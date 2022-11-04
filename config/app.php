@@ -195,6 +195,8 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        #Custom Jangkrik404
+        Spatie\Permission\PermissionServiceProvider::class,
     ],
 
     /*

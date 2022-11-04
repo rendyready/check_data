@@ -16,7 +16,9 @@ export default defineConfig({
                 'resources/js/pages/datatables.js',
                 'resources/js/pages/slick.js',
             ],
-            refresh: true,
+            refresh: [
+                'resources/views/**','app/Http/Controllers/**'
+            ],
         }),
     ],
 });
