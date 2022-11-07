@@ -25,7 +25,27 @@
 
   <!-- Modules -->
   @yield('css')
-  @vite(['resources/sass/main.scss', 'resources/js/codebase/app.js'])
+  @vite(['resources/sass/main.scss', 
+  'resources/js/codebase/app.js',
+  'resources/sass/codebase/themes/pulse.scss',
+  'public/js/plugins/datatables-bs5/css/dataTables.bootstrap5.min.css',
+  'public/js/plugins/datatables-buttons-bs5/css/buttons.bootstrap5.min.css',
+  'public/js/plugins/datatables-responsive-bs5/css/responsive.bootstrap5.min.css',
+  'public/js/lib/jquery.min.js',
+  'public/js/plugins/datatables/jquery.dataTables.min.js',
+  'public/js/plugins/datatables-bs5/js/dataTables.bootstrap5.min.js',
+  'public/js/plugins/datatables-responsive/js/dataTables.responsive.min.js',
+  'public/js/plugins/datatables-responsive-bs5/js/responsive.bootstrap5.min.js',
+  'public/js/plugins/datatables-buttons/dataTables.buttons.min.js',
+  'public/js/plugins/datatables-buttons-bs5/js/buttons.bootstrap5.min.js',
+  'public/js/plugins/datatables-buttons-jszip/jszip.min.js',
+  'public/js/plugins/datatables-buttons-pdfmake/pdfmake.min.js',
+  'public/js/plugins/datatables-buttons-pdfmake/vfs_fonts.js',
+  'public/js/plugins/datatables-buttons/buttons.print.min.js',
+  'public/js/plugins/datatables-buttons/buttons.html5.min.js',
+  'resources/js/pages/datatables.js',
+  
+  ])
 
   <!-- Alternatively, you can also include a specific color theme after the main stylesheet to alter the default color theme of the template -->
   {{-- @vite(['resources/sass/main.scss', 'resources/sass/codebase/themes/corporate.scss', 'resources/js/codebase/app.js']) --}}

@@ -1,5 +1,4 @@
 <?php
-
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,7 +12,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Example Routes
+// Dashboard Route
 Route::middleware(['auth','web'])->group(function () {
     Route::view('/', 'dashboard');
     Route::match(['get', 'post'], '/dashboard', function(){
@@ -21,6 +20,12 @@ Route::middleware(['auth','web'])->group(function () {
     });
     
 });
+//Master Route
+Route::group(['prefix' => 'master','middleware' => ['auth','web']], function()
+{
+    Route::get('area',[App\Http\Controllers\Master\MAreaController::class, 'index'] )->name('area.index');
+});
+
 
 Auth::routes();
 
