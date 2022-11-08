@@ -1,5 +1,4 @@
 <?php
-
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,11 +12,21 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Example Routes
-Route::view('/', 'landing');
-Route::match(['get', 'post'], '/dashboard', function(){
-    return view('dashboard');
+// Dashboard Route
+Route::middleware(['auth','web'])->group(function () {
+    Route::view('/', 'dashboard');
+    Route::match(['get', 'post'], '/dashboard', function(){
+        return view('dashboard');
+    });
+    
 });
-Route::view('/pages/slick', 'pages.slick');
-Route::view('/pages/datatables', 'pages.datatables');
-Route::view('/pages/blank', 'pages.blank');
+//Master Route
+Route::group(['prefix' => 'master','middleware' => ['auth','web']], function()
+{
+    Route::get('area',[App\Http\Controllers\Master\MAreaController::class, 'index'] )->name('area.index');
+});
+
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
