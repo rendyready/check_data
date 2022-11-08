@@ -19,7 +19,7 @@ return new class extends Migration
             $table->bigInteger('config_menu_kategori_m_kategori_id');
             $table->bigInteger('config_menu_kategori_created_by');
             $table->timestamp('config_menu_kategori_created_at')->useCurrent();
-            $table->timestamp('config_menu_kategori_updated_at')->useCurrentOnUpdate();
+            $table->timestamp('config_menu_kategori_updated_at')->nullable()->useCurrentOnUpdate()->default(NULL);
             $table->softDeletes('config_menu_kategori_deleted_at');
         });
     }

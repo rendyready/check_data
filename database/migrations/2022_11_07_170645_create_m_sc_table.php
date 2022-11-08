@@ -19,7 +19,7 @@ return new class extends Migration
             $table->bigInteger('m_sc_created_by');
             $table->timestamp('m_sc_created_at')->useCurrent();
             $table->bigInteger('m_sc_updated_by')->nullable();
-            $table->timestamp('m_sc_updated_at')->useCurrentOnUpdate();
+            $table->timestamp('m_sc_updated_at')->nullable()->useCurrentOnUpdate()->default(NULL);
             $table->softDeletes('m_sc_deleted_at');
         });
     }
