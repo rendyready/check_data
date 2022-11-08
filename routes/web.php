@@ -21,9 +21,10 @@ Route::middleware(['auth','web'])->group(function () {
     
 });
 //Master Route
-Route::group(['prefix' => 'master','middleware' => ['auth','web']], function()
+Route::group(['prefix' => 'master', 'controller' => App\Http\Controllers\Master\MAreaController::class,'middleware' => ['auth','web']], function()
 {
-    Route::get('area',[App\Http\Controllers\Master\MAreaController::class, 'index'] )->name('area.index');
+    Route::get('area','index')->name('area.index');
+    Route::get('area/list','list_area')->name('list.area');
 });
 
 

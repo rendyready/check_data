@@ -11,22 +11,19 @@
             </h3>
           </div>
           <div class="block-content text-muted">
-            <table id="tab" class="table table-bordered table-striped table-vcenter js-dataTable-full"">
+            <table id="tab" class="table table-bordered table-striped table-vcenter js-dataTable-buttons">
               <thead>
               <tr>
                   <th>No.</th>
-                  <th>Nama Meja</th>
-                  <th>Jenis Meja</th>
-                  <th>Waroeng</th>
+                  <th>Nama Area</th>
                   <th>Action</th>
               </tr>
               </thead>
+              <tbody>
                   <tr>
                     <td>A</td>
                     <td>B</td>
                     <td>C</td>
-                    <td>B</td>
-                    <td>B</td>
                   </tr>
               </tbody>
           </table>
@@ -36,4 +33,9 @@
     </div>
   </div>
   <!-- END Page Content -->
+@endsection
+@section('js')
+<script>
+  
+</script>
 @endsection
