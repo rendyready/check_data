@@ -20,10 +20,10 @@ return new class extends Migration
             $table->bigInteger('m_menu_harga_m_menu_id');
             $table->char('m_menu_harga_status')->default(0);
             $table->bigInteger('m_menu_harga_created_by');
-            $table->timestamp('m_menu_harga_created_at')->useCurrent();
+            $table->timestampTz('m_menu_harga_created_at')->useCurrent();
             $table->bigInteger('m_menu_harga_updated_by')->nullable();
-            $table->timestamp('m_menu_harga_updated_at')->nullable()->useCurrentOnUpdate()->default(NULL);
-            $table->softDeletes('m_menu_harga_deleted_at');
+            $table->timestampTz('m_menu_harga_updated_at')->nullable()->useCurrentOnUpdate()->default(NULL);
+            $table->timestampTz('m_menu_harga_deleted_at')->nullable()->default(NULL);
         });
     }
 

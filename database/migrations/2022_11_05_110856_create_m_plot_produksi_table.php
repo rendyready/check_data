@@ -17,10 +17,10 @@ return new class extends Migration
             $table->id();
             $table->string('m_plot_produksi_nama');
             $table->bigInteger('m_plot_produksi_created_by');
-            $table->timestamp('m_plot_produksi_created_at')->useCurrent();
+            $table->timestampTz('m_plot_produksi_created_at')->useCurrent();
             $table->bigInteger('m_plot_produksi_updated_by')->nullable();
-            $table->timestamp('m_plot_produksi_updated_at')->nullable()->useCurrentOnUpdate()->default(NULL);
-            $table->softDeletes('m_plot_produksi_deleted_at');
+            $table->timestampTz('m_plot_produksi_updated_at')->nullable()->useCurrentOnUpdate()->default(NULL);
+            $table->timestampTz('m_plot_produksi_deleted_at')->nullable()->default(NULL);
         });
     }
 

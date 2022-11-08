@@ -18,10 +18,10 @@ return new class extends Migration
             $table->string('m_kategori_nama');
             $table->bigInteger('m_kategori_m_menu_jenis_id');
             $table->bigInteger('m_kategori_created_by');
-            $table->timestamp('m_kategori_created_at')->useCurrent();
+            $table->timestampTz('m_kategori_created_at')->useCurrent();
             $table->bigInteger('m_kategori_updated_by')->nullable();
-            $table->timestamp('m_kategori_updated_at')->nullable()->useCurrentOnUpdate()->default(NULL);
-            $table->softDeletes('m_kategori_deleted_at');
+            $table->timestampTz('m_kategori_updated_at')->nullable()->useCurrentOnUpdate()->default(NULL);
+            $table->timestampTz('m_kategori_deleted_at')->nullable()->default(NULL);
         });
     }
 

@@ -25,10 +25,10 @@ return new class extends Migration
             $table->bigInteger('m_menu_m_menu_jenis_id');
             $table->bigInteger('m_menu_m_plot_produksi_id')->nullable();
             $table->bigInteger('m_menu_created_by');
-            $table->timestamp('m_menu_created_at')->useCurrent();
+            $table->timestampTz('m_menu_created_at')->useCurrent();
             $table->bigInteger('m_menu_updated_by')->nullable();
-            $table->timestamp('m_menu_updated_at')->nullable()->useCurrentOnUpdate()->default(NULL);
-            $table->softDeletes('m_menu_deleted_at');
+            $table->timestampTz('m_menu_updated_at')->nullable()->useCurrentOnUpdate()->default(NULL);
+            $table->timestampTz('m_menu_deleted_at')->nullable()->default(NULL);
         });
     }
 
