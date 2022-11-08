@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,19 +14,26 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Dashboard Route
-Route::middleware(['auth','web'])->group(function () {
+Route::middleware(['auth', 'web'])->group(function () {
     Route::view('/', 'dashboard');
-    Route::match(['get', 'post'], '/dashboard', function(){
+    Route::match(['get', 'post'], '/dashboard', function () {
         return view('dashboard');
     });
-    
 });
 //Master Route
-Route::group(['prefix' => 'master','middleware' => ['auth','web']], function()
-{
-    Route::get('area',[App\Http\Controllers\Master\MAreaController::class, 'index'] )->name('area.index');
+Route::group(['prefix' => 'master', 'middleware' => ['auth', 'web'], 'controller' => App\Http\Controllers\Master\MAreaController::class], function () {
+    Route::get('area', 'index')->name('area.index');
 });
 
+// Plot
+//test
+Route::prefix('master')->group(function () {
+    Route::get('plot', function () {
+        return view('master.plot');
+    });
+});
+
+// Route::
 
 Auth::routes();
 
