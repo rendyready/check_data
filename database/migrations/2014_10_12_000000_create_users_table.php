@@ -17,11 +17,13 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
+            $table->timestampTz('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
-            $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->nullable();
+            $table->bigInteger('created_by')->nullable();
+            $table->timestampTz('created_at')->useCurrent();
+            $table->bigInteger('updated_by')->nullable();
+            $table->timestampTz('updated_at')->nullable();
         });
     }
 

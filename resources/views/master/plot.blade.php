@@ -7,7 +7,7 @@
         <div class="block block-themed h-100 mb-0">
           <div class="block-header bg-pulse">
             <h3 class="block-title">
-              Data Plot
+              Data Plot 
             </h3>
           </div>
           <div class="block-content text-muted">

@@ -20,12 +20,8 @@ Route::middleware(['auth', 'web'])->group(function () {
         return view('dashboard');
     });
 });
-//Master Route
-Route::group(['prefix' => 'master', 'middleware' => ['auth', 'web'], 'controller' => App\Http\Controllers\Master\MAreaController::class], function () {
-    Route::get('area', 'index')->name('area.index');
-});
 
-// Plot
+
 //test
 Route::prefix('master')->group(function () {
     Route::get('plot', function () {
@@ -33,7 +29,23 @@ Route::prefix('master')->group(function () {
     });
 });
 
-// Route::
+
+//Master Route
+Route::group(['prefix' => 'master', 'middleware' => ['auth', 'web'], 'controller' => App\Http\Controllers\Master\MAreaController::class], function () {
+    Route::get('area', 'index')->name('area.index');
+});
+
+// Plot
+Route::group(
+    [
+        'prefix' => 'master', 'middleware' => ['auth', 'web'],
+        'controller' => \App\Http\Controllers\Master\MPlotProduksiController::class
+    ],
+    function () {
+        Route::get('index','index');
+    }
+);
+
 
 Auth::routes();
 
