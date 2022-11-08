@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Master;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
+use App\Models\MArea;
+use Carbon\Carbon;
 class MAreaController extends Controller
 {
     /**
@@ -13,9 +15,8 @@ class MAreaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    { 
-       
-        return view('master.area');
+    {   $data = MArea::select('id','m_area_nama')->whereNull('m_area_deleted_at')->orderBy('id','asc')->get();
+        return view('master.area',compact('data'));
     }
 
     /**
@@ -23,94 +24,29 @@ class MAreaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function list_area()
+    function action(Request $request)
     {
-        $area = area::where('area_awal', 'Y')->with('get_barangsokeu')->orderBy('area_id', 'asc')->get();
-        $no = 0;
-        $data = array();
-        foreach($area as $list){
-            $sat = $list->get_barangsokeu->id_satuan;
-            $satuan = Satuan::where('id_satuan', '=', $sat)->first();
-            $dt_satuan = $satuan['nm_satuan'];
-            $no ++;
-            $row = array();
-
-            $row[] = $no;
-            $row[] = tanggal_indonesia($list->area_tgl);
-            $row[] = "Stock Awal";
-            $row[] = $list->get_barangsokeu->barangsokeu_nm;
-            $row[] = $list->area_stk." ".$dt_satuan;
-            if ($list->area_stk === 0){
-                $row[] = '<div class="btn-group">
-                <a onclick="editForm('.$list->area_id.')" class="btn yellow-lemon btn-sm"><i class="fa fa-pencil"></i></a>
-                </div>';
-            } else {
-                $row[] = "-";
-            }
-
-            $data[] = $row;
-        }
-
-        $output = array("data" => $data);
-        return response()->json($output);
-
-
-
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+    	if($request->ajax())
+    	{
+    		if($request->action == 'edit')
+    		{
+    			$data = array(
+    				'm_area_nama'	=>	$request->m_area_nama,
+                    'm_area_updated_by' => Auth::id(),
+                    'm_area_updated_at' => Carbon::now(),
+    			);
+    			DB::table('m_area')
+    				->where('id', $request->id)
+    				->update($data);
+    		}
+    		if($request->action == 'delete')
+    		{
+                $softdelete = array('m_area_deleted_at' => Carbon::now());
+    			DB::table('m_area')
+    				->where('id', $request->id)
+    				->update($softdelete);
+    		}
+    		return response()->json($request);
+    	}
     }
 }
