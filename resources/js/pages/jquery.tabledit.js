@@ -29,42 +29,56 @@ if (typeof jQuery === 'undefined') {
             inputClass: 'form-control input-sm',
             toolbarClass: 'btn-toolbar',
             groupClass: 'btn-group btn-group-sm',
-            dangerClass: 'danger',
-            warningClass: 'warning',
             mutedClass: 'text-muted',
             eventType: 'click',
             rowIdentifier: 'id',
             hideIdentifier: false,
+            dangerClass: 'bg-danger text-white',
+            warningClass: 'bg-warning',
+            successClass: 'bg-success text-white',
+            feedbackContainer: "#feedback",
+            rowCounter: "#",
+            hideCounter: false,
             autoFocus: true,
             editButton: true,
             deleteButton: true,
             saveButton: true,
             restoreButton: true,
+            addButton: true,
             buttons: {
                 edit: {
-                    class: 'btn btn-sm btn-info',
-                    html: '<i class="fa fa-pencil"></i>',
-                    action: 'edit'
+                  class: 'btn btn-sm btn-outline-secondary',
+                  html: '<span class="fas fa-edit"></span>',
+                  action: 'edit'
+                },
+                add: {
+                  class: 'btn btn-sm btn-outline-secondary',
+                  html: '<span class="fa fa-plus"></span>',
+                  action: 'add'
                 },
                 delete: {
-                    class: 'btn btn-sm btn-danger',
-                    html: '<span class="fa fa-trash"></span>',
-                    action: 'delete'
+                  class: 'btn btn-sm btn-outline-secondary',
+                  html: '<span class="fas fa-trash-alt"></span>',
+                  action: 'delete'
                 },
                 save: {
-                    class: 'btn btn-sm btn-success',
-                    html: 'Save'
+                  class: 'btn btn-sm btn-success',
+                  html: 'Save'
+                },
+                cancel: {
+                  class: 'btn btn-sm btn-warning',
+                  html: 'Cancel'
                 },
                 restore: {
-                    class: 'btn btn-sm btn-warning',
-                    html: 'Restore',
-                    action: 'restore'
+                  class: 'btn btn-sm btn-warning',
+                  html: 'Restore',
+                  action: 'restore'
                 },
                 confirm: {
-                    class: 'btn btn-sm btn-danger',
-                    html: 'Confirm'
+                  class: 'btn btn-sm btn-danger',
+                  html: 'Confirm'
                 }
-            },
+              },
             onDraw: function() { return; },
             onSuccess: function() { return; },
             onFail: function() { return; },

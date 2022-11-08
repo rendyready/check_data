@@ -28,16 +28,23 @@ class MAreaController extends Controller
     {
     	if($request->ajax())
     	{
-    		if($request->action == 'edit')
+    		if($request->action == 'edit' or 'add')
     		{
-    			$data = array(
-    				'm_area_nama'	=>	$request->m_area_nama,
-                    'm_area_updated_by' => Auth::id(),
-                    'm_area_updated_at' => Carbon::now(),
-    			);
+                if ($request->action == 'edit') {
+                    $data = array(
+                        'm_area_nama'	=>	$request->m_area_nama,
+                        'm_area_updated_by' => Auth::id(),
+                        'm_area_updated_at' => Carbon::now(),
+                    );
+                } else {
+                    $data = array(
+                        'm_area_nama'	=>	$request->m_area_nama,
+                        'm_area_created_by' => Auth::id(),
+                        'm_area_created_at' => Carbon::now(),
+                    );
+                }
     			DB::table('m_area')
-    				->where('id', $request->id)
-    				->update($data);
+    				->updateOrInsert($data);
     		}
     		if($request->action == 'delete')
     		{
