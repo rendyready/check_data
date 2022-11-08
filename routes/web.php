@@ -19,16 +19,11 @@ Route::middleware(['auth', 'web'])->group(function () {
     Route::match(['get', 'post'], '/dashboard', function () {
         return view('dashboard');
     });
-<<<<<<< HEAD
-=======
-    
 });
 //Master Route
-Route::group(['prefix' => 'master', 'controller' => App\Http\Controllers\Master\MAreaController::class,'middleware' => ['auth','web']], function()
-{
-    Route::get('area','index')->name('area.index');
-    Route::post('area/action','action')->name('action.area');
->>>>>>> 617fc9001c89c586a564b99fb3f476e4edca1bd1
+Route::group(['prefix' => 'master', 'controller' => App\Http\Controllers\Master\MAreaController::class, 'middleware' => ['auth', 'web']], function () {
+    Route::get('area', 'index')->name('area.index');
+    Route::post('area/action', 'action')->name('action.area');
 });
 
 
@@ -50,16 +45,16 @@ Route::group(
         'controller' => \App\Http\Controllers\Master\MPlotProduksiController::class
     ],
     function () {
-        Route::get('plot','index')->name('plot.index');
+        Route::get('plot', 'index')->name('plot.index');
     }
 );
 
-//test
-Route::prefix('master')->group(function () {
-    Route::get('plot', function () {
-        return view('master.plot');
-    });
-});
+// //test
+// Route::prefix('master')->group(function () {
+//     Route::get('plot', function () {
+//         return view('master.plot');
+//     });
+// });
 
 Auth::routes();
 
