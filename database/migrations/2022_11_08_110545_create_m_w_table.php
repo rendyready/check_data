@@ -23,7 +23,7 @@ return new class extends Migration
             $table->bigInteger('m_w_m_jenis_nota_id');
             $table->bigInteger('m_w_m_pajak_id');
             $table->bigInteger('m_w_m_modal_tipe_id');
-            $table->bigInteger('m_w_m_sc_id',36);
+            $table->bigInteger('m_w_m_sc_id');
             $table->integer('m_w_decimal')->default(0);
             $table->string('m_w_pembulatan')->default('tidak');
             $table->char('m_w_currency',5)->default('Rp');
