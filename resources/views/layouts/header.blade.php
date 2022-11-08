@@ -43,11 +43,11 @@
   'public/js/plugins/datatables-buttons-pdfmake/vfs_fonts.js',
   'public/js/plugins/datatables-buttons/buttons.print.min.js',
   'public/js/plugins/datatables-buttons/buttons.html5.min.js',
-  'resources/js/pages/datatables.js',
+  'resources/js/pages/jquery.tabledit.js',
   
   ])
 
   <!-- Alternatively, you can also include a specific color theme after the main stylesheet to alter the default color theme of the template -->
   {{-- @vite(['resources/sass/main.scss', 'resources/sass/codebase/themes/corporate.scss', 'resources/js/codebase/app.js']) --}}
-  @yield('js')
+  @yield('js')  
 </head>
