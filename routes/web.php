@@ -22,18 +22,16 @@ Route::middleware(['auth', 'web'])->group(function () {
 });
 
 
-//test
-Route::prefix('master')->group(function () {
-    Route::get('plot', function () {
-        return view('master.plot');
-    });
-});
 
 
 //Master Route
 Route::group(['prefix' => 'master', 'middleware' => ['auth', 'web'], 'controller' => App\Http\Controllers\Master\MAreaController::class], function () {
     Route::get('area', 'index')->name('area.index');
 });
+
+
+
+
 
 // Plot
 Route::group(
@@ -42,10 +40,16 @@ Route::group(
         'controller' => \App\Http\Controllers\Master\MPlotProduksiController::class
     ],
     function () {
-        Route::get('index','index');
+        Route::get('plot','index')->name('plot.index');
     }
 );
 
+//test
+Route::prefix('master')->group(function () {
+    Route::get('plot', function () {
+        return view('master.plot');
+    });
+});
 
 Auth::routes();
 
