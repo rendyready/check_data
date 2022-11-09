@@ -257,14 +257,14 @@
                   <span class="nav-main-link-name">Waroeng</span>
                 </a>
               </li>
-              <li class="nav-main-item{{ request()->is('pages/*') ? ' open' : '' }}">
+              <li class="nav-main-item{{ request()->is('master/*') ? ' open' : '' }}">
                 <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
                   <span class="nav-main-link-name">CR55</span>
                 </a>
                 <ul class="nav-main-submenu">
                   <li class="nav-main-item">
-                    <a class="nav-main-link{{ request()->is('pages/datatables') ? ' active' : '' }}" href="#">
-                      <span class="nav-main-link-name">Area</span>
+                    <a class="nav-main-link{{ request()->is('master/jenis_menu') ? ' active' : '' }}" href="{{route('jenis_menu.index')}}">
+                      <span class="nav-main-link-name">Jenis Menu</span>
                     </a>
                   </li>
                   <li class="nav-main-item">

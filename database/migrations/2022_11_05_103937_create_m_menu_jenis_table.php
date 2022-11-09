@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('m_menu_jenis', function (Blueprint $table) {
             $table->id();
             $table->string('m_menu_jenis_nama');
-            $table->string('m_menu_jenis_urut')->unique();
-            $table->enum('m_menu_jenis_odcr55',['minum','makan',null])->default('makan')->nullable();
+            $table->string('m_menu_jenis_urut');
+            $table->string('m_menu_jenis_odcr55')->default('makan')->nullable();
             $table->bigInteger('m_menu_jenis_created_by');
             $table->timestampTz('m_menu_jenis_created_at')->useCurrent();
             $table->bigInteger('m_menu_jenis_updated_by')->nullable();

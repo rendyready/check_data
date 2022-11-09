@@ -35,7 +35,7 @@
   <!-- END Page Content -->
 @endsection
 @section('js')
-<script type="module" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+{{-- <script type="module" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> --}}
 <script type="module">
   $(document).ready(function(){
     $.ajaxSetup({
@@ -43,50 +43,26 @@
       'X-CSRF-Token' : $("input[name=_token]").val()
         }
       });
-      var t = $('#sample_data').DataTable({
-      "processing" : false,
-      "serverSide" : false,
-      "order" : [],
-      "dom": "Blfrtip",
-        "language": { // language settings
-            "GroupActions": "_TOTAL_ records selected:  ",
-            "AjaxRequestGeneralError": "Could not complete request. Please check your internet connection",
-            "lengthMenu": "<span class='seperator'></span>View _MENU_ records",
-            "info": "<span class='seperator'></span>Found total _TOTAL_ records",
-            "infoEmpty": "No records found to show",
-            "emptyTable": "No data available in table",
-            "zeroRecords": "No matching records found",
-            "paginate": {
-                "previous": "Prev",
-                "next": "Next",
-                "last": "Last",
-                "first": "First",
-                "page": "Page",
-                "pageOf": "of"
-            }
-        },
-        "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
-        "pageLength": -1,
-    });
-    $("#tablecontents").sortable({
-      items: "tr",
-      cursor: 'move',
-      opacity: 0.6,
-      update: function() {
-          sendOrderToServer();
-      }
-    });
+      var t = $('#sample_data').DataTable();
+    // $("#tablecontents").sortable({
+    //   items: "tr",
+    //   cursor: 'move',
+    //   opacity: 0.6,
+    //   update: function() {
+    //       sendOrderToServer();
+    //   }
+    // });
 
-    function sendOrderToServer() {
+  //   function sendOrderToServer() {
 
-  var order = [];
-  $('tr.row1').each(function(index,element) {
-    order.push({
-      id: $(this).attr('data-id'),
-      position: index+1
-    });
-  });
-    }
+  // var order = [];
+  // $('tr.row1').each(function(index,element) {
+  //   order.push({
+  //     id: $(this).attr('data-id'),
+  //     position: index+1
+  //   });
+  // });
+  //   }
 
     $('#sample_data').Tabledit({
     url:'{{ route("action.area") }}',

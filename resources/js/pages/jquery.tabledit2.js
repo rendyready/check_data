@@ -696,7 +696,7 @@ if (typeof jQuery === 'undefined') {
        *
        * @param {object} event
        */
-      $table.on('click', 'button.tabledit-save-button', function(event) {
+       $table.on('click','button.tabledit-save-button', function(event) {
         if (event.handled !== true) {
           event.preventDefault();
           if ($("button.tabledit-add-button").hasClass("active")) {
@@ -709,6 +709,23 @@ if (typeof jQuery === 'undefined') {
           // add-button table remove active
           $("button.tabledit-add-button").removeClass("active");
           event.handled = true;
+        }
+      });
+      $table.on('keyup', function(event) {
+        if (event.key === "Enter") {
+          if (event.handled !== true) {
+            event.preventDefault();
+            if ($("button.tabledit-add-button").hasClass("active")) {
+              // Add submit and update all columns.
+              Add.submit($(this).parents('tr').find('td.tabledit-edit-mode'));
+            } else {
+              // Submit and update all columns.
+              Edit.submit($(this).parents('tr').find('td.tabledit-edit-mode'));
+            }
+            // add-button table remove active
+            $("button.tabledit-add-button").removeClass("active");
+            event.handled = true;
+          }
         }
       });
       $table.on('click', 'button.tabledit-cancel-button', function(event) {
