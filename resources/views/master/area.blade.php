@@ -11,23 +11,21 @@
             </h3>
           </div>
           <div class="block-content text-muted">
-            <table id="tab" class="table table-bordered table-striped table-vcenter js-dataTable-full"">
+            @csrf
+            <table id="sample_data" class="table table-bordered table-striped table-vcenter">
               <thead>
               <tr>
                   <th>No.</th>
-                  <th>Nama Meja</th>
-                  <th>Jenis Meja</th>
-                  <th>Waroeng</th>
-                  <th>Action</th>
+                  <th>Nama Area</th>
               </tr>
               </thead>
-                  <tr>
-                    <td>A</td>
-                    <td>B</td>
-                    <td>C</td>
-                    <td>B</td>
-                    <td>B</td>
-                  </tr>
+              <tbody>
+                @foreach ($data as $item)
+                    <tr>
+                      <td>{{$item->id}}</td>
+                      <td>{{$item->m_area_nama}}</td>
+                    </tr>
+                @endforeach
               </tbody>
           </table>
           </div>
@@ -36,4 +34,32 @@
     </div>
   </div>
   <!-- END Page Content -->
+@endsection
+@section('js')
+<script type="module">
+  $(document).ready(function(){
+    $.ajaxSetup({
+    headers:{
+      'X-CSRF-Token' : $("input[name=_token]").val()
+    }
+  });
+
+    $('#sample_data').Tabledit({
+    url:'{{ route("action.area") }}',
+    dataType:"json",
+    columns:{
+      identifier:[0, 'id'],
+      editable:[[1, 'm_area_nama']]
+    },
+    restoreButton:false,
+    onSuccess:function(data, textStatus, jqXHR)
+    {
+      if(data.action == 'delete')
+      {
+        $('#'+data.id).remove();
+      }
+    }
+  });
+  });
+  </script>
 @endsection
