@@ -8,18 +8,17 @@
           <div class="block-header bg-pulse">
             <h3 class="block-title">
               Data Area
-            </h3>
           </div>
           <div class="block-content text-muted">
             @csrf
-            <table id="sample_data" class="table table-bordered table-striped table-vcenter">
+            <table id="sample_data" class="table table-bordered table-striped table-vcenter js-dataTable-full">
               <thead>
               <tr>
                   <th>No.</th>
                   <th>Nama Area</th>
               </tr>
               </thead>
-              <tbody>
+              <tbody id="tablecontents">
                 @foreach ($data as $item)
                     <tr>
                       <td>{{$item->id}}</td>
@@ -36,13 +35,34 @@
   <!-- END Page Content -->
 @endsection
 @section('js')
+{{-- <script type="module" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> --}}
 <script type="module">
   $(document).ready(function(){
     $.ajaxSetup({
     headers:{
       'X-CSRF-Token' : $("input[name=_token]").val()
-    }
-  });
+        }
+      });
+      var t = $('#sample_data').DataTable();
+    // $("#tablecontents").sortable({
+    //   items: "tr",
+    //   cursor: 'move',
+    //   opacity: 0.6,
+    //   update: function() {
+    //       sendOrderToServer();
+    //   }
+    // });
+
+  //   function sendOrderToServer() {
+
+  // var order = [];
+  // $('tr.row1').each(function(index,element) {
+  //   order.push({
+  //     id: $(this).attr('data-id'),
+  //     position: index+1
+  //   });
+  // });
+  //   }
 
     $('#sample_data').Tabledit({
     url:'{{ route("action.area") }}',
@@ -54,12 +74,18 @@
     restoreButton:false,
     onSuccess:function(data, textStatus, jqXHR)
     {
+      if (data.action == 'add') {
+        window.location.reload();
+      }
       if(data.action == 'delete')
       {
         $('#'+data.id).remove();
       }
     }
   });
+  $("#sample_data").append(
+       $('<tfoot/>').append( $("#sample_data thead tr").clone() )
+      );
   });
   </script>
 @endsection

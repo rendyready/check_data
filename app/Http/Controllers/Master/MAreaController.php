@@ -18,34 +18,40 @@ class MAreaController extends Controller
     {   $data = MArea::select('id','m_area_nama')->whereNull('m_area_deleted_at')->orderBy('id','asc')->get();
         return view('master.area',compact('data'));
     }
-
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    function action(Request $request)
-    {
+    public function action(Request $request)
+    { 
+        // $validator = \Validator::make($request->all(), [
+        //     'm_area_nama' => 'required',
+        // ]);
+
     	if($request->ajax())
     	{
-    		if($request->action == 'edit')
-    		{
-    			$data = array(
-    				'm_area_nama'	=>	$request->m_area_nama,
+            if ($request->action == 'add') {
+                $data = array(
+                    'm_area_nama'	=>	$request->m_area_nama,
+                    'm_area_created_by' => Auth::id(),
+                    'm_area_created_at' => Carbon::now(),
+                );
+                DB::table('m_area')->insert($data);
+            } elseif ($request->action == 'edit') {
+                $data = array(
+                    'm_area_nama'	=>	$request->m_area_nama,
                     'm_area_updated_by' => Auth::id(),
                     'm_area_updated_at' => Carbon::now(),
-    			);
-    			DB::table('m_area')
-    				->where('id', $request->id)
-    				->update($data);
-    		}
-    		if($request->action == 'delete')
-    		{
+                );
+                DB::table('m_area')->where('id',$request->id)
+                ->update($data);
+            }else {
                 $softdelete = array('m_area_deleted_at' => Carbon::now());
     			DB::table('m_area')
     				->where('id', $request->id)
     				->update($softdelete);
-    		}
+            }
     		return response()->json($request);
     	}
     }
