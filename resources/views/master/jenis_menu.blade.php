@@ -108,7 +108,7 @@
     dataType:"json",
     columns:{
       identifier:[0, 'id'],
-      editable:[[1, 'm_menu_jenis_nama'],[2,'m_menu_jenis_odcr55','{"makan": "makan", "minum": "minum"}']]
+      editable:[[1, 'm_menu_jenis_nama'],[2,'m_menu_jenis_odcr55','select','{"makan": "makan", "minum": "minum"}']]
     },
     restoreButton:false,
     onSuccess:function(data, textStatus, jqXHR)

@@ -34,35 +34,30 @@ class MJenisMenuController extends Controller
         $count = MMenuJeni::max('id');
     	if($request->ajax())
     	{
-    		if($request->action == 'edit' or 'add')
-    		{
-                if ($request->action == 'edit') {
-                    $data = array(
-                        'm_menu_jenis_nama' => $request->m_menu_jenis_nama, 
-                        'm_menu_jenis_odcr55' =>$request->m_menu_jenis_odcr55,
-                        'm_menu_jenis_updated_by' => Auth::id(),
-                        'm_menu_jenis_updated_at' => Carbon::now(),
-                    );
-                    DB::table('m_menu_jenis')->where('id',$request->id)
-                    ->update($data);
-                } else {
-                    $data = array(
-                        'm_menu_jenis_nama' => $request->m_menu_jenis_nama, 
-                        'm_menu_jenis_odcr55' =>$request->m_menu_jenis_odcr55,
-                        'm_menu_jenis_urut' => $count + 1,
-                        'm_menu_jenis_created_by' => Auth::id(),
-                        'm_menu_jenis_created_at' => Carbon::now(),
-                    );
-                    DB::table('m_menu_jenis')->insert($data);
-                }
-    		}
-    		if($request->action == 'delete')
-    		{
+            if ($request->action == 'add') {
+                $data = array(
+                    'm_menu_jenis_nama' => $request->m_menu_jenis_nama, 
+                    'm_menu_jenis_odcr55' =>$request->m_menu_jenis_odcr55,
+                    'm_menu_jenis_urut' => $count + 1,
+                    'm_menu_jenis_created_by' => Auth::id(),
+                    'm_menu_jenis_created_at' => Carbon::now(),
+                );
+                DB::table('m_menu_jenis')->insert($data);
+            } elseif ($request->action == 'edit') {
+                $data = array(
+                    'm_menu_jenis_nama' => $request->m_menu_jenis_nama, 
+                    'm_menu_jenis_odcr55' =>$request->m_menu_jenis_odcr55,
+                    'm_menu_jenis_updated_by' => Auth::id(),
+                    'm_menu_jenis_updated_at' => Carbon::now(),
+                );
+                DB::table('m_menu_jenis')->where('id',$request->id)
+                ->update($data);
+            } else {
                 $softdelete = array('m_menu_jenis_deleted_at' => Carbon::now());
     			DB::table('m_menu_jenis')
     				->where('id', $request->id)
     				->update($softdelete);
-    		}
+            }
     		return response()->json($request);
     	}
     }
