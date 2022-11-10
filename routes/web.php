@@ -19,15 +19,13 @@ Route::middleware(['auth', 'web'])->group(function () {
     Route::match(['get', 'post'], '/dashboard', function () {
         return view('dashboard');
     });
-<<<<<<< HEAD
+
 });
 //Master Route
 Route::group(['prefix' => 'master', 'controller' => App\Http\Controllers\Master\MAreaController::class, 'middleware' => ['auth', 'web']], function () {
     Route::get('area', 'index')->name('area.index');
     Route::post('area/action', 'action')->name('action.area');
-=======
-<<<<<<< HEAD
-=======
+
     
 });
 //Master Route
@@ -35,8 +33,7 @@ Route::group(['prefix' => 'master', 'controller' => App\Http\Controllers\Master\
 {
     Route::get('area','index')->name('area.index');
     Route::post('area/action','action')->name('action.area');
->>>>>>> 617fc9001c89c586a564b99fb3f476e4edca1bd1
->>>>>>> c0b1acbc228c6477171533977d34bfc5e99524ce
+
 });
 
 
