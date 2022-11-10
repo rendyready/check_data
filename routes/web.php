@@ -60,11 +60,14 @@ Route::group(
 );
 
 // //test
-// Route::prefix('master')->group(function () {
-//     Route::get('plot', function () {
-//         return view('master.plot');
-//     });
-// });
+Route::prefix('master')->group(function () {
+    Route::get('index', function () {
+        return view('CRMaster.index');
+    });
+    Route::prefix('plot')->group(function(){
+        Route::post('create',[\App\Http\Controllers\Master\MPlotProduksiController::class,'store'])->name('plot.create');
+    });
+});
 
 Auth::routes();
 

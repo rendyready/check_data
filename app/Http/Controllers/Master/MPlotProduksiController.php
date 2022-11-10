@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Master;
 use App\Http\Controllers\Controller;
 use App\Models\MPlotProduksi;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class MPlotProduksiController extends Controller
 {
@@ -17,22 +18,10 @@ class MPlotProduksiController extends Controller
         // dd($plot);
 
     }
-    //actions
-    function action(Request $request){
-        if ($request->ajax())
-        {
-            $data= MPlotProduksi::all();
-            return datatables()->of($data)->addColumn(
-                'action' function ($row){
-                    $text = '<a href="#" class="btn btn-xs btn-secondary btn-edit">';
-                    $text = '<button data-rowid="'.$row->. '"class="btn btn-xs btn-danger btn-delete">Delete</button>';
-                    return $text;
-
-                }) ->toJson();
-        }
-        return view('master.plot');
-    }   
-
-    
-   
+    public function store(Request $request)
+    {
+        $validate = Validator::make($request->select(
+            'm_plot_produksi_nama'
+        ))->validate();
+    }
 }
