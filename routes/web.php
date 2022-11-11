@@ -2,6 +2,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Master\MAreaController;
 use App\Http\Controllers\Master\MJenisMenuController;
+use App\Http\Controllers\Master\SubJenisMController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -30,6 +31,12 @@ Route::group(['prefix' => 'master', 'controller' => MJenisMenuController::class,
 {
     Route::get('jenis_menu','index')->name('jenis_menu.index'); Route::post('jenis_menu/sort','sort')->name('sort.jenis_menu');
     Route::post('jenis_menu/action','action')->name('action.jenis_menu');
+});
+//Master SubJenis
+Route::group(['prefix' => 'master', 'controller' => SubJenisMController::class,'middleware' => ['auth','web']], function()
+{
+    Route::get('sub_jenis_menu','index')->name('sub_jenis_menu.index'); Route::get('sub_jenis_menu/list','list')->name('sub_jenis_menu.list'); 
+    Route::post('sub_jenis_menu/action','action')->name('action.sub_jenis_menu');
 });
 
 Auth::routes();

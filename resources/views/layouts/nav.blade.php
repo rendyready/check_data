@@ -268,6 +268,11 @@
                     </a>
                   </li>
                   <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('master/sub_jenis_menu') ? ' active' : '' }}" href="{{route('sub_jenis_menu.index')}}">
+                      <span class="nav-main-link-name">Sub Jenis Menu</span>
+                    </a>
+                  </li>
+                  <li class="nav-main-item">
                     <a class="nav-main-link{{ request()->is('pages/datatables') ? ' active' : '' }}" href="#">
                       <span class="nav-main-link-name">Waroeng</span>
                     </a>
