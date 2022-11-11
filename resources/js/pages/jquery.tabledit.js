@@ -525,6 +525,7 @@
           if (settings.editButton) {
             $tr.find('button.tabledit-edit-button').addClass('active');
             $tr.find('button.tabledit-save-button').show();
+            $tr.find('button.tabledit-cancel-button').show();
           }
         },
         add: function(td) {
@@ -872,6 +873,7 @@
             }
             // add-button table remove active
             $("button.tabledit-add-button").removeClass("active");
+            $("button.tabledit-cancel-button").hide();
             event.handled = true;
           }
         });
@@ -888,6 +890,7 @@
               }
               // add-button table remove active
               $("button.tabledit-add-button").removeClass("active");
+              $("button.tabledit-cancel-button").hide();
               event.handled = true;
             }
           }
@@ -913,7 +916,7 @@
          *
          * @param {object} event
          */
-        $table.on('click', 'button.tabledit-edit-button', function (event) {
+        $table.on('click','button.tabledit-edit-button', function (event) {
           if (event.handled !== true) {
 
             // Stop, the default action of the event will not be triggered

@@ -20,7 +20,7 @@
               </tr>
               </thead>
               <tbody id="tablecontents">
-                @foreach ($data as $item)
+                @foreach ($data->sub as $item)
                     <tr class="row1">
                       <td>{{$item->id}}</td>
                       <td>{{$item->m_sub_menu_jenis_nama}}</td>
@@ -28,7 +28,6 @@
                     </tr>
                 @endforeach
               </tbody>
-              <tfoot></tfoot>
           </table>
           </div>
         </div>
@@ -38,7 +37,6 @@
   <!-- END Page Content -->
 @endsection
 @section('js')
-<script type="module" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script type="module">
   $(document).ready(function(){
     $.ajaxSetup({
@@ -52,6 +50,13 @@
         destroy: true,
         order : [0,'asc'],
       });
+//       $.each({{$data->menujenis}}, function(key, element) {
+//     test += '"'+element.id+'": "'+element.m_menu_jenis_nama+'",';
+//       });
+//       test = test.substring(0,shoes_result.length-1); //strip trailing last comma.
+// console.log(test);
+
+
     $('#sub_jenis_menu').Tabledit({
     url:'{{ route("action.sub_jenis_menu") }}',
     dataType:"json",
