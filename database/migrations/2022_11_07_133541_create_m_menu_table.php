@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('m_menu_code')->nullable();
             $table->string('m_menu_nama');
-            $table->string('m_menu_urut');
+            $table->string('m_menu_urut')->nullable();
             $table->string('m_menu_cr')->nullable();
             $table->char('m_menu_status')->default(1);
             $table->char('m_menu_tax')->default(1);
