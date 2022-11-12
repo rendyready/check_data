@@ -18,6 +18,9 @@ class DatabaseSeeder extends Seeder
             UserTableSeeder::class,
             AreaTableSeeder::class,
             MJenisMenuTableSeeder::class,
+            SubJenisMenuTableSeeder::class,
+            ModalTipeTableSeeder::class,
+            JenisMejaTableSeeder::class
        ]);
     }
 }

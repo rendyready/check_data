@@ -268,6 +268,31 @@
                     </a>
                   </li>
                   <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('master/sub_jenis_menu') ? ' active' : '' }}" href="{{route('sub_jenis_menu.index')}}">
+                      <span class="nav-main-link-name">Sub Jenis Menu</span>
+                    </a>
+                  </li>
+                  <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('master/modal_tipe') ? ' active' : '' }}" href="{{route('modal_tipe.index')}}">
+                      <span class="nav-main-link-name">Modal Tipe</span>
+                    </a>
+                  </li>
+                  <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('master/m_pajak') ? ' active' : '' }}" href="{{route('m_pajak.index')}}">
+                      <span class="nav-main-link-name">Pajak</span>
+                    </a>
+                  </li>
+                  <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('master/m_sc') ? ' active' : '' }}" href="{{route('m_sc.index')}}">
+                      <span class="nav-main-link-name">Service Charge</span>
+                    </a>
+                  </li>
+                  <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('master/m_jenis_meja') ? ' active' : '' }}" href="{{route('m_jenis_meja.index')}}">
+                      <span class="nav-main-link-name">Jenis Meja</span>
+                    </a>
+                  </li>
+                  <li class="nav-main-item">
                     <a class="nav-main-link{{ request()->is('pages/datatables') ? ' active' : '' }}" href="#">
                       <span class="nav-main-link-name">Waroeng</span>
                     </a>
