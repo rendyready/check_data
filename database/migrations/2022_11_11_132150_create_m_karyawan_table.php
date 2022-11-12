@@ -66,6 +66,7 @@ return new class extends Migration
             $table->char('m_karyawan_ukuran_topi', 10)->nullable();
             $table->string('m_karyawan_rekening_bank')->nullable();
             $table->string('m_karyawan_nama_bank')->nullable();
+            $table->string('m_karyawan_wilayah_kerja'); //Value 'Manajemen Pusat', 'Manajemen Area', 'Waroeng'
             $table->string('m_karyawan_status')->nullable()->default('aktif');
 
 

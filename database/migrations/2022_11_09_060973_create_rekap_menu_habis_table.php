@@ -19,12 +19,12 @@ return new class extends Migration
             $table->string('r_m_h_m_area_nama');
             $table->bigInteger('r_m_h_m_w_id');
             $table->string('r_m_h_m_w_nama');
-            $table->bigInteger('r_m_h_m_menu_id');
-            $table->string('r_m_h_m_menu_nama');
+            $table->bigInteger('r_m_h_m_produk_id');
+            $table->string('r_m_h_m_produk_nama');
             $table->string('r_m_h_m_menu_cr');
             $table->string('r_m_h_m_menu_urut');
-            $table->bigInteger('r_m_h_m_menu_jenis_id');
-            $table->string('r_m_h_m_menu_jenis_nama');
+            $table->bigInteger('r_m_h_m_jenis_produk_id');
+            $table->string('r_m_h_m_jenis_produk_nama');
             $table->string('r_m_h_m_menu_code');
             $table->date('r_m_h_tanggal');
             $table->string('r_m_h_shift');
@@ -36,7 +36,7 @@ return new class extends Migration
             $table->timestampTz('r_m_h_updated_at')->useCurrentOnUpdate()->nullable()->default(NULL);
             $table->timestampTz('r_m_h_deleted_at')->nullable()->default(NULL);
 
-            // $table->index(['r_m_h_tanggal', 'r_m_h_m_menu_jenis_id', 'r_m_h_waktu'], 'mrmh_counter_idx');s
+            // $table->index(['r_m_h_tanggal', 'r_m_h_m_jenis_produk_id', 'r_m_h_waktu'], 'mrmh_counter_idx');s
         });
     }
 

@@ -20,12 +20,12 @@ return new class extends Migration
             $table->smallInteger('r_p_v_shift');
             $table->time('r_p_v_jam');
             $table->string('r_p_v_nota_code');
-            $table->bigInteger('r_p_v_m_menu_id');
-            $table->string('r_p_v_m_menu_nama');
+            $table->bigInteger('r_p_v_m_produk_id');
+            $table->string('r_p_v_m_produk_nama');
             $table->string('r_p_v_m_menu_cr')->default('');
             $table->string('r_p_v_m_menu_urut');
-            $table->bigInteger('r_p_v_m_menu_jenis_id');
-            $table->string('r_p_v_m_menu_jenis_nama');
+            $table->bigInteger('r_p_v_m_jenis_produk_id');
+            $table->string('r_p_v_m_jenis_produk_nama');
             $table->decimal('r_p_v_m_menu_harga_nominal', 15);
             $table->integer('r_p_v_qty');
             $table->decimal('r_p_v_nominal', 15);

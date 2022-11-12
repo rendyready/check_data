@@ -16,13 +16,13 @@ return new class extends Migration
         Schema::create('rekap_sisa_detail', function (Blueprint $table) {
             $table->id('r_s_d_id');
             $table->bigInteger('r_s_d_r_s_id');
-            $table->bigInteger('r_s_d_m_menu_id');
+            $table->bigInteger('r_s_d_m_produk_id');
             $table->string('r_s_d_m_menu_code');
-            $table->string('r_s_d_m_menu_nama');
+            $table->string('r_s_d_m_produk_nama');
             $table->string('r_s_d_m_menu_cr');
             $table->string('r_s_d_m_menu_urut');
-            $table->bigInteger('r_s_d_m_menu_jenis_id');
-            $table->string('r_s_d_m_menu_jenis_nama');
+            $table->bigInteger('r_s_d_m_jenis_produk_id');
+            $table->string('r_s_d_m_jenis_produk_nama');
             $table->integer('r_s_d_qty');
             $table->char('r_s_d_status_sync', 1)->default('0');
             $table->timestampTz('r_s_d_created_by');

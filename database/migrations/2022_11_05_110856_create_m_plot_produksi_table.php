@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('m_plot_produksi', function (Blueprint $table) {
-            $table->id();
+            $table->id('m_plot_produksi_id');
             $table->string('m_plot_produksi_nama');
             $table->bigInteger('m_plot_produksi_created_by');
             $table->timestampTz('m_plot_produksi_created_at')->useCurrent();

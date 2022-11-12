@@ -20,12 +20,12 @@ return new class extends Migration
             $table->smallInteger('r_g_shift');
             $table->time('r_g_jam');
             $table->string('r_g_nota_code');
-            $table->bigInteger('r_g_m_menu_id');
-            $table->string('r_g_m_menu_nama');
+            $table->bigInteger('r_g_m_produk_id');
+            $table->string('r_g_m_produk_nama');
             $table->string('r_g_m_menu_cr')->default('');
             $table->string('r_g_m_menu_urut');
-            $table->bigInteger('r_g_m_menu_jenis_id');
-            $table->string('r_g_m_menu_jenis_nama');
+            $table->bigInteger('r_g_m_jenis_produk_id');
+            $table->string('r_g_m_jenis_produk_nama');
             $table->decimal('r_g_m_menu_harga_nominal', 15);
             $table->integer('r_g_qty');
             $table->decimal('r_g_nominal', 15);
