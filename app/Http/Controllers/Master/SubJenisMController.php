@@ -15,8 +15,14 @@ class SubJenisMController extends Controller
         ->leftjoin('m_menu_jenis as mmj', 'msj.m_sub_menu_jenis_m_menu_jenis_id', '=', 'mmj.id')
         ->select('msj.id','msj.m_sub_menu_jenis_nama','mmj.m_menu_jenis_nama')
         ->whereNull('msj.m_sub_menu_jenis_deleted_at')->get();
-        $data->test = DB::table('m_menu_jenis')->select('id','m_menu_jenis_nama')->get();
-        return view('master.sub_jenis_menu',compact('data'));
+        $data2 = DB::table('m_menu_jenis')->select('id','m_menu_jenis_nama')->get();
+        $data3 = array();
+        foreach ($data2 as $key => $value) {
+            $row = array();
+            $data3[$value->id]= $value->m_menu_jenis_nama;
+         
+        }
+        return view('master.sub_jenis_menu',compact('data','data3'));
     }
     public function action(Request $request)
     { 

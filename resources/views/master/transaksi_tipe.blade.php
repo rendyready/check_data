@@ -7,24 +7,30 @@
         <div class="block block-themed h-100 mb-0">
           <div class="block-header bg-pulse">
             <h3 class="block-title">
-              Data Sub Jenis Menu
+              Tipe Transaksi
           </div>
           <div class="block-content text-muted">
             @csrf
-            <table id="sub_jenis_menu" class="table table-bordered table-striped table-vcenter js-dataTable-full">
+            <table id="m_transaksi_tipe" class="table table-bordered table-striped table-vcenter js-dataTable-full">
               <thead>
               <tr>
                   <th>ID</th>
-                  <th>NAMA SUB JENIS MENU</th>
-                  <th>NAMA JENIS MENU</th>
+                  <th>TIPE TRANSAKSI</th>
+                  <th>PROFIT IN</th>
+                  <th>PROFIT OUT</th>
+                  <th>PROFIT PRICE</th>
+                  <th>KELOMPOK TIPE TRANSAKSI</th>
               </tr>
               </thead>
               <tbody id="tablecontents">
-                @foreach ($data->sub as $item)
+                @foreach ($data as $item)
                     <tr>
-                      <td>{{$item->id}}</td>
-                      <td>{{$item->m_sub_menu_jenis_nama}}</td>
-                      <td>{{$item->m_menu_jenis_nama}}</td>
+                      <td>{{$item->m_t_t_id}}</td>
+                      <td>{{$item->m_t_t_name}}</td>
+                      <td>{{$item->m_t_t_profit_in}}</td>
+                      <td>{{$item->m_t_t_profit_out}}</td>
+                      <td>{{$item->m_t_t_profit_price}}</td>
+                      <td>{{$item->m_t_t_group}}</td>
                     </tr>
                 @endforeach
               </tbody>
@@ -44,18 +50,21 @@
       'X-CSRF-Token' : $("input[name=_token]").val()
         }
       });
-      var t = $('#sub_jenis_menu').DataTable({
+      var t = $('#m_transaksi_tipe').DataTable({
         processing : false,
         serverSide : false,
         destroy: true,
         order : [0,'asc'],
       });
-    $('#sub_jenis_menu').Tabledit({
-    url:'{{ route("action.sub_jenis_menu") }}',
+      var att_num = '{"min": "0.00", "step": "0.01","placeholder":"0.00"}';
+    $('#m_transaksi_tipe').Tabledit({
+    url:'{{ route("action.m_transaksi_tipe") }}',
     dataType:"json",
     columns:{
-      identifier:[0, 'id'],
-      editable:[[1, 'm_sub_menu_jenis_nama'],[2,'m_sub_menu_jenis_m_menu_jenis_id','select',"{{$data3}}"]]
+      identifier:[0, 'm_t_t_id'],
+      editable:[[1,'m_t_t_name'],[2, 'm_t_t_profit_in','number',att_num],
+      [3,'m_t_t_profit_out','number',att_num],[4,'m_t_t_profit_price','number',att_num],
+      [5,'m_t_t_group','select','{"ojol":"Ojol","reguler":"Reguler"}']]
     },
     restoreButton:false,
     onSuccess:function(data, textStatus, jqXHR)
@@ -69,8 +78,8 @@
       }
     }
   });
-  $("#sub_jenis_menu").append(
-       $('<tfoot/>').append( $("#sub_jenis_menu thead tr").clone() )
+  $("#m_transaksi_tipe").append(
+       $('<tfoot/>').append( $("#m_transaksi_tipe thead tr").clone() )
       );
   });
   </script>
