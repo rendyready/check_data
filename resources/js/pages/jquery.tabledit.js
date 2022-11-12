@@ -330,8 +330,8 @@
                 var supportedTypes = ["input", "hidden", "number", "select", "textarea"];
                 // List of valid attributes for columnType 'textarea'
                 var supportedAttrTextarea = ["rows", "cols", "maxlength", "wrap"];
-                // -----------------------------------
-
+                // List of valid attirbute for number
+                var supportedAttrNumber = ["step", "placeholder", "min"];
                 // Get type from colums user definition
                 var columnType = settings.columns.editable[i][2];
 
@@ -355,9 +355,12 @@
 
                     break;
                   case 'number':
-
-                    // Create text input element.
-                    input = '<input class="tabledit-input ' + settings.inputClass + '" type="number" name="' + settings.columns.editable[i][1] + '" value="' + text + '" style="display: none;" disabled>';
+                    input = '<input ';
+                    $.each($.parseJSON(settings.columns.editable[i][3]), function (index, value) {
+                      // Ignore attribute if not of supported type
+                      input += ($.inArray(index, supportedAttrNumber) != -1) ? index + '="' + value + '" ' : '';
+                    });
+                    input += ' class="tabledit-input ' + settings.inputClass + '" type="number" name="' + settings.columns.editable[i][1] + '" value="' + text + '" style="display: none;" disabled>';
 
                     break;
                   case 'select':

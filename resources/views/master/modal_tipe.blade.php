@@ -7,24 +7,32 @@
         <div class="block block-themed h-100 mb-0">
           <div class="block-header bg-pulse">
             <h3 class="block-title">
-              Data Sub Jenis Menu
+              Data Modal
           </div>
           <div class="block-content text-muted">
             @csrf
-            <table id="sub_jenis_menu" class="table table-bordered table-striped table-vcenter js-dataTable-full">
+            <table id="modal_tipe" class="table table-bordered table-striped table-vcenter js-dataTable-full">
               <thead>
               <tr>
                   <th>ID</th>
-                  <th>NAMA SUB JENIS MENU</th>
-                  <th>NAMA JENIS MENU</th>
+                  <th>NAMA MODAL TIPE</th>
+                  <th>PARENT MODAL TIPE</th>
+                  <th>NOMINAL</th>
+                  <th>URUTAN TIPE</th>
               </tr>
               </thead>
               <tbody id="tablecontents">
-                @foreach ($data->sub as $item)
+                @foreach ($data->m_modal_tipe as $item)
                     <tr class="row1">
                       <td>{{$item->id}}</td>
-                      <td>{{$item->m_sub_menu_jenis_nama}}</td>
-                      <td>{{$item->m_menu_jenis_nama}}</td>
+                      <td>{{$item->m_modal_tipe_nama}}</td>
+                      <td>
+                        @if(!empty($item->m_modal_tipe_parent_id) && !empty($item->m_modal_tipe))
+                        {{$item->m_modal_tipe->m_modal_tipe_nama}}
+                        @endif
+                      </td>
+                      <td>{{$item->m_modal_tipe_nominal}}</td>
+                      <td>{{$item->m_modal_tipe_urut}}</td>
                     </tr>
                 @endforeach
               </tbody>
@@ -44,18 +52,19 @@
       'X-CSRF-Token' : $("input[name=_token]").val()
         }
       });
-      var t = $('#sub_jenis_menu').DataTable({
+      var t = $('#modal_tipe').DataTable({
         processing : false,
         serverSide : false,
         destroy: true,
         order : [0,'asc'],
       });
-    $('#sub_jenis_menu').Tabledit({
-    url:'{{ route("action.sub_jenis_menu") }}',
+      
+    $('#modal_tipe').Tabledit({
+    url:'{{ route("action.modal_tipe") }}',
     dataType:"json",
     columns:{
       identifier:[0, 'id'],
-      editable:[[1, 'm_sub_menu_jenis_nama'],[2,'m_sub_menu_jenis_m_menu_jenis_id','select','{"4": "Lauk", "1": "Minuman","12":"Mutasi-WBD","9":"Non-Menu","7":"Paket","3":"Sambal","5":"Sayur","11":"WBD-Corner"}']]
+      editable:[[1, 'm_menu_jenis_nama'],[2,'m_menu_jenis_odcr55','select','{"makan": "makan", "minum": "minum"}']]
     },
     restoreButton:false,
     onSuccess:function(data, textStatus, jqXHR)
@@ -69,8 +78,8 @@
       }
     }
   });
-  $("#sub_jenis_menu").append(
-       $('<tfoot/>').append( $("#sub_jenis_menu thead tr").clone() )
+  $("#modal_tipe").append(
+       $('<tfoot/>').append( $("#modal_tipe thead tr").clone() )
       );
   });
   </script>

@@ -7,24 +7,28 @@
         <div class="block block-themed h-100 mb-0">
           <div class="block-header bg-pulse">
             <h3 class="block-title">
-              Data Sub Jenis Menu
+              Jenis Meja
           </div>
           <div class="block-content text-muted">
             @csrf
-            <table id="sub_jenis_menu" class="table table-bordered table-striped table-vcenter js-dataTable-full">
+            <table id="m_meja_jenis" class="table table-bordered table-striped table-vcenter js-dataTable-full">
               <thead>
               <tr>
                   <th>ID</th>
-                  <th>NAMA SUB JENIS MENU</th>
-                  <th>NAMA JENIS MENU</th>
+                  <th>NAMA JENIS MEJA WAROENG</th>
+                  <th>SPACE JENIS MEJA WAROENG</th>
+                  <th>STATUS JENIS MEJA WAROENG</th>
               </tr>
               </thead>
               <tbody id="tablecontents">
-                @foreach ($data->sub as $item)
+                @foreach ($data as $item)
                     <tr class="row1">
-                      <td>{{$item->id}}</td>
-                      <td>{{$item->m_sub_menu_jenis_nama}}</td>
-                      <td>{{$item->m_menu_jenis_nama}}</td>
+                      <td>{{$item->m_meja_jenis_id}}</td>
+                      <td>{{$item->m_meja_jenis_nama}}</td>
+                      <td>{{$item->m_meja_jenis_space}}</td>
+                      <td>
+                        {{ $item->m_meja_jenis_status==1 ? 'Active' : 'Non-Active' }}
+                      </td>
                     </tr>
                 @endforeach
               </tbody>
@@ -44,18 +48,18 @@
       'X-CSRF-Token' : $("input[name=_token]").val()
         }
       });
-      var t = $('#sub_jenis_menu').DataTable({
+      var t = $('#m_meja_jenis').DataTable({
         processing : false,
         serverSide : false,
         destroy: true,
         order : [0,'asc'],
       });
-    $('#sub_jenis_menu').Tabledit({
-    url:'{{ route("action.sub_jenis_menu") }}',
+    $('#m_meja_jenis').Tabledit({
+    url:'{{ route("action.m_jenis_meja") }}',
     dataType:"json",
     columns:{
-      identifier:[0, 'id'],
-      editable:[[1, 'm_sub_menu_jenis_nama'],[2,'m_sub_menu_jenis_m_menu_jenis_id','select','{"4": "Lauk", "1": "Minuman","12":"Mutasi-WBD","9":"Non-Menu","7":"Paket","3":"Sambal","5":"Sayur","11":"WBD-Corner"}']]
+      identifier:[0, 'm_meja_jenis_id'],
+      editable:[[1, 'm_meja_jenis_nama'],[2,'m_meja_jenis_space','number','{"min":"1"}'],[3,'m_meja_jenis_status','select','{"1":"Active","0":"Non-Active"}']]
     },
     restoreButton:false,
     onSuccess:function(data, textStatus, jqXHR)
@@ -69,8 +73,8 @@
       }
     }
   });
-  $("#sub_jenis_menu").append(
-       $('<tfoot/>').append( $("#sub_jenis_menu thead tr").clone() )
+  $("#m_meja_jenis").append(
+       $('<tfoot/>').append( $("#m_meja_jenis thead tr").clone() )
       );
   });
   </script>
