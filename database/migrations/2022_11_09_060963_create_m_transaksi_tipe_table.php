@@ -16,9 +16,9 @@ return new class extends Migration
         Schema::create('m_transaksi_tipe', function (Blueprint $table) {
             $table->id('m_t_t_id');
             $table->string('m_t_t_name');
-            $table->decimal('m_t_t_profit_price', 8, 5);
-            $table->decimal('m_t_t_profit_in', 8, 5);
-            $table->decimal('m_t_t_profit_out', 8, 5);
+            $table->decimal('m_t_t_profit_price', 8, 2);
+            $table->decimal('m_t_t_profit_in', 8, 2);
+            $table->decimal('m_t_t_profit_out', 8, 2);
             $table->string('m_t_t_group');
             $table->bigInteger('m_t_t_created_by');
             $table->bigInteger('m_t_t_updated_by')->nullable();

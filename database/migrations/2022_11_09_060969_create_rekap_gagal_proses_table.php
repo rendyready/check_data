@@ -19,10 +19,10 @@ return new class extends Migration
             $table->smallInteger('r_g_p_shift');
             $table->time('r_g_p_jam');
             $table->string('r_g_p_m_menu_code');
-            $table->bigInteger('r_g_p_m_menu_id');
-            $table->string('r_g_p_m_menu_nama');
-            $table->bigInteger('r_g_p_m_menu_jenis_id');
-            $table->string('r_g_p_m_menu_jenis_nama');
+            $table->bigInteger('r_g_p_m_produk_id');
+            $table->string('r_g_p_m_produk_nama');
+            $table->bigInteger('r_g_p_m_jenis_produk_id');
+            $table->string('r_g_p_m_jenis_produk_nama');
             $table->string('r_g_p_m_menu_urut');
             $table->decimal('r_g_p_m_menu_harga_nominal', 15);
             $table->integer('r_g_p_qty');

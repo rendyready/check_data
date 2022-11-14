@@ -14,80 +14,80 @@ class MJenisMenuTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('m_menu_jenis')->truncate();
+        DB::table('m_jenis_produk')->truncate();
 
-        DB::table('m_menu_jenis')->insert([
+        DB::table('m_jenis_produk')->insert([
             [
-                'm_menu_jenis_nama' => 'Minuman',
-                'm_menu_jenis_odcr55' => 'minum',
-                'm_menu_jenis_created_by' => 1,
-                'm_menu_jenis_urut' => 1
+                'm_jenis_produk_nama' => 'Minuman',
+                'm_jenis_produk_odcr55' => 'minum',
+                'm_jenis_produk_created_by' => 1,
+                'm_jenis_produk_urut' => 1
             ],
             [
-                'm_menu_jenis_nama' => 'Buah',
-                'm_menu_jenis_odcr55' => 'minum',
-                'm_menu_jenis_created_by' => 1,
-                'm_menu_jenis_urut' => 2
+                'm_jenis_produk_nama' => 'Buah',
+                'm_jenis_produk_odcr55' => 'minum',
+                'm_jenis_produk_created_by' => 1,
+                'm_jenis_produk_urut' => 2
             ],
             [
-                'm_menu_jenis_nama' => 'Sambal',
-                'm_menu_jenis_odcr55' => 'makan',
-                'm_menu_jenis_created_by' => 1,
-                'm_menu_jenis_urut' => 3
+                'm_jenis_produk_nama' => 'Sambal',
+                'm_jenis_produk_odcr55' => 'makan',
+                'm_jenis_produk_created_by' => 1,
+                'm_jenis_produk_urut' => 3
             ],
             [
-                'm_menu_jenis_nama' => 'Lauk',
-                'm_menu_jenis_odcr55' => 'makan',
-                'm_menu_jenis_created_by' => 1,
-                'm_menu_jenis_urut' => 4
+                'm_jenis_produk_nama' => 'Lauk',
+                'm_jenis_produk_odcr55' => 'makan',
+                'm_jenis_produk_created_by' => 1,
+                'm_jenis_produk_urut' => 4
             ],
             [
-                'm_menu_jenis_nama' => 'Sayur',
-                'm_menu_jenis_odcr55' => 'makan',
-                'm_menu_jenis_created_by' => 1,
-                'm_menu_jenis_urut' => 5
+                'm_jenis_produk_nama' => 'Sayur',
+                'm_jenis_produk_odcr55' => 'makan',
+                'm_jenis_produk_created_by' => 1,
+                'm_jenis_produk_urut' => 5
             ],
             [
-                'm_menu_jenis_nama' => 'Nasi',
-                'm_menu_jenis_odcr55' => 'makan',
-                'm_menu_jenis_created_by' => 1,
-                'm_menu_jenis_urut' => 6
+                'm_jenis_produk_nama' => 'Nasi',
+                'm_jenis_produk_odcr55' => 'makan',
+                'm_jenis_produk_created_by' => 1,
+                'm_jenis_produk_urut' => 6
             ],
             [
-                'm_menu_jenis_nama' => 'Paket',
-                'm_menu_jenis_odcr55' => 'makan',
-                'm_menu_jenis_created_by' => 1,
-                'm_menu_jenis_urut' => 7
+                'm_jenis_produk_nama' => 'Paket',
+                'm_jenis_produk_odcr55' => 'makan',
+                'm_jenis_produk_created_by' => 1,
+                'm_jenis_produk_urut' => 7
             ],
             [
-                'm_menu_jenis_nama' => 'Lain-lain',
-                'm_menu_jenis_odcr55' => null,
-                'm_menu_jenis_created_by' => 1,
-                'm_menu_jenis_urut' => 8
+                'm_jenis_produk_nama' => 'Lain-lain',
+                'm_jenis_produk_odcr55' => null,
+                'm_jenis_produk_created_by' => 1,
+                'm_jenis_produk_urut' => 8
             ],
             [
-                'm_menu_jenis_nama' => 'Non-Menu',
-                'm_menu_jenis_odcr55' => 'minum',
-                'm_menu_jenis_created_by' => 1,
-                'm_menu_jenis_urut' => 9
+                'm_jenis_produk_nama' => 'Non-Menu',
+                'm_jenis_produk_odcr55' => 'minum',
+                'm_jenis_produk_created_by' => 1,
+                'm_jenis_produk_urut' => 9
             ],  
             [
-                'm_menu_jenis_nama' => 'Promo',
-                'm_menu_jenis_odcr55' => 'makan',
-                'm_menu_jenis_created_by' => 1,
-                'm_menu_jenis_urut' => 10
+                'm_jenis_produk_nama' => 'Promo',
+                'm_jenis_produk_odcr55' => 'makan',
+                'm_jenis_produk_created_by' => 1,
+                'm_jenis_produk_urut' => 10
             ],
             [
-                'm_menu_jenis_nama' => 'WBD-Corner',
-                'm_menu_jenis_odcr55' => 'makan',
-                'm_menu_jenis_created_by' => 1,
-                'm_menu_jenis_urut' => 11
+                'm_jenis_produk_nama' => 'WBD-Corner',
+                'm_jenis_produk_odcr55' => 'makan',
+                'm_jenis_produk_created_by' => 1,
+                'm_jenis_produk_urut' => 11
             ],
             [
-                'm_menu_jenis_nama' => 'Mutasi-WBD',
-                'm_menu_jenis_odcr55' => 'makan',
-                'm_menu_jenis_created_by' => 1,
-                'm_menu_jenis_urut' => 12
+                'm_jenis_produk_nama' => 'Mutasi-WBD',
+                'm_jenis_produk_odcr55' => 'makan',
+                'm_jenis_produk_created_by' => 1,
+                'm_jenis_produk_urut' => 12
             ]
           
          

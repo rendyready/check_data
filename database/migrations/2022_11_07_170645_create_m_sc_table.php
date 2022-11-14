@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('m_sc', function (Blueprint $table) {
-            $table->id();
+            $table->id('m_sc_id');
             $table->decimal('m_sc_value',3,2);
             $table->bigInteger('m_sc_created_by');
             $table->timestampTz('m_sc_created_at')->useCurrent();
