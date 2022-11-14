@@ -11,10 +11,10 @@ class SubJenisMController extends Controller
     public function index()
     {
         $data = new \stdClass();
-        $data->sub = DB::table('m_sub_menu_jenis as msj')
-        ->leftjoin('m_menu_jenis as mmj', 'msj.m_sub_menu_jenis_m_menu_jenis_id', '=', 'mmj.id')
-        ->select('msj.id','msj.m_sub_menu_jenis_nama','mmj.m_menu_jenis_nama')
-        ->whereNull('msj.m_sub_menu_jenis_deleted_at')->get();
+        $data->sub = DB::table('m_sub_jenis_produk as msj')
+        ->leftjoin('m_jenis_produk as mmj', 'msj.m_sub_jenis_produk_m_jenis_produk_id', '=', 'mmj.m_jenis_produk_id')
+        ->select('msj.m_sub_jenis_produk_id','msj.m_sub_jenis_produk_nama','mmj.m_jenis_produk_nama')
+        ->whereNull('msj.m_sub_jenis_produk_deleted_at')->get();
         
         return view('master.sub_jenis_menu',compact('data'));
     }
@@ -24,24 +24,24 @@ class SubJenisMController extends Controller
     	{
             if ($request->action == 'add') {
                 $data = array(
-                    'm_sub_menu_jenis_nama'	=>	$request->m_sub_menu_jenis_nama,
-                    'm_sub_menu_jenis_m_menu_jenis_id' => $request->m_sub_menu_jenis_m_menu_jenis_id,
-                    'm_sub_menu_jenis_created_by' => Auth::id(),
-                    'm_sub_menu_jenis_created_at' => Carbon::now(),
+                    'm_sub_jenis_produk_nama'	=>	$request->m_sub_jenis_produk_nama,
+                    'm_sub_jenis_produk_m_jenis_produk_id' => $request->m_sub_jenis_produk_m_jenis_produk_id,
+                    'm_sub_jenis_produk_created_by' => Auth::id(),
+                    'm_sub_jenis_produk_created_at' => Carbon::now(),
                 );
-                DB::table('m_sub_menu_jenis')->insert($data);
+                DB::table('m_sub_jenis_produk')->insert($data);
             } elseif ($request->action == 'edit') {
                 $data = array(
-                    'm_sub_menu_jenis_nama'	=>	$request->m_sub_menu_jenis_nama,
-                    'm_sub_menu_jenis_m_menu_jenis_id' => $request->m_sub_menu_jenis_m_menu_jenis_id,
-                    'm_sub_menu_jenis_updated_by' => Auth::id(),
-                    'm_sub_menu_jenis_updated_at' => Carbon::now(),
+                    'm_sub_jenis_produk_nama'	=>	$request->m_sub_jenis_produk_nama,
+                    'm_sub_jenis_produk_m_jenis_produk_id' => $request->m_sub_jenis_produk_m_jenis_produk_id,
+                    'm_sub_jenis_produk_updated_by' => Auth::id(),
+                    'm_sub_jenis_produk_updated_at' => Carbon::now(),
                 );
-                DB::table('m_sub_menu_jenis')->where('id',$request->id)
+                DB::table('m_sub_jenis_produk')->where('id',$request->id)
                 ->update($data);
             }else {
-                $softdelete = array('m_sub_menu_jenis_deleted_at' => Carbon::now());
-    			DB::table('m_sub_menu_jenis')
+                $softdelete = array('m_sub_jenis_produk_deleted_at' => Carbon::now());
+    			DB::table('m_sub_jenis_produk')
     				->where('id', $request->id)
     				->update($softdelete);
             }
@@ -51,14 +51,12 @@ class SubJenisMController extends Controller
     public function list()
     {
         $data = new \stdClass();
-        $data->m_jenis_menu = DB::table('m_menu_jenis')->select('id','m_menu_jenis_nama')->get();
-        $data->m_modal_tipe = DB::table('m_modal_tipe')->get();
-        // $data3 = array();
-        // foreach ($data2 as $key => $value) {
-        //     $row = array();
-        //     $data3[$value->id]= $value->m_menu_jenis_nama;
-        // }
-
+        $data1 = DB::table('m_jenis_produk')->select('m_jenis_produk_id','m_jenis_produk_nama')->get();
+        $a = array();
+        foreach ($data1 as $key => $value) {
+            $a[$value->m_jenis_produk_id]= $value->m_jenis_produk_nama;
+        }
+        $data->m_jenis_menu = $a;
         return response()->json($data);
     }
 

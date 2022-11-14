@@ -12,7 +12,7 @@ class PajakController extends Controller
     public function index()
     {
         $data = DB::table('m_pajak')
-        ->select('id','m_pajak_value')
+        ->select('m_pajak_id','m_pajak_value')
         ->whereNull('m_pajak_deleted_at')->get();
         return view('master.pajak',compact('data'));
     }
@@ -33,12 +33,12 @@ class PajakController extends Controller
                     'm_pajak_updated_by' => Auth::id(),
                     'm_pajak_updated_at' => Carbon::now(),
                 );
-                DB::table('m_pajak')->where('id',$request->id)
+                DB::table('m_pajak')->where('m_pajak_id',$request->id)
                 ->update($data);
             }else {
                 $softdelete = array('m_pajak_jenis_deleted_at' => Carbon::now());
     			DB::table('m_pajak')
-    				->where('id', $request->id)
+    				->where('m_pajak_id', $request->id)
     				->update($softdelete);
             }
     		return response()->json($request);

@@ -18,12 +18,12 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $r_p_v_shift
  * @property time without time zone $r_p_v_jam
  * @property string $r_p_v_nota_code
- * @property int $r_p_v_m_menu_id
- * @property string $r_p_v_m_menu_nama
+ * @property int $r_p_v_m_produk_id
+ * @property string $r_p_v_m_produk_nama
  * @property string $r_p_v_m_menu_cr
  * @property string $r_p_v_m_menu_urut
- * @property int $r_p_v_m_menu_jenis_id
- * @property string $r_p_v_m_menu_jenis_nama
+ * @property int $r_p_v_m_jenis_produk_id
+ * @property string $r_p_v_m_jenis_produk_nama
  * @property float $r_p_v_m_menu_harga_nominal
  * @property int $r_p_v_qty
  * @property float $r_p_v_nominal
@@ -53,8 +53,8 @@ class RekapPreVoid extends Model
 		'r_p_v_r_t_id' => 'int',
 		'r_p_v_shift' => 'int',
 		'r_p_v_jam' => 'time without time zone',
-		'r_p_v_m_menu_id' => 'int',
-		'r_p_v_m_menu_jenis_id' => 'int',
+		'r_p_v_m_produk_id' => 'int',
+		'r_p_v_m_jenis_produk_id' => 'int',
 		'r_p_v_m_menu_harga_nominal' => 'float',
 		'r_p_v_qty' => 'int',
 		'r_p_v_nominal' => 'float',
@@ -78,12 +78,12 @@ class RekapPreVoid extends Model
 		'r_p_v_shift',
 		'r_p_v_jam',
 		'r_p_v_nota_code',
-		'r_p_v_m_menu_id',
-		'r_p_v_m_menu_nama',
+		'r_p_v_m_produk_id',
+		'r_p_v_m_produk_nama',
 		'r_p_v_m_menu_cr',
 		'r_p_v_m_menu_urut',
-		'r_p_v_m_menu_jenis_id',
-		'r_p_v_m_menu_jenis_nama',
+		'r_p_v_m_jenis_produk_id',
+		'r_p_v_m_jenis_produk_nama',
 		'r_p_v_m_menu_harga_nominal',
 		'r_p_v_qty',
 		'r_p_v_nominal',

@@ -13,17 +13,17 @@ use Illuminate\Database\Eloquent\Model;
  * Class RekapPesanan
  * 
  * @property int $r_p_id
- * @property int $r_p_m_menu_id
+ * @property int $r_p_m_produk_id
  * @property string|null $r_p_m_menu_code
- * @property string $r_p_m_menu_nama
+ * @property string $r_p_m_produk_nama
  * @property string $r_p_m_menu_cr
  * @property string $r_p_m_menu_urut
  * @property float $r_p_m_menu_harga_nominal
  * @property int $r_p_m_r_t_id
  * @property Carbon $r_p_tanggal
  * @property time without time zone $r_p_jam
- * @property int $r_p_m_menu_jenis_id
- * @property string $r_p_m_menu_jenis_nama
+ * @property int $r_p_m_jenis_produk_id
+ * @property string $r_p_m_jenis_produk_nama
  * @property string $r_p_custom
  * @property int $r_p_qty
  * @property Carbon $r_p_jam_input
@@ -53,11 +53,11 @@ class RekapPesanan extends Model
 	public $timestamps = false;
 
 	protected $casts = [
-		'r_p_m_menu_id' => 'int',
+		'r_p_m_produk_id' => 'int',
 		'r_p_m_menu_harga_nominal' => 'float',
 		'r_p_m_r_t_id' => 'int',
 		'r_p_jam' => 'time without time zone',
-		'r_p_m_menu_jenis_id' => 'int',
+		'r_p_m_jenis_produk_id' => 'int',
 		'r_p_qty' => 'int',
 		'r_p_durasi_produksi' => 'int',
 		'r_p_durasi_saji' => 'int',
@@ -79,17 +79,17 @@ class RekapPesanan extends Model
 	];
 
 	protected $fillable = [
-		'r_p_m_menu_id',
+		'r_p_m_produk_id',
 		'r_p_m_menu_code',
-		'r_p_m_menu_nama',
+		'r_p_m_produk_nama',
 		'r_p_m_menu_cr',
 		'r_p_m_menu_urut',
 		'r_p_m_menu_harga_nominal',
 		'r_p_m_r_t_id',
 		'r_p_tanggal',
 		'r_p_jam',
-		'r_p_m_menu_jenis_id',
-		'r_p_m_menu_jenis_nama',
+		'r_p_m_jenis_produk_id',
+		'r_p_m_jenis_produk_nama',
 		'r_p_custom',
 		'r_p_qty',
 		'r_p_jam_input',

@@ -23,10 +23,10 @@
               <tbody id="tablecontents">
                 @foreach ($data as $item)
                     <tr class="row1">
-                      <td>{{$item->id}}</td>
-                      <td>{{$item->m_menu_jenis_nama}}</td>
-                      <td>{{$item->m_menu_jenis_odcr55}}</td>
-                      <td>{{$item->m_menu_jenis_urut}}</td>
+                      <td>{{$item->m_jenis_produk_id}}</td>
+                      <td>{{$item->m_jenis__produk_nama}}</td>
+                      <td>{{$item->m_jenis__produk_odcr55}}</td>
+                      <td>{{$item->m_jenis__produk_urut}}</td>
                     </tr>
                 @endforeach
               </tbody>
@@ -107,8 +107,8 @@
     url:'{{ route("action.jenis_menu") }}',
     dataType:"json",
     columns:{
-      identifier:[0, 'id'],
-      editable:[[1, 'm_menu_jenis_nama'],[2,'m_menu_jenis_odcr55','select','{"makan": "makan", "minum": "minum"}']]
+      identifier:[0, 'm_jenis__produk_id'],
+      editable:[[1, 'm_jenis__produk_nama'],[2,'m_jenis__produk_odcr55','select','{"makan": "makan", "minum": "minum"}']]
     },
     restoreButton:false,
     onSuccess:function(data, textStatus, jqXHR)

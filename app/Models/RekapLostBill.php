@@ -18,12 +18,12 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $r_l_b_shift
  * @property time without time zone $r_l_b_jam
  * @property string $r_l_b_nota_code
- * @property int $r_l_b_m_menu_id
- * @property string $r_l_b_m_menu_nama
+ * @property int $r_l_b_m_produk_id
+ * @property string $r_l_b_m_produk_nama
  * @property string $r_l_b_m_menu_cr
  * @property string $r_l_b_m_menu_urut
- * @property int $r_l_b_m_menu_jenis_id
- * @property string $r_l_b_m_menu_jenis_nama
+ * @property int $r_l_b_m_jenis_produk_id
+ * @property string $r_l_b_m_jenis_produk_nama
  * @property float $r_l_b_m_menu_harga_nominal
  * @property int $r_l_b_qty
  * @property float $r_l_b_nominal
@@ -55,8 +55,8 @@ class RekapLostBill extends Model
 		'r_l_b_r_t_id' => 'int',
 		'r_l_b_shift' => 'int',
 		'r_l_b_jam' => 'time without time zone',
-		'r_l_b_m_menu_id' => 'int',
-		'r_l_b_m_menu_jenis_id' => 'int',
+		'r_l_b_m_produk_id' => 'int',
+		'r_l_b_m_jenis_produk_id' => 'int',
 		'r_l_b_m_menu_harga_nominal' => 'float',
 		'r_l_b_qty' => 'int',
 		'r_l_b_nominal' => 'float',
@@ -81,12 +81,12 @@ class RekapLostBill extends Model
 		'r_l_b_shift',
 		'r_l_b_jam',
 		'r_l_b_nota_code',
-		'r_l_b_m_menu_id',
-		'r_l_b_m_menu_nama',
+		'r_l_b_m_produk_id',
+		'r_l_b_m_produk_nama',
 		'r_l_b_m_menu_cr',
 		'r_l_b_m_menu_urut',
-		'r_l_b_m_menu_jenis_id',
-		'r_l_b_m_menu_jenis_nama',
+		'r_l_b_m_jenis_produk_id',
+		'r_l_b_m_jenis_produk_nama',
 		'r_l_b_m_menu_harga_nominal',
 		'r_l_b_qty',
 		'r_l_b_nominal',

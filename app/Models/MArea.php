@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class MArea
  * 
- * @property int $id
+ * @property int $m_area_id
  * @property string $m_area_nama
  * @property int $m_area_created_by
  * @property Carbon $m_area_created_at
@@ -25,6 +25,7 @@ use Illuminate\Database\Eloquent\Model;
 class MArea extends Model
 {
 	protected $table = 'm_area';
+	protected $primaryKey = 'm_area_id';
 	public $timestamps = false;
 
 	protected $casts = [

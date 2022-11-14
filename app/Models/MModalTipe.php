@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class MModalTipe
  * 
- * @property int $id
+ * @property int $m_modal_tipe_id
  * @property string $m_modal_tipe_nama
  * @property int|null $m_modal_tipe_parent_id
  * @property float|null $m_modal_tipe_nominal
@@ -28,6 +28,7 @@ use Illuminate\Database\Eloquent\Model;
 class MModalTipe extends Model
 {
 	protected $table = 'm_modal_tipe';
+	protected $primaryKey = 'm_modal_tipe_id';
 	public $timestamps = false;
 
 	protected $casts = [
@@ -55,7 +56,6 @@ class MModalTipe extends Model
 		'm_modal_tipe_updated_at',
 		'm_modal_tipe_deleted_at'
 	];
-
 	public function m_modal_tipe()
 	{
 		return $this->belongsTo(MModalTipe::class, 'm_modal_tipe_parent_id');

@@ -59,7 +59,7 @@ Route::group(['prefix' => 'master', 'controller' => App\Http\Controllers\Master\
     Route::get('m_jenis_meja','index')->name('m_jenis_meja.index');
     Route::post('m_jenis_meja/action','action')->name('action.m_jenis_meja');
 });
-//Master Jenis Meja
+//Master Trans Tipe
 Route::group(['prefix' => 'master', 'controller' => App\Http\Controllers\Master\TransTipeController::class,'middleware' => ['auth','web']], function()
 {
     Route::get('m_transaksi_tipe','index')->name('m_transaksi_tipe.index');

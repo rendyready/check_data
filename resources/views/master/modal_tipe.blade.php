@@ -24,7 +24,7 @@
               <tbody id="tablecontents">
                 @foreach ($data->m_modal_tipe as $item)
                     <tr class="row1">
-                      <td>{{$item->id}}</td>
+                      <td>{{$item->m_modal_tipe_id}}</td>
                       <td>{{$item->m_modal_tipe_nama}}</td>
                       <td>
                         @if(!empty($item->m_modal_tipe_parent_id) && !empty($item->m_modal_tipe))
@@ -63,8 +63,8 @@
     url:'{{ route("action.modal_tipe") }}',
     dataType:"json",
     columns:{
-      identifier:[0, 'id'],
-      editable:[[1, 'm_menu_jenis_nama'],[2,'m_menu_jenis_odcr55','select','{"makan": "makan", "minum": "minum"}']]
+      identifier:[0, 'm_modal_tipe_id'],
+      editable:[[1, 'm_modal_tipe_nama'],[2,'m_menu_jenis_odcr55','select','{"makan": "makan", "minum": "minum"}']]
     },
     restoreButton:false,
     onSuccess:function(data, textStatus, jqXHR)
