@@ -32,7 +32,7 @@ Route::group(['prefix' => 'master', 'controller' => App\Http\Controllers\Master\
 //Master SubJenis
 Route::group(['prefix' => 'master', 'controller' => App\Http\Controllers\Master\SubJenisMController::class,'middleware' => ['auth','web']], function()
 {
-    Route::get('sub_jenis_menu','index')->name('sub_jenis_menu.index'); 
+    Route::get('sub_jenis_menu','index')->name('sub_jenis_menu.index');  Route::get('sub_jenis_menu/list','list')->name('sub_jenis_menu.list');
     Route::post('sub_jenis_menu/action','action')->name('action.sub_jenis_menu');
 });
 //Master Modal Tipe

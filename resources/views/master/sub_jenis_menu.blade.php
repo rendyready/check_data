@@ -50,28 +50,38 @@
         destroy: true,
         order : [0,'asc'],
       });
-    $('#sub_jenis_menu').Tabledit({
-    url:'{{ route("action.sub_jenis_menu") }}',
-    dataType:"json",
-    columns:{
-      identifier:[0, 'id'],
-      editable:[[1, 'm_sub_menu_jenis_nama'],[2,'m_sub_menu_jenis_m_menu_jenis_id','select',"{{$data3}}"]]
-    },
-    restoreButton:false,
-    onSuccess:function(data, textStatus, jqXHR)
-    {
-      if (data.action == 'add') {
-        window.location.reload();
-      }
-      if(data.action == 'delete')
-      {
-        $('#'+data.id).remove();
-      }
-    }
-  });
-  $("#sub_jenis_menu").append(
-       $('<tfoot/>').append( $("#sub_jenis_menu thead tr").clone() )
-      );
+
+      var url = "{{route('sub_jenis_menu.list')}}";
+      var menu_jenis = new Array();
+      $.get(url, function(response){
+        console.log(response.m_menu_jenis['id']);
+        response.m_menu_jenis['1'].forEach(function(data){
+          menu_jenis.push(data.m_menu_jenis_nama);
+        });
+        console.log(menu_jenis);
+      // $('#sub_jenis_menu').Tabledit({
+      //               url:'{{ route("action.sub_jenis_menu") }}',
+      //               dataType:"json",
+      //               columns:{
+      //                 identifier:[0, 'id'],
+      //                 editable: data1
+      //               },
+      //               restoreButton:false,
+      //               onSuccess:function(data, textStatus, jqXHR)
+      //               {
+      //                 if (data.action == 'add') {
+      //                   window.location.reload();
+      //                 }
+      //                 if(data.action == 'delete')
+      //                 {
+      //                   $('#'+data.id).remove();
+      //                 }
+      //               }
+      //             });
+      //             $("#sub_jenis_menu").append(
+      //             $('<tfoot/>').append( $("#sub_jenis_menu thead tr").clone() )
+      //             );
+      });
   });
   </script>
 @endsection
