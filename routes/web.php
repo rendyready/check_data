@@ -71,12 +71,13 @@ Route::group(['prefix' => 'master', 'controller' => App\Http\Controllers\Master\
     Route::get('m_w_jenis','index')->name('m_w_jenis.index');
     Route::post('m_w_jenis/action','action')->name('action.m_w_jenis');
 });
-//Master Jenis Waroeng
+//Master Waroeng
 Route::group(['prefix' => 'master', 'controller' => App\Http\Controllers\Master\MWaroengController::class,'middleware' => ['auth','web']], function()
 {
-    Route::get('m_waroeng','index')->name('m_waroeng.index');
+    Route::get('m_waroeng','index')->name('m_waroeng.index'); Route::get('m_waroeng/list','list')->name('m_waroeng.list');
     Route::post('m_waroeng/action','action')->name('action.m_waroeng');
 });
+
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

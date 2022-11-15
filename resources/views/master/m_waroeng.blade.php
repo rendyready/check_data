@@ -11,7 +11,8 @@
           </div>
           <div class="block-content text-muted">
             @csrf
-            <table id="m_w_jenis" class="table table-bordered table-striped table-vcenter js-dataTable-full">
+            <div class="table-responsive">
+            <table id="m_w" class="table table-sm table-bordered table-striped table-vcenter js-dataTable-full">
               <thead>
               <tr>
                   <th>ID</th>
@@ -29,12 +30,13 @@
               <tbody id="tablecontents">
                 {{-- @foreach ($data as $item)
                     <tr class="row1">
-                      <td>{{$item->m_w_jenis_id}}</td>
-                      <td>{{$item->m_w_jenis_nama}}</td>
+                      <td>{{$item->m_w_id}}</td>
+                      <td>{{$item->m_w_nama}}</td>
                     </tr>
                 @endforeach --}}
               </tbody>
           </table>
+            </div>
           </div>
         </div>
       </div>
@@ -50,34 +52,49 @@
       'X-CSRF-Token' : $("input[name=_token]").val()
         }
       });
-      var t = $('#m_w_jenis').DataTable({
+      var t = $('#m_w').DataTable({
         processing : false,
         serverSide : false,
         destroy: true,
         order : [0,'asc'],
       });
-    $('#m_w_jenis').Tabledit({
-    url:'{{ route("action.m_w_jenis") }}',
-    dataType:"json",
-    columns:{
-      identifier:[0, 'm_w_jenis_id'],
-      editable:[[1, 'm_w_jenis_nama']]
-    },
-    restoreButton:false,
-    onSuccess:function(data, textStatus, jqXHR)
-    {
-      if (data.action == 'add') {
-        window.location.reload();
-      }
-      if(data.action == 'delete')
-      {
-        $('#'+data.id).remove();
-      }
-    }
-  });
-  $("#m_w_jenis").append(
-       $('<tfoot/>').append( $("#m_w_jenis thead tr").clone() )
-      );
+      var url = "{{route('m_waroeng.list')}}";
+      var area = new Array(); var jenisnota = new Array();
+      var jenisw = new Array(); var modaltipe = new Array();
+      $.get(url, function(response){
+        area = response['area']; modaltipe = response['modalt'];
+        jenisw= response['jenisw'];
+        var data = [[1, 'm_w_nama'],
+        [2,'m_w_status','select','{"1": "Active", "0": "Disable"}'],
+        [3,'m_w_a_alamat'],
+        [6,'m_w_m_area_id','select',JSON.stringify(area)],
+        [7,'m_w_m_w_jenis_id','select',JSON.stringify(jenisw)],
+        [8,'m_w_m_jenis_nota_id','select',JSON.stringify()],
+        [9,'m_w_m_modal_tipe_id','select',JSON.stringify(modaltipe)]  
+        ] 
+      $('#m_w').Tabledit({
+          url:'{{ route("action.m_waroeng") }}',
+          dataType:"json",
+          columns:{
+            identifier:[0, 'm_w_id'],
+            editable: data
+          },
+          restoreButton:false,
+          onSuccess:function(data, textStatus, jqXHR)
+          {
+            if (data.action == 'add') {
+                window.location.reload();
+            }
+            if(data.action == 'delete')
+            {
+               $('#'+data.id).remove();
+            }
+          }
+          });
+          $("#sub_jenis_menu").append(
+          $('<tfoot/>').append( $("#sub_jenis_menu thead tr").clone() )
+          );
+      });
   });
   </script>
 @endsection
