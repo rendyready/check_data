@@ -19,9 +19,21 @@ class DBConnectionSeeder extends Seeder
     public function run()
     {
         DB::table('db_connection')->insert([
-            'db_connection_name' => 'sipedas_v4',
+            'db_connection_client_code' => '1',
+            'db_connection_host' => '127.0.0.1',
+            'db_connection_port' => '5432',
+            'db_connection_dbname' => 'sipedas_v4',
             'db_connection_username' => 'ihsanmac',
-            'db_connection_password' => Crypt::encryptString('password'),
+            'db_connection_password' => Crypt::encryptString('jankrik404'),
+        ]);
+
+        DB::table('db_connection')->insert([
+            'db_connection_client_code' => '2',
+            'db_connection_host' => '192.168.88.4',
+            'db_connection_port' => '5432',
+            'db_connection_dbname' => 'sipedas_v4',
+            'db_connection_username' => 'adminweb',
+            'db_connection_password' => Crypt::encryptString('TC@gjrk:55DB'),
         ]);
     }
 }

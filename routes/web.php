@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CronjobController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+ 
+Route::get('/cron', [CronjobController::class, 'index']);
+Route::get('/cron', [CronjobController::class, 'BroadcastMigration']);

@@ -15,9 +15,13 @@ return new class extends Migration
     {
         Schema::create('db_connection', function (Blueprint $table) {
             $table->id('db_connection_id');
-            $table->string('db_connection_name');
+            $table->bigInteger('db_connection_client_code');
+            $table->string('db_connection_host');
+            $table->string('db_connection_port');
+            $table->string('db_connection_dbname');
             $table->string('db_connection_username');
             $table->string('db_connection_password');
+            $table->char('db_connection_status')->nullable()->default('gagal'); //terhubung,gagal
             $table->timestamps();
         });
     }
