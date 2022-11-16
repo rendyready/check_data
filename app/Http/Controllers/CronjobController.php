@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Artisan;
 
 
 class CronjobController extends Controller
@@ -76,6 +77,10 @@ class CronjobController extends Controller
 
             $t++;
         }
+
+        foreach ($clientConnection as $key => $value) {
+
+        }
         dd($serverSchema);
         // return $db = Schema::connection('1')->getColumnListing('users');
         // return Schema::connection('1')->getColumnType('users','email');
@@ -83,9 +88,20 @@ class CronjobController extends Controller
         // var_dump($clientConnection);
     }
 
-    public function BroadcastMigration()
+    public function migrate(string $dbcon = '')
     {
-        
+        try {
+            Artisan::call('migrate', array(
+                '--database' => $dbcon,
+                '--path' => 'database/migrations',
+                '--force' => true,
+            ));
+            return "succes";
+
+        } catch (\Throwable $th) {
+            return "gagal";
+        }
+ 
     }
 
     /**

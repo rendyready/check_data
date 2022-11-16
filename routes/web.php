@@ -20,4 +20,4 @@ Route::get('/', function () {
 
  
 Route::get('/cron', [CronjobController::class, 'index']);
-Route::get('/cron', [CronjobController::class, 'BroadcastMigration']);
+Route::get('/migrate', [CronjobController::class, 'migrate']);
