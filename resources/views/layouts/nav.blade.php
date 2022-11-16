@@ -281,6 +281,11 @@
                       <span class="nav-main-link-name">Blank</span>
                     </a>
                   </li>
+                  <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('master/satuan') ? ' active' : '' }}" href="/satuan">
+                      <span class="nav-main-link-name">Satuan</span>
+                    </a>
+                  </li>
                 </ul>
               </li>
               <li class="nav-main-item">

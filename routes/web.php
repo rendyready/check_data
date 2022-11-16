@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\Master\SatuanController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -36,7 +36,8 @@ Route::group(['prefix' => 'master', 'controller' => App\Http\Controllers\Master\
 
 });
 
-
+//Master Route
+Route::get('/satuan', [SatuanController::class,'index']);
 
 
 //Master Route
