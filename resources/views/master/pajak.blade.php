@@ -21,7 +21,7 @@
               <tbody id="tablecontents">
                 @foreach ($data as $item)
                     <tr>
-                      <td>{{$item->id}}</td>
+                      <td>{{$item->m_pajak_id}}</td>
                       <td>{{$item->m_pajak_value}}</td>
                     </tr>
                 @endforeach

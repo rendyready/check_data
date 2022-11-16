@@ -32,7 +32,7 @@ Route::group(['prefix' => 'master', 'controller' => App\Http\Controllers\Master\
 //Master SubJenis
 Route::group(['prefix' => 'master', 'controller' => App\Http\Controllers\Master\SubJenisMController::class,'middleware' => ['auth','web']], function()
 {
-    Route::get('sub_jenis_menu','index')->name('sub_jenis_menu.index'); 
+    Route::get('sub_jenis_menu','index')->name('sub_jenis_menu.index');  Route::get('sub_jenis_menu/list','list')->name('sub_jenis_menu.list');
     Route::post('sub_jenis_menu/action','action')->name('action.sub_jenis_menu');
 });
 //Master Modal Tipe
@@ -59,6 +59,25 @@ Route::group(['prefix' => 'master', 'controller' => App\Http\Controllers\Master\
     Route::get('m_jenis_meja','index')->name('m_jenis_meja.index');
     Route::post('m_jenis_meja/action','action')->name('action.m_jenis_meja');
 });
+//Master Trans Tipe
+Route::group(['prefix' => 'master', 'controller' => App\Http\Controllers\Master\TransTipeController::class,'middleware' => ['auth','web']], function()
+{
+    Route::get('m_transaksi_tipe','index')->name('m_transaksi_tipe.index');
+    Route::post('m_transaksi_tipe/action','action')->name('action.m_transaksi_tipe');
+});
+//Master Jenis Waroeng
+Route::group(['prefix' => 'master', 'controller' => App\Http\Controllers\Master\WJenisController::class,'middleware' => ['auth','web']], function()
+{
+    Route::get('m_w_jenis','index')->name('m_w_jenis.index');
+    Route::post('m_w_jenis/action','action')->name('action.m_w_jenis');
+});
+//Master Waroeng
+Route::group(['prefix' => 'master', 'controller' => App\Http\Controllers\Master\MWaroengController::class,'middleware' => ['auth','web']], function()
+{
+    Route::get('m_waroeng','index')->name('m_waroeng.index'); Route::get('m_waroeng/list','list')->name('m_waroeng.list');
+    Route::post('m_waroeng/action','action')->name('action.m_waroeng');
+});
+
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

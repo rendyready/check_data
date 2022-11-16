@@ -7,32 +7,22 @@
         <div class="block block-themed h-100 mb-0">
           <div class="block-header bg-pulse">
             <h3 class="block-title">
-              Data Modal
+              Jenis Waroeng
           </div>
           <div class="block-content text-muted">
             @csrf
-            <table id="modal_tipe" class="table table-bordered table-striped table-vcenter js-dataTable-full">
+            <table id="m_w_jenis" class="table table-bordered table-striped table-vcenter js-dataTable-full">
               <thead>
               <tr>
                   <th>ID</th>
-                  <th>NAMA MODAL TIPE</th>
-                  <th>PARENT MODAL TIPE</th>
-                  <th>NOMINAL</th>
-                  <th>URUTAN TIPE</th>
+                  <th>NAMA JENIS WAROENG</th>
               </tr>
               </thead>
               <tbody id="tablecontents">
-                @foreach ($data->m_modal_tipe as $item)
+                @foreach ($data as $item)
                     <tr class="row1">
-                      <td>{{$item->m_modal_tipe_id}}</td>
-                      <td>{{$item->m_modal_tipe_nama}}</td>
-                      <td>
-                        @if(!empty($item->m_modal_tipe_parent_id) && !empty($item->m_modal_tipe))
-                        {{$item->m_modal_tipe->m_modal_tipe_nama}}
-                        @endif
-                      </td>
-                      <td>{{$item->m_modal_tipe_nominal}}</td>
-                      <td>{{$item->m_modal_tipe_urut}}</td>
+                      <td>{{$item->m_w_jenis_id}}</td>
+                      <td>{{$item->m_w_jenis_nama}}</td>
                     </tr>
                 @endforeach
               </tbody>
@@ -52,19 +42,18 @@
       'X-CSRF-Token' : $("input[name=_token]").val()
         }
       });
-      var t = $('#modal_tipe').DataTable({
+      var t = $('#m_w_jenis').DataTable({
         processing : false,
         serverSide : false,
         destroy: true,
         order : [0,'asc'],
       });
-      
-    $('#modal_tipe').Tabledit({
-    url:'{{ route("action.modal_tipe") }}',
+    $('#m_w_jenis').Tabledit({
+    url:'{{ route("action.m_w_jenis") }}',
     dataType:"json",
     columns:{
-      identifier:[0, 'm_modal_tipe_id'],
-      editable:[[1, 'm_modal_tipe_nama'],[2,'m_menu_jenis_odcr55','select','{"makan": "makan", "minum": "minum"}']]
+      identifier:[0, 'm_w_jenis_id'],
+      editable:[[1, 'm_w_jenis_nama']]
     },
     restoreButton:false,
     onSuccess:function(data, textStatus, jqXHR)
@@ -78,8 +67,8 @@
       }
     }
   });
-  $("#modal_tipe").append(
-       $('<tfoot/>').append( $("#modal_tipe thead tr").clone() )
+  $("#m_w_jenis").append(
+       $('<tfoot/>').append( $("#m_w_jenis thead tr").clone() )
       );
   });
   </script>

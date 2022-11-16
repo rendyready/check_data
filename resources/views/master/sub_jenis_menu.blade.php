@@ -21,10 +21,10 @@
               </thead>
               <tbody id="tablecontents">
                 @foreach ($data->sub as $item)
-                    <tr class="row1">
-                      <td>{{$item->id}}</td>
-                      <td>{{$item->m_sub_menu_jenis_nama}}</td>
-                      <td>{{$item->m_menu_jenis_nama}}</td>
+                    <tr>
+                      <td>{{$item->m_sub_jenis_produk_id}}</td>
+                      <td>{{$item->m_sub_jenis_produk_nama}}</td>
+                      <td>{{$item->m_jenis_produk_nama}}</td>
                     </tr>
                 @endforeach
               </tbody>
@@ -50,28 +50,35 @@
         destroy: true,
         order : [0,'asc'],
       });
-    $('#sub_jenis_menu').Tabledit({
-    url:'{{ route("action.sub_jenis_menu") }}',
-    dataType:"json",
-    columns:{
-      identifier:[0, 'id'],
-      editable:[[1, 'm_sub_menu_jenis_nama'],[2,'m_sub_menu_jenis_m_menu_jenis_id','select','{"4": "Lauk", "1": "Minuman","12":"Mutasi-WBD","9":"Non-Menu","7":"Paket","3":"Sambal","5":"Sayur","11":"WBD-Corner"}']]
-    },
-    restoreButton:false,
-    onSuccess:function(data, textStatus, jqXHR)
-    {
-      if (data.action == 'add') {
-        window.location.reload();
-      }
-      if(data.action == 'delete')
-      {
-        $('#'+data.id).remove();
-      }
-    }
-  });
-  $("#sub_jenis_menu").append(
-       $('<tfoot/>').append( $("#sub_jenis_menu thead tr").clone() )
-      );
+
+      var url = "{{route('sub_jenis_menu.list')}}";
+      var menu_jenis = new Array();
+      $.get(url, function(response){
+        menu_jenis = response['m_jenis_menu'];
+        var data = [[1, 'm_sub_jenis_produk_nama'],[2,'m_sub_jenis_produk_m_jenis_produk_id','select',JSON.stringify(menu_jenis)]] 
+      $('#sub_jenis_menu').Tabledit({
+                    url:'{{ route("action.sub_jenis_menu") }}',
+                    dataType:"json",
+                    columns:{
+                      identifier:[0, 'id'],
+                      editable: data
+                    },
+                    restoreButton:false,
+                    onSuccess:function(data, textStatus, jqXHR)
+                    {
+                      if (data.action == 'add') {
+                        window.location.reload();
+                      }
+                      if(data.action == 'delete')
+                      {
+                        $('#'+data.id).remove();
+                      }
+                    }
+                  });
+                  $("#sub_jenis_menu").append(
+                  $('<tfoot/>').append( $("#sub_jenis_menu thead tr").clone() )
+                  );
+      });
   });
   </script>
 @endsection

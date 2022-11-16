@@ -17,10 +17,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $r_g_p_shift
  * @property time without time zone $r_g_p_jam
  * @property string $r_g_p_m_menu_code
- * @property int $r_g_p_m_menu_id
- * @property string $r_g_p_m_menu_nama
- * @property int $r_g_p_m_menu_jenis_id
- * @property string $r_g_p_m_menu_jenis_nama
+ * @property int $r_g_p_m_produk_id
+ * @property string $r_g_p_m_produk_nama
+ * @property int $r_g_p_m_jenis_produk_id
+ * @property string $r_g_p_m_jenis_produk_nama
  * @property string $r_g_p_m_menu_urut
  * @property float $r_g_p_m_menu_harga_nominal
  * @property int $r_g_p_qty
@@ -50,8 +50,8 @@ class RekapGagalProse extends Model
 	protected $casts = [
 		'r_g_p_shift' => 'int',
 		'r_g_p_jam' => 'time without time zone',
-		'r_g_p_m_menu_id' => 'int',
-		'r_g_p_m_menu_jenis_id' => 'int',
+		'r_g_p_m_produk_id' => 'int',
+		'r_g_p_m_jenis_produk_id' => 'int',
 		'r_g_p_m_menu_harga_nominal' => 'float',
 		'r_g_p_qty' => 'int',
 		'r_g_p_nominal' => 'float',
@@ -74,10 +74,10 @@ class RekapGagalProse extends Model
 		'r_g_p_shift',
 		'r_g_p_jam',
 		'r_g_p_m_menu_code',
-		'r_g_p_m_menu_id',
-		'r_g_p_m_menu_nama',
-		'r_g_p_m_menu_jenis_id',
-		'r_g_p_m_menu_jenis_nama',
+		'r_g_p_m_produk_id',
+		'r_g_p_m_produk_nama',
+		'r_g_p_m_jenis_produk_id',
+		'r_g_p_m_jenis_produk_nama',
 		'r_g_p_m_menu_urut',
 		'r_g_p_m_menu_harga_nominal',
 		'r_g_p_qty',

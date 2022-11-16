@@ -7,32 +7,30 @@
         <div class="block block-themed h-100 mb-0">
           <div class="block-header bg-pulse">
             <h3 class="block-title">
-              Data Modal
+              Tipe Transaksi
           </div>
           <div class="block-content text-muted">
             @csrf
-            <table id="modal_tipe" class="table table-bordered table-striped table-vcenter js-dataTable-full">
+            <table id="m_transaksi_tipe" class="table table-bordered table-striped table-vcenter js-dataTable-full">
               <thead>
               <tr>
                   <th>ID</th>
-                  <th>NAMA MODAL TIPE</th>
-                  <th>PARENT MODAL TIPE</th>
-                  <th>NOMINAL</th>
-                  <th>URUTAN TIPE</th>
+                  <th>TIPE TRANSAKSI</th>
+                  <th>PROFIT IN</th>
+                  <th>PROFIT OUT</th>
+                  <th>PROFIT PRICE</th>
+                  <th>KELOMPOK TIPE TRANSAKSI</th>
               </tr>
               </thead>
               <tbody id="tablecontents">
-                @foreach ($data->m_modal_tipe as $item)
-                    <tr class="row1">
-                      <td>{{$item->m_modal_tipe_id}}</td>
-                      <td>{{$item->m_modal_tipe_nama}}</td>
-                      <td>
-                        @if(!empty($item->m_modal_tipe_parent_id) && !empty($item->m_modal_tipe))
-                        {{$item->m_modal_tipe->m_modal_tipe_nama}}
-                        @endif
-                      </td>
-                      <td>{{$item->m_modal_tipe_nominal}}</td>
-                      <td>{{$item->m_modal_tipe_urut}}</td>
+                @foreach ($data as $item)
+                    <tr>
+                      <td>{{$item->m_t_t_id}}</td>
+                      <td>{{$item->m_t_t_name}}</td>
+                      <td>{{$item->m_t_t_profit_in}}</td>
+                      <td>{{$item->m_t_t_profit_out}}</td>
+                      <td>{{$item->m_t_t_profit_price}}</td>
+                      <td>{{$item->m_t_t_group}}</td>
                     </tr>
                 @endforeach
               </tbody>
@@ -52,19 +50,21 @@
       'X-CSRF-Token' : $("input[name=_token]").val()
         }
       });
-      var t = $('#modal_tipe').DataTable({
+      var t = $('#m_transaksi_tipe').DataTable({
         processing : false,
         serverSide : false,
         destroy: true,
         order : [0,'asc'],
       });
-      
-    $('#modal_tipe').Tabledit({
-    url:'{{ route("action.modal_tipe") }}',
+      var att_num = '{"min": "0.00", "step": "0.01","placeholder":"0.00"}';
+    $('#m_transaksi_tipe').Tabledit({
+    url:'{{ route("action.m_transaksi_tipe") }}',
     dataType:"json",
     columns:{
-      identifier:[0, 'm_modal_tipe_id'],
-      editable:[[1, 'm_modal_tipe_nama'],[2,'m_menu_jenis_odcr55','select','{"makan": "makan", "minum": "minum"}']]
+      identifier:[0, 'm_t_t_id'],
+      editable:[[1,'m_t_t_name'],[2, 'm_t_t_profit_in','number',att_num],
+      [3,'m_t_t_profit_out','number',att_num],[4,'m_t_t_profit_price','number',att_num],
+      [5,'m_t_t_group','select','{"ojol":"Ojol","reguler":"Reguler"}']]
     },
     restoreButton:false,
     onSuccess:function(data, textStatus, jqXHR)
@@ -78,8 +78,8 @@
       }
     }
   });
-  $("#modal_tipe").append(
-       $('<tfoot/>').append( $("#modal_tipe thead tr").clone() )
+  $("#m_transaksi_tipe").append(
+       $('<tfoot/>').append( $("#m_transaksi_tipe thead tr").clone() )
       );
   });
   </script>

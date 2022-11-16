@@ -15,7 +15,7 @@ class MAreaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {   $data = MArea::select('id','m_area_nama')->whereNull('m_area_deleted_at')->orderBy('id','asc')->get();
+    {   $data = MArea::select('m_area_id','m_area_nama')->whereNull('m_area_deleted_at')->orderBy('m_area_id','asc')->get();
         return view('master.area',compact('data'));
     }
     /**
@@ -44,12 +44,12 @@ class MAreaController extends Controller
                     'm_area_updated_by' => Auth::id(),
                     'm_area_updated_at' => Carbon::now(),
                 );
-                DB::table('m_area')->where('id',$request->id)
+                DB::table('m_area')->where('m_area_id',$request->id)
                 ->update($data);
             }else {
                 $softdelete = array('m_area_deleted_at' => Carbon::now());
     			DB::table('m_area')
-    				->where('id', $request->id)
+    				->where('m_area_id', $request->id)
     				->update($softdelete);
             }
     		return response()->json($request);

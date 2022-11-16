@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class MPlotProduksi
  * 
- * @property int $id
+ * @property int $m_plot_produksi_id
  * @property string $m_plot_produksi_nama
  * @property int $m_plot_produksi_created_by
  * @property Carbon $m_plot_produksi_created_at
@@ -25,6 +25,7 @@ use Illuminate\Database\Eloquent\Model;
 class MPlotProduksi extends Model
 {
 	protected $table = 'm_plot_produksi';
+	protected $primaryKey = 'm_plot_produksi_id';
 	public $timestamps = false;
 
 	protected $casts = [

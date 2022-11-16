@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class MW
  * 
- * @property int $id
+ * @property int $m_w_id
  * @property string $m_w_nama
  * @property int $m_w_m_area_id
  * @property int $m_w_m_w_jenis_id
@@ -39,6 +39,7 @@ use Illuminate\Database\Eloquent\Model;
 class MW extends Model
 {
 	protected $table = 'm_w';
+	protected $primaryKey = 'm_w_id';
 	public $timestamps = false;
 
 	protected $casts = [

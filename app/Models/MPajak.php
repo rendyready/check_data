@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class MPajak
  * 
- * @property int $id
+ * @property int $m_pajak_id
  * @property float $m_pajak_value
  * @property int $m_pajak_created_by
  * @property Carbon $m_pajak_created_at
@@ -25,6 +25,7 @@ use Illuminate\Database\Eloquent\Model;
 class MPajak extends Model
 {
 	protected $table = 'm_pajak';
+	protected $primaryKey = 'm_pajak_id';
 	public $timestamps = false;
 
 	protected $casts = [

@@ -18,12 +18,12 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $r_g_shift
  * @property time without time zone $r_g_jam
  * @property string $r_g_nota_code
- * @property int $r_g_m_menu_id
- * @property string $r_g_m_menu_nama
+ * @property int $r_g_m_produk_id
+ * @property string $r_g_m_produk_nama
  * @property string $r_g_m_menu_cr
  * @property string $r_g_m_menu_urut
- * @property int $r_g_m_menu_jenis_id
- * @property string $r_g_m_menu_jenis_nama
+ * @property int $r_g_m_jenis_produk_id
+ * @property string $r_g_m_jenis_produk_nama
  * @property float $r_g_m_menu_harga_nominal
  * @property int $r_g_qty
  * @property float $r_g_nominal
@@ -54,8 +54,8 @@ class RekapGaransi extends Model
 		'r_g_r_t_id' => 'int',
 		'r_g_shift' => 'int',
 		'r_g_jam' => 'time without time zone',
-		'r_g_m_menu_id' => 'int',
-		'r_g_m_menu_jenis_id' => 'int',
+		'r_g_m_produk_id' => 'int',
+		'r_g_m_jenis_produk_id' => 'int',
 		'r_g_m_menu_harga_nominal' => 'float',
 		'r_g_qty' => 'int',
 		'r_g_nominal' => 'float',
@@ -79,12 +79,12 @@ class RekapGaransi extends Model
 		'r_g_shift',
 		'r_g_jam',
 		'r_g_nota_code',
-		'r_g_m_menu_id',
-		'r_g_m_menu_nama',
+		'r_g_m_produk_id',
+		'r_g_m_produk_nama',
 		'r_g_m_menu_cr',
 		'r_g_m_menu_urut',
-		'r_g_m_menu_jenis_id',
-		'r_g_m_menu_jenis_nama',
+		'r_g_m_jenis_produk_id',
+		'r_g_m_jenis_produk_nama',
 		'r_g_m_menu_harga_nominal',
 		'r_g_qty',
 		'r_g_nominal',

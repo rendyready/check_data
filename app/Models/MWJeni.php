@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class MWJeni
  * 
- * @property int $id
+ * @property int $m_w_jenis_id
  * @property string $m_w_jenis_nama
  * @property int $m_w_jenis_created_by
  * @property Carbon $m_w_jenis_created_at
@@ -25,6 +25,7 @@ use Illuminate\Database\Eloquent\Model;
 class MWJeni extends Model
 {
 	protected $table = 'm_w_jenis';
+	protected $primaryKey = 'm_w_jenis_id';
 	public $timestamps = false;
 
 	protected $casts = [

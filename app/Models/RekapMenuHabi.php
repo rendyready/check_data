@@ -17,12 +17,12 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $r_m_h_m_area_nama
  * @property int $r_m_h_m_w_id
  * @property string $r_m_h_m_w_nama
- * @property int $r_m_h_m_menu_id
- * @property string $r_m_h_m_menu_nama
+ * @property int $r_m_h_m_produk_id
+ * @property string $r_m_h_m_produk_nama
  * @property string $r_m_h_m_menu_cr
  * @property string $r_m_h_m_menu_urut
- * @property int $r_m_h_m_menu_jenis_id
- * @property string $r_m_h_m_menu_jenis_nama
+ * @property int $r_m_h_m_jenis_produk_id
+ * @property string $r_m_h_m_jenis_produk_nama
  * @property string $r_m_h_m_menu_code
  * @property Carbon $r_m_h_tanggal
  * @property string $r_m_h_shift
@@ -45,8 +45,8 @@ class RekapMenuHabi extends Model
 	protected $casts = [
 		'r_m_h_m_area_id' => 'int',
 		'r_m_h_m_w_id' => 'int',
-		'r_m_h_m_menu_id' => 'int',
-		'r_m_h_m_menu_jenis_id' => 'int',
+		'r_m_h_m_produk_id' => 'int',
+		'r_m_h_m_jenis_produk_id' => 'int',
 		'r_m_h_waktu' => 'time without time zone',
 		'r_m_h_created_by' => 'int',
 		'r_m_h_updated_by' => 'int'
@@ -64,12 +64,12 @@ class RekapMenuHabi extends Model
 		'r_m_h_m_area_nama',
 		'r_m_h_m_w_id',
 		'r_m_h_m_w_nama',
-		'r_m_h_m_menu_id',
-		'r_m_h_m_menu_nama',
+		'r_m_h_m_produk_id',
+		'r_m_h_m_produk_nama',
 		'r_m_h_m_menu_cr',
 		'r_m_h_m_menu_urut',
-		'r_m_h_m_menu_jenis_id',
-		'r_m_h_m_menu_jenis_nama',
+		'r_m_h_m_jenis_produk_id',
+		'r_m_h_m_jenis_produk_nama',
 		'r_m_h_m_menu_code',
 		'r_m_h_tanggal',
 		'r_m_h_shift',

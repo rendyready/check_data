@@ -293,8 +293,18 @@
                     </a>
                   </li>
                   <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('master/m_transaksi_tipe') ? ' active' : '' }}" href="{{route('m_transaksi_tipe.index')}}">
+                      <span class="nav-main-link-name">Transaksi Tipe</span>
+                    </a>
+                  </li>
+                  <li class="nav-main-item">
                     <a class="nav-main-link{{ request()->is('pages/datatables') ? ' active' : '' }}" href="#">
                       <span class="nav-main-link-name">Waroeng</span>
+                    </a>
+                  </li>
+                  <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('master/m_w_jenis') ? ' active' : '' }}" href="{{route('m_w_jenis.index')}}">
+                      <span class="nav-main-link-name">Jenis Waroeng</span>
                     </a>
                   </li>
                   <li class="nav-main-item">

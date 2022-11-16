@@ -14,13 +14,13 @@ use Illuminate\Database\Eloquent\Model;
  * 
  * @property int $r_s_d_id
  * @property int $r_s_d_r_s_id
- * @property int $r_s_d_m_menu_id
+ * @property int $r_s_d_m_produk_id
  * @property string $r_s_d_m_menu_code
- * @property string $r_s_d_m_menu_nama
+ * @property string $r_s_d_m_produk_nama
  * @property string $r_s_d_m_menu_cr
  * @property string $r_s_d_m_menu_urut
- * @property int $r_s_d_m_menu_jenis_id
- * @property string $r_s_d_m_menu_jenis_nama
+ * @property int $r_s_d_m_jenis_produk_id
+ * @property string $r_s_d_m_jenis_produk_nama
  * @property int $r_s_d_qty
  * @property string $r_s_d_status_sync
  * @property Carbon $r_s_d_created_by
@@ -39,8 +39,8 @@ class RekapSisaDetail extends Model
 
 	protected $casts = [
 		'r_s_d_r_s_id' => 'int',
-		'r_s_d_m_menu_id' => 'int',
-		'r_s_d_m_menu_jenis_id' => 'int',
+		'r_s_d_m_produk_id' => 'int',
+		'r_s_d_m_jenis_produk_id' => 'int',
 		'r_s_d_qty' => 'int'
 	];
 
@@ -54,13 +54,13 @@ class RekapSisaDetail extends Model
 
 	protected $fillable = [
 		'r_s_d_r_s_id',
-		'r_s_d_m_menu_id',
+		'r_s_d_m_produk_id',
 		'r_s_d_m_menu_code',
-		'r_s_d_m_menu_nama',
+		'r_s_d_m_produk_nama',
 		'r_s_d_m_menu_cr',
 		'r_s_d_m_menu_urut',
-		'r_s_d_m_menu_jenis_id',
-		'r_s_d_m_menu_jenis_nama',
+		'r_s_d_m_jenis_produk_id',
+		'r_s_d_m_jenis_produk_nama',
 		'r_s_d_qty',
 		'r_s_d_status_sync',
 		'r_s_d_created_by',
