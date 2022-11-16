@@ -52,9 +52,9 @@
   <div class="modal fade" id="modal-fadein" tabindex="-1" role="dialog" aria-labelledby="modal-fadein" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
-        <div class="block block-rounded shadow-none mb-0">
-          <div class="block-header block-header-default">
-            <h3 class="block-title">Terms &amp; Conditions</h3>
+        <div class="block block-themed shadow-none mb-0">
+          <div class="block-header block-header-default bg-pulse">
+            <h3 class="block-title">Nota</h3>
             <div class="block-options">
               <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
                 <i class="fa fa-times"></i>
@@ -62,14 +62,37 @@
             </div>
           </div>
           <div class="block-content fs-sm">
-            Nota
+            @csrf
+            <form action="#">
+              <div class="mb-4">
+                <label class="form-label" for="example-text-input">Nama Nota</label>
+                <input type="text" class="form-control" id="m_jenis_nota_nama" name="m_jenis_nota_nama" placeholder="Masukan Nama">
+              </div>
+              <div class="mb-4">
+                <label class="form-label" for="m_jenis_nota_sumber">Nota Sumber</label>
+                <select class="form-select" id="m_jenis_nota_sumber" name="m_jenis_nota_sumber">
+                  <option selected="">Pilih Sumber Nota</option>
+                    @foreach ($data as $list)
+                        <option value="{{$list->m_jenis_nota_id}}">{{$list->m_jenis_nota_nama}}</option>
+                    @endforeach
+                </select>
+              </div>
+              <div class="mb-4">
+                <label class="form-label" for="m_jenis_nota_sumber">Kelompok Jenis Nota</label>
+                <select class="form-select" id="m_jenis_nota_sumber" name="m_jenis_nota_sumber">
+                  <option selected="">Search</option>
+                  <option value="Nota A">Nota A</option>
+                  <option value="Nota B">Nota B</option>  
+                </select>
+              </div>
+            </form>
           </div>
           <div class="block-content block-content-full block-content-sm text-end border-top">
-            <button type="button" class="btn btn-alt-secondary" data-bs-dismiss="modal">
+            <button type="button" class="btn btn-alt-warning" data-bs-dismiss="modal">
               Close
             </button>
-            <button type="button" class="btn btn-alt-primary" data-bs-dismiss="modal">
-              Done
+            <button type="button" class="btn btn-alt-success" data-bs-dismiss="modal">
+              Simpan
             </button>
           </div>
         </div>
