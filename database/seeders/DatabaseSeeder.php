@@ -19,6 +19,8 @@ class DatabaseSeeder extends Seeder
             AreaTableSeeder::class,
             PajakTableSeeder::class,
             MenuJenisNotaTableSeeder::class,
+            WaroengJenisTableSeeder::class,
+            PlotProduksiTableSeeder::class,
        ]);
     }
 }
