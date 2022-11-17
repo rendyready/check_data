@@ -17,6 +17,8 @@ class DatabaseSeeder extends Seeder
        $this->call([
             UserTableSeeder::class,
             AreaTableSeeder::class,
+            PajakTableSeeder::class,
+            MenuJenisNotaTableSeeder::class,
        ]);
     }
 }
