@@ -13,9 +13,31 @@ class PajakTableSeeder extends Seeder
      */
     public function run()
     {
-        // DB::table('m_pajak')->truncate();
-        // $pajak = ['0,00', '0,10','0,11','0,12'];
+        DB::table('m_pajak')->truncate();
 
+        DB::table('m_pajak')->insert([
+            'm_pajak_value' => 0.0,
+            'm_pajak_created_by'=> 1,
+            
+        ]);
+
+        DB::table('m_pajak')->insert([
+            'm_pajak_value' => 0.10,
+            'm_pajak_created_by'=> 1,
+            
+        ]);
+
+        DB::table('m_pajak')->insert([
+            'm_pajak_value' => 0.11,
+            'm_pajak_created_by'=> 1,
+            
+        ]);
+
+        DB::table('m_pajak')->insert([
+            'm_pajak_value' => 0.12,
+            'm_pajak_created_by'=> 1,
+            
+        ]);
         // foreach ($pajak as $key => $value) {
         //     DB::table('m_pajak')->insert([
         //         'm_pajak_value' => $value,
