@@ -12,10 +12,10 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class MMenuHarga
  * 
- * @property int $id
+ * @property int $m_menu_harga_id
  * @property float $m_menu_harga_nominal
  * @property int $m_menu_harga_m_jenis_nota_id
- * @property int $m_menu_harga_m_menu_id
+ * @property int $m_menu_harga_m_produk_id
  * @property string $m_menu_harga_status
  * @property int $m_menu_harga_created_by
  * @property Carbon $m_menu_harga_created_at
@@ -28,12 +28,13 @@ use Illuminate\Database\Eloquent\Model;
 class MMenuHarga extends Model
 {
 	protected $table = 'm_menu_harga';
+	protected $primaryKey = 'm_menu_harga_id';
 	public $timestamps = false;
 
 	protected $casts = [
 		'm_menu_harga_nominal' => 'float',
 		'm_menu_harga_m_jenis_nota_id' => 'int',
-		'm_menu_harga_m_menu_id' => 'int',
+		'm_menu_harga_m_produk_id' => 'int',
 		'm_menu_harga_created_by' => 'int',
 		'm_menu_harga_updated_by' => 'int'
 	];
@@ -47,7 +48,7 @@ class MMenuHarga extends Model
 	protected $fillable = [
 		'm_menu_harga_nominal',
 		'm_menu_harga_m_jenis_nota_id',
-		'm_menu_harga_m_menu_id',
+		'm_menu_harga_m_produk_id',
 		'm_menu_harga_status',
 		'm_menu_harga_created_by',
 		'm_menu_harga_created_at',

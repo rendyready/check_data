@@ -43,7 +43,10 @@
   'public/js/plugins/datatables-buttons-pdfmake/vfs_fonts.js',
   'public/js/plugins/datatables-buttons/buttons.print.min.js',
   'public/js/plugins/datatables-buttons/buttons.html5.min.js',
+  // 'public/js/plugins/select2/css/select2.min.css',
+  // 'public/js/plugins/select2/js/select2.full.min.js',
   'resources/js/pages/jquery.tabledit.js',
+  'resources/js/pages/datatables.js',
   
   ])
 

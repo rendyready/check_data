@@ -20,18 +20,28 @@ class pageTablesDatatables {
 
     // Override a few defaults
     jQuery.extend(true, jQuery.fn.dataTable.defaults, {
+      processing : false,
+      serverSide : false,
+      order : [],
+      dom: "Blfrtip",
       language: {
-        lengthMenu: "_MENU_",
+        AjaxRequestGeneralError: "Could not complete request. Please check your internet connection",
+        lengthMenu: "<span class='seperator'></span>View _MENU_ records",
         search: "_INPUT_",
         searchPlaceholder: "Search..",
-        info: "Page <strong>_PAGE_</strong> of <strong>_PAGES_</strong>",
+        info: "<span class='seperator'></span>Found total _TOTAL_ records",
         paginate: {
           first: '<i class="fa fa-angle-double-left"></i>',
           previous: '<i class="fa fa-angle-left"></i>',
           next: '<i class="fa fa-angle-right"></i>',
           last: '<i class="fa fa-angle-double-right"></i>'
         }
-      }
+      },
+      lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+      pageLength: -1,
+      buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
+      dom: "<'row'<'col-sm-12'<'text-center bg-body-light py-2 mb-2'B>>>" +
+              "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>><'row'<'col-sm-12'tr>><'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>"
     });
 
     // Override buttons default classes
@@ -45,9 +55,7 @@ class pageTablesDatatables {
 
 		// Init full DataTable
 		jQuery('.js-dataTable-full').dataTable({
-			pageLength: 5,
-			lengthMenu: [[5, 10, 20], [5, 10, 20]],
-			autoWidth: false
+			autoWidth: true
 		});
 
     // Init DataTable with Buttons

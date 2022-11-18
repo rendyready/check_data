@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class MSc
  * 
- * @property int $id
+ * @property int $m_sc_id
  * @property float $m_sc_value
  * @property int $m_sc_created_by
  * @property Carbon $m_sc_created_at
@@ -25,6 +25,7 @@ use Illuminate\Database\Eloquent\Model;
 class MSc extends Model
 {
 	protected $table = 'm_sc';
+	protected $primaryKey = 'm_sc_id';
 	public $timestamps = false;
 
 	protected $casts = [

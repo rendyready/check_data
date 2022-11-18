@@ -252,18 +252,48 @@
                 </a>
               </li>
               <li class="nav-main-item">
-                <a class="nav-main-link{{ request()->is('pages/datatables') ? ' active' : '' }}" href="#">
+                <a class="nav-main-link{{ request()->is('master/m_waroeng') ? ' active' : '' }}" href="{{route('m_waroeng.index')}}">
                   <span class="nav-main-link-name">Waroeng</span>
                 </a>
               </li>
-              <li class="nav-main-item{{ request()->is('pages/*') ? ' open' : '' }}">
+              <li class="nav-main-item{{ request()->is('master/*') ? ' open' : '' }}">
                 <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
                   <span class="nav-main-link-name">CR55</span>
                 </a>
                 <ul class="nav-main-submenu">
                   <li class="nav-main-item">
-                    <a class="nav-main-link{{ request()->is('pages/datatables') ? ' active' : '' }}" href="#">
-                      <span class="nav-main-link-name">Area</span>
+                    <a class="nav-main-link{{ request()->is('master/jenis_menu') ? ' active' : '' }}" href="{{route('jenis_menu.index')}}">
+                      <span class="nav-main-link-name">Jenis Menu</span>
+                    </a>
+                  </li>
+                  <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('master/sub_jenis_menu') ? ' active' : '' }}" href="{{route('sub_jenis_menu.index')}}">
+                      <span class="nav-main-link-name">Sub Jenis Menu</span>
+                    </a>
+                  </li>
+                  <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('master/modal_tipe') ? ' active' : '' }}" href="{{route('modal_tipe.index')}}">
+                      <span class="nav-main-link-name">Modal Tipe</span>
+                    </a>
+                  </li>
+                  <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('master/m_pajak') ? ' active' : '' }}" href="{{route('m_pajak.index')}}">
+                      <span class="nav-main-link-name">Pajak</span>
+                    </a>
+                  </li>
+                  <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('master/m_sc') ? ' active' : '' }}" href="{{route('m_sc.index')}}">
+                      <span class="nav-main-link-name">Service Charge</span>
+                    </a>
+                  </li>
+                  <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('master/m_jenis_meja') ? ' active' : '' }}" href="{{route('m_jenis_meja.index')}}">
+                      <span class="nav-main-link-name">Jenis Meja</span>
+                    </a>
+                  </li>
+                  <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('master/m_transaksi_tipe') ? ' active' : '' }}" href="{{route('m_transaksi_tipe.index')}}">
+                      <span class="nav-main-link-name">Transaksi Tipe</span>
                     </a>
                   </li>
                   <li class="nav-main-item">
@@ -274,6 +304,15 @@
                   <li class="nav-main-item">
                     <a class="nav-main-link{{ request()->is('master/plot') ? ' active' : '' }}" href="{{route('plot.index')}}">
                       <span class="nav-main-link-name">Plot</span>
+                  </li>
+                  <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('master/m_w_jenis') ? ' active' : '' }}" href="{{route('m_w_jenis.index')}}">
+                      <span class="nav-main-link-name">Jenis Waroeng</span>
+                    </a>
+                  </li>
+                  <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('pages/slick') ? ' active' : '' }}" href="/pages/slick">
+                      <span class="nav-main-link-name">Slick Slider</span>
                     </a>
                   </li>
                   <li class="nav-main-item">

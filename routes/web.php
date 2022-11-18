@@ -19,61 +19,72 @@ Route::middleware(['auth', 'web'])->group(function () {
     Route::match(['get', 'post'], '/dashboard', function () {
         return view('dashboard');
     });
-
 });
-//Master Route
-Route::group(['prefix' => 'master', 'controller' => App\Http\Controllers\Master\MAreaController::class, 'middleware' => ['auth', 'web']], function () {
-    Route::get('area', 'index')->name('area.index');
-    Route::post('area/action', 'action')->name('action.area');
-
-    
-});
-//Master Route
+//Master Area Route
 Route::group(['prefix' => 'master', 'controller' => App\Http\Controllers\Master\MAreaController::class,'middleware' => ['auth','web']], function()
 {
-    Route::get('area','index')->name('area.index');
-    Route::post('area/action','action')->name('action.area');
-
+    Route::get('area','index')->name('area.index'); Route::post('area/action','action')->name('action.area');
 });
-
-//Master Route
-Route::get('/satuan', [SatuanController::class,'index']);
-
-
-//Master Route
-Route::group(['prefix' => 'master', 'middleware' => ['auth', 'web'], 'controller' => App\Http\Controllers\Master\MAreaController::class], function () {
-    Route::get('area', 'index')->name('area.index');
+//Master Jenis Route
+Route::group(['prefix' => 'master', 'controller' => App\Http\Controllers\Master\MJenisMenuController::class,'middleware' => ['auth','web']], function()
+{
+    Route::get('jenis_menu','index')->name('jenis_menu.index'); Route::post('jenis_menu/sort','sort')->name('sort.jenis_menu');
+    Route::post('jenis_menu/action','action')->name('action.jenis_menu');
 });
-
-
-
-
-
-// Plot
-Route::group(
-    [
-        'prefix' => 'master', 'middleware' => ['auth', 'web'],
-        'controller' => \App\Http\Controllers\Master\MPlotProduksiController::class
-    ],
-    function () {
-        Route::get('plot', 'index')->name('plot.index');
-    }
-);
-
-// //test
-Route::prefix('master')->group(function () {
-    Route::get('index', function () {
-        return view('CRMaster.index');
-    });
-    Route::prefix('plot')->group(function(){
-        Route::post('create',[\App\Http\Controllers\Master\MPlotProduksiController::class,'store'])->name('plot.create');
-    });
+//Master SubJenis
+Route::group(['prefix' => 'master', 'controller' => App\Http\Controllers\Master\SubJenisMController::class,'middleware' => ['auth','web']], function()
+{
+    Route::get('sub_jenis_menu','index')->name('sub_jenis_menu.index');  Route::get('sub_jenis_menu/list','list')->name('sub_jenis_menu.list');
+    Route::post('sub_jenis_menu/action','action')->name('action.sub_jenis_menu');
 });
-
-Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
+//Master Modal Tipe
+Route::group(['prefix' => 'master', 'controller' => App\Http\Controllers\Master\ModalTipeController::class,'middleware' => ['auth','web']], function()
+{
+    Route::get('modal_tipe','index')->name('modal_tipe.index');
+    Route::post('modal_tipe/action','action')->name('action.modal_tipe');
+});
+//Master Pajak
+Route::group(['prefix' => 'master', 'controller' => App\Http\Controllers\Master\PajakController::class,'middleware' => ['auth','web']], function()
+{
+    Route::get('m_pajak','index')->name('m_pajak.index');
+    Route::post('m_pajak/action','action')->name('action.m_pajak');
+});
+//Master Service Charge
+Route::group(['prefix' => 'master', 'controller' => App\Http\Controllers\Master\SCController::class,'middleware' => ['auth','web']], function()
+{
+    Route::get('m_sc','index')->name('m_sc.index');
+    Route::post('m_sc/action','action')->name('action.m_sc');
+});
+//Master Jenis Meja
+Route::group(['prefix' => 'master', 'controller' => App\Http\Controllers\Master\JenisMejaController::class,'middleware' => ['auth','web']], function()
+{
+    Route::get('m_jenis_meja','index')->name('m_jenis_meja.index');
+    Route::post('m_jenis_meja/action','action')->name('action.m_jenis_meja');
+});
+//Master Trans Tipe
+Route::group(['prefix' => 'master', 'controller' => App\Http\Controllers\Master\TransTipeController::class,'middleware' => ['auth','web']], function()
+{
+    Route::get('m_transaksi_tipe','index')->name('m_transaksi_tipe.index');
+    Route::post('m_transaksi_tipe/action','action')->name('action.m_transaksi_tipe');
+});
+//Master Jenis Waroeng
+Route::group(['prefix' => 'master', 'controller' => App\Http\Controllers\Master\WJenisController::class,'middleware' => ['auth','web']], function()
+{
+    Route::get('m_w_jenis','index')->name('m_w_jenis.index');
+    Route::post('m_w_jenis/action','action')->name('action.m_w_jenis');
+});
+//Master Waroeng
+Route::group(['prefix' => 'master', 'controller' => App\Http\Controllers\Master\MWaroengController::class,'middleware' => ['auth','web']], function()
+{
+    Route::get('m_waroeng','index')->name('m_waroeng.index'); Route::get('m_waroeng/list','list')->name('m_waroeng.list');
+    Route::post('m_waroeng/action','action')->name('action.m_waroeng');
+});
+//Master Jenis Nota
+Route::group(['prefix' => 'master', 'controller' => App\Http\Controllers\Master\MJenisNotaController::class,'middleware' => ['auth','web']], function()
+{
+    Route::get('m_jenis_nota','index')->name('m_jenis_nota.index'); Route::get('m_jenis_nota/list','list')->name('m_jenis_nota.list');
+    Route::post('m_jenis_nota/action','action')->name('action.m_jenis_nota');
+});
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

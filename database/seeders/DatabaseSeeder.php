@@ -21,6 +21,11 @@ class DatabaseSeeder extends Seeder
             MenuJenisNotaTableSeeder::class,
             WaroengJenisTableSeeder::class,
             PlotProduksiTableSeeder::class,
+            MJenisMenuTableSeeder::class,
+            SubJenisMenuTableSeeder::class,
+            ModalTipeTableSeeder::class,
+            JenisMejaTableSeeder::class,
+            WjenisTableSeeder::class
        ]);
     }
 }
