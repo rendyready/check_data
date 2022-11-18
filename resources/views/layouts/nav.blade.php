@@ -301,10 +301,10 @@
                       <span class="nav-main-link-name">Waroeng</span>
                     </a>
                   </li>
-                  <li class="nav-main-item">
+                  {{-- <li class="nav-main-item">
                     <a class="nav-main-link{{ request()->is('master/plot') ? ' active' : '' }}" href="{{route('plot.index')}}">
                       <span class="nav-main-link-name">Plot</span>
-                  </li>
+                  </li> --}}
                   <li class="nav-main-item">
                     <a class="nav-main-link{{ request()->is('master/m_w_jenis') ? ' active' : '' }}" href="{{route('m_w_jenis.index')}}">
                       <span class="nav-main-link-name">Jenis Waroeng</span>
