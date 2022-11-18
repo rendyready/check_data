@@ -17,6 +17,10 @@ class DatabaseSeeder extends Seeder
        $this->call([
             UserTableSeeder::class,
             AreaTableSeeder::class,
+            PajakTableSeeder::class,
+            MenuJenisNotaTableSeeder::class,
+            WaroengJenisTableSeeder::class,
+            PlotProduksiTableSeeder::class,
             MJenisMenuTableSeeder::class,
             SubJenisMenuTableSeeder::class,
             ModalTipeTableSeeder::class,
