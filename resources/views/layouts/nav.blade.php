@@ -253,7 +253,7 @@
                 </a>
               </li>
               <li class="nav-main-item">
-                <a class="nav-main-link{{ request()->is('pages/datatables') ? ' active' : '' }}" href="#">
+                <a class="nav-main-link{{ request()->is('master/m_waroeng') ? ' active' : '' }}" href="{{route('m_waroeng.index')}}">
                   <span class="nav-main-link-name">Waroeng</span>
                 </a>
               </li>
