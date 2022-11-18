@@ -1,80 +1,116 @@
 <!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Header -->
+@include('layouts.header')
+<!-- END Header -->
 
-    <!-- CSRF Token -->
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-
-    <title>{{ config('app.name', 'Laravel') }}</title>
-
-    <!-- Fonts -->
-    <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
-
-    <!-- Scripts -->
-    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
-</head>
 <body>
-    <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-            <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav me-auto">
-
-                    </ul>
-
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ms-auto">
-                        <!-- Authentication Links -->
-                        @guest
-                            @if (Route::has('login'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                                </li>
-                            @endif
-
-                            @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                </li>
-                            @endif
-                        @else
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }}
-                                </a>
-
-                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
-
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                        @csrf
-                                    </form>
-                                </div>
-                            </li>
-                        @endguest
-                    </ul>
-                </div>
+        <!-- Page Container -->
+        <!--
+          Available classes for #page-container:
+      
+          SIDEBAR & SIDE OVERLAY
+      
+            'sidebar-r'                                 Right Sidebar and left Side Overlay (default is left Sidebar and right Side Overlay)
+            'sidebar-mini'                              Mini hoverable Sidebar (screen width > 991px)
+            'sidebar-o'                                 Visible Sidebar by default (screen width > 991px)
+            'sidebar-o-xs'                              Visible Sidebar by default (screen width < 992px)
+            'sidebar-dark'                              Dark themed sidebar
+      
+            'side-overlay-hover'                        Hoverable Side Overlay (screen width > 991px)
+            'side-overlay-o'                            Visible Side Overlay by default
+      
+            'enable-page-overlay'                       Enables a visible clickable Page Overlay (closes Side Overlay on click) when Side Overlay opens
+      
+            'side-scroll'                               Enables custom scrolling on Sidebar and Side Overlay instead of native scrolling (screen width > 991px)
+      
+          HEADER
+      
+            ''                                          Static Header if no class is added
+            'page-header-fixed'                         Fixed Header
+      
+          HEADER STYLE
+      
+            ''                                          Classic Header style if no class is added
+            'page-header-modern'                        Modern Header style
+            'page-header-dark'                          Dark themed Header (works only with classic Header style)
+            'page-header-glass'                         Light themed Header with transparency by default
+                                                        (absolute position, perfect for light images underneath - solid light background on scroll if the Header is also set as fixed)
+            'page-header-glass page-header-dark'        Dark themed Header with transparency by default
+                                                        (absolute position, perfect for dark images underneath - solid dark background on scroll if the Header is also set as fixed)
+      
+          MAIN CONTENT LAYOUT
+      
+            ''                                          Full width Main Content if no class is added
+            'main-content-boxed'                        Full width Main Content with a specific maximum width (screen width > 1200px)
+            'main-content-narrow'                       Full width Main Content with a percentage width (screen width > 1200px)
+      
+          DARK MODE
+      
+            'sidebar-dark page-header-dark dark-mode'   Enable dark mode (light sidebar/header is not supported with dark mode)
+        -->
+        <div id="page-container" class="sidebar-o sidebar-dark enable-page-overlay side-scroll page-header-fixed page-header-modern main-content-boxed">
+          <!-- Side Overlay-->
+          <aside id="side-overlay">
+            <!-- Side Header -->
+            <div class="content-header">
+              <!-- User Avatar -->
+              <a class="img-link me-2" href="javascript:void(0)">
+                <img class="img-avatar img-avatar32" src="{{ asset('media/avatars/avatar15.jpg') }}" alt="">
+              </a>
+              <!-- END User Avatar -->
+      
+              <!-- User Info -->
+              <a class="link-fx text-body-color-dark fw-semibold fs-sm" href="javascript:void(0)">
+                {{Auth::user()->name}}
+              </a>
+              <!-- END User Info -->
+      
+              <!-- Close Side Overlay -->
+              <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
+              <button type="button" class="btn btn-sm btn-alt-danger ms-auto" data-toggle="layout" data-action="side_overlay_close">
+                <i class="fa fa-fw fa-times"></i>
+              </button>
+              <!-- END Close Side Overlay -->
             </div>
-        </nav>
-
-        <main class="py-4">
+            <!-- END Side Header -->
+      
+            <!-- Side Content -->
+            <div class="content-side">
+              <p>
+                Content..
+              </p>
+            </div>
+            <!-- END Side Content -->
+          </aside>
+          <!-- END Side Overlay -->
+      
+          <!-- Sidebar -->
+          <!--
+            Helper classes
+      
+            Adding .smini-hide to an element will make it invisible (opacity: 0) when the sidebar is in mini mode
+            Adding .smini-show to an element will make it visible (opacity: 1) when the sidebar is in mini mode
+              If you would like to disable the transition, just add the .no-transition along with one of the previous 2 classes
+      
+            Adding .smini-hidden to an element will hide it when the sidebar is in mini mode
+            Adding .smini-visible to an element will show it only when the sidebar is in mini mode
+            Adding 'smini-visible-block' to an element will show it (display: block) only when the sidebar is in mini mode
+          -->
+          @include('layouts.nav')
+          <!-- END Sidebar -->
+            
+          <!-- Main Container -->
+          <main id="main-container">
             @yield('content')
-        </main>
-    </div>
-</body>
+          </main>
+          <!-- END Main Container -->
+      
+          <!-- Footer -->
+          @include('layouts.footer')
+          <!-- END Footer -->
+        </div>
+        <!-- END Page Container -->
+      </body>
+      
+
 </html>
