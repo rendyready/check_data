@@ -23,6 +23,7 @@ return new class extends Migration
             $table->char('m_produk_tax')->default(1);
             $table->char('m_produk_sc')->default(1);
             $table->bigInteger('m_produk_m_jenis_produk_id');
+            $table->bigInteger('m_produk_m_satuan_id');
             $table->bigInteger('m_produk_m_plot_produksi_id')->nullable();
             $table->bigInteger('m_produk_m_klasifikasi_produk_id')->nullable();
             $table->char('m_produk_jual')->default('tidak'); // ya = dijual di CR, tidak = tidak dijual di CR

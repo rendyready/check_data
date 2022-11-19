@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id('history_jabatan_id');
             $table->bigInteger('history_jabatan_m_karyawan_id');
             $table->bigInteger('history_jabatan_m_jabatan_id');
+            $table->bigInteger('history_jabatan_m_w_id');
             $table->date('history_jabatan_mulai');  
             $table->date('history_jabatan_selesai')->nullable()->default(NULL);  
             $table->bigInteger('history_jabatan_created_by');
