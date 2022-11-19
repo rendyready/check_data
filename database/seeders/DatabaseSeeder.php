@@ -18,14 +18,14 @@ class DatabaseSeeder extends Seeder
             UserTableSeeder::class,
             AreaTableSeeder::class,
             PajakTableSeeder::class,
-            MenuJenisNotaTableSeeder::class,
-            WaroengJenisTableSeeder::class,
+            MJenisNotaTableSeeder::class,
             PlotProduksiTableSeeder::class,
             MJenisMenuTableSeeder::class,
             SubJenisMenuTableSeeder::class,
             ModalTipeTableSeeder::class,
             JenisMejaTableSeeder::class,
-            WjenisTableSeeder::class
+            WjenisTableSeeder::class,
+            MServiceChargeTableSeeder::class
        ]);
     }
 }
