@@ -24,7 +24,8 @@ class DatabaseSeeder extends Seeder
             SubJenisMenuTableSeeder::class,
             ModalTipeTableSeeder::class,
             JenisMejaTableSeeder::class,
-            WjenisTableSeeder::class
+            WjenisTableSeeder::class,
+            MServiceChargeTableSeeder::class
        ]);
     }
 }
