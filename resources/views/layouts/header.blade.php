@@ -28,6 +28,7 @@
   @vite(['resources/sass/main.scss', 
   'resources/js/codebase/app.js',
   'resources/sass/codebase/themes/pulse.scss',
+  'resources/js/codebase.app.min.js',
   'public/js/plugins/datatables-bs5/css/dataTables.bootstrap5.min.css',
   'public/js/plugins/datatables-buttons-bs5/css/buttons.bootstrap5.min.css',
   'public/js/plugins/datatables-responsive-bs5/css/responsive.bootstrap5.min.css',

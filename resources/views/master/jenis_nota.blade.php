@@ -4,12 +4,15 @@
   <div class="content">
     <div class="row items-push">
       <div class="col-md-12 col-xl-12">
-        <div class="blocitem blocitem-themed h-100 mb-0">
-          <div class="blocitem-header bg-pulse">
-            <h3 class="blocitem-title">
+        <div class="block block-themed h-100 mb-0">
+          <div class="block-header bg-pulse">
+            <h3 class="block-title">
               NOTA
           </div>
-          <div class="blocitem-content text-muted">
+          <div class="block-content text-muted">
+            <a class="btn btn-success" onclick="addFuntion('1')"> Create</a>
+            <button type="button" class="btn btn-sm btn-success addbtn" data-bs-toggle="modal" data-bs-target="#modal-fadein"><i class="fa fa-plus"> Nota </i></button>
+            <button type="button" class="btn btn-sm btn-danger updatemenu" data-bs-toggle="modal" data-bs-target="#modal-fadein"><i class="fa fa-plus"> Update Menu global </i></button>
             @csrf
             <table id="m_jenis_nota" class="table table-bordered table-striped table-vcenter js-dataTable-full">
               <thead>
@@ -63,7 +66,8 @@
           </div>
           <div class="block-content fs-sm">
             @csrf
-            <form action="#">
+            <form id="f_jenis_nota">
+              <input type="hidden" name="m_jenis_nota_id">
               <div class="mb-4">
                 <label class="form-label" for="example-text-input">Nama Nota</label>
                 <input type="text" class="form-control" id="m_jenis_nota_nama" name="m_jenis_nota_nama" placeholder="Masukan Nama">
@@ -91,7 +95,7 @@
             <button type="button" class="btn btn-alt-warning" data-bs-dismiss="modal">
               Close
             </button>
-            <button type="button" class="btn btn-alt-success" data-bs-dismiss="modal">
+            <button type="submit" class="btn btn-save btn-alt-success" data-bs-dismiss="modal">
               Simpan
             </button>
           </div>
@@ -114,13 +118,45 @@
         processing : false,
         serverSide : false,
         destroy: true,
+        button :false,
         order : [0,'asc'],
       });
      $("#m_jenis_nota").append(
        $('<tfoot/>').append( $("#m_jenis_nota thead tr").clone() )
       );
 
-      
+      const modal = new bootstrap.Modal($('#modal-fadein'))
+      function addFuntion(id) {
+        console.log(id,'test')
+      }
+      $('.addbtn').on("click", function() {
+      var action = 'add'
+      modal.show();
+      $('#modal-fadein form')[0].reset();
+      })
+
+      $('#modal-fadein').on('submit', function(e){
+                if(!e.isDefaultPrevented()){
+                    var id = $('#id').val();
+                    console.log('iki test simpan');
+                    url = "{{route('action.m_jenis_nota')}}";
+
+                    $.ajax({
+                        url : url,
+                        type : "POST",
+                        data : $('#modal-fadein form').serialize(),
+                        success : function(data){
+                            modal.hide();
+                            toastr.success("Berhasil menambahkan", "Data");
+                            window.location.reload();
+                        },
+                        error : function(){
+                            alert("Tidak dapat menyimpan data!");
+                        }
+                    });
+                    return false;
+                }
+            });
   });
   </script>
 @endsection

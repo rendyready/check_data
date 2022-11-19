@@ -17,7 +17,8 @@ class MJenisMenuController extends Controller
      */
     public function index()
     {
-        $data = MJenisProduk::select('m_jenis_produk_id','m_jenis_produk_nama','m_jenis_produk_odcr55','m_jenis_produk_urut')->whereNull('m_sub_jenis_deleted_at')->orderBy('m_sub_jenis_id','asc')->get();
+        $data = 
+        DB::table('m_jenis_produk')->select('m_jenis_produk_id','m_jenis_produk_nama','m_jenis_produk_odcr55','m_jenis_produk_urut')->whereNull('m_jenis_produk_deleted_at')->orderBy('m_jenis_produk_id','asc')->get();
         return view('master.jenis_menu',compact('data'));
     }
 
@@ -39,22 +40,22 @@ class MJenisMenuController extends Controller
                     'm_jenis_produk_nama' => $request->m_jenis_produk_nama, 
                     'm_jenis_produk_odcr55' =>$request->m_jenis_produk_odcr55,
                     'm_jenis_produk_urut' => $count + 1,
-                    'm_sub_jenis_created_by' => Auth::id(),
-                    'm_sub_jenis_created_at' => Carbon::now(),
+                    'm_jenis_produk_created_by' => Auth::id(),
+                    'm_jenis_produk_created_at' => Carbon::now(),
                 );
-                DB::table('m_sub_jenis')->insert($data);
+                DB::table('m_jenis_produk')->insert($data);
             } elseif ($request->action == 'edit') {
                 $data = array(
                     'm_jenis_produk_nama' => $request->m_jenis_produk_nama, 
                     'm_jenis_produk_odcr55' =>$request->m_jenis_produk_odcr55,
-                    'm_sub_jenis_updated_by' => Auth::id(),
-                    'm_sub_jenis_updated_at' => Carbon::now(),
+                    'm_jenis_produk_updated_by' => Auth::id(),
+                    'm_jenis_produk_updated_at' => Carbon::now(),
                 );
-                DB::table('m_sub_jenis')->where('m_jenis_produk_id',$request->id)
+                DB::table('m_jenis_produk')->where('m_jenis_produk_id',$request->id)
                 ->update($data);
             } else {
-                $softdelete = array('m_sub_jenis_deleted_at' => Carbon::now());
-    			DB::table('m_sub_jenis')
+                $softdelete = array('m_jenis_produk_deleted_at' => Carbon::now());
+    			DB::table('m_jenis_produk')
     				->where('m_jenis_produk_id', $request->id)
     				->update($softdelete);
             }
@@ -67,7 +68,7 @@ class MJenisMenuController extends Controller
 
         foreach ($tasks as $task) {
             $task->timestamps = false; // To disable update_at field updation
-            $id = $task->id;
+            $id = $task->m_jenis_produk_id;
 
             foreach ($request->order as $order) {
                 if ($order['id'] == $id) {
