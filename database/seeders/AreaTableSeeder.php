@@ -14,7 +14,17 @@ class AreaTableSeeder extends Seeder
     public function run()
     {
         DB::table('m_area')->truncate();
-        $area = ['Area Jabotabek', 'Area Purwokerto', 'Area Semarang','Area Perintis','Area Yogyakarta','Area Solo','Area Malang','Area Bali','Area Eksternal dan Waralaba','Area Asia Pasific','Pusat'];
+        $area = ['Area Jabotabek', 
+                'Area Purwokerto', 
+                'Area Semarang',
+                'Area Perintis',
+                'Area Yogyakarta',
+                'Area Solo',
+                'Area Malang',
+                'Area Bali',
+                'Area Eksternal dan Waralaba',
+                'Area Asia Pasific',
+                'Pusat'];
 
         foreach ($area as $key => $value) {
             DB::table('m_area')->insert([

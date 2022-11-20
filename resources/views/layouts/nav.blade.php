@@ -35,7 +35,7 @@
               <i class="fa fa-fw fa-user opacity-25"></i>
             </a>
             <a class="dropdown-item d-flex align-items-center justify-content-between" href="javascript:void(0)">
-              <span>Inbox</span>  
+              <span>Inbox</span>
               <i class="fa fa-fw fa-envelope-open opacity-25"></i>
             </a>
             <a class="dropdown-item d-flex align-items-center justify-content-between space-x-1" href="javascript:void(0)">
@@ -43,7 +43,7 @@
               <i class="fa fa-fw fa-file opacity-25"></i>
             </a>
             <div class="dropdown-divider"></div>
-  
+
             <!-- Toggle Side Overlay -->
             <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
             <a class="dropdown-item d-flex align-items-center justify-content-between space-x-1" href="javascript:void(0)" data-toggle="layout" data-action="side_overlay_toggle">
@@ -51,7 +51,7 @@
               <i class="fa fa-fw fa-wrench opacity-25"></i>
             </a>
             <!-- END Side Overlay -->
-  
+
             <div class="dropdown-divider"></div>
             <a class="dropdown-item d-flex align-items-center justify-content-between space-x-1" href="javascript:void(0)">
               <span>Sign Out</span>
@@ -215,15 +215,14 @@
               </a>
             </li>
             <li class="list-inline-item">
-              <a class="link-fx text-dual" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
+              <a class="link-fx text-dual" href="{{ route('logout') }}" onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                         <i class="fa fa-sign-out-alt"></i>
-                                    </a>
+                <i class="fa fa-sign-out-alt"></i>
+              </a>
 
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                        @csrf
-                                    </form>
+              <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                @csrf
+              </form>
             </li>
           </ul>
         </div>
@@ -302,6 +301,10 @@
                       <span class="nav-main-link-name">Waroeng</span>
                     </a>
                   </li>
+                  {{-- <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('master/plot') ? ' active' : '' }}" href="{{route('plot.index')}}">
+                      <span class="nav-main-link-name">Plot</span>
+                  </li> --}}
                   <li class="nav-main-item">
                     <a class="nav-main-link{{ request()->is('master/m_w_jenis') ? ' active' : '' }}" href="{{route('m_w_jenis.index')}}">
                       <span class="nav-main-link-name">Jenis Waroeng</span>
@@ -315,6 +318,11 @@
                   <li class="nav-main-item">
                     <a class="nav-main-link{{ request()->is('pages/blank') ? ' active' : '' }}" href="/pages/blank">
                       <span class="nav-main-link-name">Blank</span>
+                    </a>
+                  </li>
+                  <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('master/satuan') ? ' active' : '' }}" href="/satuan">
+                      <span class="nav-main-link-name">Satuan</span>
                     </a>
                   </li>
                 </ul>

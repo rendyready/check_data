@@ -17,6 +17,7 @@ class MAreaController extends Controller
     public function index()
     {   $data = MArea::select('m_area_id','m_area_nama')->whereNull('m_area_deleted_at')->orderBy('m_area_id','asc')->get();
         return view('master.area',compact('data'));
+        
     }
     /**
      * Show the form for creating a new resource.

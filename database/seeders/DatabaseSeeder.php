@@ -17,11 +17,19 @@ class DatabaseSeeder extends Seeder
        $this->call([
             UserTableSeeder::class,
             AreaTableSeeder::class,
+            PajakTableSeeder::class,
+            MJenisNotaTableSeeder::class,
+            PlotProduksiTableSeeder::class,
             MJenisMenuTableSeeder::class,
             SubJenisMenuTableSeeder::class,
             ModalTipeTableSeeder::class,
             JenisMejaTableSeeder::class,
-            WjenisTableSeeder::class
+            WjenisTableSeeder::class,
+            MServiceChargeTableSeeder::class,
+            MTransaksiTipeTableSeeder::class,
+            MKlasifikasiProdTableSeeder::class,
+            MSatuanTableSeeder::class,
+            MWTableSeeder::class,
        ]);
     }
 }

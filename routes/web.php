@@ -1,5 +1,7 @@
 <?php
+
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Master\SatuanController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -12,9 +14,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Dashboard Route
-Route::middleware(['auth','web'])->group(function () {
+Route::middleware(['auth', 'web'])->group(function () {
     Route::view('/', 'dashboard');
-    Route::match(['get', 'post'], '/dashboard', function(){
+    Route::match(['get', 'post'], '/dashboard', function () {
         return view('dashboard');
     });
 });
