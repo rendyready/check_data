@@ -107,6 +107,7 @@
       
           <!-- Footer -->
           @include('layouts.footer')
+          @yield('script')
           <!-- END Footer -->
         </div>
         <!-- END Page Container -->

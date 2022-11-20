@@ -25,14 +25,14 @@
 
   <!-- Modules -->
   @yield('css')
-  @vite(['resources/sass/main.scss', 
+  @vite(['resources/sass/main.scss',
+  'public/js/lib/jquery.min.js', 
   'resources/js/codebase/app.js',
   'resources/sass/codebase/themes/pulse.scss',
-  'resources/js/codebase.app.min.js',
+  // 'resources/js/codebase.app.min.js',
   'public/js/plugins/datatables-bs5/css/dataTables.bootstrap5.min.css',
   'public/js/plugins/datatables-buttons-bs5/css/buttons.bootstrap5.min.css',
   'public/js/plugins/datatables-responsive-bs5/css/responsive.bootstrap5.min.css',
-  'public/js/lib/jquery.min.js',
   'public/js/plugins/datatables/jquery.dataTables.min.js',
   'public/js/plugins/datatables-bs5/js/dataTables.bootstrap5.min.js',
   'public/js/plugins/datatables-responsive/js/dataTables.responsive.min.js',

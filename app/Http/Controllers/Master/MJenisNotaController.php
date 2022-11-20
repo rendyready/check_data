@@ -20,41 +20,33 @@ class MJenisNotaController extends Controller
         ->whereNull('m_jenis_nota_deleted_at')->get();
         return view('master.jenis_nota',compact('data'));
     }
-    public function action(Request $request)
+    
+    public function store(Request $request)
     {
         try {
-            if ($request->action == 'add') {
-
                 $id_nota = $request->m_jenis_nota_sumber_id;
                 DB::table('m_jenis_nota')->insert([
                     'm_jenis_nota_nama' => $request->m_jenis_nota_nama,
                     'm_jenis_nota_group' => $request->m_jenis_nota_group,
                     'm_jenis_nota_created_by' => Auth::user()->id
                 ]);
-                $idbaru = DB::table('m_jenis_nota')->max('m_jenis_nota_id')->first();
+                $idbaru = DB::table('m_jenis_nota')->max('m_jenis_nota_id');
                 if (isset($id_nota)) {
                     $harga = DB::table('m_menu_harga')->where('m_menu_harga_m_jenis_nota_id', $id_nota)->get();
                     foreach ($harga as $key => $val) {
                         DB::table('m_menu_harga')->insert([
-                            'm_menu_harga_id' => Uuid::uuid1(),
                             'm_menu_harga_m_jenis_nota_id' => $idbaru,
                             'm_menu_harga_m_menu_id' => $val->m_menu_harga_m_menu_id,
                             'm_menu_harga_nominal' => $val->m_menu_harga_nominal,
                             'm_menu_harga_status' => '1',
-                            'm_menu_harga_by' => Auth::user()->id,
+                            'm_menu_harga_created_by' => Auth::user()->id,
                         ]);
                     }
                 }
 
-            } else {
-                # code...
-            }
-            
-            
         } catch (\Exception $e) {
             return response()->json('Error : ' . $e, 500);
         }
-        
         return response()->json(['data' => 'success', 'response' => 200]);
     }
 }

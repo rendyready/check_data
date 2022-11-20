@@ -10,8 +10,7 @@
               NOTA
           </div>
           <div class="block-content text-muted">
-            <a class="btn btn-success" onclick="addFuntion('1')"> Create</a>
-            <button type="button" class="btn btn-sm btn-success addbtn" data-bs-toggle="modal" data-bs-target="#modal-fadein"><i class="fa fa-plus"> Nota </i></button>
+            <button type="button" class="btn btn-sm btn-success addbtn" id="addnota"><i class="fa fa-plus"> Nota </i></button>
             <button type="button" class="btn btn-sm btn-danger updatemenu" data-bs-toggle="modal" data-bs-target="#modal-fadein"><i class="fa fa-plus"> Update Menu global </i></button>
             @csrf
             <table id="m_jenis_nota" class="table table-bordered table-striped table-vcenter js-dataTable-full">
@@ -65,7 +64,6 @@
             </div>
           </div>
           <div class="block-content fs-sm">
-            @csrf
             <form id="f_jenis_nota">
               <input type="hidden" name="m_jenis_nota_id">
               <div class="mb-4">
@@ -82,8 +80,8 @@
                 </select>
               </div>
               <div class="mb-4">
-                <label class="form-label" for="m_jenis_nota_sumber">Kelompok Jenis Nota</label>
-                <select class="form-select" id="m_jenis_nota_sumber" name="m_jenis_nota_sumber">
+                <label class="form-label" for="m_jenis_nota_group">Kelompok Jenis Nota</label>
+                <select class="form-select" id="m_jenis_nota_group" name="m_jenis_nota_group">
                   <option selected="">Search</option>
                   <option value="Nota A">Nota A</option>
                   <option value="Nota B">Nota B</option>  
@@ -95,7 +93,7 @@
             <button type="button" class="btn btn-alt-warning" data-bs-dismiss="modal">
               Close
             </button>
-            <button type="submit" class="btn btn-save btn-alt-success" data-bs-dismiss="modal">
+            <button type="submit" class="btn btn-save btn-alt-success" id="saveBtn" value="create" data-bs-dismiss="modal">
               Simpan
             </button>
           </div>
@@ -109,6 +107,7 @@
 @section('js')
 <script type="module">
   $(document).ready(function(){
+    var action;
     $.ajaxSetup({
     headers:{
       'X-CSRF-Token' : $("input[name=_token]").val()
@@ -126,37 +125,55 @@
       );
 
       const modal = new bootstrap.Modal($('#modal-fadein'))
-      function addFuntion(id) {
-        console.log(id,'test')
-      }
-      $('.addbtn').on("click", function() {
-      var action = 'add'
-      modal.show();
-      $('#modal-fadein form')[0].reset();
-      })
+      $('#addnota').click(function () {
+        $('#saveBtn').val("create-product");
+        $('#m_jenis_nota_id').val('');
+        $('#f_jenis_nota').trigger("reset");
+        $('.block-title').html("Buat Nota");
+        $('#modal-fadein').modal('show');
+      });
 
-      $('#modal-fadein').on('submit', function(e){
-                if(!e.isDefaultPrevented()){
-                    var id = $('#id').val();
-                    console.log('iki test simpan');
-                    url = "{{route('action.m_jenis_nota')}}";
+      $('#saveBtn').click(function (e) {
+        e.preventDefault();
+        $(this).html('Simpan');
+      
+        $.ajax({
+          data: $('#modal-fadein form').serialize(),
+          url: "{{route('store.m_jenis_nota')}}",
+          type: "POST",
+          dataType: 'json',
+          success: function (data) {
+              $('#f_jenis_nota').trigger("reset");
+              $('#modal-fadein').modal('hide');
+              window.location.reload();
+           
+          },
+          error: function (data) {
+              console.log('Error:', data);
+              $('#saveBtn').html('Save Changes');
+          }
+      });
+    });
 
-                    $.ajax({
-                        url : url,
-                        type : "POST",
-                        data : $('#modal-fadein form').serialize(),
-                        success : function(data){
-                            modal.hide();
-                            toastr.success("Berhasil menambahkan", "Data");
-                            window.location.reload();
-                        },
-                        error : function(){
-                            alert("Tidak dapat menyimpan data!");
-                        }
-                    });
-                    return false;
-                }
-            });
+      // $('.btn-save').on("submit",function(){
+      //               var id = $('#id').val();
+      //               console.log(action);
+      //               $.ajax({
+      //                   url : "{{route('store.m_jenis_nota')}}",
+      //                   type : "POST",
+      //                   data : $('#modal-fadein form').serialize(),
+      //                   success : function(data){
+      //                       modal.hide();
+      //                       window.location.reload();
+      //                   },
+      //                   error : function(){
+      //                       alert("Tidak dapat menyimpan data!");
+      //                   }
+      //               });
+                  
+      //       });
+
+      
   });
   </script>
 @endsection

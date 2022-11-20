@@ -83,7 +83,7 @@ Route::group(['prefix' => 'master', 'controller' => App\Http\Controllers\Master\
 Route::group(['prefix' => 'master', 'controller' => App\Http\Controllers\Master\MJenisNotaController::class,'middleware' => ['auth','web']], function()
 {
     Route::get('m_jenis_nota','index')->name('m_jenis_nota.index'); Route::get('m_jenis_nota/list','list')->name('m_jenis_nota.list');
-    Route::post('m_jenis_nota/action','action')->name('action.m_jenis_nota');
+    Route::post('m_jenis_nota/store','store')->name('store.m_jenis_nota');
 });
 Auth::routes();
 

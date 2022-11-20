@@ -272,6 +272,11 @@
                     </a>
                   </li>
                   <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('master/m_jenis_nota') ? ' active' : '' }}" href="{{route('m_jenis_nota.index')}}">
+                      <span class="nav-main-link-name">Jenis Nota</span>
+                    </a>
+                  </li>
+                  <li class="nav-main-item">
                     <a class="nav-main-link{{ request()->is('master/modal_tipe') ? ' active' : '' }}" href="{{route('modal_tipe.index')}}">
                       <span class="nav-main-link-name">Modal Tipe</span>
                     </a>
