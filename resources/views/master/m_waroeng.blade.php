@@ -24,7 +24,7 @@
                   <th>AREA</th>
                   <th>JENIS WAROENG</th>
                   <th>JENIS NOTA WAROENG</th>
-                  <th>MODAL TIPE WAROENG</th>
+                  <th>MODAL TIPE</th>
               </tr>
               </thead>
               <tbody id="tablecontents">
@@ -105,8 +105,8 @@
             }
           }
           });
-          $("#sub_jenis_menu").append(
-          $('<tfoot/>').append( $("#sub_jenis_menu thead tr").clone() )
+          $("#m_w").append(
+          $('<tfoot/>').append( $("#m_w thead tr").clone() )
           );
       });
   });

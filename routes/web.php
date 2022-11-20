@@ -85,6 +85,19 @@ Route::group(['prefix' => 'master', 'controller' => App\Http\Controllers\Master\
     Route::get('m_jenis_nota','index')->name('m_jenis_nota.index'); Route::get('m_jenis_nota/list','list')->name('m_jenis_nota.list');
     Route::post('m_jenis_nota/store','store')->name('store.m_jenis_nota');
 });
+//Master Footer
+Route::group(['prefix' => 'master', 'controller' => App\Http\Controllers\Master\FooterController::class,'middleware' => ['auth','web']], function()
+{
+    Route::get('conf_footer','index')->name('conf_footer.index'); Route::get('conf_footer/list','list')->name('conf_footer.list');
+    Route::post('conf_footer/action','action')->name('action.conf_footer');
+});
+//Master Meja
+Route::group(['prefix' => 'master', 'controller' => App\Http\Controllers\Master\MejaController::class,'middleware' => ['auth','web']], function()
+{
+    Route::get('meja','index')->name('meja.index'); Route::get('meja/list','list')->name('meja.list');
+    Route::post('meja/action','action')->name('action.meja');
+});
+
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

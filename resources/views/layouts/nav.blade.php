@@ -316,6 +316,11 @@
                     </a>
                   </li>
                   <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('master/conf_footer') ? ' active' : '' }}" href="{{route('conf_footer.index')}}">
+                      <span class="nav-main-link-name">Footer Waroeng</span>
+                    </a>
+                  </li>
+                  <li class="nav-main-item">
                     <a class="nav-main-link{{ request()->is('pages/slick') ? ' active' : '' }}" href="/pages/slick">
                       <span class="nav-main-link-name">Slick Slider</span>
                     </a>
