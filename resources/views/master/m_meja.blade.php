@@ -10,8 +10,7 @@
               MEJA
           </div>
           <div class="block-content text-muted">
-            <button type="button" class="btn btn-alt-primary push" data-bs-toggle="modal" data-bs-target="#modal-block-select2">Launch Modal</button>
-            <a class="btn btn-success mr-5 mb-5 buttonInsert" title="Edit" style="color: #fff"><i class="fa fa-plus mr-5"></i>Meja</a>
+            <a class="btn btn-success mr-5 mb-5 buttonInsert" title="Edit" style="color: #fff"><i class="fa fa-plus mr-5"></i>  Meja</a>
             <table id="m_meja" class="table table-bordered table-striped table-vcenter js-dataTable-full">
               <thead>
               <tr>
@@ -23,12 +22,17 @@
               </tr>
               </thead>
               <tbody id="tablecontents">
-                {{-- @foreach ($data as $item)
+                @foreach ($data->meja as $item)
                     <tr>
-                      <td>{{$item->m_meja_id}}</td>
-                      <td>{{$item->m_meja_value}}</td>
+                      <td>{{$data->no++}}</td>
+                      <td>{{$item->config_meja_nama}}</td>
+                      <td>{{$item->m_meja_jenis_nama}}</td>
+                      <td>{{$item->m_w_nama}}</td>
+                      <td> <a class="btn btn-info buttonEdit" value="{{$item->config_meja_id}}" title="Edit"><i class="fa fa-edit"></i></a>
+                           <a href="{{route('hapus.meja',$item->config_meja_id)}}" class="btn btn-danger" title="Delete"><i class="fa fa-trash"></i></a>
+                      </td>
                     </tr>
-                @endforeach --}}
+                @endforeach
               </tbody>
           </table>
           </div>
@@ -51,6 +55,7 @@
           <div class="block-content">
             <!-- Select2 is initialized at the bottom of the page -->
             <form method="post" action="" id="formAction">
+              @csrf
               <div class="mb-4">
                 <input name="id_meja" type="hidden" id="id_meja">
                         <div class="form-group" id="meja_text">
@@ -96,11 +101,11 @@
                   </div>
               </div>
               </div>
+              <div class="block-content block-content-full text-end bg-body">
+                <button type="button" class="btn btn-sm btn-alt-secondary me-1" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-sm btn-success">Simpan</button>
+              </div>
             </form>
-          </div>
-          <div class="block-content block-content-full text-end bg-body">
-            <button type="button" class="btn btn-sm btn-alt-secondary me-1" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-sm btn-success" data-bs-dismiss="modal">Simpan</button>
           </div>
         </div>
       </div>
@@ -120,13 +125,13 @@
       });
       Codebase.helpersOnLoad(['jq-select2', 'jq-rangeslider']);
     $(".js-range-slider").ionRangeSlider({
-                type: "double",
-                min: 1,
-                max: 60,
-                from: 1,
-                to: 30,
-                grid: true,
-                onChange: function(data) {
+        type: "double",
+        min: 1,
+        max: 60,
+        from: 1,
+        to: 30,
+        grid: true,
+        onChange: function(data) {
                     $(".mulai_meja").val(data.from);
                     $(".selesai_meja").val(data.to);
                 }
@@ -136,18 +141,41 @@
         processing : false,
         serverSide : false,
         destroy: true,
+        buttons:[],
+        pageLength: 10,
         order : [0,'asc'],
       });
+
       $(".buttonInsert").on('click', function() {
-                $("#meja_slider").show();
-                $("#meja_text").hide()
-                var id = $(this).attr('value');
-                $("#myModalLabel").html('Tambah Meja');
-                $("#formAction").attr('action',"/meja/simpan");
-                $("#modal-block-select2").modal('show');
+          $("#meja_slider").show();
+          $("#meja_text").hide()
+            var id = $(this).attr('value');
+            $("#myModalLabel").html('Tambah Meja');
+            $("#formAction").attr('action',"/master/meja/simpan");
+            $("#modal-block-select2").modal('show');
       });
-
-
+      $(".buttonEdit").on('click', function() {
+                $("#meja_text").show();
+                $("#meja_slider").hide()
+                var id = $(this).attr('value');
+                $("#myModalLabel").html('Ubah Meja');
+                $("#formAction").attr('action','/master/meja/edit');
+                $.ajax({
+                    url: "/master/meja/list/"+id,
+                    type: "GET",
+                    dataType: 'json',
+                    success: function(respond) {
+                      console.log(respond)
+                        $("#id_meja").val(respond.config_meja_id).trigger('change');
+                        $("#nama_meja").val(respond.config_meja_nama).trigger('change');
+                        $("#jenis_meja").val(respond.config_meja_m_meja_jenis_id).trigger('change');
+                        $("#waroeng").val(respond.config_meja_m_w_id).trigger('change');
+                    },
+                    error: function() {
+                    }
+                });
+                $("#modal-block-select2").modal('show');
+            }); 
       $("#m_meja").append(
           $('<tfoot/>').append( $("#m_meja thead tr").clone() )
           );
