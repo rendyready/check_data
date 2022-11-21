@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('config_footer_value');
             $table->integer('config_footer_priority');
             $table->bigInteger('config_footer_created_by');
-            $table->bigInteger('config_footer_updated_by');
+            $table->bigInteger('config_footer_updated_by')->nullable();
             $table->timestampTz('config_footer_created_at')->useCurrent();
             $table->timestampTz('config_footer_updated_at')->useCurrentOnUpdate()->nullable()->default(NULL);
             $table->timestampTz('config_footer_deleted_at')->nullable()->default(NULL);

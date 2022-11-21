@@ -25,7 +25,11 @@ class DatabaseSeeder extends Seeder
             ModalTipeTableSeeder::class,
             JenisMejaTableSeeder::class,
             WjenisTableSeeder::class,
-            MServiceChargeTableSeeder::class
+            MServiceChargeTableSeeder::class,
+            MTransaksiTipeTableSeeder::class,
+            MKlasifikasiProdTableSeeder::class,
+            MSatuanTableSeeder::class,
+            MWTableSeeder::class,
        ]);
     }
 }

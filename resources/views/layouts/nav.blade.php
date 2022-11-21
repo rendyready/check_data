@@ -272,6 +272,11 @@
                     </a>
                   </li>
                   <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('master/m_jenis_nota') ? ' active' : '' }}" href="{{route('m_jenis_nota.index')}}">
+                      <span class="nav-main-link-name">Jenis Nota</span>
+                    </a>
+                  </li>
+                  <li class="nav-main-item">
                     <a class="nav-main-link{{ request()->is('master/modal_tipe') ? ' active' : '' }}" href="{{route('modal_tipe.index')}}">
                       <span class="nav-main-link-name">Modal Tipe</span>
                     </a>
@@ -308,6 +313,11 @@
                   <li class="nav-main-item">
                     <a class="nav-main-link{{ request()->is('master/m_w_jenis') ? ' active' : '' }}" href="{{route('m_w_jenis.index')}}">
                       <span class="nav-main-link-name">Jenis Waroeng</span>
+                    </a>
+                  </li>
+                  <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('master/conf_footer') ? ' active' : '' }}" href="{{route('conf_footer.index')}}">
+                      <span class="nav-main-link-name">Footer Waroeng</span>
                     </a>
                   </li>
                   <li class="nav-main-item">

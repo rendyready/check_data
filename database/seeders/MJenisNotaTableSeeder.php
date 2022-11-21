@@ -498,6 +498,16 @@ class MJenisNotaTableSeeder extends Seeder
                 'm_jenis_nota_group' => 'Nota B',
                 'm_jenis_nota_created_by' => 1
             ],
+            [
+                'm_jenis_nota_nama' => 'Nota A Jatinangor',
+                'm_jenis_nota_group' => 'Nota A',
+                'm_jenis_nota_created_by' => 1
+            ],
+            [
+                'm_jenis_nota_nama' => 'Nota B Tekim',
+                'm_jenis_nota_group' => 'Nota B',
+                'm_jenis_nota_created_by' => 1
+            ],
 
         ]);
     }
