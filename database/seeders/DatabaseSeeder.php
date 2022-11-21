@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
             MKlasifikasiProdTableSeeder::class,
             MSatuanTableSeeder::class,
             MWTableSeeder::class,
+            PinSeeder::class,
        ]);
     }
 }
