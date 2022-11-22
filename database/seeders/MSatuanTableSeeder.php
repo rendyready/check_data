@@ -31,6 +31,11 @@ class MSatuanTableSeeder extends Seeder
                 'm_satuan_keterangan' =>Null,
                 'm_satuan_created_by' => 1
             ],
+            [
+                'm_satuan_kode' => 'Porsi',
+                'm_satuan_keterangan' =>Null,
+                'm_satuan_created_by' => 1
+            ],
         ]);
     }
 }
