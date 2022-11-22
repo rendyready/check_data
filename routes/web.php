@@ -94,10 +94,22 @@ Route::group(['prefix' => 'master', 'controller' => App\Http\Controllers\Master\
 //Master Meja
 Route::group(['prefix' => 'master', 'controller' => App\Http\Controllers\Master\MejaController::class,'middleware' => ['auth','web']], function()
 {
-    Route::get('meja','index')->name('meja.index'); Route::get('meja/list','list')->name('meja.list');
-    Route::post('meja/action','action')->name('action.meja');
+    Route::get('meja','index')->name('meja.index'); Route::get('meja/list/{id}','list')->name('meja.list');
+    Route::post('meja/simpan','simpan')->name('simpan.meja'); Route::get('meja/hapus/{id}','hapus')->name('hapus.meja'); 
+    Route::post('meja/edit','edit')->name('edit.meja');
 });
-
+//Master Satuan
+Route::group(['prefix' => 'master', 'controller' => App\Http\Controllers\Master\MSatuanController::class,'middleware' => ['auth','web']], function()
+{
+    Route::get('m_satuan','index')->name('m_satuan.index'); 
+    Route::post('m_satuan/action','action')->name('action.m_satuan');
+});
+//Master Satuan
+Route::group(['prefix' => 'master', 'controller' => App\Http\Controllers\Master\ProdKlasifikasiController::class,'middleware' => ['auth','web']], function()
+{
+    Route::get('m_klasifikasi','index')->name('m_klasifikasi.index'); Route::get('m_klasifikasi/list','list')->name('m_klasifikasi.list');
+    Route::post('m_klasifikasi/action','action')->name('action.m_klasifikasi');
+});
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

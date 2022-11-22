@@ -29,7 +29,6 @@
   'public/js/lib/jquery.min.js', 
   'resources/js/codebase/app.js',
   'resources/sass/codebase/themes/pulse.scss',
-  // 'resources/js/codebase.app.min.js',
   'public/js/plugins/datatables-bs5/css/dataTables.bootstrap5.min.css',
   'public/js/plugins/datatables-buttons-bs5/css/buttons.bootstrap5.min.css',
   'public/js/plugins/datatables-responsive-bs5/css/responsive.bootstrap5.min.css',
@@ -55,5 +54,5 @@
 
   <!-- Alternatively, you can also include a specific color theme after the main stylesheet to alter the default color theme of the template -->
   {{-- @vite(['resources/sass/main.scss', 'resources/sass/codebase/themes/corporate.scss', 'resources/js/codebase/app.js']) --}}
-  @yield('js')  
+  @yield('js')
 </head>

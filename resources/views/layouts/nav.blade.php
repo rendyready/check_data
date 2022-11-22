@@ -316,6 +316,11 @@
                     </a>
                   </li>
                   <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('master/meja') ? ' active' : '' }}" href="{{route('meja.index')}}">
+                      <span class="nav-main-link-name">Meja</span>
+                    </a>
+                  </li>
+                  <li class="nav-main-item">
                     <a class="nav-main-link{{ request()->is('master/conf_footer') ? ' active' : '' }}" href="{{route('conf_footer.index')}}">
                       <span class="nav-main-link-name">Footer Waroeng</span>
                     </a>
@@ -331,8 +336,13 @@
                     </a>
                   </li>
                   <li class="nav-main-item">
-                    <a class="nav-main-link{{ request()->is('master/satuan') ? ' active' : '' }}" href="/satuan">
+                    <a class="nav-main-link{{ request()->is('master/m_satuan') ? ' active' : '' }}" href="{{route('m_satuan.index')}}">
                       <span class="nav-main-link-name">Satuan</span>
+                    </a>
+                  </li>
+                  <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('master/m_klasifikasi') ? ' active' : '' }}" href="{{route('m_klasifikasi.index')}}">
+                      <span class="nav-main-link-name">Produk Klasifikasi</span>
                     </a>
                   </li>
                 </ul>
