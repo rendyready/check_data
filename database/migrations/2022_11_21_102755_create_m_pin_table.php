@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id('m_pin_id');
             $table->string('m_pin_value');
             $table->string('m_pin_type');
+            $table->string('m_pin_access'); //allow, deny
             $table->char('m_pin_status', 1)->default('1');
             $table->bigInteger('m_pin_created_by');
             $table->bigInteger('m_pin_updated_by')->nullable()->default(NULL);

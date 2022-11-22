@@ -24,6 +24,7 @@ return new class extends Migration
             $table->timestampTz('created_at')->useCurrent();
             $table->bigInteger('updated_by')->nullable();
             $table->timestampTz('updated_at')->nullable();
+            $table->timestampTz('deleted_at')->nullable();
         });
     }
 
