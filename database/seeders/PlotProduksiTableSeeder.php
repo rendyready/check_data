@@ -14,7 +14,7 @@ class PlotProduksiTableSeeder extends Seeder
     public function run()
     {
         DB::table('m_plot_produksi')->truncate();
-        $plotprod = ['Goreng','Tepung','Sambal Non Bawang','Sambal Masak + Telur','Ca/Tumis','Bakaran','Buah','Minum','Sayur','Nasi'];
+        $plotprod = ['Goreng','Tepung','Sambal Bawang','Sambal Non Bawang','Sambal Masak + Telur','Ca/Tumis','Bakaran','Buah','Minum','Sayur','Nasi'];
 
         foreach ($plotprod as $key => $value) {
             DB::table('m_plot_produksi')->insert([
