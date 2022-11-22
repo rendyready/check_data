@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Master\SatuanController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -12,7 +10,10 @@ use App\Http\Controllers\Master\SatuanController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+// Dashboard Route
+Route::middleware(['auth', 'web'])->group(function () {
+    Route::view('/', 'dashboard::dashboard');
+    Route::match(['get', 'post'], '/dashboard', function () {
+        return view('dashboard::dashboard');
+    });
+});
