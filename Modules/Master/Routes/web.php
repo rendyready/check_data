@@ -93,7 +93,7 @@ Route::group(['prefix' => 'master', 'controller' => MSatuanController::class,'mi
 //Master Klasifikasi
 Route::group(['prefix' => 'master', 'controller' => ProdKlasifikasiController::class,'middleware' => ['auth','web']], function()
 {
-    Route::get('m_klasifikasi','index')->name('m_klasifikasi.index'); Route::get('m_klasifikasi/list','list')->name('m_klasifikasi.list');
+    Route::get('m_klasifikasi','index')->name('m_klasifikasi.index'); 
     Route::post('m_klasifikasi/action','action')->name('action.m_klasifikasi');
 });
 //Master Footer
@@ -101,4 +101,12 @@ Route::group(['prefix' => 'master', 'controller' => FooterController::class,'mid
 {
     Route::get('conf_footer','index')->name('conf_footer.index'); Route::get('conf_footer/list','list')->name('conf_footer.list');
     Route::post('conf_footer/action','action')->name('action.conf_footer');
+});
+//Master Produk
+Route::group(['prefix' => 'master', 'controller' => ProdukController::class,'middleware' => ['auth','web']], function()
+{
+    Route::get('m_produk','index')->name('m_produk.index');
+    Route::post('produk/simpan','simpan')->name('simpan.m_produk');
+    Route::post('produk/edit','edit')->name('edit.m_produk');
+    Route::get('produk/list/{id}','list')->name('m_produk.list');
 });

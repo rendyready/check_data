@@ -32,7 +32,9 @@ class DatabaseSeeder extends Seeder
             MWTableSeeder::class,
             MLevelJabatanTableSeeder::class,
             MJabatanTableSeeder::class,
+            MProdukTableSeeder::class,
             PinSeeder::class,
+            ConfigSubJenisProdukTableSeeder::class,
        ]);
     }
 }

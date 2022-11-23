@@ -262,6 +262,11 @@
                 </a>
                 <ul class="nav-main-submenu">
                   <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('master/m_produk') ? ' active' : '' }}" href="{{route('m_produk.index')}}">
+                      <span class="nav-main-link-name">Produk</span>
+                    </a>
+                  </li>
+                  <li class="nav-main-item">
                     <a class="nav-main-link{{ request()->is('master/jenis_menu') ? ' active' : '' }}" href="{{route('jenis_menu.index')}}">
                       <span class="nav-main-link-name">Jenis Menu</span>
                     </a>
@@ -326,13 +331,13 @@
                     </a>
                   </li>
                   <li class="nav-main-item">
-                    <a class="nav-main-link{{ request()->is('pages/slick') ? ' active' : '' }}" href="/pages/slick">
-                      <span class="nav-main-link-name">Slick Slider</span>
+                    <a class="nav-main-link{{ request()->is('user/akses') ? ' active' : '' }}" href="{{route('akses.index')}}">
+                      <span class="nav-main-link-name">Hak Akses</span>
                     </a>
                   </li>
                   <li class="nav-main-item">
-                    <a class="nav-main-link{{ request()->is('pages/blank') ? ' active' : '' }}" href="/pages/blank">
-                      <span class="nav-main-link-name">Blank</span>
+                    <a class="nav-main-link{{ request()->is('users') ? ' active' : '' }}" href="{{route('users.index')}}">
+                      <span class="nav-main-link-name">User</span>
                     </a>
                   </li>
                   <li class="nav-main-item">

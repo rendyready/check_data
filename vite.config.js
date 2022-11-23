@@ -17,7 +17,7 @@ export default defineConfig({
                 'resources/js/pages/slick.js',
             ],
             refresh: [
-                'resources/views/**','app/Http/Controllers/**'
+                'resources/views/**','app/Http/Controllers/**','Modules/**'
             ],
         }),
     ],
