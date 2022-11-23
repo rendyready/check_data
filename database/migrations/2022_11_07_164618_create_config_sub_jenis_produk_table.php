@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('config_sub_jenis_produk', function (Blueprint $table) {
             $table->id('config_sub_jenis_produk_id');
             $table->bigInteger('config_sub_jenis_produk_m_produk_id');
-            $table->bigInteger('config_sub_jenis_produk_m_kategori_id');
+            $table->bigInteger('config_sub_jenis_produk_m_sub_jenis_produk_id');
             $table->bigInteger('config_sub_jenis_produk_created_by');
             $table->timestampTz('config_sub_jenis_produk_created_at')->useCurrent();
             $table->timestampTz('config_sub_jenis_produk_updated_at')->nullable()->useCurrentOnUpdate()->default(NULL);

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->decimal('m_menu_harga_nominal', 15, 2);
             $table->bigInteger('m_menu_harga_m_jenis_nota_id');
             $table->bigInteger('m_menu_harga_m_produk_id');
-            $table->char('m_menu_harga_status')->default(0);
+            $table->char('m_menu_harga_status')->default('0');
             $table->bigInteger('m_menu_harga_created_by');
             $table->timestampTz('m_menu_harga_created_at')->useCurrent();
             $table->bigInteger('m_menu_harga_updated_by')->nullable();
