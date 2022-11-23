@@ -16,8 +16,7 @@ return new class extends Migration
         Schema::create('m_resep', function (Blueprint $table) {
             $table->id('m_resep_id');
             $table->bigInteger('m_resep_m_produk_id');
-            $table->bigInteger('m_resep_bb_id');
-            $table->bigInteger('m_resep_m_satuan_id');
+            $table->string('m_resep_keterangan');
             $table->char('m_resep_status'); //aktif, non aktif
             $table->bigInteger('m_resep_created_by');
             $table->bigInteger('m_resep_updated_by')->nullable();
