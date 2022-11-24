@@ -21,11 +21,11 @@ return new class extends Migration
             $table->string('r_m_h_m_w_nama');
             $table->bigInteger('r_m_h_m_produk_id');
             $table->string('r_m_h_m_produk_nama');
-            $table->string('r_m_h_m_menu_cr');
-            $table->string('r_m_h_m_menu_urut');
+            $table->string('r_m_h_m_produk_cr');
+            $table->string('r_m_h_m_produk_urut');
             $table->bigInteger('r_m_h_m_jenis_produk_id');
             $table->string('r_m_h_m_jenis_produk_nama');
-            $table->string('r_m_h_m_menu_code');
+            $table->string('r_m_h_m_produk_code');
             $table->date('r_m_h_tanggal');
             $table->string('r_m_h_shift');
             $table->time('r_m_h_waktu')->nullable();

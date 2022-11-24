@@ -22,11 +22,11 @@ return new class extends Migration
             $table->string('r_l_b_nota_code');
             $table->bigInteger('r_l_b_m_produk_id');
             $table->string('r_l_b_m_produk_nama');
-            $table->string('r_l_b_m_menu_cr')->default('');
-            $table->string('r_l_b_m_menu_urut');
+            $table->string('r_l_b_m_produk_cr')->default('');
+            $table->string('r_l_b_m_produk_urut');
             $table->bigInteger('r_l_b_m_jenis_produk_id');
             $table->string('r_l_b_m_jenis_produk_nama');
-            $table->decimal('r_l_b_m_menu_harga_nominal', 15);
+            $table->decimal('r_l_b_m_produk_harga_nominal', 15);
             $table->integer('r_l_b_qty');
             $table->decimal('r_l_b_nominal', 15);
             $table->string('r_l_b_keterangan');
