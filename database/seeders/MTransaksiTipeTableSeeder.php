@@ -49,7 +49,7 @@ class MTransaksiTipeTableSeeder extends Seeder
                 'm_t_t_created_by'=> 1
             ],
             [
-                'm_t_t_name' => 'Dinein',
+                'm_t_t_name' => 'Dine In',
                 'm_t_t_profit_price' => 0,
                 'm_t_t_profit_in' => 0,
                 'm_t_t_profit_out'=> 0,
