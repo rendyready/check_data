@@ -24,7 +24,7 @@ class DatabaseSeeder extends Seeder
             SubJenisMenuTableSeeder::class,
             ModalTipeTableSeeder::class,
             JenisMejaTableSeeder::class,
-            WjenisTableSeeder::class,
+            WJenisTableSeeder::class,
             MServiceChargeTableSeeder::class,
             MTransaksiTipeTableSeeder::class,
             MKlasifikasiProdTableSeeder::class,
@@ -35,6 +35,10 @@ class DatabaseSeeder extends Seeder
             MProdukTableSeeder::class,
             PinSeeder::class,
             ConfigSubJenisProdukTableSeeder::class,
+            MMenuHargaTableSeeder::class,
+            ConfigFooterTableSeeder::class,
+            MResepTableSeeder::class,
+            MResepDetailTableSeeder::class,
        ]);
     }
 }

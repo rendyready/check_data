@@ -110,3 +110,12 @@ Route::group(['prefix' => 'master', 'controller' => ProdukController::class,'mid
     Route::post('produk/edit','edit')->name('edit.m_produk');
     Route::get('produk/list/{id}','list')->name('m_produk.list');
 });
+//Master Produk Relasi
+Route::group(['prefix' => 'master', 'controller' => RelasiKatMenuController::class,'middleware' => ['auth','web']], function()
+{
+    Route::get('m_produk_relasi','index')->name('m_produk_relasi.index');
+    Route::post('m_produk_relasi/simpan','simpan')->name('simpan.m_produk_relasi');
+    Route::post('m_produk_relasi/edit','edit')->name('edit.m_produk_relasi');
+    Route::get('m_produk_relasi/list/{id}','list')->name('m_produk_relasi.list');
+    Route::get('m_produk_relasi/hapus/{id}','hapus')->name('hapus.m_produk_relasi'); 
+});

@@ -23,9 +23,9 @@
               <tbody id="tablecontents">
                 @foreach ($data as $item)
                     <tr class="row1">
-                      <td>{{$item->config_footer_id}}</td>
-                      <td>{{$item->config_footer_value}}</td>
-                      <td>{{$item->config_footer_priority}}</td>
+                      <td>{{$item->m_footer_id}}</td>
+                      <td>{{$item->m_footer_value}}</td>
+                      <td>{{$item->m_footer_priority}}</td>
                       <td>{{$item->m_w_nama}}</td>
                     </tr>
                 @endforeach
@@ -61,8 +61,8 @@
           url:'{{ route("action.conf_footer") }}',
           dataType:"json",
           columns:{
-            identifier:[0, 'config_footer_id'],
-            editable:[[1, 'config_footer_value'],[2,'config_footer_priority','number','{"step": "1","placeholder":"0"}'],[3,'config_footer_m_w_id','select',JSON.stringify(mw)]]
+            identifier:[0, 'm_footer_id'],
+            editable:[[1, 'm_footer_value'],[2,'m_footer_priority','number','{"step": "1","placeholder":"0"}'],[3,'m_footer_m_w_id','select',JSON.stringify(mw)]]
           },
           restoreButton:false,
           onSuccess:function(data, textStatus, jqXHR)
