@@ -29,6 +29,8 @@
   <link rel="stylesheet" href="{{ asset('js/plugins/datatables-bs5/css/dataTables.bootstrap5.min.css') }}">
   <link rel="stylesheet" href="{{ asset('js/plugins/datatables-buttons-bs5/css/buttons.bootstrap5.min.css') }}">
   <link rel="stylesheet" href="{{ asset('js/plugins/datatables-responsive-bs5/css/responsive.bootstrap5.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('js/plugins/select2/css/select2.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('js/plugins/ion-rangeslider/css/ion.rangeSlider.css') }}">
   @vite(['resources/sass/main.scss',
   'resources/js/codebase/app.js',
   'resources/sass/codebase/themes/pulse.scss',
@@ -53,5 +55,7 @@
     <script src="{{ asset('js/plugins/datatables-buttons-pdfmake/vfs_fonts.js') }}"></script>
     <script src="{{ asset('js/plugins/datatables-buttons/buttons.print.min.js') }}"></script>
     <script src="{{ asset('js/plugins/datatables-buttons/buttons.html5.min.js') }}"></script>
+    <script src="{{ asset('js/plugins/select2/js/select2.full.min.js') }}"></script>
+    <script src="{{asset('js/plugins/ion-rangeslider/js/ion.rangeSlider.js')}}"></script>
   @yield('js')
 </head>
