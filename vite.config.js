@@ -7,8 +7,10 @@ export default defineConfig({
             input: [
                 'resources/sass/main.scss',
                 'resources/sass/codebase/themes/pulse.scss',
+                'resources/js/plugins/lib/jquery.min.js',
                 'resources/js/codebase/app.js',
-                'resources/js/app.js',
+                'resources/js/app.js', 
+                'resources/js/pages/jquery.tabledit.js',
                 'resources/js/pages/datatables.js',
                 'resources/js/pages/jquery.tabledit.js',
             ],
@@ -22,4 +24,7 @@ export default defineConfig({
             '~bootstrap': path.resolve(__dirname, 'node_modules/bootstrap'),
         }
     },
+    build: {
+        chunkSizeWarningLimit: 1600,
+      },
 });
