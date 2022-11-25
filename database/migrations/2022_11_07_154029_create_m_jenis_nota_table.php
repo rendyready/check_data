@@ -14,13 +14,14 @@ return new class extends Migration
     public function up()
     {
         Schema::create('m_jenis_nota', function (Blueprint $table) {
-            $table->id();
+            $table->id('m_jenis_nota_id');
             $table->string('m_jenis_nota_nama');
+            $table->string('m_jenis_nota_group');
             $table->bigInteger('m_jenis_nota_created_by');
-            $table->timestamp('m_jenis_nota_created_at')->useCurrent();
+            $table->timestampTz('m_jenis_nota_created_at')->useCurrent();
             $table->bigInteger('m_jenis_nota_updated_by')->nullable();
-            $table->timestamp('m_jenis_nota_updated_at')->nullable()->useCurrentOnUpdate()->default(NULL);
-            $table->softDeletes('m_jenis_nota_deleted_at');
+            $table->timestampTz('m_jenis_nota_updated_at')->nullable()->useCurrentOnUpdate()->default(NULL);
+            $table->timestampTz('m_jenis_nota_deleted_at')->nullable()->default(NULL);
         });
     }
 

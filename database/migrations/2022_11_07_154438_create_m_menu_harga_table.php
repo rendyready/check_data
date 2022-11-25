@@ -14,16 +14,16 @@ return new class extends Migration
     public function up()
     {
         Schema::create('m_menu_harga', function (Blueprint $table) {
-            $table->id();
+            $table->id('m_menu_harga_id');
             $table->decimal('m_menu_harga_nominal', 15, 2);
             $table->bigInteger('m_menu_harga_m_jenis_nota_id');
-            $table->bigInteger('m_menu_harga_m_menu_id');
-            $table->char('m_menu_harga_status')->default(0);
+            $table->bigInteger('m_menu_harga_m_produk_id');
+            $table->char('m_menu_harga_status')->default('0');
             $table->bigInteger('m_menu_harga_created_by');
-            $table->timestamp('m_menu_harga_created_at')->useCurrent();
+            $table->timestampTz('m_menu_harga_created_at')->useCurrent();
             $table->bigInteger('m_menu_harga_updated_by')->nullable();
-            $table->timestamp('m_menu_harga_updated_at')->nullable()->useCurrentOnUpdate()->default(NULL);
-            $table->softDeletes('m_menu_harga_deleted_at');
+            $table->timestampTz('m_menu_harga_updated_at')->nullable()->useCurrentOnUpdate()->default(NULL);
+            $table->timestampTz('m_menu_harga_deleted_at')->nullable()->default(NULL);
         });
     }
 

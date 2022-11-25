@@ -14,13 +14,13 @@ return new class extends Migration
     public function up()
     {
         Schema::create('m_area', function (Blueprint $table) {
-            $table->id();
+            $table->id('m_area_id');
             $table->string('m_area_nama');
             $table->bigInteger('m_area_created_by');
-            $table->timestamp('m_area_created_at')->useCurrent();
+            $table->timestampTz('m_area_created_at')->useCurrent();
             $table->bigInteger('m_area_updated_by')->nullable();
-            $table->timestamp('m_area_updated_at')->nullable()->useCurrentOnUpdate()->default(NULL);
-            $table->softDeletes('m_area_deleted_at');
+            $table->timestampTz('m_area_updated_at')->nullable()->useCurrentOnUpdate()->default(NULL);
+            $table->timestampTz('m_area_deleted_at')->nullable()->default(NULL);
         });
     }
 
