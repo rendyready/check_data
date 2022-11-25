@@ -13,44 +13,44 @@ class ConfigFooterTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('config_footer')->truncate();
+        DB::table('m_footer')->truncate();
 
-        DB::table('config_footer')->insert([
+        DB::table('m_footer')->insert([
             [
-                'config_footer_m_w_id' =>1,
-                'config_footer_value'=>'Terimakasih Atas Kunjungan Anda',
-                'config_footer_priority' => 1,
-                'config_footer_created_by'=>1,
+                'm_footer_m_w_id' =>1,
+                'm_footer_value'=>'Terimakasih Atas Kunjungan Anda',
+                'm_footer_priority' => 1,
+                'm_footer_created_by'=>1,
             ],
             [
-                'config_footer_m_w_id' =>1,
-                'config_footer_value'=>'Hotline SMS 0811251500',
-                'config_footer_priority' => 2,
-                'config_footer_created_by'=>1,
+                'm_footer_m_w_id' =>1,
+                'm_footer_value'=>'Hotline SMS 0811251500',
+                'm_footer_priority' => 2,
+                'm_footer_created_by'=>1,
             ],
             [
-                'config_footer_m_w_id' =>1,
-                'config_footer_value'=>'Follow IG @waroengss',
-                'config_footer_priority' => 3,
-                'config_footer_created_by'=>1,
+                'm_footer_m_w_id' =>1,
+                'm_footer_value'=>'Follow IG @waroengss',
+                'm_footer_priority' => 3,
+                'm_footer_created_by'=>1,
             ],
             [
-                'config_footer_m_w_id' =>2,
-                'config_footer_value'=>'Terimakasih Atas Kunjungan Anda',
-                'config_footer_priority' => 1,
-                'config_footer_created_by'=>1,
+                'm_footer_m_w_id' =>2,
+                'm_footer_value'=>'Terimakasih Atas Kunjungan Anda',
+                'm_footer_priority' => 1,
+                'm_footer_created_by'=>1,
             ],
             [
-                'config_footer_m_w_id' =>2,
-                'config_footer_value'=>'Hotline SMS 0811251500',
-                'config_footer_priority' => 2,
-                'config_footer_created_by'=>1,
+                'm_footer_m_w_id' =>2,
+                'm_footer_value'=>'Hotline SMS 0811251500',
+                'm_footer_priority' => 2,
+                'm_footer_created_by'=>1,
             ],
             [
-                'config_footer_m_w_id' =>2,
-                'config_footer_value'=>'Follow IG @waroengss',
-                'config_footer_priority' => 3,
-                'config_footer_created_by'=>1,
+                'm_footer_m_w_id' =>2,
+                'm_footer_value'=>'Follow IG @waroengss',
+                'm_footer_priority' => 3,
+                'm_footer_created_by'=>1,
             ],
         ]);
     }
