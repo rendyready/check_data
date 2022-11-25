@@ -26,7 +26,7 @@
   <!-- Modules -->
   @yield('css')
   @vite(['resources/sass/main.scss',
-  'resources/js/lib/jquery.min.js', 
+  'resources/js/plugins/lib/jquery.min.js',
   'resources/js/codebase/app.js',
   'resources/sass/codebase/themes/pulse.scss',
   'resources/js/plugins/datatables-bs5/css/dataTables.bootstrap5.min.css',
