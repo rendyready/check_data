@@ -16,11 +16,11 @@ return new class extends Migration
         Schema::create('rekap_pesanan', function (Blueprint $table) {
             $table->id('r_p_id');
             $table->bigInteger('r_p_m_produk_id');
-            $table->string('r_p_m_menu_code')->nullable();
+            $table->string('r_p_m_produk_code')->nullable();
             $table->string('r_p_m_produk_nama');
-            $table->string('r_p_m_menu_cr');
-            $table->string('r_p_m_menu_urut');
-            $table->decimal('r_p_m_menu_harga_nominal', 15);
+            $table->string('r_p_m_produk_cr');
+            $table->string('r_p_m_produk_urut');
+            $table->decimal('r_p_m_produk_harga_nominal', 15);
             $table->bigInteger('r_p_m_r_t_id');
             $table->date('r_p_tanggal');
             $table->time('r_p_jam');

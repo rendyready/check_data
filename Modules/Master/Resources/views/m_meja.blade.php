@@ -25,11 +25,11 @@
                 @foreach ($data->meja as $item)
                     <tr>
                       <td>{{$data->no++}}</td>
-                      <td>{{$item->config_meja_nama}}</td>
+                      <td>{{$item->m_meja_nama}}</td>
                       <td>{{$item->m_meja_jenis_nama}}</td>
                       <td>{{$item->m_w_nama}}</td>
-                      <td> <a class="btn btn-info buttonEdit" value="{{$item->config_meja_id}}" title="Edit"><i class="fa fa-edit"></i></a>
-                           <a href="{{route('hapus.meja',$item->config_meja_id)}}" class="btn btn-danger" title="Delete"><i class="fa fa-trash"></i></a>
+                      <td> <a class="btn btn-info buttonEdit" value="{{$item->m_meja_id}}" title="Edit"><i class="fa fa-edit"></i></a>
+                           <a href="{{route('hapus.meja',$item->m_meja_id)}}" class="btn btn-danger" title="Delete"><i class="fa fa-trash"></i></a>
                       </td>
                     </tr>
                 @endforeach
@@ -166,10 +166,10 @@
                     dataType: 'json',
                     success: function(respond) {
                       console.log(respond)
-                        $("#id_meja").val(respond.config_meja_id).trigger('change');
-                        $("#nama_meja").val(respond.config_meja_nama).trigger('change');
-                        $("#jenis_meja").val(respond.config_meja_m_meja_jenis_id).trigger('change');
-                        $("#waroeng").val(respond.config_meja_m_w_id).trigger('change');
+                        $("#id_meja").val(respond.m_meja_id).trigger('change');
+                        $("#nama_meja").val(respond.m_meja_nama).trigger('change');
+                        $("#jenis_meja").val(respond.m_meja_m_meja_jenis_id).trigger('change');
+                        $("#waroeng").val(respond.m_meja_m_w_id).trigger('change');
                     },
                     error: function() {
                     }
