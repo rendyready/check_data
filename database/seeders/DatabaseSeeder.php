@@ -39,6 +39,7 @@ class DatabaseSeeder extends Seeder
             ConfigFooterTableSeeder::class,
             MResepTableSeeder::class,
             MResepDetailTableSeeder::class,
+            ConfigMejaTableSeeder::class,
        ]);
     }
 }
