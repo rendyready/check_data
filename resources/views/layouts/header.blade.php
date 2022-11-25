@@ -25,34 +25,33 @@
 
   <!-- Modules -->
   @yield('css')
+  <!-- Page JS Plugins CSS -->
+  <link rel="stylesheet" href="{{ asset('js/plugins/datatables-bs5/css/dataTables.bootstrap5.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('js/plugins/datatables-buttons-bs5/css/buttons.bootstrap5.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('js/plugins/datatables-responsive-bs5/css/responsive.bootstrap5.min.css') }}">
   @vite(['resources/sass/main.scss',
-  'public/js/lib/jquery.min.js', 
   'resources/js/codebase/app.js',
   'resources/sass/codebase/themes/pulse.scss',
-  'public/js/plugins/datatables-bs5/css/dataTables.bootstrap5.min.css',
-  'public/js/plugins/datatables-buttons-bs5/css/buttons.bootstrap5.min.css',
-  'public/js/plugins/datatables-responsive-bs5/css/responsive.bootstrap5.min.css',
-  'public/js/plugins/datatables/jquery.dataTables.min.js',
-  'public/js/plugins/datatables-bs5/js/dataTables.bootstrap5.min.js',
-  'public/js/plugins/datatables-responsive/js/dataTables.responsive.min.js',
-  'public/js/plugins/datatables-responsive-bs5/js/responsive.bootstrap5.min.js',
-  'public/js/plugins/datatables-buttons/dataTables.buttons.min.js',
-  'public/js/plugins/datatables-buttons-bs5/js/buttons.bootstrap5.min.js',
-  'public/js/plugins/datatables-buttons-jszip/jszip.min.js',
-  'public/js/plugins/datatables-buttons-pdfmake/pdfmake.min.js',
-  'public/js/plugins/datatables-buttons-pdfmake/vfs_fonts.js',
-  'public/js/plugins/datatables-buttons/buttons.print.min.js',
-  'public/js/plugins/datatables-buttons/buttons.html5.min.js',
-  'public/js/plugins/select2/css/select2.min.css',
-  'public/js/plugins/select2/js/select2.full.min.js',
-  'public/js/plugins/ion-rangeslider/js/ion.rangeSlider.js',
-  'public/js/plugins/ion-rangeslider/css/ion.rangeSlider.css',
   'resources/js/pages/jquery.tabledit.js',
   'resources/js/pages/datatables.js',
-  
   ])
 
   <!-- Alternatively, you can also include a specific color theme after the main stylesheet to alter the default color theme of the template -->
   {{-- @vite(['resources/sass/main.scss', 'resources/sass/codebase/themes/corporate.scss', 'resources/js/codebase/app.js']) --}}
+    <!-- jQuery (required for DataTables plugin) -->
+    <script src="{{ asset('js/lib/jquery.min.js') }}"></script>
+  
+    <!-- Page JS Plugins -->
+    <script src="{{ asset('js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('js/plugins/datatables-bs5/js/dataTables.bootstrap5.min.js') }}"></script>
+    <script src="{{ asset('js/plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('js/plugins/datatables-responsive-bs5/js/responsive.bootstrap5.min.js') }}"></script>
+    <script src="{{ asset('js/plugins/datatables-buttons/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('js/plugins/datatables-buttons-bs5/js/buttons.bootstrap5.min.js') }}"></script>
+    <script src="{{ asset('js/plugins/datatables-buttons-jszip/jszip.min.js') }}"></script>
+    <script src="{{ asset('js/plugins/datatables-buttons-pdfmake/pdfmake.min.js') }}"></script>
+    <script src="{{ asset('js/plugins/datatables-buttons-pdfmake/vfs_fonts.js') }}"></script>
+    <script src="{{ asset('js/plugins/datatables-buttons/buttons.print.min.js') }}"></script>
+    <script src="{{ asset('js/plugins/datatables-buttons/buttons.html5.min.js') }}"></script>
   @yield('js')
 </head>
