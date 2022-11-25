@@ -11,9 +11,9 @@ class FooterController extends Controller
 {
     public function index()
     {
-        $data = DB::table('config_footer')
-        ->leftjoin('m_w','config_footer_m_w_id','m_w_id')
-        ->select('config_footer_id','config_footer_value','config_footer_priority','m_w_nama')
+        $data = DB::table('m_footer')
+        ->leftjoin('m_w','m_footer_m_w_id','m_w_id')
+        ->select('m_footer_id','m_footer_value','m_footer_priority','m_w_nama')
         ->get();
         return view('master::conf_footer',compact('data'));
     }
@@ -23,27 +23,27 @@ class FooterController extends Controller
     	{
             if ($request->action == 'add') {
                 $data = array(
-                    'config_footer_value'	=>	$request->config_footer_value,
-                    'config_footer_m_w_id' =>	$request->config_footer_m_w_id,
-                    'config_footer_priority' =>	$request->config_footer_priority,
-                    'config_footer_created_by' => Auth::id(),
-                    'config_footer_created_at' => Carbon::now(),
+                    'm_footer_value'	=>	$request->m_footer_value,
+                    'm_footer_m_w_id' =>	$request->m_footer_m_w_id,
+                    'm_footer_priority' =>	$request->m_footer_priority,
+                    'm_footer_created_by' => Auth::id(),
+                    'm_footer_created_at' => Carbon::now(),
                 );
-                DB::table('config_footer')->insert($data);
+                DB::table('m_footer')->insert($data);
             } elseif ($request->action == 'edit') {
                 $data = array(
-                    'config_footer_value'	=>	$request->config_footer_value,
-                    'config_footer_m_w_id' =>	$request->config_footer_m_w_id,
-                    'config_footer_priority' =>	$request->config_footer_priority,
-                    'config_footer_updated_by' => Auth::id(),
-                    'config_footer_updated_at' => Carbon::now(),
+                    'm_footer_value'	=>	$request->m_footer_value,
+                    'm_footer_m_w_id' =>	$request->m_footer_m_w_id,
+                    'm_footer_priority' =>	$request->m_footer_priority,
+                    'm_footer_updated_by' => Auth::id(),
+                    'm_footer_updated_at' => Carbon::now(),
                 );
-                DB::table('config_footer')->where('config_footer_id',$request->config_footer_id)
+                DB::table('m_footer')->where('m_footer_id',$request->m_footer_id)
                 ->update($data);
             }else {
-                $softdelete = array('config_footer_deleted_at' => Carbon::now());
-    			DB::table('config_footer')
-    				->where('config_footer_id', $request->config_footer_id)
+                $softdelete = array('m_footer_deleted_at' => Carbon::now());
+    			DB::table('m_footer')
+    				->where('m_footer_id', $request->m_footer_id)
     				->update($softdelete);
             }
     		return response()->json($request);
