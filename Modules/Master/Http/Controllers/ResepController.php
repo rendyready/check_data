@@ -5,7 +5,10 @@ namespace Modules\Master\Http\Controllers;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
+use Carbon\Carbon;
 class ResepController extends Controller
 {
     /**
@@ -15,18 +18,11 @@ class ResepController extends Controller
     public function index()
     {
         $data = new \stdClass();
-        $data->resep = DB::table('m_resep')->get();
+        $data->resep = DB::table('m_resep')
+        ->leftjoin('m_produk','m_resep_m_produk_id','m_produk_id')
+        ->get();
         $data->produk = DB::table('m_produk')->get();
-        return view('master::index');
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     * @return Renderable
-     */
-    public function create()
-    {
-        return view('master::create');
+        return view('master::m_resep',compact('data'));
     }
 
     /**
@@ -34,9 +30,16 @@ class ResepController extends Controller
      * @param Request $request
      * @return Renderable
      */
-    public function store(Request $request)
+    public function simpan(Request $request)
     {
-        //
+        $data = DB::table('m_resep')->insert([
+            "m_resep_m_produk_id" => $request->m_resep_m_produk_id,
+            "m_resep_keterangan" => $request->m_resep_keterangan,
+            "m_resep_status" => $request->m_resep_status,
+            "m_resep_created_by" => Auth::id(),
+            "m_resep_created_at" => Carbon::now(),
+        ]);
+        return Redirect::route('m_resep.index');
     }
 
     /**
@@ -44,9 +47,10 @@ class ResepController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function show($id)
+    public function list($id)
     {
-        return view('master::show');
+       $data = DB::table('m_resep')->where('m_resep_id',$id)->first();
+       return response()->json($data, 200);
     }
 
     /**
@@ -54,29 +58,64 @@ class ResepController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
-        return view('master::edit');
+        DB::table('m_resep')->where('m_resep_id', $request->id)
+        ->update([
+            "m_resep_m_produk_id" => $request->m_resep_m_produk_id,
+            "m_resep_keterangan" => $request->m_resep_keterangan,
+            "m_resep_status" => $request->m_resep_status,
+            "m_resep_updated_by" => Auth::id(),
+            "m_resep_updated_at" => Carbon::now(),
+        ]);
+        return Redirect::route('m_resep.index');
+    }
+    public function detail($id)
+    {
+        $data = DB::table('m_resep_detail')->where('m_resep_detail_m_resep_id',$id)
+        ->leftjoin('m_produk','m_resep_detail_bb_id','m_produk_id')
+        ->leftjoin('m_satuan','m_resep_detail_m_satuan_id','m_satuan_id')
+        ->select('m_resep_detail.*','m_produk_nama','m_satuan_kode')
+        ->get();
+        return response()->json($data, 200);
     }
 
-    /**
-     * Update the specified resource in storage.
-     * @param Request $request
-     * @param int $id
-     * @return Renderable
-     */
-    public function update(Request $request, $id)
+    public function action(Request $request)
     {
-        //
+        if($request->ajax())
+    	{
+            if ($request->action == 'add') {
+                $data = array(
+                    'm_resep_detail_m_resep_id'	=>	$request->id,
+                    'm_resep_detail_bb_id'	=>	$request->m_resep_detail_bb_id,
+                    'm_resep_detail_bb_qty'	=>	$request->m_resep_detail_bb_qty,
+                    'm_resep_detail_m_satuan_id' =>	$request->m_resep_detail_m_satuan_id,
+                    'm_resep_detail_created_by' => Auth::id(),
+                    'm_resep_detail_created_at' => Carbon::now(),
+                );
+                DB::table('m_satuan')->insert($data);
+            } elseif ($request->action == 'edit') {
+                $data = array(
+                    'm_satuan_kode'	=>	$request->m_satuan_kode,
+                    'm_satuan_keterangan'	=>	$request->m_satuan_keterangan,
+                    'm_satuan_updated_by' => Auth::id(),
+                    'm_satuan_updated_at' => Carbon::now(),
+                );
+                DB::table('m_satuan')->where('m_satuan_id',$request->id)
+                ->update($data);
+            }
+    		return response()->json($request);
+    	}
     }
-
-    /**
-     * Remove the specified resource from storage.
-     * @param int $id
-     * @return Renderable
-     */
-    public function destroy($id)
+    public function list_detail()
     {
-        //
+        $data = new \stdClass();
+        $satuan = DB::table('m_satuan')->get();
+        $bb = DB::table('m_produk')->get();
+        foreach ($satuan as $key => $v) {
+            $data->satuan[$v->m_satuan_id]=$v->m_satuan_kode;}
+            foreach ($bb as $key => $v) {
+                $data->bb[$v->m_produk_id]=$v->m_produk_nama;}
+        return response()->json($data);
     }
 }
