@@ -40,6 +40,7 @@ class DatabaseSeeder extends Seeder
             MResepTableSeeder::class,
             MResepDetailTableSeeder::class,
             ConfigMejaTableSeeder::class,
+            MFaqTableSeeder::class,
        ]);
     }
 }
