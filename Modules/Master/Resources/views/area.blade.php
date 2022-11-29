@@ -35,36 +35,36 @@
   <!-- END Page Content -->
 @endsection
 @section('js')
-<script type="module">
-  $(document).ready(function(){
-    $.ajaxSetup({
-    headers:{
-      'X-CSRF-Token' : $("input[name=_token]").val()
-        }
-      });
-      var t = $('#sample_data').DataTable();
-    $('#sample_data').Tabledit({
-    url:'{{ route("action.area") }}',
-    dataType:"json",
-    columns:{
-      identifier:[0, 'id'],
-      editable:[[1, 'm_area_nama']]
-    },
-    restoreButton:false,
-    onSuccess:function(data, textStatus, jqXHR)
-    {
-      if (data.action == 'add') {
-        window.location.reload();
-      }
-      if(data.action == 'delete')
+  <script type="module">
+    $(document).ready(function(){
+      $.ajaxSetup({
+      headers:{
+        'X-CSRF-Token' : $("input[name=_token]").val()
+          }
+        });
+        var t = $('#sample_data').DataTable();
+      $('#sample_data').Tabledit({
+      url:'{{ route("action.area") }}',
+      dataType:"json",
+      columns:{
+        identifier:[0, 'id'],
+        editable:[[1, 'm_area_nama']]
+      },
+      restoreButton:false,
+      onSuccess:function(data, textStatus, jqXHR)
       {
-        $('#'+data.id).remove();
+        if (data.action == 'add') {
+          window.location.reload();
+        }
+        if(data.action == 'delete')
+        {
+          $('#'+data.id).remove();
+        }
       }
-    }
-  });
-  $("#sample_data").append(
-       $('<tfoot/>').append( $("#sample_data thead tr").clone() )
-      );
-  });
-  </script>
+    });
+    $("#sample_data").append(
+         $('<tfoot/>').append( $("#sample_data thead tr").clone() )
+        );
+    });
+    </script>
 @endsection
