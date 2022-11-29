@@ -16,6 +16,8 @@
               <tr>
                   <th>No.</th>
                   <th>Nama Area</th>
+                  <th>Area Code</th>
+
               </tr>
               </thead>
               <tbody id="tablecontents">
@@ -23,6 +25,7 @@
                     <tr>
                       <td>{{$item->m_area_id}}</td>
                       <td>{{$item->m_area_nama}}</td>
+                      <td>{{$item->m_area_code}}</td>
                     </tr>
                 @endforeach
               </tbody>
@@ -48,7 +51,7 @@
       dataType:"json",
       columns:{
         identifier:[0, 'id'],
-        editable:[[1, 'm_area_nama']]
+        editable:[[1,'m_area_nama'],[2,'m_area_code']],
       },
       restoreButton:false,
       onSuccess:function(data, textStatus, jqXHR)
