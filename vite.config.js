@@ -13,7 +13,7 @@ export default defineConfig({
                 'resources/sass/codebase/themes/pulse.scss',
                 'resources/js/plugins/lib/jquery.min.js',
                 'resources/js/codebase/app.js',
-                'resources/js/app.js', 
+                'resources/js/app.js',
                 'resources/js/pages/jquery.tabledit.js',
                 'resources/js/pages/datatables.js',
                 'resources/js/pages/slick.js',
@@ -37,7 +37,7 @@ export default defineConfig({
                 'resources/js/plugins/ion-rangeslider/css/ion.rangeSlider.css',
             ],
             refresh: [
-                'resources/views/**','app/Http/Controllers/**','Modules/**'
+                'resources/views/**', 'app/Http/Controllers/**', 'Modules/**'
             ],
         }),
     ],
@@ -48,5 +48,10 @@ export default defineConfig({
     },
     build: {
         chunkSizeWarningLimit: 1600,
-      },
+    },
+
+    // Server AutoLoad componet vite
+    server: {
+        host: true
+    },
 });
