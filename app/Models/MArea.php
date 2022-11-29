@@ -30,7 +30,8 @@ class MArea extends Model
 
 	protected $casts = [
 		'm_area_created_by' => 'int',
-		'm_area_updated_by' => 'int'
+		'm_area_updated_by' => 'int',
+		'm_area_deleted_by' => 'int'
 	];
 
 	protected $dates = [
@@ -41,10 +42,12 @@ class MArea extends Model
 
 	protected $fillable = [
 		'm_area_nama',
+		'm_area_code',
 		'm_area_created_by',
 		'm_area_created_at',
 		'm_area_updated_by',
 		'm_area_updated_at',
-		'm_area_deleted_at'
+		'm_area_deleted_at',
+		'm_area_deleted_by',
 	];
 }
