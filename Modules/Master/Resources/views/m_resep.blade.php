@@ -11,7 +11,6 @@
           </div>
           <div class="block-content text-muted">
             <a class="btn btn-success buttonInsert"><i class="fa fa-plus"></i> Tambah</a>
-            @csrf
             <table id="m_resep" class="table table-bordered table-striped table-vcenter js-dataTable-full">
               <thead>
                 <tr>
@@ -117,16 +116,16 @@
             <div class="modal-content">
               <div class="block block-themed shadow-none mb-0">
                 <div class="block-header block-header-default bg-pulse">
-                  <h3 class="block-title" id="myModalLabel"></h3>
+                  <h3 class="block-title" id="myModalLabel2"></h3>
                   <div class="block-options">
-                    <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
+                    <button type="button" class="btn-block-option close" data-bs-dismiss="modal" aria-label="Close">
                       <i class="fa fa-fw fa-times"></i>
                     </button>
                   </div>
                 </div>
                 <div class="block-content">
                   @csrf
-                  <table id="m_resep_detail_tb" class="table table-bordered table-striped table-vcenter js-dataTable-full">
+                  <table class="table m_resep_detail_tb table-bordered table-striped table-vcenter js-dataTable-full">
                    <thead>
                       <th>No</th>
                       <th>NAMA BB</th>
@@ -137,7 +136,7 @@
                    </tbody>
                   </table>
                     <div class="block-content block-content-full text-end bg-transparent">
-                      <button type="button" class="btn btn-sm btn-alt-secondary me-1" data-bs-dismiss="modal">Close</button>
+                      <button type="button" class="btn btn-sm btn-alt-secondary me-1 close" data-bs-dismiss="modal">Close</button>
                     </div>
                 
                 </div>
@@ -151,13 +150,22 @@
 @endsection
 @section('js')
 <script type="module">
+  var table;
   $(document).ready(function(){
+  $.ajaxSetup({
+    headers:{
+      'X-CSRF-Token' : $("input[name=_token]").val()
+        }
+      });
   var t = $('#m_resep').DataTable();
 
   $("#m_resep").append(
        $('<tfoot/>').append( $("#m_resep thead tr").clone() )
       );
-  });
+  $(".close").on('click',function() {
+    window.location.reload();
+  })
+ 
   Codebase.helpersOnLoad(['jq-select2']);
   $(".buttonInsert").on('click', function() {
             var id = $(this).attr('value');
@@ -178,7 +186,7 @@
                         $("#id").val(respond.m_resep_id).trigger('change');
                         $("#m_resep_m_produk_id").val(respond.m_resep_m_produk_id).trigger('change');
                         $("#m_resep_keterangan").val(respond.m_resep_keterangan).trigger('change');
-                        $("#m_resep_status").val(respond.m_resep_status).trigger('change');
+                        $("input[name='m_resep_status']").val(respond.m_resep_status).prop("checked", true);
                     },
                     error: function() {
                     }
@@ -187,44 +195,42 @@
             });
       $(".buttonDetail").on('click', function() {
                 var id = $(this).attr('value');
-                $("#myModalLabel").html('Detail Resep');
-                var table =  $.ajax({
-                    url: "/master/m_resep/detail/"+id,
-                    type: "GET",
-                    cache: true,
-                    success: function(response){
-                      console.log(response)
-                      $.each(response, function (key, value) {
-                        $('#detail_resep').append("<tr>\
-                              <td>"+value.m_resep_detail_id+"</td>\
-                              <td>"+value.m_produk_nama+"</td>\
-                              <td>"+value.m_resep_detail_qty+"</td>\
-                              <td>"+value.m_satuan_kode+"</td>\
-                              </tr>");
-                      })
-                    }
-				        });
-                var url = "{{route('list_detail.m_resep')}}";
+                $("#myModalLabel2").html('Detail Resep');
+                  table =  $('.m_resep_detail_tb').dataTable( {
+                        ajax: "/master/m_resep/detail/"+id,
+                        destroy: true,
+                    })
+             
+      var url = "{{route('list_detail.m_resep')}}";
       var satuan = new Array(); var bb = new Array();
       $.get(url, function(response){
         satuan = response['satuan']; bb = response['bb'];
         var data = [
         [1,'m_resep_detail_bb_id','select',JSON.stringify(bb)],
-        [2,'m_resep_detail_qty'],
-        [3,'m_w_m_sc_id','select',JSON.stringify(satuan)]]
+        [2,'m_resep_detail_bb_qty'],
+        [3,'m_resep_detail_m_satuan_id','select',JSON.stringify(satuan)]]
 
-      $('#m_resep_detail_tb').Tabledit({
-          url:'{{ route("action.m_resep") }}',
+      $('.m_resep_detail_tb').Tabledit({
+          url:'/master/m_resep/action/'+id,
           dataType:"json",
+          cache:false,
           columns:{
-            identifier:[0, 'id'],
+            identifier:[0, 'm_resep_detail_id'],
             editable: data
           },
           restoreButton:false,
           onSuccess:function(data, textStatus, jqXHR)
           {
             if (data.action == 'add') {
-                window.location.reload();
+              window.location.reload();
+              Codebase.helpers('jq-notify', {
+              align: 'right',             // 'right', 'left', 'center'
+              from: 'top',                // 'top', 'bottom'
+              type: 'success',               // 'info', 'success', 'warning', 'danger'
+              icon: 'fa fa-info me-5',    // Icon class
+              message: 'Detail Resep Berhasil Ditambahkan'
+          });
+             
             }
             if(data.action == 'delete')
             {
@@ -232,12 +238,11 @@
             }
           }
           });
-          $("#m_w").append(
-          $('<tfoot/>').append( $("#m_w thead tr").clone() )
-          );
-      });
+       });
                               
-                $("#modal-block-select2-detail").modal('show');
-            });  
+            $("#modal-block-select2-detail").modal('show');
+      });
+    
+    });  
 </script>
 @endsection

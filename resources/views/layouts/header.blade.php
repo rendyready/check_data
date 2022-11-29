@@ -56,6 +56,7 @@
     <script src="{{ asset('js/plugins/datatables-buttons/buttons.print.min.js') }}"></script>
     <script src="{{ asset('js/plugins/datatables-buttons/buttons.html5.min.js') }}"></script>
     <script src="{{ asset('js/plugins/select2/js/select2.full.min.js') }}"></script>
-    <script src="{{asset('js/plugins/ion-rangeslider/js/ion.rangeSlider.js')}}"></script>
+    <script src="{{ asset('js/plugins/ion-rangeslider/js/ion.rangeSlider.js')}}"></script>
+    <script src="{{ asset('js/plugins/bootstrap-notify/bootstrap-notify.min.js')}}"></script>
   @yield('js')
 </head>

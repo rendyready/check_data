@@ -119,7 +119,7 @@ Route::group(['prefix' => 'master', 'controller' => RelasiKatMenuController::cla
     Route::get('m_produk_relasi/list/{id}','list')->name('m_produk_relasi.list');
     Route::get('m_produk_relasi/hapus/{id}','hapus')->name('hapus.m_produk_relasi'); 
 });
-//Master Footer
+//Master Resep
 Route::group(['prefix' => 'master', 'controller' => ResepController::class,'middleware' => ['auth','web']], function()
 {
     Route::get('m_resep','index')->name('m_resep.index');
@@ -127,7 +127,7 @@ Route::group(['prefix' => 'master', 'controller' => ResepController::class,'midd
     Route::post('m_resep/edit','edit')->name('edit.m_resep');
     Route::get('m_resep/list/{id}','list')->name('m_resep.list');
     Route::get('m_resep/detail/{id}','detail')->name('detail.m_resep');
-    Route::post('m_resep/action','action')->name('action.m_resep');
+    Route::post('m_resep/action/{id}','action')->name('action.m_resep');
     Route::get('m_resep_detail','list_detail')->name('list_detail.m_resep');
 
 });
