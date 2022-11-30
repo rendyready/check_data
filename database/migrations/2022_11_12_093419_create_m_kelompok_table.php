@@ -18,6 +18,7 @@ class CreateMKelompokTable extends Migration
             $table->string('m_kelompok_nama');
             $table->bigInteger('m_kelompok_created_by');
             $table->bigInteger('m_kelompok_updated_by')->nullable();
+            $table->bigInteger('m_kelompok_deleted_by')->nullable();
             $table->timestampTz('m_kelompok_created_at')->useCurrent();
             $table->timestampTz('m_kelompok_updated_at')->useCurrentOnUpdate()->nullable()->default(NULL);
             $table->timestampTz('m_kelompok_deleted_at')->nullable()->default(NULL);

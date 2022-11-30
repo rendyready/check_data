@@ -21,6 +21,7 @@ return new class extends Migration
             $table->bigInteger('m_resep_detail_m_satuan_id');
             $table->bigInteger('m_resep_detail_created_by');
             $table->bigInteger('m_resep_detail_updated_by')->nullable();
+            $table->bigInteger('m_resep_detail_deleted_by')->nullable();
             $table->timestampTz('m_resep_detail_created_at')->useCurrent();
             $table->timestampTz('m_resep_detail_updated_at')->useCurrentOnUpdate()->nullable()->default(NULL);
             $table->timestampTz('m_resep_detail_deleted_at')->nullable()->default(NULL);

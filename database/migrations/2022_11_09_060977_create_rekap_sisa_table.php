@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('rekap_sisa', function (Blueprint $table) {
             $table->id('r_s_id');
+            $table->bigInteger('r_s_sync_id')->nullable();
             $table->bigInteger('r_s_m_w_id');
             $table->string('r_s_m_w_nama');
             $table->bigInteger('r_s_m_area_id');

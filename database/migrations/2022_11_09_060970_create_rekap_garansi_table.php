@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('rekap_garansi', function (Blueprint $table) {
             $table->id('r_g_id');
+            $table->bigInteger('r_g_sync_id')->nullable();
             $table->bigInteger('r_g_r_t_id');
             $table->date('r_g_tanggal');
             $table->smallInteger('r_g_shift');

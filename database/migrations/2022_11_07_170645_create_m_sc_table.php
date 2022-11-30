@@ -17,8 +17,9 @@ return new class extends Migration
             $table->id('m_sc_id');
             $table->decimal('m_sc_value',3,2);
             $table->bigInteger('m_sc_created_by');
-            $table->timestampTz('m_sc_created_at')->useCurrent();
             $table->bigInteger('m_sc_updated_by')->nullable();
+            $table->bigInteger('m_sc_deleted_by')->nullable();
+            $table->timestampTz('m_sc_created_at')->useCurrent();
             $table->timestampTz('m_sc_updated_at')->nullable()->useCurrentOnUpdate()->default(NULL);
             $table->timestampTz('m_sc_deleted_at')->nullable()->default(NULL);
         });

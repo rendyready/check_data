@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('m_level_jabatan_nama');
             $table->bigInteger('m_level_jabatan_created_by');
             $table->bigInteger('m_level_jabatan_updated_by')->nullable();
+            $table->bigInteger('m_level_jabatan_deleted_by')->nullable();
             $table->timestampTz('m_level_jabatan_created_at')->useCurrent();
             $table->timestampTz('m_level_jabatan_updated_at')->useCurrentOnUpdate()->nullable()->default(NULL);
             $table->timestampTz('m_level_jabatan_deleted_at')->nullable()->default(NULL);

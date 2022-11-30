@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('rekap_uang_tips', function (Blueprint $table) {
             $table->id('r_u_t_id');
+            $table->bigInteger('r_u_t_sync_id')->nullable();
             $table->date('r_u_t_tanggal');
             $table->smallInteger('r_u_t_shift');
             $table->time('r_u_t_jam');

@@ -21,8 +21,9 @@ return new class extends Migration
             $table->string('m_meja_type');
             $table->char('m_meja_status_sync', 1)->default('1');
             $table->bigInteger('m_meja_created_by');
-            $table->timestampTz('m_meja_created_at')->useCurrent();
             $table->bigInteger('m_meja_updated_by')->nullable();
+            $table->bigInteger('m_meja_deleted_by')->nullable();
+            $table->timestampTz('m_meja_created_at')->useCurrent();
             $table->timestampTz('m_meja_updated_at')->useCurrentOnUpdate()->nullable()->default(NULL);
             $table->timestampTz('m_meja_deleted_at')->nullable();
         });

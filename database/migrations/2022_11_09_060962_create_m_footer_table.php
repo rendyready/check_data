@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('m_footer_priority');
             $table->bigInteger('m_footer_created_by');
             $table->bigInteger('m_footer_updated_by')->nullable();
+            $table->bigInteger('m_footer_deleted_by')->nullable();
             $table->timestampTz('m_footer_created_at')->useCurrent();
             $table->timestampTz('m_footer_updated_at')->useCurrentOnUpdate()->nullable()->default(NULL);
             $table->timestampTz('m_footer_deleted_at')->nullable()->default(NULL);

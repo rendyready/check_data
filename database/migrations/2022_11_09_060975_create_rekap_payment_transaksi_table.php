@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('rekap_payment_transaksi', function (Blueprint $table) {
             $table->id('r_p_t_id');
+            $table->bigInteger('r_p_t_sync_id')->nullable();
             $table->bigInteger('r_p_t_r_t_id');
             $table->string('r_p_t_type');
             $table->decimal('r_p_t_nominal', 15);

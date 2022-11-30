@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('rekap_gagal_proses', function (Blueprint $table) {
             $table->id('r_g_p_id');
+            $table->bigInteger('r_g_p_sync_id')->nullable();
             $table->date('r_g_p_tanggal');
             $table->smallInteger('r_g_p_shift');
             $table->time('r_g_p_jam');

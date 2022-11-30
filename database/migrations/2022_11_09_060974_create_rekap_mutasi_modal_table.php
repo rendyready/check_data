@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('rekap_mutasi_modal', function (Blueprint $table) {
             $table->id('r_m_m_id');
+            $table->bigInteger('r_m_m_sync_id')->nullable();
             $table->date('r_m_m_tanggal');
             $table->smallInteger('r_m_m_shift');
             $table->time('r_m_m_jam');

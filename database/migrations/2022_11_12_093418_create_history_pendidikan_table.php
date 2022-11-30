@@ -24,6 +24,7 @@ return new class extends Migration
             $table->decimal('history_pendidikan_nilai')->nullable()->default(NULL);
             $table->bigInteger('history_pendidikan_created_by');
             $table->bigInteger('history_pendidikan_updated_by')->nullable();
+            $table->bigInteger('history_pendidikan_deleted_by')->nullable();
             $table->timestampTz('history_pendidikan_created_at')->useCurrent();
             $table->timestampTz('history_pendidikan_updated_at')->useCurrentOnUpdate()->nullable()->default(NULL);
             $table->timestampTz('history_pendidikan_deleted_at')->nullable()->default(NULL);

@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('rekap_pre_void', function (Blueprint $table) {
             $table->id('r_p_v_id');
+            $table->bigInteger('r_p_v_sync_id')->nullable();
             $table->bigInteger('r_p_v_r_t_id');
             $table->date('r_p_v_tanggal');
             $table->smallInteger('r_p_v_shift');

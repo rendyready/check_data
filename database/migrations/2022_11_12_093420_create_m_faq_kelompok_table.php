@@ -19,6 +19,7 @@ class CreateMFaqKelompokTable extends Migration
             $table->bigInteger('m_faq_kelompok_m_kelompok_id');
             $table->bigInteger('m_faq_kelompok_created_by');
             $table->bigInteger('m_faq_kelompok_updated_by')->nullable();
+            $table->bigInteger('m_faq_kelompok_deleted_by')->nullable();
             $table->timestampTz('m_faq_kelompok_created_at')->useCurrent();
             $table->timestampTz('m_faq_kelompok_updated_at')->useCurrentOnUpdate()->nullable()->default(NULL);
             $table->timestampTz('m_faq_kelompok_deleted_at')->nullable()->default(NULL);

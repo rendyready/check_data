@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('rekap_tarikan_kasir', function (Blueprint $table) {
             $table->id('r_t_k_id');
+            $table->bigInteger('r_t_k_sync_id')->nullable();
             $table->date('r_t_k_tanggal');
             $table->smallInteger('r_t_k_shift');
             $table->bigInteger('r_t_k_m_w_id');

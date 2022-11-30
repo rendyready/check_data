@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('rekap_lost_bill', function (Blueprint $table) {
             $table->id('r_l_b_id');
+            $table->bigInteger('r_l_b_sync_id')->nullable();
             $table->bigInteger('r_l_b_r_t_id');
             $table->date('r_l_b_tanggal');
             $table->smallInteger('r_l_b_shift');

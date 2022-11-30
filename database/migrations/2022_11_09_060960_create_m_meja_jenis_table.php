@@ -19,8 +19,9 @@ return new class extends Migration
             $table->integer('m_meja_jenis_space');
             $table->char('m_meja_jenis_status', 1)->nullable()->default('0');
             $table->bigInteger('m_meja_jenis_created_by');
-            $table->timestampTz('m_meja_jenis_created_at')->useCurrent();
             $table->bigInteger('m_meja_jenis_updated_by')->nullable();
+            $table->bigInteger('m_meja_jenis_deleted_by')->nullable();
+            $table->timestampTz('m_meja_jenis_created_at')->useCurrent();
             $table->timestampTz('m_meja_jenis_updated_at')->useCurrentOnUpdate()->nullable()->default(NULL);
             $table->timestampTz('m_meja_jenis_deleted_at')->nullable();
         });

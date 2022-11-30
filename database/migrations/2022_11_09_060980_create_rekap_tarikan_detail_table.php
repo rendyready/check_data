@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('rekap_tarikan_detail', function (Blueprint $table) {
             $table->id('r_t_d_id');
+            $table->bigInteger('r_t_d_sync_id')->nullable();
             $table->bigInteger('r_t_d_r_t_k_id');
             $table->string('r_t_d_key');
             $table->string('r_t_d_value');

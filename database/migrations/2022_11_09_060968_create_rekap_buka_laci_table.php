@@ -14,7 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::create('rekap_buka_laci', function (Blueprint $table) {
-            $table->id('r_b_l_id');
+            $table->id('r_b_l_id'); 
+            $table->bigInteger('r_b_l_sync_id')->nullable();
             $table->date('r_b_l_tanggal');
             $table->smallInteger('r_b_l_shift');
             $table->time('r_b_l_jam');

@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('rekap_transaksi', function (Blueprint $table) {
             $table->id('r_t_id');
+            $table->bigInteger('r_t_sync_id')->nullable();
             $table->bigInteger('r_t_m_jenis_nota_id');
             $table->string('r_t_m_jenis_nota_nama');
             $table->string('r_t_nota_code');

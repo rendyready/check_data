@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('rekap_menu_habis', function (Blueprint $table) {
             $table->id('r_m_h_id');
+            $table->bigInteger('r_m_h_sync_id')->nullable();
             $table->bigInteger('r_m_h_m_area_id');
             $table->string('r_m_h_m_area_nama');
             $table->bigInteger('r_m_h_m_w_id');

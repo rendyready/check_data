@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('rekap_sisa_detail', function (Blueprint $table) {
             $table->id('r_s_d_id');
+            $table->bigInteger('r_s_d_sync_id')->nullable();
             $table->bigInteger('r_s_d_r_s_id');
             $table->bigInteger('r_s_d_m_produk_id');
             $table->string('r_s_d_m_produk_code');

@@ -15,10 +15,10 @@ return new class extends Migration
     {
         Schema::create('rekap_modal_detail', function (Blueprint $table) {
             $table->id('rekap_modal_detail_id');
+            $table->bigInteger('rekap_modal_detail_sync_id')->nullable();
             $table->bigInteger('rekap_modal_detail_qty')->nullable()->default(0);
             $table->bigInteger('rekap_modal_detail_m_modal_tipe_id');
             $table->bigInteger('rekap_modal_detail_m_modal_id');
-            $table->char('rekap_modal_detail_status_sync', 1)->nullable()->default('0');
             $table->bigInteger('rekap_modal_detail_created_by');
             $table->bigInteger('rekap_modal_detail_updated_by')->nullable();
             $table->timestampTz('rekap_modal_detail_created_at')->useCurrent();

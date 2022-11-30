@@ -34,9 +34,10 @@ return new class extends Migration
             $table->bigInteger('m_w_created_by');
             $table->timestampTz('m_w_created_at')->useCurrent();
             $table->bigInteger('m_w_updated_by')->nullable();
+            $table->bigInteger('m_w_deleted_by')->nullable();
             $table->timestampTz('m_w_updated_at')->nullable()->useCurrentOnUpdate()->default(NULL);
             $table->timestampTz('m_w_deleted_at')->nullable()->default(NULL);
-            $table->bigInteger('m_w_deleted_by')->nullable();
+            
         });
     }
 

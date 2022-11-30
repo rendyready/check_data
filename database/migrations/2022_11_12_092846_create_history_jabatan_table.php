@@ -22,6 +22,7 @@ return new class extends Migration
             $table->date('history_jabatan_selesai')->nullable()->default(NULL);  
             $table->bigInteger('history_jabatan_created_by');
             $table->bigInteger('history_jabatan_updated_by')->nullable();
+            $table->bigInteger('history_jabatan_deleted_by')->nullable();
             $table->timestampTz('history_jabatan_created_at')->useCurrent();
             $table->timestampTz('history_jabatan_updated_at')->useCurrentOnUpdate()->nullable()->default(NULL);
             $table->timestampTz('history_jabatan_deleted_at')->nullable()->default(NULL);
