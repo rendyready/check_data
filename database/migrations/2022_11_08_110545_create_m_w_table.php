@@ -21,7 +21,7 @@ return new class extends Migration
             $table->bigInteger('m_w_m_w_jenis_id');
             $table->char('m_w_status')->default('1');
             $table->text('m_w_alamat');
-            $table->bigInteger('m_w_m_jenis_nota_id');
+            $table->char('m_w_m_kode_nota',10); // Nota A, Nota B
             $table->bigInteger('m_w_m_pajak_id');
             $table->bigInteger('m_w_m_modal_tipe_id');
             $table->bigInteger('m_w_m_sc_id');

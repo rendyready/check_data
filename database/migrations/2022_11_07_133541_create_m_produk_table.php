@@ -31,8 +31,9 @@ return new class extends Migration
             $table->char('m_produk_hpp');
 
             $table->bigInteger('m_produk_created_by');
-            $table->timestampTz('m_produk_created_at')->useCurrent();
             $table->bigInteger('m_produk_updated_by')->nullable();
+            $table->bigInteger('m_produk_deleted_by')->nullable();
+            $table->timestampTz('m_produk_created_at')->useCurrent();
             $table->timestampTz('m_produk_updated_at')->nullable()->useCurrentOnUpdate()->default(NULL);
             $table->timestampTz('m_produk_deleted_at')->nullable()->default(NULL);
         });

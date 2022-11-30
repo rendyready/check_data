@@ -19,8 +19,9 @@ return new class extends Migration
             $table->string('m_jenis_produk_urut');
             $table->string('m_jenis_produk_odcr55')->default('makan')->nullable();
             $table->bigInteger('m_jenis_produk_created_by');
-            $table->timestampTz('m_jenis_produk_created_at')->useCurrent();
             $table->bigInteger('m_jenis_produk_updated_by')->nullable();
+            $table->bigInteger('m_jenis_produk_deleted_by')->nullable();
+            $table->timestampTz('m_jenis_produk_created_at')->useCurrent();
             $table->timestampTz('m_jenis_produk_updated_at')->nullable()->useCurrentOnUpdate()->default(NULL);
             $table->timestampTz('m_jenis_produk_deleted_at')->nullable()->default(NULL);
         });
