@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('m_w', function (Blueprint $table) {
             $table->id('m_w_id');
             $table->string('m_w_nama');
+            $table->string('m_w_code');
             $table->bigInteger('m_w_m_area_id');
             $table->bigInteger('m_w_m_w_jenis_id');
             $table->char('m_w_status')->default('1');
@@ -35,6 +36,7 @@ return new class extends Migration
             $table->bigInteger('m_w_updated_by')->nullable();
             $table->timestampTz('m_w_updated_at')->nullable()->useCurrentOnUpdate()->default(NULL);
             $table->timestampTz('m_w_deleted_at')->nullable()->default(NULL);
+            $table->bigInteger('m_w_deleted_by')->nullable();
         });
     }
 

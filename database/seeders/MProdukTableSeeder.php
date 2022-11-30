@@ -547,7 +547,7 @@ class MProdukTableSeeder extends Seeder
                 'm_produk_nama' => 'Bumbu Tabur Bawang',
                 'm_produk_urut' =>'000-002',
                 'm_produk_cr' => 'Bumbu Tabur Bawang',
-                'm_produk_status'=> 0,
+                'm_produk_status'=>1,
                 'm_produk_tax'=> 0,
                 'm_produk_sc'=>0,
                 'm_produk_m_jenis_produk_id'=>0,
