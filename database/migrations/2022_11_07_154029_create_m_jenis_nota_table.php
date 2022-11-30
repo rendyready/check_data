@@ -15,11 +15,13 @@ return new class extends Migration
     {
         Schema::create('m_jenis_nota', function (Blueprint $table) {
             $table->id('m_jenis_nota_id');
-            $table->string('m_jenis_nota_nama');
-            $table->string('m_jenis_nota_group');
+            $table->bigInteger('m_jenis_nota_m_w_id');
+            $table->string('m_jenis_nota_nama'); //Reguler, Grab, Gojek
+            // $table->string('m_jenis_nota_group');
             $table->bigInteger('m_jenis_nota_created_by');
-            $table->timestampTz('m_jenis_nota_created_at')->useCurrent();
             $table->bigInteger('m_jenis_nota_updated_by')->nullable();
+            $table->bigInteger('m_jenis_nota_deleted_by')->nullable();
+            $table->timestampTz('m_jenis_nota_created_at')->useCurrent();
             $table->timestampTz('m_jenis_nota_updated_at')->nullable()->useCurrentOnUpdate()->default(NULL);
             $table->timestampTz('m_jenis_nota_deleted_at')->nullable()->default(NULL);
         });

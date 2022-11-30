@@ -21,8 +21,9 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->bigInteger('created_by')->nullable();
-            $table->timestampTz('created_at')->useCurrent();
             $table->bigInteger('updated_by')->nullable();
+            $table->bigInteger('deleted_by')->nullable();
+            $table->timestampTz('created_at')->useCurrent();
             $table->timestampTz('updated_at')->nullable();
             $table->timestampTz('deleted_at')->nullable();
         });

@@ -19,9 +19,12 @@ return new class extends Migration
             $table->bigInteger('m_menu_harga_m_jenis_nota_id');
             $table->bigInteger('m_menu_harga_m_produk_id');
             $table->char('m_menu_harga_status')->default('0');
+            $table->char('m_menu_tax_status')->default('0');
+            $table->char('m_menu_sc_status')->default('0');
             $table->bigInteger('m_menu_harga_created_by');
-            $table->timestampTz('m_menu_harga_created_at')->useCurrent();
             $table->bigInteger('m_menu_harga_updated_by')->nullable();
+            $table->bigInteger('m_menu_harga_deleted_by')->nullable();
+            $table->timestampTz('m_menu_harga_created_at')->useCurrent();
             $table->timestampTz('m_menu_harga_updated_at')->nullable()->useCurrentOnUpdate()->default(NULL);
             $table->timestampTz('m_menu_harga_deleted_at')->nullable()->default(NULL);
         });
