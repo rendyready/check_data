@@ -37,7 +37,8 @@ class MArea extends Model
 	protected $dates = [
 		'm_area_created_at',
 		'm_area_updated_at',
-		'm_area_deleted_at'
+		'm_area_deleted_at',
+
 	];
 
 	protected $fillable = [
