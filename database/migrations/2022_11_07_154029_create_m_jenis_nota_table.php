@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('m_jenis_nota', function (Blueprint $table) {
             $table->id('m_jenis_nota_id');
             $table->bigInteger('m_jenis_nota_m_w_id');
-            $table->string('m_jenis_nota_nama'); //Reguler, Grab, Gojek
+            $table->bigInteger('m_jenis_nota_m_t_t_id'); //Reguler, Grab, Gojek
             // $table->string('m_jenis_nota_group');
             $table->bigInteger('m_jenis_nota_created_by');
             $table->bigInteger('m_jenis_nota_updated_by')->nullable();

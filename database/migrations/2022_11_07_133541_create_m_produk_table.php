@@ -29,7 +29,6 @@ return new class extends Migration
             $table->char('m_produk_jual')->default('tidak'); // ya = dijual di CR, tidak = tidak dijual di CR
             $table->char('m_produk_scp');
             $table->char('m_produk_hpp');
-
             $table->bigInteger('m_produk_created_by');
             $table->bigInteger('m_produk_updated_by')->nullable();
             $table->bigInteger('m_produk_deleted_by')->nullable();
