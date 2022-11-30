@@ -1,12 +1,15 @@
 <?php
 
 namespace Modules\Master\Http\Controllers;
+
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\MArea;
 use Carbon\Carbon;
+
+
 class MAreaController extends Controller
 {
     /**
@@ -15,9 +18,10 @@ class MAreaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {   $data = MArea::select('m_area_id','m_area_nama','m_area_code')->whereNull('m_area_deleted_at')->orderBy('m_area_id','asc')->get();
-        return view('master::area',compact('data'));
-        
+    {
+        $data = MArea::select('m_area_id', 'm_area_nama', 'm_area_code')->whereNull('m_area_deleted_at')->orderBy('m_area_id', 'asc')->get();
+        return view('master::area', compact('data'));
+        return response($data);
     }
     /**
      * Show the form for creating a new resource.
@@ -25,40 +29,66 @@ class MAreaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function action(Request $request)
-    { 
-        // $validator = \Validator::make($request->all(), [
-        //     'm_area_nama' => 'required',
-        // ]);
+    {
+        // $validator = Validator::make(
+        //     $request->DB::table('m_area')
+        //         ->select(
+        //             'm_area_id',
+        //             'm_area_nama',
+        //             'm_area_code',
+        //             'm_area_created_by',
+        //             'm_area_created_at',
+        //             'm_area_deleted_by',
+        //             'm_area_deleted_at',
+        //         ),
+        //     [
+        //         'm_area_nama' => 'required|unique:area',
+        //         'm_area_code' => 'required|unique:area',
+        //     ]
+        // );
 
-    	if($request->ajax())
-    	{
+        if ($request->ajax()) {
             if ($request->action == 'add') {
+                $this->validate(
+                    $request,
+                    [
+                        'm_area_nama' => 'required|unique:m_area',
+                        'm_area_code' => 'required|unique:m_area',
+                    ]
+                );
                 $data = array(
-                    'm_area_nama'	=>	$request->m_area_nama,
-                    'm_area_code'	=>	$request->m_area_code,
+                    'm_area_nama'    =>    $request->m_area_nama,
+                    'm_area_code'    =>    $request->m_area_code,
                     'm_area_created_by' => Auth::id(),
                     'm_area_created_at' => Carbon::now(),
                 );
                 DB::table('m_area')->insert($data);
             } elseif ($request->action == 'edit') {
+                $this->validate(
+                    $request,
+                    [
+                        'm_area_nama' => 'required|unique:m_area',
+                        'm_area_code' => 'required|unique:m_area',
+                    ]
+                );
                 $data = array(
-                    'm_area_nama'	=>	$request->m_area_nama,
-                    'm_area_code'	=>	$request->m_area_code,
+                    'm_area_nama'    =>    $request->m_area_nama,
+                    'm_area_code'    =>    $request->m_area_code,
                     'm_area_updated_by' => Auth::id(),
                     'm_area_updated_at' => Carbon::now(),
                 );
-                DB::table('m_area')->where('m_area_id',$request->id)
-                ->update($data);
-            }else {
-                $softdelete = array(
+                DB::table('m_area')->where('m_area_id', $request->id)
+                    ->update($data);
+            } else {
+                $data = array(
                     'm_area_deleted_at' => Carbon::now(),
-                    'm_area_deleted_by' => Auth::id(),
+                    'm_area_deleted_by' => Auth::id()
                 );
-    			DB::table('m_area')
-    				->where('m_area_id', $request->id)
-    				->update($softdelete);
+                DB::table('m_area')
+                    ->where('m_area_id', $request->id)
+                    ->update($data);
             }
-    		return response()->json($request);
-    	}
+            return response()->json($data);
+        }
     }
 }
