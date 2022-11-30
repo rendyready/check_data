@@ -267,6 +267,11 @@
                     </a>
                   </li>
                   <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('master/m_resep') ? ' active' : '' }}" href="{{route('m_resep.index')}}">
+                      <span class="nav-main-link-name">Resep</span>
+                    </a>
+                  </li>
+                  <li class="nav-main-item">
                     <a class="nav-main-link{{ request()->is('master/jenis_menu') ? ' active' : '' }}" href="{{route('jenis_menu.index')}}">
                       <span class="nav-main-link-name">Jenis Menu</span>
                     </a>
