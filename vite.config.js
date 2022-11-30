@@ -8,12 +8,12 @@ export default defineConfig({
                 'resources/sass/main.scss',
                 'resources/sass/codebase/themes/pulse.scss',
                 'resources/js/codebase/app.js',
-                'resources/js/app.js', 
+                'resources/js/app.js',
                 'resources/js/pages/jquery.tabledit.js',
                 'resources/js/pages/datatables.js',
             ],
             refresh: [
-                'resources/views/**','app/Http/Controllers/**','Modules/**'
+                'resources/views/**', 'app/Http/Controllers/**', 'Modules/**'
             ],
         }),
     ],
@@ -24,5 +24,10 @@ export default defineConfig({
     },
     build: {
         chunkSizeWarningLimit: 1600,
-      },
+    },
+
+    // Server AutoLoad componet vite
+    server: {
+        host: true
+    },
 });
