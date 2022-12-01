@@ -24,6 +24,7 @@ return new class extends Migration
             $table->char('r_s_status_sync', 1)->default('0');
             $table->bigInteger('r_s_created_by');
             $table->bigInteger('r_s_updated_by')->nullable();
+            $table->bigInteger('r_s_deleted_by')->nullable();
             $table->timestampTz('r_s_created_at')->useCurrent();
             $table->timestampTz('r_s_updated_at')->useCurrentOnUpdate()->nullable()->default(NULL);
             $table->timestampTz('r_s_deleted_at')->nullable()->default(NULL);

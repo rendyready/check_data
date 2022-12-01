@@ -42,6 +42,7 @@ return new class extends Migration
             $table->string('r_l_b_ops_nama');
             $table->bigInteger('r_l_b_created_by');
             $table->bigInteger('r_l_b_updated_by')->nullable();
+            $table->bigInteger('r_l_b_deleted_by')->nullable();
             $table->timestampTz('r_l_b_created_at')->useCurrent();
             $table->timestampTz('r_l_b_updated_at')->useCurrentOnUpdate()->nullable()->default(NULL);
             $table->timestampTz('r_l_b_deleted_at')->nullable()->default(NULL);

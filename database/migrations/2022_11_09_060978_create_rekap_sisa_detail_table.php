@@ -27,6 +27,7 @@ return new class extends Migration
             $table->integer('r_s_d_qty');
             $table->char('r_s_d_status_sync', 1)->default('0');
             $table->timestampTz('r_s_d_created_by');
+            $table->timestampTz('r_s_d_deleted_by');
             $table->timestampTz('r_s_d_updated_by')->nullable();
             $table->timestampTz('r_s_d_created_at')->useCurrent();
             $table->timestampTz('r_s_d_updated_at')->useCurrentOnUpdate()->nullable()->default(NULL);

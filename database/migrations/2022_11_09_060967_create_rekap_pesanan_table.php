@@ -43,6 +43,7 @@ return new class extends Migration
             $table->char('r_p_status_sync', 1)->default('0');
             $table->bigInteger('r_p_created_by');
             $table->bigInteger('r_p_updated_by')->nullable();
+            $table->bigInteger('r_p_deleted_by')->nullable();
             $table->timestampTz('r_p_created_at')->useCurrent();
             $table->timestampTz('r_p_updated_at')->useCurrentOnUpdate()->nullable()->default(NULL);
             $table->timestampTz('r_p_deleted_at')->nullable()->default(NULL);

@@ -23,6 +23,7 @@ return new class extends Migration
             $table->boolean('rekap_modal_status')->default(true);
             $table->bigInteger('rekap_modal_created_by');
             $table->bigInteger('rekap_modal_updated_by')->nullable();
+            $table->bigInteger('rekap_modal_deleted_by')->nullable();
             $table->timestampTz('rekap_modal_created_at')->useCurrent();
             $table->timestampTz('rekap_modal_updated_at')->useCurrentOnUpdate()->nullable()->default(NULL);
             $table->timestampTz('rekap_modal_deleted_at')->nullable()->default(NULL);

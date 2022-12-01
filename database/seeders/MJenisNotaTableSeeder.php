@@ -18,15 +18,15 @@ class MJenisNotaTableSeeder extends Seeder
         DB::table('m_jenis_nota')->insert([
             [
                 'm_jenis_nota_m_w_id'=>1,
-                'm_jenis_nota_nama' => 'Reguler',
+                'm_jenis_nota_m_t_t_id' =>1,
                 'm_jenis_nota_created_by' => 1
             ],  [
                 'm_jenis_nota_m_w_id'=>2,
-                'm_jenis_nota_nama' => 'Gojek',
+                'm_jenis_nota_m_t_t_id' => 2,
                 'm_jenis_nota_created_by' => 1
             ],  [
                 'm_jenis_nota_m_w_id'=>3,
-                'm_jenis_nota_nama' => 'Grab',
+                'm_jenis_nota_m_t_t_id' => 3,
                 'm_jenis_nota_created_by' => 1
             ],
             // [

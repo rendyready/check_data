@@ -27,8 +27,8 @@
                     <tr>
                       <td>{{$item->m_jenis_nota_id}}</td>
                       <td>{{$item->m_w_nama}}</td>
-                      <td>{{$item->m_jenis_nota_nama}}</td>
-                      <td>{{$item->m_jenis_nota_group}}</td>
+                      <td>{{$item->m_jenis_nota_m_w_id}}</td>
+                      <td>{{$item->m_jenis_nota_m_t_t_id}}</td>
                       <td>{{$item->total}}</td>
                       <td>
                         <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modal-fadein"><i class="fa fa-edit"></i></button>        
@@ -67,24 +67,28 @@
             <form id="f_jenis_nota">
               <input type="hidden" name="m_jenis_nota_id">
               <div class="mb-4">
-                <label class="form-label" for="example-text-input">Nama Nota</label>
-                <input type="text" class="form-control" id="m_jenis_nota_nama" name="m_jenis_nota_nama" placeholder="Masukan Nama">
+                <label class="form-label" for="example-text-input">Id Waroeng</label>
+                <input type="text" class="form-control" id="m_jenis_nota_m_w_id" name="m_jenis_nota_m_w_id" placeholder="Masukan Nama">
               </div>
               <div class="mb-4">
-                <label class="form-label" for="m_jenis_nota_sumber">Nota Sumber</label>
-                <select class="form-select" id="m_jenis_nota_sumber" name="m_jenis_nota_sumber">
-                  <option selected="">Pilih Sumber Nota</option>
+                <label class="form-label" for="m_jenis_nota_m_t_t_id">Jenis Transaksi</label>
+                <select class="form-select" id="m_jenis_nota_m_t_t_id" name="m_jenis_nota_m_t_t_id">
+                  <option selected="">Jenis Transaksi</option>
                     @foreach ($data as $list)
-                        <option value="{{$list->m_jenis_nota_id}}">{{$list->m_jenis_nota_nama}}</option>
+                        <option value="{{$list->m_jenis_nota_m_t_t_id}}">{{$list->m_jenis_nota_m_t_t_id}}</option>
                     @endforeach
                 </select>
               </div>
               <div class="mb-4">
-                <label class="form-label" for="m_jenis_nota_group">Kelompok Jenis Nota</label>
-                <select class="form-select" id="m_jenis_nota_group" name="m_jenis_nota_group">
+                <label class="form-label" for="m_jenis_nota_m_t_t_id">Jenis Transaksi </label>
+                <select class="form-select" id="m_jenis_nota_m_t_t_id" name="m_jenis_nota_m_t_t_id">
                   <option selected="">Search</option>
-                  <option value="Nota A">Nota A</option>
-                  <option value="Nota B">Nota B</option>  
+                  <option value="Grab">Grab</option>
+                  <option value="Gojek">Gojek</option>  
+                  <option value="Takeaway">Takeaway</option>  
+                  <option value="Dine In">Dine In</option>  
+                  <option value="ShoppeFood">ShoppeFood</option>
+                  <option value="Maxim>Maxim</option>    
                 </select>
               </div>
             </form>
