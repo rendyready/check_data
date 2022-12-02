@@ -13,10 +13,11 @@ class MJenisNotaController extends Controller
     public function index()
     {
         $data = DB::table('m_jenis_nota')
-        ->selectRaw('Count(m_menu_harga_id) as total , m_jenis_nota.*, m_w_nama ')
-        ->leftjoin('m_w','m_jenis_nota_id','m_w_m_w_jenis_id')
-        ->leftjoin('m_menu_harga', 'm_jenis_nota_id','m_menu_harga_m_jenis_nota_id')
-        ->groupBy('m_jenis_nota_id', 'm_w_id')
+        ->selectRaw('Count(m_menu_harga_id) as total , m_jenis_nota.*, m_w_nama, m_t_t_name')
+        ->leftjoin('m_w','m_jenis_nota_id','m_w_id')
+        ->leftjoin('m_menu_harga', 'm_jenis_nota_id','m_jenis_nota_id')
+        ->leftJoin('m_transaksi_tipe','m_jenis_nota_id','m_t_t_id')
+        ->groupBy('m_jenis_nota_id', 'm_w_id', 'm_t_t_id')
         ->whereNull('m_jenis_nota_deleted_at')->get();
         return view('master::jenis_nota',compact('data'));
     }
@@ -26,8 +27,8 @@ class MJenisNotaController extends Controller
         try {
                 $id_nota = $request->m_jenis_nota_sumber_id;
                 DB::table('m_jenis_nota')->insert([
-                    'm_jenis_nota_nama' => $request->m_jenis_nota_nama,
-                    'm_jenis_nota_group' => $request->m_jenis_nota_group,
+                    'm_jenis_nota_m_w_id' => $request->m_jenis_nota_m_w_id,
+                    'm_jenis_nota_m_t_t_id' => $request->m_jenis_nota_m_t_t_id,
                     'm_jenis_nota_created_by' => Auth::user()->id
                 ]);
                 $idbaru = DB::table('m_jenis_nota')->max('m_jenis_nota_id');
