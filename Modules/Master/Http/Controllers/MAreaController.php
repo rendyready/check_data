@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\MArea;
 use Carbon\Carbon;
+use illuminate\Support\Str;
 
 
 class MAreaController extends Controller
@@ -52,7 +53,7 @@ class MAreaController extends Controller
                 $this->validate(
                     $request,
                     [
-                        'm_area_nama' => 'required|unique:m_area',
+                        Str::lower('m_area_nama') => 'required|unique:m_area',
                         'm_area_code' => 'required|unique:m_area',
                     ]
                 );
