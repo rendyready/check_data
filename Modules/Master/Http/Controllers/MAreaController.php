@@ -53,8 +53,16 @@ class MAreaController extends Controller
                 $this->validate(
                     $request,
                     [
-                        Str::lower('m_area_nama') => 'required|unique:m_area',
-                        'm_area_code' => 'required|unique:m_area',
+                        'm_area_nama' => [
+                            'required',
+                            'unique:m_area',
+                            'String'
+                        ],
+                        'm_area_code' => [
+                            'required',
+                            'unique:m_area',
+                            'String'
+                        ],
                     ]
                 );
                 $data = array(
@@ -63,7 +71,22 @@ class MAreaController extends Controller
                     'm_area_created_by' => Auth::id(),
                     'm_area_created_at' => Carbon::now(),
                 );
-                DB::table('m_area')->insert($data);
+                // if ($request->$data->filter(function ($value, $key) use ($data) {
+                //     if (strtolower(array(
+                //         $value->m_area_nama,
+                //         $value->m_area_code
+                //     )) == strtolower($data)) {
+                //         return $value;
+                //     }
+                // }));
+                DB::table('m_area')->filter(function($value,$key)use($data){
+                    if(strtolower([$value]))==strtolower([$value]),{
+                        elseif(strtoupper([$value]))==strtoupper([$value]){
+                            return $value;
+                        }
+                    }
+                });
+                    // ->insert($data);
             } elseif ($request->action == 'edit') {
                 $this->validate(
                     $request,
