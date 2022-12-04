@@ -20,7 +20,7 @@ return new class extends Migration
             $table->integer('rekap_modal_shift')->default(1);
             $table->dateTime('rekap_modal_tanggal')->useCurrent();
             $table->decimal('rekap_modal_nominal', 15);
-            $table->boolean('rekap_modal_status')->default(true);
+            $table->char('rekap_modal_status',5)->default('open');
             $table->bigInteger('rekap_modal_created_by');
             $table->bigInteger('rekap_modal_updated_by')->nullable();
             $table->bigInteger('rekap_modal_deleted_by')->nullable();
