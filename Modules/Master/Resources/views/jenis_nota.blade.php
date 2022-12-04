@@ -17,8 +17,7 @@
               <thead>
                 <th>ID</th>
                 <th>NAMA WAROENG</th>
-                <th>NAMA NOTA</th>
-                <th>KELOMPOK Nota</th>
+                <th>TIPE TRANSAKSI</th>
                 <th>JUMLAH MENU</th>
                 <th>ACTION</th>
               </thead>
@@ -27,8 +26,7 @@
                     <tr>
                       <td>{{$item->m_jenis_nota_id}}</td>
                       <td>{{$item->m_w_nama}}</td>
-                      <td>{{$item->m_jenis_nota_m_w_id}}</td>
-                      <td>{{$item->m_jenis_nota_m_t_t_id}}</td>
+                      <td>{{$item->m_t_t_name}}</td>
                       <td>{{$item->total}}</td>
                       <td>
                         <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modal-fadein"><i class="fa fa-edit"></i></button>        
@@ -67,15 +65,11 @@
             <form id="f_jenis_nota">
               <input type="hidden" name="m_jenis_nota_id">
               <div class="mb-4">
-                <label class="form-label" for="example-text-input">Id Waroeng</label>
-                <input type="text" class="form-control" id="m_jenis_nota_m_w_id" name="m_jenis_nota_m_w_id" placeholder="Masukan Nama">
-              </div>
-              <div class="mb-4">
-                <label class="form-label" for="m_jenis_nota_m_t_t_id">Jenis Transaksi</label>
-                <select class="form-select" id="m_jenis_nota_m_t_t_id" name="m_jenis_nota_m_t_t_id">
-                  <option selected="">Jenis Transaksi</option>
+                <label class="form-label" for="m_jenis_nota_m_w_id">Nama Waroeng</label>
+                <select class="form-select" id="m_jenis_nota_m_w_id" name="m_jenis_nota_m_w_id">
+                  <option selected="">Pilih Waroeng</option>
                     @foreach ($data as $list)
-                        <option value="{{$list->m_jenis_nota_m_t_t_id}}">{{$list->m_jenis_nota_m_t_t_id}}</option>
+                        <option value="{{$list->m_jenis_nota_m_w_id}}">{{$list->m_w_nama}}</option>
                     @endforeach
                 </select>
               </div>
@@ -88,7 +82,7 @@
                   <option value="Takeaway">Takeaway</option>  
                   <option value="Dine In">Dine In</option>  
                   <option value="ShoppeFood">ShoppeFood</option>
-                  <option value="Maxim>Maxim</option>    
+                  <option value="Maxim">Maxim</option>    
                 </select>
               </div>
             </form>

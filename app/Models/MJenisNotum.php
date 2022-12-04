@@ -43,9 +43,9 @@ class MJenisNotum extends Model
 		'm_jenis_nota_m_w_id',
 		'm_jenis_nota_m_t_t_id',
 		'm_jenis_nota_created_by',
-		'm_jenis_nota_created_at',
 		'm_jenis_nota_deleted_by',
 		'm_jenis_nota_updated_by',
+		'm_jenis_nota_created_at',
 		'm_jenis_nota_updated_at',
 		'm_jenis_nota_deleted_at'
 	];

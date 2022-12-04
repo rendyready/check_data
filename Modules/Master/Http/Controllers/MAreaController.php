@@ -23,6 +23,10 @@ class MAreaController extends Controller
         $data = MArea::select('m_area_id', 'm_area_nama', 'm_area_code')->whereNull('m_area_deleted_at')->orderBy('m_area_id', 'asc')->get();
         return view('master::area', compact('data'));
         return response($data);
+
+        // return $test = DB::table('m_area')->where(DB::raw("UPPER(m_area_nama) = 'JABODETABEK'"))->get();
+        // $input = ' JABO DETABEK ';
+        // return $test = DB::table('m_area')->whereRaw("UPPER(m_area_nama) = '{$input}'")->get();
     }
     /**
      * Show the form for creating a new resource.
@@ -31,64 +35,52 @@ class MAreaController extends Controller
      */
     public function action(Request $request)
     {
-        // $validator = Validator::make(
-        //     $request->DB::table('m_area')
-        //         ->select(
-        //             'm_area_id',
-        //             'm_area_nama',
-        //             'm_area_code',
-        //             'm_area_created_by',
-        //             'm_area_created_at',
-        //             'm_area_deleted_by',
-        //             'm_area_deleted_at',
-        //         ),
-        //     [
-        //         'm_area_nama' => 'required|unique:area',
-        //         'm_area_code' => 'required|unique:area',
-        //     ]
-        // );
-
+        $dataRaw = Str::upper($request->m_area_nama);
+        $checkUpper =  DB::table('m_area')->whereRaw("UPPER(m_area_nama)='{$dataRaw}'")->first();
         if ($request->ajax()) {
-            if ($request->action == 'add') {
-                $this->validate(
-                    $request,
-                    [
-                        Str::lower('m_area_nama') => 'required|unique:m_area',
-                        'm_area_code' => 'required|unique:m_area',
-                    ]
-                );
-                $data = array(
-                    'm_area_nama'    =>    $request->m_area_nama,
-                    'm_area_code'    =>    $request->m_area_code,
-                    'm_area_created_by' => Auth::id(),
-                    'm_area_created_at' => Carbon::now(),
-                );
-                DB::table('m_area')->insert($data);
-            } elseif ($request->action == 'edit') {
-                $this->validate(
-                    $request,
-                    [
-                        'm_area_nama' => 'required|unique:m_area',
-                        'm_area_code' => 'required|unique:m_area',
-                    ]
-                );
-                $data = array(
-                    'm_area_nama'    =>    $request->m_area_nama,
-                    'm_area_code'    =>    $request->m_area_code,
-                    'm_area_updated_by' => Auth::id(),
-                    'm_area_updated_at' => Carbon::now(),
-                );
-                DB::table('m_area')->where('m_area_id', $request->id)
-                    ->update($data);
+            if (empty($checkUpper->m_area_nama)) {
+                $request->validate([
+                    'm_area_nama' => ['required', 'unique:m_area'],
+                    'm_area_code' => ['required', 'unique:m_area'],
+                ]);
+                if ($request->action == 'add') {
+                    $data = array(
+                        'm_area_nama'    =>    $request->m_area_nama,
+                        'm_area_code'    =>    $request->m_area_code,
+                        'm_area_created_by' => Auth::id(),
+                        'm_area_created_at' => Carbon::now(),
+                    );
+                    DB::table('m_area')->insert($data);
+                } elseif ($request->action == 'edit') {
+                    $this->validate(
+                        $request,
+                        [
+                            'm_area_nama' => 'required|unique:m_area',
+                            'm_area_code' => 'required|unique:m_area',
+                        ]
+                    );
+                    $data = array(
+                        'm_area_nama'    =>    $request->m_area_nama,
+                        'm_area_code'    =>    $request->m_area_code,
+                        'm_area_updated_by' => Auth::id(),
+                        'm_area_updated_at' => Carbon::now(),
+                    );
+                    DB::table('m_area')->where('m_area_id', $request->id)
+                        ->update($data);
+                } else {
+                    $data = array(
+                        'm_area_deleted_at' => Carbon::now(),
+                        'm_area_deleted_by' => Auth::id()
+                    );
+                    DB::table('m_area')
+                        ->where('m_area_id', $request->id)
+                        ->update($data);
+                }
             } else {
-                $data = array(
-                    'm_area_deleted_at' => Carbon::now(),
-                    'm_area_deleted_by' => Auth::id()
-                );
-                DB::table('m_area')
-                    ->where('m_area_id', $request->id)
-                    ->update($data);
+                $data = "error duplikate";
             }
+
+
             return response()->json($data);
         }
     }
