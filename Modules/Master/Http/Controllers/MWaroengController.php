@@ -15,7 +15,7 @@ class MWaroengController extends Controller
         $data = DB::table('m_w')
             ->leftjoin('m_area', 'm_w_m_area_id', 'm_area_id')
             ->leftjoin('m_w_jenis', 'm_w_m_w_jenis_id', 'm_w_jenis_id')
-            ->leftjoin('m_jenis_nota', 'm_w_m_jenis_nota_id', 'm_jenis_nota_id')
+            ->leftjoin('m_jenis_nota', 'm_w_m_w_jenis_id', 'm_jenis_nota_m_w_id')
             ->leftjoin('m_pajak', 'm_w_m_pajak_id', 'm_pajak_id')
             ->leftjoin('m_sc', 'm_w_m_sc_id', 'm_sc_id')
             ->leftjoin('m_modal_tipe', 'm_w_m_modal_tipe_id', 'm_modal_tipe_id')
@@ -26,13 +26,15 @@ class MWaroengController extends Controller
                 'm_area_nama',
                 'm_w_status',
                 'm_w_jenis_nama',
-                'm_jenis_nota_nama',
+                'm_w_m_kode_nota',
                 'm_pajak_value',
                 'm_sc_value',
                 'm_modal_tipe_nama'
             )
             ->get();
         return view('master::m_waroeng', compact('data'));
+
+        return $data;
     }
     public function list()
     {
@@ -69,14 +71,22 @@ class MWaroengController extends Controller
         if ($request->ajax()) {
             if ($request->action == 'add') {
                 $data = array(
-                    'm_w_nama'    =>    $request->m_w_nama,
-                    'm_w_code'    =>    $request->m_w_code,
+                    'm_w_nama' => $request->m_w_nama,
+                    'm_w_code' => $request->m_w_code,
                     'm_w_m_area_id' => $request->m_w_m_area_id,
                     'm_w_m_w_jenis_id' => $request->m_w_m_w_jenis_id,
                     'm_w_status' => $request->m_w_status,
                     'm_w_alamat' => $request->m_w_alamat,
                     'm_w_m_kode_nota' => $request->m_w_m_kode_nota,
                     'm_w_m_pajak_id' => $request->m_w_m_pajak_id,
+                    'm_w_m_modal_tipe_id' => $request->m_w_m_modal_tipe_id,
+                    'm_w_m_sc_id' => $request->m_w_m_sc_id,
+                    'm_w_decimal' => $request->m_w_decimal,
+                    'm_w_pembulatan' => $request->m_w_pembulatan,
+                    'm_w_currency' => $request->m_w_cuurency,
+                    'm_w_grab' => $request->m_w_grab,
+                    'm_w_gojek' => $request->m_w_gojek,
+                    'm_menu_profit' => $request->m_menu_profit,
                     'm_w_created_by' => Auth::id(),
                     'm_w_created_at' => Carbon::now(),
                 );

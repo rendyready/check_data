@@ -23,10 +23,6 @@ class MAreaController extends Controller
         $data = MArea::select('m_area_id', 'm_area_nama', 'm_area_code')->whereNull('m_area_deleted_at')->orderBy('m_area_id', 'asc')->get();
         return view('master::area', compact('data'));
         return response($data);
-
-        // return $test = DB::table('m_area')->where(DB::raw("UPPER(m_area_nama) = 'JABODETABEK'"))->get();
-        // $input = ' JABO DETABEK ';
-        // return $test = DB::table('m_area')->whereRaw("UPPER(m_area_nama) = '{$input}'")->get();
     }
     /**
      * Show the form for creating a new resource.
