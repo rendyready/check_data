@@ -41,7 +41,7 @@
                       <td>{{$item->m_sc_value}}</td>
                       <td>{{$item->m_area_nama}}</td>
                       <td>{{$item->m_w_jenis_nama}}</td>
-                      <td>{{$item->m_jenis_nota_nama}}</td>
+                      <td>{{$item->m_w_m_kode_nota}}</td>
                       <td>{{$item->m_modal_tipe_nama}}</td>
                     </tr>
                 @endforeach

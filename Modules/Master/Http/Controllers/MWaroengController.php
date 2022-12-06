@@ -15,7 +15,7 @@ class MWaroengController extends Controller
         $data = DB::table('m_w')
             ->leftjoin('m_area', 'm_w_m_area_id', 'm_area_id')
             ->leftjoin('m_w_jenis', 'm_w_m_w_jenis_id', 'm_w_jenis_id')
-            ->leftjoin('m_jenis_nota', 'm_w_m_kode_nota', 'm_jenis_nota_m_w_id')
+            ->leftjoin('m_jenis_nota', 'm_w_m_w_jenis_id', 'm_jenis_nota_m_w_id')
             ->leftjoin('m_pajak', 'm_w_m_pajak_id', 'm_pajak_id')
             ->leftjoin('m_sc', 'm_w_m_sc_id', 'm_sc_id')
             ->leftjoin('m_modal_tipe', 'm_w_m_modal_tipe_id', 'm_modal_tipe_id')
@@ -26,13 +26,13 @@ class MWaroengController extends Controller
                 'm_area_nama',
                 'm_w_status',
                 'm_w_jenis_nama',
-                'm_jenis_nota_nama',
+                'm_w_m_kode_nota',
                 'm_pajak_value',
                 'm_sc_value',
                 'm_modal_tipe_nama'
             )
             ->get();
-        // return view('master::m_waroeng', compact('data'));
+        return view('master::m_waroeng', compact('data'));
 
         return $data;
     }
