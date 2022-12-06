@@ -13,9 +13,9 @@
                 <div class="row">
                     <div class="col-md-3">
                         <div class="row mb-1">
-                            <label class="col-sm-4 col-form-label" for="example-hf-text">Transaksi</label>
+                            <label class="col-sm-4 col-form-label" for="rekap_beli_created_by">Transaksi</label>
                             <div class="col-sm-8">
-                              <input type="text" class="form-control form-control-sm" id="example-hf-text" name="example-hf-text" value="Admin" disabled>
+                              <input type="text" class="form-control form-control-sm" id="rekap_beli_created_by" name="rekap_beli_created_by" value="{{Auth::user()->name}}" disabled>
                             </div>
                         </div>
                         <div class="row mb-1">
@@ -33,23 +33,29 @@
                             </div>
                         </div>
                         <div class="row mb-1">
-                            <label class="col-sm-4 col-form-label" for="example-hf-text">Tanggal</label>
+                          <label class="col-sm-4 col-form-label" for="rekap_beli_code_nota">Nota Suplier</label>
+                          <div class="col-sm-8">
+                            <input type="text" class="form-control form-control-sm" id="rekap_beli_code_nota" name="rekap_beli_code_nota" value="" placeholder="Nota Supplier">
+                          </div>
+                      </div>
+                        <div class="row mb-1">
+                            <label class="col-sm-4 col-form-label" for="rekap_beli_tgl">Tanggal</label>
                             <div class="col-sm-8">
-                              <input type="date" class="form-control form-control-sm" id="example-hf-text" name="example-hf-text">
+                              <input type="date" class="form-control form-control-sm" id="rekap_beli_tgl" name="rekap_beli_tgl">
                             </div>
                         </div>
                         <div class="row mb-1">
-                            <label class="col-sm-4 col-form-label" for="example-hf-text">Jth Tempo</label>
+                            <label class="col-sm-4 col-form-label" for="rekap_beli_jth_tmp">Jth Tempo</label>
                             <div class="col-sm-8">
-                              <input type="date" class="form-control form-control-sm" id="example-hf-text" name="example-hf-text">
+                              <input type="date" class="form-control form-control-sm" id="rekap_beli_jth_tmp" name="rekap_beli_jth_tmp">
                             </div>
                         </div>
                     </div>
                     <div class="col-md-5">
                         <div class="row mb-2">
-                            <label class="col-sm-4 col-form-label" for="example-hf-text">Kode Supplier</label>
+                            <label class="col-sm-4 col-form-label" for="rekap_beli_sp_id">Kode Supplier</label>
                             <div class="col-sm-8">
-                              <select class="js-select2 form-control-sm" style="width: 100%;" name="kode_supplier" id="kode_supplier" data-placeholder="pilih supplier">
+                              <select class="js-select2 form-control-sm" style="width: 100%;" name="rekap_beli_sp_id" id="rekap_beli_sp_id" data-placeholder="pilih supplier" required>
                                 <option></option>
                                 <option value="1">PT. Matahari</option>
                                 <option value="2">Bunga Mekar</option>
@@ -59,21 +65,21 @@
                             </div>
                         </div>
                         <div class="row mb-1">
-                            <label class="col-sm-4 col-form-label" for="example-hf-text">Nama</label>
+                            <label class="col-sm-4 col-form-label" for="rekap_beli_sp_nama">Nama</label>
                             <div class="col-sm-8">
-                              <input type="text" class="form-control form-control-sm" id="nama" name="example-hf-text">
+                              <input type="text" class="form-control form-control-sm" id="rekap_beli_sp_nama" name="rekap_beli_sp_nama">
                             </div>
                         </div>
                         <div class="row mb-1">
-                            <label class="col-sm-4 col-form-label" for="example-hf-text">No Telpn</label>
+                            <label class="col-sm-4 col-form-label" for="rekap_beli_telp">No Telpn</label>
                             <div class="col-sm-8">
-                              <input type="text" class="form-control form-control-sm" id="telp" name="example-hf-text">
+                              <input type="text" class="form-control form-control-sm" id="rekap_beli_telp" name="rekap_beli_telp">
                             </div>
                         </div>
                         <div class="row mb-1">
-                            <label class="col-sm-4 col-form-label" for="example-hf-text">Alamat</label>
+                            <label class="col-sm-4 col-form-label" for="rekap_beli_alamat">Alamat</label>
                             <div class="col-sm-8">
-                             <textarea name="Alamat" id="alamat" cols="30" rows="3"></textarea>
+                             <textarea name="rekap_beli_alamat" id="rekap_beli_alamat" cols="30" rows="3"></textarea>
                             </div>
                         </div>
                     </div>
@@ -91,12 +97,12 @@
                     </thead>
                     <tbody>
                         <tr>
-                        <td><select class="js-select2 nama_barang" name="name[]" id="nama_barang" style="width: 100%;"data-placeholder="Pilih Nama Barang"><option></option></select></td>
-                        <td><input type="number" step="0.01" class="form-control form-control-sm" name="name[]" id=""></td>
-                        <td><input type="text" class="form-control form-control-sm" name="name[]" id=""></td>
-                        <td><input type="text" class="form-control form-control-sm" name="name[]" id=""></td>
-                        <td><input type="text" class="form-control form-control-sm" name="name[]" id=""></td>
-                        <td><input type="text" class="form-control form-control-sm txtCal" name="name[]" id=""></td>
+                        <td><select class="js-select2 nama_barang" name="rekap_beli_brg_code[]" id="rekap_beli_brg_code" style="width: 100%;"data-placeholder="Pilih Nama Barang" required><option></option></select></td>
+                        <td><input type="number" min="0.01" step="0.01" class="form-control form-control-sm qty" name="rekap_beli_detail_qty[]" id="rekap_beli_detail_qty" required></td>
+                        <td><input type="text" class="form-control form-control-sm harga" name="rekap_beli_detail_harga[]" id="rekap_beli_detail_harga" required></td>
+                        <td><input type="text" class="form-control form-control-sm persendisc" name="rekap_beli_detail_disc[]" id="rekap_beli_detail_disc"></td>
+                        <td><input type="text" class="form-control form-control-sm rupiahdisc" name="rekap_beli_detail_discrp[]" id="rekap_beli_detail_discrp"></td>
+                        <td><input type="text" class="form-control form-control-sm subtot" name="rekap_beli_detail_subtot[]" id="rekap_beli_detail_subtot"></td>
                         </tr>
                     </tbody>
                     <tfoot>
@@ -115,39 +121,45 @@
                 </div>
                 <div class="col-md-6">
                     <div class="row mb-1">
-                        <label class="col-sm-3 col-form-label" for="example-hf-text">Diskon</label>
+                        <label class="col-sm-3 col-form-label" for="rekap_beli_disc">Diskon</label>
                         <div class="col-sm-2">
-                          <input type="text" class="form-control form-control-sm" id="example-hf-text" name="example-hf-text" placeholder="%">
+                          <input type="text" class="form-control form-control-sm disc_tot" id="rekap_beli_disc" name="rekap_beli_disc" placeholder="%">
                         </div>
                         <div class="col-sm-5">
-                            <input type="text" class="form-control form-control-sm" id="example-hf-text" name="example-hf-text" placeholder="Rp">
+                            <input type="text" class="form-control form-control-sm disc_tot_rp" id="rekap_beli_disc_rp" name="rekap_beli_disc_rp" placeholder="Rp">
                           </div>
                     </div>
                     <div class="row mb-1">
-                        <label class="col-sm-3 col-form-label" for="example-hf-text">PPN</label>
+                        <label class="col-sm-3 col-form-label" for="rekap_beli_ppn">PPN</label>
                         <div class="col-sm-2">
-                          <input type="text" class="form-control form-control-sm" id="example-hf-text" name="example-hf-text" placeholder="%">
+                          <input type="text" class="form-control form-control-sm" id="rekap_beli_ppn" name="rekap_beli_ppn" placeholder="%">
                         </div>
                         <div class="col-sm-5">
-                            <input type="text" class="form-control form-control-sm" id="example-hf-text" name="example-hf-text"placeholder="Rp">
+                            <input type="text" class="form-control form-control-sm" id="rekap_beli_ppn_rp" name="rekap_beli_ppn_rp" placeholder="Rp" disabled>
                           </div>
                     </div>
                     <div class="row mb-1">
-                        <label class="col-sm-4 col-form-label" for="example-hf-text">Ongkos Kirim</label>
+                        <label class="col-sm-4 col-form-label" for="rekap_beli_ongkir">Ongkos Kirim</label>
                         <div class="col-sm-6">
-                          <input type="text" class="form-control form-control-sm" id="example-hf-text" name="example-hf-text">
+                          <input type="text" class="form-control form-control-sm" id="rekap_beli_ongkir" name="rekap_beli_ongkir">
                         </div>
                     </div>
                     <div class="row mb-1">
-                        <label class="col-sm-4 col-form-label" for="example-hf-text">Jumlah</label>
+                        <label class="col-sm-4 col-form-label" for="rekap_beli_tot_nom">Jumlah</label>
                         <div class="col-sm-6">
-                          <input type="text" class="form-control form-control-sm" id="example-hf-text" name="example-hf-text" disabled>
+                          <input type="text" class="form-control form-control-sm grdtot" id="rekap_beli_tot_nom" name="rekap_beli_tot_nom" disabled>
                         </div>
                     </div>
                     <div class="row mb-1">
-                        <label class="col-sm-4 col-form-label" for="example-hf-text">Sisa</label>
+                      <label class="col-sm-4 col-form-label" for="rekap_beli_terbayar">Dibayar</label>
+                      <div class="col-sm-6">
+                        <input type="text" class="form-control form-control-sm" id="rekap_beli_terbayar" name="rekap_beli_terbayar">
+                      </div>
+                  </div>
+                    <div class="row mb-1">
+                        <label class="col-sm-4 col-form-label" for="rekap_beli_tersisa">Sisa</label>
                         <div class="col-sm-6">
-                          <input type="text" class="form-control form-control-sm" id="example-hf-text" name="example-hf-text" disabled>
+                          <input type="text" class="form-control form-control-sm" id="rekap_beli_tersisa" name="rekap_beli_tersisa" disabled>
                         </div>
                     </div>
                 </div>
@@ -174,16 +186,16 @@
 	$('.tambah').on('click',function(){
 	    no++;
 		$('#form').append('<tr id="row'+no+'">'+
-                        '<td><select class="js-select2 nama_barang" name="name[]" id="nama_barang'+no+'" style="width: 100%;" data-placeholder="Pilih Nama Barang"><option></option></select></td>'+
-                        '<td><input type="number" class="form-control form-control-sm" name="name[]" id=""></td>'+
-                        '<td><input type="text" class="form-control form-control-sm" name="name[]" id=""></td>'+
-                        '<td><input type="text" class="form-control form-control-sm" name="name[]" id=""></td>'+
-                        '<td><input type="text" class="form-control form-control-sm" name="name[]" id=""></td>'+
-                        '<td><input type="text" class="form-control form-control-sm txtCal" name="name[]" id=""></td>'+
+                        '<td><select class="js-select2 nama_barang" name="rekap_beli_brg_code[]" id="rekap_beli_brg_code'+no+'" style="width: 100%;" data-placeholder="Pilih Nama Barang" required><option></option></select></td>'+
+                        '<td><input type="number" min="0.01" step="0.01" class="form-control form-control-sm qty" name="rekap_beli_detail_qty[]" id="rekap_beli_detail_qty" required></td>'+
+                        '<td><input type="text" class="form-control form-control-sm harga" name="rekap_beli_detail_harga[]" id="rekap_beli_detail_harga" required></td>'+
+                        '<td><input type="text" class="form-control form-control-sm persendisc" name="rekap_beli_detail_disc[]" id="rekap_beli_detail_disc"></td>'+
+                        '<td><input type="text" class="form-control form-control-sm rupiahdisc" name="rekap_beli_detail_discrp[]" id="rekap_beli_detail_discrp"></td>'+
+                        '<td><input type="text" class="form-control form-control-sm subtot txtCal" name="rekap_beli_detail_subtot[]" id="rekap_beli_detail_subtot"></td>'+
                         '<td><button type="button" id="'+no+'" class="btn btn-danger btn_remove">Hapus</button></td></tr>');
         
             $.each(selectValues, function(key, value) {
-            $('#nama_barang'+no)
+            $('#rekap_beli_brg_code'+no)
             .append($('<option>', { value : key })
             .text(value));
     });
@@ -199,42 +211,51 @@
 		var button_id = $(this).attr("id"); 
 		$('#row'+button_id+'').remove();
 	});
-    $("#form").on('input', '.txtCal', function () {
-       var calculated_total_sum = 0;
-     
-       $("#form .txtCal").each(function () {
-           var get_textbox_value = $(this).val();
-           if ($.isNumeric(get_textbox_value)) {
-              calculated_total_sum += parseFloat(get_textbox_value);
-              }                  
-            });
-              $("#total_sum_value").html('Rp '+calculated_total_sum);
-       });
-       var $tblrows = $("#tblProducts tbody tr");
+    $("#form").on('input', function () {
+      var $tblrows = $("#form tbody tr");
+      $tblrows.each(function (index) {
+          var $tblrow = $(this);
 
-            $tblrows.each(function (index) {
-                var $tblrow = $(this);
+          $tblrow.find(".qty, .harga, .persendisc, .rupiahdisc").on('input', function () {
 
-                $tblrow.find('.qty').on('change', function () {
+              var qty = $tblrow.find("[name='rekap_beli_detail_qty[]']").val();
+              var price = $tblrow.find("[name='rekap_beli_detail_harga[]']").val();
+              var persendisc = $tblrow.find("[name='rekap_beli_detail_disc[]']").val();
+              var nilaipersendisc = 100-persendisc;
+              var rupiahdisc = $tblrow.find("[name='rekap_beli_detail_discrp[]']").val();
+              if (rupiahdisc==null) {
+                rupiahdisc = 0;
+              }
+              var subTotal = parseFloat(qty) * parseFloat(price) * (nilaipersendisc/100) - rupiahdisc;
+          
+              if (!isNaN(subTotal)) { 
 
-                    var qty = $tblrow.find("[name=qty]").val();
-                    var price = $tblrow.find("[name=price]").val();
-                    var subTotal = parseInt(qty, 10) * parseFloat(price);
+                  $tblrow.find('.subtot').val(subTotal.toFixed(2));
+                  var grandTotal = 0;
 
-                    if (!isNaN(subTotal)) {
+                  $(".subtot").each(function () {
+                      var stval = parseFloat($(this).val());
+                      grandTotal += isNaN(stval) ? 0 : stval;
+                  });
 
-                        $tblrow.find('.subtot').val(subTotal.toFixed(2));
-                        var grandTotal = 0;
+                  $('.grdtot').val(grandTotal.toFixed(2)); 
+              }
+          });
 
-                        $(".subtot").each(function () {
-                            var stval = parseFloat($(this).val());
-                            grandTotal += isNaN(stval) ? 0 : stval;
-                        });
+      });
+    });
+    $('#form, .qty, .harga, .persendisc, .rupiahdisc, .disc_tot').on('input',function () {
+      var grdtot = 0;
+      $(".subtot").each(function () {
+                      var stval = parseFloat($(this).val());
+                      grdtot += isNaN(stval) ? 0 : stval;
+                  });
+      var disc_tot = $("[name='rekap_beli_disc']").val();
+      var grandtotal = grdtot*parseFloat((100-disc_tot)/100);
+      $('.grdtot').val(grandtotal.toFixed(2));
+    });
 
-                        $('.grdtot').val(grandTotal.toFixed(2));
-                    }
-                });
-            });
+       
 });
 </script>
 @endsection
