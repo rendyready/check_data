@@ -1,4 +1,6 @@
 <?php
+use Illuminate\Support\Facades\Route;
+use Modules\Akuntansi\Http\Controllers\AkuntansiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -10,7 +12,7 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::prefix('akuntansi')->group(function() {
-    Route::get('/', 'AkuntansiController@index');
-});
+// Route::prefix('akuntansi')->group(function() {
+//     Route::get('/', 'AkuntansiController@index');
+// });
+Route::get('/akuntansi',[AkuntansiController::class,'index']);

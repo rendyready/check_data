@@ -5,6 +5,7 @@ namespace Modules\Akuntansi\Http\Controllers;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\DB;
 
 class AkuntansiController extends Controller
 {
@@ -14,7 +15,19 @@ class AkuntansiController extends Controller
      */
     public function index()
     {
-        return view('akuntansi::index');
+       
+        $data = DB::table('m_w')
+        ->select('m_w_id','m_w_nama')
+        ->get();
+        // return $data;
+        return view('akuntansi::master\rekening',compact('data'));
+
+        // $data = DB::table('m_w')
+        // // ->leftjoin('m_w','m_rekening_m_w_id','m_w_id')
+        // ->select('m_w_id','m_w_nama')
+        // // 'm_rekening_kategori','m_rekening_no_akun','m_rekening_nama','m_rekening_saldo')
+        // ->get();
+        // return view('akuntansi::master\rekening',compact('data'));
     }
 
     /**
