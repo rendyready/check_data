@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\MArea;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Redirect;
 use illuminate\Support\Str;
 
 
@@ -73,7 +74,7 @@ class MAreaController extends Controller
                         ->update($data);
                 }
             } else {
-                $data = "error duplikate";
+                return Redirect::back()->whit(['msg' => 'Data Duplicate']);
             }
 
 
