@@ -10,7 +10,9 @@
             Data Area
         </div>
         <div class="block-content text-muted">
-        <div  class="col-md-12"><h1 id="error"></h1></div>
+          <div class="col-md-12">
+            <h1 id="error"></h1>
+          </div>
           @csrf
           <table id="sample_data" class="table table-bordered table-striped table-vcenter js-dataTable-full">
             <thead>
@@ -22,15 +24,6 @@
               </tr>
             </thead>
             <tbody id="tablecontents">
-              @if(Session::has('msg'))
-              <div class="col-md-6">
-                <div class="alert alert-warning" role="alert">
-                  <ul>
-                    <li>{{Session::get('msg')}}</li>
-                  </ul>
-                </div>
-              </div>
-              @endif
               @foreach ($data as $item)
               <tr>
                 <td>{{$item->m_area_id}}</td>
@@ -76,11 +69,6 @@
           t.ajax().reload();
         }
       },
-      onFail: function(data, textStatus, jqXHR) {
-        var error  = data.responseJSON.message;
-        $('#error').html(error);
-      }
-
     });
     // $('input').attr('required', true);
     $("#sample_data").append(

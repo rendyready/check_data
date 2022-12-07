@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\MArea;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Redirect;
 use illuminate\Support\Str;
 
@@ -73,12 +74,10 @@ class MAreaController extends Controller
                         ->where('m_area_id', $request->id)
                         ->update($data);
                 }
+                return response()->json($data);
             } else {
-                return Redirect::back()->whit(['msg' => 'Data Duplicate']);
+                $this->$request->with('Data Duplicate', 201);
             }
-
-
-            return response()->json($data);
         }
     }
 }
