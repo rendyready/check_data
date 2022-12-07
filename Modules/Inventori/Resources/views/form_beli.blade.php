@@ -93,7 +93,8 @@
                         <th>Disc</th>
                         <th>Disc Rp</th>
                         <th>Sub Harga</th>
-                        <th><button type="button" class="btn tambah btn-success">Add</button></th>
+                        <th>Catatan</th>
+                        <th><button type="button" class="btn tambah btn-success"><i class="fa fa-plus"></i></button></th>
                     </thead>
                     <tbody>
                         <tr>
@@ -103,7 +104,8 @@
                         <td><input type="text" class="form-control form-control-sm persendisc" name="rekap_beli_detail_disc[]" id="rekap_beli_detail_disc"></td>
                         <td><input type="text" class="form-control form-control-sm rupiahdisc" name="rekap_beli_detail_discrp[]" id="rekap_beli_detail_discrp"></td>
                         <td><input type="text" class="form-control form-control-sm subtot" name="rekap_beli_detail_subtot[]" id="rekap_beli_detail_subtot"></td>
-                        </tr>
+                        <td><textarea class="form-control form-control-sm" name="rekap_beli_detail_catatan[]" id="rekap_beli_detail_catatan" cols="50" required placeholder="catatan bb atau satuan"></textarea></td>
+                      </tr>
                     </tbody>
                     <tfoot>
                         <th>Nama Barang</th>
@@ -112,14 +114,21 @@
                         <th>Disc</th>
                         <th>Disc Rp</th>
                         <th>Sub Harga</th>
-                        <th><button type="button" class="btn tambah btn-success">Add</button></th>
+                        <th>Catatan</th>
+                        <th><button type="button" class="btn tambah btn-success"><i class="fa fa-plus"></i></button></th>
                     </tfoot>
                 </table>
                 <div class="row">
-                <div class="col-md-5">
+                <div class="col-md-6">
                     <h3>Total <span id="total_sum_value"></span></h3>
                 </div>
-                <div class="col-md-7">
+                <div class="col-md-6">
+                    <div class="row mb-1">
+                      <label class="col-sm-4 col-form-label" for="rekap_beli_tot_no_ppn">Jumlah Total</label>
+                      <div class="col-sm-6">
+                        <input type="text" class="form-control form-control-sm grdtot" id="rekap_beli_tot_no_ppn" name="rekap_beli_tot_no_ppn" disabled>
+                      </div>
+                    </div>
                     <div class="row mb-1">
                         <label class="col-sm-3 col-form-label" for="rekap_beli_disc">Diskon</label>
                         <div class="col-sm-2">
@@ -145,13 +154,7 @@
                         </div>
                     </div>
                     <div class="row mb-1">
-                      <label class="col-sm-4 col-form-label" for="rekap_beli_tot_no_ppn">Jumlah Tanpa PPN</label>
-                      <div class="col-sm-6">
-                        <input type="text" class="form-control form-control-sm rekap_beli_tot_no_ppn" id="rekap_beli_tot_no_ppn" name="rekap_beli_tot_no_ppn" disabled>
-                      </div>
-                    </div>
-                    <div class="row mb-1">
-                        <label class="col-sm-4 col-form-label" for="rekap_beli_tot_nom">Jumlah + PPN + Ongkir</label>
+                        <label class="col-sm-4 col-form-label" for="rekap_beli_tot_nom">Jumlah Akhir</label>
                         <div class="col-sm-6">
                           <input type="text" class="form-control form-control-sm rekap_beli_tot_nom" id="rekap_beli_tot_nom" name="rekap_beli_tot_nom" disabled>
                         </div>
@@ -197,8 +200,9 @@
                         '<td><input type="text" class="form-control form-control-sm harga" name="rekap_beli_detail_harga[]" id="rekap_beli_detail_harga" required></td>'+
                         '<td><input type="text" class="form-control form-control-sm persendisc" name="rekap_beli_detail_disc[]" id="rekap_beli_detail_disc"></td>'+
                         '<td><input type="text" class="form-control form-control-sm rupiahdisc" name="rekap_beli_detail_discrp[]" id="rekap_beli_detail_discrp"></td>'+
-                        '<td><input type="text" class="form-control form-control-sm subtot txtCal" name="rekap_beli_detail_subtot[]" id="rekap_beli_detail_subtot"></td>'+
-                        '<td><button type="button" id="'+no+'" class="btn btn-danger btn_remove">Hapus</button></td></tr>');
+                        '<td><input type="text" class="form-control form-control-sm subtot" name="rekap_beli_detail_subtot[]" id="rekap_beli_detail_subtot"></td>'+
+                        '<td><textarea class="form-control form-control-sm" name="rekap_beli_detail_catatan[]" id="rekap_beli_detail_catatan" cols="50" required placeholder="catatan bb atau satuan"></textarea></td>'+
+                        '<td><button type="button" id="'+no+'" class="btn btn-danger btn_remove"><i class="fa fa-trash"></i></button></td></tr>');
         
             $.each(selectValues, function(key, value) {
             $('#rekap_beli_brg_code'+no)
@@ -263,7 +267,6 @@
           var ppnrp = parseFloat(ppn/100)*grandtotal;
           var rekap_beli_tot_nom = parseFloat(grandtotal)+ parseFloat(ppnrp)+ parseFloat(ongkir);
           $('.ppnrp').val(ppnrp.toFixed(2));
-          $('.rekap_beli_tot_no_ppn').val(grandtotal.toFixed(2));
           $('.rekap_beli_tot_nom').val(rekap_beli_tot_nom.toFixed(2));
           $('.sisa').val((rekap_beli_tot_nom-bayar).toFixed(2));
     });
