@@ -16,18 +16,18 @@ return new class extends Migration
         Schema::create('rekap_beli', function (Blueprint $table) {
             $table->id('rekap_beli_id');
             $table->string('rekap_beli_code'); //id user+ urutan
-            $table->string('rekap_beli_code_nota');
-            $table->string('rekap_beli_tgl');
+            $table->string('rekap_beli_code_nota')->nullable(); //code nota dari supplier jika ada
+            $table->date('rekap_beli_tgl');
             $table->string('rekap_beli_jth_tmp');
-            $table->bigInteger('rekap_beli_sp_id');
-            $table->string('rekap_beli_sp_nama');
-            $table->string('rekap_beli_telp');
-            $table->string('rekap_beli_alamat');
-            $table->string('rekap_beli_m_w_id');
-            $table->string('rekap_beli_disc');
-            $table->string('rekap_beli_disc_rp');
-            $table->string('rekap_beli_ppn');
-            $table->string('rekap_beli_ppn_rp');
+            $table->bigInteger('rekap_beli_supplier_id');
+            $table->string('rekap_beli_supplier_nama');
+            $table->string('rekap_beli_supplier_telp')->nullable();
+            $table->string('rekap_beli_supplier_alamat')->nullable();
+            $table->bigInteger('rekap_beli_m_w_id');
+            $table->decimal('rekap_beli_disc',8,2);
+            $table->decimal('rekap_beli_disc_rp');
+            $table->decimal('rekap_beli_ppn',8,2);
+            $table->decimal('rekap_beli_ppn_rp');
             $table->string('rekap_beli_ongkir');
             $table->string('rekap_beli_terbayar');
             $table->string('rekap_beli_tersisa');
