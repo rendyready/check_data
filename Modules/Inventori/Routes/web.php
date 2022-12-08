@@ -17,5 +17,7 @@ Route::prefix('inventori')->group(function() {
 //Master beli Route
 Route::group(['prefix' => 'inventori', 'controller' => BeliController::class,'middleware' => ['auth','web']], function()
 {
-    Route::get('pembelian','index')->name('beli.index'); Route::post('beli/action','action')->name('action.beli');
+    Route::get('beli','index')->name('beli.index'); Route::post('beli/action','action')->name('action.beli');
+    Route::get('beli/list','list')->name('beli.list');
+    Route::post('beli/simpan','simpan')->name('beli.simpan');
 });
