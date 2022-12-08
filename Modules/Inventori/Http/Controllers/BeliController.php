@@ -7,7 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-class InventoriController extends Controller
+use Carbon\Carbon;
+class BeliController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +16,9 @@ class InventoriController extends Controller
      */
     public function index()
     {
-        return view('inventori::index');
+        $urut = 
+        $user = Auth::id();
+        return view('inventori::form_beli');
     }
 
     /**
