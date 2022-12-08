@@ -36,11 +36,12 @@ class MAreaController extends Controller
         $dataRaw = Str::upper($request->m_area_nama);
         $checkUpper =  DB::table('m_area')->whereRaw("UPPER(m_area_nama)='{$dataRaw}'")->first();
         if ($request->ajax()) {
-            if (empty($checkUpper->m_area_nama)) {
+            if (!empty($checkUpper->m_area_nama)) {
                 $request->validate([
                     'm_area_nama' => ['required', 'unique:m_area'],
                     'm_area_code' => ['required', 'unique:m_area'],
                 ]);
+
                 if ($request->action == 'add') {
                     $data = array(
                         'm_area_nama'    =>    $request->m_area_nama,
@@ -74,9 +75,11 @@ class MAreaController extends Controller
                         ->where('m_area_id', $request->id)
                         ->update($data);
                 }
-                return response()->json($data);
-            } else {
-                $this->$request->with('Data Duplicate', 201);
+                if ($request->passes()) {
+                    return response()->json(['status' => 0, 'error' => $request->errors()->toArray()]);
+                } else {
+                    return response()->json(['status' => 1, 'msg' => 'Data Input Success']);
+                }
             }
         }
     }

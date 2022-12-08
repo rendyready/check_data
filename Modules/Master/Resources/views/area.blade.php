@@ -14,6 +14,7 @@
             <h1 id="error"></h1>
           </div>
           @csrf
+          <span id="alertDanger"></span>
           <table id="sample_data" class="table table-bordered table-striped table-vcenter js-dataTable-full">
             <thead>
               <tr>
@@ -68,7 +69,22 @@
           $('#' + data.id).remove();
           t.ajax().reload();
         }
+        if (data.error) {
+          var errorHtml = '';
+          for (var count = 0; count < data.error.length; count++) {
+            errorHtml += '<p>' + data.error[count] + '</p>';
+          }
+          $('#alertDanger').html('<div class="alert alert-danger">' + errorHtml + '</div>');
+        } else {
+
+        }
       },
+      onFail: function(data, textStatus, jqXHR, errorThrown, onFail) {
+        if (data.status === 0) {
+          alert(data.errorThrown);
+        }
+      }
+
     });
     // $('input').attr('required', true);
     $("#sample_data").append(
