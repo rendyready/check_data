@@ -8,10 +8,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\MArea;
 use Carbon\Carbon;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Redirect;
 use illuminate\Support\Str;
-
+use Illuminate\Support\Facades\Validator;
 
 class MAreaController extends Controller
 {
@@ -34,14 +32,18 @@ class MAreaController extends Controller
     public function action(Request $request)
     {
         $dataRaw = Str::upper($request->m_area_nama);
-        $checkUpper =  DB::table('m_area')->whereRaw("UPPER(m_area_nama)='{$dataRaw}'")->first();
-        if ($request->ajax()) {
-            if (!empty($checkUpper->m_area_nama)) {
-                $request->validate([
-                    'm_area_nama' => ['required', 'unique:m_area'],
-                    'm_area_code' => ['required', 'unique:m_area'],
-                ]);
-
+        $checkUpper =  DB::table('m_area')->whereRaw("UPPER(m_area_nama)='{$dataRaw}'")
+            ->first();
+        $newReq = new Request();
+        $this->validate(
+            $newReq,
+            [
+                $checkUpper['m_area_nama'] => ['required', 'unique:m_area'],
+                $checkUpper['m_area_code'] => ['required', 'unique:m_area'],
+            ]
+        );
+        if (!empty($request->m_area_nama)) {
+            if ($request->ajax()) {
                 if ($request->action == 'add') {
                     $data = array(
                         'm_area_nama'    =>    $request->m_area_nama,
@@ -75,12 +77,14 @@ class MAreaController extends Controller
                         ->where('m_area_id', $request->id)
                         ->update($data);
                 }
-                if ($request->passes()) {
-                    return response()->json(['status' => 0, 'error' => $request->errors()->toArray()]);
-                } else {
-                    return response()->json(['status' => 1, 'msg' => 'Data Input Success']);
-                }
             }
+            return response()->json(['error' => $data, $request->errors()], 200);
+        } elseif ($this->$request[$checkUpper]->fails()) {
+            $msg = [
+                'required' => 'Data :Masih kosong!',
+                'unique' => ':ada yang sama!',
+            ];
+            return response()->json(['error' => $msg, $request->errors()]);
         }
     }
 }

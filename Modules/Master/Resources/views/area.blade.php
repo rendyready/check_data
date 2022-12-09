@@ -63,28 +63,20 @@
       restoreButton: false,
       onSuccess: function(data, textStatus, jqXHR) {
         if (data.action == 'add') {
-          window.location.reload();
+          // window.location.reload();
+          t.ajax().reload();
         }
         if (data.action == 'delete') {
           $('#' + data.id).remove();
           t.ajax().reload();
-        }
-        if (data.error) {
-          var errorHtml = '';
-          for (var count = 0; count < data.error.length; count++) {
-            errorHtml += '<p>' + data.error[count] + '</p>';
-          }
-          $('#alertDanger').html('<div class="alert alert-danger">' + errorHtml + '</div>');
         } else {
 
         }
       },
-      onFail: function(data, textStatus, jqXHR, errorThrown, onFail) {
-        if (data.status === 0) {
-          alert(data.errorThrown);
-        }
+      onFail: function(jqXHR, status, error) {
+        // var errorMessge = jqXHR.status + ':' + jqXHR.statusTex;
+        // alert('Error-' + errorMessge);
       }
-
     });
     // $('input').attr('required', true);
     $("#sample_data").append(
