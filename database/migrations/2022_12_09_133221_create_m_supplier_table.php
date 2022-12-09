@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('m_supplier_rek_nama');
             $table->string('m_supplier_bank_nama');
             $table->decimal('m_supplier_saldo_awal',8,2);
+            $table->bigInteger('m_supplier_created_by');
             $table->bigInteger('m_supplier_updated_by')->nullable();
             $table->bigInteger('m_supplier_deleted_by')->nullable();
             $table->timestampTz('m_supplier_created_at')->useCurrent();
