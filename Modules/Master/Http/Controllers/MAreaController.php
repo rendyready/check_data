@@ -36,10 +36,10 @@ class MAreaController extends Controller
             ->first();
         $newReq = new Request();
         $this->validate(
-            $newReq,
+            $request,
             [
-                $checkUpper['m_area_nama'] => ['required', 'unique:m_area'],
-                $checkUpper['m_area_code'] => ['required', 'unique:m_area'],
+                'm_area_nama' => ['required', 'unique:m_area'],
+                'm_area_code' => ['required', 'unique:m_area'],
             ]
         );
         if (!empty($request->m_area_nama)) {
@@ -78,13 +78,14 @@ class MAreaController extends Controller
                         ->update($data);
                 }
             }
-            return response()->json(['error' => $data, $request->errors()], 200);
-        } elseif ($this->$request[$checkUpper]->fails()) {
-            $msg = [
-                'required' => 'Data :Masih kosong!',
-                'unique' => ':ada yang sama!',
-            ];
-            return response()->json(['error' => $msg, $request->errors()]);
+            return response()->json(['message' => 'Data Duplicate !', $data->$request->errors()], 200);
         }
+        // elseif ($request->fails()) {
+        //     $message = [
+        //         'required' => 'Data :Masih kosong!',
+        //         'unique' => ':ada yang sama!',
+        //     ];
+        //     return response()->json(['message' => $message, $request->errors()], 442);
+        // }
     }
 }

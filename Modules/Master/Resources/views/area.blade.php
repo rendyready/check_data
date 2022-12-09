@@ -69,13 +69,16 @@
         if (data.action == 'delete') {
           $('#' + data.id).remove();
           t.ajax().reload();
+        }
+        if (data.error) {
+          alert(data.error);
         } else {
-
+          alert(data.votes);
         }
       },
-      onFail: function(jqXHR, status, error) {
-        // var errorMessge = jqXHR.status + ':' + jqXHR.statusTex;
-        // alert('Error-' + errorMessge);
+      error: function(jqXHR, statusText, errorThrow) {
+        // var message = jqXHR.status + ':' + jqXHR.statusText;
+        alert('error' + jqXHR.status + statusText + ':' + jqXHR.statusText + errorThrow);
       }
     });
     // $('input').attr('required', true);
