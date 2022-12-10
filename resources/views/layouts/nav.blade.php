@@ -239,7 +239,7 @@
               <span class="nav-main-link-name">Dashboard</span>
             </a>
           </li>
-          <li class="nav-main-heading">Master</li>
+          <li class="nav-main-heading">Menu</li>
           <li class="nav-main-item{{ request()->is('master/*') ? ' open' : '' }}">
             <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
               <i class="nav-main-link-icon fa fa-lightbulb"></i>
@@ -262,8 +262,23 @@
                 </a>
                 <ul class="nav-main-submenu">
                   <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('master/m_w_jenis') ? ' active' : '' }}" href="{{route('m_w_jenis.index')}}">
+                      <span class="nav-main-link-name">Jenis Waroeng</span>
+                    </a>
+                  </li>
+                  <li class="nav-main-item">
                     <a class="nav-main-link{{ request()->is('master/m_produk') ? ' active' : '' }}" href="{{route('m_produk.index')}}">
                       <span class="nav-main-link-name">Produk</span>
+                    </a>
+                  </li>
+                  <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('master/m_klasifikasi') ? ' active' : '' }}" href="{{route('m_klasifikasi.index')}}">
+                      <span class="nav-main-link-name">Produk Klasifikasi</span>
+                    </a>
+                  </li>
+                  <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('master/m_produk_relasi') ? ' active' : '' }}" href="{{route('m_produk_relasi.index')}}">
+                      <span class="nav-main-link-name">Produk Relasi Katergori</span>
                     </a>
                   </li>
                   <li class="nav-main-item">
@@ -312,17 +327,6 @@
                     </a>
                   </li>
                   <li class="nav-main-item">
-                    <a class="nav-main-link{{ request()->is('pages/datatables') ? ' active' : '' }}" href="#">
-                      <span class="nav-main-link-name">Waroeng</span>
-                    </a>
-                  </li>
-
-                  <li class="nav-main-item">
-                    <a class="nav-main-link{{ request()->is('master/m_w_jenis') ? ' active' : '' }}" href="{{route('m_w_jenis.index')}}">
-                      <span class="nav-main-link-name">Jenis Waroeng</span>
-                    </a>
-                  </li>
-                  <li class="nav-main-item">
                     <a class="nav-main-link{{ request()->is('master/meja') ? ' active' : '' }}" href="{{route('meja.index')}}">
                       <span class="nav-main-link-name">Meja</span>
                     </a>
@@ -333,42 +337,10 @@
                     </a>
                   </li>
                   <li class="nav-main-item">
-                    <a class="nav-main-link{{ request()->is('user/akses') ? ' active' : '' }}" href="{{route('akses.index')}}">
-                      <span class="nav-main-link-name">Hak Akses</span>
-                    </a>
-                  </li>
-                  <li class="nav-main-item">
-                    <a class="nav-main-link{{ request()->is('users') ? ' active' : '' }}" href="{{route('users.index')}}">
-                      <span class="nav-main-link-name">User</span>
-                    </a>
-                  </li>
-                  <li class="nav-main-item">
                     <a class="nav-main-link{{ request()->is('master/m_satuan') ? ' active' : '' }}" href="{{route('m_satuan.index')}}">
                       <span class="nav-main-link-name">Satuan</span>
                     </a>
                   </li>
-                  <li class="nav-main-item">
-                    <a class="nav-main-link{{ request()->is('master/m_klasifikasi') ? ' active' : '' }}" href="{{route('m_klasifikasi.index')}}">
-                      <span class="nav-main-link-name">Produk Klasifikasi</span>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li class="nav-main-item">
-                <a class="nav-main-link{{ request()->is('master/m_produk_relasi') ? ' active' : '' }}" href="{{route('m_produk_relasi.index')}}">
-                  <span class="nav-main-link-name">Produk Relasi Katergori</span>
-                </a>
-              </li>
-              <li class="nav-main-item">
-                <a class="nav-main-link{{ request()->is('inventori/index') ? ' active' : '' }}" href="{{route('inventori.index')}}">
-                  <span class="nav-main-link-name">Inventori</span>
-                </a>
-              </li>
-              <li class="nav-main-item{{ request()->is('master/*') ? ' open' : '' }}">
-                <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
-                  <span class="nav-main-link-name">Learn</span>
-                </a>
-                <ul class="nav-main-submenu">
                   <li class="nav-main-item">
                     <a class="nav-main-link{{ request()->is('master/plot-produksi') ? ' active' : '' }}" href="{{route('plot-produksi.index')}}">
                       <span class="nav-main-link-name">Plot Produksi</span>
@@ -383,12 +355,60 @@
               </li>
             </ul>
           </li>
-          <li class="nav-main-heading">More</li>
-          <li class="nav-main-item">
-            <a class="nav-main-link" href="#">
-              <i class="nav-main-link-icon fa fa-globe"></i>
-              <span class="nav-main-link-name">Landing</span>
+          <li class="nav-main-item{{ request()->is('inventori/*') ? ' open' : '' }}">
+            <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
+              <i class="nav-main-link-icon fa fa-warehouse"></i>
+              <span class="nav-main-link-name">Inventori</span>
             </a>
+            <ul class="nav-main-submenu">
+              <li class="nav-main-item">
+                <a class="nav-main-link{{ request()->is('inventori/supplier') ? ' active' : '' }}" href="{{route('supplier.index')}}">
+                  <span class="nav-main-link-name">Supplier</span>
+                </a>
+              </li>
+              <li class="nav-main-item">
+                <a class="nav-main-link{{ request()->is('invetori/beli') ? ' active' : '' }}" href="{{route('beli.index')}}">
+                  <span class="nav-main-link-name">Pembelian</span>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-main-item{{ request()->is('akuntansi/*') ? ' open' : '' }}">
+            <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
+              <i class="nav-main-link-icon fa fa-money-bill-1"></i>
+              <span class="nav-main-link-name">Akuntansi</span>
+            </a>
+            <ul class="nav-main-submenu">
+              <li class="nav-main-item">
+                <a class="nav-main-link{{ request()->is('inventori/supplier') ? ' active' : '' }}" href="{{route('supplier.index')}}">
+                  <span class="nav-main-link-name">Supplier</span>
+                </a>
+              </li>
+              <li class="nav-main-item">
+                <a class="nav-main-link{{ request()->is('invetori/beli') ? ' active' : '' }}" href="{{route('beli.index')}}">
+                  <span class="nav-main-link-name">Pembelian</span>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-main-heading">Pengaturan</li>
+          <li class="nav-main-item{{ request()->is('users/*') ? ' open' : '' }}">
+            <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
+              <i class="nav-main-link-icon fa fa-lightbulb"></i>
+              <span class="nav-main-link-name">User</span>
+            </a>
+            <ul class="nav-main-submenu">
+              <li class="nav-main-item">
+                <a class="nav-main-link{{ request()->is('users') ? ' active' : '' }}" href="{{route('users.index')}}">
+                  <span class="nav-main-link-name">User</span>
+                </a>
+              </li>
+              <li class="nav-main-item">
+                <a class="nav-main-link{{ request()->is('user/akses') ? ' active' : '' }}" href="{{route('akses.index')}}">
+                  <span class="nav-main-link-name">Hak Akses</span>
+                </a>
+              </li>
+            </ul>
           </li>
         </ul>
       </div>
