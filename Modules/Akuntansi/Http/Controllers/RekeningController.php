@@ -25,7 +25,7 @@ class RekeningController extends Controller
         $rekening = DB::table('m_rekening')
         ->get();
         // return $data;
-        return view('akuntansi::master\rekening',compact('data','rekening'));
+        return view('akuntansi::master.rekening',compact('data','rekening'));
 
         // $data = DB::table('m_w')
         // // ->leftjoin('m_w','m_rekening_m_w_id','m_w_id')

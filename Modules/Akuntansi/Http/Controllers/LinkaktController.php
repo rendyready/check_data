@@ -22,7 +22,7 @@ class LinkaktController extends Controller
         $listakt = DB::table('list_akt')
         ->select('list_akt_id','list_akt_nama')
         ->get();
-        return view('akuntansi::master\link_akt',compact('data','listakt'));
+        return view('akuntansi::master.link_akt',compact('data','listakt'));
   
     }
 
