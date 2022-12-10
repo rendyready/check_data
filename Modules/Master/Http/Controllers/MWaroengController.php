@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use illuminate\Support\Str;
+
 
 class MWaroengController extends Controller
 {
@@ -68,51 +70,62 @@ class MWaroengController extends Controller
     }
     public function action(Request $request)
     {
-        if ($request->ajax()) {
-            if ($request->action == 'add') {
-                $data = array(
-                    'm_w_nama' => $request->m_w_nama,
-                    'm_w_code' => $request->m_w_code,
-                    'm_w_m_area_id' => $request->m_w_m_area_id,
-                    'm_w_m_w_jenis_id' => $request->m_w_m_w_jenis_id,
-                    'm_w_status' => $request->m_w_status,
-                    'm_w_alamat' => $request->m_w_alamat,
-                    'm_w_m_kode_nota' => $request->m_w_m_kode_nota,
-                    'm_w_m_pajak_id' => $request->m_w_m_pajak_id,
-                    'm_w_m_modal_tipe_id' => $request->m_w_m_modal_tipe_id,
-                    'm_w_m_sc_id' => $request->m_w_m_sc_id,
-                    'm_w_decimal' => $request->m_w_decimal,
-                    'm_w_pembulatan' => $request->m_w_pembulatan,
-                    'm_w_currency' => $request->m_w_cuurency,
-                    'm_w_grab' => $request->m_w_grab,
-                    'm_w_gojek' => $request->m_w_gojek,
-                    'm_menu_profit' => $request->m_menu_profit,
-                    'm_w_created_by' => Auth::id(),
-                    'm_w_created_at' => Carbon::now(),
-                );
-                DB::table('m_w')->insert($data);
-            } elseif ($request->action == 'edit') {
-                $data = array(
-                    'm_w_nama'    =>    $request->m_w_nama,
-                    'm_w_alamat'    =>    $request->m_w_alamat,
-                    'm_w_m_area_id' => $request->m_w_m_area_id,
-                    'm_w_m_w_jenis_id' => $request->m_w_m_w_jenis_id,
-                    'm_w_m_pajak_id' => $request->m_w_m_pajak_id,
-                    'm_w_m_sc_id' => $request->m_w_m_sc_id,
-                    'm_w_m_jenis_nota_id' => $request->m_w_m_jenis_nota_id,
-                    'm_w_m_modal_tipe_id' => $request->m_w_m_modal_tipe_id,
-                    'm_w_updated_by' => Auth::id(),
-                    'm_w_updated_at' => Carbon::now(),
-                );
-                DB::table('m_w')->where('m_w_id', $request->m_w_id)
-                    ->update($data);
+        $check = Str::upper($request->m_w_nama);
+        $checkUpper = DB::table('m_w')->whereRaw("UPPER(m_w_nama)='{$check}'")->first();
+        if (empty($checkUpper->m_w_nama)) {
+            if ($request->ajax()) {
+                if ($request->action == 'add') {
+                    $request->validate() == $data = array(
+                        'm_w_nama' => $request->m_w_nama,
+                        // 'm_w_code' => $request->m_w_code,
+                        'm_w_m_area_id' => $request->m_w_m_area_id,
+                        'm_w_m_w_jenis_id' => $request->m_w_m_w_jenis_id,
+                        'm_w_status' => $request->m_w_status,
+                        'm_w_alamat' => $request->m_w_alamat,
+                        'm_w_m_kode_nota' => $request->m_w_m_kode_nota,
+                        'm_w_m_pajak_id' => $request->m_w_m_pajak_id,
+                        'm_w_m_modal_tipe_id' => $request->m_w_m_modal_tipe_id,
+                        'm_w_m_sc_id' => $request->m_w_m_sc_id,
+                        'm_w_decimal' => $request->m_w_decimal,
+                        'm_w_pembulatan' => $request->m_w_pembulatan,
+                        'm_w_currency' => $request->m_w_cuurency,
+                        'm_w_grab' => $request->m_w_grab,
+                        'm_w_gojek' => $request->m_w_gojek,
+                        'm_menu_profit' => $request->m_menu_profit,
+                        'm_w_created_by' => Auth::id(),
+                        'm_w_created_at' => Carbon::now(),
+                    );
+                    DB::table('m_w')->insert($data);
+                } elseif ($request->action == 'edit') {
+                    $data = array(
+                        'm_w_nama'    =>    $request->m_w_nama,
+                        'm_w_alamat'    =>    $request->m_w_alamat,
+                        'm_w_m_area_id' => $request->m_w_m_area_id,
+                        'm_w_m_w_jenis_id' => $request->m_w_m_w_jenis_id,
+                        'm_w_m_pajak_id' => $request->m_w_m_pajak_id,
+                        'm_w_m_sc_id' => $request->m_w_m_sc_id,
+                        'm_w_m_jenis_nota_id' => $request->m_w_m_jenis_nota_id,
+                        'm_w_m_modal_tipe_id' => $request->m_w_m_modal_tipe_id,
+                        'm_w_updated_by' => Auth::id(),
+                        'm_w_updated_at' => Carbon::now(),
+                    );
+                    DB::table('m_w')->where('m_w_id', $request->m_w_id)
+                        ->update($data);
+                } else {
+                    $softdelete = array('m_w_deleted_at' => Carbon::now());
+                    DB::table('m_pajak')
+                        ->where('m_w_id', $request->m_w_id)
+                        ->update($softdelete);
+                }
             } else {
-                $softdelete = array('m_w_deleted_at' => Carbon::now());
-                DB::table('m_pajak')
-                    ->where('m_w_id', $request->m_w_id)
-                    ->update($softdelete);
+                return response()->messages('Duplicate');
             }
             return response()->json($request);
         }
+    }
+
+    public function create()
+    {
+        return view('master::MastersCreate.MWaroengCreate');
     }
 }

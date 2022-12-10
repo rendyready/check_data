@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\MArea;
 use Carbon\Carbon;
 use illuminate\Support\Str;
-
+use Illuminate\Support\Facades\Validator;
 
 class MAreaController extends Controller
 {
@@ -22,7 +22,7 @@ class MAreaController extends Controller
     {
         $data = MArea::select('m_area_id', 'm_area_nama', 'm_area_code')->whereNull('m_area_deleted_at')->orderBy('m_area_id', 'asc')->get();
         return view('master::area', compact('data'));
-        return response($data);
+        // return $this->array_map();
     }
     /**
      * Show the form for creating a new resource.
@@ -32,13 +32,18 @@ class MAreaController extends Controller
     public function action(Request $request)
     {
         $dataRaw = Str::upper($request->m_area_nama);
-        $checkUpper =  DB::table('m_area')->whereRaw("UPPER(m_area_nama)='{$dataRaw}'")->first();
-        if ($request->ajax()) {
-            if (empty($checkUpper->m_area_nama)) {
-                $request->validate([
-                    'm_area_nama' => ['required', 'unique:m_area'],
-                    'm_area_code' => ['required', 'unique:m_area'],
-                ]);
+        $checkUpper =  DB::table('m_area')->whereRaw("UPPER(m_area_nama)='{$dataRaw}'")
+            ->first();
+        $newReq = new Request();
+        $this->validate(
+            $request,
+            [
+                'm_area_nama' => ['required', 'unique:m_area'],
+                'm_area_code' => ['required', 'unique:m_area'],
+            ]
+        );
+        if (!empty($request->m_area_nama)) {
+            if ($request->ajax()) {
                 if ($request->action == 'add') {
                     $data = array(
                         'm_area_nama'    =>    $request->m_area_nama,
@@ -72,12 +77,8 @@ class MAreaController extends Controller
                         ->where('m_area_id', $request->id)
                         ->update($data);
                 }
-            } else {
-                $data = "error duplikate";
             }
-
-
-            return response()->json($data);
+            return response()->json(['message' => 'Data Duplicate !', $data->$request->errors()], 200);
         }
     }
 }

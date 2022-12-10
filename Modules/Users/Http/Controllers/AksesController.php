@@ -8,6 +8,8 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use illuminate\Support\Str;
+
 class AksesController extends Controller
 {
     /**
@@ -17,33 +19,35 @@ class AksesController extends Controller
     public function index()
     {
         $data = DB::table('roles')->get();
-        return view('users::akses',compact('data'));
+        return view('users::akses', compact('data'));
     }
     public function action(Request $request)
-    { 
-    	if($request->ajax())
-    	{
-            if ($request->action == 'add') {
-                $data = array(
-                    'name'	=>	$request->name,
-                    'guard_name' =>'web',
-                    'created_at' => Carbon::now(),
-                );
-                DB::table('roles')->insert($data);
-            } elseif ($request->action == 'edit') {
-                $data = array(
-                    'name'	=>	$request->name,
-                    'guard_name' =>'web',
-                    'updated_at' => Carbon::now(),
-                );
-                DB::table('roles')->where('id',$request->id)
-                ->update($data);
-            }else {
-               
+    {
+        if ($request->ajax()) {
+            $upper = Str::upper($request->name);
+            $check = DB::table('roles')->whereRaw("UPPER(name)='{$upper}'")->first();
+            if (!empty($check->name)) {
+                $request->validate(['name']);
+                if ($request->action == 'add') {
+                    $data = array(
+                        'name'    =>    $request->name,
+                        'guard_name' => 'web',
+                        'created_at' => Carbon::now(),
+                    );
+                    DB::table('roles')->insert($data);
+                } elseif ($request->action == 'edit') {
+                    $data = array(
+                        'name'    =>    $request->name,
+                        'guard_name' => 'web',
+                        'updated_at' => Carbon::now(),
+                    );
+                    DB::table('roles')->where('id', $request->id)
+                        ->update($data);
+                } else {
+                    return 'Nama Duplicate';
+                }
+                return response()->json($request);
             }
-    		return response()->json($request);
-    	}
+        }
     }
-
-  
 }

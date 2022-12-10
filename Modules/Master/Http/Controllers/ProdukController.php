@@ -20,15 +20,20 @@ class ProdukController extends Controller
     {
         $data = new \stdClass();
         $data->produk = DB::table('m_produk')
-        ->leftjoin('m_jenis_produk','m_produk_m_jenis_produk_id','m_jenis_produk_id')
-        ->leftjoin('m_satuan','m_produk_m_satuan_id','m_satuan_id')
-        ->leftjoin('m_klasifikasi_produk','m_produk_m_klasifikasi_produk_id','m_klasifikasi_produk_id')
-        ->get();
+            ->leftjoin('m_jenis_produk', 'm_produk_m_jenis_produk_id', 'm_jenis_produk_id')
+            ->leftjoin('m_satuan', 'm_produk_m_satuan_id', 'm_satuan_id')
+            ->leftjoin('m_klasifikasi_produk', 'm_produk_m_klasifikasi_produk_id', 'm_klasifikasi_produk_id')
+            ->get();
         $data->satuan = DB::table('m_satuan')->get();
         $data->klasifikasi = DB::table('m_klasifikasi_produk')->get();
         $data->jenisproduk = DB::table('m_jenis_produk')->get();
         $data->plot_produksi = DB::table('m_plot_produksi')->get();
-        return view('master::m_produk',compact('data'));
+        return view('master::m_produk', compact('data'));
+
+
+            echo "<pre>";
+            dd($data);
+            echo "</pre>";
     }
 
     /**
@@ -65,7 +70,7 @@ class ProdukController extends Controller
      */
     public function list($id)
     {
-        $data = DB::table('m_produk')->where('m_produk_id',$id)->first();
+        $data = DB::table('m_produk')->where('m_produk_id', $id)->first();
         return response()->json($data, 200);
     }
 

@@ -10,7 +10,11 @@
             Data Area
         </div>
         <div class="block-content text-muted">
+          <div class="col-md-12">
+            <h1 id="error"></h1>
+          </div>
           @csrf
+          <span id="alertDanger"></span>
           <table id="sample_data" class="table table-bordered table-striped table-vcenter js-dataTable-full">
             <thead>
               <tr>
@@ -59,17 +63,27 @@
       restoreButton: false,
       onSuccess: function(data, textStatus, jqXHR) {
         if (data.action == 'add') {
-          window.location.reload();
+          // window.location.reload();
+          t.ajax().reload();
         }
         if (data.action == 'delete') {
           $('#' + data.id).remove();
           t.ajax().reload();
         }
-      }
+        if (data.error, message) {
+          alert(data.error + messageText);
+        } else {
+          alert(data.votes);
+        }
+      },
+
     });
+    // $('input').attr('required', true);
     $("#sample_data").append(
       $('<tfoot/>').append($("#sample_data thead tr").clone())
     );
+
+
   });
 </script>
 @endsection

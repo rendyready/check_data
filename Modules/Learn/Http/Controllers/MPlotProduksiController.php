@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use illuminate\Support\Str;
 
 class MPlotProduksiController extends Controller
 {
@@ -30,30 +31,48 @@ class MPlotProduksiController extends Controller
     public function action(Request $request)
     {
         if ($request->ajax()) {
-            if ($request->action == 'add') {
-                $data = array(
-                    'm_plot_produksi_id' => $request->m_plot_produksi_id,
-                    'm_plot_produksi_nama' => $request->m_plot_produksi_nama,
-                    'm_plot_produksi_created_by' => Auth::id(),
-                    'm_plot_produksi_created_at' => Carbon::now(),
-                );
-                DB::table('m_plot_produksi')
-                    ->where('m_plot_produksi_nama')
-                    ->insert($data);
-            } elseif ($request->action == 'edit') {
-                $data = array(
-                    'm_plot_produksi_nama' => $request->m_plot_produksi_nama,
-                    'm_plot_produksi_updated_by' => Auth::id(),
-                    'm_plot_produksi_updated_at' => Carbon::now(),
-                );
-                DB::table('m_plot_produksi')->where('m_plot_produksi_id', $request->m_plot_produksi_id)
-                    ->update($data);
-            } elseif ($request->action == 'delete') {
-                $data = MPlotProduksi::where('m_plot_produksi_id');
-                $data->delete();
+            $msg = [
+                'm_plot_produksi_nama.required' => 'Data Kosong !',
+            ];
+            $this->validate([
+                'm_plot_produksi_nama' => ['required', 'string', 'unique:m_plot_produksi'],
+            ], $msg);
+
+            if ($request->$this->fails()) {
+                $upper = Str::upper($request->m_plot_produksi_nama);
+                $check =  DB::table('m_plot_produksi')->whereRaw("UPPER(m_plot_produksi_nama)='{$upper}'")->first();
+                if (!empty($request->$check)) {
+                }
+                return back()->withErrors($msg);
+                // return response($msg)->json(['message' => $request], 422);
+            } elseif (!empty($request->m_plot_produksi_nama)) {
+                if ($request->action == 'add') {
+                    $data = array(
+                        'm_plot_produksi_id' => $request->m_plot_produksi_id,
+                        'm_plot_produksi_nama' => $request->m_plot_produksi_nama,
+                        'm_plot_produksi_created_by' => Auth::id(),
+                        'm_plot_produksi_created_at' => Carbon::now(),
+                    );
+                    DB::table('m_plot_produksi')
+                        ->where('m_plot_produksi_nama')
+                        ->insert($data);
+                } elseif ($request->action == 'edit') {
+                    $data = array(
+                        'm_plot_produksi_nama' => $request->m_plot_produksi_nama,
+                        'm_plot_produksi_updated_by' => Auth::id(),
+                        'm_plot_produksi_updated_at' => Carbon::now(),
+                    );
+                    DB::table('m_plot_produksi')->where('m_plot_produksi_id', $request->m_plot_produksi_id)
+                        ->update($data);
+                } elseif ($request->action == 'delete') {
+                    $data = MPlotProduksi::where('m_plot_produksi_id');
+                    $data->delete();
+                }
+                // return response()->json(['error' => $data], 200);
             }
+            return response()->json($data);
+            // return response()->json(['error' => 'Data Duplicate', $request->$val->errors()])->getMessage();
         }
-        return response()->json();
     }
 
     /**
