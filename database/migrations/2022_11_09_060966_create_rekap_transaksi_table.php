@@ -30,8 +30,8 @@ return new class extends Migration
             $table->integer('r_t_durasi_saji')->nullable()->default(0);
             $table->integer('r_t_durasi_pelayanan')->nullable();
             $table->integer('r_t_durasi_kunjungan');
-            $table->bigInteger('r_t_config_meja_id');
-            $table->string('r_t_config_meja_nama');
+            $table->bigInteger('r_t_m_meja_id');
+            $table->string('r_t_m_meja_nama');
             $table->integer('r_t_m_meja_jenis_space');
             $table->string('r_t_bigbos');
             $table->bigInteger('r_t_m_area_id');
