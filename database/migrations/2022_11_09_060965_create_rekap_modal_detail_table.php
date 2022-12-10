@@ -20,7 +20,7 @@ return new class extends Migration
             $table->bigInteger('rekap_modal_detail_m_modal_tipe_id');
             $table->bigInteger('rekap_modal_detail_rekap_modal_id');
             $table->bigInteger('rekap_modal_detail_created_by');
-            $table->bigInteger('rekap_modal_detail_deleted_by');
+            $table->bigInteger('rekap_modal_detail_deleted_by')->nullable();
             $table->bigInteger('rekap_modal_detail_updated_by')->nullable();
             $table->timestampTz('rekap_modal_detail_created_at')->useCurrent();
             $table->timestampTz('rekap_modal_detail_updated_at')->useCurrentOnUpdate()->nullable()->default(NULL);

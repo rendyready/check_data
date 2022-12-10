@@ -22,8 +22,8 @@ return new class extends Migration
             $table->smallInteger('r_h_t_shift');
             $table->date('r_h_t_tanggal');
             $table->time('r_h_t_jam_hapus');
-            $table->bigInteger('r_h_t_config_meja_id');
-            $table->string('r_h_t_config_meja_nama');
+            $table->bigInteger('r_h_t_m_meja_id');
+            $table->string('r_h_t_m_meja_nama');
             $table->string('r_h_t_bigbos');
             $table->bigInteger('r_h_t_m_area_id');
             $table->string('r_h_t_m_area_nama');
