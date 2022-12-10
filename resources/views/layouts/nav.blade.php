@@ -380,13 +380,13 @@
             </a>
             <ul class="nav-main-submenu">
               <li class="nav-main-item">
-                <a class="nav-main-link{{ request()->is('inventori/supplier') ? ' active' : '' }}" href="{{route('supplier.index')}}">
-                  <span class="nav-main-link-name">Supplier</span>
+                <a class="nav-main-link{{ request()->is('akuntansi/rekening') ? ' active' : '' }}" href="{{route('rek.index')}}">
+                  <span class="nav-main-link-name">Rekening</span>
                 </a>
               </li>
               <li class="nav-main-item">
-                <a class="nav-main-link{{ request()->is('invetori/beli') ? ' active' : '' }}" href="{{route('beli.index')}}">
-                  <span class="nav-main-link-name">Pembelian</span>
+                <a class="nav-main-link{{ request()->is('akuntansi/link_akt') ? ' active' : '' }}" href="{{route('rek_link.index')}}">
+                  <span class="nav-main-link-name">Link Akuntansi</span>
                 </a>
               </li>
             </ul>
