@@ -24,7 +24,7 @@
                 @foreach ($data as $item)
                     <tr class="row1">
                       <td>{{$item->m_meja_jenis_id}}</td>
-                      <td>{{$item->m_meja_jenis_nama}}</td>
+                      <td>{{ucwords($item->m_meja_jenis_nama)}}</td>
                       <td>{{$item->m_meja_jenis_space}}</td>
                       <td>
                         {{ $item->m_meja_jenis_status==1 ? 'Active' : 'Non-Active' }}
@@ -57,6 +57,7 @@
     $('#m_meja_jenis').Tabledit({
     url:'{{ route("action.m_jenis_meja") }}',
     dataType:"json",
+    deleteButton:false,
     columns:{
       identifier:[0, 'm_meja_jenis_id'],
       editable:[[1, 'm_meja_jenis_nama'],[2,'m_meja_jenis_space','number','{"min":"1"}'],[3,'m_meja_jenis_status','select','{"1":"Active","0":"Non-Active"}']]
@@ -64,13 +65,16 @@
     restoreButton:false,
     onSuccess:function(data, textStatus, jqXHR)
     {
-      if (data.action == 'add') {
-        window.location.reload();
-      }
-      if(data.action == 'delete')
-      {
-        $('#'+data.id).remove();
-      }
+      Codebase.helpers('jq-notify', {
+          align: 'right',             // 'right', 'left', 'center'
+          from: 'top',                // 'top', 'bottom'
+          type: 'danger',               // 'info', 'success', 'warning', 'danger'
+          icon: 'fa fa-info me-5',    // Icon class
+          message: data.m_meja_jenis_nama+'<br></br>'+data.m_meja_jenis_status+'<br></br>'+ data.m_meja_jenis_space, 
+      });
+      setTimeout(function() {
+          window.location.reload();
+      }, 3300);
     }
   });
   $("#m_meja_jenis").append(
