@@ -22,7 +22,7 @@ class MAreaController extends Controller
     {
         $data = MArea::select('m_area_id', 'm_area_nama', 'm_area_code')->whereNull('m_area_deleted_at')->orderBy('m_area_id', 'asc')->get();
         return view('master::area', compact('data'));
-        return response($data);
+        // return $this->array_map();
     }
     /**
      * Show the form for creating a new resource.
@@ -80,12 +80,5 @@ class MAreaController extends Controller
             }
             return response()->json(['message' => 'Data Duplicate !', $data->$request->errors()], 200);
         }
-        // elseif ($request->fails()) {
-        //     $message = [
-        //         'required' => 'Data :Masih kosong!',
-        //         'unique' => ':ada yang sama!',
-        //     ];
-        //     return response()->json(['message' => $message, $request->errors()], 442);
-        // }
     }
 }
