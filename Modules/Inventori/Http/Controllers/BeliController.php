@@ -32,8 +32,12 @@ class BeliController extends Controller
         $data = new \stdClass();
         $nama_barang = DB::table('m_produk')->where('m_produk_m_klasifikasi_produk_id','1')
         ->select('m_produk_id','m_produk_nama')->get();
+        $supplier = DB::table('m_supplier')->get();
         foreach ($nama_barang as $key => $v) {
             $data->barang[$v->m_produk_id]=$v->m_produk_nama;
+        }
+        foreach ($supplier as $key => $v) {
+            $data->supplier[$v->m_supplier_id]=$v->m_supplier_nama;
         }
         return response()->json($data);
     }

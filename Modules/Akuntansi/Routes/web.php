@@ -1,6 +1,8 @@
 <?php
 use Illuminate\Support\Facades\Route;
-use Modules\Akuntansi\Http\Controllers\AkuntansiController;
+use Modules\Akuntansi\Http\Controllers\RekeningController;
+use Modules\Akuntansi\Http\Controllers\LinkaktController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -12,7 +14,7 @@ use Modules\Akuntansi\Http\Controllers\AkuntansiController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-// Route::prefix('akuntansi')->group(function() {
-//     Route::get('/', 'AkuntansiController@index');
-// });
-Route::get('/akuntansi',[AkuntansiController::class,'index']);
+Route::get('/akuntansi/rekening',[RekeningController::class,'index'])->name('rek.index');
+Route::post('/akuntansi/simpan',[RekeningController::class,'simpan'])->name('rek.simpan');
+
+Route::get('/akuntansi/link_akt',[LinkaktController::class,'index'])->name('rek_link.index');

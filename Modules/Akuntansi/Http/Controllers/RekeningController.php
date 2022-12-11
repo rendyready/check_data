@@ -2,12 +2,14 @@
 
 namespace Modules\Akuntansi\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
-class AkuntansiController extends Controller
+class RekeningController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,18 +17,43 @@ class AkuntansiController extends Controller
      */
     public function index()
     {
-        return view('akuntansi::index');
+       
+        $data = DB::table('m_w')
+        ->select('m_w_id','m_w_nama')
+        ->get();
+    
+        $rekening = DB::table('m_rekening')
+        ->get();
+        // return $data;
+        return view('akuntansi::master.rekening',compact('data','rekening'));
 
-  
+        // $data = DB::table('m_w')
+        // // ->leftjoin('m_w','m_rekening_m_w_id','m_w_id')
+        // ->select('m_w_id','m_w_nama')
+        // // 'm_rekening_kategori','m_rekening_no_akun','m_rekening_nama','m_rekening_saldo')
+        // ->get();
+        // return view('akuntansi::master\rekening',compact('data'));
     }
 
     /**
      * Show the form for creating a new resource.
      * @return Renderable
      */
-    public function create()
+    public function simpan(Request $request)
     {
-        return view('akuntansi::create');
+        foreach ($request->no_akun as $key => $value) {
+            $data=array(
+                'm_rekening_m_w_id'=>$request->kode_waroeng,
+                'm_rekening_kategori'=>$request->kode_akun,
+                'm_rekening_no_akun'=>$request->no_akun[$key],
+                'm_rekening_nama'=>$request->nama_akun[$key],
+                'm_rekening_saldo'=>$request->saldo[$key],
+                'm_rekening_created_by'=>Auth::id(),
+                'm_rekening_created_at'=>Carbon::now(),
+            );
+            DB::table('m_rekening')->insert($data);
+        }
+        return redirect()->back();
     }
 
     /**

@@ -25,7 +25,7 @@ class SupplierController extends Controller
      */
     public function data()
     {
-        $get = DB::table('m_supplier')->get();
+        $get = DB::table('m_supplier')->orderBy('m_supplier_id')->get();
         $no = 0;
         $data = array();
         foreach ($get as $value) {
@@ -40,7 +40,7 @@ class SupplierController extends Controller
             $row[] = $value->m_supplier_ket;
             $row[] = $value->m_supplier_saldo_awal;
             $row[] = $value->m_supplier_rek.'-'.$value->m_supplier_rek_nama.'-'.$value->m_supplier_bank_nama;
-            $row[] = "<button class='btn btn-sm buttonEdit btn-success'><i class='fa fa-pencil'></i></button>";
+            $row[] = '<a id="buttonEdit" class="btn btn-sm buttonEdit btn-success" value="'.$value->m_supplier_id.'" title="Edit"><i class="fa fa-pencil"></i></a>';
             $data[] = $row;
         }
         $output = array("data" => $data);
@@ -52,10 +52,10 @@ class SupplierController extends Controller
      * @param Request $request
      * @return Renderable
      */
-    public function simpan(Request $request)
+    public function action(Request $request)
     {
-        $code = DB::table('m_supplier')->orderBy('m_supplier_id','desc')->get();
-        $nocode = (empty($code->m_rekap_code)) ? "500001" : $code->m_supplier_code+1;
+        $code = DB::table('m_supplier')->orderBy('m_supplier_id','desc')->first();
+        $nocode = (empty($code->m_supplier_code)) ? "500001" : $code->m_supplier_code+1;
         if($request->ajax())
     	{
             if ($request->action == 'add') {
@@ -76,7 +76,6 @@ class SupplierController extends Controller
                 DB::table('m_supplier')->insert($data);
             } elseif ($request->action == 'edit') {
                 $data = array(
-                    'm_supplier_code'	=>	$request->m_supplier_code,
                     'm_supplier_nama'	=>	$request->m_supplier_nama,
                     'm_supplier_alamat'	=>	$request->m_supplier_alamat,
                     'm_supplier_kota'	=>	$request->m_supplier_kota,
@@ -103,43 +102,13 @@ class SupplierController extends Controller
     }
 
     /**
-     * Show the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
-    public function show($id)
-    {
-        return view('inventori::show');
-    }
-
-    /**
      * Show the form for editing the specified resource.
      * @param int $id
      * @return Renderable
      */
     public function edit($id)
     {
-        return view('inventori::edit');
-    }
-
-    /**
-     * Update the specified resource in storage.
-     * @param Request $request
-     * @param int $id
-     * @return Renderable
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     * @param int $id
-     * @return Renderable
-     */
-    public function destroy($id)
-    {
-        //
+        $data = DB::table('m_supplier')->where('m_supplier_id',$id)->first();
+        return response()->json($data);
     }
 }

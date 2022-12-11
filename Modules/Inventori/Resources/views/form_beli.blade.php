@@ -42,13 +42,13 @@
                         <div class="row mb-1">
                             <label class="col-sm-4 col-form-label" for="rekap_beli_tgl">Tanggal</label>
                             <div class="col-sm-8">
-                              <input type="date" class="form-control form-control-sm" id="rekap_beli_tgl" name="rekap_beli_tgl">
+                              <input type="date" class="form-control form-control-sm" id="rekap_beli_tgl" name="rekap_beli_tgl" required>
                             </div>
                         </div>
                         <div class="row mb-1">
-                            <label class="col-sm-4 col-form-label" for="rekap_beli_jth_tmp">Jth Tempo</label>
+                            <label class="col-sm-4 col-form-label-sm" for="rekap_beli_jth_tmp">Jth Tempo</label>
                             <div class="col-sm-8">
-                              <input type="date" class="form-control form-control-sm" id="rekap_beli_jth_tmp" name="rekap_beli_jth_tmp">
+                              <input type="date" class="form-control form-control-sm" id="rekap_beli_jth_tmp" name="rekap_beli_jth_tmp" required>
                             </div>
                         </div>
                     </div>
@@ -57,30 +57,26 @@
                             <label class="col-sm-4 col-form-label" for="rekap_beli_supplier_id">Kode Supplier</label>
                             <div class="col-sm-8">
                               <select class="js-select2 form-control-sm" style="width: 100%;" name="rekap_beli_supplier_id" id="rekap_beli_supplier_id" data-placeholder="pilih supplier" required>
-                                <option></option>
-                                <option value="1">PT. Matahari</option>
-                                <option value="2">Bunga Mekar</option>
-                                <option value="3">Melati</option>
-                                <option value="4">Umum</option>
+                              <option></option>
                               </select>
                             </div>
                         </div>
                         <div class="row mb-1">
                             <label class="col-sm-4 col-form-label" for="rekap_beli_supplier_nama">Nama</label>
                             <div class="col-sm-8">
-                              <input type="text" class="form-control form-control-sm" id="rekap_beli_supplier_nama" name="rekap_beli_supplier_nama">
+                              <input type="text" class="form-control supplier form-control-sm" id="rekap_beli_supplier_nama" name="rekap_beli_supplier_nama">
                             </div>
                         </div>
                         <div class="row mb-1">
                             <label class="col-sm-4 col-form-label" for="rekap_beli_supplier_telp">No Telpn</label>
                             <div class="col-sm-8">
-                              <input type="text" class="form-control form-control-sm" id="rekap_beli_supplier_telp" name="rekap_beli_supplier_telp">
+                              <input type="text" class="form-control supplier form-control-sm" id="rekap_beli_supplier_telp" name="rekap_beli_supplier_telp">
                             </div>
                         </div>
                         <div class="row mb-1">
                             <label class="col-sm-4 col-form-label" for="rekap_beli_supplier_alamat">Alamat</label>
                             <div class="col-sm-8">
-                             <textarea name="rekap_beli_supplier_alamat" id="rekap_beli_supplier_alamat" cols="30" rows="3"></textarea>
+                             <textarea class="supplier" name="rekap_beli_supplier_alamat" id="rekap_beli_supplier_alamat" cols="30" rows="3"></textarea>
                             </div>
                         </div>
                     </div>
@@ -196,9 +192,11 @@
       });
     Codebase.helpersOnLoad(['jq-select2']);
 	  var no =1;
-    var  selectValues = new Array();
+    var  barang = new Array();
+    var supplier = new Array();
     $.get('/inventori/beli/list', function(response){
-      selectValues = response['barang'];
+      barang = response['barang'];
+      supplier = response['supplier'];
 	  $('.tambah').on('click',function(){
 	    no++;
 		$('#form').append('<tr id="row'+no+'">'+
@@ -211,7 +209,7 @@
                         '<td><textarea class="form-control form-control-sm" name="rekap_beli_detail_catatan[]" id="rekap_beli_detail_catatan" cols="50" required placeholder="catatan bb atau satuan"></textarea></td>'+
                         '<td><button type="button" id="'+no+'" class="btn btn-danger btn_remove"><i class="fa fa-trash"></i></button></td></tr>');
         
-            $.each(selectValues, function(key, value) {
+            $.each(barang, function(key, value) {
             $('#rekap_beli_detail_m_produk_id'+no)
             .append($('<option>', { value : key })
             .text(value));
@@ -219,8 +217,13 @@
         Codebase.helpersOnLoad(['jq-select2']);
         });
        
-   $.each(selectValues, function(key, value) {
+   $.each(barang, function(key, value) {
      $('.nama_barang')
+          .append($('<option>', { value : key })
+          .text(value));
+    });
+    $.each(supplier, function(key, value) {
+     $('#rekap_beli_supplier_id')
           .append($('<option>', { value : key })
           .text(value));
     });
@@ -277,6 +280,7 @@
           $('.ppnrp').val(ppnrp.toFixed(2));
           $('.rekap_beli_tot_nom').val(rekap_beli_tot_nom.toFixed(2));
           $('.sisa').val((rekap_beli_tot_nom-bayar).toFixed(2));
+          $('#total_sum_value').html(': Rp '+rekap_beli_tot_nom.toFixed(2));
     });
 
        

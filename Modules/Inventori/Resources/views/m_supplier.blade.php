@@ -141,7 +141,7 @@
       'X-CSRF-Token' : $("input[name=_token]").val()
         }
       });
-    Codebase.helpersOnLoad(['jq-select2']);
+    Codebase.helpersOnLoad(['jq-notify']);
     var table, save_method;
         $(function() {
             table = $('.table').DataTable({
@@ -157,25 +157,33 @@
                 }
             });
         });
-        $(".buttonInsert").on('click', function() {
+      $(".buttonInsert").on('click', function() {
             $('[name="action"]').val('add');
             var id = $(this).attr('value');
+            $('#form-supplier form')[0].reset();
             $("#myModalLabel").html('Tambah Supplier');
             $("#form-supplier").modal('show');
       });
-      $(".buttonEdit").on('click', function() {
+      $("#tb_supplier").on('click','.buttonEdit', function() {
                 var id = $(this).attr('value');
+                $('[name="action"]').val('edit');
+                $('#form-supplier form')[0].reset();
                 $("#myModalLabel").html('Ubah Supplier');
                 $.ajax({
                     url: "/inventori/supplier/edit/"+id,
                     type: "GET",
                     dataType: 'json',
                     success: function(respond) {
-                      console.log(respond)
-                        $("#id_supplier").val(respond.m_supplier_id).trigger('change');
-                        $("#nama_supplier").val(respond.m_supplier_nama).trigger('change');
-                        $("#jenis_supplier").val(respond.m_supplier_m_supplier_jenis_id).trigger('change');
-                        $("#waroeng").val(respond.m_supplier_m_w_id).trigger('change');
+                        $("#m_supplier_id").val(respond.m_supplier_id).trigger('change');
+                        $("#m_supplier_nama").val(respond.m_supplier_nama).trigger('change');
+                        $("#m_supplier_alamat").val(respond.m_supplier_alamat).trigger('change');
+                        $("#m_supplier_kota").val(respond.m_supplier_kota).trigger('change');
+                        $("#m_supplier_telp").val(respond.m_supplier_telp).trigger('change');
+                        $("#m_supplier_ket").val(respond.m_supplier_ket).trigger('change');
+                        $("#m_supplier_rek").val(respond.m_supplier_rek).trigger('change');
+                        $("#m_supplier_rek_nama").val(respond.m_supplier_rek_nama).trigger('change');
+                        $("#m_supplier_bank_nama").val(respond.m_supplier_bank_nama).trigger('change');
+                        $("#m_supplier_saldo_awal").val(respond.m_supplier_saldo_awal).trigger('change');
                     },
                     error: function() {
                     }
@@ -185,12 +193,18 @@
             $('#formAction').submit( function(e){
                 if(!e.isDefaultPrevented()){
                     $.ajax({
-                        url : "{{ route('supplier.simpan') }}",
+                        url : "{{ route('supplier.action') }}",
                         type : "POST",
                         data : $('#form-supplier form').serialize(),
                         success : function(data){
                             $('#form-supplier').modal('hide');
-                            // toastr.success("Menyimpan Data", "save");
+                            $.notify({
+                              align: 'right',       
+                              from: 'top',                
+                              type: 'success',               
+                              icon: 'fa fa-success me-5',    
+                              message: 'Berhasil Menambahkan Data'
+                            });
                             table.ajax.reload();
                         },
                         error : function(){

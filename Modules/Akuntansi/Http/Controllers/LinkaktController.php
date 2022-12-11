@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 
-class AkuntansiController extends Controller
+class LinkaktController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,8 +15,14 @@ class AkuntansiController extends Controller
      */
     public function index()
     {
-        return view('akuntansi::index');
+        $data = DB::table('m_rekening')
+        ->select('m_rekening_id','m_rekening_no_akun','m_rekening_nama')
+        ->get();
 
+        $listakt = DB::table('list_akt')
+        ->select('list_akt_id','list_akt_nama')
+        ->get();
+        return view('akuntansi::master.link_akt',compact('data','listakt'));
   
     }
 

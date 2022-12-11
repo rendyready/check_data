@@ -15,7 +15,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('tmp_transaction_detail', function (Blueprint $table) {
-            $table->uuid('tmp_transaction_detail_id')->default(DB::raw('gen_random_uuid()'))->primary();
+            // $table->uuid('tmp_transaction_detail_id')->default(DB::raw('gen_random_uuid()'))->primary();
             $table->uuid('tmp_transaction_detail_tmp_transaction_id');
             $table->bigInteger('tmp_transaction_detail_m_produk_id')->nullable();
             $table->integer('tmp_transaction_detail_qty')->default(1)->comment('qty menu');
@@ -36,9 +36,9 @@ return new class extends Migration
             $table->enum('tmp_transaction_detail_discount_type', ['Persen', 'Nominal', 'Qty', 'CustomPrice'])->default('CustomPrice');
         });
 
-        Schema::table('tmp_transaction_detail', function (Blueprint $table) {
-            $table->foreign(['tmp_transaction_detail_tmp_transaction_id'], 'tmp_transaction_detail_tmp_transaction_id_fkey')->references(['tmp_transaction_id'])->on('tmp_transaction')->onUpdate('CASCADE')->onDelete('CASCADE');
-        });
+        // Schema::table('tmp_transaction_detail', function (Blueprint $table) {
+        //     $table->foreign(['tmp_transaction_detail_tmp_transaction_id'], 'tmp_transaction_detail_tmp_transaction_id_fkey')->references(['tmp_transaction_id'])->on('tmp_transaction')->onUpdate('CASCADE')->onDelete('CASCADE');
+        // });
     }
 
     /**

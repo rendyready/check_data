@@ -24,7 +24,7 @@ Route::group(['prefix' => 'inventori', 'controller' => BeliController::class,'mi
 //Master Supplier
 Route::group(['prefix' => 'inventori', 'controller' => SupplierController::class,'middleware' => ['auth','web']], function()
 {
-    Route::get('supplier','index')->name('supplier.index'); Route::post('supplier/action','action')->name('action.supplier');
+    Route::get('supplier','index')->name('supplier.index'); Route::post('supplier/action','action')->name('supplier.action');
     Route::get('supplier/data','data')->name('supplier.data');
-    Route::post('supplier/simpan','simpan')->name('supplier.simpan');
+    Route::get('supplier/edit/{id}','edit')->name('supplier.edit');
 });
