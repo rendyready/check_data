@@ -80,12 +80,5 @@ class MAreaController extends Controller
             }
             return response()->json(['message' => 'Data Duplicate !', $data->$request->errors()], 200);
         }
-        // elseif ($request->fails()) {
-        //     $message = [
-        //         'required' => 'Data :Masih kosong!',
-        //         'unique' => ':ada yang sama!',
-        //     ];
-        //     return response()->json(['message' => $message, $request->errors()], 442);
-        // }
     }
 }
