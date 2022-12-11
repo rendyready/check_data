@@ -31,18 +31,21 @@ class MAreaController extends Controller
      */
     public function action(Request $request)
     {
-        $dataRaw = Str::upper($request->m_area_nama);
-        $checkUpper =  DB::table('m_area')->whereRaw("UPPER(m_area_nama)='{$dataRaw}'")
-            ->first();
-        $newReq = new Request();
-        $this->validate(
-            $request,
-            [
-                'm_area_nama' => ['required', 'unique:m_area'],
-                'm_area_code' => ['required', 'unique:m_area'],
-            ]
-        );
-        if (!empty($request->m_area_nama)) {
+        $raw = [
+            'm_area_nama' => ['required', 'unique:m_area'],
+            'm_area_code' => ['required', 'unique:m_area'],
+        ];
+        $value = [
+            'm_area_nama' => Str::lower($request->m_area_nama),
+            'm_area_code' => Str::lower($request->m_area_code),
+        ];
+        // if (!empty([$request->m_area_nama, $request->m_area_code])) {
+        //     return response()->json($request->message()->get('*'));
+        // } else {
+        $validate = Validator::make($value, $raw);
+        if ($validate->fails()) {
+            return response()->json($validate->messages()->get('*'));
+        } else {
             if ($request->ajax()) {
                 if ($request->action == 'add') {
                     $data = array(
@@ -53,13 +56,6 @@ class MAreaController extends Controller
                     );
                     DB::table('m_area')->insert($data);
                 } elseif ($request->action == 'edit') {
-                    $this->validate(
-                        $request,
-                        [
-                            'm_area_nama' => 'required|unique:m_area',
-                            'm_area_code' => 'required|unique:m_area',
-                        ]
-                    );
                     $data = array(
                         'm_area_nama'    =>    $request->m_area_nama,
                         'm_area_code'    =>    $request->m_area_code,
@@ -77,8 +73,9 @@ class MAreaController extends Controller
                         ->where('m_area_id', $request->id)
                         ->update($data);
                 }
+                return response()->json(['Success' => true]);
             }
-            return response()->json(['message' => 'Data Duplicate !', $data->$request->errors()], 200);
         }
+        // }
     }
 }

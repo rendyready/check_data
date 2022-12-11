@@ -70,12 +70,8 @@
           $('#' + data.id).remove();
           t.ajax().reload();
         }
-        if (data.error, message) {
-          alert(data.error + messageText);
-        } else {
-          alert(data.votes);
-        }
       },
+
 
     });
     // $('input').attr('required', true);
