@@ -14,8 +14,8 @@
 Route::group(['prefix' => 'users','controller' => UsersController::class,'middleware' => ['auth','web']], function()
 {
     Route::get('/','index')->name('users.index');
-    Route::get('/create','create')->name('users.create');
-    Route::post('users/action','action')->name('users.akses');
+    Route::get('/edit/{id}','edit')->name('users.edit');
+    Route::post('users/action','action')->name('users.action');
 });
 //Akses Route
 Route::group(['prefix' => 'users', 'controller' => AksesController::class,'middleware' => ['auth','web']], function()

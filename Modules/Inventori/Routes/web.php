@@ -28,3 +28,10 @@ Route::group(['prefix' => 'inventori', 'controller' => SupplierController::class
     Route::get('supplier/data','data')->name('supplier.data');
     Route::get('supplier/edit/{id}','edit')->name('supplier.edit');
 });
+//Form beli Route
+Route::group(['prefix' => 'inventori', 'controller' => RusakController::class,'middleware' => ['auth','web']], function()
+{
+    Route::get('rusak','index')->name('rusak.index'); Route::post('rusak/action','action')->name('action.rusak');
+    Route::get('rusak/list','list')->name('rusak.list');
+    Route::post('rusak/simpan','simpan')->name('rusak.simpan');
+});
