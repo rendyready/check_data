@@ -20,13 +20,12 @@ return new class extends Migration
             $table->string('rekap_beli_detail_m_produk_code');
             $table->string('rekap_beli_detail_m_produk_nama');
             $table->decimal('rekap_beli_detail_qty',5,2);
-            $table->string('rekap_beli_detail_satuan');
+            $table->string('rekap_beli_detail_satuan')->nullable();
             $table->decimal('rekap_beli_detail_harga',10,2);
-            $table->decimal('rekap_beli_detail_disc',8,2);
-            $table->decimal('rekap_beli_detail_discrp');
-            $table->decimal('rekap_beli_detail_subtot');
+            $table->decimal('rekap_beli_detail_disc',8,2)->nullable();
+            $table->decimal('rekap_beli_detail_discrp')->nullable();
+            $table->decimal('rekap_beli_detail_subtot',9,2);
             $table->string('rekap_beli_detail_catatan');
-
             $table->bigInteger('rekap_beli_detail_created_by');
             $table->bigInteger('rekap_beli_detail_updated_by')->nullable();
             $table->bigInteger('rekap_beli_detail_deleted_by')->nullable();

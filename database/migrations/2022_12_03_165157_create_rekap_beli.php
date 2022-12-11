@@ -24,11 +24,11 @@ return new class extends Migration
             $table->string('rekap_beli_supplier_telp')->nullable();
             $table->string('rekap_beli_supplier_alamat')->nullable();
             $table->bigInteger('rekap_beli_m_w_id');
-            $table->decimal('rekap_beli_disc',8,2);
-            $table->decimal('rekap_beli_disc_rp');
-            $table->decimal('rekap_beli_ppn',8,2);
-            $table->decimal('rekap_beli_ppn_rp');
-            $table->string('rekap_beli_ongkir');
+            $table->decimal('rekap_beli_disc',8,2)->nullable();
+            $table->decimal('rekap_beli_disc_rp')->nullable();
+            $table->decimal('rekap_beli_ppn',8,2)->nullable();
+            $table->decimal('rekap_beli_ppn_rp')->nullable();
+            $table->string('rekap_beli_ongkir')->nullable();
             $table->string('rekap_beli_terbayar');
             $table->string('rekap_beli_tersisa');
             $table->string('rekap_beli_tot_nom');

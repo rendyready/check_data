@@ -31,9 +31,21 @@ class MPlotProduksiController extends Controller
     public function action(Request $request)
     {
         if ($request->ajax()) {
-            $upper = Str::upper($request->m_plot_produksi_nama);
-            $check =  DB::table('m_plot_produksi')->whereRaw("UPPER(m_plot_produksi_nama)='{$upper}'")->first();
-            if (!empty($check->m_plot_produksi_nama)) {
+            $msg = [
+                'm_plot_produksi_nama.required' => 'Data Kosong !',
+            ];
+            $this->validate([
+                'm_plot_produksi_nama' => ['required', 'string', 'unique:m_plot_produksi'],
+            ], $msg);
+
+            if ($request->$this->fails()) {
+                $upper = Str::upper($request->m_plot_produksi_nama);
+                $check =  DB::table('m_plot_produksi')->whereRaw("UPPER(m_plot_produksi_nama)='{$upper}'")->first();
+                if (!empty($request->$check)) {
+                }
+                return back()->withErrors($msg);
+                // return response($msg)->json(['message' => $request], 422);
+            } elseif (!empty($request->m_plot_produksi_nama)) {
                 if ($request->action == 'add') {
                     $data = array(
                         'm_plot_produksi_id' => $request->m_plot_produksi_id,
@@ -56,8 +68,10 @@ class MPlotProduksiController extends Controller
                     $data = MPlotProduksi::where('m_plot_produksi_id');
                     $data->delete();
                 }
+                // return response()->json(['error' => $data], 200);
             }
-            return response()->json();
+            return response()->json($data);
+            // return response()->json(['error' => 'Data Duplicate', $request->$val->errors()])->getMessage();
         }
     }
 

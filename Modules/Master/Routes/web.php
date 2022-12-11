@@ -123,16 +123,3 @@ Route::group(['prefix' => 'master', 'controller' => ResepController::class, 'mid
     Route::post('m_resep/action/{id}', 'action')->name('action.m_resep');
     Route::get('m_resep_detail', 'list_detail')->name('list_detail.m_resep');
 });
-
-
-// For Test
-Route::group(
-    [
-        'prefix' => 'master',
-        'controller' => MWaroengController::class,
-        'middleware' => 'web'
-    ],
-    function () {
-        Route::get('waroeng/create', 'create')->name('waroeng.create');
-    }
-);

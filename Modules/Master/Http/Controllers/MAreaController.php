@@ -22,7 +22,7 @@ class MAreaController extends Controller
     {
         $data = MArea::select('m_area_id', 'm_area_nama', 'm_area_code')->whereNull('m_area_deleted_at')->orderBy('m_area_id', 'asc')->get();
         return view('master::area', compact('data'));
-        return response($data);
+        // return $this->array_map();
     }
     /**
      * Show the form for creating a new resource.
