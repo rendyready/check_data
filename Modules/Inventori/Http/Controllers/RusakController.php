@@ -16,9 +16,9 @@ class RusakController extends Controller
      */
     public function index()
     {   $data = new \stdClass();
-        $get_max_id = DB::table('rekap_beli')->orderBy('rekap_beli_id','desc')->first();
+        $get_max_id = DB::table('rekap_rusak')->orderBy('rekap_rusak_id','desc')->first();
         $user = Auth::id();
-        $data->code = (empty($get_max_id->rekap_beli_id)) ? $urut = "500001". $user : $urut = substr($get_max_id->rekap_beli_code,0,-1)+'1'. $user; 
+        $data->code = (empty($get_max_id->rekap_rusak_id)) ? $urut = "500001". $user : $urut = substr($get_max_id->rekap_rusak_code,0,-1)+'1'. $user; 
         return view('inventori::form_rusak',compact('data'));
     }
 
@@ -26,9 +26,36 @@ class RusakController extends Controller
      * Show the form for creating a new resource.
      * @return Renderable
      */
-    public function create()
+    public function simpan(Request $request)
     {
-        return view('inventori::create');
+        $rekap_rusak = array(
+            'rekap_rusak_code' => $request->rekap_rusak_code,
+            'rekap_rusak_tgl' => $request->rekap_rusak_tgl,
+            'rekap_rusak_m_w_id' => Auth::user()->waroeng_id,
+            'rekap_rusak_created_at' => Carbon::now(),
+            'rekap_rusak_created_by' => Auth::id()
+        );
+
+        $insert = DB::table('rekap_rusak')->insert($rekap_rusak);
+        foreach ($request->rekap_rusak_detail_qty as $key => $value) {
+            $produk = DB::table('m_produk')
+            ->where('m_produk_id',$request->rekap_rusak_detail_m_produk_id[$key])
+            ->first();
+            $data = array(
+                'rekap_rusak_detail_rekap_rusak_code'=> $request->rekap_rusak_code,
+                'rekap_rusak_detail_m_produk_id' => $request->rekap_rusak_detail_m_produk_id[$key],
+                'rekap_rusak_detail_m_produk_code' => $produk->m_produk_code,
+                'rekap_rusak_detail_m_produk_nama' => $produk->m_produk_nama,
+                'rekap_rusak_detail_qty' => $request->rekap_rusak_detail_qty[$key],
+                'rekap_rusak_detail_isi' => $request->rekap_rusak_detail_isi[$key],
+                'rekap_rusak_detail_satuan' => $request->rekap_rusak_detail_satuan[$key],
+                'rekap_rusak_detail_catatan' => $request->rekap_rusak_detail_catatan[$key],
+                'rekap_rusak_detail_created_by' => Auth::id(),
+                'rekap_rusak_detail_created_at' => Carbon::now()
+            );
+            DB::table('rekap_rusak_detail')->insert($data);
+        }
+        return redirect()->back()->with('success', 'your message,here'); 
     }
 
     /**
