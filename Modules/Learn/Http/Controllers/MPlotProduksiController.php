@@ -44,7 +44,6 @@ class MPlotProduksiController extends Controller
                 if (!empty($request->$check)) {
                 }
                 return back()->withErrors($msg);
-                // return response($msg)->json(['message' => $request], 422);
             } elseif (!empty($request->m_plot_produksi_nama)) {
                 if ($request->action == 'add') {
                     $data = array(
