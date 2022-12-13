@@ -27,6 +27,7 @@
                     <form id="formAction" method="post">
                       <div class="mb-4">
                         <input name="id" type="hidden" id="id">
+                        <input name="action" type="hidden" id="action">
                         <div class="form-group">
                           <label for="name">Nama User</label>
                             <div>
@@ -54,10 +55,10 @@
                         <div class="form-group">
                           <label for="roles">Hak Akses</label>
                           <div>
-                              <select class="js-select2" id="roles" name="roles" style="width: 100%;" data-container="#modal-popout" data-placeholder="Choose one..">
+                              <select class="js-select2" id="roles" name="roles" style="width: 100%;" data-container="#modal-popout" data-placeholder="Choose one.." required>
                                   <option></option>
                                   @foreach ($data->roles as $item)
-                                      <option value="{{$item->id}}">{{ $item->name}}</option>
+                                      <option value="{{$item->name}}">{{ $item->name}}</option>
                                   @endforeach
                               </select>
                           </div>
@@ -67,7 +68,7 @@
                         <div class="form-group">
                           <label for="waroeng_id">Wilayah Kerja</label>
                           <div>
-                              <select class="js-select2" id="waroeng_id" name="waroeng_id" style="width: 100%;" data-container="#modal-popout" data-placeholder="Choose one..">
+                              <select class="js-select2" id="waroeng_id" name="waroeng_id" style="width: 100%;" data-container="#modal-popout" data-placeholder="Choose one.." required>
                                   <option></option>
                                   @foreach ($data->waroeng as $item)
                                       <option value="{{$item->m_w_id}}">{{ $item->m_w_nama}}</option>
@@ -77,13 +78,9 @@
                       </div>
                       </div>
                   </div>
-                  <div class="block-content block-content-full block-content-sm text-end border-top">
-                    <button type="button" class="btn btn-alt-secondary" data-bs-dismiss="modal">
-                      Close
-                    </button>
-                    <button type="submit" class="btn btn-alt-success" data-bs-dismiss="modal">
-                      Simpan
-                    </button>
+                  <div class="block-content block-content-full text-end bg-body">
+                    <button type="button" class="btn btn-sm btn-alt-secondary me-1" data-bs-dismiss="modal">Close</button>
+                    <input type="submit" class="btn btn-success" id="submit">
                   </div>
                     </form>
                 </div>
@@ -99,18 +96,23 @@
                 <th>No.</th>
                 <th>NAMA USER</th>
                 <th>EMAIL</th>
+                <th>WAROENG</th>
                 <th>HAK AKSES</th>
                 <th>AKSI</th>
               </tr>
             </thead>
             <tbody id="tablecontents">
+              @php
+                  $no = 1;
+              @endphp
               @foreach ($data->users as $item)
               <tr>
-                <td>{{$item->id}}</td>
+                <td>{{$no++}}</td>
                 <td>{{$item->username}}</td>
                 <td>{{$item->email}}</td>
+                <td>{{$item->m_w_nama}}</td>
                 <td>{{$item->rolename}}</td>
-                <td><a class="btn btn-sm btn-warning"><i class="fa fa-pencil"></i></a>
+                <td><a id="buttonEdit" class="btn btn-sm btn-warning buttonEdit" value="{{$item->id}}"><i class="fa fa-pencil"></i></a>
                   <a class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>
                 </td>
               </tr>
@@ -127,6 +129,11 @@
 @section('js')
 <script type="module">
   $(document).ready(function() {
+    $.ajaxSetup({
+      headers: {
+        'X-CSRF-Token': $("input[name=_token]").val()
+      }
+    });
     Codebase.helpersOnLoad(['jq-select2']);
     var t = $('#user').DataTable();
     $("#user").append(
@@ -135,28 +142,66 @@
 
     $(".buttonInsert").on('click', function() {
             var id = $(this).attr('value');
+            $('#modal-popout form')[0].reset();
+            $('#action').val('add');
             $("#myModalLabel").html('Tambah User');
             $("#modal-popout").modal('show');
+            $("#password").attr('required',true);
       });
       $(".buttonEdit").on('click', function() {
                 var id = $(this).attr('value');
+                $('#modal-popout form')[0].reset();
+                $('#action').val('edit');
                 $("#myModalLabel").html('Ubah User');
-                $("#formAction").attr('action','/master/meja/edit');
+                $('#password').attr('placeholder', 'Masukan Password Untuk Merubah').attr('required',false);
                 $.ajax({
-                    url: "/master/meja/list/"+id,
+                    url: "/users/edit/"+id,
                     type: "GET",
                     dataType: 'json',
                     success: function(respond) {
                       console.log(respond)
-                        $("#id_meja").val(respond.m_meja_id).trigger('change');
-                        $("#nama_meja").val(respond.m_meja_nama).trigger('change');
-                        $("#jenis_meja").val(respond.m_meja_m_meja_jenis_id).trigger('change');
-                        $("#waroeng").val(respond.m_meja_m_w_id).trigger('change');
+                        $("#id").val(respond.id).trigger('change');
+                        $("#name").val(respond.name).trigger('change');
+                        $("#email").val(respond.email).trigger('change');
+                        $("#roles").val(respond.roles).trigger('change');
+                        $("#waroeng_id").val(respond.waroeng_id).trigger('change');
                     },
                     error: function() {
                     }
                 });
-                $("#modal-block-select2").modal('show');
+                $("#modal-popout").modal('show');
+            });
+            $('#formAction').submit( function(e){
+                if(!e.isDefaultPrevented()){
+                    $.ajax({
+                        url : "{{ route('users.action') }}",
+                        type : "POST",
+                        data : $('#modal-popout form').serialize(),
+                        success : function(data){
+                          if (data.error == true) {
+                            alert(data.message.email);
+                          } else {
+                            if (data.action=='edit') {
+                            var msg = "Berhasil Mengubah User";
+                          } else {
+                            var msg = "Berhasil Menambahkan User";
+                          }
+                            $('#modal-popout').modal('hide');
+                            Codebase.helpers('jq-notify', {
+                                align: 'right',             
+                                from: 'top',                
+                                type: 'success',              
+                                icon: 'fa fa-info me-5',    
+                                message: msg
+                            });
+                            setTimeout(function() {
+                              location.reload();
+                          }, 2500);
+                          }
+                        },
+                    });
+                    return false;
+                }
             }); 
   });
 </script>
