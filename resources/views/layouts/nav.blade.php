@@ -371,6 +371,11 @@
                   <span class="nav-main-link-name">Pembelian</span>
                 </a>
               </li>
+              <li class="nav-main-item">
+                <a class="nav-main-link{{ request()->is('invetori/rusak') ? ' active' : '' }}" href="{{route('rusak.index')}}">
+                  <span class="nav-main-link-name">Barang Rusak</span>
+                </a>
+              </li>
             </ul>
           </li>
           <li class="nav-main-item{{ request()->is('akuntansi/*') ? ' open' : '' }}">

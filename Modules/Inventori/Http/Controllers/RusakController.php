@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Users\Http\Controllers;
+namespace Modules\Inventori\Http\Controllers;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
@@ -8,30 +8,18 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
-class UsersController extends Controller
+class RusakController extends Controller
 {
     /**
      * Display a listing of the resource.
      * @return Renderable
      */
     public function index()
-    {   
-        $data = new \stdClass();
-        $data->num = 1;
-        $role = Auth::user()->roles[0]->name;
-        $data->waroeng = DB::table('m_w')->select('m_w_id','m_w_nama')->get();
-        $data->roles = DB::table('roles')->get();
-        $user = DB::table('model_has_roles')
-        ->rightjoin('users','users.id','model_id')
-        ->leftjoin('roles','role_id','roles.id')
-        ->select('users.id as id','users.name as username','roles.name as rolename','email');
-        
-        if ($role == 'admin'||'administrator') {
-            $data->users = $user->orderBy('users.name','ASC')->get();
-        }else{
-            $data->users = $user->where('roles.name','!=','admin')->orderBy('users.name','ASC')->get();
-        }
-        return view('users::index',compact('data'));
+    {   $data = new \stdClass();
+        $get_max_id = DB::table('rekap_beli')->orderBy('rekap_beli_id','desc')->first();
+        $user = Auth::id();
+        $data->code = (empty($get_max_id->rekap_beli_id)) ? $urut = "500001". $user : $urut = substr($get_max_id->rekap_beli_code,0,-1)+'1'. $user; 
+        return view('inventori::form_rusak',compact('data'));
     }
 
     /**
@@ -40,7 +28,7 @@ class UsersController extends Controller
      */
     public function create()
     {
-   
+        return view('inventori::create');
     }
 
     /**
@@ -60,7 +48,7 @@ class UsersController extends Controller
      */
     public function show($id)
     {
-        return view('users::show');
+        return view('inventori::show');
     }
 
     /**
@@ -70,7 +58,7 @@ class UsersController extends Controller
      */
     public function edit($id)
     {
-        return view('users::edit');
+        return view('inventori::edit');
     }
 
     /**
