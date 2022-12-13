@@ -19,17 +19,20 @@
                 </thead>
                     <tbody>
                         <tr>
-                        <td><select class="js-select2 form-control-sm" style="width: 100%;" name="no_rekening[]" id="no_rekening" >
-                          @foreach ($listakt as $lst)
-                          <option value="{{ $lst->list_akt_nama}}"> {{$lst->list_akt_nama}}</option>
-                          @endforeach
-                        </select></td>
                         <td>
-                              <select class="js-select2 form-control-sm" style="width: 100%;" name="no_rekening[]" id="no_rekening" >
-                                @foreach ($data as $item)
-                                <option value="{{ $item->m_rekening_no_akun}}"> {{$item->m_rekening_no_akun}}</option>
-                                @endforeach
-                              </select>
+                          @foreach ($listakt as $lakt)
+                          <input type="text" class="form-control form-control-sm" style="width: 100%"value="{{$lakt->list_akt_nama}}" placeholder="{{$lakt->list_akt_nama}}"
+                          style="width: 100%;" name="list_akt" id="list_akt">
+                          @endforeach
+                        </td>
+                        <td>
+                          @foreach ($listakt as $la)
+                          <select class="js-select2 form-control-sm" style="width: 100%" name="no_rekening[]" id="no_rekening" >
+                            @foreach ($data as $item)
+                            <option value="{{$item->m_rekening_no_akun}}"> {{$item->m_rekening_no_akun}}</option>
+                            @endforeach
+                          </select>
+                          @endforeach
                         </td>
                         <td>
                           {{-- <select class="js-select2 form-control-sm" style="width: 100%;" name="no_rekening[]" id="no_rekening" >
