@@ -104,7 +104,7 @@ class MWaroengController extends Controller
                         'm_w_created_by' => Auth::id(),
                         'm_w_created_at' => Carbon::now(),
                     );
-                    DB::table('m_w')->insert($data);
+                    DB::table('m_w')->whereNull(['m_w_code' => $request->m_w_code])->insert($data);
                 } elseif ($request->action == 'edit') {
                     $data = array(
                         'm_w_nama'    =>    $request->m_w_nama,
