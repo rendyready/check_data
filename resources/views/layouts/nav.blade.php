@@ -363,12 +363,22 @@
             <ul class="nav-main-submenu">
               <li class="nav-main-item">
                 <a class="nav-main-link{{ request()->is('inventori/supplier') ? ' active' : '' }}" href="{{route('supplier.index')}}">
-                  <span class="nav-main-link-name">Supplier</span>
+                  <span class="nav-main-link-name">Supplier & Pelanggan</span>
+                </a>
+              </li>
+              <li class="nav-main-item">
+                <a class="nav-main-link{{ request()->is('invetori/po') ? ' active' : '' }}" href="{{route('po.index')}}">
+                  <span class="nav-main-link-name">Purchase Order (PO)</span>
                 </a>
               </li>
               <li class="nav-main-item">
                 <a class="nav-main-link{{ request()->is('invetori/beli') ? ' active' : '' }}" href="{{route('beli.index')}}">
                   <span class="nav-main-link-name">Pembelian</span>
+                </a>
+              </li>
+              <li class="nav-main-item">
+                <a class="nav-main-link{{ request()->is('invetori/penjualan_inv') ? ' active' : '' }}" href="{{route('penjualan_inv.index')}}">
+                  <span class="nav-main-link-name">Penjualan Barang</span>
                 </a>
               </li>
               <li class="nav-main-item">
@@ -399,7 +409,7 @@
           <li class="nav-main-heading">Pengaturan</li>
           <li class="nav-main-item{{ request()->is('users/*') ? ' open' : '' }}">
             <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
-              <i class="nav-main-link-icon fa fa-lightbulb"></i>
+              <i class="nav-main-link-icon fa fa-user"></i>
               <span class="nav-main-link-name">User</span>
             </a>
             <ul class="nav-main-submenu">
