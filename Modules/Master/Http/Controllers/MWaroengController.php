@@ -7,8 +7,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Validator;
 use illuminate\Support\Str;
-
 
 class MWaroengController extends Controller
 {
@@ -70,14 +70,23 @@ class MWaroengController extends Controller
     }
     public function action(Request $request)
     {
-        $check = Str::upper($request->m_w_nama);
-        $checkUpper = DB::table('m_w')->whereRaw("UPPER(m_w_nama)='{$check}'")->first();
-        if (empty($checkUpper->m_w_nama)) {
+        $raw = [
+            'm_w_nama' => Str::lower($request->m_w_nama),
+            'm_w_alamat' => Str::lower($request->m_w_alamat),
+        ];
+        $val = [
+            'm_w_nama' => ['required',  'unique:m_w', 'max:255'],
+            'm_w_alamat' => ['required'],
+        ];
+        $validate = Validator::make($raw, $val);
+        if ($validate->fails()) {
+            return response()->json(['Errors: Data Duplicate' => $validate->messages()]);
+        } else {
             if ($request->ajax()) {
                 if ($request->action == 'add') {
-                    $request->validate() == $data = array(
+                    $data = array(
                         'm_w_nama' => $request->m_w_nama,
-                        // 'm_w_code' => $request->m_w_code,
+                        // 'm_w_code' => $request->m_w_code->NULL,
                         'm_w_m_area_id' => $request->m_w_m_area_id,
                         'm_w_m_w_jenis_id' => $request->m_w_m_w_jenis_id,
                         'm_w_status' => $request->m_w_status,
@@ -95,7 +104,7 @@ class MWaroengController extends Controller
                         'm_w_created_by' => Auth::id(),
                         'm_w_created_at' => Carbon::now(),
                     );
-                    DB::table('m_w')->insert($data);
+                    DB::table('m_w')->whereNull(['m_w_code' => $request->m_w_code])->insert($data);
                 } elseif ($request->action == 'edit') {
                     $data = array(
                         'm_w_nama'    =>    $request->m_w_nama,
@@ -117,10 +126,8 @@ class MWaroengController extends Controller
                         ->where('m_w_id', $request->m_w_id)
                         ->update($softdelete);
                 }
-            } else {
-                return response()->messages('Duplicate');
+                // return response(['Success' => $data]);
             }
-            return response()->json($request);
         }
     }
 

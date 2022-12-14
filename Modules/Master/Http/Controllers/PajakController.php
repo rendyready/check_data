@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Validator;
 use illuminate\Support\Str;
 
 
@@ -21,17 +22,14 @@ class PajakController extends Controller
     }
     public function action(Request $request)
     {
-        if ($request->ajax()) {
-            $upper = Str::upper($request->m_pajak_value);
-            $check = DB::table('m_pajak')->whereRaw("UPPER(m_pajak_value)='{$upper}'")->first();
-            if (!empty($check->m_pajak_value)) {
-                $request->validate(
-                    [
-                        'm_pajak_value' => ['required', 'unique:m_pajak']
-                    ]
-                );
+        $raw = ['m_pajak_value' => Str::lower($request->m_pajak_value)];
+        $value = ['m_pajak_value' => ['required']];
+        $validate = Validator::make($raw, $value);
+        if ($validate->fails()) {
+            return response(['Errors' => $validate, $validate->messages()]);
+        } else {
+            if ($request->ajax()) {
                 if ($request->action == 'add') {
-
                     $data = array(
                         'm_pajak_value'    =>    $request->m_pajak_value,
                         'm_pajak_created_by' => Auth::id(),
@@ -52,7 +50,7 @@ class PajakController extends Controller
                         ->where('m_pajak_id', $request->id)
                         ->update($softdelete);
                 }
-                return response()->json($request);
+                return response(['Success' => $data]);
             }
         }
     }

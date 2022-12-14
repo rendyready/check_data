@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\MPlotProduksi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use illuminate\Support\Str;
 
 class MPlotProduksiController extends Controller
 {
@@ -20,8 +21,17 @@ class MPlotProduksiController extends Controller
     }
     public function store(Request $request)
     {
-        $validate = Validator::make($request->select(
-            'm_plot_produksi_nama'
-        ))->validate();
+        $raw = [
+            'm_plot_produksi_nama' => Str::lower($request->m_plot_produski),
+        ];
+        $val = ['m_plot_produksi_nama' => ['required', 'unique:m_plot_produksi', 'max:255']];
+        $validate = Validator::make($raw, $val);
+        if ($validate->fails()) {
+            return redirect()->back()
+                ->withErrors($validate)
+                ->withInput();
+        } else {
+            return response(['Success' => $validate]);
+        }
     }
 }
