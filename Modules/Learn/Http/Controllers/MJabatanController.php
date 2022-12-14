@@ -10,6 +10,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use illuminate\Support\Str;
+use illuminate\Support\Facades\Validator;
 
 class MJabatanController extends Controller
 {
@@ -33,34 +34,55 @@ class MJabatanController extends Controller
     // Action
     public function action(Request $request)
     {
+        // $validate = Validator::make(
+        //     $request->all(),
+        //     ['m_level_jabatan_nama' => ['required', 'unique:m_level_jabatan']],
+        //     ['m_level_jabatan_nama.required' => 'Data Tidak Boleh Kosong !']
+        // );
+
         if ($request->ajax()) {
-            $upper = Str::upper($request->m_level_jabatan_nama);
-            $check = DB::table('m_level_jabatan')->whereRaw("UPPER(m_level_jabatan_nama)='{$upper}'")->first();
-            if (!empty($check->m_level_jabatan_nama)) {
-                if ($request->action == 'add') {
-                    $data = array(
-                        'm_level_jabatan_id' => $request->m_level_jabatan_id,
-                        'm_level_jabatan_nama' => $request->m_level_jabatan_nama,
-                        'm_level_jabatan_created_by' => Auth::id(),
-                        'm_level_jabatan_created_at' => Carbon::now(),
-                    );
-                    DB::table('m_level_jabatan')
-                        ->select('m_level_jabatan_id')
-                        ->where('m_level_jabatan_nama')
-                        ->insert($data);
-                } elseif ($request->action == 'edit') {
-                    $data = array(
-                        'm_level_jabatan_id' => $request->m_level_jabatan_id,
-                        'm_level_jabatan_nama' => $request->m_level_jabatan_nama,
-                        'm_level_jabatan_updated_by' => Auth::id(),
-                        'm_level_jabatan_updated_at' => Carbon::now(),
-                    );
-                    DB::table('m_level_jabatan')
-                        ->where('m_level_jabatan_id', $request->m_level_jabatan_id)
-                        // ->where('m_level_jabatan_nama')
-                        ->update($data);
-                    return response()->json($request);
+            $raw = Str::lower($request->m_level_jabatan_nama);
+            $dataRaw = DB::table('m_level_jabatan')->whereRaw("LOWER(m_level_jabatan_nama)='{$raw}'")->first();
+            if (!empty($dataRaw->m_level_jabatan_nama)) {
+                Validator::make($request->all(), [
+                    ['m_level_jabatan_nama' => ['required', 'unique:m_level_jabatan']],
+                    ['m_level_jabatan_nama.required' => 'Data Tidak Boleh Kosong !']
+
+                ])->validate();
+                if ($request->fails()) {
+                    return response()->json([$this->$request]);
+                } else {
+                    return response()->json([
+                        'success' => $request, 'errors' => $request
+                    ]);
                 }
+            }
+
+            return $this;
+
+            if ($request->action == 'add') {
+                $data = array(
+                    'm_level_jabatan_id' => $request->m_level_jabatan_id,
+                    'm_level_jabatan_nama' => $request->m_level_jabatan_nama,
+                    'm_level_jabatan_created_by' => Auth::id(),
+                    'm_level_jabatan_created_at' => Carbon::now(),
+                );
+                DB::table('m_level_jabatan')
+                    ->select('m_level_jabatan_id')
+                    ->where('m_level_jabatan_nama')
+                    ->insert($data);
+            } elseif ($request->action == 'edit') {
+                $data = array(
+                    'm_level_jabatan_id' => $request->m_level_jabatan_id,
+                    'm_level_jabatan_nama' => $request->m_level_jabatan_nama,
+                    'm_level_jabatan_updated_by' => Auth::id(),
+                    'm_level_jabatan_updated_at' => Carbon::now(),
+                );
+                DB::table('m_level_jabatan')
+                    ->where('m_level_jabatan_id', $request->m_level_jabatan_id)
+                    // ->where('m_level_jabatan_nama')
+                    ->update($data);
+                return response()->json($request);
             }
         }
     }
