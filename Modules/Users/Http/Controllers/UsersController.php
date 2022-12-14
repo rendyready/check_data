@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Traits\HasRoles;
+use App\Models\User;
 use Carbon\Carbon;
 class UsersController extends Controller
 {
@@ -24,7 +27,8 @@ class UsersController extends Controller
         $user = DB::table('model_has_roles')
         ->rightjoin('users','users.id','model_id')
         ->leftjoin('roles','role_id','roles.id')
-        ->select('users.id as id','users.name as username','roles.name as rolename','email');
+        ->leftjoin('m_w','waroeng_id','m_w_id')
+        ->select('users.id as id','users.name as username','roles.name as rolename','email','m_w_nama');
         
         if ($role == 'admin'||'administrator') {
             $data->users = $user->orderBy('users.name','ASC')->get();
@@ -38,29 +42,67 @@ class UsersController extends Controller
      * Show the form for creating a new resource.
      * @return Renderable
      */
-    public function create()
+    public function action(Request $request)
     {
-   
-    }
+        $rules = [
+            'email' => 'required|unique:users|max:255'
 
-    /**
-     * Store a newly created resource in storage.
-     * @param Request $request
-     * @return Renderable
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Show the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
-    public function show($id)
-    {
-        return view('users::show');
+        ];
+        $data_validate = array(
+            'email'	=>	strtolower($request->email)
+        );
+        $validator = \Validator::make($data_validate,$rules);
+        if ($validator->fails()) {
+            return response()->json(['error'=>true, 'message'=>$validator->messages()->get('*')]);
+        }
+            if ($request->action == 'add') {
+                $data = array(
+                    'name'    =>    strtolower($request->name),
+                    'email'    =>    strtolower($request->email),
+                    'password'    =>    Hash::make($request->password),
+                    'waroeng_id' => $request->waroeng_id,
+                    'created_by' => Auth::id(),
+                    'created_at' => Carbon::now(),
+                );
+                DB::table('users')->insert($data);
+                $user = DB::table('users')->max('id');
+                DB::table('users')->where('id', $user)->first()->assignRole($request->roles);
+                
+            } elseif ($request->action == 'edit') {
+               if (!empty($request->password)) {
+                $data = array(
+                    'name'    =>    strtolower($request->name),
+                    'email'    =>    strtolower($request->email),
+                    'password' => Hash::make($request->password),
+                    'waroeng_id' => $request->waroeng_id,
+                    'updated_by' => Auth::id(),
+                    'updated_at' => Carbon::now(),
+                );
+               } else {
+                $data = array(
+                    'name'    =>    strtolower($request->name),
+                    'email'    =>    strtolower($request->email),
+                    'waroeng_id' => $request->waroeng_id,
+                    'updated_by' => Auth::id(),
+                    'updated_at' => Carbon::now(),
+                );
+               }
+               
+                DB::table('model_has_roles')->where('model_id',$request->id)->delete();
+                DB::table('users')->where('id', $request->id)
+                    ->update($data);
+                User::where('id', $request->id)->first()->assignRole($request->roles);
+            } else {
+                $data = array(
+                    'deleted_at' => Carbon::now(),
+                    'deleted_by' => Auth::id()
+                );
+                DB::table('users')
+                    ->where('id', $request->id)
+                    ->update($data);
+            }
+            return response()->json($request);
+        
     }
 
     /**
@@ -70,27 +112,11 @@ class UsersController extends Controller
      */
     public function edit($id)
     {
-        return view('users::edit');
-    }
-
-    /**
-     * Update the specified resource in storage.
-     * @param Request $request
-     * @param int $id
-     * @return Renderable
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     * @param int $id
-     * @return Renderable
-     */
-    public function destroy($id)
-    {
-        //
+        $edit = DB::table('model_has_roles')
+        ->rightjoin('users','users.id','model_id')
+        ->leftjoin('roles','role_id','roles.id')
+        ->select('users.id as id','users.name as name','roles.name as roles','email','waroeng_id')
+        ->where('users.id',$id)->first();
+         return response()->json($edit, 200);
     }
 }

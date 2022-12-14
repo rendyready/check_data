@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('rekap_rusak_detail', function (Blueprint $table) {
             $table->id('rekap_rusak_id');
-            $table->bigInteger('rekap_rusak_detal_rekap_rusak_code');
+            $table->string('rekap_rusak_detail_rekap_rusak_code');
             $table->bigInteger('rekap_rusak_detail_m_produk_id');
             $table->string('rekap_rusak_detail_m_produk_code');
             $table->string('rekap_rusak_detail_m_produk_nama');

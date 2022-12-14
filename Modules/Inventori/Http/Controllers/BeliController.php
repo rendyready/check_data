@@ -32,12 +32,16 @@ class BeliController extends Controller
         $data = new \stdClass();
         $nama_barang = DB::table('m_produk')->where('m_produk_m_klasifikasi_produk_id','1')
         ->select('m_produk_id','m_produk_nama')->get();
-        $supplier = DB::table('m_supplier')->get();
+        $supplierku = DB::table('m_supplier')->get();
+        $satuan = DB::table('m_satuan')->get();
         foreach ($nama_barang as $key => $v) {
             $data->barang[$v->m_produk_id]=$v->m_produk_nama;
         }
-        foreach ($supplier as $key => $v) {
+        foreach ($supplierku as $key => $v) {
             $data->supplier[$v->m_supplier_id]=$v->m_supplier_nama;
+        }
+        foreach ($satuan as $key => $v) {
+            $data->satuan[$v->m_satuan_id]=$v->m_satuan_kode;
         }
         return response()->json($data);
     }
@@ -58,7 +62,7 @@ class BeliController extends Controller
             'rekap_beli_supplier_nama' => $request->rekap_beli_supplier_nama,
             'rekap_beli_supplier_telp' => $request->rekap_beli_supplier_telp,
             'rekap_beli_supplier_alamat' => $request->rekap_beli_supplier_alamat,
-            'rekap_beli_m_w_id' => '1',
+            'rekap_beli_m_w_id' => Auth::user()->waroeng_id,
             'rekap_beli_disc' => $request->rekap_beli_disc,
             'rekap_beli_disc_rp' => $request->rekap_beli_disc_rp,
             'rekap_beli_ppn' => $request->rekap_beli_ppn,
@@ -74,11 +78,14 @@ class BeliController extends Controller
 
         $insert = DB::table('rekap_beli')->insert($rekap_beli);
         foreach ($request->rekap_beli_detail_qty as $key => $value) {
+            $produk = DB::table('m_produk')
+            ->where('m_produk_id',$request->rekap_beli_detail_m_produk_id[$key])
+            ->first();
             $data = array(
                 'rekap_beli_detal_rekap_beli_id'=> $request->rekap_beli_code[$key],
                 'rekap_beli_detail_m_produk_id' => $request->rekap_beli_detail_m_produk_id[$key],
-                'rekap_beli_detail_m_produk_code' => "code",
-                'rekap_beli_detail_m_produk_nama' => "nama",
+                'rekap_beli_detail_m_produk_code' => $produk->m_porduk_code,
+                'rekap_beli_detail_m_produk_nama' => $produk->m_produk_nama,
                 'rekap_beli_detail_qty' => $request->rekap_beli_detail_qty[$key],
                 'rekap_beli_detail_satuan' => $request->rekap_beli_detail_catatan[$key],
                 'rekap_beli_detail_harga' => $request->rekap_beli_detail_harga[$key],
