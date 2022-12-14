@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\MJenisProduk;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Validator;
 use illuminate\Support\Str;
 
 class MJenisMenuController extends Controller
@@ -32,10 +33,19 @@ class MJenisMenuController extends Controller
     public function action(Request $request)
     {
         $count = MJenisProduk::max('m_jenis_produk_id');
-        if ($request->ajax()) {
-            $check = Str::upper($request->m_jenis_produk_nama);
-            $checkData = DB::table('m_jenis_produk')->whereRaw("UPPER(m_jenis_produk_nama)='{$check}'")->first();
-            if (!empty($request->validate($checkData->m_jenis_nama_produk))) {
+        $val = [
+            'm_jenis_produk_nama' => Str::lower($request->m_jenis_produk_nama),
+            'm_jenis_produk_odcr55' => Str::lower($request->m_jenis_produk_odcr55),
+        ];
+        $raw = [
+            'm_jenis_produk_nama' => ['required', 'unique:m_jenis_produk', 'max:255'],
+            'm_jenis_produk_odcr55' => ['required'],
+        ];
+        $validate = Validator::make($val, $raw);
+        if ($validate->fails()) {
+            return response(['Errors' => $validate]);
+        } else {
+            if ($request->ajax()) {
                 if ($request->action == 'add') {
                     $data = array(
                         'm_jenis_produk_nama' => $request->m_jenis_produk_nama,
@@ -60,15 +70,13 @@ class MJenisMenuController extends Controller
                         ->where('m_jenis_produk_id', $request->id)
                         ->update($softdelete);
                 }
-            } else {
-                return 'Duplicate';
+                return response(['Success' => $data]);
             }
-            return response()->json($request);
         }
     }
     public function sort(Request $request)
     {
-        $tasks = MJenisProduk::all();
+        $tasks = MJenisProduk::all(); // Really All Data Collect !
 
         foreach ($tasks as $task) {
             $task->timestamps = false; // To disable update_at field updation

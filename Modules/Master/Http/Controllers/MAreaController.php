@@ -22,7 +22,6 @@ class MAreaController extends Controller
     {
         $data = MArea::select('m_area_id', 'm_area_nama', 'm_area_code')->whereNull('m_area_deleted_at')->orderBy('m_area_id', 'asc')->get();
         return view('master::area', compact('data'));
-        // return $this->array_map();
     }
     /**
      * Show the form for creating a new resource.
@@ -39,9 +38,6 @@ class MAreaController extends Controller
             'm_area_nama' => Str::lower($request->m_area_nama),
             'm_area_code' => Str::lower($request->m_area_code),
         ];
-        // if (!empty([$request->m_area_nama, $request->m_area_code])) {
-        //     return response()->json($request->message()->get('*'));
-        // } else {
         $validate = Validator::make($value, $raw);
         if ($validate->fails()) {
             return response()->json($validate->messages()->get('*'));
@@ -76,6 +72,5 @@ class MAreaController extends Controller
                 return response()->json(['Success' => true]);
             }
         }
-        // }
     }
 }

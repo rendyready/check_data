@@ -143,11 +143,11 @@
                 <div class="form-group">
                   <label for="m_produk_hpp">Jenis HPP Produk</label>
                   <div>
-                    <select class="js-select2" id="m_produk_hpp" name="m_produk_id" style="width: 100%;" data-container="#form_produk" data-placeholder="Choose one..">
+                    <select class="js-select2" id="m_produk_hpp" name="m_produk_hpp" style="width: 100%;" data-container="#form_produk" data-placeholder="Choose one..">
                       <option></option>
                       @foreach($data ->produk as $hpp)
                       <option value="{{$hpp->m_produk_hpp}}">{{$hpp->m_produk_hpp}}</option>
-                      @endforeach 
+                      @endforeach
                     </select>
                   </div>
                 </div>
