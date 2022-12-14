@@ -25,6 +25,7 @@ class ResepController extends Controller
             ->get();
         $data->produk = DB::table('m_produk')->get();
         return view('master::m_resep', compact('data'));
+        // return $data;
     }
 
     /**
@@ -34,24 +35,33 @@ class ResepController extends Controller
      */
     public function simpan(Request $request)
     {
-        $value = [
-            'm_produk_nama' => ['required', 'max:255'],
-            'm_resep_keterangan' => ['required', 'max:255'],
-        ];
-        $validate = Validator::make($request, $value);
-        if ($validate->fails()) {
-            return response(['Errors' => $validate]);
-        } else {
-            //
-        }
-        $data = DB::table('m_resep')->insert([
+
+        $expl =  array(
             "m_resep_m_produk_id" => $request->m_resep_m_produk_id,
             "m_resep_keterangan" => $request->m_resep_keterangan,
             "m_resep_status" => $request->m_resep_status,
             "m_resep_created_by" => Auth::id(),
             "m_resep_created_at" => Carbon::now(),
+        );
+        $validate = Validator::make($request->all(), [
+            'm_produk_nama' => ['required', 'max:225'],
+            'm_resep_keterangan' => ['required', 'max:225'],
+            'm_resep_status',
         ]);
-        return Redirect::route('m_resep.index');
+        if ($validate->fails()) {
+            return redirect()->route('m_resep.index')
+                ->withErrors($validate, 302)
+                ->withInput();
+        } else {
+            $data = DB::table('m_resep')->insert([
+                "m_resep_m_produk_id" => $request->m_resep_m_produk_id,
+                "m_resep_keterangan" => $request->m_resep_keterangan,
+                "m_resep_status" => $request->m_resep_status,
+                "m_resep_created_by" => Auth::id(),
+                "m_resep_created_at" => Carbon::now(),
+            ]);
+            return response(['Success' => $data]);
+        }
     }
 
     /**

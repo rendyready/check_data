@@ -50,7 +50,7 @@ class PajakController extends Controller
                         ->where('m_pajak_id', $request->id)
                         ->update($softdelete);
                 }
-                return response(['Success' => $data]);
+                return redirect()->route('m_pajak.index')->with(['Success' => $data]);
             }
         }
     }
