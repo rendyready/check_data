@@ -17,16 +17,20 @@
                             <label class="col-sm-4 col-form-label" for="example-hf-text">Area Waroeng</label>
                             <div class="col-sm-8">
                               <select class="js-select2 form-control-sm" style="width: 100%;" name="kode_waroeng" id="kode_waroeng" data-placeholder="pilih area/waroeng">
-                                @foreach ($data as $item)
+                                @foreach ($waroeng as $item)
+                                @if ($item->m_w_id==$waroeng_id)
+                                <option value="{{ $item->m_w_id}}" selected="selected"> {{$item->m_w_nama}}</option>
+                                @else
                                 <option value="{{ $item->m_w_id}}"> {{$item->m_w_nama}}</option>
+                                @endif
                                 @endforeach
                               </select>
                             </div>
                         </div>
                          <div class="row mb-2">
-                            <label class="col-sm-4 col-form-label" for="example-hf-text">Kode Akun</label>
+                            <label class="col-sm-4 col-form-label" for="example-hf-text">Kategori Akun</label>
                             <div class="col-sm-8">
-                              <select class="js-select2 form-control-sm" style="width: 100%;" name="kode_akun" id="kode_akun" data-placeholder="pilih kode akun">
+                              <select class="js-select2 form-control-sm" style="width: 100%;" name="kode_akun" id="kode_akun" data-placeholder="pilih kategori akun">
                                 <option></option>
                                 <option value="aktiva lancar">Aktiva Lancar</option>
                                 <option value="aktiva tetap">Aktiva Tetap</option>
@@ -71,6 +75,7 @@
                 <div class="table-responsive">
                   <table id="form" class="table table-sm table-bordered table-striped table-vcenter">
                     <thead>
+                      <th>Kategori</th>
                       <th>No Akun</th>
                       <th>Nama Akun</th>
                       <th>Saldo</th>
@@ -78,6 +83,7 @@
                       <tbody>
                         @foreach ($rekening as $rek)
                         <tr>
+                          <td>{{$rek->m_rekening_kategori}}</td>
                           <td>{{$rek->m_rekening_no_akun}}</td>
                           <td>{{$rek->m_rekening_nama}}</td>
                           <td>{{$rek->m_rekening_saldo}}</td>

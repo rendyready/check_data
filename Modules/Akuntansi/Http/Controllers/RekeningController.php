@@ -15,17 +15,21 @@ class RekeningController extends Controller
      * Display a listing of the resource.
      * @return Renderable
      */
-    public function index()
+    public function index(Request $request)
     {
-       
-        $data = DB::table('m_w')
+        if (empty($request->waroeng_id)) {
+            $waroeng_id = Auth::user()->waroeng_id;
+        } else {
+           $waroeng_id= $request->waroeng_id;
+        }
+        $waroeng = DB::table('m_w')
         ->select('m_w_id','m_w_nama')
         ->get();
     
         $rekening = DB::table('m_rekening')
+        ->where('m_rekening_m_w_id',$waroeng_id)
         ->get();
-        // return $data;
-        return view('akuntansi::master.rekening',compact('data','rekening'));
+        return view('akuntansi::master.rekening',compact('waroeng','rekening','waroeng_id'));
 
         // $data = DB::table('m_w')
         // // ->leftjoin('m_w','m_rekening_m_w_id','m_w_id')
@@ -53,7 +57,7 @@ class RekeningController extends Controller
             );
             DB::table('m_rekening')->insert($data);
         }
-        return redirect()->back();
+        return redirect()->route('rek.index',['waroeng_id'=>$request->kode_waroeng]);
     }
 
     /**
