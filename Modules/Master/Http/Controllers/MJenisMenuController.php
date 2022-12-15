@@ -45,7 +45,7 @@ class MJenisMenuController extends Controller
         if ($validate->fails()) {
             return response(['Message' => 'Data Duplidate']);
         } else {
-            if ($validate->ajax()) {
+            if ($request->ajax()) {
                 if ($request->action == 'add') {
                     $data = array(
                         'm_jenis_produk_nama' => $request->m_jenis_produk_nama,
