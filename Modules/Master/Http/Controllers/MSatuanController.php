@@ -30,10 +30,10 @@ class MSatuanController extends Controller
         ];
         $validate = Validator::make($raw, $value);
         if ($validate->fails()) {
-            return response(['Errors: Data Sudah Masuk' => $validate->messages()]);
+            return response(['Message' => 'Data Duplicate ! ']);
         } else {
             if (!empty($validate->$raw)) {
-                if ($request->ajax()) {
+                if ($validate->ajax()) {
                     if ($request->action == 'add') {
                         $data = array(
                             'm_satuan_kode'    =>    $request->m_satuan_kode,

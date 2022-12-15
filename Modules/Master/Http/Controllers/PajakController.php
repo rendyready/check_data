@@ -26,9 +26,9 @@ class PajakController extends Controller
         $value = ['m_pajak_value' => ['required']];
         $validate = Validator::make($raw, $value);
         if ($validate->fails()) {
-            return response(['Errors' => $validate, $validate->messages()]);
+            return response(['Message' => 'Data Duplicate !'])->redirectTo('m_pajak.index');
         } else {
-            if ($request->ajax()) {
+            if ($validate->ajax()) {
                 if ($request->action == 'add') {
                     $data = array(
                         'm_pajak_value'    =>    $request->m_pajak_value,

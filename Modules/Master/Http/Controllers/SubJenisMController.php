@@ -28,9 +28,9 @@ class SubJenisMController extends Controller
         $value = ['m_sub_jenis_produk_nama' => Str::lower($request->m_sub_jenis_produk_nama)];
         $validate = Validator::make($value, $val);
         if ($validate->fails()) {
-            return response(['Errors' => $validate, $validate->messages()]);
+            return response(['Message' => 'Data Duplicate !']);
         } else {
-            if ($request->ajax()) {
+            if ($validate->ajax()) {
                 if ($request->action == 'add') {
                     $data = array(
                         'm_sub_jenis_produk_nama'    =>  Str::lower($request->m_sub_jenis_produk_nama),
@@ -54,7 +54,7 @@ class SubJenisMController extends Controller
                         ->where('id', $request->id)
                         ->update($softdelete);
                 }
-                return response()->json($request);
+                return response(['Success' => $data]);
             }
         }
     }

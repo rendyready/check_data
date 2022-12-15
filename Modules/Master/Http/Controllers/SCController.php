@@ -19,17 +19,18 @@ class SCController extends Controller
     }
     public function action(Request $request)
     {
-        if ($request->ajax()) {
-            $val = [
-                'm_sc_value' => ['required']
-            ];
-            $value = [
-                'm_sc_value' => Str::lower($request->m_sc_value)
-            ];
-            $validate = \Validator::make($request->all(), $val);
-            if ($validate->fails()) {
-                return response(['Errors' => $validate->messages()]);
-            } else {
+
+        $val = [
+            'm_sc_value' => ['required']
+        ];
+        $value = [
+            'm_sc_value' => Str::lower($request->m_sc_value)
+        ];
+        $validate = \Validator::make($request->all(), $val);
+        if ($validate->fails()) {
+            return response(['Message' => 'Data Duplicate !']);
+        } else {
+            if ($validate->ajax()) {
                 if ($request->action == 'add') {
                     $data = array(
                         'm_sc_value'    =>    $request->m_sc_value,
@@ -51,7 +52,7 @@ class SCController extends Controller
                         ->where('id', $request->id)
                         ->update($softdelete);
                 }
-                return response()->json($request);
+                return response(['Success' => $data]);
             }
         }
     }

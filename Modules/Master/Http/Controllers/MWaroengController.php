@@ -80,17 +80,17 @@ class MWaroengController extends Controller
         ];
         $validate = Validator::make($raw, $val);
         if ($validate->fails()) {
-            return response()->json(['Errors: Data Duplicate' => $validate->messages()]);
+            return response()->json(['Message' => 'Data Duplicate']);
         } else {
-            if ($request->ajax()) {
+            if ($validate->ajax()) {
                 if ($request->action == 'add') {
                     $data = array(
-                        'm_w_nama' => $request->m_w_nama,
+                        'm_w_nama' => Str::lower($request->m_w_nama),
                         // 'm_w_code' => $request->m_w_code->NULL,
                         'm_w_m_area_id' => $request->m_w_m_area_id,
                         'm_w_m_w_jenis_id' => $request->m_w_m_w_jenis_id,
                         'm_w_status' => $request->m_w_status,
-                        'm_w_alamat' => $request->m_w_alamat,
+                        'm_w_alamat' => Str::lower($request->m_w_alamat),
                         'm_w_m_kode_nota' => $request->m_w_m_kode_nota,
                         'm_w_m_pajak_id' => $request->m_w_m_pajak_id,
                         'm_w_m_modal_tipe_id' => $request->m_w_m_modal_tipe_id,

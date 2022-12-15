@@ -21,11 +21,11 @@ class TransTipeController extends Controller
     {
         $val = ['m_t_t_name' => ['required', 'unique:m_transaksi_tipe']];
         $value = ['m_t_t_name' => Str::lower($request->m_t_t_name)];
-        $validate = Validator::make($value, $val);
+        $validate = \Validator::make($value, $val);
         if ($validate->fails()) {
-            return response(['Errors' => $validate, $validate->messages('Data Dupliate')]);
+            return response(['Message' => 'Data Dupliate']);
         } else {
-            if ($request->ajax()) {
+            if ($validate->ajax()) {
                 if ($request->action == 'add') {
                     $data = array(
                         'm_t_t_name' => Str::lower($request->m_t_t_name),

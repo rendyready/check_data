@@ -42,7 +42,7 @@ class MAreaController extends Controller
         if ($validate->fails()) {
             return response()->json($validate->messages()->get('*'));
         } else {
-            if ($request->ajax()) {
+            if ($validate->ajax()) {
                 if ($request->action == 'add') {
                     $data = array(
                         'm_area_nama'    =>    $request->m_area_nama,

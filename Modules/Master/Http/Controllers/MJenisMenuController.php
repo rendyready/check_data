@@ -43,9 +43,9 @@ class MJenisMenuController extends Controller
         ];
         $validate = Validator::make($val, $raw);
         if ($validate->fails()) {
-            return response(['Errors' => $validate]);
+            return response(['Message' => 'Data Duplidate']);
         } else {
-            if ($request->ajax()) {
+            if ($validate->ajax()) {
                 if ($request->action == 'add') {
                     $data = array(
                         'm_jenis_produk_nama' => $request->m_jenis_produk_nama,
