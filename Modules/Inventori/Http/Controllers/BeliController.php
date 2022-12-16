@@ -30,7 +30,7 @@ class BeliController extends Controller
     public function list()
     {
         $data = new \stdClass();
-        $nama_barang = DB::table('m_produk')->where('m_produk_m_klasifikasi_produk_id','1')
+        $nama_barang = DB::table('m_produk')
         ->select('m_produk_id','m_produk_nama')->get();
         $supplierku = DB::table('m_supplier')->get();
         $satuan = DB::table('m_satuan')->get();
@@ -84,7 +84,7 @@ class BeliController extends Controller
             $data = array(
                 'rekap_beli_detal_rekap_beli_id'=> $request->rekap_beli_code[$key],
                 'rekap_beli_detail_m_produk_id' => $request->rekap_beli_detail_m_produk_id[$key],
-                'rekap_beli_detail_m_produk_code' => $produk->m_porduk_code,
+                'rekap_beli_detail_m_produk_code' => $produk->m_produk_code,
                 'rekap_beli_detail_m_produk_nama' => $produk->m_produk_nama,
                 'rekap_beli_detail_qty' => $request->rekap_beli_detail_qty[$key],
                 'rekap_beli_detail_satuan' => $request->rekap_beli_detail_catatan[$key],
@@ -99,46 +99,5 @@ class BeliController extends Controller
             DB::table('rekap_beli_detail')->insert($data);
         }
         return redirect()->back()->with('success', 'your message,here'); 
-    }
-
-    /**
-     * Show the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
-    public function show($id)
-    {
-        return view('inventori::show');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
-    public function edit($id)
-    {
-        return view('inventori::edit');
-    }
-
-    /**
-     * Update the specified resource in storage.
-     * @param Request $request
-     * @param int $id
-     * @return Renderable
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     * @param int $id
-     * @return Renderable
-     */
-    public function destroy($id)
-    {
-        //
     }
 }

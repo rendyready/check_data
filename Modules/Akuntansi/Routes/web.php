@@ -2,6 +2,7 @@
 use Illuminate\Support\Facades\Route;
 use Modules\Akuntansi\Http\Controllers\RekeningController;
 use Modules\Akuntansi\Http\Controllers\LinkaktController;
+use Modules\Akuntansi\Http\Controllers\ListaktController;
 
 
 /*
@@ -18,3 +19,6 @@ Route::get('/akuntansi/rekening',[RekeningController::class,'index'])->name('rek
 Route::post('/akuntansi/simpan',[RekeningController::class,'simpan'])->name('rek.simpan');
 
 Route::get('/akuntansi/link_akt',[LinkaktController::class,'index'])->name('rek_link.index');
+
+Route::get('/akuntansi/list_akt',[ListaktController::class,'index'])->name('rek_list.index');
+Route::post('/akuntansi/list_akt/save',[ListaktController::class,'save'])->name('rek_list.save');

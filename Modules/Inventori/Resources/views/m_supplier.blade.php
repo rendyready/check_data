@@ -6,11 +6,10 @@
         <div class="block block-themed h-100 mb-0">
           <div class="block-header bg-pulse">
             <h3 class="block-title">
-              Master Supplier
+              Master Supplier & Pelanggan
           </div>
           <div class="block-content text-muted">
             <a class="btn btn-success mr-2 mb-2 buttonInsert" title="Edit" style="color: #fff"><i class="fa fa-plus mr-5"></i>Supplier</a>
-                <div class="table-responsive">
                 <table id="tb_supplier" class="table table-sm table-bordered table-striped table-vcenter js-dataTable-full">
                     <thead>
                         <th>No</th>
@@ -39,7 +38,7 @@
                       <th>Aksi</th>
                     </tfoot>
                 </table>
-                </div>
+             
             <!-- Select2 in a modal -->
   <div class="modal" id="form-supplier" tabindex="-1" role="dialog" aria-labelledby="form-supplier" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -144,7 +143,7 @@
     Codebase.helpersOnLoad(['jq-notify']);
     var table, save_method;
         $(function() {
-            table = $('.table').DataTable({
+            table = $('#tb_supplier').DataTable({
         "destroy":true,
         "orderCellsTop": true,
         "processing": true,
