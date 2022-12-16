@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Validator;
 use illuminate\Support\Str;
 
 class TransTipeController extends Controller
@@ -18,13 +19,16 @@ class TransTipeController extends Controller
     }
     public function action(Request $request)
     {
-        if ($request->ajax()) {
-            $upper = Str::upper($request->m_t_t_name);
-            $check = DB::table('m_transaksi_tipe')->whereRaw("UPPER(m_t_t_name)='{$upper}'")->first();
-            if (!empty($check->m_t_t_name)) {
+        $val = ['m_t_t_name' => ['required', 'unique:m_transaksi_tipe']];
+        $value = ['m_t_t_name' => Str::lower($request->m_t_t_name)];
+        $validate = \Validator::make($value, $val);
+        if ($validate->fails()) {
+            return response(['Message' => 'Data Dupliate']);
+        } else {
+            if ($validate->ajax()) {
                 if ($request->action == 'add') {
                     $data = array(
-                        'm_t_t_name' => $request->m_t_t_name,
+                        'm_t_t_name' => Str::lower($request->m_t_t_name),
                         'm_t_t_profit_price' => $request->m_t_t_profit_price,
                         'm_t_t_profit_in' => $request->m_t_t_profit_in,
                         'm_t_t_profit_out' => $request->m_t_t_profit_out,
@@ -48,7 +52,7 @@ class TransTipeController extends Controller
                         ->where('m_t_t_id', $request->m_t_t_id)
                         ->update($softdelete);
                 }
-                return response()->json($request);
+                return response(['Congratulations' => $data]);
             }
         }
     }

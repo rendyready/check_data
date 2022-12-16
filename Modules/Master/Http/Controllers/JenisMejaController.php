@@ -38,7 +38,7 @@ class JenisMejaController extends Controller
             return response()->json($validator->messages()->get('*'));
         } else {
             return $validator->messages('success');
-            if ($request->ajax()) {
+            if ($validator->ajax()) {
                 if ($request->action == 'add') {
                     $data = array(
                         'm_meja_jenis_nama'    =>    strtolower($request->m_meja_jenis_nama),

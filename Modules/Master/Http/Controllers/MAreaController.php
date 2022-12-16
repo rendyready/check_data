@@ -32,15 +32,21 @@ class MAreaController extends Controller
     {
         $raw = [
             'm_area_nama' => ['required', 'unique:m_area'],
-            'm_area_code' => ['required', 'unique:m_area'],
+
         ];
         $value = [
             'm_area_nama' => Str::lower($request->m_area_nama),
-            'm_area_code' => Str::lower($request->m_area_code),
+
         ];
-        $validate = Validator::make($value, $raw);
+        $validate = \Validator::make($value, $raw,);
         if ($validate->fails()) {
-            return response()->json($validate->messages()->get('*'));
+            if (!empty($validate->$value)) {
+                return response(['Messages' => 'Data Kosong !']);
+            } elseif ($validate->passes) {
+                return response(['Messages' => true]);
+            }
+            return response(['Messages' => 'Data Duplicate !']);
+            // return response()->json(['message' => $validate], $validate->messages()->get('*'));
         } else {
             if ($request->ajax()) {
                 if ($request->action == 'add') {

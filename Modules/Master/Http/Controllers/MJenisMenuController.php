@@ -43,7 +43,7 @@ class MJenisMenuController extends Controller
         ];
         $validate = Validator::make($val, $raw);
         if ($validate->fails()) {
-            return response(['Errors' => $validate]);
+            return response(['Message' => 'Data Duplidate']);
         } else {
             if ($request->ajax()) {
                 if ($request->action == 'add') {

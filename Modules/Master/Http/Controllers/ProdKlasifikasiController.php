@@ -23,9 +23,9 @@ class ProdKlasifikasiController extends Controller
         $value = ['m_klasifikasi_produk_nama' => ['required', 'unique:m_klasifikasi_produk', 'max:255']];
         $validate = Validator::make($raw, $value);
         if ($validate->fails()) {
-            return response(['Errors' => $validate->messages()]);
+            return response(['Message' => 'Data Duplicate !']);
         } else {
-            if ($request->ajax()) {
+            if ($validate->ajax()) {
                 if ($request->action == 'add') {
                     $data = array(
                         'm_klasifikasi_produk_nama'    =>   Str::lower($request->m_klasifikasi_produk_nama),

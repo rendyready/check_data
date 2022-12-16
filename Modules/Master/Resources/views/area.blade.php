@@ -61,16 +61,26 @@
         ],
       },
       restoreButton: false,
-      onSuccess: function(data, textStatus, jqXHR) {
+      onSuccess: function(data, textStatus, jqXHR, Messages) {
+        Codebase.helpers('jq-notify', {
+          align: 'right', // 'right', 'left', 'center'
+          from: 'top', // 'top', 'bottom'
+          type: 'danger', // 'info', 'success', 'warning', 'danger'
+          icon: 'fa fa-info me-5', // Icon class
+          message: data.Messages
+        });
+        setTimeout(function() {
+          window.location.reload();
+        }, 3300);
         if (data.action == 'add') {
-          // window.location.reload();
-          t.ajax().reload();
+          window.location.reload();
         }
         if (data.action == 'delete') {
           $('#' + data.id).remove();
           t.ajax().reload();
         }
       },
+
 
 
     });
