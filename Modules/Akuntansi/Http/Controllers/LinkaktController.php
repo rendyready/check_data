@@ -15,14 +15,14 @@ class LinkaktController extends Controller
      */
     public function index()
     {
-        $data = DB::table('m_rekening')
-        ->select('m_rekening_id','m_rekening_no_akun','m_rekening_nama')
+        $data = DB::table('link_akt')
+        ->rightjoin('list_akt','list_akt_id','link_akt_list_akt_id')
         ->get();
 
-        $listakt = DB::table('list_akt')
-        ->select('list_akt_id','list_akt_nama')
+        $rekening = DB::table('m_rekening')
         ->get();
-        return view('akuntansi::master.link_akt',compact('data','listakt'));
+        
+        return view('akuntansi::master.link_akt',compact('data','rekening'));
   
     }
 
