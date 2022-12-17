@@ -73,7 +73,14 @@
           window.location.reload();
         }, 3300);
         if (data.action == 'add') {
-          window.location.reload();
+          setTimeout(function() {
+            window.location.reload();
+          }, 3300);
+        }
+        if (data.action == 'edit') {
+          setTimeout(function() {
+            window.location.reload();
+          }, 3300);
         }
         if (data.action == 'delete') {
           $('#' + data.id).remove();
@@ -84,7 +91,7 @@
 
 
     });
-    // $('input').attr('required', true);
+
     $("#sample_data").append(
       $('<tfoot/>').append($("#sample_data thead tr").clone())
     );

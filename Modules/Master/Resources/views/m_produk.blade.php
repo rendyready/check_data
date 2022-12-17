@@ -257,6 +257,16 @@
       $("#myModalLabel").html('Tambah Produk');
       $("#formAction").attr('action', "/master/produk/simpan");
       $("#form_produk").modal('show');
+      Codebase.helpers('jq-notify', {
+        align: 'right',
+        from: 'top',
+        type: 'danger',
+        icon: 'fa fa-info me-5',
+        message: data.Messages
+      });
+      setTimeout(function() {
+        window.location.reload();
+      }, 3300);
     });
     $(".buttonEdit").on('click', function() {
       var id = $(this).attr('value');
@@ -283,8 +293,17 @@
           $("#m_produk_status").val(respond.m_produk_status).trigger('change');
           $("#m_produk_tax").val(respond.m_produk_tax).trigger('change');
           $("#m_produk_urut").val(respond.m_produk_urut).trigger('change');
+          Codebase.helpers('jq-notify', {
+            align: 'right',
+            from: 'top',
+            type: 'danger',
+            icon: 'fa fa-info me-5',
+            message: data.Messages
+          });
+          setTimeout(function() {
+            window.location.reload();
+          }, 3300);
         },
-        error: function() {}
       });
       $("#form_produk").modal('show');
     });

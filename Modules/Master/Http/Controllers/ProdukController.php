@@ -46,25 +46,19 @@ class ProdukController extends Controller
     {
         $raw = [
             'm_produk_code' => ['required', 'unique:m_produk', 'max:255'],
-            'm_produk_nama' => ['required', 'unique:m_produk', 'max:255'],
-            'm_prosuk_cr' => ['required'],
         ];
         $value = [
             "m_produk_code" => Str::lower($request->m_produk_code),
-            "m_produk_nama" => Str::lower($request->m_produk_nama),
-            "m_produk_cr" => Str::lower($request->m_produk_cr),
         ];
         $validate = Validator::make($value, $raw);
         if ($validate->fails()) {
-            return redirect()->route('m_produk.index')
-                ->withErrors($validate)
-                ->withInput();
+            return response(['Messages' => 'Data Duplidate !']);
         } else {
             DB::table('m_produk')->insert([
                 "m_produk_code" => Str::lower($request->m_produk_code),
-                "m_produk_nama" => Str::lower($request->m_produk_nama),
+                "m_produk_nama" => $request->m_produk_nama,
                 "m_produk_urut" => $request->m_produk_urut,
-                "m_produk_cr" => Str::lower($request->m_produk_cr),
+                "m_produk_cr" => $request->m_produk_cr,
                 "m_produk_status" => $request->m_produk_status,
                 "m_produk_tax" => $request->m_produk_tax,
                 "m_produk_sc" => $request->m_produk_sc,
@@ -79,6 +73,7 @@ class ProdukController extends Controller
                 "m_produk_created_at" => Carbon::now(),
             ]);
             return Redirect::route('m_produk.index');
+            return response(['Messages' => true]);
         }
     }
 
@@ -112,19 +107,11 @@ class ProdukController extends Controller
     {
         $rawData = [
             'm_produk_code' => ['required', 'unique:m_produk'],
-            'm_produk_nama' => ['required', 'unique:m_produk', 'max:255'],
-            'm_produk_cd' => ['required'],
         ];
-        $value = [
-            'm_produk_nama' => Str::lower($request->m_produk_nama),
-            'm_produk_code' => Str::lower($request->m_produk_code),
-            'm_produk_cr' => Str::lower($request->m_produk_cr),
-        ];
+        $value = ['m_produk_code' => Str::lower($request->m_produk_code),];
         $validate = Validator::make($value, $rawData);
         if ($validate->fails()) {
-            return redirect()->route('m_produk.index')
-                ->withErrors($validate)
-                ->withInput();
+            return response(['Messages' => 'Data Duplidate !']);
         } else {
             DB::table('m_produk')->where('m_produk_id', $request->m_produk_id)
                 ->update([
@@ -146,7 +133,8 @@ class ProdukController extends Controller
                     "m_produk_updated_at" => Carbon::now(),
                 ]);
         }
-        return Redirect::route('m_produk.index')->with(['Success' => $validate->messages()]);
+        return Redirect::route('m_produk.index');
+        return response(['Messages' => 'Data Update !']);
     }
 
     /**

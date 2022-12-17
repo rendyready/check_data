@@ -30,53 +30,44 @@ class MAreaController extends Controller
      */
     public function action(Request $request)
     {
-        $raw = [
-            'm_area_nama' => ['required', 'unique:m_area'],
 
-        ];
-        $value = [
-            'm_area_nama' => Str::lower($request->m_area_nama),
-
-        ];
-        $validate = \Validator::make($value, $raw,);
-        if ($validate->fails()) {
-            if (!empty($validate->$value)) {
-                return response(['Messages' => 'Data Kosong !']);
-            } elseif ($validate->passes) {
-                return response(['Messages' => true]);
-            }
-            return response(['Messages' => 'Data Duplicate !']);
-            // return response()->json(['message' => $validate], $validate->messages()->get('*'));
-        } else {
-            if ($request->ajax()) {
-                if ($request->action == 'add') {
-                    $data = array(
-                        'm_area_nama'    =>    $request->m_area_nama,
+        if ($request->ajax()) {
+            $raw = ['m_area_nama' => ['required', 'unique:m_area'],];
+            $value = ['m_area_nama' => Str::lower($request->m_area_nama),];
+            if ($request->action == 'add') {
+                $validate = \Validator::make($value, $raw,);
+                if ($validate->fails()) {
+                    return response(['Messages' => 'Data Duplicate !']);
+                } else {
+                    $data = DB::table('m_area')->insert([
+                        'm_area_nama'    =>  Str::lower($request->m_area_nama),
                         'm_area_code'    =>    $request->m_area_code,
                         'm_area_created_by' => Auth::id(),
                         'm_area_created_at' => Carbon::now(),
-                    );
-                    DB::table('m_area')->insert($data);
-                } elseif ($request->action == 'edit') {
-                    $data = array(
-                        'm_area_nama'    =>    $request->m_area_nama,
-                        'm_area_code'    =>    $request->m_area_code,
-                        'm_area_updated_by' => Auth::id(),
-                        'm_area_updated_at' => Carbon::now(),
-                    );
-                    DB::table('m_area')->where('m_area_id', $request->id)
-                        ->update($data);
-                } else {
-                    $data = array(
-                        'm_area_deleted_at' => Carbon::now(),
-                        'm_area_deleted_by' => Auth::id()
-                    );
-                    DB::table('m_area')
-                        ->where('m_area_id', $request->id)
-                        ->update($data);
+                    ]);
                 }
-                return response()->json(['Success' => true]);
+                return response(['Messages' => 'Congratulations !']);
+            } elseif ($request->action == 'edit') {
+                $data = array(
+                    'm_area_nama'    =>    $request->m_area_nama,
+                    'm_area_code'    =>    $request->m_area_code,
+                    'm_area_updated_by' => Auth::id(),
+                    'm_area_updated_at' => Carbon::now(),
+                );
+                DB::table('m_area')->where('m_area_id', $request->id)
+                    ->update($data);
+                return response(['Messages' => 'Data Update !']);
+            } else {
+                $data = array(
+                    'm_area_deleted_at' => Carbon::now(),
+                    'm_area_deleted_by' => Auth::id()
+                );
+                DB::table('m_area')
+                    ->where('m_area_id', $request->id)
+                    ->update($data);
+                return response(['Messages' => 'Data Terhapus !']);
             }
+            return response()->json(['Success' => true]);
         }
     }
 }
