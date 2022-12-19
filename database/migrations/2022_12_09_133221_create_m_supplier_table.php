@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id('m_supplier_id');
             $table->string('m_supplier_code');
             $table->string('m_supplier_nama',255);
+            $table->string('m_supplier_jth_tempo');
             $table->string('m_supplier_alamat',255);
             $table->string('m_supplier_kota',100);
             $table->string('m_supplier_telp',25);

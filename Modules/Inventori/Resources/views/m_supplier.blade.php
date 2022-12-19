@@ -89,6 +89,12 @@
                 </div>
             </div>
             <div class="form-group">
+              <label for="m_supplier_jth_tempo">Durasi Jatuh Tempo Pembayaran</label>
+                <div>
+                  <input class="form-control" type="number" min="0" name="m_supplier_jth_tempo" id="m_supplier_jth_tempo" style="width: 100%;" required>
+                </div>
+          </div>
+            <div class="form-group">
               <label for="m_supplier_rek">No Rekening</label>
                 <div>
                   <input class="form-control" type="number" name="m_supplier_rek" id="m_supplier_rek" style="width: 100%;">
