@@ -19,7 +19,7 @@ class BeliController extends Controller
         
         $get_max_id = DB::table('rekap_beli')->orderBy('rekap_beli_id','desc')->first();
         $user = Auth::id();
-        $data->code = (empty($get_max_id->rekap_beli_id)) ? $urut = "10000001". $user : $urut = substr($get_max_id->rekap_beli_code,0,-1)+'1'. $user; 
+        $data->code = (empty($get_max_id->rekap_beli_id)) ? $urut = "1000001". $user : $urut = substr($get_max_id->rekap_beli_code,0,-1)+'1'. $user; 
         return view('inventori::form_beli',compact('data'));
     }
 
@@ -99,5 +99,15 @@ class BeliController extends Controller
             DB::table('rekap_beli_detail')->insert($data);
         }
         return redirect()->back()->with('success', 'your message,here'); 
+    }
+    public function select(Request $request)
+    {
+        
+       $data = DB::table('m_produk')->whereNotIn('m_produk_id',$request->id)
+       ->select('m_produk_id','m_produk_nama')->get();
+       foreach ($data as $key => $value) {
+        $list[$value->m_produk_id]=$value->m_produk_nama;
+       }
+       return response()->json($list);
     }
 }
