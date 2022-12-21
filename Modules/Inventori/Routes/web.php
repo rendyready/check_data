@@ -13,11 +13,11 @@
 
 Route::prefix('inventori')->group(function() {
     Route::get('/', 'InventoriController@index')-> name('inventori.index');
-});
+}); 
 //Form beli Route
 Route::group(['prefix' => 'inventori', 'controller' => BeliController::class,'middleware' => ['auth','web']], function()
 {
-    Route::get('beli','index')->name('beli.index');
+    Route::get('beli','index')->name('beli.index'); Route::get('beli/select','select')->name('beli.select');
     Route::get('beli/list','list')->name('beli.list');
     Route::post('beli/simpan','simpan')->name('beli.simpan');
 });
@@ -40,10 +40,10 @@ Route::group(['prefix' => 'inventori', 'controller' => PoController::class,'midd
     Route::get('po','index')->name('po.index');
     Route::post('po/simpan','simpan')->name('po.simpan');
 });
-//Form po Route
+//Form penjualan Route
 Route::group(['prefix' => 'inventori', 'controller' => InvPenjualanController::class,'middleware' => ['auth','web']], function()
 {
     Route::get('penjualan_inv','index')->name('penjualan_inv.index');
     Route::get('penjualan_inv/list','list')->name('penjualan_inv.list');
     Route::post('penjualan_inv/simpan','simpan')->name('penjualan_inv.simpan');
-});
+}); 

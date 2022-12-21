@@ -185,18 +185,8 @@
 @section('js')
 <script type="module">
  $(document).ready(function(){
-  function filterItems(items, searchVal) {
-  return items.filter((item) => Object.values(item).includes(searchVal));
-}
-let data = [
-  { "name": "apple", "type": "fruit", "id": 123234 },
-  { "name": "cat", "type": "animal", "id": 98989 },
-  { "name": "something", "type": "other", "id": 656565 }]
+ 
 
-
-console.log("Filtered by name: ", filterItems(data, "apple"));
-console.log("Filtered by type: ", filterItems(data, "animal"));
-console.log("Filtered by id: ", filterItems(data, 98989,656565));
 
   $.ajaxSetup({
     headers:{
@@ -213,7 +203,7 @@ console.log("Filtered by id: ", filterItems(data, 98989,656565));
 	  $('.tambah').on('click',function(){
 	    no++;
 		$('#form').append('<tr id="row'+no+'">'+
-                        '<td><select class="js-select2 nama_barang" name="rekap_beli_detail_m_produk_id[]" id="rekap_beli_detail_m_produk_id'+no+'" style="width: 100%;" data-placeholder="Pilih Nama Barang" required><option></option></select></td>'+
+                        '<td><select class="js-select2 nama_barang" name="rekap_beli_detail_m_produk_id[]" id="rekap_beli_detail_m_produk_id'+no+'" style="width: 100%;" data-placeholder="Pilih Nama Barang" required > <option value="0" selected disabled hidden></option></select></td>'+
                         '<td><textarea class="form-control form-control-sm" name="rekap_beli_detail_catatan[]" id="rekap_beli_detail_catatan" cols="50" required placeholder="catatan bb atau satuan"></textarea></td>'+
                         '<td><input type="number" min="0.01" step="0.01" class="form-control form-control-sm qty" name="rekap_beli_detail_qty[]" id="rekap_beli_detail_qty" required></td>'+
                         '<td><input type="text" class="form-control form-control-sm harga" name="rekap_beli_detail_harga[]" id="rekap_beli_detail_harga" required></td>'+
@@ -221,15 +211,36 @@ console.log("Filtered by id: ", filterItems(data, 98989,656565));
                         '<td><input type="text" class="form-control form-control-sm rupiahdisc" name="rekap_beli_detail_discrp[]" id="rekap_beli_detail_discrp"></td>'+
                         '<td><input type="text" class="form-control form-control-sm subtot" name="rekap_beli_detail_subtot[]" id="rekap_beli_detail_subtot"></td>'+
                         '<td><button type="button" id="'+no+'" class="btn btn-danger btn_remove"><i class="fa fa-trash"></i></button></td></tr>');
-        
-            $.each(barang, function(key, value) {
-            $('#rekap_beli_detail_m_produk_id'+no)
-            .append($('<option>', { value : key })
-            .text(value));
+
     });
-        Codebase.helpersOnLoad(['jq-select2']);
+        $('body').ready(function(){
+        $(document).on('click','.tambah, .btn_remove', function(){
+          var test = $('[name="rekap_beli_detail_m_produk_id[]"]').map(function () {
+                return this.value; // $(this).val()
+          }).get();
+            $.ajax({
+              data: {id:test},
+              url: "{{route('beli.select')}}",
+              type: "get",
+              success: function (data) {
+              $.each(data, function(key, value) {
+              $('#rekap_beli_detail_m_produk_id'+no)
+              .append($('<option>', { value : key })
+              .text(value));
+              Codebase.helpersOnLoad(['jq-select2']);
+              });  
+            }
+            });
         });
-       
+      });
+      $('body').ready(function () {
+        $('select').on('focus',function () {
+         var val_id = $(this).val();
+         console.log(val_id);
+      });
+      });
+      
+
    $.each(barang, function(key, value) {
      $('.nama_barang')
           .append($('<option>', { value : key })
