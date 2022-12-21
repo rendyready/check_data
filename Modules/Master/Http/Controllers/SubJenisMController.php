@@ -24,40 +24,44 @@ class SubJenisMController extends Controller
     }
     public function action(Request $request)
     {
-        $val = ['m_sub_jenis_produk_nama' => ['required', 'unique:m_sub_jenis_produk']];
-        $value = ['m_sub_jenis_produk_nama' => Str::lower($request->m_sub_jenis_produk_nama)];
-        $validate = Validator::make($value, $val);
-        if ($validate->fails()) {
-            return response(['Message' => 'Data Duplicate !']);
-        } else {
-            if ($validate->ajax()) {
-                if ($request->action == 'add') {
+        if ($request->ajax()) {
+            if ($request->action == 'add') {
+                $val = ['m_sub_jenis_produk_nama' => ['required', 'unique:m_sub_jenis_produk']];
+                $value = ['m_sub_jenis_produk_nama' => Str::lower($request->m_sub_jenis_produk_nama)];
+                $validate = \Validator::make($value, $val);
+                if ($validate->fails()) {
+                    return response(['Messages' => 'Data Duplicate !']);
+                } else {
                     $data = array(
                         'm_sub_jenis_produk_nama'    =>  Str::lower($request->m_sub_jenis_produk_nama),
-                        'm_sub_jenis_produk_m_jenis_produk_id' => $request->m_sub_jenis_produk_m_jenis_produk_id,
+                        'm_sub_jenis_produk_m_jenis_produk_id' => $request->array(m_sub_jenis_produk_m_jenis_produk_id, m_sub_jenis_produk),
                         'm_sub_jenis_produk_created_by' => Auth::id(),
                         'm_sub_jenis_produk_created_at' => Carbon::now(),
                     );
-                    DB::table('m_sub_jenis_produk')->insert($data);
-                } elseif ($request->action == 'edit') {
-                    $data = array(
-                        'm_sub_jenis_produk_nama'    =>    $request->m_sub_jenis_produk_nama,
-                        'm_sub_jenis_produk_m_jenis_produk_id' => $request->m_sub_jenis_produk_m_jenis_produk_id,
-                        'm_sub_jenis_produk_updated_by' => Auth::id(),
-                        'm_sub_jenis_produk_updated_at' => Carbon::now(),
-                    );
-                    DB::table('m_sub_jenis_produk')->where('id', $request->id)
-                        ->update($data);
-                } else {
-                    $softdelete = array('m_sub_jenis_produk_deleted_at' => Carbon::now());
-                    DB::table('m_sub_jenis_produk')
-                        ->where('id', $request->id)
-                        ->update($softdelete);
+                    DB::table('m_sub_jenis_produk', 'm_jenis_produk')->insert($data);
+                    return response(['Messages' => 'Congratulations !']);
                 }
-                return response(['Success' => $data]);
+            } elseif ($request->action == 'edit') {
+                $data = array(
+                    'm_sub_jenis_produk_nama'    =>    $request->m_sub_jenis_produk_nama,
+                    'm_sub_jenis_produk_m_jenis_produk_id' => $request->m_sub_jenis_produk_m_jenis_produk_id,
+                    'm_sub_jenis_produk_updated_by' => Auth::id(),
+                    'm_sub_jenis_produk_updated_at' => Carbon::now(),
+                );
+                DB::table('m_sub_jenis_produk', 'm_jenis_produk')->where('m_sub_jenis_produk_m_jenis_produk_id', $request->id)
+                    ->update($data);
+                return response(['Messages' => 'Data Updated !']);
+            } else {
+                $softdelete = array('m_sub_jenis_produk_deleted_at' => Carbon::now());
+                DB::table('m_sub_jenis_produk')
+                    ->where('m_sub_jenis_produk_m_jenis_produk_id', $request->id)
+                    ->update($softdelete);
+                return response(['Messages' => 'Data Deleted !']);
             }
+            return response(['Success' => true]);
         }
     }
+
     public function list()
     {
         $data = new \stdClass();

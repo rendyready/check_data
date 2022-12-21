@@ -59,6 +59,16 @@
       },
       restoreButton: false,
       onSuccess: function(data, textStatus, jqXHR) {
+        Codebase.helpers('jq-notify', {
+          align: 'right',
+          from: 'top',
+          type: 'danger',
+          icon: 'fa fa-info me-5',
+          message: data.Messages
+        });
+        setTimeout(function() {
+          window.location.reload();
+        }, 3000);
         if (data.action == 'add') {
           window.location.reload();
         }
