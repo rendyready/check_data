@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use illuminate\Support\Str;
 use illuminate\Support\Facades\Validator;
 
+use function Symfony\Component\VarDumper\Dumper\esc;
 
 class MAreaController extends Controller
 {
@@ -23,29 +24,6 @@ class MAreaController extends Controller
     {
         $data = MArea::select('m_area_id', 'm_area_nama', 'm_area_code')->whereNull('m_area_deleted_at')->orderBy('m_area_id', 'asc')->get();
         return view('master::area', compact('data'));
-
-
-
-        // $yy = DB::table('m_area')->select('m_area_id', 'm_area_code')->where(['m_area_id' => 9])->first();
-        // $kk = DB::table('m_w')->selectRaw('m_w_m_area_id')
-        //     ->where('m_w_m_area_id', 10)->get()->toArray();
-        // if ($kk == null) {
-        //     return 'Data Delete';
-        // } elseif ($kk == $kk) {
-        //     return 'Data Tak Bisa Delete';
-        // }
-
-        // $count = '601';
-        // $DB = DB::table('m_area')->select('m_area_id')->where('m_area_id', 0)->orderBy('m_area_id', 'asc')->get();
-        // $DBcount = count($DB);
-        // if ($DBcount == 0) {
-        //     return $count;
-        // } elseif ($DBcount == $DBcount) {
-        //     return   $DBcount + 1;
-        // }
-
-
-
     }
 
     public function action(Request $request)
@@ -58,29 +36,14 @@ class MAreaController extends Controller
                 $tb = DB::table('m_area')->selectRaw('m_area_nama')->whereRaw('LOWER(m_area_nama) =' . "'$aa'")->first();
 
                 // Count
-                $count = '601';
-                $DB = DB::table('m_area')->select('m_area_id')->where('m_area_id', 0)->orderBy('m_area_id', 'asc')->get();
-                $DBcount = count($DB);
-                if ($DBcount == 0) {
-                    return $count;
-                } elseif ($DBcount == $DBcount) {
-                    return   $DBcount + 1;
-                }
+                $count = '600';
+                $DB = DB::table('m_area')->count();
+                $areaCode = $count + $DB + 1;
 
                 if ($tb == null) {
                     $data = DB::table('m_area')->insert([
                         'm_area_nama'    => Str::upper(trim($request->m_area_nama)),
-                        'm_area_code'    => function ($request, $data) {
-                            $data = $request->m_area_code;
-                            $count = '601';
-                            $DB = DB::table('m_area')->select('m_area_id')->where('m_area_id', 0)->orderBy('m_area_id', 'asc')->get();
-                            $data = count($DB);
-                            if ($data == 0) {
-                                $data = $count;
-                            } elseif ($data == $data) {
-                                $data = $data + 1;
-                            }
-                        },
+                        'm_area_code'    => $areaCode,
                         'm_area_created_by' => Auth::id(),
                         'm_area_created_at' => Carbon::now(),
                     ]);
