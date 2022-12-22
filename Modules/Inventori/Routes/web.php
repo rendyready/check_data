@@ -47,3 +47,10 @@ Route::group(['prefix' => 'inventori', 'controller' => InvPenjualanController::c
     Route::get('penjualan_inv/list','list')->name('penjualan_inv.list');
     Route::post('penjualan_inv/simpan','simpan')->name('penjualan_inv.simpan');
 }); 
+//Form CHT Route
+Route::group(['prefix' => 'inventori', 'controller' => ChtController::class,'middleware' => ['auth','web']], function()
+{
+    Route::get('cht','index')->name('cht.index');
+    Route::get('cht/list','list')->name('cht.list');
+    Route::post('cht/simpan','simpan')->name('cht.simpan');
+}); 

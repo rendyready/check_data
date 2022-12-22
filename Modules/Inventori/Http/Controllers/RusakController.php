@@ -18,8 +18,11 @@ class RusakController extends Controller
     {   $data = new \stdClass();
         $get_max_id = DB::table('rekap_rusak')->orderBy('rekap_rusak_id','desc')->first();
         $user = Auth::id();
+        $w_id = Auth::user()->waroeng_id;
+        $waroeng_nama = DB::table('m_w')->select('m_w_nama')->where('m_w_id',$w_id)->first();
         $data->code = (empty($get_max_id->rekap_rusak_id)) ? $urut = "500001". $user : $urut = substr($get_max_id->rekap_rusak_code,0,-1)+'1'. $user; 
-        return view('inventori::form_rusak',compact('data'));
+        $data->tgl_now = Carbon::now()->format('Y-m-d');
+        return view('inventori::form_rusak',compact('data','waroeng_nama'));
     }
 
     /**

@@ -53,7 +53,8 @@ class BeliController extends Controller
      * @return Renderable
      */
     public function simpan(Request $request)
-    {
+    {   $terbayar = (empty($request->rekap_beli_terbayar)) ? 0 : $request->rekap_beli_terbayar;
+        $ongkir  = (empty($request->rekap_beli_ongkir)) ? 0 : $request->rekap_beli_ongkir;
         $rekap_beli = array(
             'rekap_beli_code' => $request->rekap_beli_code,
             'rekap_beli_code_nota' => $request->rekap_beli_code_nota,
@@ -68,13 +69,12 @@ class BeliController extends Controller
             'rekap_beli_disc_rp' => $request->rekap_beli_disc_rp,
             'rekap_beli_ppn' => $request->rekap_beli_ppn,
             'rekap_beli_ppn_rp' => $request->rekap_beli_ppn_rp,
-            'rekap_beli_ongkir' => $request->rekap_beli_ongkir,
-            'rekap_beli_terbayar' => $request->rekap_beli_terbayar,
+            'rekap_beli_ongkir' => $ongkir,
+            'rekap_beli_terbayar' => $terbayar,
             'rekap_beli_tersisa' => $request->rekap_beli_tersisa,
             'rekap_beli_tot_nom' => $request->rekap_beli_tot_nom,
             'rekap_beli_created_at' => Carbon::now(),
             'rekap_beli_created_by' => Auth::id()
-
         );
 
         $insert = DB::table('rekap_beli')->insert($rekap_beli);

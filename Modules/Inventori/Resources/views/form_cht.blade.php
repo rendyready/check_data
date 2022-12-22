@@ -6,7 +6,7 @@
         <div class="block block-themed h-100 mb-0">
           <div class="block-header bg-pulse">
             <h3 class="block-title">
-              Form Input Pembelian
+              Form Input CHT
           </div>
           <div class="block-content text-muted">
                 <form id="formAction" action="{{route('beli.simpan')}}" method="post">
@@ -28,59 +28,14 @@
                     </div>
                     <div class="col-md-4">
                         <div class="row mb-1">
-                            <label class="col-sm-5 col-form-label" for="rekap_beli_code">No Nota</label>
-                            <div class="col-sm-7">
-                              <input type="text" class="form-control form-control-sm" id="rekap_beli_code" name="rekap_beli_code" value="{{$data->code}}" readonly>
-                            </div>
-                        </div>
-                        <div class="row mb-1">
-                          <label class="col-sm-5 col-form-label" for="rekap_beli_code_nota">Nota Suplier</label>
-                          <div class="col-sm-7">
-                            <input type="text" class="form-control form-control-sm" id="rekap_beli_code_nota" name="rekap_beli_code_nota" value="" placeholder="Nota Supplier">
-                          </div>
-                      </div>
-                        <div class="row mb-1">
                             <label class="col-sm-5 col-form-label" for="rekap_beli_tgl">Tanggal</label>
                             <div class="col-sm-7">
                               <input type="date" class="form-control form-control-sm" value="{{$data->tgl_now}}" readonly id="rekap_beli_tgl" name="rekap_beli_tgl" required>
                             </div>
                         </div>
-                        <div class="row mb-1">
-                            <label class="col-sm-5 col-form-label" for="rekap_beli_jth_tmp">Jth Tempo</label>
-                            <div class="col-sm-7">
-                              <input type="date" class="form-control form-control-sm" value="{{$data->tgl_now}}" id="rekap_beli_jth_tmp" name="rekap_beli_jth_tmp" readonly required>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-5">
-                        <div class="row mb-2">
-                            <label class="col-sm-4 col-form-label" for="rekap_beli_supplier_id">Kode Supplier</label>
-                            <div class="col-sm-8">
-                              <select class="js-select2 form-control-sm" style="width: 100%;" name="rekap_beli_supplier_id" id="rekap_beli_supplier_id" data-placeholder="pilih supplier" required>
-                              <option></option>
-                              </select>
-                            </div>
-                        </div>
-                        <div class="row mb-1">
-                            <label class="col-sm-4 col-form-label" for="rekap_beli_supplier_nama">Nama</label>
-                            <div class="col-sm-8">
-                              <input type="text" class="form-control supplier form-control-sm" id="rekap_beli_supplier_nama" name="rekap_beli_supplier_nama" readonly required>
-                            </div>
-                        </div>
-                        <div class="row mb-1">
-                            <label class="col-sm-4 col-form-label" for="rekap_beli_supplier_telp">No Telpn</label>
-                            <div class="col-sm-8">
-                              <input type="text" class="form-control supplier form-control-sm" id="rekap_beli_supplier_telp" name="rekap_beli_supplier_telp" readonly required>
-                            </div>
-                        </div>
-                        <div class="row mb-1">
-                            <label class="col-sm-4 col-form-label" for="rekap_beli_supplier_alamat">Alamat</label>
-                            <div class="col-sm-8">
-                             <textarea class="supplier" name="rekap_beli_supplier_alamat" id="rekap_beli_supplier_alamat" cols="30" rows="3" readonly required></textarea>
-                            </div>
-                        </div>
                     </div>
                 </div>
+                <br>
                 <div class="table-responsive">
                 <table id="form" class="table table-sm table-bordered table-striped table-vcenter">
                     <thead>
@@ -171,7 +126,7 @@
                 </div>
                 </div>
                 <div class="block-content block-content-full text-end bg-transparent">
-                    <input type="submit" class="btn btn-sm btn-success btn-save">
+                    <button type="submit" class="btn btn-sm btn-success btn-save">Simpan</button>
                   </div>
                 </div>
                 </form>
@@ -211,13 +166,25 @@
 
     });
         
-    $('#form').on('click select2:open','.tambah', function(){
+    $('#form').on('click select2:open','.tambah, #rekap_beli_detail_m_produk_id'+no, function(){
           Codebase.helpersOnLoad(['jq-select2']);
+          var id = $(this).val();
+          var val_id = $('[name="rekap_beli_detail_m_produk_id[]"]').map(function () {
+                return this.value; // $(this).val()
+          }).get();
               $.each(barang, function(key, value) {
               $('#rekap_beli_detail_m_produk_id'+no)
               .append($('<option>', { value : key })
               .text(value));
               });  
+              $('select > option').removeAttr('disabled');
+                if (id != null) {
+                  $.each(val_id, function(index, value) {
+                    $('select > option').filter(function () {
+                      return $(this).val() == value
+                    }).prop('disabled', true)
+                  });
+              }
         });
    $.each(barang, function(key, value) {
      $('.nama_barang')
@@ -233,6 +200,16 @@
 	$(document).on('click', '.btn_remove', function(){
 		var button_id = $(this).attr("id"); 
 		$('#row'+button_id+'').remove();
+    var val_id = $('[name="rekap_beli_detail_m_produk_id[]"]').map(function () {
+                return this.value; // $(this).val()
+          }).get();
+    $('select > option').removeAttr('disabled');
+      $.each(val_id, function(index, value) {
+       $('select > option').filter(function () {
+              return $(this).val() == value
+          }).prop('disabled', true)
+        });
+    
       var $tblrows = $("#form");
       $tblrows.find('.persendisc').trigger('input');
 	});
@@ -312,15 +289,8 @@
                 });
       }
     });
-    $(document).on('select2:open', '.nama_barang', function(){
-          console.log("Saving value " + $(this).val());
-          var index = $(this).attr('id'); 
-          $(this).data('val', $(this).val());
-          $(this).data('id',index);
-      }).on('change','.nama_barang', function(e){
-          var prev = $(this).data('val');
-          var current = $(this).val();
-          var id = $(this).data('id');
+
+    $('#form').on('change','.nama_barang', function(e) {
       var values = $('[name="rekap_beli_detail_m_produk_id[]"]').map(function() {
         return this.value.trim();
       }).get();
@@ -328,16 +298,15 @@
       if (values.length != unique.length) {
         e.preventDefault();
         alert('Nama Barang Sudah Digunakan Pilih Yang Lain');
-         $('#'+id).val(prev).trigger('change');
       }
-      });
+    });
 
   $(".number").on("keypress", function (evt) {
     if (evt.which != 8 && evt.which != 0 && evt.which < 48 || evt.which > 57)
     {
         evt.preventDefault();
     }
-    });
+    });      
 });
 </script>
 @endsection
