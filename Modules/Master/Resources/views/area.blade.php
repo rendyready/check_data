@@ -57,7 +57,7 @@
         identifier: [0, 'id'],
         editable: [
           [1, 'm_area_nama'],
-          [2, 'm_area_code']
+
         ],
       },
       restoreButton: false,
