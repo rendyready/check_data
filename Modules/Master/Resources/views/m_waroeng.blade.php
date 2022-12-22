@@ -113,7 +113,9 @@
             message: data.Messages
           });
           if (data.action == 'add') {
-            window.location.reload();
+            setTimeout(function() {
+              window.location.reload();
+            }, 3300);
           }
           if (data.action == 'delete') {
             $('#' + data.id).remove();

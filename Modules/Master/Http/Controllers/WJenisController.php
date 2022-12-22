@@ -22,39 +22,40 @@ class WJenisController extends Controller
     public function action(Request $request)
     {
         if ($request->ajax()) {
-            $val = [
-                'm_w_jenis_nama' => ['required', 'unique:m_w_jenis'],
-            ];
-            $value = [
-                'm_w_jenis_nama' => Str::lower($request->m_w_jenis_nama)
-            ];
-            $validate = \Validator::make($value, $val);
-            if ($validate->fails()) {
-                return response(['message' => 'Data Duplicate ! ']);
-            } else {
-                if ($request->action == 'add') {
+            $val = ['m_w_jenis_nama' => ['required', 'unique:m_w_jenis']];
+            $value = ['m_w_jenis_nama' => Str::lower($request->m_w_jenis_nama)];
+            if ($request->action == 'add') {
+
+                $validate = \Validator::make($value, $val);
+                if ($validate->fails()) {
+                    return response(['Messages' => 'Data Duplicate ! ']);
+                } else {
+
                     $data = array(
                         'm_w_jenis_nama'    =>  Str::lower($request->m_w_jenis_nama),
                         'm_w_jenis_created_by' => Auth::id(),
                         'm_w_jenis_created_at' => Carbon::now(),
                     );
                     DB::table('m_w_jenis')->insert($data);
-                } elseif ($request->action == 'edit') {
-                    $data = array(
-                        'm_w_jenis_nama'    =>    $request->m_w_jenis_nama,
-                        'm_w_jenis_updated_by' => Auth::id(),
-                        'm_w_jenis_updated_at' => Carbon::now(),
-                    );
-                    DB::table('m_w_jenis')->where('m_w_jenis_id', $request->m_w_jenis_id)
-                        ->update($data);
-                } else {
-                    $softdelete = array('m_w_jenis_deleted_at' => Carbon::now());
-                    DB::table('m_w_jenis')
-                        ->where('m_w_jenis_id', $request->m_w_jenis_id)
-                        ->update($softdelete);
                 }
-                return response(['Success' => $data]);
+                return response(['Messages' => 'Congratulations !']);
+            } elseif ($request->action == 'edit') {
+                $data = array(
+                    'm_w_jenis_nama'    =>    $request->m_w_jenis_nama,
+                    'm_w_jenis_updated_by' => Auth::id(),
+                    'm_w_jenis_updated_at' => Carbon::now(),
+                );
+                DB::table('m_w_jenis')->where('m_w_jenis_id', $request->m_w_jenis_id)
+                    ->update($data);
+                return response(['Messages' => 'Data Update !']);
+            } else {
+                $softdelete = array('m_w_jenis_deleted_at' => Carbon::now());
+                DB::table('m_w_jenis')
+                    ->where('m_w_jenis_id', $request->m_w_jenis_id)
+                    ->update($softdelete);
+                return response(['Messages' => 'Data Delete !']);
             }
+            return response(['Success' => true]);
         }
     }
 }

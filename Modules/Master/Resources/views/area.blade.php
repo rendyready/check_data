@@ -28,7 +28,7 @@
               @foreach ($data as $item)
               <tr>
                 <td>{{$item->m_area_id}}</td>
-                <td>{{$item->m_area_nama}}</td>
+                <td>{{$item->m_area_nama}} </td>
                 <td>{{$item->m_area_code}}</td>
               </tr>
               @endforeach
@@ -71,20 +71,29 @@
         });
         setTimeout(function() {
           window.location.reload();
-        }, 3300);
+        }, 3000);
         if (data.action == 'add') {
-          window.location.reload();
+          setTimeout(function() {
+            window.location.reload();
+          }, 3000);
+        }
+        if (data.action == 'edit') {
+          setTimeout(function() {
+            window.location.reload();
+          }, 3000);
         }
         if (data.action == 'delete') {
           $('#' + data.id).remove();
-          t.ajax().reload();
+          setTimeout(function() {
+            window.location.reload();
+          });
         }
       },
 
 
 
     });
-    // $('input').attr('required', true);
+
     $("#sample_data").append(
       $('<tfoot/>').append($("#sample_data thead tr").clone())
     );

@@ -21,7 +21,7 @@ class RelasiKatMenuController extends Controller
         $data = new \stdClass();
         $data->relasi = DB::table('config_sub_jenis_produk')
             ->leftjoin('m_produk', 'config_sub_jenis_produk_m_produk_id', 'm_produk_id')
-            ->leftjoin('m_sub_jenis_produk', 'config_sub_jenis_produk_m_kategori_id', 'm_sub_jenis_produk_id')
+            ->leftjoin('m_sub_jenis_produk', 'config_sub_jenis_produk_m_sub_jenis_produk_id', 'm_sub_jenis_produk_id')
             ->get();
         $data->produk = DB::table('m_produk')->get();
         $data->kategori = DB::table('m_sub_jenis_produk')->get();
@@ -37,7 +37,7 @@ class RelasiKatMenuController extends Controller
         //don't need validate
         $data = DB::table('config_sub_jenis_produk')->insert([
             "config_sub_jenis_produk_m_produk_id" => $request->config_sub_jenis_produk_m_produk_id,
-            "config_sub_jenis_produk_m_kategori_id" => $request->config_sub_jenis_produk_m_kategori_id,
+            "config_sub_jenis_produk_m_sub_jenis_produk_id" => $request->config_sub_jenis_produk_m_sub_jenis_produk_id,
             "config_sub_jenis_produk_created_by" => Auth::id(),
             "config_sub_jenis_produk_created_at" => Carbon::now(),
         ]);
@@ -64,7 +64,7 @@ class RelasiKatMenuController extends Controller
     {
         $data = DB::table('config_sub_jenis_produk')->where('config_sub_jenis_produk_id', $request->id)->update([
             "config_sub_jenis_produk_m_produk_id" => $request->config_sub_jenis_produk_m_produk_id,
-            "config_sub_jenis_produk_m_kategori_id" => $request->config_sub_jenis_produk_m_kategori_id,
+            "config_sub_jenis_produk_m_sub_jenis_produk_id" => $request->config_sub_jenis_produk_m_kategori_id,
             "config_sub_jenis_produk_updated_by" => Auth::id(),
             "config_sub_jenis_produk_updated_at" => Carbon::now(),
         ]);

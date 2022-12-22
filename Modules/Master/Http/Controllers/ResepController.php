@@ -35,33 +35,14 @@ class ResepController extends Controller
      */
     public function simpan(Request $request)
     {
-
-        $expl =  array(
+        $data = DB::table('m_resep')->insert([
             "m_resep_m_produk_id" => $request->m_resep_m_produk_id,
             "m_resep_keterangan" => $request->m_resep_keterangan,
             "m_resep_status" => $request->m_resep_status,
             "m_resep_created_by" => Auth::id(),
             "m_resep_created_at" => Carbon::now(),
-        );
-        $validate = Validator::make($request->all(), [
-            'm_produk_nama' => ['required', 'max:225'],
-            'm_resep_keterangan' => ['required', 'max:225'],
-            'm_resep_status',
         ]);
-        if ($validate->fails()) {
-            return redirect()->route('m_resep.index')
-                ->withErrors($validate, 302)
-                ->withInput();
-        } else {
-            $data = DB::table('m_resep')->insert([
-                "m_resep_m_produk_id" => $request->m_resep_m_produk_id,
-                "m_resep_keterangan" => $request->m_resep_keterangan,
-                "m_resep_status" => $request->m_resep_status,
-                "m_resep_created_by" => Auth::id(),
-                "m_resep_created_at" => Carbon::now(),
-            ]);
-            return response(['Success' => $data]);
-        }
+        return response(['Success' => $data]);
     }
 
     /**
