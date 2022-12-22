@@ -19,6 +19,7 @@ class BeliController extends Controller
         
         $get_max_id = DB::table('rekap_beli')->orderBy('rekap_beli_id','desc')->first();
         $user = Auth::id();
+        $data->tgl_now = Carbon::now()->format('Y-m-d'); 
         $data->code = (empty($get_max_id->rekap_beli_id)) ? $urut = "1000001". $user : $urut = substr($get_max_id->rekap_beli_code,0,-1)+'1'. $user; 
         return view('inventori::form_beli',compact('data'));
     }
@@ -86,13 +87,12 @@ class BeliController extends Controller
                 'rekap_beli_detail_m_produk_id' => $request->rekap_beli_detail_m_produk_id[$key],
                 'rekap_beli_detail_m_produk_code' => $produk->m_produk_code,
                 'rekap_beli_detail_m_produk_nama' => $produk->m_produk_nama,
+                'rekap_beli_detail_catatan' => $request->rekap_beli_detail_catatan[$key],
                 'rekap_beli_detail_qty' => $request->rekap_beli_detail_qty[$key],
-                'rekap_beli_detail_satuan' => $request->rekap_beli_detail_catatan[$key],
                 'rekap_beli_detail_harga' => $request->rekap_beli_detail_harga[$key],
                 'rekap_beli_detail_disc' => $request->rekap_beli_detail_disc[$key],
                 'rekap_beli_detail_discrp' => $request->rekap_beli_detail_discrp[$key],
                 'rekap_beli_detail_subtot' => $request->rekap_beli_detail_subtot[$key],
-                'rekap_beli_detail_catatan' => $request->rekap_beli_detail_catatan[$key],
                 'rekap_beli_detail_created_by' => Auth::id(),
                 'rekap_beli_detail_created_at' => Carbon::now()
             );
