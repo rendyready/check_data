@@ -19,9 +19,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $r_b_l_qty
  * @property string $r_b_l_keterangan
  * @property int $r_b_l_m_w_id
- * @property string $r_b_l_m_w_nama
  * @property int $r_b_l_m_area_id
- * @property string $r_b_l_m_area_nama
  * @property string $r_b_l_status_sync
  * @property int $r_b_l_created_by
  * @property int|null $r_b_l_deleted_by
@@ -63,9 +61,7 @@ class RekapBukaLaci extends Model
 		'r_b_l_qty',
 		'r_b_l_keterangan',
 		'r_b_l_m_w_id',
-		'r_b_l_m_w_nama',
 		'r_b_l_m_area_id',
-		'r_b_l_m_area_nama',
 		'r_b_l_status_sync',
 		'r_b_l_created_by',
 		'r_b_l_deleted_by',

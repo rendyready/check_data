@@ -16,7 +16,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property int|null $r_h_t_detail_sync_id
  * @property int $r_h_t_detail_r_h_t_id
  * @property int $r_h_t_detail_m_produk_id
- * @property string $r_h_t_detail_m_produk_name
  * @property int $r_h_t_detail_qty
  * @property float $r_h_t_detail_price
  * @property float $r_h_t_detail_nominal
@@ -64,7 +63,6 @@ class RekapHapusTransaksiDetail extends Model
 		'r_h_t_detail_sync_id',
 		'r_h_t_detail_r_h_t_id',
 		'r_h_t_detail_m_produk_id',
-		'r_h_t_detail_m_produk_name',
 		'r_h_t_detail_qty',
 		'r_h_t_detail_price',
 		'r_h_t_detail_nominal',

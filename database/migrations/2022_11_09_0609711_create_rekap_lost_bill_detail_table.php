@@ -18,14 +18,14 @@ return new class extends Migration
             $table->bigInteger('r_l_b_detail_sync_id')->nullable();
             $table->bigInteger('r_l_b_detail_r_l_b_id');
             $table->bigInteger('r_l_b_detail_m_produk_id');
-            $table->string('r_l_b_detail_m_produk_nama');
+            // $table->string('r_l_b_detail_m_produk_nama');
             $table->decimal('r_l_b_detail_price', 15,2);
             $table->integer('r_l_b_detail_qty');
             $table->decimal('r_l_b_detail_nominal', 15,2)->default(0);
             $table->decimal('r_l_b_detail_nominal_pajak', 15,2)->default(0);
             $table->decimal('r_l_b_detail_nominal_sc', 15,2)->default(0);
             $table->decimal('r_l_b_detail_nominal_sharing_profit', 15,2)->default(0);
-            $table->char('r_l_b_detail_status_sync', 1)->default('0');
+            $table->char('r_l_b_detail_status_sync', 10)->default('0');
             $table->bigInteger('r_l_b_detail_created_by');
             $table->bigInteger('r_l_b_detail_updated_by')->nullable();
             $table->bigInteger('r_l_b_detail_deleted_by')->nullable();

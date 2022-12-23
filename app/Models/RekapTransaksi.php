@@ -15,17 +15,13 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $r_t_id
  * @property int|null $r_t_sync_id
  * @property int $r_t_rekap_modal_id
- * @property int $r_t_m_jenis_nota_id
- * @property string $r_t_m_jenis_nota_nama
  * @property string $r_t_tmp_transaction_id
  * @property string $r_t_nota_code
  * @property string $r_t_bigboss
  * @property Carbon $r_t_tanggal
  * @property time without time zone $r_t_jam
  * @property int $r_t_m_area_id
- * @property string $r_t_m_area_nama
  * @property int $r_t_m_w_id
- * @property string $r_t_m_w_nama
  * @property float $r_t_nominal
  * @property float $r_t_nominal_pajak
  * @property float $r_t_nominal_sc
@@ -45,7 +41,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property float $r_t_nominal_pembulatan_void
  * @property float $r_t_nominal_free_kembalian_void
  * @property int $r_t_m_t_t_id
- * @property string $r_t_m_t_t_name
  * @property string $r_t_status
  * @property string|null $r_t_catatan
  * @property string $r_t_status_sync
@@ -67,7 +62,6 @@ class RekapTransaksi extends Model
 	protected $casts = [
 		'r_t_sync_id' => 'int',
 		'r_t_rekap_modal_id' => 'int',
-		'r_t_m_jenis_nota_id' => 'int',
 		'r_t_jam' => 'time without time zone',
 		'r_t_m_area_id' => 'int',
 		'r_t_m_w_id' => 'int',
@@ -105,17 +99,13 @@ class RekapTransaksi extends Model
 	protected $fillable = [
 		'r_t_sync_id',
 		'r_t_rekap_modal_id',
-		'r_t_m_jenis_nota_id',
-		'r_t_m_jenis_nota_nama',
 		'r_t_tmp_transaction_id',
 		'r_t_nota_code',
 		'r_t_bigboss',
 		'r_t_tanggal',
 		'r_t_jam',
 		'r_t_m_area_id',
-		'r_t_m_area_nama',
 		'r_t_m_w_id',
-		'r_t_m_w_nama',
 		'r_t_nominal',
 		'r_t_nominal_pajak',
 		'r_t_nominal_sc',
@@ -135,7 +125,6 @@ class RekapTransaksi extends Model
 		'r_t_nominal_pembulatan_void',
 		'r_t_nominal_free_kembalian_void',
 		'r_t_m_t_t_id',
-		'r_t_m_t_t_name',
 		'r_t_status',
 		'r_t_catatan',
 		'r_t_status_sync',

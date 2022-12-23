@@ -16,12 +16,12 @@ use Illuminate\Database\Eloquent\Model;
  * @property int|null $r_v_sync_id
  * @property int $r_v_r_t_id
  * @property int $r_v_m_produk_id
- * @property string $r_v_m_produk_nama
  * @property float $r_v_price
  * @property int $r_v_qty
  * @property float $r_v_nominal
  * @property float $r_v_nominal_pajak
  * @property float $r_v_nominal_sc
+ * @property float $r_v_nominal_sharing_profit
  * @property string $r_v_keterangan
  * @property string $r_v_status_sync
  * @property int $r_v_created_by
@@ -48,6 +48,7 @@ class RekapVoid extends Model
 		'r_v_nominal' => 'float',
 		'r_v_nominal_pajak' => 'float',
 		'r_v_nominal_sc' => 'float',
+		'r_v_nominal_sharing_profit' => 'float',
 		'r_v_created_by' => 'int',
 		'r_v_updated_by' => 'int',
 		'r_v_deleted_by' => 'int'
@@ -63,12 +64,12 @@ class RekapVoid extends Model
 		'r_v_sync_id',
 		'r_v_r_t_id',
 		'r_v_m_produk_id',
-		'r_v_m_produk_nama',
 		'r_v_price',
 		'r_v_qty',
 		'r_v_nominal',
 		'r_v_nominal_pajak',
 		'r_v_nominal_sc',
+		'r_v_nominal_sharing_profit',
 		'r_v_keterangan',
 		'r_v_status_sync',
 		'r_v_created_by',

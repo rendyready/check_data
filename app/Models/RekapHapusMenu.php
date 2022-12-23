@@ -20,7 +20,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $r_h_m_nota_code
  * @property string $r_h_m_bigboss
  * @property int $r_h_m_m_produk_id
- * @property string $r_h_m_m_produk_nama
  * @property int $r_h_m_qty
  * @property float $r_h_m_price
  * @property float $r_h_m_nominal
@@ -29,9 +28,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property float $r_h_m_nominal_sharing_profit
  * @property string $r_h_m_keterangan
  * @property int $r_h_m_m_w_id
- * @property string $r_h_m_m_w_nama
  * @property int $r_h_m_m_area_id
- * @property string $r_h_m_m_area_nama
  * @property string $r_h_m_status_sync
  * @property int $r_h_m_created_by
  * @property int|null $r_h_m_updated_by
@@ -81,7 +78,6 @@ class RekapHapusMenu extends Model
 		'r_h_m_nota_code',
 		'r_h_m_bigboss',
 		'r_h_m_m_produk_id',
-		'r_h_m_m_produk_nama',
 		'r_h_m_qty',
 		'r_h_m_price',
 		'r_h_m_nominal',
@@ -90,9 +86,7 @@ class RekapHapusMenu extends Model
 		'r_h_m_nominal_sharing_profit',
 		'r_h_m_keterangan',
 		'r_h_m_m_w_id',
-		'r_h_m_m_w_nama',
 		'r_h_m_m_area_id',
-		'r_h_m_m_area_nama',
 		'r_h_m_status_sync',
 		'r_h_m_created_by',
 		'r_h_m_updated_by',

@@ -18,9 +18,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon $r_u_t_tanggal
  * @property float $r_u_t_nominal
  * @property int $r_u_t_m_w_id
- * @property string $r_u_t_m_w_nama
  * @property int $r_u_t_m_area_id
- * @property string $r_u_t_m_area_nama
  * @property string $r_u_t_keterangan
  * @property string $r_u_t_status_sync
  * @property int $r_u_t_created_by
@@ -62,9 +60,7 @@ class RekapUangTip extends Model
 		'r_u_t_tanggal',
 		'r_u_t_nominal',
 		'r_u_t_m_w_id',
-		'r_u_t_m_w_nama',
 		'r_u_t_m_area_id',
-		'r_u_t_m_area_nama',
 		'r_u_t_keterangan',
 		'r_u_t_status_sync',
 		'r_u_t_created_by',

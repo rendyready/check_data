@@ -20,11 +20,11 @@ return new class extends Migration
             $table->date('r_u_t_tanggal');
             $table->decimal('r_u_t_nominal',8,2);
             $table->bigInteger('r_u_t_m_w_id');
-            $table->string('r_u_t_m_w_nama');
+            // $table->string('r_u_t_m_w_nama');
             $table->bigInteger('r_u_t_m_area_id');
-            $table->string('r_u_t_m_area_nama');
+            // $table->string('r_u_t_m_area_nama');
             $table->string('r_u_t_keterangan');
-            $table->char('r_u_t_status_sync', 1)->default('0');
+            $table->char('r_u_t_status_sync', 10)->default('0');
             $table->bigInteger('r_u_t_created_by');
             $table->bigInteger('r_u_t_updated_by')->nullable();
             $table->bigInteger('r_u_t_deleted_by')->nullable();

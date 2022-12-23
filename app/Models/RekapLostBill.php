@@ -26,9 +26,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property float $r_l_b_nominal_sharing_profit
  * @property string $r_l_b_keterangan
  * @property int $r_l_b_m_w_id
- * @property string $r_l_b_m_w_nama
  * @property int $r_l_b_m_area_id
- * @property string $r_l_b_m_area_nama
  * @property string $r_l_b_status_sync
  * @property int $r_l_b_created_by
  * @property int|null $r_l_b_updated_by
@@ -81,9 +79,7 @@ class RekapLostBill extends Model
 		'r_l_b_nominal_sharing_profit',
 		'r_l_b_keterangan',
 		'r_l_b_m_w_id',
-		'r_l_b_m_w_nama',
 		'r_l_b_m_area_id',
-		'r_l_b_m_area_nama',
 		'r_l_b_status_sync',
 		'r_l_b_created_by',
 		'r_l_b_updated_by',

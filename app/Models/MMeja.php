@@ -17,7 +17,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $m_meja_m_meja_jenis_id
  * @property int $m_meja_m_w_id
  * @property string $m_meja_type
- * @property string $m_meja_status_sync
  * @property int $m_meja_created_by
  * @property int|null $m_meja_updated_by
  * @property int|null $m_meja_deleted_by
@@ -52,7 +51,6 @@ class MMeja extends Model
 		'm_meja_m_meja_jenis_id',
 		'm_meja_m_w_id',
 		'm_meja_type',
-		'm_meja_status_sync',
 		'm_meja_created_by',
 		'm_meja_updated_by',
 		'm_meja_deleted_by',

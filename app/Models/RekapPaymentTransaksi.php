@@ -15,9 +15,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $r_p_t_id
  * @property int|null $r_p_t_sync_id
  * @property int $r_p_t_r_t_id
- * @property string $r_p_t_type
+ * @property string $r_p_t_payment_method_id
  * @property float $r_p_t_nominal
- * @property string|null $r_p_t_vendor
  * @property string $r_p_t_status_sync
  * @property int $r_p_t_created_by
  * @property int|null $r_p_t_updated_by
@@ -52,9 +51,8 @@ class RekapPaymentTransaksi extends Model
 	protected $fillable = [
 		'r_p_t_sync_id',
 		'r_p_t_r_t_id',
-		'r_p_t_type',
+		'r_p_t_payment_method_id',
 		'r_p_t_nominal',
-		'r_p_t_vendor',
 		'r_p_t_status_sync',
 		'r_p_t_created_by',
 		'r_p_t_updated_by',
