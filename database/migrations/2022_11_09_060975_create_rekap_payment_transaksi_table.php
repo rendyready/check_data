@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id('r_p_t_id');
             $table->bigInteger('r_p_t_sync_id')->nullable();
             $table->bigInteger('r_p_t_r_t_id');
-            $table->string('r_p_t_payment_method_id');
+            $table->string('r_p_t_m_payment_method_id');
             $table->decimal('r_p_t_nominal', 15,2);
             $table->char('r_p_t_status_sync', 10)->default('0');
             $table->bigInteger('r_p_t_created_by');
