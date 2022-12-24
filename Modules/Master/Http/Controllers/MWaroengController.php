@@ -70,23 +70,31 @@ class MWaroengController extends Controller
     }
     public function action(Request $request)
     {
-        $raw = [
-            'm_w_nama' => Str::lower($request->m_w_nama),
-
-        ];
-        $val = [
-            'm_w_nama' => ['required',  'unique:m_w', 'max:255'],
-
-        ];
-        $validate = \Validator::make($raw, $val);
-        if ($validate->fails()) {
-            return response(['Messages' => 'Data Duplicate !']);
-        } else {
-            if ($request->ajax()) {
-                if ($request->action == 'add') {
+        // Validatea Data 
+        $MMeja = DB::table('m_meja')->select('m_meja_m_w_id')
+            ->where('m_meja_m_w_id', 1)
+            ->orderBy('m_meja_id', 'asc')->first();
+        $RekapBeli = DB::table('rekap_beli')->select('rekap_beli_m_w_id')
+            ->where('rekap_beli_m_w_id', 2)->orderby('rekap_beli_id', 'asc')->first();
+        $RekapRusak = DB::table('rekap_rusak')->select('rekap_rusak_m_w_id')
+            ->where('rekap_rusak_m_w_id', 2)->orderBy('rekap_rusak_id')->first();
+        // Validate Edit
+        $dataAdd = DB::table('m_w')->select('m_w_id')->where('m_w_id', 2)->orderBy('m_w_id', 'asc')->first();
+        if ($request->ajax()) {
+            if ($request->action == 'add') {
+                //Validate
+                $fromData = $request->m_w_nama;
+                $dataLower = Str::lower(trim($fromData));
+                $dbMW = DB::table('m_w')->select('m_w_nama')
+                    ->where(Str::lower('m_w_nama'), preg_replace(array('/\s{2,}/', '/[\t\n]/'), ' ', $dataLower))
+                    ->first();
+                if ($dbMW == null) {
+                    $MCode = '0';
+                    $countMW = DB::table('m_w')->count('m_w_id');
+                    $MWcode = $MCode + $countMW + 1;
                     $data = array(
                         'm_w_nama' => Str::lower($request->m_w_nama),
-                        'm_w_code' => $request->m_w_code,
+                        'm_w_code' => $MWcode,
                         'm_w_m_area_id' => $request->m_w_m_area_id,
                         'm_w_m_w_jenis_id' => $request->m_w_m_w_jenis_id,
                         'm_w_status' => $request->m_w_status,
@@ -105,29 +113,30 @@ class MWaroengController extends Controller
                         'm_w_created_at' => Carbon::now(),
                     );
                     DB::table('m_w')->insert($data);
-                } elseif ($request->action == 'edit') {
-                    $data = array(
-                        'm_w_nama'    =>    $request->m_w_nama,
-                        'm_w_alamat'    =>    $request->m_w_alamat,
-                        'm_w_m_area_id' => $request->m_w_m_area_id,
-                        'm_w_m_w_jenis_id' => $request->m_w_m_w_jenis_id,
-                        'm_w_m_pajak_id' => $request->m_w_m_pajak_id,
-                        'm_w_m_sc_id' => $request->m_w_m_sc_id,
-                        'm_w_m_jenis_nota_id' => $request->m_w_m_jenis_nota_id,
-                        'm_w_m_modal_tipe_id' => $request->m_w_m_modal_tipe_id,
-                        'm_w_updated_by' => Auth::id(),
-                        'm_w_updated_at' => Carbon::now(),
-                    );
-                    DB::table('m_w')->where('m_w_id', $request->m_w_id)
-                        ->update($data);
-                } else {
-                    $softdelete = array('m_w_deleted_at' => Carbon::now());
-                    DB::table('m_pajak')
-                        ->where('m_w_id', $request->m_w_id)
-                        ->update($softdelete);
+                    return response(['Messages' => 'Data Tambah !']);
                 }
-                return response(['Messages' => $data]);
+            } elseif ($request->action == 'edit') {
+                $data = array(
+                    'm_w_nama'    =>    $request->m_w_nama,
+                    'm_w_alamat'    =>    $request->m_w_alamat,
+                    'm_w_m_area_id' => $request->m_w_m_area_id,
+                    'm_w_m_w_jenis_id' => $request->m_w_m_w_jenis_id,
+                    'm_w_m_pajak_id' => $request->m_w_m_pajak_id,
+                    'm_w_m_sc_id' => $request->m_w_m_sc_id,
+                    'm_w_m_jenis_nota_id' => $request->m_w_m_jenis_nota_id,
+                    'm_w_m_modal_tipe_id' => $request->m_w_m_modal_tipe_id,
+                    'm_w_updated_by' => Auth::id(),
+                    'm_w_updated_at' => Carbon::now(),
+                );
+                DB::table('m_w')->where('m_w_id', $request->m_w_id)
+                    ->update($data);
+            } else {
+                $softdelete = array('m_w_deleted_at' => Carbon::now());
+                DB::table('m_pajak')
+                    ->where('m_w_id', $request->m_w_id)
+                    ->update($softdelete);
             }
+            return response(['Messages' => $data]);
         }
     }
 
