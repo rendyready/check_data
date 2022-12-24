@@ -15,8 +15,8 @@ class BeliController extends Controller
      * @return Renderable
      */
     public function index()
-    {   $data = new \stdClass();
-        
+    {   
+        $data = new \stdClass();
         $get_max_id = DB::table('rekap_beli')->orderBy('rekap_beli_id','desc')->first();
         $user = Auth::id();
         $data->tgl_now = Carbon::now()->format('Y-m-d'); 
@@ -83,7 +83,7 @@ class BeliController extends Controller
             ->where('m_produk_id',$request->rekap_beli_detail_m_produk_id[$key])
             ->first();
             $data = array(
-                'rekap_beli_detal_rekap_beli_id'=> $request->rekap_beli_code[$key],
+                'rekap_beli_detail_rekap_beli_code'=> $request->rekap_beli_code,
                 'rekap_beli_detail_m_produk_id' => $request->rekap_beli_detail_m_produk_id[$key],
                 'rekap_beli_detail_m_produk_code' => $produk->m_produk_code,
                 'rekap_beli_detail_m_produk_nama' => $produk->m_produk_nama,

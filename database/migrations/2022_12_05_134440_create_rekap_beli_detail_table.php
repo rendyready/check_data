@@ -14,8 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::create('rekap_beli_detail', function (Blueprint $table) {
-            $table->id('rekap_beli_detal_id');
-            $table->bigInteger('rekap_beli_detal_rekap_beli_id');
+            $table->id('rekap_beli_detail_id');
+            $table->string('rekap_beli_detail_rekap_beli_code');
             $table->bigInteger('rekap_beli_detail_m_produk_id');
             $table->string('rekap_beli_detail_m_produk_code');
             $table->string('rekap_beli_detail_m_produk_nama');

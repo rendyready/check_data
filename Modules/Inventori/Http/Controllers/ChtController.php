@@ -15,8 +15,21 @@ class ChtController extends Controller
      * @return Renderable
      */
     public function index()
-    {   $data = new \stdClass();
+    {   
+        $data = new \stdClass();
         $data->tgl_now = Carbon::now()->format('Y-m-d');
+        $waroeng_id = Auth::user()->waroeng_id;
+        $data->nama_waroeng = DB::table('m_w')->select('m_w_nama')->where('m_w_id',$waroeng_id)->first();
+        $data->satuan = DB::table('m_satuan')->get();
+        $data->cht = DB::table('rekap_beli_detail')
+        ->select('rekap_beli_detail_id','rekap_beli_supplier_nama','rekap_beli_detail_m_produk_nama',
+                 'rekap_beli_detail_catatan','rekap_beli_detail_qty','m_satuan_kode')
+        ->leftjoin('rekap_beli','rekap_beli_code','rekap_beli_detail_rekap_beli_code')
+        ->leftjoin('m_produk','rekap_beli_detail_m_produk_id','m_produk_id')
+        ->leftjoin('m_satuan','m_produk_m_satuan_id','m_satuan_id')
+        ->where('rekap_beli_tgl',$data->tgl_now)
+        ->where('rekap_beli_m_w_id',$waroeng_id)
+        ->get();
         return view('inventori::form_cht',compact('data'));
     }
 
