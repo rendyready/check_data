@@ -3,7 +3,6 @@
 namespace Modules\Master\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Http\Middleware\TrustHosts;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,21 +15,28 @@ class WJenisController extends Controller
 {
     public function index()
     {
-        $data = DB::table('m_w_jenis')->whereNull('m_w_jenis_deleted_at')->get();
+        $data = DB::table('m_w_jenis')->whereNull('m_w_jenis_deleted_at')->orderBy('m_w_jenis_id', 'asc')->get();
         return view('master::jenis_waroeng', compact('data'));
 
 
-        // $destroy = DB::table('m_w_jenis')->select('m_w_jenis_id', 'm_w_jenis_nama')
-        //     ->where('m_w_jenis_id', 2)
-        //     ->first();
-        // $delCheck = DB::table('m_w')->selectRaw('m_w_m_w_jenis_id')
-        //     ->where('m_w_m_w_jenis_id', $destroy)->first();
-        // if ($delCheck == null) {
-        //     return response(['Messages' => 'Data asa Delete !']);
-        // } elseif ($delCheck == $delCheck) {
-        //     return response(['Messages' => 'Tidak Bisa Data Delete !']);
-        // }
-        // return $destroy;
+
+
+
+        // $dafuk = DB::raw('Waroeng Mandiri');
+        // $test = DB::table('m_area')->select('m_area_nama')
+        //     ->where(DB::raw('"m_area_nama"'), '=', "$dafuk")
+        //     ->get();
+
+        // $raw = DB::table('m_w_jenis')
+        //     ->crossJoin('m_w')
+        //     ->selectRaw("m_w_jenis_id,m_w_jenis_nama")->whereRaw("m_w_jenis.m_w_jenis_id= m_w.m_w_m_w_jenis_id")
+        //     ->where(DB::raw('m_w_jenis.m_w_jenis_nama'), '=', "$dafuk")
+        //     ->get();
+        // $test = Str::lower($dafuk);
+        // // $has = $raw = $dafuk;
+        // echo '<pre>';
+        // return var_dump(['data' => $test]);
+        // echo '</pre>';
     }
     public function action(Request $request)
     {
@@ -54,16 +60,20 @@ class WJenisController extends Controller
                     return response(['Messages' => 'Data jenis Waroeng Update !']);
                 }
             } elseif ($request->action == 'edit') {
-                $raw = Str::upper(preg_replace(array('/\s{2,}/', '/[\t\n]/'), ' ', $request->m_w_jenis_nama));
+                // return 'edit';
+                $raw = $request->m_w_jenis_nama;
                 $editRaw = Str::lower(trim($raw));
-                $editUpdate = DB::table('m_w_jenis')->selectRaw('m_w_jenis_nama')->whereRaw('LOWER(m_w_jenis_nama)' . "'$editRaw'")->orderBy('m_w_jenis_nama', 'asc');
-                if (!empty($raw == null)) {
+                $editUpdate = DB::table('m_w_jenis')->select('m_w_jenis_nama')
+                    ->whereRaw('LOWER(m_w_jenis_nama)', "'$editRaw'")
+                    ->orderBy('m_w_jenis_nama', 'asc')->first();
+                $nameData = Str::upper(preg_replace(array('/\s{2,}/', '/[\t\n]/'), ' ', $raw));
+                if (!empty($nameData == null)) {
                     return response(['Messages' => 'Data Tidak Boleh Kosong !']);
-                } elseif ($editUpdate == $editUpdate) {
+                } elseif ($editUpdate != null) {
                     return response(['Messages' => 'Data Duplicate !']);
                 } else {
                     $data = array(
-                        'm_w_jenis_nama' => $raw,
+                        'm_w_jenis_nama' => $nameData,
                         'm_w_jenis_updated_by' => Auth::id(),
                         'm_w_jenis_updated_at' => Carbon::now(),
                     );
@@ -71,29 +81,30 @@ class WJenisController extends Controller
                         ->update($data);
                     return response(['Messages' => 'Data update !']);
                 }
-                return response(['Messages' => 'Data error !']);
+                // return response(['Messages' => 'Data error !']);
             } else {
-                $destroy = $request->id;
-                $delCheck = DB::table('m_w')->select('m_w_m_w_jenis_id')
-                    ->where('m_w_m_w_jenis_id', $destroy)
-                    ->whereNull('m_w_deleted_at')->first();
-                if ($delCheck == null) {
+                $dataChk =  DB::raw('Waroeng Mandiri');
+                $dataChk = Str::lower($dataChk);
+                $delCheck =  DB::table('m_w_jenis')
+                    ->crossJoin('m_w')
+                    ->selectRaw("m_w_jenis_id,m_w_jenis_nama")->whereRaw("m_w_jenis.m_w_jenis_id= m_w.m_w_m_w_jenis_id")
+                    ->where(DB::raw('m_w_jenis.m_w_jenis_nama'), '=', "$dataChk")
+                    ->get();
+                $delCheck = Str::lower($delCheck);
+                if ($delCheck = null) {
                     $data = array(
                         'm_w_jenis_deleted_at' => Carbon::now(),
                         'm_w_jenis_deleted_by' => Auth::id(),
                     );
+
                     DB::table('m_w_jenis')
-                        ->where('m_w_jenis_id', $destroy)
+                        ->where('m_w_jenis_id', $request->m_w_jenis_id)
                         ->update($data);
                     return response(['Messages' => 'Data Delete !']);
-                } elseif ($delCheck == true) {
+                } elseif ($delCheck) {
                     return response(['Messages' => 'Tidak Bisa Data Delete !']);
                 }
-                // $softdelete = array('m_w_jenis_deleted_at' => Carbon::now());
-                // DB::table('m_w_jenis')
-                //     ->where('m_w_jenis_id', $request->m_w_jenis_id)
-                //     ->update($softdelete);
-                // return response(['Messages' => 'Data Delete !']);
+                return $delCheck = $delCheck->toSql();
             }
         }
     }
