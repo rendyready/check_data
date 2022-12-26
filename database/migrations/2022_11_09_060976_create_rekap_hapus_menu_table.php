@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id('r_h_m_id');
             $table->bigInteger('r_h_m_sync_id')->nullable();
             $table->bigInteger('r_h_m_rekap_modal_id');
+            $table->string('r_h_m_tmp_transaction_id');
             $table->date('r_h_m_tanggal');
             $table->time('r_h_m_jam');
             $table->string('r_h_m_nota_code');
