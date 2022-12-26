@@ -33,9 +33,33 @@ class ProdukController extends Controller
         return view('master::m_produk', compact('data'));
 
 
-        echo "<pre>";
-        dd($data);
-        echo "</pre>";
+
+        // echo '<pre>';
+        // var_dump($data);
+        // echo '</pre>';
+        // Test
+        $produkCode = Str::lower(preg_replace(array('/\s{2,}/', '/[\t\n]/'), ' ', DB::raw('Fg-11-000-018')));
+        $produkNama = Str::lower(preg_replace(array('/\s{2,}/', '/[\t\n]/'), ' ', DB::raw('SaMBAl                    bAJaK')));
+        $produkUrut = Str::lower(preg_replace(array('/\s{2,}/', '/[\t\n]/'), ' ', DB::raw('001-001')));
+        $check = DB::table('m_produk')
+            ->selectRaw('m_produk_code,m_produk_urut')
+            ->selectRaw('m_produk_nama')
+            ->whereRaw(
+                'LOWER(m_produk_code)=' . "'$produkCode'"
+            )->whereRaw(
+                'LOWER(m_produk_urut)=' . "'$produkUrut'"
+            )->whereRaw(
+                'LOWER(m_produk_nama)=' . "'$produkNama'"
+            )
+            ->orderBy('m_produk_id', 'asc')
+            ->get();
+        if ($check == true) {
+            return  ['Data' => 'Data Double Kak !', $check];
+        } else {
+            return  ['Data' => 'Yuk Kak !', $check];
+        }
+
+        // return $check;
     }
 
     /**
@@ -44,15 +68,17 @@ class ProdukController extends Controller
      */
     public function simpan(request $request)
     {
-        $raw = [
-            'm_produk_code' => ['required', 'unique:m_produk', 'max:255'],
-        ];
-        $value = [
-            "m_produk_code" => Str::lower($request->m_produk_code),
-        ];
-        $validate = Validator::make($value, $raw);
-        if ($validate->fails()) {
-            return response(['Messages' => 'Data Duplidate !']);
+        $produkCode = Str::upper(preg_replace(array('/\s{2,}/', '/[\t\n]/'), ' ', $request->m_produk_code));
+        $produkNama = Str::upper(preg_replace(array('/\s{2,}/', '/[\t\n]/'), ' ', $request->m_produk_nama));
+        $produkUrut = Str::upper(preg_replace(array('/\s{2,}/', '/[\t\n]/'), ' ', $request->m_produk_urut));
+
+        $check = DB::table('m_produk')->select('m_produk_coode', 'm_produk_nama', 'm_produk_urut') //select 
+            ->where(['m_produk_code' => $produkCode] . ['m_produk_nama' => $produkNama], ['m_produk_urut' => $produkUrut]) //data
+            ->whereNull('m_produk_deleted_at')
+            ->orderBy('m_produk_id', 'asc')
+            ->first();
+        if ($check) {
+            return response(['Messages' => 'Data Duplicate !']);
         } else {
             DB::table('m_produk')->insert([
                 "m_produk_code" => Str::lower($request->m_produk_code),
@@ -72,8 +98,9 @@ class ProdukController extends Controller
                 "m_produk_created_by" => Auth::id(),
                 "m_produk_created_at" => Carbon::now(),
             ]);
-            return Redirect::route('m_produk.index');
+            return Redirect::route('/master/produk/edit');
             return response(['Messages' => true]);
+            // return response(['Messages' => 'Data Errors !']);
         }
     }
 

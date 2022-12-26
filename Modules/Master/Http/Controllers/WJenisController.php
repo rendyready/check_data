@@ -46,7 +46,7 @@ class WJenisController extends Controller
                 $chkEdit = DB::table('m_w_jenis')
                     ->crossJoin('m_w')
                     ->selectRaw("m_w_jenis_id,LOWER(m_w_jenis_nama)")
-                    ->whereRaw("m_w_jenis.m_w_jenis_id= m_w.m_w_m_w_jenis_id")
+                    // ->whereRaw("m_w_jenis.m_w_jenis_id= m_w.m_w_m_w_jenis_id")
                     ->where(DB::raw('LOWER(m_w_jenis_nama)'), $nameData)
                     ->first();
                  $nameDatap = Str::upper(preg_replace(array('/\s{2,}/', '/[\t\n]/'), ' ', $raw));

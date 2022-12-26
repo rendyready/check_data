@@ -157,11 +157,11 @@
                   <label for="m_produk_status">Produk SCP</label>
                   <div class="space-x-2">
                     <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio" id="m_produk_scp1" name="m_produk_scp" value="Ya">
+                      <input class="form-check-input" type="radio" id="m_produk_scp1" name="m_produk_scp" value="Ya" checked>
                       <label class="form-check-label" for="m_produk_scp1">Ya</label>
                     </div>
                     <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio" id="m_produk_scp0" name="m_produk_scp" value="Tidak">
+                      <input class="form-check-input" type="radio" id="m_produk_scp0" name="m_produk_scp" value="Tidak" checked>
                       <label class="form-check-label" for="m_produk_scp0">Tidak</label>
                     </div>
                   </div>
@@ -172,11 +172,11 @@
                   <label for="m_produk_status">Produk Status</label>
                   <div class="space-x-2">
                     <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio" id="m_produk_status1" name="m_produk_status" value="1">
+                      <input class="form-check-input" type="radio" id="m_produk_status1" name="m_produk_status" value="1" checked>
                       <label class="form-check-label" for="m_produk_status">Aktif</label>
                     </div>
                     <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio" id="m_produk_status0" name="m_produk_status" value="0">
+                      <input class="form-check-input" type="radio" id="m_produk_status0" name="m_produk_status" value="0" checked>
                       <label class="form-check-label" for="m_produk_status">Non Aktif</label>
                     </div>
                   </div>
@@ -187,11 +187,11 @@
                   <label for="m_produk_status">Status Pajak</label>
                   <div class="space-x-2">
                     <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio" id="m_produk_tax1" name="m_produk_tax" value="1">
+                      <input class="form-check-input" type="radio" id="m_produk_tax1" name="m_produk_tax" value="1" checked>
                       <label class="form-check-label" for="m_produk_tax">Aktif</label>
                     </div>
                     <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio" id="m_produk_tax0" name="m_produk_tax" value="0">
+                      <input class="form-check-input" type="radio" id="m_produk_tax0" name="m_produk_tax" value="0" checked>
                       <label class="form-check-label" for="m_produk_tax">Non Aktif</label>
                     </div>
                   </div>
@@ -202,11 +202,11 @@
                   <label for="m_produk_status">Status Service Charge</label>
                   <div class="space-x-2">
                     <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio" id="m_produk_sc1" name="m_produk_sc" value="1">
+                      <input class="form-check-input" type="radio" id="m_produk_sc1" name="m_produk_sc" value="1" checked>
                       <label class="form-check-label" for="m_produk_sc">Aktif</label>
                     </div>
                     <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio" id="m_produk_sc0" name="m_produk_sc" value="0">
+                      <input class="form-check-input" type="radio" id="m_produk_sc0" name="m_produk_sc" value="0" checked>
                       <label class="form-check-label" for="m_produk_sc">Non Aktif</label>
                     </div>
                   </div>
@@ -217,11 +217,11 @@
                   <label for="m_produk_status">Dijual Di CR</label>
                   <div class="space-x-2">
                     <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio" id="m_produk_jual1" name="m_produk_jual" value="Ya">
+                      <input class="form-check-input" type="radio" id="m_produk_jual1" name="m_produk_jual" value="Ya" checked>
                       <label class="form-check-label" for="m_produk_jual">Ya</label>
                     </div>
                     <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio" id="m_produk_jual0" name="m_produk_jual" value="Tidak">
+                      <input class="form-check-input" type="radio" id="m_produk_jual0" name="m_produk_jual" value="Tidak" checked>
                       <label class="form-check-label" for="m_produk_jual">Tidak</label>
                     </div>
                   </div>
@@ -276,7 +276,7 @@
         url: "/master/produk/list/" + id,
         type: "GET",
         dataType: 'json',
-        success: function(respond) {
+        success: function(respond, data, textStatus, jqXHR, Messages) {
           console.log(respond)
           $("#m_produk_id").val(respond.m_produk_id).trigger('change');
           $("#m_produk_cr").val(respond.m_produk_cr).trigger('change');
@@ -300,9 +300,9 @@
             icon: 'fa fa-info me-5',
             message: data.Messages
           });
-          setTimeout(function() {
-            window.location.reload();
-          }, 3300);
+          // setTimeout(function() {
+          //   window.location.reload();
+          // }, 3300);
         },
       });
       $("#form_produk").modal('show');
