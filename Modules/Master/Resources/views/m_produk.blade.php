@@ -276,7 +276,7 @@
         url: "/master/produk/list/" + id,
         type: "GET",
         dataType: 'json',
-        success: function(respond, data, textStatus, jqXHR, Messages) {
+        success: function(respond) {
           console.log(respond)
           $("#m_produk_id").val(respond.m_produk_id).trigger('change');
           $("#m_produk_cr").val(respond.m_produk_cr).trigger('change');
