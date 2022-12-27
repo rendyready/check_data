@@ -38,7 +38,7 @@ class SupplierController extends Controller
             $row[] = $value->m_supplier_kota;
             $row[] = $value->m_supplier_telp;
             $row[] = $value->m_supplier_ket;
-            $row[] = $value->m_supplier_saldo_awal;
+            $row[] = rupiah($value->m_supplier_saldo_awal);
             $row[] = $value->m_supplier_rek.'-'.$value->m_supplier_rek_nama.'-'.$value->m_supplier_bank_nama;
             $row[] = '<a id="buttonEdit" class="btn btn-sm buttonEdit btn-success" value="'.$value->m_supplier_id.'" title="Edit"><i class="fa fa-pencil"></i></a>';
             $data[] = $row;
@@ -62,6 +62,7 @@ class SupplierController extends Controller
                 $data = array(
                     'm_supplier_code'	=>	$nocode,
                     'm_supplier_nama'	=>	$request->m_supplier_nama,
+                    'm_supplier_jth_tempo'	=>	$request->m_supplier_jth_tempo,
                     'm_supplier_alamat'	=>	$request->m_supplier_alamat,
                     'm_supplier_kota'	=>	$request->m_supplier_kota,
                     'm_supplier_telp'	=>	$request->m_supplier_telp,
@@ -77,6 +78,7 @@ class SupplierController extends Controller
             } elseif ($request->action == 'edit') {
                 $data = array(
                     'm_supplier_nama'	=>	$request->m_supplier_nama,
+                    'm_supplier_jth_tempo'	=>	$request->m_supplier_jth_tempo,
                     'm_supplier_alamat'	=>	$request->m_supplier_alamat,
                     'm_supplier_kota'	=>	$request->m_supplier_kota,
                     'm_supplier_telp'	=>	$request->m_supplier_telp,

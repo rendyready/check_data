@@ -18,8 +18,7 @@ return new class extends Migration
             $table->string('m_meja_nama');
             $table->bigInteger('m_meja_m_meja_jenis_id');
             $table->bigInteger('m_meja_m_w_id');
-            $table->string('m_meja_type');
-            $table->char('m_meja_status_sync', 1)->default('1');
+            $table->string('m_meja_type')->comment('meja,express,bungkus');
             $table->bigInteger('m_meja_created_by');
             $table->bigInteger('m_meja_updated_by')->nullable();
             $table->bigInteger('m_meja_deleted_by')->nullable();

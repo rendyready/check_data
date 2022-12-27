@@ -17,9 +17,12 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $m_menu_harga_m_jenis_nota_id
  * @property int $m_menu_harga_m_produk_id
  * @property string $m_menu_harga_status
+ * @property string $m_menu_harga_tax_status
+ * @property string $m_menu_harga_sc_status
  * @property int $m_menu_harga_created_by
- * @property Carbon $m_menu_harga_created_at
  * @property int|null $m_menu_harga_updated_by
+ * @property int|null $m_menu_harga_deleted_by
+ * @property Carbon $m_menu_harga_created_at
  * @property Carbon|null $m_menu_harga_updated_at
  * @property Carbon|null $m_menu_harga_deleted_at
  *
@@ -36,7 +39,8 @@ class MMenuHarga extends Model
 		'm_menu_harga_m_jenis_nota_id' => 'int',
 		'm_menu_harga_m_produk_id' => 'int',
 		'm_menu_harga_created_by' => 'int',
-		'm_menu_harga_updated_by' => 'int'
+		'm_menu_harga_updated_by' => 'int',
+		'm_menu_harga_deleted_by' => 'int'
 	];
 
 	protected $dates = [
@@ -50,9 +54,12 @@ class MMenuHarga extends Model
 		'm_menu_harga_m_jenis_nota_id',
 		'm_menu_harga_m_produk_id',
 		'm_menu_harga_status',
+		'm_menu_harga_tax_status',
+		'm_menu_harga_sc_status',
 		'm_menu_harga_created_by',
-		'm_menu_harga_created_at',
 		'm_menu_harga_updated_by',
+		'm_menu_harga_deleted_by',
+		'm_menu_harga_created_at',
 		'm_menu_harga_updated_at',
 		'm_menu_harga_deleted_at'
 	];

@@ -85,33 +85,33 @@
                 <table id="form" class="table table-sm table-bordered table-striped table-vcenter">
                     <thead>
                         <th>Nama Barang</th>
+                        <th>Catatan</th>
                         <th>Qty</th>
                         <th>Harga</th>
                         <th>Disc</th>
                         <th>Disc Rp</th>
                         <th>Sub Harga</th>
-                        <th>Catatan</th>
                         <th><button type="button" class="btn tambah btn-success"><i class="fa fa-plus"></i></button></th>
                     </thead>
                     <tbody>
                         <tr>
                         <td><select class="js-select2 nama_barang" name="rekap_beli_detail_m_produk_id[]" id="rekap_beli_detail_m_produk_id" style="width: 100%;"data-placeholder="Pilih Nama Barang" required><option></option></select></td>
+                        <td><textarea class="form-control form-control-sm" name="rekap_beli_detail_catatan[]" id="rekap_beli_detail_catatan" cols="50" required placeholder="catatan bb atau satuan"></textarea></td>
                         <td><input type="number" min="0.01" step="0.01" class="form-control form-control-sm qty" name="rekap_beli_detail_qty[]" id="rekap_beli_detail_qty" required></td>
                         <td><input type="text" class="form-control form-control-sm harga" name="rekap_beli_detail_harga[]" id="rekap_beli_detail_harga" required></td>
                         <td><input type="text" class="form-control form-control-sm persendisc" name="rekap_beli_detail_disc[]" id="rekap_beli_detail_disc"></td>
                         <td><input type="text" class="form-control form-control-sm rupiahdisc" name="rekap_beli_detail_discrp[]" id="rekap_beli_detail_discrp"></td>
                         <td><input type="text" class="form-control form-control-sm subtot" name="rekap_beli_detail_subtot[]" id="rekap_beli_detail_subtot"></td>
-                        <td><textarea class="form-control form-control-sm" name="rekap_beli_detail_catatan[]" id="rekap_beli_detail_catatan" cols="50" required placeholder="catatan bb atau satuan"></textarea></td>
                       </tr>
                     </tbody>
                     <tfoot>
                         <th>Nama Barang</th>
+                        <th>Catatan</th>
                         <th>Qty</th>
                         <th>Harga</th>
                         <th>Disc</th>
                         <th>Disc Rp</th>
                         <th>Sub Harga</th>
-                        <th>Catatan</th>
                         <th><button type="button" class="btn tambah btn-success"><i class="fa fa-plus"></i></button></th>
                     </tfoot>
                 </table>
@@ -185,6 +185,9 @@
 @section('js')
 <script type="module">
  $(document).ready(function(){
+ 
+
+
   $.ajaxSetup({
     headers:{
       'X-CSRF-Token' : $("input[name=_token]").val()
@@ -200,23 +203,44 @@
 	  $('.tambah').on('click',function(){
 	    no++;
 		$('#form').append('<tr id="row'+no+'">'+
-                        '<td><select class="js-select2 nama_barang" name="rekap_beli_detail_m_produk_id[]" id="rekap_beli_detail_m_produk_id'+no+'" style="width: 100%;" data-placeholder="Pilih Nama Barang" required><option></option></select></td>'+
+                        '<td><select class="js-select2 nama_barang" name="rekap_beli_detail_m_produk_id[]" id="rekap_beli_detail_m_produk_id'+no+'" style="width: 100%;" data-placeholder="Pilih Nama Barang" required > <option value="0" selected disabled hidden></option></select></td>'+
+                        '<td><textarea class="form-control form-control-sm" name="rekap_beli_detail_catatan[]" id="rekap_beli_detail_catatan" cols="50" required placeholder="catatan bb atau satuan"></textarea></td>'+
                         '<td><input type="number" min="0.01" step="0.01" class="form-control form-control-sm qty" name="rekap_beli_detail_qty[]" id="rekap_beli_detail_qty" required></td>'+
                         '<td><input type="text" class="form-control form-control-sm harga" name="rekap_beli_detail_harga[]" id="rekap_beli_detail_harga" required></td>'+
                         '<td><input type="text" class="form-control form-control-sm persendisc" name="rekap_beli_detail_disc[]" id="rekap_beli_detail_disc"></td>'+
                         '<td><input type="text" class="form-control form-control-sm rupiahdisc" name="rekap_beli_detail_discrp[]" id="rekap_beli_detail_discrp"></td>'+
                         '<td><input type="text" class="form-control form-control-sm subtot" name="rekap_beli_detail_subtot[]" id="rekap_beli_detail_subtot"></td>'+
-                        '<td><textarea class="form-control form-control-sm" name="rekap_beli_detail_catatan[]" id="rekap_beli_detail_catatan" cols="50" required placeholder="catatan bb atau satuan"></textarea></td>'+
                         '<td><button type="button" id="'+no+'" class="btn btn-danger btn_remove"><i class="fa fa-trash"></i></button></td></tr>');
-        
-            $.each(barang, function(key, value) {
-            $('#rekap_beli_detail_m_produk_id'+no)
-            .append($('<option>', { value : key })
-            .text(value));
+
     });
-        Codebase.helpersOnLoad(['jq-select2']);
+        $('body').ready(function(){
+        $(document).on('click','.tambah, .btn_remove', function(){
+          var test = $('[name="rekap_beli_detail_m_produk_id[]"]').map(function () {
+                return this.value; // $(this).val()
+          }).get();
+            $.ajax({
+              data: {id:test},
+              url: "{{route('beli.select')}}",
+              type: "get",
+              success: function (data) {
+              $.each(data, function(key, value) {
+              $('#rekap_beli_detail_m_produk_id'+no)
+              .append($('<option>', { value : key })
+              .text(value));
+              Codebase.helpersOnLoad(['jq-select2']);
+              });  
+            }
+            });
         });
-       
+      });
+      $('body').ready(function () {
+        $('select').on('focus',function () {
+         var val_id = $(this).val();
+         console.log(val_id);
+      });
+      });
+      
+
    $.each(barang, function(key, value) {
      $('.nama_barang')
           .append($('<option>', { value : key })

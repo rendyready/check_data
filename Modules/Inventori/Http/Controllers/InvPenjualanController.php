@@ -53,7 +53,7 @@ class InvPenjualanController extends Controller
             $produk = DB::table('m_produk')
             ->where('m_produk_id',$request->rekap_inv_penjualan_detail_m_produk_id[$key])
             ->first();
-            $data = array(
+            $data = array(  
                 'rekap_inv_penjualan_detail_rekap_inv_penjualan_code'=> $request->rekap_inv_penjualan_code,
                 'rekap_inv_penjualan_detail_m_produk_id' => $request->rekap_inv_penjualan_detail_m_produk_id[$key],
                 'rekap_inv_penjualan_detail_m_produk_code' => $produk->m_produk_code,
