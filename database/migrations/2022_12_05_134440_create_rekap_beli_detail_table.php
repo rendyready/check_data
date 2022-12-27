@@ -25,10 +25,8 @@ return new class extends Migration
             $table->decimal('rekap_beli_detail_disc',8,2)->nullable();
             $table->decimal('rekap_beli_detail_discrp')->nullable();
             $table->decimal('rekap_beli_detail_subtot',9,2);
-            $table->string('rekap_beli_detail_cht_1')->nullable();
-            $table->string('rekap_beli_detail_satuan_cht_1')->nullable();
-            $table->string('rekap_beli_detail_cht_2')->nullable();
-            $table->string('rekap_beli_detail_satuan_cht_2')->nullable();
+            $table->string('rekap_beli_detail_terima')->nullable();
+            $table->string('rekap_beli_detail_satuan_terima')->nullable();
             $table->bigInteger('rekap_beli_detail_created_by');
             $table->bigInteger('rekap_beli_detail_updated_by')->nullable();
             $table->bigInteger('rekap_beli_detail_deleted_by')->nullable();
