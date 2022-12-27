@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use illuminate\Support\Str;
 
 class MJabatanController extends Controller
 {
@@ -51,28 +52,31 @@ class MJabatanController extends Controller
                     return response(['Messages' => 'Data Jabatan Double !']);
                 }
             } elseif ($request->action == 'edit') {
-                $raw = $request->m_level_jabatan_nama;
+                $raw = Str::upper(preg_replace(array('/\s{2,}/', '/[\t\n]/'), ' ', $request->m_level_jabatan_nama));
                 $jabatan = DB::table('m_level_jabatan')->selectRaw('m_level_jabatan_nama')
                     ->whereRaw('LOWER(m_level_jabatan_nama)=' . "'$raw'")
                     ->whereNull('m_level_jabatan_deleted_at')
                     ->first();
-                if (!empty($jabatan->m_level_jabatan_nama)) {
-                    return response(['Messages' => 'Data Edit Kosong !']);
+                if (!empty($raw == false)) {
+                    // redirect()->route('level-jabatan.action');
+                    return response(['Messages' => 'Data Edit Kosong !', $raw]);
                 } elseif ($jabatan == true) {
-                    return response(['Messages' => 'Data Edit Duplicate !']);
-                } else {
-                    return response(['Messages' => 'Data Edit Bisa Update!']);
+                    // redirect()->route('level-jabatan.action');
+                    return response(['Messages' => 'Data Edit Duplicate !', $jabatan]);
+                } elseif ($jabatan == false) {
+                    // $data = array(
+                    //     'm_level_jabatan_nama' => $request->m_level_jabatan_nama,
+                    //     'm_level_jabatan_updated_by' => Auth::id(),
+                    //     'm_level_jabatan_updated_at' => Carbon::now(),
+                    // );
+                    // DB::table('m_level_jabatan')
+                    //     ->where('m_level_jabatan_id', $request->m_level_jabatan_id)
+                    //     ->update($data);
+                    // redirect()->route('level-jabatan.action');
+                    return response(['Messages' => 'Data Edit Bisa Update!', $jabatan]);
                 }
-                $data = array(
-                    'm_level_jabatan_id' => $request->m_level_jabatan_id,
-                    'm_level_jabatan_nama' => $request->m_level_jabatan_nama,
-                    'm_level_jabatan_updated_by' => Auth::id(),
-                    'm_level_jabatan_updated_at' => Carbon::now(),
-                );
-                DB::table('m_level_jabatan')
-                    ->where('m_level_jabatan_id', $request->m_level_jabatan_id)
-                    ->update($data);
-                return response()->json($data);
+
+                // return response()->json($data);
             }
         }
     }
