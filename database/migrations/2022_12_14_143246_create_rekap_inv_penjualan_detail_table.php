@@ -19,11 +19,11 @@ return new class extends Migration
             $table->bigInteger('rekap_inv_penjualan_detail_m_produk_id');
             $table->string('rekap_inv_penjualan_detail_m_produk_code');
             $table->string('rekap_inv_penjualan_detail_m_produk_nama');
-            $table->decimal('rekap_inv_penjualan_detail_qty',5,2);
+            $table->decimal('rekap_inv_penjualan_detail_qty',15,2);
             $table->string('rekap_inv_penjualan_detail_satuan')->nullable();
-            $table->decimal('rekap_inv_penjualan_detail_harga',10,2);
-            $table->decimal('rekap_inv_penjualan_detail_disc',8,2)->nullable();
-            $table->decimal('rekap_inv_penjualan_detail_discrp')->nullable();
+            $table->decimal('rekap_inv_penjualan_detail_harga',18,2);
+            $table->decimal('rekap_inv_penjualan_detail_disc',5,2)->nullable();
+            $table->decimal('rekap_inv_penjualan_detail_discrp',15,2)->nullable();
             $table->decimal('rekap_inv_penjualan_detail_subtot',9,2);
             $table->string('rekap_inv_penjualan_detail_catatan');
             $table->bigInteger('rekap_inv_penjualan_detail_created_by');

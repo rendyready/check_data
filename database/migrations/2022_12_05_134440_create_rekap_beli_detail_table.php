@@ -14,18 +14,19 @@ return new class extends Migration
     public function up()
     {
         Schema::create('rekap_beli_detail', function (Blueprint $table) {
-            $table->id('rekap_beli_detal_id');
-            $table->bigInteger('rekap_beli_detal_rekap_beli_id');
+            $table->id('rekap_beli_detail_id');
+            $table->string('rekap_beli_detail_rekap_beli_code');
             $table->bigInteger('rekap_beli_detail_m_produk_id');
             $table->string('rekap_beli_detail_m_produk_code');
             $table->string('rekap_beli_detail_m_produk_nama');
+            $table->string('rekap_beli_detail_catatan');
             $table->decimal('rekap_beli_detail_qty',5,2);
-            $table->string('rekap_beli_detail_satuan')->nullable();
             $table->decimal('rekap_beli_detail_harga',10,2);
             $table->decimal('rekap_beli_detail_disc',8,2)->nullable();
             $table->decimal('rekap_beli_detail_discrp')->nullable();
             $table->decimal('rekap_beli_detail_subtot',9,2);
-            $table->string('rekap_beli_detail_catatan');
+            $table->string('rekap_beli_detail_terima')->nullable();
+            $table->string('rekap_beli_detail_satuan_terima')->nullable();
             $table->bigInteger('rekap_beli_detail_created_by');
             $table->bigInteger('rekap_beli_detail_updated_by')->nullable();
             $table->bigInteger('rekap_beli_detail_deleted_by')->nullable();

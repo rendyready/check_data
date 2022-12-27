@@ -42,6 +42,7 @@ class DatabaseSeeder extends Seeder
             ConfigMejaTableSeeder::class,
             MFaqTableSeeder::class,
             List_AktTableSeeder::class,
+            SupplierSeeder::class,
        ]);
     }
 }
