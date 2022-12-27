@@ -54,3 +54,10 @@ Route::group(['prefix' => 'inventori', 'controller' => ChtController::class,'mid
     Route::get('cht/list','list')->name('cht.list');
     Route::post('cht/simpan','simpan')->name('cht.simpan');
 }); 
+//Form Input Stok Awal Route
+Route::group(['prefix' => 'inventori', 'controller' => MStokController::class,'middleware' => ['auth','web']], function()
+{
+    Route::get('stok_awal','index')->name('stok_awal.index');
+    Route::get('stok/list','list')->name('stok.list');
+    Route::post('stok_awal/simpan','simpan')->name('stok_awal.simpan');
+}); 
