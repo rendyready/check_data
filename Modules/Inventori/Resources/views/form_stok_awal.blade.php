@@ -118,54 +118,7 @@
                       <textarea class="form-control" type="text" name="m_supplier_alamat" id="m_supplier_alamat" style="width: 100%;" cols="3" rows="2" required></textarea>
                     </div>
                 </div>
-                <div class="form-group">
-                  <label for="m_supplier_kota">Kota Supplier</label>
-                    <div>
-                      <input class="form-control" type="text" name="m_supplier_kota" id="m_supplier_kota" style="width: 100%;" required>
-                    </div>
-              </div>
-              <div class="form-group">
-                <label for="m_supplier_telp">Telp Supplier</label>
-                  <div>
-                    <input class="form-control" type="number" name="m_supplier_telp" id="m_supplier_telp" style="width: 100%;" required>
-                  </div>
-            </div>
-            <div class="form-group">
-              <label for="m_supplier_ket">Keterangan Supplier</label>
-                <div>
-                  <textarea class="form-control" type="text" name="m_supplier_ket" id="m_supplier_ket" style="width: 100%;" cols="3" rows="2" required></textarea>
-                </div>
-            </div>
-            <div class="form-group">
-              <label for="m_supplier_jth_tempo">Durasi Jatuh Tempo Pembayaran</label>
-                <div>
-                  <input class="form-control" type="number" min="0" name="m_supplier_jth_tempo" id="m_supplier_jth_tempo" style="width: 100%;" required>
-                </div>
-          </div>
-            <div class="form-group">
-              <label for="m_supplier_rek">No Rekening</label>
-                <div>
-                  <input class="form-control" type="number" name="m_supplier_rek" id="m_supplier_rek" style="width: 100%;">
-                </div>
-            </div>
-          <div class="form-group">
-            <label for="m_supplier_rek_nama">Nama Rekening</label>
-              <div>
-                <input class="form-control" type="text" name="m_supplier_rek_nama" id="m_supplier_rek_nama" style="width: 100%;" >
-              </div>
-          </div>
-          <div class="form-group">
-            <label for="m_supplier_bank_nama">Nama Bank</label>
-              <div>
-                <input class="form-control" type="text" name="m_supplier_bank_nama" id="m_supplier_bank_nama" style="width: 100%;" >
-              </div>
-          </div>
-          <div class="form-group">
-            <label for="m_supplier_saldo_awal">Saldo Awal</label>
-              <div>
-                <input class="form-control" type="number" name="m_supplier_saldo_awal" id="m_supplier_saldo_awal" style="width: 100%;">
-              </div>
-          </div>
+                
               </div>
               </div>
               <div class="block-content block-content-full text-end bg-body">

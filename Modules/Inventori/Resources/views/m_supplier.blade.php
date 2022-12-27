@@ -9,6 +9,7 @@
               Master Supplier & Pelanggan
           </div>
           <div class="block-content text-muted">
+            
             <a class="btn btn-success mr-2 mb-2 buttonInsert" title="Edit" style="color: #fff"><i class="fa fa-plus mr-5"></i>Supplier</a>
                 <table id="tb_supplier" class="table table-sm table-bordered table-striped table-vcenter js-dataTable-full">
                     <thead>
