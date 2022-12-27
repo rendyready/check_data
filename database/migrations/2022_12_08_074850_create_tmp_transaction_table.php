@@ -15,7 +15,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('tmp_transaction', function (Blueprint $table) {
-            // $table->uuid('tmp_transaction_id')->default(DB::raw('gen_random_uuid()'))->primary();
+            $table->uuid('tmp_transaction_id')->default(DB::raw('gen_random_uuid()'))->primary();
             $table->uuid('tmp_transaction_id_parent')->nullable();
             $table->bigInteger('tmp_transaction_m_t_t_id')->nullable();
             $table->bigInteger('tmp_transaction_m_w_id')->nullable();

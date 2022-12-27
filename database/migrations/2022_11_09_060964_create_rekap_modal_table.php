@@ -17,9 +17,12 @@ return new class extends Migration
             $table->id('rekap_modal_id');
             $table->bigInteger('rekap_modal_sync_id')->nullable();
             $table->bigInteger('rekap_modal_m_w_id');
-            $table->integer('rekap_modal_shift')->default(1);
+            $table->integer('rekap_modal_sesi')->default(1);
             $table->dateTime('rekap_modal_tanggal')->useCurrent();
-            $table->decimal('rekap_modal_nominal', 15);
+            $table->decimal('rekap_modal_nominal', 15,2);
+            $table->decimal('rekap_modal_sales', 15,2)->default(0);
+            $table->decimal('rekap_modal_cash', 15,2)->default(0);
+            $table->decimal('rekap_modal_cash_real', 15,2)->default(0);
             $table->char('rekap_modal_status',5)->default('open');
             $table->bigInteger('rekap_modal_created_by');
             $table->bigInteger('rekap_modal_updated_by')->nullable();
