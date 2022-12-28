@@ -5,9 +5,8 @@ namespace Modules\Akuntansi\Http\Controllers;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\DB;
 
-class AkuntansiController extends Controller
+class LinkAkuntansiController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +14,6 @@ class AkuntansiController extends Controller
      */
     public function index()
     {
-        // return view('akuntansi::index');
         return view('akuntansi::index');
     }
 

@@ -21,47 +21,7 @@ class MAreaController extends Controller
     public function index()
     {
         $data = MArea::select('m_area_id', 'm_area_nama', 'm_area_code')->whereNull('m_area_deleted_at')->orderBy('m_area_id', 'asc')->get();
-        // return view('master::area', compact('data'));
-
-        $ss = 2;
-        $name = 'Purwokerto';
-        $idCheck = DB::table('m_area')
-            ->select('m_area_id', 'm_area_nama')
-            ->where(['m_area_id' => $ss], ['m_area_nama' => $name])
-            ->first();
-
-        if ($idCheck == [$ss, $name]) {
-            // DB::table('m_area_nama')->select('m_area_nama')->where(['m_area_id', 'm_area_nama'])->get();
-            return response(['data' => $this]);
-        } elseif ($idCheck) {
-            return ['Errors' => $idCheck];
-        }
-
-        // return  response()->json($idCheck);
         return view('master::area', compact('data'));
-
-
-
-        // $yy = DB::table('m_area')->select('m_area_id', 'm_area_code')->where(['m_area_id' => 9])->first();
-        // $kk = DB::table('m_w')->selectRaw('m_w_m_area_id')
-        //     ->where('m_w_m_area_id', 10)->get()->toArray();
-        // if ($kk == null) {
-        //     return 'Data Delete';
-        // } elseif ($kk == $kk) {
-        //     return 'Data Tak Bisa Delete';
-        // }
-
-        // $count = '601';
-        // $DB = DB::table('m_area')->select('m_area_id')->where('m_area_id', 0)->orderBy('m_area_id', 'asc')->get();
-        // $DBcount = count($DB);
-        // if ($DBcount == 0) {
-        //     return $count;
-        // } elseif ($DBcount == $DBcount) {
-        //     return   $DBcount + 1;
-        // }
-
-
-
     }
 
     public function action(Request $request)

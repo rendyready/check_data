@@ -9,6 +9,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
+
 class RekeningController extends Controller
 {
     /**
@@ -22,14 +23,17 @@ class RekeningController extends Controller
         } else {
             $waroeng_id = $request->waroeng_id;
         }
-        $waroeng = DB::table('m_w')
-            ->select('m_w_id', 'm_w_nama')
-            ->get();
 
-        $rekening = DB::table('m_rekening')
-            ->where('m_rekening_m_w_id', $waroeng_id)
+        $rl = DB::table('m_rekening')->select('m_rekening_kategori', 'm_rekening_nama', 'm_rekening_no_akun', 'm_rekening_saldo')
+            ->orderBy('m_rekening_kategori')->get();
+
+        $mr = DB::table('m_rekening')
+            ->rightJoin('m_w', 'm_w_id', 'm_rekening_m_w_id')
+            ->select('m_rekening_id', 'm_rekening_kategori', 'm_rekening_no_akun', 'm_rekening_nama', 'm_rekening_saldo',)
+            ->whereNull('m_rekening_deleted_at')->orderBy('m_w_code', 'asc')
             ->get();
-        return view('akuntansi::master.rekening', compact('waroeng', 'rekening', 'waroeng_id'));
+        $mw = DB::table('m_w')->select('m_w_id', 'm_w_nama', 'm_w_code',)->orderBy('m_w_code', 'asc')->get();
+        return view('akuntansi::master.rekening', compact('mr', 'mw'));
     }
 
     /**
@@ -50,7 +54,7 @@ class RekeningController extends Controller
             );
             DB::table('m_rekening')->insert($data);
         }
-        return redirect()->route('rekening.index', ['waroeng_id' => $request->kode_waroeng]);
+        // return redirect()->route('rekening.index', ['waroeng_id' => $request->kode_waroeng]);
     }
 
     /**
@@ -60,7 +64,25 @@ class RekeningController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        // $rekMW = $request->m_rekening_m_w_id;
+        // $val = DB::table('m_rekening')->leftJoin('m_w', 'm_rekening_m_w_id', 'm_w_id')
+        //     ->select('m_rekening_m_w_id')
+        //     ->where('m_rekening_m_w_id', $rekMW)
+        //     ->get();
+        foreach ($request->m_rekening_no_akun as $key => $value) {
+            $data = array(
+                'm_rekening_m_w_id' => $request->m_rekening_m_w_id,
+                'm_rekening_kategori' => $request->m_rekening_kategori,
+                'm_rekening_no_akun' => $request->m_rekening_no_akun[$key],
+                'm_rekening_nama' => $request->m_rekening_nama[$key],
+                'm_rekening_saldo' => $request->m_rekening_saldo[$key],
+                'm_rekening_created_at' => Carbon::now(),
+                'm_rekening_created_by' => Auth::id(),
+            );
+            DB::table('m_rekening')->insert($data);
+        }
+        return response()->json();
     }
 
     /**
@@ -68,9 +90,12 @@ class RekeningController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function show($id)
+    public function view()
     {
-        return view('akuntansi::show');
+        $value = 'aktiva lancar';
+        $data = DB::table('m_rekening')->select('m_rekening_kategori', 'm_rekening_no_akun', 'm_rekening_nama', 'm_rekening_saldo')
+            ->where('m_rekening_kategori', $value)->get();
+        return $data;
     }
 
     /**
