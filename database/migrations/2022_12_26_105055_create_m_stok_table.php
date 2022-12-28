@@ -16,8 +16,7 @@ return new class extends Migration
         Schema::create('m_stok', function (Blueprint $table) {
             $table->id('m_stok_id');
             $table->bigInteger('m_stok_m_produk_id');
-            $table->string('m_stok_m_produk_nama');
-            $table->string('m_stok_satuan');
+            $table->bigInteger('m_stok_gudang_id');
             $table->decimal('m_stok_awal');
             $table->decimal('m_stok_masuk',18,2)->nullable();
             $table->decimal('m_stok_keluar',18,2)->nullable();
@@ -25,9 +24,6 @@ return new class extends Migration
             $table->decimal('m_stok_hpp',18,2);
             $table->decimal('m_stok_rusak',18,2);
             $table->decimal('m_stok_lelang',18,2);
-            $table->string('m_stok_catatan');
-            $table->bigInteger('m_stok_m_w_id');
-            $table->string('m_stok_gudang');
             $table->bigInteger('m_stok_created_by');
             $table->bigInteger('m_stok_updated_by')->nullable();
             $table->bigInteger('m_stok_deleted_by')->nullable();

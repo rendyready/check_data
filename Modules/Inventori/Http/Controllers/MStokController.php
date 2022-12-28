@@ -17,25 +17,23 @@ class MStokController extends Controller
     public function index(Request $request)
     {   
        
-        $waroeng = DB::table('m_w')->select('m_w_id','m_w_nama')->get();
+        $gudang = DB::table('m_gudang')
+        ->join('m_w','m_w_id','m_gudang_m_w_id')
+        ->select('m_gudang_id','m_gudang_nama','m_w_nama')->get();
         $waroeng_id = Auth::user()->waroeng_id;
         $tgl_now = Carbon::now()->format('Y-m-d');
-        $stok_mw = (empty($request->m_stok_m_w_id)) ? $waroeng_id : $request->m_stok_m_w_id ;
-        $gudang = (empty($request->m_stok_gudang)) ? 'gudang utama' : $request->m_stok_gudang ;
-        $data = DB::table('m_stok')
-        ->where('m_stok_m_w_id',$stok_mw)
-        ->where('m_stok_gudang',$gudang)
-        ->get();
-        return view('inventori::form_stok_awal',compact('waroeng','tgl_now','data','stok_mw','gudang'));
+        return view('inventori::form_stok_awal',compact('gudang','tgl_now'));
     }
 
     /**
      * Show the form for creating a new resource.
      * @return Renderable
      */
-    public function list(Request $request)
+    public function list($id)
     {
-        
+        $data = DB::table('m_stok')->where('m_stok_gudang_id',$id)->get();
+        $output = array('data' => $data);
+        return response()->json($output);
     }
 
     /**
