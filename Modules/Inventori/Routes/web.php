@@ -54,3 +54,18 @@ Route::group(['prefix' => 'inventori', 'controller' => ChtController::class,'mid
     Route::get('cht/list','list')->name('cht.list');
     Route::post('cht/simpan','simpan')->name('cht.simpan');
 }); 
+//Form Input Stok Awal Route
+Route::group(['prefix' => 'inventori', 'controller' => MStokController::class,'middleware' => ['auth','web']], function()
+{
+    Route::get('stok_awal','index')->name('stok_awal.index');
+    Route::get('stok_awal/list/{id}','list')->name('stok_awal.list');
+    Route::post('stok_awal/simpan','simpan')->name('stok_awal.simpan');
+}); 
+//Form Master Gudang
+Route::group(['prefix' => 'inventori', 'controller' => GudangController::class,'middleware' => ['auth','web']], function()
+{
+    Route::get('m_gudang','index')->name('m_gudang.index');
+    Route::get('m_gudang/list','list')->name('m_gudang.list');
+    Route::post('m_gudang/action','action')->name('m_gudang.action');
+    Route::get('m_gudang/edit/{id}','edit')->name('m_gudang.edit');
+}); 
