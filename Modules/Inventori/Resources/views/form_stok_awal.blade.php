@@ -48,17 +48,16 @@
             <form action="">
                 <table id="form_input" class="table table-sm table-bordered table-striped table-vcenter">
                   <thead>
-                    <th>No</th>
                     <th>Nama Barang</th>
                     <th>Stok Awal</th>
                     <th>Satuan</th>
+                    <th><button type="button" class="btn tambah btn-success"><i class="fa fa-plus"></i></button></th>
                   </thead>
                   <tbody>
                     <tr>
-                      <td>1</td>
-                      <td><select class="js-select2 nama_barang" name="rekap_inv_penjualan_detail_m_produk_id[]" id="rekap_inv_penjualan_detail_m_produk_id" style="width: 100%;"data-placeholder="Pilih Nama Barang" required><option></option></select></td>
-                      <td><input type="number" min="0.01" step="0.01" class="form-control form-control-sm qty" name="rekap_inv_penjualan_detail_qty[]" id="rekap_inv_penjualan_detail_qty" required></td>
-                      <td><input type="text" class="form-control form-control-sm harga" name="rekap_inv_penjualan_detail_harga[]" id="rekap_inv_penjualan_detail_harga" readonly></td>
+                      <td><select class="js-select2 nama_barang" name="m_stok_m_produk_id[]" id="m_stok_m_produk_id" style="width: 100%;"data-placeholder="Pilih Nama Barang" required><option></option></select></td>
+                      <td><input type="number" min="0" class="form-control form-control-sm qty" name="m_stok_awal[]" id="m_stok_awal" required></td>
+                      <td><input type="text" class="form-control form-control-sm harga" name="m_satuan[]" id="m_satuan" readonly></td>
                     </tr>
                   </tbody>
                 </table>
@@ -83,51 +82,6 @@
                         <th>Satuan</th>
                     </tfoot>
                 </table>
-            <!-- Select2 in a modal -->
-  <div class="modal" id="form-supplier" tabindex="-1" role="dialog" aria-labelledby="form-supplier" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="block block-themed shadow-none mb-0">
-          <div class="block-header block-header-default bg-pulse">
-            <h3 class="block-title" id="myModalLabel"></h3>
-            <div class="block-options">
-              <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
-                <i class="fa fa-fw fa-times"></i>
-              </button>
-            </div>
-          </div>
-          <div class="block-content">
-            <!-- Select2 is initialized at the bottom of the page -->
-            <form id="formAction" name="form_action" method="post">
-              <div class="mb-4">
-                <input name="action" type="hidden" id="action">
-                <input name="m_supplier_id" type="hidden" id="m_supplier_id">
-                <div class="form-group">
-                    <label for="m_supplier_nama">Nama Barang</label>
-                      <div>
-                        <input class="form-control" type="text" name="m_supplier_nama" id="m_supplier_nama" style="width: 100%;" required>
-                      </div>
-                </div>
-                <div class="form-group">
-                  <label for="m_supplier_alamat">Qty Stok Awal</label>
-                    <div>
-                      <textarea class="form-control" type="text" name="m_supplier_alamat" id="m_supplier_alamat" style="width: 100%;" cols="3" rows="2" required></textarea>
-                    </div>
-                </div>
-                
-              </div>
-              </div>
-              <div class="block-content block-content-full text-end bg-body">
-                <button type="button" class="btn btn-sm btn-alt-secondary me-1" data-bs-dismiss="modal">Close</button>
-                <input type="submit" class="btn btn-success" id="submit">
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- END Select2 in a modal -->
           </div>
         </div>
       </div>
@@ -155,24 +109,24 @@
               ajax: {
               url: "/inventori/stok_awal/list/"+g_id,
               type: "GET",
-                },
-                columns: [
-                  { data: 'm_stok_id'},
-                  { data: 'm_stok_m_produk_nama' },
-                  { data: 'm_stok_awal' },
-                  { data: 'm_stok_satuan' },
-              ]
-              
+                }
             });
         });
     });
-      $(".buttonInsert").on('click', function() {
-            $('[name="action"]').val('add');
-            var id = $(this).attr('value');
-            $('#form-supplier form')[0].reset();
-            $("#myModalLabel").html('Tambah Supplier');
-            $("#form-supplier").modal('show');
-      });
+    var no=0;
+    $('.tambah').on('click',function(){
+	    no++;
+		$('#form_input').append('<tr id="row'+no+'">'+
+                        '<td><select class="js-select2 nama_barang" name="m_stok_m_produk_id[]" id="m_stok_m_produk_id" style="width: 100%;"data-placeholder="Pilih Nama Barang" required><option></option></select></td>'+
+                        '<td><input type="number" min="0" class="form-control form-control-sm qty" name="m_stok_awal[]" id="m_stok_awal" required></td>'+
+                        '<td><input type="text" class="form-control form-control-sm satuan" name="m_satuan[]" id="m_satuan" readonly></td>'+
+                        '<td><button type="button" id="'+no+'" class="btn btn-danger btn_remove"><i class="fa fa-trash"></i></button></td></tr>');
+
+    });
+    $(document).on('click', '.btn_remove', function(){
+		var button_id = $(this).attr("id"); 
+		$('#row'+button_id+'').remove();
+    });
             $('#formAction').submit( function(e){
                 if(!e.isDefaultPrevented()){
                     $.ajax({
