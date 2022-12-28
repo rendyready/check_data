@@ -18,7 +18,7 @@
                       </div>
                   </div>
               </div>
-              <div class="col-md-4">
+              <div class="col-md-3">
                   <div class="row mb-1">
                       <label class="col-sm-4 col-form-label" for="tgl_now">Tanggal</label>
                       <div class="col-sm-8">
@@ -26,41 +26,48 @@
                       </div>
                   </div>
               </div>
-              <div class="col-md-5">
+              <div class="col-md-6">
                   <div class="row mb-2">
-                      <label class="col-sm-4 col-form-label" for="rekap_po_supplier_id">Nama Waroeng</label>
+                      <label class="col-sm-4 col-form-label" for="m_stok_gudang_id">Gudang</label>
                       <div class="col-sm-8">
-                        <select class="js-select2 form-control-sm" style="width: 100%;" name="rekap_po_supplier_id" id="rekap_po_supplier_id" data-placeholder="Pilih Waroeng">
-                        <option></option>
-                        @foreach ($waroeng as $item)
-                        @if ($item->m_w_id ==  $stok_mw)
-                        <option value="{{$item->m_w_id}}" selected>{{$item->m_w_nama}}</option>  
-                        @else
-                        <option value="{{$item->m_w_id}}">{{$item->m_w_nama}}</option>  
-                        @endif
-                        @endforeach
-                        </select>
-                      </div>
-                  </div>
-                  <div class="row mb-2">
-                      <label class="col-sm-4 col-form-label" for="rekap_po_supplier_nama">Gudang</label>
-                      <div class="col-sm-8">
-                        <select class="js-select2 form-control-sm" style="width: 100%;" name="m_stok_gudang" id="m_stok_gudang" data-placeholder="Pilih Gudang">
+                        <select class="js-select2 form-control-sm" style="width: 100%;" name="m_stok_gudang_id" id="m_stok_gudang_id" data-placeholder="Pilih Gudang">
                           <option value=""></option>
-                          <option value="gudang utama" selected>Gudang Utama</option>
-                          <option value="gudang produksi">Gudang Produksi</option>
-                          <option value="gudang wbd">Gudang WBD</option>
+                          @foreach ($gudang as $item)
+                              <option value="{{$item->m_gudang_id}}">{{ucwords($item->m_gudang_nama)}} - {{$item->m_w_nama}}</option>
+                          @endforeach
                         </select>
                       </div>
                   <div class="row mb-4">
                       <label class="col-sm-4 col-form-label" for="rekap_po_tgl">Pencarian</label>
                     <div class="col-sm-8 py-2 px-lg-4">
-                      <button class="btn btn-lg btn-warning"> Cari</button>
+                      <button id="cari" class="btn btn-lg btn-warning btn-cari"> Cari</button>
                     </div>
                   </div>
               </div>
             </div>
-                <table id="tb_supplier" class="table table-sm table-bordered table-striped table-vcenter js-dataTable-full">
+            <form action="">
+                <table id="form_input" class="table table-sm table-bordered table-striped table-vcenter">
+                  <thead>
+                    <th>No</th>
+                    <th>Nama Barang</th>
+                    <th>Stok Awal</th>
+                    <th>Satuan</th>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1</td>
+                      <td><select class="js-select2 nama_barang" name="rekap_inv_penjualan_detail_m_produk_id[]" id="rekap_inv_penjualan_detail_m_produk_id" style="width: 100%;"data-placeholder="Pilih Nama Barang" required><option></option></select></td>
+                      <td><input type="number" min="0.01" step="0.01" class="form-control form-control-sm qty" name="rekap_inv_penjualan_detail_qty[]" id="rekap_inv_penjualan_detail_qty" required></td>
+                      <td><input type="text" class="form-control form-control-sm harga" name="rekap_inv_penjualan_detail_harga[]" id="rekap_inv_penjualan_detail_harga" readonly></td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div class="block-content block-content-full text-end bg-transparent">
+                  <button type="submit"  class="btn btn-sm btn-success">Simpan</button>
+                </div>
+              </div>
+              </form>
+                <table id="tb_stok" class="table table-sm table-bordered table-striped table-vcenter js-dataTable-full">
                     <thead>
                         <th>No</th>
                         <th>Nama Barang</th>
@@ -68,17 +75,6 @@
                         <th>Satuan</th>
                     </thead>
                     <tbody>
-                      @php
-                          $no=0;
-                      @endphp
-                      @foreach ($data as $item)
-                      <tr>
-                        <td>{{$no++}}</td>
-                        <td>{{$item->m_stok_m_produk_nama}}</td>
-                        <td>{{$item->stok_awal}}</td>
-                        <td>{{$item->m_stok_satuan}}</td>
-                      </tr>
-                      @endforeach
                     </tbody>
                     <tfoot>
                         <th>No</th>
@@ -150,10 +146,26 @@
       });
     Codebase.helpersOnLoad(['jq-notify']);
     var table, save_method;
-    var mw = $('')
-        $(function() {
-            table = $('#tb_supplier').DataTable();
+    $('#cari').on('click',function () {
+            var g_id = $('#m_stok_gudang_id').val();
+            $(function() {
+            table = $('#tb_stok').DataTable({
+              buttons:[],
+              destroy:true,
+              ajax: {
+              url: "/inventori/stok_awal/list/"+g_id,
+              type: "GET",
+                },
+                columns: [
+                  { data: 'm_stok_id'},
+                  { data: 'm_stok_m_produk_nama' },
+                  { data: 'm_stok_awal' },
+                  { data: 'm_stok_satuan' },
+              ]
+              
+            });
         });
+    });
       $(".buttonInsert").on('click', function() {
             $('[name="action"]').val('add');
             var id = $(this).attr('value');
@@ -161,32 +173,6 @@
             $("#myModalLabel").html('Tambah Supplier');
             $("#form-supplier").modal('show');
       });
-      $("#tb_supplier").on('click','.buttonEdit', function() {
-                var id = $(this).attr('value');
-                $('[name="action"]').val('edit');
-                $('#form-supplier form')[0].reset();
-                $("#myModalLabel").html('Ubah Supplier');
-                $.ajax({
-                    url: "/inventori/supplier/edit/"+id,
-                    type: "GET",
-                    dataType: 'json',
-                    success: function(respond) {
-                        $("#m_supplier_id").val(respond.m_supplier_id).trigger('change');
-                        $("#m_supplier_nama").val(respond.m_supplier_nama).trigger('change');
-                        $("#m_supplier_alamat").val(respond.m_supplier_alamat).trigger('change');
-                        $("#m_supplier_kota").val(respond.m_supplier_kota).trigger('change');
-                        $("#m_supplier_telp").val(respond.m_supplier_telp).trigger('change');
-                        $("#m_supplier_ket").val(respond.m_supplier_ket).trigger('change');
-                        $("#m_supplier_rek").val(respond.m_supplier_rek).trigger('change');
-                        $("#m_supplier_rek_nama").val(respond.m_supplier_rek_nama).trigger('change');
-                        $("#m_supplier_bank_nama").val(respond.m_supplier_bank_nama).trigger('change');
-                        $("#m_supplier_saldo_awal").val(respond.m_supplier_saldo_awal).trigger('change');
-                    },
-                    error: function() {
-                    }
-                });
-                $("#form-supplier").modal('show');
-            }); 
             $('#formAction').submit( function(e){
                 if(!e.isDefaultPrevented()){
                     $.ajax({
