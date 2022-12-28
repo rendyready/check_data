@@ -9,7 +9,7 @@
               Form Input Pembelian
           </div>
           <div class="block-content text-muted">
-                <form action="{{route('beli.simpan')}}" method="post">
+                <form id="formAction" action="{{route('beli.simpan')}}" method="post">
                   @csrf
                 <div class="row">
                     <div class="col-md-3">
@@ -19,36 +19,36 @@
                               <input type="text" class="form-control form-control-sm" id="rekap_beli_created_by" name="rekap_beli_created_by" value="{{Auth::user()->name}}" readonly>
                             </div>
                         </div>
-                        <div class="row mb-1">
+                        {{-- <div class="row mb-1">
                             <label class="col-sm-4 col-form-label" for="example-hf-text">Pukul</label>
                             <div class="col-sm-8">
                                 <h3 id="time">13:00</h3>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                     <div class="col-md-4">
                         <div class="row mb-1">
-                            <label class="col-sm-4 col-form-label" for="rekap_beli_code">No Nota</label>
-                            <div class="col-sm-8">
+                            <label class="col-sm-5 col-form-label" for="rekap_beli_code">No Nota</label>
+                            <div class="col-sm-7">
                               <input type="text" class="form-control form-control-sm" id="rekap_beli_code" name="rekap_beli_code" value="{{$data->code}}" readonly>
                             </div>
                         </div>
                         <div class="row mb-1">
-                          <label class="col-sm-4 col-form-label-sm" for="rekap_beli_code_nota">Nota Suplier</label>
-                          <div class="col-sm-8">
+                          <label class="col-sm-5 col-form-label" for="rekap_beli_code_nota">Nota Suplier</label>
+                          <div class="col-sm-7">
                             <input type="text" class="form-control form-control-sm" id="rekap_beli_code_nota" name="rekap_beli_code_nota" value="" placeholder="Nota Supplier">
                           </div>
                       </div>
                         <div class="row mb-1">
-                            <label class="col-sm-4 col-form-label" for="rekap_beli_tgl">Tanggal</label>
-                            <div class="col-sm-8">
-                              <input type="date" class="form-control form-control-sm" id="rekap_beli_tgl" name="rekap_beli_tgl" required>
+                            <label class="col-sm-5 col-form-label" for="rekap_beli_tgl">Tanggal</label>
+                            <div class="col-sm-7">
+                              <input type="date" class="form-control form-control-sm" value="{{$data->tgl_now}}" readonly id="rekap_beli_tgl" name="rekap_beli_tgl" required>
                             </div>
                         </div>
                         <div class="row mb-1">
-                            <label class="col-sm-4 col-form-label-sm" for="rekap_beli_jth_tmp">Jth Tempo</label>
-                            <div class="col-sm-8">
-                              <input type="date" class="form-control form-control-sm" id="rekap_beli_jth_tmp" name="rekap_beli_jth_tmp" required>
+                            <label class="col-sm-5 col-form-label" for="rekap_beli_jth_tmp">Jth Tempo</label>
+                            <div class="col-sm-7">
+                              <input type="date" class="form-control form-control-sm" value="{{$data->tgl_now}}" id="rekap_beli_jth_tmp" name="rekap_beli_jth_tmp" readonly required>
                             </div>
                         </div>
                     </div>
@@ -64,19 +64,19 @@
                         <div class="row mb-1">
                             <label class="col-sm-4 col-form-label" for="rekap_beli_supplier_nama">Nama</label>
                             <div class="col-sm-8">
-                              <input type="text" class="form-control supplier form-control-sm" id="rekap_beli_supplier_nama" name="rekap_beli_supplier_nama">
+                              <input type="text" class="form-control supplier form-control-sm" id="rekap_beli_supplier_nama" name="rekap_beli_supplier_nama" readonly required>
                             </div>
                         </div>
                         <div class="row mb-1">
                             <label class="col-sm-4 col-form-label" for="rekap_beli_supplier_telp">No Telpn</label>
                             <div class="col-sm-8">
-                              <input type="text" class="form-control supplier form-control-sm" id="rekap_beli_supplier_telp" name="rekap_beli_supplier_telp">
+                              <input type="text" class="form-control supplier form-control-sm" id="rekap_beli_supplier_telp" name="rekap_beli_supplier_telp" readonly required>
                             </div>
                         </div>
                         <div class="row mb-1">
                             <label class="col-sm-4 col-form-label" for="rekap_beli_supplier_alamat">Alamat</label>
                             <div class="col-sm-8">
-                             <textarea class="supplier" name="rekap_beli_supplier_alamat" id="rekap_beli_supplier_alamat" cols="30" rows="3"></textarea>
+                             <textarea class="supplier" name="rekap_beli_supplier_alamat" id="rekap_beli_supplier_alamat" cols="30" rows="3" readonly required></textarea>
                             </div>
                         </div>
                     </div>
@@ -95,13 +95,13 @@
                     </thead>
                     <tbody>
                         <tr>
-                        <td><select class="js-select2 nama_barang" name="rekap_beli_detail_m_produk_id[]" id="rekap_beli_detail_m_produk_id" style="width: 100%;"data-placeholder="Pilih Nama Barang" required><option></option></select></td>
+                        <td><select class="js-select2 nama_barang" name="rekap_beli_detail_m_produk_id[]" id="rekap_beli_detail_m_produk_id1" style="width: 100%;" data-placeholder="Pilih Nama Barang" required><option value="0" selected disabled hidden>Pilih Nama Produk</option></select></td>
                         <td><textarea class="form-control form-control-sm" name="rekap_beli_detail_catatan[]" id="rekap_beli_detail_catatan" cols="50" required placeholder="catatan bb atau satuan"></textarea></td>
-                        <td><input type="number" min="0.01" step="0.01" class="form-control form-control-sm qty" name="rekap_beli_detail_qty[]" id="rekap_beli_detail_qty" required></td>
-                        <td><input type="text" class="form-control form-control-sm harga" name="rekap_beli_detail_harga[]" id="rekap_beli_detail_harga" required></td>
-                        <td><input type="text" class="form-control form-control-sm persendisc" name="rekap_beli_detail_disc[]" id="rekap_beli_detail_disc"></td>
-                        <td><input type="text" class="form-control form-control-sm rupiahdisc" name="rekap_beli_detail_discrp[]" id="rekap_beli_detail_discrp"></td>
-                        <td><input type="text" class="form-control form-control-sm subtot" name="rekap_beli_detail_subtot[]" id="rekap_beli_detail_subtot"></td>
+                        <td><input type="number" min="0.01" step="0.01" class="form-control number form-control-sm qty" name="rekap_beli_detail_qty[]" id="rekap_beli_detail_qty" required></td>
+                        <td><input type="number" class="form-control number form-control-sm harga" name="rekap_beli_detail_harga[]" id="rekap_beli_detail_harga" required></td>
+                        <td><input type="number" class="form-control number form-control-sm persendisc" name="rekap_beli_detail_disc[]" id="rekap_beli_detail_disc"></td>
+                        <td><input type="number" class="form-control number form-control-sm rupiahdisc" name="rekap_beli_detail_discrp[]" id="rekap_beli_detail_discrp"></td>
+                        <td><input type="text" class="form-control form-control-sm subtot" name="rekap_beli_detail_subtot[]" id="rekap_beli_detail_subtot" readonly></td>
                       </tr>
                     </tbody>
                     <tfoot>
@@ -147,7 +147,7 @@
                     <div class="row mb-1">
                         <label class="col-sm-4 col-form-label" for="rekap_beli_ongkir">Ongkos Kirim</label>
                         <div class="col-sm-6">
-                          <input type="text" class="form-control form-control-sm ongkir" value="0" id="rekap_beli_ongkir" name="rekap_beli_ongkir">
+                          <input type="text" class="form-control form-control-sm ongkir" id="rekap_beli_ongkir" name="rekap_beli_ongkir">
                         </div>
                     </div>
                     <div class="row mb-1">
@@ -159,7 +159,7 @@
                     <div class="row mb-1">
                       <label class="col-sm-4 col-form-label" for="rekap_beli_terbayar">Dibayar</label>
                       <div class="col-sm-6">
-                        <input type="text" class="form-control form-control-sm bayar" id="rekap_beli_terbayar" name="rekap_beli_terbayar">
+                        <input type="text" class="form-control form-control-sm bayar" id="rekap_beli_terbayar" name="rekap_beli_terbayar" value="0">
                       </div>
                   </div>
                     <div class="row mb-1">
@@ -171,7 +171,7 @@
                 </div>
                 </div>
                 <div class="block-content block-content-full text-end bg-transparent">
-                    <button type="submit" class="btn btn-sm btn-success">Simpan</button>
+                    <input type="submit" class="btn btn-sm btn-success btn-save">
                   </div>
                 </div>
                 </form>
@@ -185,9 +185,6 @@
 @section('js')
 <script type="module">
  $(document).ready(function(){
- 
-
-
   $.ajaxSetup({
     headers:{
       'X-CSRF-Token' : $("input[name=_token]").val()
@@ -205,42 +202,23 @@
 		$('#form').append('<tr id="row'+no+'">'+
                         '<td><select class="js-select2 nama_barang" name="rekap_beli_detail_m_produk_id[]" id="rekap_beli_detail_m_produk_id'+no+'" style="width: 100%;" data-placeholder="Pilih Nama Barang" required > <option value="0" selected disabled hidden></option></select></td>'+
                         '<td><textarea class="form-control form-control-sm" name="rekap_beli_detail_catatan[]" id="rekap_beli_detail_catatan" cols="50" required placeholder="catatan bb atau satuan"></textarea></td>'+
-                        '<td><input type="number" min="0.01" step="0.01" class="form-control form-control-sm qty" name="rekap_beli_detail_qty[]" id="rekap_beli_detail_qty" required></td>'+
-                        '<td><input type="text" class="form-control form-control-sm harga" name="rekap_beli_detail_harga[]" id="rekap_beli_detail_harga" required></td>'+
-                        '<td><input type="text" class="form-control form-control-sm persendisc" name="rekap_beli_detail_disc[]" id="rekap_beli_detail_disc"></td>'+
-                        '<td><input type="text" class="form-control form-control-sm rupiahdisc" name="rekap_beli_detail_discrp[]" id="rekap_beli_detail_discrp"></td>'+
-                        '<td><input type="text" class="form-control form-control-sm subtot" name="rekap_beli_detail_subtot[]" id="rekap_beli_detail_subtot"></td>'+
+                        '<td><input type="number" min="0.01" step="0.01" class="form-control number form-control-sm qty" name="rekap_beli_detail_qty[]" id="rekap_beli_detail_qty" required></td>'+
+                        '<td><input type="number" class="form-control number form-control-sm harga" name="rekap_beli_detail_harga[]" id="rekap_beli_detail_harga" required></td>'+
+                        '<td><input type="number" class="form-control number form-control-sm persendisc" name="rekap_beli_detail_disc[]" id="rekap_beli_detail_disc"></td>'+
+                        '<td><input type="number" class="form-control number form-control-sm rupiahdisc" name="rekap_beli_detail_discrp[]" id="rekap_beli_detail_discrp"></td>'+
+                        '<td><input type="text" class="form-control form-control-sm subtot" name="rekap_beli_detail_subtot[]" id="rekap_beli_detail_subtot" readonly></td>'+
                         '<td><button type="button" id="'+no+'" class="btn btn-danger btn_remove"><i class="fa fa-trash"></i></button></td></tr>');
 
     });
-        $('body').ready(function(){
-        $(document).on('click','.tambah, .btn_remove', function(){
-          var test = $('[name="rekap_beli_detail_m_produk_id[]"]').map(function () {
-                return this.value; // $(this).val()
-          }).get();
-            $.ajax({
-              data: {id:test},
-              url: "{{route('beli.select')}}",
-              type: "get",
-              success: function (data) {
-              $.each(data, function(key, value) {
+        
+    $('#form').on('click select2:open','.tambah', function(){
+          Codebase.helpersOnLoad(['jq-select2']);
+              $.each(barang, function(key, value) {
               $('#rekap_beli_detail_m_produk_id'+no)
               .append($('<option>', { value : key })
               .text(value));
-              Codebase.helpersOnLoad(['jq-select2']);
               });  
-            }
-            });
         });
-      });
-      $('body').ready(function () {
-        $('select').on('focus',function () {
-         var val_id = $(this).val();
-         console.log(val_id);
-      });
-      });
-      
-
    $.each(barang, function(key, value) {
      $('.nama_barang')
           .append($('<option>', { value : key })
@@ -255,14 +233,14 @@
 	$(document).on('click', '.btn_remove', function(){
 		var button_id = $(this).attr("id"); 
 		$('#row'+button_id+'').remove();
+      var $tblrows = $("#form");
+      $tblrows.find('.persendisc').trigger('input');
 	});
     $("#form, .qty, .harga, .persendisc, .rupiahdisc, .disc_tot, .disc_tot_rp, .ppn, .ongkir, .bayar").on('input', function () {
       var $tblrows = $("#form tbody tr");
       $tblrows.each(function (index) {
           var $tblrow = $(this);
-
           $tblrow.find(".qty, .harga, .persendisc, .rupiahdisc").on('input', function () {
-
               var qty = $tblrow.find("[name='rekap_beli_detail_qty[]']").val();
               var price = $tblrow.find("[name='rekap_beli_detail_harga[]']").val();
               var persendisc = $tblrow.find("[name='rekap_beli_detail_disc[]']").val();
@@ -297,7 +275,9 @@
           var ppn = $("[name='rekap_beli_ppn']").val();
           var bayar = $("[name='rekap_beli_terbayar']").val();
           var ongkir = $("[name='rekap_beli_ongkir']").val();
-        
+         if (ongkir==="") {
+            var ongkir = 0;
+         }
           var grandtotal = grdtot*parseFloat((100-disc_tot)/100)-disctotrp;
           var ppnrp = parseFloat(ppn/100)*grandtotal;
           var rekap_beli_tot_nom = parseFloat(grandtotal)+ parseFloat(ppnrp)+ parseFloat(ongkir);
@@ -306,8 +286,58 @@
           $('.sisa').val((rekap_beli_tot_nom-bayar).toFixed(2));
           $('#total_sum_value').html(': Rp '+rekap_beli_tot_nom.toFixed(2));
     });
+    $('#rekap_beli_supplier_id').on('change',function() {
+      var id = $(this).val();
+      if (id == 1) {
+        const date = new Date('{{$data->tgl_now}}').toISOString().slice(0, 10);
+        $('.supplier').attr('readonly',false).trigger('change').val('');
+        $("#rekap_beli_jth_tmp").val(date).trigger('change');
+      } else {
+        $('.supplier').attr('readonly',true);
+        $.ajax({
+                    url: "/inventori/supplier/edit/"+id,
+                    type: "GET",
+                    dataType: 'json',
+                    success: function(respond) {
+                        $("#rekap_beli_supplier_nama").val(respond.m_supplier_nama).trigger('change');
+                        $("#rekap_beli_supplier_alamat").val(respond.m_supplier_alamat).trigger('change');
+                        $("#rekap_beli_supplier_telp").val(respond.m_supplier_telp).trigger('change');
+                        const date = new Date('{{$data->tgl_now}}');
+                        date.setDate(date.getDate() + parseInt(respond.m_supplier_jth_tempo));
+                        var jth_tmp = new Date(date).toISOString().slice(0, 10);
+                        $("#rekap_beli_jth_tmp").val(jth_tmp).trigger('change');
+                    },
+                    error: function() {
+                    }
+                });
+      }
+    });
+    $(document).on('select2:open', '.nama_barang', function(){
+          console.log("Saving value " + $(this).val());
+          var index = $(this).attr('id'); 
+          $(this).data('val', $(this).val());
+          $(this).data('id',index);
+      }).on('change','.nama_barang', function(e){
+          var prev = $(this).data('val');
+          var current = $(this).val();
+          var id = $(this).data('id');
+      var values = $('[name="rekap_beli_detail_m_produk_id[]"]').map(function() {
+        return this.value.trim();
+      }).get();
+      var unique =  [...new Set(values)];
+      if (values.length != unique.length) {
+        e.preventDefault();
+        alert('Nama Barang Sudah Digunakan Pilih Yang Lain');
+         $('#'+id).val(prev).trigger('change');
+      }
+      });
 
-       
+  $(".number").on("keypress", function (evt) {
+    if (evt.which != 8 && evt.which != 0 && evt.which < 48 || evt.which > 57)
+    {
+        evt.preventDefault();
+    }
+    });
 });
 </script>
 @endsection

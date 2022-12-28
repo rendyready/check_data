@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Learn\Http\Controllers;
+namespace Modules\Inventori\Http\Controllers;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
@@ -8,26 +8,34 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
-class LearnController extends Controller
+class MStokController extends Controller
 {
     /**
      * Display a listing of the resource.
      * @return Renderable
      */
     public function index(Request $request)
-    {
-        $id = 1;
-        return   $data = DB::table('m_w_jenis')->where('m_w_jenis_id',$id)->first();
-        return view('learn::index');
+    {   
+       
+        $waroeng = DB::table('m_w')->select('m_w_id','m_w_nama')->get();
+        $waroeng_id = Auth::user()->waroeng_id;
+        $tgl_now = Carbon::now()->format('Y-m-d');
+        $stok_mw = (empty($request->m_stok_m_w_id)) ? $waroeng_id : $request->m_stok_m_w_id ;
+        $gudang = (empty($request->m_stok_gudang)) ? 'gudang utama' : $request->m_stok_gudang ;
+        $data = DB::table('m_stok')
+        ->where('m_stok_m_w_id',$stok_mw)
+        ->where('m_stok_gudang',$gudang)
+        ->get();
+        return view('inventori::form_stok_awal',compact('waroeng','tgl_now','data','stok_mw','gudang'));
     }
 
     /**
      * Show the form for creating a new resource.
      * @return Renderable
      */
-    public function create()
+    public function list(Request $request)
     {
-        return view('learn::create');
+        
     }
 
     /**
@@ -47,7 +55,7 @@ class LearnController extends Controller
      */
     public function show($id)
     {
-        return view('learn::show');
+        return view('inventori::show');
     }
 
     /**
@@ -57,7 +65,7 @@ class LearnController extends Controller
      */
     public function edit($id)
     {
-        return view('learn::edit');
+        return view('inventori::edit');
     }
 
     /**

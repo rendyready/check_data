@@ -6,40 +6,87 @@
         <div class="block block-themed h-100 mb-0">
           <div class="block-header bg-pulse">
             <h3 class="block-title">
-              Master Supplier & Pelanggan
+              Form Input Stok Awal
           </div>
           <div class="block-content text-muted">
-            
-            <a class="btn btn-success mr-2 mb-2 buttonInsert" title="Edit" style="color: #fff"><i class="fa fa-plus mr-5"></i>Supplier</a>
+            <div class="row">
+              <div class="col-md-3">
+                  <div class="row mb-1">
+                      <label class="col-sm-4 col-form-label-sm" for="rekap_po_created_by">Operator</label>
+                      <div class="col-sm-8">
+                        <input type="text" class="form-control form-control-sm" id="rekap_po_created_by" name="rekap_po_created_by" value="{{Auth::user()->name}}" readonly>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-4">
+                  <div class="row mb-1">
+                      <label class="col-sm-4 col-form-label" for="tgl_now">Tanggal</label>
+                      <div class="col-sm-8">
+                        <input type="date" class="form-control form-control-sm" id="tgl_now" name="tgl_now" value="{{$tgl_now}}" readonly>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-5">
+                  <div class="row mb-2">
+                      <label class="col-sm-4 col-form-label" for="rekap_po_supplier_id">Nama Waroeng</label>
+                      <div class="col-sm-8">
+                        <select class="js-select2 form-control-sm" style="width: 100%;" name="rekap_po_supplier_id" id="rekap_po_supplier_id" data-placeholder="Pilih Waroeng">
+                        <option></option>
+                        @foreach ($waroeng as $item)
+                        @if ($item->m_w_id ==  $stok_mw)
+                        <option value="{{$item->m_w_id}}" selected>{{$item->m_w_nama}}</option>  
+                        @else
+                        <option value="{{$item->m_w_id}}">{{$item->m_w_nama}}</option>  
+                        @endif
+                        @endforeach
+                        </select>
+                      </div>
+                  </div>
+                  <div class="row mb-2">
+                      <label class="col-sm-4 col-form-label" for="rekap_po_supplier_nama">Gudang</label>
+                      <div class="col-sm-8">
+                        <select class="js-select2 form-control-sm" style="width: 100%;" name="m_stok_gudang" id="m_stok_gudang" data-placeholder="Pilih Gudang">
+                          <option value=""></option>
+                          <option value="gudang utama" selected>Gudang Utama</option>
+                          <option value="gudang produksi">Gudang Produksi</option>
+                          <option value="gudang wbd">Gudang WBD</option>
+                        </select>
+                      </div>
+                  <div class="row mb-4">
+                      <label class="col-sm-4 col-form-label" for="rekap_po_tgl">Pencarian</label>
+                    <div class="col-sm-8 py-2 px-lg-4">
+                      <button class="btn btn-lg btn-warning"> Cari</button>
+                    </div>
+                  </div>
+              </div>
+            </div>
                 <table id="tb_supplier" class="table table-sm table-bordered table-striped table-vcenter js-dataTable-full">
                     <thead>
                         <th>No</th>
-                        <th>Code</th>
-                        <th>Nama</th>
-                        <th>Alamat</th>
-                        <th>Kota</th>
-                        <th>Telp</th>
-                        <th>Keterangan</th>
-                        <th>Saldo</th>
-                        <th>Rekening</th>
-                        <th>Aksi</th>
+                        <th>Nama Barang</th>
+                        <th>Stok Awal</th>
+                        <th>Satuan</th>
                     </thead>
                     <tbody>
+                      @php
+                          $no=0;
+                      @endphp
+                      @foreach ($data as $item)
+                      <tr>
+                        <td>{{$no++}}</td>
+                        <td>{{$item->m_stok_m_produk_nama}}</td>
+                        <td>{{$item->stok_awal}}</td>
+                        <td>{{$item->m_stok_satuan}}</td>
+                      </tr>
+                      @endforeach
                     </tbody>
                     <tfoot>
-                      <th>No</th>
-                      <th>Code</th>
-                      <th>Nama</th>
-                      <th>Alamat</th>
-                      <th>Kota</th>
-                      <th>Telp</th>
-                      <th>Keterangan</th>
-                      <th>Saldo</th>
-                      <th>Rekening</th>
-                      <th>Aksi</th>
+                        <th>No</th>
+                        <th>Nama Barang</th>
+                        <th>Stok Awal</th>
+                        <th>Satuan</th>
                     </tfoot>
                 </table>
-             
             <!-- Select2 in a modal -->
   <div class="modal" id="form-supplier" tabindex="-1" role="dialog" aria-labelledby="form-supplier" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -60,65 +107,18 @@
                 <input name="action" type="hidden" id="action">
                 <input name="m_supplier_id" type="hidden" id="m_supplier_id">
                 <div class="form-group">
-                    <label for="m_supplier_nama">Nama Supplier</label>
+                    <label for="m_supplier_nama">Nama Barang</label>
                       <div>
                         <input class="form-control" type="text" name="m_supplier_nama" id="m_supplier_nama" style="width: 100%;" required>
                       </div>
                 </div>
                 <div class="form-group">
-                  <label for="m_supplier_alamat">Alamat Supplier</label>
+                  <label for="m_supplier_alamat">Qty Stok Awal</label>
                     <div>
                       <textarea class="form-control" type="text" name="m_supplier_alamat" id="m_supplier_alamat" style="width: 100%;" cols="3" rows="2" required></textarea>
                     </div>
                 </div>
-                <div class="form-group">
-                  <label for="m_supplier_kota">Kota Supplier</label>
-                    <div>
-                      <input class="form-control" type="text" name="m_supplier_kota" id="m_supplier_kota" style="width: 100%;" required>
-                    </div>
-              </div>
-              <div class="form-group">
-                <label for="m_supplier_telp">Telp Supplier</label>
-                  <div>
-                    <input class="form-control" type="number" name="m_supplier_telp" id="m_supplier_telp" style="width: 100%;" required>
-                  </div>
-            </div>
-            <div class="form-group">
-              <label for="m_supplier_ket">Keterangan Supplier</label>
-                <div>
-                  <textarea class="form-control" type="text" name="m_supplier_ket" id="m_supplier_ket" style="width: 100%;" cols="3" rows="2" required></textarea>
-                </div>
-            </div>
-            <div class="form-group">
-              <label for="m_supplier_jth_tempo">Durasi Jatuh Tempo Pembayaran</label>
-                <div>
-                  <input class="form-control" type="number" min="0" name="m_supplier_jth_tempo" id="m_supplier_jth_tempo" style="width: 100%;" required>
-                </div>
-          </div>
-            <div class="form-group">
-              <label for="m_supplier_rek">No Rekening</label>
-                <div>
-                  <input class="form-control" type="number" name="m_supplier_rek" id="m_supplier_rek" style="width: 100%;">
-                </div>
-            </div>
-          <div class="form-group">
-            <label for="m_supplier_rek_nama">Nama Rekening</label>
-              <div>
-                <input class="form-control" type="text" name="m_supplier_rek_nama" id="m_supplier_rek_nama" style="width: 100%;" >
-              </div>
-          </div>
-          <div class="form-group">
-            <label for="m_supplier_bank_nama">Nama Bank</label>
-              <div>
-                <input class="form-control" type="text" name="m_supplier_bank_nama" id="m_supplier_bank_nama" style="width: 100%;" >
-              </div>
-          </div>
-          <div class="form-group">
-            <label for="m_supplier_saldo_awal">Saldo Awal</label>
-              <div>
-                <input class="form-control" type="number" name="m_supplier_saldo_awal" id="m_supplier_saldo_awal" style="width: 100%;">
-              </div>
-          </div>
+                
               </div>
               </div>
               <div class="block-content block-content-full text-end bg-body">
@@ -142,6 +142,7 @@
 @section('js')
 <script type="module">
  $(document).ready(function(){
+  Codebase.helpersOnLoad(['jq-select2']);
   $.ajaxSetup({
     headers:{
       'X-CSRF-Token' : $("input[name=_token]").val()
@@ -149,19 +150,9 @@
       });
     Codebase.helpersOnLoad(['jq-notify']);
     var table, save_method;
+    var mw = $('')
         $(function() {
-            table = $('#tb_supplier').DataTable({
-        "destroy":true,
-        "orderCellsTop": true,
-        "processing": true,
-        "autoWidth": true,
-        "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
-        "pageLength": 10,
-        "ajax": {
-            "url": "{{ route('supplier.data') }}",
-            "type": "GET"
-                }
-            });
+            table = $('#tb_supplier').DataTable();
         });
       $(".buttonInsert").on('click', function() {
             $('[name="action"]').val('add');
