@@ -73,6 +73,7 @@ class RekapHapusMenu extends Model
 	protected $fillable = [
 		'r_h_m_sync_id',
 		'r_h_m_rekap_modal_id',
+		'r_h_m_tmp_transaction_id',
 		'r_h_m_tanggal',
 		'r_h_m_jam',
 		'r_h_m_nota_code',
