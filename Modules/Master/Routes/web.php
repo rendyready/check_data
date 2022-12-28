@@ -12,7 +12,7 @@
 */
 
 //Master Area Route
-
+use illuminate\Support\Facades\Route;
 use Modules\Master\Http\Controllers\MWaroengController;
 
 Route::group(['prefix' => 'master', 'controller' => MAreaController::class, 'middleware' => ['auth', 'web']], function () {

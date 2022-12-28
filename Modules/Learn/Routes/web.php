@@ -11,6 +11,7 @@
 |
 */
 
+use illuminate\Support\Facades\Route;
 use Modules\Learn\Http\Controllers\MJabatanController;
 use Modules\Learn\Http\Controllers\MPlotProduksiController;
 

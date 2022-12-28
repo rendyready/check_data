@@ -31,11 +31,6 @@ class ProdukController extends Controller
         $data->jenisproduk = DB::table('m_jenis_produk')->get();
         $data->plot_produksi = DB::table('m_plot_produksi')->get();
         return view('master::m_produk', compact('data'));
-
-
-        echo "<pre>";
-        dd($data);
-        echo "</pre>";
     }
 
     /**
@@ -44,16 +39,26 @@ class ProdukController extends Controller
      */
     public function simpan(request $request)
     {
-        $raw = [
-            'm_produk_code' => ['required', 'unique:m_produk', 'max:255'],
-        ];
-        $value = [
-            "m_produk_code" => Str::lower($request->m_produk_code),
-        ];
-        $validate = Validator::make($value, $raw);
-        if ($validate->fails()) {
-            return response(['Messages' => 'Data Duplidate !']);
+        $produkCode = Str::upper(preg_replace(array('/\s{2,}/', '/[\t\n]/'), ' ', $request->m_produk_code));
+        $produkNama = Str::upper(preg_replace(array('/\s{2,}/', '/[\t\n]/'), ' ', $request->m_produk_nama));
+        $produkUrut = Str::upper(preg_replace(array('/\s{2,}/', '/[\t\n]/'), ' ', $request->m_produk_urut));
+
+        $check = DB::table('m_produk')
+            ->selectRaw('m_produk_code,m_produk_urut')
+            ->selectRaw('m_produk_nama')
+            ->whereRaw(
+                'LOWER(m_produk_code)=' . "'$produkCode'"
+            )->whereRaw(
+                'LOWER(m_produk_urut)=' . "'$produkUrut'"
+            )->whereRaw(
+                'LOWER(m_produk_nama)=' . "'$produkNama'"
+            )
+            ->orderBy('m_produk_id', 'asc')
+            ->get();
+        if ($check == true) {
+            return  response(['Messages' => 'Data Simpan Double Kak !', $check]);
         } else {
+            return  response(['Messages' => 'Yuk Simpan Kak !', $check]);
             DB::table('m_produk')->insert([
                 "m_produk_code" => Str::lower($request->m_produk_code),
                 "m_produk_nama" => $request->m_produk_nama,
@@ -72,8 +77,8 @@ class ProdukController extends Controller
                 "m_produk_created_by" => Auth::id(),
                 "m_produk_created_at" => Carbon::now(),
             ]);
-            return Redirect::route('m_produk.index');
-            return response(['Messages' => true]);
+            return Redirect::route('edit.m_produk');
+            // return response(['Messages' => true]);
         }
     }
 
@@ -105,19 +110,31 @@ class ProdukController extends Controller
      */
     public function edit(request $request)
     {
-        $rawData = [
-            'm_produk_code' => ['required', 'unique:m_produk'],
-        ];
-        $value = ['m_produk_code' => Str::lower($request->m_produk_code),];
-        $validate = Validator::make($value, $rawData);
-        if ($validate->fails()) {
-            return response(['Messages' => 'Data Duplidate !']);
-        } else {
+        $produkCode = Str::upper(preg_replace(array('/\s{2,}/', '/[\t\n]/'), ' ', $request->m_produk_code));
+        $produkNama = Str::upper(preg_replace(array('/\s{2,}/', '/[\t\n]/'), ' ', $request->m_produk_nama));
+        $produkUrut = Str::upper(preg_replace(array('/\s{2,}/', '/[\t\n]/'), ' ', $request->m_produk_urut));
+
+        $check = DB::table('m_produk')
+            ->selectRaw('m_produk_code,m_produk_urut')
+            ->selectRaw('m_produk_nama')
+            ->whereRaw(
+                'LOWER(m_produk_code)=' . "'$produkCode'"
+            )->whereRaw(
+                'LOWER(m_produk_urut)=' . "'$produkUrut'"
+            )->whereRaw(
+                'LOWER(m_produk_nama)=' . "'$produkNama'"
+            )
+            ->orderBy('m_produk_id', 'asc')
+            ->get();
+        if ($check == true) {
+            return Redirect::route('m_produk.index')
+                ->with(['Messages' => 'Data Edit Double Kak !']);
+        } elseif ($check == null) {
             DB::table('m_produk')->where('m_produk_id', $request->m_produk_id)
                 ->update([
-                    "m_produk_code" => $request->m_produk_code,
-                    "m_produk_nama" => $request->m_produk_nama,
-                    "m_produk_urut" => $request->m_produk_urut,
+                    "m_produk_code" => $produkCode,
+                    "m_produk_nama" => $produkNama,
+                    "m_produk_urut" => $produkUrut,
                     "m_produk_cr" => $request->m_produk_cr,
                     "m_produk_status" => $request->m_produk_status,
                     "m_produk_tax" => $request->m_produk_tax,
@@ -132,9 +149,9 @@ class ProdukController extends Controller
                     "m_produk_updated_by" => Auth::id(),
                     "m_produk_updated_at" => Carbon::now(),
                 ]);
+            return response(['Messages' => 'Data Edit Update !']);
+            return Redirect::route('m_produk.index');
         }
-        return Redirect::route('m_produk.index');
-        return response(['Messages' => 'Data Update !']);
     }
 
     /**
