@@ -57,9 +57,9 @@ class MStokController extends Controller
      * @param Request $request
      * @return Renderable
      */
-    public function store(Request $request)
+    public function simpan(Request $request)
     {
-        //
+        return $request->all();
     }
 
     /**
