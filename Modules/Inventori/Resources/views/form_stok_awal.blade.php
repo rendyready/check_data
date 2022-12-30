@@ -43,7 +43,7 @@
                                         </select>
                                     </div>
                                     <div class="row mb-4">
-                                        <label class="col-sm-4 col-form-label" for="rekap_po_tgl">Pencarian</label>
+                                        <label class="col-sm-4 col-form-label" for="rekap_po_tgl">Pencarian Data</label>
                                         <div class="col-sm-8 py-2 px-lg-4">
                                             <button id="cari" class="btn btn-lg btn-warning btn-cari"> Cari</button>
                                         </div>
@@ -64,7 +64,7 @@
                                             <td><select class="js-select2 nama_barang" name="m_stok_m_produk_id[]"
                                                     id="m_stok_m_produk_id"
                                                     style="width: 100%;"data-placeholder="Pilih Nama Barang" required>
-                                                    <option></option>
+                                                    <option value=""></option>
                                                 </select></td>
                                             <td><input type="number" min="0"
                                                     class="form-control form-control-sm number" name="m_stok_awal[]"
@@ -137,7 +137,7 @@
       $('#form_input').append('<tr id="row'+no+'">'+
                           '<td><select class="js-select2 nama_barang" name="m_stok_m_produk_id[]" id="m_stok_m_produk_id'+no+'" style="width: 100%;"data-placeholder="Pilih Nama Barang" required><option></option></select></td>'+
                           '<td><input type="number" min="0" class="form-control number form-control-sm" name="m_stok_awal[]" id="m_stok_awal" required></td>'+
-                          '<td><input type="text" class="form-control form-control-sm satuan" id="m_satuan" readonly></td>'+
+                          '<td><input type="text" class="form-control form-control-sm satuan" id="m_satuan'+no+'" readonly></td>'+
                           '<td><button type="button" id="'+no+'" class="btn btn-danger btn_remove"><i class="fa fa-trash"></i></button></td></tr>');
 
       });
@@ -149,6 +149,7 @@
       $('#form_input').on('click select2:open','.tambah', function(){
           Codebase.helpersOnLoad(['jq-select2']);
               $.each(barang, function(key, value) {
+              $('#m_stok_m_produk_id'+no).append('<option></option>');  
               $('#m_stok_m_produk_id'+no)
               .append($('<option>', { value : key })
               .text(value));
@@ -169,7 +170,11 @@
           var prev = $(this).data('val');
           var current = $(this).val();
           var id = $(this).data('id');
-      var values = $('[name="m_stok_m_produk_id[]"]').map(function() {
+          var satuan_id = id.slice(18);  
+          $.get("/master/m_satuan/"+current, function(data){
+            $('#m_satuan'+satuan_id).val(data.m_satuan_kode);
+          });
+                var values = $('[name="m_stok_m_produk_id[]"]').map(function() {
         return this.value.trim();
       }).get();
       var unique =  [...new Set(values)];
@@ -179,7 +184,6 @@
          $('#'+id).val(prev).trigger('change');
       }
       });
-
       $(".number").on("keypress", function (evt) {
         if (evt.which != 8 && evt.which != 0 && evt.which < 48 || evt.which > 57)
         {
@@ -196,17 +200,19 @@
                         type : "POST",
                         data : formData,
                         success : function(data){
-                            $.notify({
-                              align: 'right',       
-                              from: 'top',                
-                              type: 'success',               
-                              icon: 'fa fa-success me-5',    
-                              message: 'Berhasil Menambahkan Data'
+                            Codebase.helpers('jq-notify', {
+                            align: 'right', // 'right', 'left', 'center'
+                            from: 'top', // 'top', 'bottom'
+                            type: data.type, // 'info', 'success', 'warning', 'danger'
+                            icon: 'fa fa-info me-5', // Icon class
+                            message: data.message
                             });
-                            table.ajax.reload();
+                            setTimeout(function() {
+                            window.location.reload();
+                            }, 3000);
                         },
-                        error : function(){
-                            alert("Tidak dapat menyimpan data!");
+                        error : function(err){
+                            alert(err.responseJSON.message);
                         }
                     });
                     return false;

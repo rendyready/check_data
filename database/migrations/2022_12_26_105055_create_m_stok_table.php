@@ -20,10 +20,10 @@ return new class extends Migration
             $table->decimal('m_stok_awal');
             $table->decimal('m_stok_masuk',18,2)->nullable();
             $table->decimal('m_stok_keluar',18,2)->nullable();
-            $table->decimal('m_stok_saldo',18,2);
-            $table->decimal('m_stok_hpp',18,2);
-            $table->decimal('m_stok_rusak',18,2);
-            $table->decimal('m_stok_lelang',18,2);
+            $table->decimal('m_stok_saldo',18,2)->nullable();
+            $table->decimal('m_stok_hpp',18,2)->nullable();
+            $table->decimal('m_stok_rusak',18,2)->nullable();
+            $table->decimal('m_stok_lelang',18,2)->nullable();
             $table->bigInteger('m_stok_created_by');
             $table->bigInteger('m_stok_updated_by')->nullable();
             $table->bigInteger('m_stok_deleted_by')->nullable();
