@@ -21,11 +21,14 @@ Route::prefix('akuntansi')->middleware('auth', 'web')
         // Rekening
         Route::controller(RekeningController::class)->group(function () {
             Route::get('rekening', 'index')->name('rekening.index');
-            Route::post('tambah', 'store')->name('rekening.store');
-            Route::get('src-rekening', 'srcRekening')->name('resource_rekening');
+            Route::post('rekening-create', 'store')->name('rekening.store');
+
+
+            Route::get('rekening-list', 'srcRekening')->name('rekening.list');
         });
         // link
         Route::controller(LinkAkuntansiController::class)->group(function () {
-            Route::get('link', 'index')->name('link');
+            Route::get('link', 'index')->name('link.index');
+            Route::post('link-create', 'store')->name('link.store');
         });
     });

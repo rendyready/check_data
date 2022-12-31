@@ -72,9 +72,12 @@ class RekeningController extends Controller
                 'm_rekening_created_at' => Carbon::now(),
                 'm_rekening_created_by' => Auth::id(),
             );
-            DB::table('m_rekening')->insert($data);
+            if ($data == null) {
+            } else {
+                DB::table('m_rekening')->insert($data);
+            }
+            return response()->json();
         }
-        return response()->json();
     }
 
     /**

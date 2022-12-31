@@ -101,7 +101,7 @@
                   <th>Nama Akun</th>
                   <th>Saldo</th>
                 </thead>
-                <tbody>
+                <tbody id="dataReload">
                 </tbody>
                 <tfoot>
                   <th>Kaategori</th>
@@ -161,54 +161,45 @@
         return false;
       }
     });
-
-    $('#prosesData').click('.button', function() {
-      console.log('codot');
-      var mwId = $('#m_rekening_m_w_id').val();
-      var rekKat = $('#m_rekening_kategori').val();
-      console.log(mwId, rekKat);
-      if (mwId == m_rekening_m_w_id && rekKat == m_rekening_kategori) {
-        console.log(this);
-        $('#dataSourceProcess').find('tbody', function(data) {
-          console.log(this);
-          $.ajax({
-              type: 'GET',
-              dataType: 'JSON',
-              url: '{{route("resource_rekening")}}',
-            }),
-            append('<tr>' +
-              '<td>' + data.m_rekening_kategori + '</td>' +
-              '<td>' + data.m_rekening_no_akun + '</td>' +
-              '<td>' + data.m_rekening_nama + '</td>' +
-              '<td>' + data.m_rekening_saldo + '</td>' +
-              '<tr>');
-        });
-        $.ajax({
-          type: 'GET',
-          dataType: 'JSON',
-          url: '{{route("resource_rekening")}}',
-          success: function(data) {
-
-            $.each(data, function(a, item) {
-              $('#dataSourceProcess').find('tbody').append(
-                '<tr>' +
-                '<td>' + item.m_rekening_kategori + '</td>' +
-                '<td>' + item.m_rekening_no_akun + '</td>' +
-                '<td>' + item.m_rekening_nama + '</td>' +
-                '<td>' + item.m_rekening_saldo + '</td>' +
-                '<tr>');
-            });
-          }
-        });
-      }
-    });
-
-
-
     $(document).on('click', '.btn_remove', function() {
       var button_id = $(this).attr("id");
       $('#row' + button_id + '').remove();
     });
+
+    $('#prosesData').click('.button', function(event) {
+      event.preventDefault();
+      var mwId = $('#m_rekening_m_w_id').val();
+      var rekKat = $('#m_rekening_kategori').val();
+      console.log(mwId, rekKat);
+
+      $.ajax({
+        type: 'GET',
+        dataType: 'JSON',
+        url: '{{route("rekening.list")}}',
+        data: {
+          m_rekening_m_w_id: mwId,
+          m_rekening_kategori: rekKat,
+        },
+        success: function(data) {
+          $('#dataReload').empty();
+          console.log(data);
+          $.each(data, function(a, item) {
+            $('#dataSourceProcess').find('tbody').append(
+              '<tr>' +
+              '<td>' + item.m_rekening_kategori + '</td>' +
+              '<td>' + item.m_rekening_no_akun + '</td>' +
+              '<td>' + item.m_rekening_nama + '</td>' +
+              '<td>' + item.m_rekening_saldo + '</td>' +
+              '<tr>');
+          });
+        },
+      });
+    });
+
+
+
+
+
 
   });
 </script>

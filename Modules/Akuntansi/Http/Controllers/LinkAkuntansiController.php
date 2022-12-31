@@ -2,7 +2,6 @@
 
 namespace Modules\Akuntansi\Http\Controllers;
 
-use Dflydev\DotAccessData\Data;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -18,16 +17,19 @@ class LinkAkuntansiController extends Controller
     public function index()
     {
         $data  = new stdClass();
-        $data->link = DB::table('link_akt')->select('link_akt_m_rekening_id', 'link_akt_list_akt_id')->whereNull('link_akt_deleted_at')->orderBy('link_akt_id', 'asc')->get();
+        $data->link = DB::table('link_akt')
+            ->select('link_akt_m_rekening_id', 'link_akt_list_akt_id')
+            ->whereNull('link_akt_deleted_at')->orderBy('link_akt_id', 'asc')->get();
         $data->list = DB::table('link_akt')->rightJoin('list_akt', 'list_akt_id', 'link_akt_list_akt_id')
-            ->select('list_akt_nama')
+            ->select('list_akt_id', 'list_akt_nama')->orderBy('list_akt_id', 'asc')
             ->get();
         $data->rekening = DB::table('link_akt')->rightJoin('m_rekening', 'm_rekening_id', 'link_akt_m_rekening_id')
             ->select()
-            ->select('m_rekening_nama', 'm_rekening_kategori', 'm_rekening_no_akun', 'm_rekening_saldo')
+            ->select('m_rekening_id', 'm_rekening_nama', 'm_rekening_kategori', 'm_rekening_no_akun', 'm_rekening_saldo')
             ->get();
-        // return view('akuntansi::master.link_akt', compact('data'));
-        return $data;
+
+        return view('akuntansi::master.link', compact('data'));
+        // return response()->json($data);
     }
 
     /**
