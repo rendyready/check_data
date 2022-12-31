@@ -146,7 +146,7 @@
         var button_id = $(this).attr("id"); 
         $('#row'+button_id+'').remove();
       });
-      $('#form_input').on('click select2:open','.tambah', function(){
+      $('#form_input').on('click','.tambah', function(){
           Codebase.helpersOnLoad(['jq-select2']);
               $.each(barang, function(key, value) {
               $('#m_stok_m_produk_id'+no).append('<option></option>');  
