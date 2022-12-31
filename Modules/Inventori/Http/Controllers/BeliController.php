@@ -19,6 +19,7 @@ class BeliController extends Controller
         $data = new \stdClass();
         $get_max_id = DB::table('rekap_beli')->orderBy('rekap_beli_id','desc')->first();
         $user = Auth::id();
+        $data->waroeng_nama = DB::table('m_w')->select('m_w_nama')->where('m_w_id',Auth::user()->waroeng_id)->first();
         $data->tgl_now = Carbon::now()->format('Y-m-d'); 
         $data->code = (empty($get_max_id->rekap_beli_id)) ? $urut = "1000001". $user : $urut = substr($get_max_id->rekap_beli_code,0,-1)+'1'. $user; 
         return view('inventori::form_beli',compact('data'));

@@ -57,7 +57,9 @@
                       <tr>
                         <td>{{$no++}}</td>
                         <td hidden><input type="text" class="form-control form-control-sm" name="rekap_beli_detail_id[]" id="rekap_beli_detail_id" value="{{$item->rekap_beli_detail_id}}" readonly></td>
+                        <td hidden><input type="text" class="form-control form-control-sm" name="rekap_beli_detail_rekap_beli_code[]" id="rekap_beli_detail_rekap_beli_code" value="{{$item->rekap_beli_detail_rekap_beli_code}}" readonly></td>
                         <td hidden><input type="text" class="form-control form-control-sm" name="rekap_beli_detail_m_produk_id[]" id="rekap_beli_detail_m_produk_id" value="{{$item->rekap_beli_detail_m_produk_id}}" readonly></td>
+                        <td hidden><input type="text" class="form-control form-control-sm" name="rekap_beli_detail_subtot[]" id="rekap_beli_detail_subtot" value="{{$item->rekap_beli_detail_subtot}}" readonly></td>
                         <td>{{$item->rekap_beli_supplier_nama}}</td>
                         <td ><input type="text" class="form-control form-control-sm" name="rekap_beli_detail_m_produk_nama[]" id="rekap_beli_detail_m_produk_nama" value="{{$item->rekap_beli_detail_m_produk_nama}}" readonly></td>
                         <td>{{$item->rekap_beli_detail_catatan}}</td>

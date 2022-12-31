@@ -19,12 +19,12 @@
                               <input type="text" class="form-control form-control-sm" id="rekap_beli_created_by" name="rekap_beli_created_by" value="{{Auth::user()->name}}" readonly>
                             </div>
                         </div>
-                        {{-- <div class="row mb-1">
-                            <label class="col-sm-4 col-form-label" for="example-hf-text">Pukul</label>
+                        <div class="row mb-1">
+                            <label class="col-sm-4 col-form-label" for="example-hf-text">Waroeng</label>
                             <div class="col-sm-8">
-                                <h3 id="time">13:00</h3>
+                              <input type="text" class="form-control form-control-sm" id="rekap_beli_m_w" name="rekap_beli_m_w" value="{{$data->waroeng_nama->m_w_nama}}" readonly>
                             </div>
-                        </div> --}}
+                        </div>
                     </div>
                     <div class="col-md-4">
                         <div class="row mb-1">
