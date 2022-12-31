@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id('m_payment_method_id');
             $table->string('m_payment_method_type'); //cash,transfer
             $table->string('m_payment_method_name');
-            $table->string('m_payment_method_logo')->nullable();
+            $table->string('m_payment_method_color')->nullable()->default('#B7C4CF');
             $table->bigInteger('m_payment_method_created_by');
             $table->bigInteger('m_payment_method_updated_by')->nullable();
             $table->timestampTz('m_payment_method_deleted_by')->nullable();

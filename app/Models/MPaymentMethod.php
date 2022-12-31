@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $m_payment_method_id
  * @property string $m_payment_method_type
  * @property string $m_payment_method_name
- * @property string|null $m_payment_method_logo
+ * @property string|null $m_payment_method_color
  * @property int $m_payment_method_created_by
  * @property int|null $m_payment_method_updated_by
  * @property Carbon|null $m_payment_method_deleted_by
@@ -46,7 +46,7 @@ class MPaymentMethod extends Model
 	protected $fillable = [
 		'm_payment_method_type',
 		'm_payment_method_name',
-		'm_payment_method_logo',
+		'm_payment_method_color',
 		'm_payment_method_created_by',
 		'm_payment_method_updated_by',
 		'm_payment_method_deleted_by',

@@ -86,6 +86,7 @@ Route::group(['prefix' => 'master', 'controller' => MejaController::class, 'midd
 Route::group(['prefix' => 'master', 'controller' => MSatuanController::class, 'middleware' => ['auth', 'web']], function () {
     Route::get('m_satuan', 'index')->name('m_satuan.index');
     Route::post('m_satuan/action', 'action')->name('action.m_satuan');
+    Route::get('m_satuan/{id}','satuan_kode_produk');
 });
 //Master Klasifikasi
 Route::group(['prefix' => 'master', 'controller' => ProdKlasifikasiController::class, 'middleware' => ['auth', 'web']], function () {

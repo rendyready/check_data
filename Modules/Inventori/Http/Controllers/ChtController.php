@@ -41,22 +41,7 @@ class ChtController extends Controller
                 ->update(['rekap_beli_detail_terima'=>$request->rekap_beli_detail_terima[$key],
                           'rekap_beli_detail_satuan_terima' => $request->rekap_beli_detail_satuan_terima[$key]]);
             if (empty($request->rekap_beli_detail_terima[$key])) {
-                $saldo = DB::table('m_stok')
-                ->where('m_stok_mutasi_m_w_id',$waroeng_id)
-                ->where('m_stok_mutasi_gudang','gudang utama')
-                ->where('m_stok_mutasi_m_produk_id',$request->rekap_beli_detail_m_produk_id[$key])
-                ->sortBy('m_stok_mutasi_id','desc')
-                ->first();
-                $last_saldo = (empty($saldo->m_stok_mutasi_saldo)) ? 0 : $saldo->m_stok_mutasi_saldo;
-                $saldo_now = $last_saldo + $request->rekap_beli_detail_terima[$key];
-                $hpp = $saldo->
-                $data = array(
-                    'm_stok_mutasi_m_produk_id' => $request->rekap_beli_detail_m_produk_id[$key],
-                    'm_stok_mutasi_m_produk_nama' => $request->rekap_beli_detail_m_produk_nama[$key],
-                    'm_stok_mutasi_satuan' => $request->rekap_beli_detail_satuan_terima[$key],
-                    'm_stok_mutasi_stok_masuk' => $request->rekap_beli_detail_terima[$key],
-                    'm_stok_mutasi_saldo' => $saldo_now
-                );
+                
             }                
         }
 
