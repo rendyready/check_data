@@ -395,7 +395,7 @@
             </a>
             <ul class="nav-main-submenu">
               <li class="nav-main-item">
-                <a class="nav-main-link{{ request()->is('akuntansi/rekening') ? ' active' : '' }}" href="{{route('rekening')}}">
+                <a class="nav-main-link{{ request()->is('akuntansi/rekening') ? ' active' : '' }}" href="{{route('rekening.index')}}">
                   <span class="nav-main-link-name">Rekening</span>
                 </a>
               </li>
