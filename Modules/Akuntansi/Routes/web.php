@@ -1,26 +1,13 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\Akuntansi\Http\Controllers\AkuntansiController;
 use Modules\Akuntansi\Http\Controllers\RekeningController;
 use Modules\Akuntansi\Http\Controllers\LinkAkuntansiController;
 use Modules\Akuntansi\Http\Controllers\LinkaktController;
 use Modules\Akuntansi\Http\Controllers\ListaktController;
 
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
-
-Route::post('/akuntansi/simpan', [RekeningController::class, 'simpan'])->name('rek.simpan');
+// Route Global  Akuntansi 
+// Welcome to jungle !!!
 
 Route::get('/akuntansi/link_akt', [LinkaktController::class, 'index'])->name('rek_link.index');
 
@@ -34,16 +21,14 @@ Route::prefix('akuntansi')->middleware('auth', 'web')
         // Rekening
         Route::controller(RekeningController::class)->group(function () {
             Route::get('rekening', 'index')->name('rekening.index');
-            Route::post('tambah', 'store')->name('rekening.store');
-            Route::get('showrek', 'view')->name('rekening.view');
+            Route::post('rekening-create', 'store')->name('rekening.store');
+
+
+            Route::get('rekening-list', 'srcRekening')->name('rekening.list');
         });
         // link
         Route::controller(LinkAkuntansiController::class)->group(function () {
-            Route::get('link', 'index')->name('link');
-        });
-
-        // for testing
-        Route::controller(AkuntansiController::class)->group(function () {
-            Route::get('fortest', 'index')->name('fortest');
+            Route::get('link', 'index')->name('link.index');
+            Route::post('link-create', 'store')->name('link.store');
         });
     });

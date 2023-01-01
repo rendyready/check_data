@@ -10,14 +10,13 @@
         </div>
         <div class="block block-rounded">
           <div class="block-content text-muted">
-            <!-- <form action="{{route('rek.simpan')}}" method="POST" onchange="return "> -->
             <form id="rekeningInsert">
               <div class="row">
                 <div class="col-md-5">
                   <div class="row mb-2">
-                    <label class="col-sm-4 col-form-label" for="example-hf-text">Area Waroeng</label>
+                    <label id="namaWaroeng" class="col-sm-4 col-form-label" for="example-hf-text">Area Waroeng</label>
                     <div class="col-sm-8">
-                      <select class="js-select2 form-control-sm" style="width: 100%;" name="m_rekening_m_w_id" id="m_rekening_m_w_id" data-placeholder="pilih area/waroeng">
+                      <select class="js-select2 form-control-sm namaWaroeng" style="width: 100%;" name="m_rekening_m_w_id" id="m_rekening_m_w_id" data-placeholder="pilih area/waroeng">
                         @foreach($mw as $data)
                         <option value="{{($data -> m_w_id)}}"> {{($data ->m_w_nama)}}</option>
                         @endforeach
@@ -25,9 +24,9 @@
                     </div>
                   </div>
                   <div class="row mb-2">
-                    <label class="col-sm-4 col-form-label" for="example-hf-text">Kategori Akun</label>
+                    <label id="categoryAccount" class="col-sm-4 col-form-label" for="example-hf-text">Kategori Akun</label>
                     <div class="col-sm-8">
-                      <select class="js-select2 form-control-sm" style="width: 100%;" name="m_rekening_kategori" id="m_rekening_kategori" data-placeholder="pilih kategori akun">
+                      <select class="js-select2 form-control-sm categoryAccount" style="width: 100%;" name="m_rekening_kategori" id="m_rekening_kategori" data-placeholder="pilih kategori akun">
                         <option value="aktiva lancar">Aktiva Lancar</option>
                         <option value="aktiva tetap">Aktiva Tetap</option>
                         <option value="modal">Modal</option>
@@ -40,7 +39,17 @@
                     </div>
                   </div>
                 </div>
+                <div class="col-md-5">
+                  <div class="col-sm-4">
+                    <div class="position-relative">
+                      <div class="position-absolute mb-4 top-50 start-50 translate-middle-x ">
+                        <button id="prosesData" type="button" class="btn btn-success">Pencarian Data</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
+
               <div class="table-responsive">
                 <table id="form" class="table table-sm table-bordered table-striped table-vcenter">
                   <thead>
@@ -84,30 +93,24 @@
         </div>
         <div class="block block-rounded">
           <div class="block-content text-mute">
-            <form action="#" method="#">
-              <div class="table-responsive">
-                <table id="form" class="table table-sm table-bordered table-striped table-vcenter">
-                  <thead>
-                    <th>Kategori</th>
-                    <th>No Akun</th>
-                    <th>Nama Akun</th>
-                    <th>Saldo</th>
-                  </thead>
-                  <tbody>
-                    <td>Nama Category</td>
-                    <td>NO Akun</td>
-                    <td>Name Account</td>
-                    <td>Saldo</td>
-                  </tbody>
-                  <tfoot>
-                    <th>Kaategori</th>
-                    <th>No Akun</th>
-                    <th>Nama Akun</th>
-                    <th>Saldo</th>
-                  </tfoot>
-                </table>
-              </div>
-            </form>
+            <div class="table-responsive">
+              <table id="dataSourceProcess" class="table table-sm table-bordered table-striped table-vcenter">
+                <thead>
+                  <th>Kategori</th>
+                  <th>No Akun</th>
+                  <th>Nama Akun</th>
+                  <th>Saldo</th>
+                </thead>
+                <tbody id="dataReload">
+                </tbody>
+                <tfoot>
+                  <th>Kaategori</th>
+                  <th>No Akun</th>
+                  <th>Nama Akun</th>
+                  <th>Saldo</th>
+                </tfoot>
+              </table>
+            </div>
           </div>
         </div>
       </div>
@@ -123,6 +126,7 @@
         'X-CSRF-Token': $("input[name=_token]").val()
       },
     });
+
     Codebase.helpersOnLoad(['jq-select2']);
     var no = 1;
     $('.tambah').on('click', function() {
@@ -157,11 +161,45 @@
         return false;
       }
     });
-
     $(document).on('click', '.btn_remove', function() {
       var button_id = $(this).attr("id");
       $('#row' + button_id + '').remove();
     });
+
+    $('#prosesData').click('.button', function(event) {
+      event.preventDefault();
+      var mwId = $('#m_rekening_m_w_id').val();
+      var rekKat = $('#m_rekening_kategori').val();
+      console.log(mwId, rekKat);
+
+      $.ajax({
+        type: 'GET',
+        dataType: 'JSON',
+        url: '{{route("rekening.list")}}',
+        data: {
+          m_rekening_m_w_id: mwId,
+          m_rekening_kategori: rekKat,
+        },
+        success: function(data) {
+          $('#dataReload').empty();
+          console.log(data);
+          $.each(data, function(a, item) {
+            $('#dataSourceProcess').find('tbody').append(
+              '<tr>' +
+              '<td>' + item.m_rekening_kategori + '</td>' +
+              '<td>' + item.m_rekening_no_akun + '</td>' +
+              '<td>' + item.m_rekening_nama + '</td>' +
+              '<td>' + item.m_rekening_saldo + '</td>' +
+              '<tr>');
+          });
+        },
+      });
+    });
+
+
+
+
+
 
   });
 </script>
