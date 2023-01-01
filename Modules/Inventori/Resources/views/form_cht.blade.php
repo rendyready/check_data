@@ -85,8 +85,6 @@
 @section('js')
 <script type="module">
  $(document).ready(function(){
-  $('.js-select2').select2();
-  // Codebase.helpersOnLoad(['jq-select2']);
   $(".number").on("keypress", function (evt) {
     if (evt.which != 8 && evt.which != 0 && evt.which < 48 || evt.which > 57)
     {

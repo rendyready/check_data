@@ -103,7 +103,6 @@ Route::group(['prefix' => 'master', 'controller' => FooterController::class, 'mi
 Route::group(['prefix' => 'master', 'controller' => ProdukController::class, 'middleware' => ['auth', 'web']], function () {
     Route::get('m_produk', 'index')->name('m_produk.index');
     Route::post('produk/simpan', 'simpan')->name('simpan.m_produk');
-    Route::post('produk/edit', 'edit')->name('edit.m_produk');
     Route::get('produk/list/{id}', 'list')->name('m_produk.list');
 });
 //Master Produk Relasi

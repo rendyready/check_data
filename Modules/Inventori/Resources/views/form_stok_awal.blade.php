@@ -61,15 +61,15 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td><select class="js-select2 nama_barang" name="m_stok_m_produk_id[]"
+                                            <td><select class="js-select2 nama_barang reset" name="m_stok_m_produk_id[]"
                                                     id="m_stok_m_produk_id"
                                                     style="width: 100%;"data-placeholder="Pilih Nama Barang" required>
                                                     <option value=""></option>
                                                 </select></td>
                                             <td><input type="number" min="0"
-                                                    class="form-control form-control-sm number" name="m_stok_awal[]"
+                                                    class="form-control form-control-sm number reset" name="m_stok_awal[]"
                                                     id="m_stok_awal" required></td>
-                                            <td><input type="text" class="form-control form-control-sm harga"
+                                            <td><input type="text" class="form-control form-control-sm reset"
                                                     id="m_satuan" readonly></td>
                                         </tr>
                                     </tbody>
@@ -112,11 +112,11 @@
         }
       });
     Codebase.helpersOnLoad(['jq-notify']);
-    var table1, table2;
+    var table;
     $('#cari').on('click',function () {
             var g_id = $('#m_stok_gudang_id').val();
             $(function() {
-            table1 = $('#tb_stok').DataTable({
+            table = $('#tb_stok').DataTable({
               buttons:[],
               destroy:true,
               ajax: {
@@ -134,7 +134,7 @@
       var no=1;
       $('.tambah').on('click',function(){
         no++;
-      $('#form_input').append('<tr id="row'+no+'">'+
+      $('#form_input').append('<tr id="row'+no+'" class="remove_all">'+
                           '<td><select class="js-select2 nama_barang" name="m_stok_m_produk_id[]" id="m_stok_m_produk_id'+no+'" style="width: 100%;"data-placeholder="Pilih Nama Barang" required><option></option></select></td>'+
                           '<td><input type="number" min="0" class="form-control number form-control-sm" name="m_stok_awal[]" id="m_stok_awal" required></td>'+
                           '<td><input type="text" class="form-control form-control-sm satuan" id="m_satuan'+no+'" readonly></td>'+
@@ -207,9 +207,19 @@
                             icon: 'fa fa-info me-5', // Icon class
                             message: data.message
                             });
-                            setTimeout(function() {
-                            window.location.reload();
-                            }, 3000);
+                            $('.remove_all').remove();
+                            $('.reset').val('');
+                            var g_id = $('#m_stok_gudang_id').val();
+                            $(function() {
+                            $('#tb_stok').DataTable({
+                                buttons:[],
+                                destroy:true,
+                                ajax: {
+                                url: "/inventori/stok_awal/list/"+g_id,
+                                type: "GET",
+                                    }
+                                });
+                            });
                         },
                         error : function(err){
                             alert(err.responseJSON.message);

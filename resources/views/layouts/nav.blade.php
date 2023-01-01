@@ -361,19 +361,41 @@
               <span class="nav-main-link-name">Inventori</span>
             </a>
             <ul class="nav-main-submenu">
-              <li class="nav-main-item">
-                <a class="nav-main-link{{ request()->is('inventori/supplier') ? ' active' : '' }}" href="{{route('supplier.index')}}">
-                  <span class="nav-main-link-name">Supplier & Pelanggan</span>
+              <li class="nav-main-item{{ request()->is('inventori/*') ? ' open' : '' }}">
+                <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
+                  <span class="nav-main-link-name">Master</span>
                 </a>
+                <ul class="nav-main-submenu">
+                  <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('inventori/m_gudang') ? ' active' : '' }}" href="{{route('m_gudang.index')}}">
+                      <span class="nav-main-link-name">Data Gudang</span>
+                    </a>
+                  </li>
+                  <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('inventori/stok_awal') ? ' active' : '' }}" href="{{route('stok_awal.index')}}">
+                      <span class="nav-main-link-name">Stok Awal</span>
+                    </a>
+                  </li>
+                  <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('inventori/supplier') ? ' active' : '' }}" href="{{route('supplier.index')}}">
+                      <span class="nav-main-link-name">Supplier & Pelanggan</span>
+                    </a>
+                  </li>
+                </ul>
               </li>
               <li class="nav-main-item">
                 <a class="nav-main-link{{ request()->is('invetori/po') ? ' active' : '' }}" href="{{route('po.index')}}">
-                  <span class="nav-main-link-name">Purchase Order (PO)</span>
+                  <span class="nav-main-link-name">Purc hase Order (PO)</span>
                 </a>
               </li>
               <li class="nav-main-item">
                 <a class="nav-main-link{{ request()->is('invetori/beli') ? ' active' : '' }}" href="{{route('beli.index')}}">
                   <span class="nav-main-link-name">Pembelian</span>
+                </a>
+              </li>
+              <li class="nav-main-item">
+                <a class="nav-main-link{{ request()->is('invetori/cht') ? ' active' : '' }}" href="{{route('cht.index')}}">
+                  <span class="nav-main-link-name">CHT Pembelian</span>
                 </a>
               </li>
               <li class="nav-main-item">

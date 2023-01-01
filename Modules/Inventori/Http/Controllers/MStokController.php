@@ -86,29 +86,12 @@ class MStokController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function edit($id)
+    public function master_stok($id)
     {
-        return view('inventori::edit');
-    }
-
-    /**
-     * Update the specified resource in storage.
-     * @param Request $request
-     * @param int $id
-     * @return Renderable
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     * @param int $id
-     * @return Renderable
-     */
-    public function destroy($id)
-    {
-        //
+       $data = DB::table('m_stok')->where('m_stok_gudang_id',$id)
+        ->select('m_produk_id','m_produk_nama')
+        ->join('m_produk','m_produk_id','m_stok_m_produk_id')
+        ->get();
+        return response()->json($data);
     }
 }

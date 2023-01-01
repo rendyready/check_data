@@ -68,8 +68,7 @@
           </div>
           <div class="block-content fs-sm">
             <!-- Select2 is initialized at the bottom of the page -->
-            <form method="post" action="" id="formAction">
-              @csrf
+            <form id="formAction" name="form_action" method="post">
               <div class="mb-4">
                 <input type="hidden" id="m_produk_id" name="m_produk_id">
                 <label class="form-label" for="m_produk_code">Produk Code</label>
@@ -145,9 +144,9 @@
                   <div>
                     <select class="js-select2" id="m_produk_hpp" name="m_produk_hpp" style="width: 100%;" data-container="#form_produk" data-placeholder="Choose one..">
                       <option></option>
-                      @foreach($data ->produk as $hpp)
-                      <option value="{{$hpp->m_produk_hpp}}">{{$hpp->m_produk_hpp}}</option>
-                      @endforeach
+                      <option value="scp">SCP</option>
+                      <option value="sales">Sales</option>
+                      <option value="overhead">Overhead</option>
                     </select>
                   </div>
                 </div>
@@ -242,9 +241,13 @@
 <!-- END Page Content -->
 @endsection
 @section('js')
-
 <script type="module">
   $(document).ready(function() {
+    $.ajaxSetup({
+    headers:{
+      'X-CSRF-Token' : $("input[name=_token]").val()
+        }
+      });
     var t = $('#m_w_jenis').DataTable({
       processing: false,
       serverSide: false,
@@ -254,30 +257,21 @@
     Codebase.helpersOnLoad(['jq-select2']);
     $(".buttonInsert").on('click', function() {
       var id = $(this).attr('value');
+      $('[name="action"]').val('add');
+      $('#form_produk form')[0].reset();
       $("#myModalLabel").html('Tambah Produk');
-      $("#formAction").attr('action', "/master/produk/simpan");
       $("#form_produk").modal('show');
-      Codebase.helpers('jq-notify', {
-        align: 'right',
-        from: 'top',
-        type: 'danger',
-        icon: 'fa fa-info me-5',
-        message: data.Messages
-      });
-      setTimeout(function() {
-        window.location.reload();
-      }, 3300);
     });
     $(".buttonEdit").on('click', function() {
       var id = $(this).attr('value');
       $("#myModalLabel").html('Ubah Produk');
-      $("#formAction").attr('action', '/master/produk/edit');
+      $('[name="action"]').val('edit');
       $.ajax({
         url: "/master/produk/list/" + id,
         type: "GET",
         dataType: 'json',
         success: function(respond) {
-          console.log(respond)
+          console.log(respond);
           $("#m_produk_id").val(respond.m_produk_id).trigger('change');
           $("#m_produk_cr").val(respond.m_produk_cr).trigger('change');
           $("#m_produk_code").val(respond.m_produk_code).trigger('change');
@@ -293,20 +287,36 @@
           $("#m_produk_status").val(respond.m_produk_status).trigger('change');
           $("#m_produk_tax").val(respond.m_produk_tax).trigger('change');
           $("#m_produk_urut").val(respond.m_produk_urut).trigger('change');
-          Codebase.helpers('jq-notify', {
-            align: 'right',
-            from: 'top',
-            type: 'danger',
-            icon: 'fa fa-info me-5',
-            message: data.Messages
-          });
-          // setTimeout(function() {
-          //   window.location.reload();
-          // }, 3300);
         },
       });
       $("#form_produk").modal('show');
     });
+    $('#formAction').submit( function(e){
+                if(!e.isDefaultPrevented()){
+                    $.ajax({
+                        url : "{{ route('simpan.m_produk') }}",
+                        type : "POST",
+                        data : $('#form_produk form').serialize(),
+                        success : function(data){
+                            $('#form_produk').modal('hide');
+                            Codebase.helpers('jq-notify', {
+                              align: 'right', // 'right', 'left', 'center'
+                              from: 'top', // 'top', 'bottom'
+                              type: data.type, // 'info', 'success', 'warning', 'danger'
+                              icon: 'fa fa-info me-5', // Icon class
+                              message: data.messages
+                            });
+                            setTimeout(function() {
+                              window.location.reload();
+                            }, 3000);
+                        },
+                        error : function(){
+                            alert("Tidak dapat menyimpan data!");
+                        }
+                    });
+                    return false;
+                }
+            });
     $("#m_w_jenis").append(
       $('<tfoot/>').append($("#m_w_jenis thead tr").clone())
     );
