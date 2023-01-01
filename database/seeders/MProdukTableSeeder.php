@@ -29,7 +29,7 @@ class MProdukTableSeeder extends Seeder
                 'm_produk_m_klasifikasi_produk_id'=>3,
                 'm_produk_jual'=>'Ya',
                 'm_produk_scp'=>'Ya',
-                'm_produk_hpp'=>'Scp',
+                'm_produk_hpp'=>'scp',
                 'm_produk_created_by'=>'1',
             ],
             [
@@ -46,7 +46,7 @@ class MProdukTableSeeder extends Seeder
                 'm_produk_m_klasifikasi_produk_id'=>3,
                 'm_produk_jual'=>'Ya',
                 'm_produk_scp'=>'Ya',
-                'm_produk_hpp'=>'Scp',
+                'm_produk_hpp'=>'scp',
                 'm_produk_created_by'=>'1',
             ],
             [
@@ -63,7 +63,7 @@ class MProdukTableSeeder extends Seeder
                 'm_produk_m_klasifikasi_produk_id'=>3,
                 'm_produk_jual'=>'Ya',
                 'm_produk_scp'=>'Ya',
-                'm_produk_hpp'=>'Scp',
+                'm_produk_hpp'=>'scp',
                 'm_produk_created_by'=>'1',
             ],
             [
@@ -80,7 +80,7 @@ class MProdukTableSeeder extends Seeder
                 'm_produk_m_klasifikasi_produk_id'=>3,
                 'm_produk_jual'=>'Ya',
                 'm_produk_scp'=>'Ya',
-                'm_produk_hpp'=>'Scp',
+                'm_produk_hpp'=>'scp',
                 'm_produk_created_by'=>'1',
             ],
             [
@@ -97,7 +97,7 @@ class MProdukTableSeeder extends Seeder
                 'm_produk_m_klasifikasi_produk_id'=>3,
                 'm_produk_jual'=>'Ya',
                 'm_produk_scp'=>'Ya',
-                'm_produk_hpp'=>'Scp',
+                'm_produk_hpp'=>'scp',
                 'm_produk_created_by'=>'1',
             ],
             [
@@ -114,7 +114,7 @@ class MProdukTableSeeder extends Seeder
                 'm_produk_m_klasifikasi_produk_id'=>3,
                 'm_produk_jual'=>'Ya',
                 'm_produk_scp'=>'Ya',
-                'm_produk_hpp'=>'Scp',
+                'm_produk_hpp'=>'scp',
                 'm_produk_created_by'=>'1',
             ],
             [
@@ -131,7 +131,7 @@ class MProdukTableSeeder extends Seeder
                 'm_produk_m_klasifikasi_produk_id'=>3,
                 'm_produk_jual'=>'Ya',
                 'm_produk_scp'=>'Ya',
-                'm_produk_hpp'=>'Scp',
+                'm_produk_hpp'=>'scp',
                 'm_produk_created_by'=>'1',
             ],
             [
@@ -148,7 +148,7 @@ class MProdukTableSeeder extends Seeder
                 'm_produk_m_klasifikasi_produk_id'=>3,
                 'm_produk_jual'=>'Ya',
                 'm_produk_scp'=>'Ya',
-                'm_produk_hpp'=>'Scp',
+                'm_produk_hpp'=>'scp',
                 'm_produk_created_by'=>'1',
             ],
             [
@@ -165,7 +165,7 @@ class MProdukTableSeeder extends Seeder
                 'm_produk_m_klasifikasi_produk_id'=>3,
                 'm_produk_jual'=>'Ya',
                 'm_produk_scp'=>'Ya',
-                'm_produk_hpp'=>'Scp',
+                'm_produk_hpp'=>'scp',
                 'm_produk_created_by'=>'1',
             ],
             [
@@ -182,7 +182,7 @@ class MProdukTableSeeder extends Seeder
                 'm_produk_m_klasifikasi_produk_id'=>3,
                 'm_produk_jual'=>'Ya',
                 'm_produk_scp'=>'Ya',
-                'm_produk_hpp'=>'Scp',
+                'm_produk_hpp'=>'scp',
                 'm_produk_created_by'=>'1',
             ],
             [
@@ -199,7 +199,7 @@ class MProdukTableSeeder extends Seeder
                 'm_produk_m_klasifikasi_produk_id'=>3,
                 'm_produk_jual'=>'Ya',
                 'm_produk_scp'=>'Ya',
-                'm_produk_hpp'=>'Scp',
+                'm_produk_hpp'=>'scp',
                 'm_produk_created_by'=>'1',
             ],
             [
@@ -216,7 +216,7 @@ class MProdukTableSeeder extends Seeder
                 'm_produk_m_klasifikasi_produk_id'=>3,
                 'm_produk_jual'=>'Ya',
                 'm_produk_scp'=>'Ya',
-                'm_produk_hpp'=>'Scp',
+                'm_produk_hpp'=>'scp',
                 'm_produk_created_by'=>'1',
             ],
             [
@@ -233,7 +233,7 @@ class MProdukTableSeeder extends Seeder
                 'm_produk_m_klasifikasi_produk_id'=>3,
                 'm_produk_jual'=>'Ya',
                 'm_produk_scp'=>'Ya',
-                'm_produk_hpp'=>'Scp',
+                'm_produk_hpp'=>'scp',
                 'm_produk_created_by'=>'1',
             ],
             [
@@ -250,7 +250,7 @@ class MProdukTableSeeder extends Seeder
                 'm_produk_m_klasifikasi_produk_id'=>3,
                 'm_produk_jual'=>'Ya',
                 'm_produk_scp'=>'Ya',
-                'm_produk_hpp'=>'Scp',
+                'm_produk_hpp'=>'scp',
                 'm_produk_created_by'=>'1',
             ],
             [
@@ -267,7 +267,7 @@ class MProdukTableSeeder extends Seeder
                 'm_produk_m_klasifikasi_produk_id'=>3,
                 'm_produk_jual'=>'Ya',
                 'm_produk_scp'=>'Ya',
-                'm_produk_hpp'=>'Scp',
+                'm_produk_hpp'=>'scp',
                 'm_produk_created_by'=>'1',
             ],
             [
@@ -284,7 +284,7 @@ class MProdukTableSeeder extends Seeder
                 'm_produk_m_klasifikasi_produk_id'=>3,
                 'm_produk_jual'=>'Ya',
                 'm_produk_scp'=>'Ya',
-                'm_produk_hpp'=>'Scp',
+                'm_produk_hpp'=>'scp',
                 'm_produk_created_by'=>'1',
             ],
             [
@@ -301,7 +301,7 @@ class MProdukTableSeeder extends Seeder
                 'm_produk_m_klasifikasi_produk_id'=>3,
                 'm_produk_jual'=>'Ya',
                 'm_produk_scp'=>'Ya',
-                'm_produk_hpp'=>'Scp',
+                'm_produk_hpp'=>'scp',
                 'm_produk_created_by'=>'1',
             ],
             [
@@ -318,7 +318,7 @@ class MProdukTableSeeder extends Seeder
                 'm_produk_m_klasifikasi_produk_id'=>3,
                 'm_produk_jual'=>'Ya',
                 'm_produk_scp'=>'Ya',
-                'm_produk_hpp'=>'Scp',
+                'm_produk_hpp'=>'scp',
                 'm_produk_created_by'=>'1',
             ],
             [
@@ -335,7 +335,7 @@ class MProdukTableSeeder extends Seeder
                 'm_produk_m_klasifikasi_produk_id'=>3,
                 'm_produk_jual'=>'Ya',
                 'm_produk_scp'=>'Ya',
-                'm_produk_hpp'=>'Scp',
+                'm_produk_hpp'=>'scp',
                 'm_produk_created_by'=>'1',
             ],
             [
@@ -352,7 +352,7 @@ class MProdukTableSeeder extends Seeder
                 'm_produk_m_klasifikasi_produk_id'=>3,
                 'm_produk_jual'=>'Ya',
                 'm_produk_scp'=>'Ya',
-                'm_produk_hpp'=>'Scp',
+                'm_produk_hpp'=>'scp',
                 'm_produk_created_by'=>'1',
             ],
             [
@@ -369,7 +369,7 @@ class MProdukTableSeeder extends Seeder
                 'm_produk_m_klasifikasi_produk_id'=>3,
                 'm_produk_jual'=>'Ya',
                 'm_produk_scp'=>'Ya',
-                'm_produk_hpp'=>'Sell',
+                'm_produk_hpp'=>'sales',
                 'm_produk_created_by'=>'1',
             ],
             [
@@ -386,7 +386,7 @@ class MProdukTableSeeder extends Seeder
                 'm_produk_m_klasifikasi_produk_id'=>3,
                 'm_produk_jual'=>'Ya',
                 'm_produk_scp'=>'Ya',
-                'm_produk_hpp'=>'Sell',
+                'm_produk_hpp'=>'sales',
                 'm_produk_created_by'=>'1',
             ],
             [
@@ -403,7 +403,7 @@ class MProdukTableSeeder extends Seeder
                 'm_produk_m_klasifikasi_produk_id'=>3,
                 'm_produk_jual'=>'Ya',
                 'm_produk_scp'=>'Ya',
-                'm_produk_hpp'=>'Sell',
+                'm_produk_hpp'=>'sales',
                 'm_produk_created_by'=>'1',
             ],
             [
@@ -420,7 +420,7 @@ class MProdukTableSeeder extends Seeder
                 'm_produk_m_klasifikasi_produk_id'=>3,
                 'm_produk_jual'=>'Ya',
                 'm_produk_scp'=>'Ya',
-                'm_produk_hpp'=>'Sell',
+                'm_produk_hpp'=>'sales',
                 'm_produk_created_by'=>'1',
             ],
             [
@@ -437,7 +437,7 @@ class MProdukTableSeeder extends Seeder
                 'm_produk_m_klasifikasi_produk_id'=>3,
                 'm_produk_jual'=>'Ya',
                 'm_produk_scp'=>'Ya',
-                'm_produk_hpp'=>'Sell',
+                'm_produk_hpp'=>'sales',
                 'm_produk_created_by'=>'1',
             ],
             [
@@ -454,7 +454,7 @@ class MProdukTableSeeder extends Seeder
                 'm_produk_m_klasifikasi_produk_id'=>3,
                 'm_produk_jual'=>'Ya',
                 'm_produk_scp'=>'Ya',
-                'm_produk_hpp'=>'Sell',
+                'm_produk_hpp'=>'sales',
                 'm_produk_created_by'=>'1',
             ],
             [
@@ -471,7 +471,7 @@ class MProdukTableSeeder extends Seeder
                 'm_produk_m_klasifikasi_produk_id'=>3,
                 'm_produk_jual'=>'Ya',
                 'm_produk_scp'=>'Ya',
-                'm_produk_hpp'=>'Sell',
+                'm_produk_hpp'=>'sales',
                 'm_produk_created_by'=>'1',
             ],
             [
@@ -488,7 +488,7 @@ class MProdukTableSeeder extends Seeder
                 'm_produk_m_klasifikasi_produk_id'=>3,
                 'm_produk_jual'=>'Ya',
                 'm_produk_scp'=>'Ya',
-                'm_produk_hpp'=>'Sell',
+                'm_produk_hpp'=>'sales',
                 'm_produk_created_by'=>'1',
             ],
             [
@@ -505,7 +505,7 @@ class MProdukTableSeeder extends Seeder
                 'm_produk_m_klasifikasi_produk_id'=>3,
                 'm_produk_jual'=>'Ya',
                 'm_produk_scp'=>'Ya',
-                'm_produk_hpp'=>'Sell',
+                'm_produk_hpp'=>'sales',
                 'm_produk_created_by'=>'1',
             ],
             [
@@ -522,7 +522,7 @@ class MProdukTableSeeder extends Seeder
                 'm_produk_m_klasifikasi_produk_id'=>3,
                 'm_produk_jual'=>'Ya',
                 'm_produk_scp'=>'Ya',
-                'm_produk_hpp'=>'Sales',
+                'm_produk_hpp'=>'sales',
                 'm_produk_created_by'=>'1',
             ],
             [
@@ -539,7 +539,7 @@ class MProdukTableSeeder extends Seeder
                 'm_produk_m_klasifikasi_produk_id'=>0,
                 'm_produk_jual'=>'Ya',
                 'm_produk_scp'=>'Ya',
-                'm_produk_hpp'=>'Scp',
+                'm_produk_hpp'=>'scp',
                 'm_produk_created_by'=>'1',
             ],
             [
@@ -556,7 +556,7 @@ class MProdukTableSeeder extends Seeder
                 'm_produk_m_klasifikasi_produk_id'=>0,
                 'm_produk_jual'=>'Ya',
                 'm_produk_scp'=>'Ya',
-                'm_produk_hpp'=>'Scp',
+                'm_produk_hpp'=>'scp',
                 'm_produk_created_by'=>'1',
             ],
         ]);
