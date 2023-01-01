@@ -62,7 +62,7 @@ class GudangController extends Controller
                 );
                 if ($validate == null) {
                     DB::table('m_gudang')->insert($data);
-                    $masterbb = DB::table('m_produk')->where('m_produk_jual','tidak')
+                    $masterbb = DB::table('m_produk')->where('m_produk_jual','Tidak')
                     ->select('m_produk_id')->get();
                     $gudang_id = DB::table('m_gudang')->max('m_gudang_id');
                     foreach ($masterbb as $key) {

@@ -46,7 +46,7 @@ class ProdukController extends Controller
                 ->selectRaw('m_produk_code,m_produk_urut')
                 ->selectRaw('m_produk_nama')
                 ->whereRaw('LOWER(m_produk_code)=' . "'$produkCode'")
-            // ->whereRaw('LOWER(m_produk_urut)=' . "'$produkUrut'")
+            //  ->whereRaw('LOWER(m_produk_urut)=' . "'$produkUrut'")
                 ->whereRaw('LOWER(m_produk_nama)=' . "'$produkNama'")
                 ->orderBy('m_produk_id', 'asc')
                 ->first();
