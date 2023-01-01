@@ -58,6 +58,7 @@ class RekapHapusMenu extends Model
 		'r_h_m_nominal_sharing_profit' => 'float',
 		'r_h_m_m_w_id' => 'int',
 		'r_h_m_m_area_id' => 'int',
+		'r_h_m_approved_by' => 'int',
 		'r_h_m_created_by' => 'int',
 		'r_h_m_updated_by' => 'int',
 		'r_h_m_deleted_by' => 'int'
@@ -89,6 +90,7 @@ class RekapHapusMenu extends Model
 		'r_h_m_m_w_id',
 		'r_h_m_m_area_id',
 		'r_h_m_status_sync',
+		'r_h_m_approved_by',
 		'r_h_m_created_by',
 		'r_h_m_updated_by',
 		'r_h_m_deleted_by',
