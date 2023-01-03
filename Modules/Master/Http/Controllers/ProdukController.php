@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Redirect;
 use illuminate\Support\Str;
 
 class ProdukController extends Controller
@@ -41,12 +40,12 @@ class ProdukController extends Controller
         if ($request->ajax()) {
             $produkCode = Str::lower(preg_replace(array('/\s{2,}/', '/[\t\n]/'), ' ', $request->m_produk_code));
             $produkNama = Str::lower(preg_replace(array('/\s{2,}/', '/[\t\n]/'), ' ', $request->m_produk_nama));
-            // $produkUrut = Str::upper(preg_replace(array('/\s{2,}/', '/[\t\n]/'), ' ', $request->m_produk_urut));
+            $produkUrut = Str::upper(preg_replace(array('/\s{2,}/', '/[\t\n]/'), ' ', $request->m_produk_urut));
             $check = DB::table('m_produk')
                 ->selectRaw('m_produk_code,m_produk_urut')
                 ->selectRaw('m_produk_nama')
                 ->whereRaw('LOWER(m_produk_code)=' . "'$produkCode'")
-            // ->whereRaw('LOWER(m_produk_urut)=' . "'$produkUrut'")
+                ->whereRaw('LOWER(m_produk_urut)=' . "'$produkUrut'")
                 ->whereRaw('LOWER(m_produk_nama)=' . "'$produkNama'")
                 ->orderBy('m_produk_id', 'asc')
                 ->first();
@@ -97,10 +96,9 @@ class ProdukController extends Controller
                             "m_produk_updated_by" => Auth::id(),
                             "m_produk_updated_at" => Carbon::now(),
                         ]);
-                        return response(['Messages' => 'Berhasil Edit Produk !', 'type' => 'success']);
+                    return response(['Messages' => 'Berhasil Edit Produk !', 'type' => 'success']);
                 }
             }
-            
         }
     }
 
@@ -109,7 +107,8 @@ class ProdukController extends Controller
      * @param Request $request
      * @return Renderable
      */
-    function list($id) {
+    function list($id)
+    {
         $data = DB::table('m_produk')->where('m_produk_id', $id)->first();
         return response()->json($data, 200);
     }
