@@ -67,18 +67,25 @@ class MStokController extends Controller
         foreach ($request->m_stok_m_produk_id as $key => $value) {
             $cek = DB::table('m_stok')->where('m_stok_gudang_id', $request->m_stok_gudang_id)
                 ->where('m_stok_m_produk_id', $request->m_stok_m_produk_id[$key])->first();
-            if (empty($cek)) {
-                $data = array(
+            $hpp = $cek->m_stok_hpp;
+            $saldo = $cek->m_stok_saldo;
+            $hpp_new = (($hpp*$saldo)+($request->m_stok_awal[$key]*$request->m_stok_hpp[$key]))/($saldo+$request->m_stok_awal[$key]);
+                
+            $data = array(
                     'm_stok_m_produk_id' => $request->m_stok_m_produk_id[$key],
                     'm_stok_gudang_id' => $request->m_stok_gudang_id,
                     'm_stok_awal' => $request->m_stok_awal[$key],
+                    'm_stok_hpp' => $hpp_new,
+                    'm_stok_saldo' => $saldo+$request->m_stok_awal[$key],
                     'm_stok_created_by' => Auth::id(),
                     'm_stok_created_at' => Carbon::now(),
                 );
-                DB::table('m_stok')->insert($data);
-            }
+            
+            DB::table('m_stok')->where('m_stok_gudang_id', $request->m_stok_gudang_id)
+            ->where('m_stok_m_produk_id', $request->m_stok_m_produk_id[$key])->update($data);
+            
         }
-        return response()->json(['message'=>'Sukses Menambah Data','type'=>'success']);
+        return response()->json(['message'=>'Sukses Menambah Stok Awal','type'=>'success']);
 
     }
 
