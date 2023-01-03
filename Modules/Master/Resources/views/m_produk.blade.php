@@ -68,8 +68,9 @@
           </div>
           <div class="block-content fs-sm">
             <!-- Select2 is initialized at the bottom of the page -->
-            <form id="formAction" name="form_action" method="post">
+            <form id="formAction" method="post">
               <div class="mb-4">
+                <input type="hidden" id="action" name="action">
                 <input type="hidden" id="m_produk_id" name="m_produk_id">
                 <label class="form-label" for="m_produk_code">Produk Code</label>
                 <input type="text" class="form-control" id="m_produk_code" name="m_produk_code" placeholder="Masukan code">
