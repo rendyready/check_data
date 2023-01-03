@@ -41,12 +41,13 @@ class ProdukController extends Controller
         if ($request->ajax()) {
             $produkCode = Str::lower(preg_replace(array('/\s{2,}/', '/[\t\n]/'), ' ', $request->m_produk_code));
             $produkNama = Str::lower(preg_replace(array('/\s{2,}/', '/[\t\n]/'), ' ', $request->m_produk_nama));
-            // $produkUrut = Str::upper(preg_replace(array('/\s{2,}/', '/[\t\n]/'), ' ', $request->m_produk_urut));
+            $produkUrut = Str::upper(preg_replace(array('/\s{2,}/', '/[\t\n]/'), ' ', $request->m_produk_urut));
             $check = DB::table('m_produk')
+                ->select('m_produk_id')
                 ->selectRaw('m_produk_code,m_produk_urut')
                 ->selectRaw('m_produk_nama')
                 ->whereRaw('LOWER(m_produk_code)=' . "'$produkCode'")
-            //  ->whereRaw('LOWER(m_produk_urut)=' . "'$produkUrut'")
+             ->whereRaw('LOWER(m_produk_urut)=' . "'$produkUrut'")
                 ->whereRaw('LOWER(m_produk_nama)=' . "'$produkNama'")
                 ->orderBy('m_produk_id', 'asc')
                 ->first();
@@ -72,17 +73,17 @@ class ProdukController extends Controller
                         "m_produk_created_by" => Auth::id(),
                         "m_produk_created_at" => Carbon::now(),
                     ]);
-                    return response(['Messages' => 'Berhasil Tambah Produk !', 'type' => 'success']);
+                    return response(['messages' => 'Berhasil Tambah Produk !', 'type' => 'success']);
                 }
             } else {
-                if (!empty($check)) {
+                if ($check->m_produk_id != $request->m_produk_id ) {
                     return response()->json(['messages' => 'Data Edit Double !', 'type' => 'danger']);
-                } elseif ($check == null) {
+                } else {
                     DB::table('m_produk')->where('m_produk_id', $request->m_produk_id)
                         ->update([
-                            "m_produk_code" => $produkCode,
-                            "m_produk_nama" => $produkNama,
-                            "m_produk_urut" => $produkUrut,
+                            "m_produk_code" => Str::lower($request->m_produk_code),
+                            "m_produk_nama" => $request->m_produk_nama,
+                            "m_produk_urut" => $request->m_produk_urut,
                             "m_produk_cr" => $request->m_produk_cr,
                             "m_produk_status" => $request->m_produk_status,
                             "m_produk_tax" => $request->m_produk_tax,
@@ -97,7 +98,7 @@ class ProdukController extends Controller
                             "m_produk_updated_by" => Auth::id(),
                             "m_produk_updated_at" => Carbon::now(),
                         ]);
-                        return response(['Messages' => 'Berhasil Edit Produk !', 'type' => 'success']);
+                        return response(['messages' => 'Berhasil Edit Produk !', 'type' => 'success']);
                 }
             }
             
@@ -112,5 +113,5 @@ class ProdukController extends Controller
     function list($id) {
         $data = DB::table('m_produk')->where('m_produk_id', $id)->first();
         return response()->json($data, 200);
-    }
+    } 
 }
