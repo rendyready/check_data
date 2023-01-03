@@ -54,6 +54,7 @@ class RekapHapusTransaksi extends Model
 		'r_h_t_nominal_sc' => 'float',
 		'r_h_t_nominal_sharing_profit' => 'float',
 		'r_h_t_m_t_t_id' => 'int',
+		'r_h_t_approved_by' => 'int',
 		'r_h_t_created_by' => 'int',
 		'r_h_t_updated_by' => 'int',
 		'r_h_t_deleted_by' => 'int'
@@ -82,6 +83,7 @@ class RekapHapusTransaksi extends Model
 		'r_h_t_nominal_sharing_profit',
 		'r_h_t_m_t_t_id',
 		'r_h_t_status_sync',
+		'r_h_t_approved_by',
 		'r_h_t_created_by',
 		'r_h_t_updated_by',
 		'r_h_t_deleted_by',

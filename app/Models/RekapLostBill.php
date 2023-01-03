@@ -53,6 +53,7 @@ class RekapLostBill extends Model
 		'r_l_b_nominal_sharing_profit' => 'float',
 		'r_l_b_m_w_id' => 'int',
 		'r_l_b_m_area_id' => 'int',
+		'r_l_b_approved_by' => 'int',
 		'r_l_b_created_by' => 'int',
 		'r_l_b_updated_by' => 'int',
 		'r_l_b_deleted_by' => 'int'
@@ -81,6 +82,7 @@ class RekapLostBill extends Model
 		'r_l_b_m_w_id',
 		'r_l_b_m_area_id',
 		'r_l_b_status_sync',
+		'r_l_b_approved_by',
 		'r_l_b_created_by',
 		'r_l_b_updated_by',
 		'r_l_b_deleted_by',

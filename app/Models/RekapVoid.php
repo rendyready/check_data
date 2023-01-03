@@ -49,6 +49,7 @@ class RekapVoid extends Model
 		'r_v_nominal_pajak' => 'float',
 		'r_v_nominal_sc' => 'float',
 		'r_v_nominal_sharing_profit' => 'float',
+		'r_v_approved_by' => 'int',
 		'r_v_created_by' => 'int',
 		'r_v_updated_by' => 'int',
 		'r_v_deleted_by' => 'int'
@@ -72,6 +73,7 @@ class RekapVoid extends Model
 		'r_v_nominal_sharing_profit',
 		'r_v_keterangan',
 		'r_v_status_sync',
+		'r_v_approved_by',
 		'r_v_created_by',
 		'r_v_updated_by',
 		'r_v_deleted_by',

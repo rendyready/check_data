@@ -36,6 +36,7 @@ return new class extends Migration
             $table->bigInteger('r_h_m_m_area_id');
             // $table->string('r_h_m_m_area_nama');
             $table->char('r_h_m_status_sync', 10)->default('0');
+            $table->bigInteger('r_h_m_approved_by')->nullable();
             $table->bigInteger('r_h_m_created_by');
             $table->bigInteger('r_h_m_updated_by')->nullable();
             $table->bigInteger('r_h_m_deleted_by')->nullable();
