@@ -50,6 +50,9 @@ return new class extends Migration
             $table->decimal('r_t_nominal_void_sc', 15,2)->default(0);
             $table->decimal('r_t_nominal_pembulatan_void', 15,2)->default(0);
             $table->decimal('r_t_nominal_free_kembalian_void', 15,2)->default(0);
+            $table->decimal('r_t_nominal_void_total', 15,2)->default(0);
+            $table->decimal('r_t_tax_percent',5,2)->default(0);
+            $table->decimal('r_t_sc_percent',5,2)->default(0);
 
             $table->bigInteger('r_t_m_t_t_id');
             // $table->string('r_t_m_t_t_name');
