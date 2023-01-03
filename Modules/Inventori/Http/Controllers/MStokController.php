@@ -35,7 +35,7 @@ class MStokController extends Controller
             ->rightjoin('m_produk', 'm_produk_id', 'm_stok_m_produk_id')
             ->rightjoin('m_satuan', 'm_produk_m_satuan_id', 'm_satuan_id')
             ->where('m_stok_gudang_id', $id)
-            ->select('m_stok_awal', 'm_produk_nama', 'm_satuan_kode')
+            ->select('m_stok_awal', 'm_produk_nama', 'm_satuan_kode','m_stok_hpp')
             ->get();
         $no = 0;
         $data = array();
@@ -45,6 +45,7 @@ class MStokController extends Controller
             $row[] = $no;
             $row[] = $value->m_produk_nama;
             $row[] = $value->m_stok_awal;
+            $row[] = $value->m_stok_hpp;
             $row[] = $value->m_satuan_kode;
             $data[] = $row;
         }

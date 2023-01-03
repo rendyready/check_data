@@ -49,9 +49,9 @@
                     </thead>
                     <tbody>
                       <tr>
-                        <td><input type="text" step="" class="form-control form-control-sm" name="m_rekening_no_akun[]" id="m_rekening_no_akun" required></td>
-                        <td><input type="text" class="form-control form-control-sm" name="m_rekening_nama[]" id="m_rekening_nama" required></td>
-                        <td><input type="number" class="form-control form-control-sm" name="m_rekening_saldo[]" id="m_rekening_saldo" required></td>
+                        <td><input type="text" step="" class="form-control set form-control-sm" name="m_rekening_no_akun[]" id="m_rekening_no_akun" required></td>
+                        <td><input type="text" class="form-control set form-control-sm" name="m_rekening_nama[]" id="m_rekening_nama" required></td>
+                        <td><input type="number" class="form-control set form-control-sm" name="m_rekening_saldo[]" id="m_rekening_saldo" required></td>
                       </tr>
                     </tbody>
                     <tfoot>
@@ -120,12 +120,32 @@
     var no = 1;
     $('.tambah').on('click', function() {
       no++;
-      $('#form').append('<tr id="row' + no + '">' +
+      $('#form').append('<tr class="hapus" id="row' + no + '">' +
         '<td><input type="text" class="form-control form-control-sm" name="m_rekening_no_akun[]" id="m_rekening_no_akun" required></td>' +
         '<td><input type="text" class="form-control form-control-sm" name="m_rekening_nama[]" id="m_rekening_nama" required></td>' +
         '<td><input type="number" class="form-control form-control-sm" name="m_rekening_saldo[]" id="m_rekening_saldo" required></td>' +
         '<td><button type="button" id="' + no + '" class="btn btn-danger btn_remove">Hapus</button></td></tr>');
     });
+    var mwId = $('#m_rekening_m_w_id').val();
+    var rekKat = $('#m_rekening_kategori').val();
+    $('#dataSourceProcess').DataTable({
+              buttons:[],
+              destroy:true,
+              ajax: {
+                url: '{{route("rekening.list")}}',
+                data: {
+                  m_rekening_m_w_id: mwId,
+                  m_rekening_kategori: rekKat,
+                    },
+                type: "GET",
+                },
+                columns: [
+            { data: 'm_rekening_kategori' },
+            { data: 'm_rekening_nama' },
+            { data: 'm_rekening_no_akun' },
+            { data: 'm_rekening_saldo' },
+              ],
+            });
     $('#rekeningInsert').submit(function(e) {
       if (!e.isDefaultPrevented()) {
         $.ajax({
@@ -133,14 +153,35 @@
           type: "POST",
           data: $('form').serialize(),
           success: function(data) {
-            $.notify({
-              align: 'right',
-              from: 'top',
-              type: 'success',
-              icon: 'fa fa-success me-5',
-              message: 'Berhasil Menambahkan Data'
+            Codebase.helpers('jq-notify', {
+                            align: 'right', // 'right', 'left', 'center'
+                            from: 'top', // 'top', 'bottom'
+                            type: data.type, // 'info', 'success', 'warning', 'danger'
+                            icon: 'fa fa-info me-5', // Icon class
+                            message: data.message
+                            });
+            $('.hapus').remove();
+            $('.set').val('');
+            var mwId2 = $('#m_rekening_m_w_id').val();
+            var rekKat2 = $('#m_rekening_kategori').val();
+            $('#dataSourceProcess').DataTable({
+              buttons:[],
+              destroy:true,
+              ajax: {
+                url: '{{route("rekening.list")}}',
+                data: {
+                  m_rekening_m_w_id: mwId2,
+                  m_rekening_kategori: rekKat2,
+                    },
+                type: "GET",
+                },
+                columns: [
+            { data: 'm_rekening_kategori' },
+            { data: 'm_rekening_nama' },
+            { data: 'm_rekening_no_akun' },
+            { data: 'm_rekening_saldo' },
+              ],
             });
-            window.location.reload();
           },
           error: function() {
             alert("Tidak dapat menyimpan data!");
@@ -153,61 +194,28 @@
       var button_id = $(this).attr("id");
       $('#row' + button_id + '').remove();
     });
-    // $('#dataSourceProcess').DataTable(function() {
-    //   var waroeng = $('#m_rekening_m_w_id').val();
-    //   var rekkategori = $('#m_rekening_kategori').val();
-    //   $.ajax({
-    //     type: 'GET',
-    //     dataType: 'JSON',
-    //     url: '{{route("rekening.list")}}',
-    //     data: {
-    //       m_rekening_m_w_id: mwId,
-    //       m_rekening_kategori: rekKat,
-    //     },
-    //     success: function(data) {
-    //       $('#dataReload').empty();
-    //       $.each(data, function(a, item) {
-    //         $('#dataSourceProcess').find('tbody').append(
-    //           '<tr>' +
-    //           '<td>' + item.m_rekening_kategori + '</td>' +
-    //           '<td>' + item.m_rekening_no_akun + '</td>' +
-    //           '<td>' + item.m_rekening_nama + '</td>' +
-    //           '<td>' + item.m_rekening_saldo + '</td>' +
-    //           '<tr>');
-    //         // });
-    //       });
-    //     },
-    //   });
-    // });
 
     $('.cari').on('change', function() {
       var mwId = $('#m_rekening_m_w_id').val();
       var rekKat = $('#m_rekening_kategori').val();
-      // $('#dataSourceProcess').DataTable(function() {
-      //   console.log(this);  
-      // });
-      $.ajax({
-        type: 'GET',
-        dataType: 'JSON',
-        url: '{{route("rekening.list")}}',
-        data: {
-          m_rekening_m_w_id: mwId,
-          m_rekening_kategori: rekKat,
-        },
-        success: function(data) {
-          $.each(data, function(a, item) {
-            $('#dataSourceProcess').DataTable(function() {
-              $('#dataReload').find('tbody').append(
-                '<tr>' +
-                '<td>' + item.m_rekening_kategori + '</td>' +
-                '<td>' + item.m_rekening_no_akun + '</td>' +
-                '<td>' + item.m_rekening_nama + '</td>' +
-                '<td>' + item.m_rekening_saldo + '</td>' +
-                '<tr>');
+      $('#dataSourceProcess').DataTable({
+              buttons:[],
+              destroy:true,
+              ajax: {
+                url: '{{route("rekening.list")}}',
+                data: {
+                  m_rekening_m_w_id: mwId,
+                  m_rekening_kategori: rekKat,
+                    },
+                type: "GET",
+                },
+                columns: [
+            { data: 'm_rekening_kategori' },
+            { data: 'm_rekening_nama' },
+            { data: 'm_rekening_no_akun' },
+            { data: 'm_rekening_saldo' },
+              ],
             });
-          });
-        },
-      });
     });
   });
 </script>

@@ -49,10 +49,8 @@ class RekeningController extends Controller
             ->where('m_rekening_kategori', $request->m_rekening_kategori)
             ->where('m_rekening_m_w_id', $request->m_rekening_m_w_id)
             ->orderBy('m_w_code', 'asc')->get();
-        // return response()->json(['data' => $data]);
-
-
-        return $data;
+        $output = array('data' => $data);
+        return response()->json($output);
     }
 
     /**
@@ -72,12 +70,9 @@ class RekeningController extends Controller
                 'm_rekening_created_at' => Carbon::now(),
                 'm_rekening_created_by' => Auth::id(),
             );
-            if ($data == null) {
-            } else {
                 DB::table('m_rekening')->insert($data);
-            }
-            return response()->json();
         }
+        return response()->json(['message'=> 'Berhasil Menambakan','type'=>'success']);
     }
 
     /**

@@ -33,7 +33,7 @@
                                     <label class="col-sm-4 col-form-label" for="m_stok_gudang_id">Gudang</label>
                                     <div class="col-sm-8">
                                         <select class="js-select2 form-control-sm" style="width: 100%;"
-                                            name="m_stok_gudang_id" id="m_stok_gudang_id" data-placeholder="Pilih Gudang"
+                                            name="m_stok_gudang_id" id="m_stok_gudang_id" data-placeholder="Cari Gudang"
                                             required>
                                             <option value=""></option>
                                             @foreach ($gudang as $item)
@@ -41,12 +41,6 @@
                                                     - {{ $item->m_w_nama }}</option>
                                             @endforeach
                                         </select>
-                                    </div>
-                                    <div class="row mb-4">
-                                        <label class="col-sm-4 col-form-label" for="rekap_po_tgl">Pencarian Data</label>
-                                        <div class="col-sm-8 py-2 px-lg-4">
-                                            <button id="cari" class="btn btn-lg btn-warning btn-cari"> Cari</button>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -71,6 +65,9 @@
                                                     id="m_stok_awal" required></td>
                                             <td><input type="text" class="form-control form-control-sm reset"
                                                     id="m_satuan" readonly></td>
+                                            <td><input type="number" min="0"
+                                                    class="form-control number form-control-sm" name="m_stok_hpp[]"
+                                                    id="m_stok_hpp" required></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -85,6 +82,7 @@
                                 <th>No</th>
                                 <th>Nama Barang</th>
                                 <th>Stok Awal</th>
+                                <th>Hpp</th>
                                 <th>Satuan</th>
                             </thead>
                             <tbody>
@@ -93,6 +91,7 @@
                                 <th>No</th>
                                 <th>Nama Barang</th>
                                 <th>Stok Awal</th>
+                                <th>Hpp</th>
                                 <th>Satuan</th>
                             </tfoot>
                         </table>
@@ -113,7 +112,7 @@
       });
     Codebase.helpersOnLoad(['jq-notify']);
     var table;
-    $('#cari').on('click',function () {
+    $('#m_stok_gudang_id').on('change',function () {
             var g_id = $('#m_stok_gudang_id').val();
             $(function() {
             table = $('#tb_stok').DataTable({
@@ -137,6 +136,7 @@
       $('#form_input').append('<tr id="row'+no+'" class="remove_all">'+
                           '<td><select class="js-select2 nama_barang" name="m_stok_m_produk_id[]" id="m_stok_m_produk_id'+no+'" style="width: 100%;"data-placeholder="Pilih Nama Barang" required><option></option></select></td>'+
                           '<td><input type="number" min="0" class="form-control number form-control-sm" name="m_stok_awal[]" id="m_stok_awal" required></td>'+
+                          '<td><input type="number" min="0" class="form-control number form-control-sm" name="m_stok_hpp[]" id="m_stok_hpp" required></td>'+
                           '<td><input type="text" class="form-control form-control-sm satuan" id="m_satuan'+no+'" readonly></td>'+
                           '<td><button type="button" id="'+no+'" class="btn btn-danger btn_remove"><i class="fa fa-trash"></i></button></td></tr>');
 
