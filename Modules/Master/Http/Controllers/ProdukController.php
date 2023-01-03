@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Redirect;
 use illuminate\Support\Str;
 
 class ProdukController extends Controller
@@ -101,7 +100,6 @@ class ProdukController extends Controller
                         return response(['messages' => 'Berhasil Edit Produk !', 'type' => 'success']);
                 }
             }
-            
         }
     }
 
@@ -110,7 +108,8 @@ class ProdukController extends Controller
      * @param Request $request
      * @return Renderable
      */
-    function list($id) {
+    function list($id)
+    {
         $data = DB::table('m_produk')->where('m_produk_id', $id)->first();
         return response()->json($data, 200);
     } 
