@@ -100,6 +100,9 @@ class MStokController extends Controller
         ->select('m_produk_id','m_produk_nama')
         ->join('m_produk','m_produk_id','m_stok_m_produk_id')
         ->get();
-        return response()->json($data);
+        foreach ($data as $key => $v) {
+            $list[$v->m_produk_id]=$v->m_produk_nama;
+        }
+        return response()->json($list);
     }
 }

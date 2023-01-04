@@ -78,17 +78,16 @@ class ResepController extends Controller
         $detail = DB::table('m_resep_detail')->where('m_resep_detail_m_resep_id', $id)
             ->leftjoin('m_produk', 'm_resep_detail_bb_id', 'm_produk_id')
             ->leftjoin('m_satuan', 'm_resep_detail_m_satuan_id', 'm_satuan_id')
-            ->select('m_resep_detail.*', 'm_produk_nama', 'm_satuan_kode')
+            ->select('m_resep_detail.*', 'm_produk_nama', 'm_satuan_kode','m_resep_detail_ket')
             ->get();
         $data = array();
-        $no = 0;
         foreach ($detail as $key) {
-            $no++;
             $row = array();
-            $row[] = $no;
+            $row[] = $key->m_resep_detail_id;
             $row[] = $key->m_produk_nama;
             $row[] = $key->m_resep_detail_bb_qty;
             $row[] = $key->m_satuan_kode;
+            $row[] = $key->m_resep_detail_ket;
             $data[] = $row;
         }
         $output = array("data" => $data);
@@ -104,16 +103,18 @@ class ResepController extends Controller
                     'm_resep_detail_bb_id'    =>    $request->m_resep_detail_bb_id,
                     'm_resep_detail_bb_qty'    =>    $request->m_resep_detail_bb_qty,
                     'm_resep_detail_m_satuan_id' =>    $request->m_resep_detail_m_satuan_id,
+                    'm_resep_detail_ket' => $request->m_resep_detail_ket,
                     'm_resep_detail_created_by' => Auth::id(),
                     'm_resep_detail_created_at' => Carbon::now(),
                 );
                 DB::table('m_resep_detail')->insert($data);
             } elseif ($request->action == 'edit') {
                 $data = array(
-                    'm_resep_detail_m_resep_id'    =>    $request->id,
+                    'm_resep_detail_m_resep_id'    =>    $request->m_resep_detail_id,
                     'm_resep_detail_bb_id'    =>    $request->m_resep_detail_bb_id,
                     'm_resep_detail_bb_qty'    =>    $request->m_resep_detail_bb_qty,
                     'm_resep_detail_m_satuan_id' =>    $request->m_resep_detail_m_satuan_id,
+                    'm_resep_detail_ket' => $request->m_resep_detail_ket,
                     'm_resep_detail_updated_by' => Auth::id(),
                     'm_resep_detail_updated_at' => Carbon::now(),
                 );

@@ -368,7 +368,7 @@
                     // Check if exists the third parameter of editable array.
                     if (typeof settings.columns.editable[i][3] !== 'undefined') {
                       // Create select element.
-                      input = '<select class="tabledit-input ' + settings.inputClass + '" name="' + settings.columns.editable[i][1] + '" style="display: none;" disabled>';
+                      input = '<select class="tabledit-input js-select2 ' + settings.inputClass + '" name="' + settings.columns.editable[i][1] + '" style="display: none; width:100%;">';
 
                       // Create options for select element.
                       $.each($.parseJSON(settings.columns.editable[i][3]), function (index, value) {
@@ -383,6 +383,8 @@
 
                       // Create last piece of select element.
                       input += '</select>';
+                      $('.js-select2').select2({dropdownParent: $(this).parent()});
+                      $('.js-select2').next(".select2-container").hide();
                     }
 
                     break;
@@ -528,7 +530,7 @@
           if (settings.editButton) {
             $tr.find('button.tabledit-edit-button').addClass('active');
             $tr.find('button.tabledit-save-button').show();
-            $tr.find('button.tabledit-cancel-button').show();
+            $tr.find('.js-select2').next(".select2-container").show();
           }
         },
         add: function(td) {
@@ -556,6 +558,12 @@
             $tr.find('button.tabledit-delete-button').hide();
             $tr.find('button.tabledit-save-button').show();
             $tr.find('button.tabledit-cancel-button').show();
+            $tr.find('.js-select2').next(".select2-container").show();
+            // $tr.find('select > option').prop("disabled", false);
+            // $tr.find('.select2-container-disabled').prop("disabled", false);
+           
+            // $tr.find('.js-select2').next(".select2-container").show().removeAttr('disabled');
+            // $(td).find('.js-select2').prop('disabled',false);
           }
         }
       };
@@ -877,6 +885,7 @@
             // add-button table remove active
             $("button.tabledit-add-button").removeClass("active");
             $("button.tabledit-cancel-button").hide();
+            $table.find('.js-select2').next(".select2-container").hide();
             event.handled = true;
           }
         });
@@ -894,6 +903,7 @@
               // add-button table remove active
               $("button.tabledit-add-button").removeClass("active");
               $("button.tabledit-cancel-button").hide();
+              $table.find('.js-select2').next(".select2-container").hide();
               event.handled = true;
             }
           }

@@ -112,7 +112,7 @@
   </div>
   <!-- END Modal Resep -->
   <!-- Modal Detail Resep -->
-  <div class="modal modal-lg" id="modal-block-select2-detail" tabindex="-1" role="dialog" aria-labelledby="modal-block-select2-detail" aria-hidden="true">
+  <div class="modal modal-large" id="modal-block-select2-detail" tabindex="-1" role="dialog" aria-labelledby="modal-block-select2-detail" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
         <div class="block block-themed shadow-none mb-0">
@@ -126,16 +126,19 @@
           </div>
           <div class="block-content">
             @csrf
-            <table class="table m_resep_detail_tb table-bordered table-striped table-vcenter js-dataTable-full">
+            <div class="table-responsive">
+            <table id="m_resep_detail_tb" class="table table-sm m_resep_detail_tb table-bordered table-striped table-vcenter js-dataTable-full">
               <thead>
                 <th>No</th>
-                <th>NAMA BB</th>
+                <th>NAMA BAHAN BAKU</th>
                 <th>QTY</th>
                 <th>SATUAN</th>
+                <th>KETERANGAN</th>
               </thead>
               <tbody id="detail_resep">
               </tbody>
             </table>
+          </div>
             <div class="block-content block-content-full text-end bg-transparent">
               <button type="button" class="btn btn-sm btn-alt-secondary me-1 close" data-bs-dismiss="modal">Close</button>
             </div>
@@ -194,11 +197,12 @@
       $("#modal-block-select2").modal('show');
     });
     $(".buttonDetail").on('click', function() {
-      var id = $(this).attr('value').val;
+      var id = $(this).attr('value');
       $("#myModalLabel2").html('Detail Resep');
-      table = $('.m_resep_detail_tb').dataTable({
+      $('.m_resep_detail_tb').dataTable({
         ajax: "/master/m_resep/detail/" + id,
         destroy: true,
+        order : [[0, 'asc']],
       })
 
       var url = "{{route('list_detail.m_resep')}}";
@@ -210,10 +214,10 @@
         var data = [
           [1, 'm_resep_detail_bb_id', 'select', JSON.stringify(bb)],
           [2, 'm_resep_detail_bb_qty'],
-          [3, 'm_resep_detail_m_satuan_id', 'select', JSON.stringify(satuan)]
+          [3, 'm_resep_detail_m_satuan_id', 'select', JSON.stringify(satuan)],
+          [4, 'm_resep_detail_ket','textarea', '{"rows": "2", "cols": "2", "maxlength": "200", "wrap": "hard"}']
         ]
-
-        $('.m_resep_detail_tb').Tabledit({
+       $('.m_resep_detail_tb').Tabledit({
           url: '/master/m_resep/action/' + id,
           dataType: "json",
           cache: false,
@@ -224,15 +228,9 @@
           restoreButton: false,
           onSuccess: function(data, textStatus, jqXHR) {
             if (data.action == 'add') {
-              window.location.reload();
-              Codebase.helpers('jq-notify', {
-                align: 'right', // 'right', 'left', 'center'
-                from: 'top', // 'top', 'bottom'
-                type: 'success', // 'info', 'success', 'warning', 'danger'
-                icon: 'fa fa-info me-5', // Icon class
-                message: 'Detail Resep Berhasil Ditambahkan'
-              });
-
+              // // window.location.reload();
+               $('#m_resep_detail_tb').DataTable().ajax.reload();
+               tb_edit.reload();
             }
             if (data.action == 'delete') {
               $('#' + data.id).remove();
@@ -240,7 +238,6 @@
           }
         });
       });
-
       $("#modal-block-select2-detail").modal('show');
     });
 
