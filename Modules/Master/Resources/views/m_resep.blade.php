@@ -129,9 +129,10 @@
             <div class="table-responsive">
             <table id="m_resep_detail_tb" class="table table-sm m_resep_detail_tb table-bordered table-striped table-vcenter js-dataTable-full">
               <thead>
+                <th>ID</th>
                 <th>No</th>
                 <th>NAMA BAHAN BAKU</th>
-                <th>QTY</th>
+                <th>JUMLAH</th>
                 <th>SATUAN</th>
                 <th>KETERANGAN</th>
               </thead>
@@ -199,28 +200,31 @@
     $(".buttonDetail").on('click', function() {
       var id = $(this).attr('value');
       $("#myModalLabel2").html('Detail Resep');
-      $('.m_resep_detail_tb').dataTable({
+     var dt = $('.m_resep_detail_tb').dataTable({
         ajax: "/master/m_resep/detail/" + id,
         destroy: true,
-        order : [[0, 'asc']],
-      })
+        order : [[1, 'asc']],
+      });
 
       var url = "{{route('list_detail.m_resep')}}";
       var satuan = new Array();
       var bb = new Array();
+      var tb_edit;
       $.get(url, function(response) {
         satuan = response['satuan'];
         bb = response['bb'];
         var data = [
-          [1, 'm_resep_detail_bb_id', 'select', JSON.stringify(bb)],
-          [2, 'm_resep_detail_bb_qty'],
-          [3, 'm_resep_detail_m_satuan_id', 'select', JSON.stringify(satuan)],
-          [4, 'm_resep_detail_ket','textarea', '{"rows": "2", "cols": "2", "maxlength": "200", "wrap": "hard"}']
-        ]
-       $('.m_resep_detail_tb').Tabledit({
+          [2, 'm_resep_detail_bb_id', 'select', JSON.stringify(bb)],
+          [3, 'm_resep_detail_bb_qty', 'number','{"min":"0.01","step":"0.01"}'],
+          [4, 'm_resep_detail_m_satuan_id', 'select', JSON.stringify(satuan)],
+          [5, 'm_resep_detail_ket','textarea', '{"rows": "2", "cols": "2", "maxlength": "200", "wrap": "hard"}']
+        ];
+   
+     var tab =  $('.m_resep_detail_tb').Tabledit({
           url: '/master/m_resep/action/' + id,
           dataType: "json",
           cache: false,
+          hideIdentifier:true,
           columns: {
             identifier: [0, 'm_resep_detail_id'],
             editable: data
@@ -228,18 +232,42 @@
           restoreButton: false,
           onSuccess: function(data, textStatus, jqXHR) {
             if (data.action == 'add') {
-              // // window.location.reload();
-               $('#m_resep_detail_tb').DataTable().ajax.reload();
-               tb_edit.reload();
+             window.location.reload();
             }
             if (data.action == 'delete') {
               $('#' + data.id).remove();
             }
           }
         });
+
+    
       });
       $("#modal-block-select2-detail").modal('show');
+      $(document).on('select2:open', '.js-select2', function(){
+          console.log("Saving value " + $(this).val());
+          var index = $(this).attr('id'); 
+          console.log(index);
+          $(this).data('val', $(this).val());
+          $(this).data('id',index);
+      }).on('change','.js-select2', function(e){
+          var prev = $(this).data('val');
+          var current = $(this).val();
+          var id = $(this).data('id');
+          console.log(id);
+      var values = $('[name="m_resep_detail_bb_id"]').map(function() {
+        return this.value.trim();
+      }).get();
+      console.log(values);
+      var unique =  [...new Set(values)];
+      if (values.length != unique.length) {
+        e.preventDefault();
+        alert('Nama Barang Sudah Digunakan Pilih Yang Lain');
+        console.log('ini id'+id);
+         $('#m_resep_detail_bb_id').val(prev).trigger('change');
+      }
+      });
     });
+    
 
   });
 </script>

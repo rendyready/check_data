@@ -81,9 +81,11 @@ class ResepController extends Controller
             ->select('m_resep_detail.*', 'm_produk_nama', 'm_satuan_kode','m_resep_detail_ket')
             ->get();
         $data = array();
+        $no = 1;
         foreach ($detail as $key) {
             $row = array();
             $row[] = $key->m_resep_detail_id;
+            $row[] = $no++;
             $row[] = $key->m_produk_nama;
             $row[] = $key->m_resep_detail_bb_qty;
             $row[] = $key->m_satuan_kode;
@@ -110,7 +112,6 @@ class ResepController extends Controller
                 DB::table('m_resep_detail')->insert($data);
             } elseif ($request->action == 'edit') {
                 $data = array(
-                    'm_resep_detail_m_resep_id'    =>    $request->m_resep_detail_id,
                     'm_resep_detail_bb_id'    =>    $request->m_resep_detail_bb_id,
                     'm_resep_detail_bb_qty'    =>    $request->m_resep_detail_bb_qty,
                     'm_resep_detail_m_satuan_id' =>    $request->m_resep_detail_m_satuan_id,

@@ -360,7 +360,7 @@
                       // Ignore attribute if not of supported type
                       input += ($.inArray(index, supportedAttrNumber) != -1) ? index + '="' + value + '" ' : '';
                     });
-                    input += ' class="tabledit-input ' + settings.inputClass + '" type="number" name="' + settings.columns.editable[i][1] + '" value="' + text + '" style="display: none;" disabled>';
+                    input += ' class="tabledit-input ' + settings.inputClass + '" type="number" name="' + settings.columns.editable[i][1] + '" value="' + text + '" style="display: none; width:100%;" disabled>';
 
                     break;
                   case 'select':
@@ -368,7 +368,7 @@
                     // Check if exists the third parameter of editable array.
                     if (typeof settings.columns.editable[i][3] !== 'undefined') {
                       // Create select element.
-                      input = '<select class="tabledit-input js-select2 ' + settings.inputClass + '" name="' + settings.columns.editable[i][1] + '" style="display: none; width:100%;">';
+                      input = '<select class="tabledit-input js-select2 ' + settings.inputClass + '" name="' + settings.columns.editable[i][1] + '" style="display: none; width:100%;" disabled>';
 
                       // Create options for select element.
                       $.each($.parseJSON(settings.columns.editable[i][3]), function (index, value) {
@@ -383,8 +383,7 @@
 
                       // Create last piece of select element.
                       input += '</select>';
-                      $('.js-select2').select2({dropdownParent: $(this).parent()});
-                      $('.js-select2').next(".select2-container").hide();
+                      // console.log($(this).parent());
                     }
 
                     break;
@@ -530,7 +529,7 @@
           if (settings.editButton) {
             $tr.find('button.tabledit-edit-button').addClass('active');
             $tr.find('button.tabledit-save-button').show();
-            $tr.find('.js-select2').next(".select2-container").show();
+            $tr.find('.js-select2').select2({dropdownParent: $tr});
           }
         },
         add: function(td) {
@@ -558,12 +557,7 @@
             $tr.find('button.tabledit-delete-button').hide();
             $tr.find('button.tabledit-save-button').show();
             $tr.find('button.tabledit-cancel-button').show();
-            $tr.find('.js-select2').next(".select2-container").show();
-            // $tr.find('select > option').prop("disabled", false);
-            // $tr.find('.select2-container-disabled').prop("disabled", false);
-           
-            // $tr.find('.js-select2').next(".select2-container").show().removeAttr('disabled');
-            // $(td).find('.js-select2').prop('disabled',false);
+            $tr.find('.js-select2').select2({dropdownParent: $tr});
           }
         }
       };
@@ -860,6 +854,7 @@
               $($(tableditTableName + " tbody tr:last").find('td.tabledit-view-mode').get().reverse()).each(function() {
                 Mode.add(this);
               });
+
   
               $(tableditTableName + ' button.tabledit-add-button').addClass("active");
             }
@@ -886,6 +881,8 @@
             $("button.tabledit-add-button").removeClass("active");
             $("button.tabledit-cancel-button").hide();
             $table.find('.js-select2').next(".select2-container").hide();
+            $('button.tabledit-edit-button').show();
+            $('button.tabledit-delete-button').show();
             event.handled = true;
           }
         });
@@ -1292,12 +1289,12 @@
   $.fn.Tabledit.langs = {
     en: {
       btn_edit: 'Edit',
-      btn_delete: 'Delete',
+      btn_delete: 'Hapus',
       btn_confirm: 'Confirm',
-      btn_save: 'Save',
+      btn_save: 'Simpan',
       btn_restore: 'Restore',
       txt_action: 'Actions',
-      txt_remain: 'characters remaining'
+      txt_remain: 'characters tersisa'
     }
   };
 
