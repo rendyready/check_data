@@ -21,9 +21,11 @@ use Illuminate\Database\Eloquent\Model;
  * @property float $r_v_nominal
  * @property float $r_v_nominal_pajak
  * @property float $r_v_nominal_sc
- * @property float $r_v_nominal_sharing_profit
+ * @property float $r_v_nominal_sharing_profit_in
+ * @property float $r_v_nominal_sharing_profit_out
  * @property string $r_v_keterangan
  * @property string $r_v_status_sync
+ * @property int|null $r_v_approved_by
  * @property int $r_v_created_by
  * @property int|null $r_v_updated_by
  * @property int|null $r_v_deleted_by
@@ -48,7 +50,8 @@ class RekapVoid extends Model
 		'r_v_nominal' => 'float',
 		'r_v_nominal_pajak' => 'float',
 		'r_v_nominal_sc' => 'float',
-		'r_v_nominal_sharing_profit' => 'float',
+		'r_v_nominal_sharing_profit_in' => 'float',
+		'r_v_nominal_sharing_profit_out' => 'float',
 		'r_v_approved_by' => 'int',
 		'r_v_created_by' => 'int',
 		'r_v_updated_by' => 'int',
@@ -70,7 +73,8 @@ class RekapVoid extends Model
 		'r_v_nominal',
 		'r_v_nominal_pajak',
 		'r_v_nominal_sc',
-		'r_v_nominal_sharing_profit',
+		'r_v_nominal_sharing_profit_in',
+		'r_v_nominal_sharing_profit_out',
 		'r_v_keterangan',
 		'r_v_status_sync',
 		'r_v_approved_by',

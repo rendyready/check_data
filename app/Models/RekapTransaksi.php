@@ -25,7 +25,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property float $r_t_nominal
  * @property float $r_t_nominal_pajak
  * @property float $r_t_nominal_sc
- * @property float $r_t_nominal_sharing_profit
+ * @property float $r_t_nominal_sharing_profit_in
+ * @property float $r_t_nominal_sharing_profit_out
  * @property float $r_t_nominal_diskon
  * @property float $r_t_nominal_voucher
  * @property float $r_t_nominal_pembulatan
@@ -40,6 +41,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property float $r_t_nominal_void_sc
  * @property float $r_t_nominal_pembulatan_void
  * @property float $r_t_nominal_free_kembalian_void
+ * @property float $r_t_nominal_void_total
+ * @property float $r_t_tax_percent
+ * @property float $r_t_sc_percent
  * @property int $r_t_m_t_t_id
  * @property string $r_t_status
  * @property string|null $r_t_catatan
@@ -68,7 +72,8 @@ class RekapTransaksi extends Model
 		'r_t_nominal' => 'float',
 		'r_t_nominal_pajak' => 'float',
 		'r_t_nominal_sc' => 'float',
-		'r_t_nominal_sharing_profit' => 'float',
+		'r_t_nominal_sharing_profit_in' => 'float',
+		'r_t_nominal_sharing_profit_out' => 'float',
 		'r_t_nominal_diskon' => 'float',
 		'r_t_nominal_voucher' => 'float',
 		'r_t_nominal_pembulatan' => 'float',
@@ -112,7 +117,8 @@ class RekapTransaksi extends Model
 		'r_t_nominal',
 		'r_t_nominal_pajak',
 		'r_t_nominal_sc',
-		'r_t_nominal_sharing_profit',
+		'r_t_nominal_sharing_profit_in',
+		'r_t_nominal_sharing_profit_out',
 		'r_t_nominal_diskon',
 		'r_t_nominal_voucher',
 		'r_t_nominal_pembulatan',
