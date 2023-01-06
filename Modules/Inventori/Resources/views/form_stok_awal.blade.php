@@ -49,6 +49,7 @@
                                     <thead>
                                         <th>Nama Barang</th>
                                         <th>Stok Awal</th>
+                                        <th>Hpp</th>
                                         <th>Satuan</th>
                                         <th><button type="button" class="btn tambah btn-success"><i
                                                     class="fa fa-plus"></i></button></th>
@@ -63,11 +64,11 @@
                                             <td><input type="number" min="0"
                                                     class="form-control form-control-sm number reset" name="m_stok_awal[]"
                                                     id="m_stok_awal" required></td>
+                                            <td><input type="number" min="0"
+                                                    class="form-control number reset form-control-sm"  name="m_stok_hpp[]"
+                                                    id="m_stok_hpp" required></td>
                                             <td><input type="text" class="form-control form-control-sm reset"
                                                     id="m_satuan" readonly></td>
-                                            <td><input type="number" min="0"
-                                                    class="form-control number form-control-sm" name="m_stok_hpp[]"
-                                                    id="m_stok_hpp" required></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -174,7 +175,7 @@
           $.get("/master/m_satuan/"+current, function(data){
             $('#m_satuan'+satuan_id).val(data.m_satuan_kode);
           });
-                var values = $('[name="m_stok_m_produk_id[]"]').map(function() {
+        var values = $('[name="m_stok_m_produk_id[]"]').map(function() {
         return this.value.trim();
       }).get();
       var unique =  [...new Set(values)];
