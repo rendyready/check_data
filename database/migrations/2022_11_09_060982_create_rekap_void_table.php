@@ -24,7 +24,8 @@ return new class extends Migration
             $table->decimal('r_v_nominal', 15,2);
             $table->decimal('r_v_nominal_pajak', 15,2)->default(0);
             $table->decimal('r_v_nominal_sc', 15,2)->default(0);
-            $table->decimal('r_v_nominal_sharing_profit', 15,2)->default(0);
+            $table->decimal('r_v_nominal_sharing_profit_in', 15,2)->default(0);
+            $table->decimal('r_v_nominal_sharing_profit_out', 15,2)->default(0);
             $table->string('r_v_keterangan');
             $table->char('r_v_status_sync', 10)->default('0');
             $table->bigInteger('r_v_approved_by')->nullable();

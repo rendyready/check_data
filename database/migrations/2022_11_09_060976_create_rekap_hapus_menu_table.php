@@ -29,7 +29,8 @@ return new class extends Migration
             $table->decimal('r_h_m_nominal', 15,2);
             $table->decimal('r_h_m_nominal_pajak', 15,2)->default(0);
             $table->decimal('r_h_m_nominal_sc', 15,2)->default(0);
-            $table->decimal('r_h_m_nominal_sharing_profit', 15,2)->default(0);
+            $table->decimal('r_h_m_nominal_sharing_profit_in', 15,2)->default(0);
+            $table->decimal('r_h_m_nominal_sharing_profit_out', 15,2)->default(0);
             $table->string('r_h_m_keterangan');
             $table->bigInteger('r_h_m_m_w_id');
             // $table->string('r_h_m_m_w_nama');

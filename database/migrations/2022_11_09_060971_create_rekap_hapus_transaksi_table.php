@@ -34,7 +34,8 @@ return new class extends Migration
             $table->decimal('r_h_t_nominal', 15,2)->default(0);
             $table->decimal('r_h_t_nominal_pajak', 15,2)->default(0);
             $table->decimal('r_h_t_nominal_sc', 15,2)->default(0);
-            $table->decimal('r_h_t_nominal_sharing_profit', 15,2)->default(0);
+            $table->decimal('r_h_t_nominal_sharing_profit_in', 15,2)->default(0);
+            $table->decimal('r_h_t_nominal_sharing_profit_out', 15,2)->default(0);
             $table->bigInteger('r_h_t_m_t_t_id');
             // $table->string('r_h_t_m_t_t_name');
             // $table->decimal('r_h_t_m_t_t_profit_price', 3)->default(0);

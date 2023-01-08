@@ -23,11 +23,13 @@ use Illuminate\Database\Eloquent\Model;
  * @property float $r_l_b_nominal
  * @property float $r_l_b_nominal_pajak
  * @property float $r_l_b_nominal_sc
- * @property float $r_l_b_nominal_sharing_profit
+ * @property float $r_l_b_nominal_sharing_profit_in
+ * @property float $r_l_b_nominal_sharing_profit_out
  * @property string $r_l_b_keterangan
  * @property int $r_l_b_m_w_id
  * @property int $r_l_b_m_area_id
  * @property string $r_l_b_status_sync
+ * @property int|null $r_l_b_approved_by
  * @property int $r_l_b_created_by
  * @property int|null $r_l_b_updated_by
  * @property int|null $r_l_b_deleted_by
@@ -50,7 +52,8 @@ class RekapLostBill extends Model
 		'r_l_b_nominal' => 'float',
 		'r_l_b_nominal_pajak' => 'float',
 		'r_l_b_nominal_sc' => 'float',
-		'r_l_b_nominal_sharing_profit' => 'float',
+		'r_l_b_nominal_sharing_profit_in' => 'float',
+		'r_l_b_nominal_sharing_profit_out' => 'float',
 		'r_l_b_m_w_id' => 'int',
 		'r_l_b_m_area_id' => 'int',
 		'r_l_b_approved_by' => 'int',
@@ -77,7 +80,8 @@ class RekapLostBill extends Model
 		'r_l_b_nominal',
 		'r_l_b_nominal_pajak',
 		'r_l_b_nominal_sc',
-		'r_l_b_nominal_sharing_profit',
+		'r_l_b_nominal_sharing_profit_in',
+		'r_l_b_nominal_sharing_profit_out',
 		'r_l_b_keterangan',
 		'r_l_b_m_w_id',
 		'r_l_b_m_area_id',

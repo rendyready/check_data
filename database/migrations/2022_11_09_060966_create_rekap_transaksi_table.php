@@ -32,7 +32,8 @@ return new class extends Migration
             $table->decimal('r_t_nominal', 15,2)->default(0);
             $table->decimal('r_t_nominal_pajak', 15,2)->default(0);
             $table->decimal('r_t_nominal_sc', 15,2)->default(0);
-            $table->decimal('r_t_nominal_sharing_profit', 15,2)->default(0);
+            $table->decimal('r_t_nominal_sharing_profit_in', 15,2)->default(0);
+            $table->decimal('r_t_nominal_sharing_profit_out', 15,2)->default(0);
             $table->decimal('r_t_nominal_diskon', 15,2)->default(0);
             $table->decimal('r_t_nominal_voucher', 15,2)->default(0);
             $table->decimal('r_t_nominal_pembulatan', 8,2)->default(0);
