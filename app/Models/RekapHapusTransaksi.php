@@ -25,9 +25,11 @@ use Illuminate\Database\Eloquent\Model;
  * @property float $r_h_t_nominal
  * @property float $r_h_t_nominal_pajak
  * @property float $r_h_t_nominal_sc
- * @property float $r_h_t_nominal_sharing_profit
+ * @property float $r_h_t_nominal_sharing_profit_in
+ * @property float $r_h_t_nominal_sharing_profit_out
  * @property int $r_h_t_m_t_t_id
  * @property string $r_h_t_status_sync
+ * @property int|null $r_h_t_approved_by
  * @property int $r_h_t_created_by
  * @property int|null $r_h_t_updated_by
  * @property int|null $r_h_t_deleted_by
@@ -52,7 +54,8 @@ class RekapHapusTransaksi extends Model
 		'r_h_t_nominal' => 'float',
 		'r_h_t_nominal_pajak' => 'float',
 		'r_h_t_nominal_sc' => 'float',
-		'r_h_t_nominal_sharing_profit' => 'float',
+		'r_h_t_nominal_sharing_profit_in' => 'float',
+		'r_h_t_nominal_sharing_profit_out' => 'float',
 		'r_h_t_m_t_t_id' => 'int',
 		'r_h_t_approved_by' => 'int',
 		'r_h_t_created_by' => 'int',
@@ -80,7 +83,8 @@ class RekapHapusTransaksi extends Model
 		'r_h_t_nominal',
 		'r_h_t_nominal_pajak',
 		'r_h_t_nominal_sc',
-		'r_h_t_nominal_sharing_profit',
+		'r_h_t_nominal_sharing_profit_in',
+		'r_h_t_nominal_sharing_profit_out',
 		'r_h_t_m_t_t_id',
 		'r_h_t_status_sync',
 		'r_h_t_approved_by',

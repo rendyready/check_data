@@ -16,13 +16,14 @@ use Illuminate\Database\Eloquent\Model;
  * @property int|null $r_t_detail_sync_id
  * @property int $r_t_detail_r_t_id
  * @property int $r_t_detail_m_produk_id
- * @property string $r_t_detail_custom
+ * @property string|null $r_t_detail_custom
  * @property float $r_t_detail_price
  * @property int $r_t_detail_qty
  * @property float $r_t_detail_nominal
  * @property float $r_t_detail_nominal_pajak
  * @property float $r_t_detail_nominal_sc
- * @property float $r_t_detail_nominal_sharing_profit
+ * @property float $r_t_detail_nominal_sharing_profit_in
+ * @property float $r_t_detail_nominal_sharing_profit_out
  * @property string $r_t_detail_status_sync
  * @property int $r_t_detail_created_by
  * @property int|null $r_t_detail_updated_by
@@ -48,7 +49,8 @@ class RekapTransaksiDetail extends Model
 		'r_t_detail_nominal' => 'float',
 		'r_t_detail_nominal_pajak' => 'float',
 		'r_t_detail_nominal_sc' => 'float',
-		'r_t_detail_nominal_sharing_profit' => 'float',
+		'r_t_detail_nominal_sharing_profit_in' => 'float',
+		'r_t_detail_nominal_sharing_profit_out' => 'float',
 		'r_t_detail_created_by' => 'int',
 		'r_t_detail_updated_by' => 'int',
 		'r_t_detail_deleted_by' => 'int'
@@ -70,7 +72,8 @@ class RekapTransaksiDetail extends Model
 		'r_t_detail_nominal',
 		'r_t_detail_nominal_pajak',
 		'r_t_detail_nominal_sc',
-		'r_t_detail_nominal_sharing_profit',
+		'r_t_detail_nominal_sharing_profit_in',
+		'r_t_detail_nominal_sharing_profit_out',
 		'r_t_detail_status_sync',
 		'r_t_detail_created_by',
 		'r_t_detail_updated_by',
