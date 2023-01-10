@@ -28,13 +28,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property float|null $tmp_transaction_detail_service_charge
  * @property float $tmp_transaction_detail_discount
  * @property float $tmp_transaction_detail_price
+ * @property float $tmp_transaction_detail_nominal
  * @property string|null $tmp_transaction_detail_custom_menu
  * @property bool $tmp_transaction_detail_tax_status
  * @property bool $tmp_transaction_detail_service_charge_status
  * @property int $tmp_transaction_detail_production_status
  * @property string $tmp_transaction_detail_discount_type
- * 
- * @property TmpTransaction $tmp_transaction
  *
  * @package App\Models
  */
@@ -57,6 +56,7 @@ class TmpTransactionDetail extends Model
 		'tmp_transaction_detail_service_charge' => 'float',
 		'tmp_transaction_detail_discount' => 'float',
 		'tmp_transaction_detail_price' => 'float',
+		'tmp_transaction_detail_nominal' => 'float',
 		'tmp_transaction_detail_tax_status' => 'bool',
 		'tmp_transaction_detail_service_charge_status' => 'bool',
 		'tmp_transaction_detail_production_status' => 'int'
@@ -74,15 +74,11 @@ class TmpTransactionDetail extends Model
 		'tmp_transaction_detail_service_charge',
 		'tmp_transaction_detail_discount',
 		'tmp_transaction_detail_price',
+		'tmp_transaction_detail_nominal',
 		'tmp_transaction_detail_custom_menu',
 		'tmp_transaction_detail_tax_status',
 		'tmp_transaction_detail_service_charge_status',
 		'tmp_transaction_detail_production_status',
 		'tmp_transaction_detail_discount_type'
 	];
-
-	public function tmp_transaction()
-	{
-		return $this->belongsTo(TmpTransaction::class, 'tmp_transaction_detail_tmp_transaction_id');
-	}
 }

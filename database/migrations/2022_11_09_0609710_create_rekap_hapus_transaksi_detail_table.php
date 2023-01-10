@@ -18,7 +18,7 @@ return new class extends Migration
             $table->bigInteger('r_h_t_detail_sync_id')->nullable();
             $table->bigInteger('r_h_t_detail_r_h_t_id');
             $table->bigInteger('r_h_t_detail_m_produk_id');
-            // $table->string('r_h_t_detail_m_produk_name');
+            $table->string('r_h_t_detail_m_produk_nama')->nullable();
             $table->integer('r_h_t_detail_qty');
             $table->decimal('r_h_t_detail_price', 8,2)->default(0);
             $table->decimal('r_h_t_detail_nominal', 15,2)->default(0);

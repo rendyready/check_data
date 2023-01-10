@@ -19,16 +19,16 @@ return new class extends Migration
             $table->bigInteger('r_t_rekap_modal_id');
             // $table->bigInteger('r_t_m_jenis_nota_id');
             // $table->string('r_t_m_jenis_nota_nama');
-            $table->string('r_t_tmp_transaction_id')->comment('Untuk cek duplikasi input');
+            // $table->string('r_t_tmp_transaction_id')->comment('Untuk cek duplikasi input');
             $table->string('r_t_nota_code');
             $table->string('r_t_bigboss');
             // $table->smallInteger('r_t_shift');
             $table->date('r_t_tanggal');
             $table->time('r_t_jam');
             $table->bigInteger('r_t_m_area_id');
-            // $table->string('r_t_m_area_nama');
+            $table->string('r_t_m_area_nama')->nullable();
             $table->bigInteger('r_t_m_w_id');
-            // $table->string('r_t_m_w_nama');
+            $table->string('r_t_m_w_nama')->nullable();
             $table->decimal('r_t_nominal', 15,2)->default(0);
             $table->decimal('r_t_nominal_pajak', 15,2)->default(0);
             $table->decimal('r_t_nominal_sc', 15,2)->default(0);
@@ -46,12 +46,12 @@ return new class extends Migration
             $table->decimal('r_t_nominal_total_kembalian', 15,2)->default(0);
             
 
-            $table->decimal('r_t_nominal_void', 15,2)->default(0);
-            $table->decimal('r_t_nominal_void_pajak', 15,2)->default(0);
-            $table->decimal('r_t_nominal_void_sc', 15,2)->default(0);
-            $table->decimal('r_t_nominal_pembulatan_void', 15,2)->default(0);
-            $table->decimal('r_t_nominal_free_kembalian_void', 15,2)->default(0);
-            $table->decimal('r_t_nominal_void_total', 15,2)->default(0);
+            $table->decimal('r_t_nominal_refund', 15,2)->default(0);
+            $table->decimal('r_t_nominal_refund_pajak', 15,2)->default(0);
+            $table->decimal('r_t_nominal_refund_sc', 15,2)->default(0);
+            $table->decimal('r_t_nominal_pembulatan_refund', 15,2)->default(0);
+            $table->decimal('r_t_nominal_free_kembalian_refund', 15,2)->default(0);
+            $table->decimal('r_t_nominal_refund_total', 15,2)->default(0);
             $table->decimal('r_t_tax_percent',5,2)->default(0);
             $table->decimal('r_t_sc_percent',5,2)->default(0);
 

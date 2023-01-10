@@ -15,12 +15,12 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $r_h_m_id
  * @property int|null $r_h_m_sync_id
  * @property int $r_h_m_rekap_modal_id
- * @property string $r_h_m_tmp_transaction_id
  * @property Carbon $r_h_m_tanggal
  * @property time without time zone $r_h_m_jam
  * @property string $r_h_m_nota_code
  * @property string $r_h_m_bigboss
  * @property int $r_h_m_m_produk_id
+ * @property string|null $r_h_m_m_produk_nama
  * @property int $r_h_m_qty
  * @property float $r_h_m_price
  * @property float $r_h_m_nominal
@@ -30,7 +30,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property float $r_h_m_nominal_sharing_profit_out
  * @property string $r_h_m_keterangan
  * @property int $r_h_m_m_w_id
+ * @property string|null $r_h_m_m_w_nama
  * @property int $r_h_m_m_area_id
+ * @property string|null $r_h_m_m_area_nama
  * @property string $r_h_m_status_sync
  * @property int|null $r_h_m_approved_by
  * @property int $r_h_m_created_by
@@ -78,12 +80,12 @@ class RekapHapusMenu extends Model
 	protected $fillable = [
 		'r_h_m_sync_id',
 		'r_h_m_rekap_modal_id',
-		'r_h_m_tmp_transaction_id',
 		'r_h_m_tanggal',
 		'r_h_m_jam',
 		'r_h_m_nota_code',
 		'r_h_m_bigboss',
 		'r_h_m_m_produk_id',
+		'r_h_m_m_produk_nama',
 		'r_h_m_qty',
 		'r_h_m_price',
 		'r_h_m_nominal',
@@ -93,7 +95,9 @@ class RekapHapusMenu extends Model
 		'r_h_m_nominal_sharing_profit_out',
 		'r_h_m_keterangan',
 		'r_h_m_m_w_id',
+		'r_h_m_m_w_nama',
 		'r_h_m_m_area_id',
+		'r_h_m_m_area_nama',
 		'r_h_m_status_sync',
 		'r_h_m_approved_by',
 		'r_h_m_created_by',

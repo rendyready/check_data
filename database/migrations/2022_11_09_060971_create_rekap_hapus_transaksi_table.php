@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id('r_h_t_id');
             $table->bigInteger('r_h_t_sync_id')->nullable();
             $table->bigInteger('r_h_t_rekap_modal_id');
-            $table->string('r_h_t_tmp_transaction_id');
+            // $table->string('r_h_t_tmp_transaction_id');
             // $table->bigInteger('r_h_t_m_jenis_nota_id');
             // $table->string('r_h_t_m_jenis_nota_nama');
             $table->string('r_h_t_nota_code');
@@ -28,9 +28,9 @@ return new class extends Migration
             // $table->string('r_h_t_m_meja_nama');
             $table->string('r_h_t_bigboss');
             $table->bigInteger('r_h_t_m_area_id');
-            // $table->string('r_h_t_m_area_nama');
+            $table->string('r_h_t_m_area_nama')->nullable();
             $table->bigInteger('r_h_t_m_w_id');
-            // $table->string('r_h_t_m_w_nama');
+            $table->string('r_h_t_m_w_nama')->nullable();
             $table->decimal('r_h_t_nominal', 15,2)->default(0);
             $table->decimal('r_h_t_nominal_pajak', 15,2)->default(0);
             $table->decimal('r_h_t_nominal_sc', 15,2)->default(0);

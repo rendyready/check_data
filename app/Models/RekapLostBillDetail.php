@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int|null $r_l_b_detail_sync_id
  * @property int $r_l_b_detail_r_l_b_id
  * @property int $r_l_b_detail_m_produk_id
+ * @property string|null $r_l_b_detail_m_produk_nama
  * @property float $r_l_b_detail_price
  * @property int $r_l_b_detail_qty
  * @property float $r_l_b_detail_nominal
@@ -65,6 +66,7 @@ class RekapLostBillDetail extends Model
 		'r_l_b_detail_sync_id',
 		'r_l_b_detail_r_l_b_id',
 		'r_l_b_detail_m_produk_id',
+		'r_l_b_detail_m_produk_nama',
 		'r_l_b_detail_price',
 		'r_l_b_detail_qty',
 		'r_l_b_detail_nominal',

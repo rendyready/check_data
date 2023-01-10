@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int|null $rekap_garansi_sync_id
  * @property int $rekap_garansi_r_t_id
  * @property int $rekap_garansi_m_produk_id
+ * @property string|null $rekap_garansi_m_produk_nama
  * @property float $rekap_garansi_price
  * @property int $rekap_garansi_qty
  * @property float $rekap_garansi_nominal
@@ -59,6 +60,7 @@ class RekapGaransi extends Model
 		'rekap_garansi_sync_id',
 		'rekap_garansi_r_t_id',
 		'rekap_garansi_m_produk_id',
+		'rekap_garansi_m_produk_nama',
 		'rekap_garansi_price',
 		'rekap_garansi_qty',
 		'rekap_garansi_nominal',

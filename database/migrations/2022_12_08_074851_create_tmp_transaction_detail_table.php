@@ -28,7 +28,8 @@ return new class extends Migration
             $table->decimal('tmp_transaction_detail_tax',8,2)->default(0)->comment('percentage tax');
             $table->decimal('tmp_transaction_detail_service_charge',8,2)->nullable()->comment('percentage percentage charge');
             $table->decimal('tmp_transaction_detail_discount',8,2)->default(0)->comment('percentage discount');
-            $table->decimal('tmp_transaction_detail_price',10,2)->default(0);
+            $table->decimal('tmp_transaction_detail_price',15,2)->default(0);
+            $table->decimal('tmp_transaction_detail_nominal',15,2)->default(0);
             $table->text('tmp_transaction_detail_custom_menu')->nullable();
             $table->boolean('tmp_transaction_detail_tax_status')->default(true);
             $table->boolean('tmp_transaction_detail_service_charge_status')->default(true);
