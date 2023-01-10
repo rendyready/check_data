@@ -15,6 +15,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $rekap_modal_id
  * @property int|null $rekap_modal_sync_id
  * @property int $rekap_modal_m_w_id
+ * @property string|null $rekap_modal_m_w_nama
+ * @property int|null $rekap_modal_m_area_id
+ * @property string|null $rekap_modal_m_area_nama
  * @property int $rekap_modal_sesi
  * @property Carbon $rekap_modal_tanggal
  * @property float $rekap_modal_nominal
@@ -40,6 +43,7 @@ class RekapModal extends Model
 	protected $casts = [
 		'rekap_modal_sync_id' => 'int',
 		'rekap_modal_m_w_id' => 'int',
+		'rekap_modal_m_area_id' => 'int',
 		'rekap_modal_sesi' => 'int',
 		'rekap_modal_nominal' => 'float',
 		'rekap_modal_sales' => 'float',
@@ -60,6 +64,9 @@ class RekapModal extends Model
 	protected $fillable = [
 		'rekap_modal_sync_id',
 		'rekap_modal_m_w_id',
+		'rekap_modal_m_w_nama',
+		'rekap_modal_m_area_id',
+		'rekap_modal_m_area_nama',
 		'rekap_modal_sesi',
 		'rekap_modal_tanggal',
 		'rekap_modal_nominal',

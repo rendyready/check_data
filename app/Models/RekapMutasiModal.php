@@ -21,7 +21,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property float $r_m_m_kredit
  * @property string $r_m_m_keterangan
  * @property int $r_m_m_m_w_id
+ * @property string|null $r_m_m_m_w_nama
  * @property int $r_m_m_m_area_id
+ * @property string|null $r_m_m_m_area_nama
  * @property string $r_m_m_status_sync
  * @property int $r_m_m_created_by
  * @property int|null $r_m_m_updated_by
@@ -67,7 +69,9 @@ class RekapMutasiModal extends Model
 		'r_m_m_kredit',
 		'r_m_m_keterangan',
 		'r_m_m_m_w_id',
+		'r_m_m_m_w_nama',
 		'r_m_m_m_area_id',
+		'r_m_m_m_area_nama',
 		'r_m_m_status_sync',
 		'r_m_m_created_by',
 		'r_m_m_updated_by',
