@@ -14,12 +14,24 @@
                             <div class="table-responsive">
                                 <table id="linkAkuntansi" class="table table-sm table-bordered table-striped table-vcenter" style="width:100%">
                                     <thead>
-                                        <th>No</th>
                                         <th>Akuntansi</th>
                                         <th>No Rekening</th>
                                         <th>Nama Akun</th>
                                     </thead>
                                     <tbody>
+                                        @php
+                                            $no =0;
+                                        @endphp
+                                        @foreach($data as $items)
+                                            @php
+                                                $no++;
+                                            @endphp
+                                        <tr>
+                                            <td>{{$items->list_akt_nama}}</td>
+                                            <td id="{{$no}}"><select class="js-select2 js-states form-select masterRekening" id="m_rekening_no_akun" name="m_rekening_no_akun[]" style="width: 100%;"></select></td>
+                                            <td><input id="fieldName{{$no}}" name="m_rekening_nama" readonly></td>
+                                        </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -41,16 +53,43 @@
                 'X-CSRF-Token': $("input[name=_token]").val()
             }
         });
-        $(function() {
-            $('#linkAkuntansi').DataTable({
-                'ajax': {
-                    'url': '{{route("listIndex.index")}}',
+        $.ajax({
+            url: '{{route("link.list")}}',
+            type: 'GET',
+            dataType: 'Json',
+            success: function(data) {
+                $('#linkAkuntansi').DataTable({
+                    'paging': false,
+                    'order': false,
+                });
+                $.each(data, function(key, value) {
+                    $('.masterRekening')
+                        .append($('<option>', {
+                                value: key
+                            })
+                            .text(value[0]));
+                });
+            }
+        })
+        $('#linkAkuntansi').on('change', '.masterRekening', function(s) {
+            s.preventDefault()
+            let getData = $(this).val()
+            var idNo=$(this).parent().attr('id')
+            console.log(idNo);
+            $.ajax({
+                url: '{{route("link.rekening")}}',
+                type: 'GET',
+                dataType: 'json',
+                data: {
+                   data: getData
                 },
-                'pageLength': 10,
+                success: function(response) {
+
+                   $('#fieldName'+idNo).val(response.m_rekening_nama)
+                   
+                }
             });
         });
-        $('#linkAkuntansi').find('.masterRekening').append('<option value="1">test</option>');
-
     });
 </script>
 @endsection

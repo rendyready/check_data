@@ -129,23 +129,30 @@
     var mwId = $('#m_rekening_m_w_id').val();
     var rekKat = $('#m_rekening_kategori').val();
     $('#dataSourceProcess').DataTable({
-              buttons:[],
-              destroy:true,
-              ajax: {
-                url: '{{route("rekening.list")}}',
-                data: {
-                  m_rekening_m_w_id: mwId,
-                  m_rekening_kategori: rekKat,
-                    },
-                type: "GET",
-                },
-                columns: [
-            { data: 'm_rekening_kategori' },
-            { data: 'm_rekening_nama' },
-            { data: 'm_rekening_no_akun' },
-            { data: 'm_rekening_saldo' },
-              ],
-            });
+      buttons: [],
+      destroy: true,
+      ajax: {
+        url: '{{route("rekening.list")}}',
+        data: {
+          m_rekening_m_w_id: mwId,
+          m_rekening_kategori: rekKat,
+        },
+        type: "GET",
+      },
+      columns: [{
+          data: 'm_rekening_kategori'
+        },
+        {
+          data: 'm_rekening_no_akun'
+        },
+        {
+          data: 'm_rekening_nama'
+        },
+        {
+          data: 'm_rekening_saldo'
+        },
+      ],
+    });
     $('#rekeningInsert').submit(function(e) {
       if (!e.isDefaultPrevented()) {
         $.ajax({
@@ -154,32 +161,39 @@
           data: $('form').serialize(),
           success: function(data) {
             Codebase.helpers('jq-notify', {
-                            align: 'right', // 'right', 'left', 'center'
-                            from: 'top', // 'top', 'bottom'
-                            type: data.type, // 'info', 'success', 'warning', 'danger'
-                            icon: 'fa fa-info me-5', // Icon class
-                            message: data.message
-                            });
+              align: 'right', // 'right', 'left', 'center'
+              from: 'top', // 'top', 'bottom'
+              type: data.type, // 'info', 'success', 'warning', 'danger'
+              icon: 'fa fa-info me-5', // Icon class
+              message: data.message
+            });
             $('.hapus').remove();
             $('.set').val('');
             var mwId2 = $('#m_rekening_m_w_id').val();
             var rekKat2 = $('#m_rekening_kategori').val();
             $('#dataSourceProcess').DataTable({
-              buttons:[],
-              destroy:true,
+              buttons: [],
+              destroy: true,
               ajax: {
                 url: '{{route("rekening.list")}}',
                 data: {
                   m_rekening_m_w_id: mwId2,
                   m_rekening_kategori: rekKat2,
-                    },
-                type: "GET",
                 },
-                columns: [
-            { data: 'm_rekening_kategori' },
-            { data: 'm_rekening_nama' },
-            { data: 'm_rekening_no_akun' },
-            { data: 'm_rekening_saldo' },
+                type: "GET",
+              },
+              columns: [{
+                  data: 'm_rekening_kategori'
+                },
+                {
+                  data: 'm_rekening_no_akun'
+                },
+                {
+                  data: 'm_rekening_nama'
+                },
+                {
+                  data: 'm_rekening_saldo'
+                },
               ],
             });
           },
@@ -199,23 +213,30 @@
       var mwId = $('#m_rekening_m_w_id').val();
       var rekKat = $('#m_rekening_kategori').val();
       $('#dataSourceProcess').DataTable({
-              buttons:[],
-              destroy:true,
-              ajax: {
-                url: '{{route("rekening.list")}}',
-                data: {
-                  m_rekening_m_w_id: mwId,
-                  m_rekening_kategori: rekKat,
-                    },
-                type: "GET",
-                },
-                columns: [
-            { data: 'm_rekening_kategori' },
-            { data: 'm_rekening_nama' },
-            { data: 'm_rekening_no_akun' },
-            { data: 'm_rekening_saldo' },
-              ],
-            });
+        buttons: [],
+        destroy: true,
+        ajax: {
+          url: '{{route("rekening.list")}}',
+          data: {
+            m_rekening_m_w_id: mwId,
+            m_rekening_kategori: rekKat,
+          },
+          type: "GET",
+        },
+        columns: [{
+            data: 'm_rekening_kategori'
+          },
+          {
+            data: 'm_rekening_no_akun'
+          },
+          {
+            data: 'm_rekening_nama'
+          },
+          {
+            data: 'm_rekening_saldo'
+          },
+        ],
+      });
     });
   });
 </script>

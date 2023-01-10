@@ -14,7 +14,7 @@ class JurnalAkuntansiController extends Controller
      */
     public function index()
     {
-        return view('akuntansi::index');
+        return view('akuntansi::master.jurnal');
     }
 
     /**

@@ -418,12 +418,17 @@
             <ul class="nav-main-submenu">
               <li class="nav-main-item">
                 <a class="nav-main-link{{ request()->is('akuntansi/rekening') ? ' active' : '' }}" href="{{route('rekening.index')}}">
-                  <span class="nav-main-link-name">Rekening</span>
+                  <span class="nav-main-link-name">Rekening Akuntansi</span>
                 </a>
               </li>
               <li class="nav-main-item">
                 <a class="nav-main-link{{ request()->is('akuntansi/link_akt') ? ' active' : '' }}" href="{{route('rek_link.index')}}">
                   <span class="nav-main-link-name">Link Akuntansi</span>
+                </a>
+              </li>
+              <li class="nav-main-item">
+                <a class="nav-main-link{{ request()->is('akuntansi/jurnal') ? ' active' : '' }}" href="{{route('jurnal.index')}}">
+                  <span class="nav-main-link-name">Jurnal Akuntansi</span>
                 </a>
               </li>
             </ul>

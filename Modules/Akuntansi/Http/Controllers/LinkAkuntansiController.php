@@ -26,7 +26,7 @@ class LinkAkuntansiController extends Controller
             ->whereNull('link_akt_deleted_at')->orderBy('list_akt_id', 'asc')
             ->get();
 
-        // return response()->json([$data, $list]);
+        // return response()->json([$link, $data]);
         return view('akuntansi::master.link', compact('data'));
     }
 
@@ -36,60 +36,27 @@ class LinkAkuntansiController extends Controller
      */
     public function list()
     {
-
-        //mode awal
-        // $data = DB::table('link_akt')->rightJoin('m_rekening', 'm_rekening_id', 'link_akt_m_rekening_id')
-        //     ->select('m_rekening_id', 'm_rekening_nama', 'm_rekening_kategori', 'm_rekening_no_akun', 'm_rekening_saldo')
-        //     ->get();
-
-        // return response()->json(['data' => $data]);
-
-        $list = DB::table('link_akt')
-            ->rightJoin('m_rekening', 'm_rekening_id', 'link_akt_m_rekening_id')
-            ->select('m_rekening_nama', 'm_rekening_no_akun',)
+        $list2 = DB::table('m_rekening')
+            ->select('m_rekening_no_akun', 'm_rekening_id', 'm_rekening_nama')
             ->orderBy('m_rekening_no_akun', 'asc')
             ->get();
-        foreach ($list as $val) {
-            $data[] = $val->m_rekening_no_akun;
-            return response()->json($data);
+        $data = array();
+        foreach ($list2 as $val) {
+            $data[$val->m_rekening_id] = [$val->m_rekening_no_akun];
         }
+
+        return response()->json($data);
     }
 
-    public function listIndex()
+
+    public function rekeninglink(Request $request)
     {
-        $list = DB::table('list_akt')->select('list_akt_nama',)->get();
+        $rekening = DB::table('m_rekening')
+            ->where('m_rekening_id', $request->data)
+            ->select('m_rekening_nama')->first();
 
-        $no = 0;
-        $data = array();
-        $data = array();
-        foreach ($list as $val) {
-            $rekening = DB::table('m_rekening')->select('m_rekening_nama','m_rekening_no_akun')->get();
-            $we = array();
-            $no++;
-            $we[] = $no;
-            $we[] = $val->list_akt_nama;
-            $we[] = '<select class="js-select2 form-select masterRekening" id="masterRekening" name="example-select2" style="width: 100%;" data-placeholder="Choose one.."></select>';
-            $we[] = '
-              <select class="js-select2 form-select" id="example-select2" name="example-select2" style="width: 100%;" data-placeholder="Choose one..">
-                <option ></option>
-                <option value="1">HTML</option>
-                <option value="2">CSS</option>
-                <option value="3">JavaScript</option>
-                <option value="4">PHP</option>
-                <option value="5">MySQL</option>
-                <option value="6">Ruby</option>
-                <option value="7">Angular</option>
-                <option value="8">React</option>
-                <option value="9">Vue.js</option>
-              </select>
-            ';
-            $data[] = $we;
-        }
-
-        $output = array('data' => $data);
-        return response()->json($output);
+        return  response()->json( $rekening);
     }
-
     /**
      * Store a newly created resource in storage.
      * @param Request $request

@@ -18,22 +18,8 @@ class RekeningController extends Controller
      */
     public function index(Request $request)
     {
-        if (empty($request->waroeng_id)) {
-            $waroeng_id = Auth::user()->waroeng_id;
-        } else {
-            $waroeng_id = $request->waroeng_id;
-        }
-
-        $rl = DB::table('m_rekening')->select('m_rekening_kategori', 'm_rekening_nama', 'm_rekening_no_akun', 'm_rekening_saldo')
-            ->orderBy('m_rekening_kategori')->get();
-
-        $mr = DB::table('m_rekening')
-            ->rightJoin('m_w', 'm_w_id', 'm_rekening_m_w_id')
-            ->select('m_rekening_id', 'm_rekening_kategori', 'm_rekening_no_akun', 'm_rekening_nama', 'm_rekening_saldo',)
-            ->whereNull('m_rekening_deleted_at')->orderBy('m_w_code', 'asc')
-            ->get();
         $mw = DB::table('m_w')->select('m_w_id', 'm_w_nama', 'm_w_code',)->orderBy('m_w_code', 'asc')->get();
-        return view('akuntansi::master.rekening', compact('mr', 'mw'));
+        return view('akuntansi::master.rekening', compact('mw'));
     }
 
     /**
@@ -42,8 +28,6 @@ class RekeningController extends Controller
      */
     public function srcRekening(Request $request)
     {
-        // $value = $request->m_rekening_kategori;
-        $value = "aktiva lancar";
         $data = DB::table('m_rekening')->join('m_w', 'm_w_id', 'm_rekening_m_w_id')
             ->select('m_rekening_kategori', 'm_rekening_no_akun', 'm_rekening_nama', 'm_rekening_saldo')
             ->where('m_rekening_kategori', $request->m_rekening_kategori)
@@ -70,9 +54,9 @@ class RekeningController extends Controller
                 'm_rekening_created_at' => Carbon::now(),
                 'm_rekening_created_by' => Auth::id(),
             );
-                DB::table('m_rekening')->insert($data);
+            DB::table('m_rekening')->insert($data);
         }
-        return response()->json(['message'=> 'Berhasil Menambakan','type'=>'success']);
+        return response()->json(['message' => 'Berhasil Menambakan', 'type' => 'success']);
     }
 
     /**
