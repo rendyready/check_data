@@ -16,7 +16,7 @@
                   <div class="row mb-2">
                     <label id="namaWaroeng" class="col-sm-4 col-form-label" for="example-hf-text">Area Waroeng</label>
                     <div class="col-sm-8">
-                      <select class="js-select2 form-control-sm namaWaroeng" style="width: 100%;" name="m_rekening_m_w_id" id="m_rekening_m_w_id" data-placeholder="pilih area/waroeng">
+                      <select class="cari js-select2 form-control-sm" style="width: 100%;" name="m_rekening_m_w_id" id="m_rekening_m_w_id" data-placeholder="pilih area/waroeng">
                         @foreach($mw as $data)
                         <option value="{{($data -> m_w_id)}}"> {{($data ->m_w_nama)}}</option>
                         @endforeach
@@ -26,7 +26,7 @@
                   <div class="row mb-2">
                     <label id="categoryAccount" class="col-sm-4 col-form-label" for="example-hf-text">Kategori Akun</label>
                     <div class="col-sm-8">
-                      <select class="js-select2 form-control-sm categoryAccount" style="width: 100%;" name="m_rekening_kategori" id="m_rekening_kategori" data-placeholder="pilih kategori akun">
+                      <select class="cari js-select2 form-control-sm " style="width: 100%;" name="m_rekening_kategori" id="m_rekening_kategori" data-placeholder="pilih kategori akun">
                         <option value="aktiva lancar">Aktiva Lancar</option>
                         <option value="aktiva tetap">Aktiva Tetap</option>
                         <option value="modal">Modal</option>
@@ -39,43 +39,32 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-md-5">
-                  <div class="col-sm-4">
-                    <div class="position-relative">
-                      <div class="position-absolute mb-4 top-50 start-50 translate-middle-x ">
-                        <button id="prosesData" type="button" class="btn btn-success">Pencarian Data</button>
-                      </div>
-                    </div>
+                <div class="table-responsive">
+                  <table id="form" class="table table-sm table-bordered table-striped table-vcenter">
+                    <thead>
+                      <th>No Akun</th>
+                      <th>Nama Akun</th>
+                      <th>Saldo</th>
+                      <th><button type="button" class="btn tambah btn-success">Add</button></th>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><input type="text" step="" class="form-control set form-control-sm" name="m_rekening_no_akun[]" id="m_rekening_no_akun" required></td>
+                        <td><input type="text" class="form-control set form-control-sm" name="m_rekening_nama[]" id="m_rekening_nama" required></td>
+                        <td><input type="number" class="form-control set form-control-sm" name="m_rekening_saldo[]" id="m_rekening_saldo" required></td>
+                      </tr>
+                    </tbody>
+                    <tfoot>
+                      <th>No Akun</th>
+                      <th>Nama Akun</th>
+                      <th>Saldo</th>
+                      <th><button type="button" class="btn tambah btn-success">Add</button></th>
+                    </tfoot>
+                  </table>
+                  <div class="block-content block-content-full text-end bg-transparent">
+                    <button type="submit" class="btn btn-sm btn-success">Simpan</button>
                   </div>
                 </div>
-              </div>
-
-              <div class="table-responsive">
-                <table id="form" class="table table-sm table-bordered table-striped table-vcenter">
-                  <thead>
-                    <th>No Akun</th>
-                    <th>Nama Akun</th>
-                    <th>Saldo</th>
-                    <th><button type="button" class="btn tambah btn-success">Add</button></th>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td><input type="text" step="" class="form-control form-control-sm" name="m_rekening_no_akun[]" id="m_rekening_no_akun" required></td>
-                      <td><input type="text" class="form-control form-control-sm" name="m_rekening_nama[]" id="m_rekening_nama" required></td>
-                      <td><input type="number" class="form-control form-control-sm" name="m_rekening_saldo[]" id="m_rekening_saldo" required></td>
-                    </tr>
-                  </tbody>
-                  <tfoot>
-                    <th>No Akun</th>
-                    <th>Nama Akun</th>
-                    <th>Saldo</th>
-                    <th><button type="button" class="btn tambah btn-success">Add</button></th>
-                  </tfoot>
-                </table>
-                <div class="block-content block-content-full text-end bg-transparent">
-                  <button type="submit" class="btn btn-sm btn-success">Simpan</button>
-                </div>
-              </div>
             </form>
           </div>
         </div>
@@ -101,7 +90,7 @@
                   <th>Nama Akun</th>
                   <th>Saldo</th>
                 </thead>
-                <tbody>
+                <tbody id="dataReload">
                 </tbody>
                 <tfoot>
                   <th>Kaategori</th>
@@ -131,11 +120,38 @@
     var no = 1;
     $('.tambah').on('click', function() {
       no++;
-      $('#form').append('<tr id="row' + no + '">' +
+      $('#form').append('<tr class="hapus" id="row' + no + '">' +
         '<td><input type="text" class="form-control form-control-sm" name="m_rekening_no_akun[]" id="m_rekening_no_akun" required></td>' +
         '<td><input type="text" class="form-control form-control-sm" name="m_rekening_nama[]" id="m_rekening_nama" required></td>' +
         '<td><input type="number" class="form-control form-control-sm" name="m_rekening_saldo[]" id="m_rekening_saldo" required></td>' +
         '<td><button type="button" id="' + no + '" class="btn btn-danger btn_remove">Hapus</button></td></tr>');
+    });
+    var mwId = $('#m_rekening_m_w_id').val();
+    var rekKat = $('#m_rekening_kategori').val();
+    $('#dataSourceProcess').DataTable({
+      buttons: [],
+      destroy: true,
+      ajax: {
+        url: '{{route("rekening.list")}}',
+        data: {
+          m_rekening_m_w_id: mwId,
+          m_rekening_kategori: rekKat,
+        },
+        type: "GET",
+      },
+      columns: [{
+          data: 'm_rekening_kategori'
+        },
+        {
+          data: 'm_rekening_no_akun'
+        },
+        {
+          data: 'm_rekening_nama'
+        },
+        {
+          data: 'm_rekening_saldo'
+        },
+      ],
     });
     $('#rekeningInsert').submit(function(e) {
       if (!e.isDefaultPrevented()) {
@@ -144,15 +160,42 @@
           type: "POST",
           data: $('form').serialize(),
           success: function(data) {
-            $.notify({
-              align: 'right',
-              from: 'top',
-              type: 'success',
-              icon: 'fa fa-success me-5',
-              message: 'Berhasil Menambahkan Data'
+            Codebase.helpers('jq-notify', {
+              align: 'right', // 'right', 'left', 'center'
+              from: 'top', // 'top', 'bottom'
+              type: data.type, // 'info', 'success', 'warning', 'danger'
+              icon: 'fa fa-info me-5', // Icon class
+              message: data.message
             });
-            window.location.reload();
-
+            $('.hapus').remove();
+            $('.set').val('');
+            var mwId2 = $('#m_rekening_m_w_id').val();
+            var rekKat2 = $('#m_rekening_kategori').val();
+            $('#dataSourceProcess').DataTable({
+              buttons: [],
+              destroy: true,
+              ajax: {
+                url: '{{route("rekening.list")}}',
+                data: {
+                  m_rekening_m_w_id: mwId2,
+                  m_rekening_kategori: rekKat2,
+                },
+                type: "GET",
+              },
+              columns: [{
+                  data: 'm_rekening_kategori'
+                },
+                {
+                  data: 'm_rekening_no_akun'
+                },
+                {
+                  data: 'm_rekening_nama'
+                },
+                {
+                  data: 'm_rekening_saldo'
+                },
+              ],
+            });
           },
           error: function() {
             alert("Tidak dapat menyimpan data!");
@@ -161,55 +204,40 @@
         return false;
       }
     });
-
-    $('#prosesData').click('.button', function() {
-      console.log('codot');
-      var mwId = $('#m_rekening_m_w_id').val();
-      var rekKat = $('#m_rekening_kategori').val();
-      console.log(mwId, rekKat);
-      if (mwId == m_rekening_m_w_id && rekKat == m_rekening_kategori) {
-        console.log(this);
-        $('#dataSourceProcess').find('tbody', function(data) {
-          console.log(this);
-          $.ajax({
-              type: 'GET',
-              dataType: 'JSON',
-              url: '{{route("resource_rekening")}}',
-            }),
-            append('<tr>' +
-              '<td>' + data.m_rekening_kategori + '</td>' +
-              '<td>' + data.m_rekening_no_akun + '</td>' +
-              '<td>' + data.m_rekening_nama + '</td>' +
-              '<td>' + data.m_rekening_saldo + '</td>' +
-              '<tr>');
-        });
-        $.ajax({
-          type: 'GET',
-          dataType: 'JSON',
-          url: '{{route("resource_rekening")}}',
-          success: function(data) {
-
-            $.each(data, function(a, item) {
-              $('#dataSourceProcess').find('tbody').append(
-                '<tr>' +
-                '<td>' + item.m_rekening_kategori + '</td>' +
-                '<td>' + item.m_rekening_no_akun + '</td>' +
-                '<td>' + item.m_rekening_nama + '</td>' +
-                '<td>' + item.m_rekening_saldo + '</td>' +
-                '<tr>');
-            });
-          }
-        });
-      }
-    });
-
-
-
     $(document).on('click', '.btn_remove', function() {
       var button_id = $(this).attr("id");
       $('#row' + button_id + '').remove();
     });
 
+    $('.cari').on('change', function() {
+      var mwId = $('#m_rekening_m_w_id').val();
+      var rekKat = $('#m_rekening_kategori').val();
+      $('#dataSourceProcess').DataTable({
+        buttons: [],
+        destroy: true,
+        ajax: {
+          url: '{{route("rekening.list")}}',
+          data: {
+            m_rekening_m_w_id: mwId,
+            m_rekening_kategori: rekKat,
+          },
+          type: "GET",
+        },
+        columns: [{
+            data: 'm_rekening_kategori'
+          },
+          {
+            data: 'm_rekening_no_akun'
+          },
+          {
+            data: 'm_rekening_nama'
+          },
+          {
+            data: 'm_rekening_saldo'
+          },
+        ],
+      });
+    });
   });
 </script>
 @endsection

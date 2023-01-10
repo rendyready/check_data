@@ -35,7 +35,7 @@ class MStokController extends Controller
             ->rightjoin('m_produk', 'm_produk_id', 'm_stok_m_produk_id')
             ->rightjoin('m_satuan', 'm_produk_m_satuan_id', 'm_satuan_id')
             ->where('m_stok_gudang_id', $id)
-            ->select('m_stok_awal', 'm_produk_nama', 'm_satuan_kode')
+            ->select('m_stok_awal', 'm_produk_nama', 'm_satuan_kode','m_stok_hpp')
             ->get();
         $no = 0;
         $data = array();
@@ -45,6 +45,7 @@ class MStokController extends Controller
             $row[] = $no;
             $row[] = $value->m_produk_nama;
             $row[] = $value->m_stok_awal;
+            $row[] = $value->m_stok_hpp;
             $row[] = $value->m_satuan_kode;
             $data[] = $row;
         }
@@ -66,18 +67,25 @@ class MStokController extends Controller
         foreach ($request->m_stok_m_produk_id as $key => $value) {
             $cek = DB::table('m_stok')->where('m_stok_gudang_id', $request->m_stok_gudang_id)
                 ->where('m_stok_m_produk_id', $request->m_stok_m_produk_id[$key])->first();
-            if (empty($cek)) {
-                $data = array(
+            $hpp = $cek->m_stok_hpp;
+            $saldo = $cek->m_stok_saldo;
+            $hpp_new = (($hpp*$saldo)+($request->m_stok_awal[$key]*$request->m_stok_hpp[$key]))/($saldo+$request->m_stok_awal[$key]);
+                
+            $data = array(
                     'm_stok_m_produk_id' => $request->m_stok_m_produk_id[$key],
                     'm_stok_gudang_id' => $request->m_stok_gudang_id,
                     'm_stok_awal' => $request->m_stok_awal[$key],
+                    'm_stok_hpp' => $hpp_new,
+                    'm_stok_saldo' => $saldo+$request->m_stok_awal[$key],
                     'm_stok_created_by' => Auth::id(),
                     'm_stok_created_at' => Carbon::now(),
                 );
-                DB::table('m_stok')->insert($data);
-            }
+            
+            DB::table('m_stok')->where('m_stok_gudang_id', $request->m_stok_gudang_id)
+            ->where('m_stok_m_produk_id', $request->m_stok_m_produk_id[$key])->update($data);
+            
         }
-        return response()->json(['message'=>'Sukses Menambah Data','type'=>'success']);
+        return response()->json(['message'=>'Sukses Menambah Stok Awal','type'=>'success']);
 
     }
 
@@ -86,29 +94,15 @@ class MStokController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function edit($id)
+    public function master_stok($id)
     {
-        return view('inventori::edit');
-    }
-
-    /**
-     * Update the specified resource in storage.
-     * @param Request $request
-     * @param int $id
-     * @return Renderable
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     * @param int $id
-     * @return Renderable
-     */
-    public function destroy($id)
-    {
-        //
+       $data = DB::table('m_stok')->where('m_stok_gudang_id',$id)
+        ->select('m_produk_id','m_produk_nama')
+        ->join('m_produk','m_produk_id','m_stok_m_produk_id')
+        ->get();
+        foreach ($data as $key => $v) {
+            $list[$v->m_produk_id]=$v->m_produk_nama;
+        }
+        return response()->json($list);
     }
 }

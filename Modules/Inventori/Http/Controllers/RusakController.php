@@ -22,6 +22,8 @@ class RusakController extends Controller
         $waroeng_nama = DB::table('m_w')->select('m_w_nama')->where('m_w_id',$w_id)->first();
         $data->code = (empty($get_max_id->rekap_rusak_id)) ? $urut = "500001". $user : $urut = substr($get_max_id->rekap_rusak_code,0,-1)+'1'. $user; 
         $data->tgl_now = Carbon::now()->format('Y-m-d');
+        $data->gudang = DB::table('m_gudang')->select('m_gudang_id','m_gudang_nama')
+        ->where('m_gudang_m_w_id',$w_id)->get();
         return view('inventori::form_rusak',compact('data','waroeng_nama'));
     }
 

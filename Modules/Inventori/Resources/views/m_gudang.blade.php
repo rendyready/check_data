@@ -16,7 +16,7 @@
                         <th>No</th>
                         <th>Nama Gudang</th>
                         <th>Waroeng</th>
-                        <th>Aksi</th>
+                     
                     </thead>
                     <tbody>
                     </tbody>
@@ -24,7 +24,7 @@
                         <th>No</th>
                         <th>Nama Gudang</th>
                         <th>Waroeng</th>
-                        <th>Aksi</th>
+                  
                     </tfoot>
                 </table>
              
@@ -122,25 +122,25 @@
             $("#myModalLabel").html('Tambah Gudang');
             $("#form-gudang").modal('show');
       });
-      $("#tb_gudang").on('click','.buttonEdit', function() {
-                var id = $(this).attr('value');
-                $('[name="action"]').val('edit');
-                $('#form-gudang form')[0].reset();
-                $("#myModalLabel").html('Ubah gudang');
-                $.ajax({
-                    url: "/inventori/m_gudang/edit/"+id,
-                    type: "GET",
-                    dataType: 'json',
-                    success: function(respond) {
-                        $("#m_gudang_id").val(respond.m_gudang_id).trigger('change');
-                        $("#m_gudang_nama").val(respond.m_gudang_nama).trigger('change');
-                        $("#m_gudang_m_w_id").val(respond.m_gudang_m_w_id).trigger('change');
-                    },
-                    error: function() {
-                    }
-                });
-                $("#form-gudang").modal('show');
-            }); 
+      // $("#tb_gudang").on('click','.buttonEdit', function() {
+      //           var id = $(this).attr('value');
+      //           $('[name="action"]').val('edit');
+      //           $('#form-gudang form')[0].reset();
+      //           $("#myModalLabel").html('Ubah gudang');
+      //           $.ajax({
+      //               url: "/inventori/m_gudang/edit/"+id,
+      //               type: "GET",
+      //               dataType: 'json',
+      //               success: function(respond) {
+      //                   $("#m_gudang_id").val(respond.m_gudang_id).trigger('change');
+      //                   $("#m_gudang_nama").val(respond.m_gudang_nama).trigger('change');
+      //                   $("#m_gudang_m_w_id").val(respond.m_gudang_m_w_id).trigger('change');
+      //               },
+      //               error: function() {
+      //               }
+      //           });
+      //           $("#form-gudang").modal('show');
+      //       }); 
             $('#formAction').submit( function(e){
                 if(!e.isDefaultPrevented()){
                     $.ajax({

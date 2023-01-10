@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('m_stok_detail', function (Blueprint $table) {
             $table->id('m_stok_detail_id');
+            $table->date('m_stok_detail_tgl');
             $table->bigInteger('m_stok_detail_m_produk_id');
             $table->string('m_stok_detail_m_produk_nama');
             $table->string('m_stok_detail_satuan');
@@ -23,7 +24,6 @@ return new class extends Migration
             $table->decimal('m_stok_detail_saldo',15,2);
             $table->decimal('m_stok_detail_so',15,2)->nullable();
             $table->decimal('m_stok_detail_hpp',18,2);
-            $table->decimal('m_stok_detail_nilai',18,2);
             $table->string('m_stok_detail_catatan');
             $table->string('m_stok_detail_gudang_id');
             $table->bigInteger('m_stok_detail_created_by');

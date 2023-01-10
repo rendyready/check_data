@@ -5,11 +5,8 @@ namespace Modules\Akuntansi\Http\Controllers;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\DB;
-use stdClass;
 
-class LinkAkuntansiController extends Controller
+class JurnalAkuntansiController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,46 +14,18 @@ class LinkAkuntansiController extends Controller
      */
     public function index()
     {
-        $list = DB::table('list_akt')
-            ->select('list_akt_nama')
-            ->whereNull('list_akt_deleted_at')->orderBy('list_akt_id', 'asc')->get();
-
-        $data = DB::table('link_akt')->rightJoin('list_akt', 'list_akt_id', 'link_akt_list_akt_id')
-            ->select('list_akt_id', 'list_akt_nama',)
-            ->whereNull('link_akt_deleted_at')->orderBy('list_akt_id', 'asc')
-            ->get();
-
-        // return response()->json([$link, $data]);
-        return view('akuntansi::master.link', compact('data'));
+        return view('akuntansi::master.jurnal');
     }
 
     /**
      * Show the form for creating a new resource.
      * @return Renderable
      */
-    public function list()
+    public function create()
     {
-        $list2 = DB::table('m_rekening')
-            ->select('m_rekening_no_akun', 'm_rekening_id', 'm_rekening_nama')
-            ->orderBy('m_rekening_no_akun', 'asc')
-            ->get();
-        $data = array();
-        foreach ($list2 as $val) {
-            $data[$val->m_rekening_id] = [$val->m_rekening_no_akun];
-        }
-
-        return response()->json($data);
+        return view('akuntansi::create');
     }
 
-
-    public function rekeninglink(Request $request)
-    {
-        $rekening = DB::table('m_rekening')
-            ->where('m_rekening_id', $request->data)
-            ->select('m_rekening_nama')->first();
-
-        return  response()->json( $rekening);
-    }
     /**
      * Store a newly created resource in storage.
      * @param Request $request

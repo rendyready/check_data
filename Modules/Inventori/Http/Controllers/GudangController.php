@@ -34,7 +34,7 @@ class GudangController extends Controller
             $row[] = $no;
             $row[] = ucwords($key->m_gudang_nama);
             $row[] = $key->m_w_nama;
-            $row[] = '<a id="buttonEdit" class="btn btn-sm buttonEdit btn-success" value="'.$key->m_gudang_id.'" title="Edit"><i class="fa fa-pencil"></i></a>';
+            // $row[] = '<a id="buttonEdit" class="btn btn-sm buttonEdit btn-success" value="'.$key->m_gudang_id.'" title="Edit"><i class="fa fa-pencil"></i></a>';
             $data[] = $row;
         }
         $output = array("data" => $data);
@@ -62,6 +62,20 @@ class GudangController extends Controller
                 );
                 if ($validate == null) {
                     DB::table('m_gudang')->insert($data);
+                    $masterbb = DB::table('m_produk')->where('m_produk_jual','Tidak')
+                    ->select('m_produk_id')->get();
+                    $gudang_id = DB::table('m_gudang')->max('m_gudang_id');
+                    foreach ($masterbb as $key) {
+                        $data_bb = array(
+                            'm_stok_m_produk_id' => $key->m_produk_id,
+                            'm_stok_gudang_id' => $gudang_id,
+                            'm_stok_awal' => 0,
+                            'm_stok_created_by' => Auth::id(),
+                            'm_stok_created_at' => Carbon::now(),
+                        );
+                        DB::table('m_stok')->insert($data_bb);
+                    }
+                    
                     return response(['messages' => 'Berhasil Tambah Gudang !','type' => 'success']);
                 } else {
                     return response(['messages' => 'Gagal Tambah Gudang Sudah Ada!','type'=> 'danger']);
