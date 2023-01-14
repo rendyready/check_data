@@ -37,12 +37,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property float $r_t_nominal_kembalian
  * @property float $r_t_nominal_free_kembalian
  * @property float $r_t_nominal_total_kembalian
- * @property float $r_t_nominal_refund
- * @property float $r_t_nominal_refund_pajak
- * @property float $r_t_nominal_refund_sc
- * @property float $r_t_nominal_pembulatan_refund
- * @property float $r_t_nominal_free_kembalian_refund
- * @property float $r_t_nominal_refund_total
  * @property float $r_t_tax_percent
  * @property float $r_t_sc_percent
  * @property int $r_t_m_t_t_id
@@ -84,12 +78,6 @@ class RekapTransaksi extends Model
 		'r_t_nominal_kembalian' => 'float',
 		'r_t_nominal_free_kembalian' => 'float',
 		'r_t_nominal_total_kembalian' => 'float',
-		'r_t_nominal_refund' => 'float',
-		'r_t_nominal_refund_pajak' => 'float',
-		'r_t_nominal_refund_sc' => 'float',
-		'r_t_nominal_pembulatan_refund' => 'float',
-		'r_t_nominal_free_kembalian_refund' => 'float',
-		'r_t_nominal_refund_total' => 'float',
 		'r_t_tax_percent' => 'float',
 		'r_t_sc_percent' => 'float',
 		'r_t_m_t_t_id' => 'int',
@@ -130,12 +118,6 @@ class RekapTransaksi extends Model
 		'r_t_nominal_kembalian',
 		'r_t_nominal_free_kembalian',
 		'r_t_nominal_total_kembalian',
-		'r_t_nominal_refund',
-		'r_t_nominal_refund_pajak',
-		'r_t_nominal_refund_sc',
-		'r_t_nominal_pembulatan_refund',
-		'r_t_nominal_free_kembalian_refund',
-		'r_t_nominal_refund_total',
 		'r_t_tax_percent',
 		'r_t_sc_percent',
 		'r_t_m_t_t_id',
