@@ -21,7 +21,7 @@ class ProdukController extends Controller
         $data = new \stdClass();
         $data->produk = DB::table('m_produk')
             ->leftjoin('m_jenis_produk', 'm_produk_m_jenis_produk_id', 'm_jenis_produk_id')
-            ->leftjoin('m_satuan', 'm_produk_m_satuan_id', 'm_satuan_id')
+            ->leftjoin('m_satuan', 'm_produk_utama_m_satuan_id', 'm_satuan_id')
             ->leftjoin('m_klasifikasi_produk', 'm_produk_m_klasifikasi_produk_id', 'm_klasifikasi_produk_id')
             ->get();
         $data->satuan = DB::table('m_satuan')->get();
@@ -63,7 +63,8 @@ class ProdukController extends Controller
                         "m_produk_tax" => $request->m_produk_tax,
                         "m_produk_sc" => $request->m_produk_sc,
                         "m_produk_m_jenis_produk_id" => $request->m_produk_m_jenis_produk_id,
-                        "m_produk_m_satuan_id" => $request->m_produk_m_satuan_id,
+                        "m_produk_utama_m_satuan_id" => $request->m_produk_utama_m_satuan_id,
+                        "m_produk_produksi_m_satuan_id" => $request->m_produk_produksi_m_satuan_id,
                         "m_produk_m_plot_produksi_id" => $request->m_produk_m_plot_produksi_id,
                         "m_produk_m_klasifikasi_produk_id" => $request->m_produk_m_klasifikasi_produk_id,
                         "m_produk_jual" => $request->m_produk_jual,
@@ -75,7 +76,8 @@ class ProdukController extends Controller
                     return response(['messages' => 'Berhasil Tambah Produk !', 'type' => 'success']);
                 }
             } else {
-                if ($check->m_produk_id != $request->m_produk_id ) {
+                // return $check->m_produk_id;
+                if ($request->m_produk_id==null ) {
                     return response()->json(['messages' => 'Data Edit Double !', 'type' => 'danger']);
                 } else {
                     DB::table('m_produk')->where('m_produk_id', $request->m_produk_id)
@@ -88,7 +90,8 @@ class ProdukController extends Controller
                             "m_produk_tax" => $request->m_produk_tax,
                             "m_produk_sc" => $request->m_produk_sc,
                             "m_produk_m_jenis_produk_id" => $request->m_produk_m_jenis_produk_id,
-                            "m_produk_m_satuan_id" => $request->m_produk_m_satuan_id,
+                            "m_produk_utama_m_satuan_id" => $request->m_produk_utama_m_satuan_id,
+                            "m_produk_produksi_m_satuan_id" => $request->m_produk_produksi_m_satuan_id,
                             "m_produk_m_plot_produksi_id" => $request->m_produk_m_plot_produksi_id,
                             "m_produk_m_klasifikasi_produk_id" => $request->m_produk_m_klasifikasi_produk_id,
                             "m_produk_jual" => $request->m_produk_jual,
