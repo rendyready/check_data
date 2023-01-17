@@ -43,6 +43,7 @@ class DatabaseSeeder extends Seeder
             MFaqTableSeeder::class,
             List_AktTableSeeder::class,
             SupplierSeeder::class,
+            NmGudangTableSeeder::class,
        ]);
     }
 }

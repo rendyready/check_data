@@ -53,9 +53,9 @@
                   <div>
                       <select class="js-select2" id="m_gudang_nama" name="m_gudang_nama" style="width: 100%;" data-container="#form-gudang" data-placeholder="Pilih Nama Gudang">
                         <option></option>
-                        <option value="gudang utama">Gudang Utama</option>
-                        <option value="gudang produksi">Gudang Produksi</option>
-                        <option value="gudang wbd">Gudang WBD</option>
+                        @foreach ($nama_gudang as $item)
+                            <option value="{{ucwords($item->m_gudang_nama)}}">{{ucwords($item->m_gudang_nama)}}</option>
+                        @endforeach
                       </select>
                   </div>
               </div>     

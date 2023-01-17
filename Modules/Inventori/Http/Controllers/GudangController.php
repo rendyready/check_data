@@ -17,7 +17,8 @@ class GudangController extends Controller
     public function index()
     {
         $waroeng = DB::table('m_w')->select('m_w_id','m_w_nama')->get();
-        return view('inventori::m_gudang',compact('waroeng'));
+        $nama_gudang = DB::table('m_gudang_nama')->get();
+        return view('inventori::m_gudang',compact('waroeng','nama_gudang'));
     }
 
     /**
@@ -56,13 +57,13 @@ class GudangController extends Controller
                 ->where('m_gudang_nama',$request->m_gudang_nama)->first();
                 $data = array(
                     'm_gudang_m_w_id'	=>	$request->m_gudang_m_w_id,
-                    'm_gudang_nama'	=>	$request->m_gudang_nama,
+                    'm_gudang_nama'	=>	strtolower($request->m_gudang_nama),
                     'm_gudang_created_by' => Auth::id(),
                     'm_gudang_created_at' => Carbon::now(),
                 );
                 if ($validate == null) {
                     DB::table('m_gudang')->insert($data);
-                    $masterbb = DB::table('m_produk')->where('m_produk_jual','Tidak')
+                    $masterbb = DB::table('m_produk')
                     ->select('m_produk_id')->get();
                     $gudang_id = DB::table('m_gudang')->max('m_gudang_id');
                     foreach ($masterbb as $key) {
@@ -87,7 +88,7 @@ class GudangController extends Controller
                 ->where('m_gudang_nama',$request->m_gudang_nama)->first();
                 $data = array(
                     'm_gudang_m_w_id'	=>	$request->m_gudang_m_w_id,
-                    'm_gudang_nama'	=>	$request->m_gudang_nama,
+                    'm_gudang_nama'	=>	strtolower($request->m_gudang_nama),
                     'm_gudang_updated_by' => Auth::id(),
                     'm_gudang_updated_at' => Carbon::now(),
                 );
