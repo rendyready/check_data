@@ -17,11 +17,15 @@ class MKlasifikasiProdTableSeeder extends Seeder
 
         DB::table('m_klasifikasi_produk')->insert([
             [
-                'm_klasifikasi_produk_nama' =>'Mentah',
+                'm_klasifikasi_produk_nama' =>'BBTL',
                 'm_klasifikasi_produk_created_by' =>1
             ],
             [
-                'm_klasifikasi_produk_nama' =>'Setengah Jadi',
+                'm_klasifikasi_produk_nama' =>'BBOPS',
+                'm_klasifikasi_produk_created_by' =>1
+            ],
+            [
+                'm_klasifikasi_produk_nama' =>'BB Utama',
                 'm_klasifikasi_produk_created_by' =>1
             ],
             [

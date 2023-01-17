@@ -22,7 +22,7 @@
                 <th>Status Menu</th>
                 <th>Jenis Produk</th>
                 <th>Klasifikasi</th>
-                <th>Satuan Menu</th>
+                <th>Satuan Utama</th>
                 <th>Dijual</th>
                 <th>Action</th>
               </tr>
@@ -89,9 +89,22 @@
               </div>
               <div class="mb-4">
                 <div class="form-group">
-                  <label for="m_produk_m_satuan_id">Produk Satuan</label>
+                  <label for="m_produk_utama_m_satuan_id">Produk Satuan Utama</label>
                   <div>
-                    <select class="js-select2" id="m_produk_m_satuan_id" name="m_produk_m_satuan_id" style="width: 100%;" data-container="#form_produk" data-placeholder="Choose one..">
+                    <select class="js-select2" id="m_produk_utama_m_satuan_id" name="m_produk_utama_m_satuan_id" style="width: 100%;" data-container="#form_produk" data-placeholder="Choose one..">
+                      <option></option>
+                      @foreach ($data->satuan as $item)
+                      <option value="{{$item->m_satuan_id}}">{{$item->m_satuan_kode}}</option>
+                      @endforeach
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="mb-4">
+                <div class="form-group">
+                  <label for="m_produk_produksi_m_satuan_id">Produk Satuan Produksi</label>
+                  <div>
+                    <select class="js-select2" id="m_produk_produksi_m_satuan_id" name="m_produk_produksi_m_satuan_id" style="width: 100%;" data-container="#form_produk" data-placeholder="Choose one..">
                       <option></option>
                       @foreach ($data->satuan as $item)
                       <option value="{{$item->m_satuan_id}}">{{$item->m_satuan_kode}}</option>
@@ -255,7 +268,7 @@
       destroy: true,
       order: [0, 'asc'],
     });
-    Codebase.helpersOnLoad(['jq-select2']);
+    $('.js-select2').select2({dropdownParent: $('#formAction')})
     $(".buttonInsert").on('click', function() {
       var id = $(this).attr('value');
       $('[name="action"]').val('add');
@@ -281,7 +294,8 @@
           $("#m_produk_m_jenis_produk_id").val(respond.m_produk_m_jenis_produk_id).trigger('change');
           $("#m_produk_m_klasifikasi_produk_id").val(respond.m_produk_m_klasifikasi_produk_id).trigger('change');
           $("#m_produk_m_plot_produksi_id").val(respond.m_produk_m_plot_produksi_id).trigger('change');
-          $("#m_produk_m_satuan_id").val(respond.m_produk_m_satuan_id).trigger('change');
+          $("#m_produk_utama_m_satuan_id").val(respond.m_produk_utama_m_satuan_id).trigger('change');
+          $("#m_produk_produksi_m_satuan_id").val(respond.m_produk_produksi_m_satuan_id).trigger('change');
           $("#m_produk_nama").val(respond.m_produk_nama).trigger('change');
           $("#m_produk_sc").val(respond.m_produk_sc).trigger('change');
           $("#m_produk_scp").val(respond.m_produk_scp).trigger('change');
