@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('printer_setting', function (Blueprint $table) {
             $table->id('printer_setting_id');
+            $table->bigInteger('printer_setting_m_w_id');
             $table->string('printer_setting_type')->comment('usb,network,sharing');
             $table->string('printer_setting_address')->nullable()->comment('auto,ip address, sharing name');
             $table->string('printer_setting_location')->default('kasir');

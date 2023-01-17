@@ -45,6 +45,7 @@ class PrinterSetting extends Model
 	];
 
 	protected $fillable = [
+		'printer_setting_m_w_id',
 		'printer_setting_type',
 		'printer_setting_address',
 		'printer_setting_location',
