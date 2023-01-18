@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('printer_setting_type')->comment('usb,network,sharing');
             $table->string('printer_setting_address')->nullable()->comment('auto,ip address, sharing name');
             $table->string('printer_setting_location')->default('kasir');
-            $table->integer('printer_setting_width')->default(33);
+            $table->integer('printer_setting_width')->default(405);
             $table->string('printer_setting_status')->default('aktif');
             $table->bigInteger('printer_setting_created_by');
             $table->bigInteger('printer_setting_deleted_by')->nullable();
