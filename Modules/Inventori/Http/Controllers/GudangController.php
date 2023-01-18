@@ -54,14 +54,14 @@ class GudangController extends Controller
             if ($request->action == 'add') {
                 $validate = DB::table('m_gudang')
                 ->where('m_gudang_m_w_id',$request->m_gudang_m_w_id)
-                ->where('m_gudang_nama',$request->m_gudang_nama)->first();
+                ->where('m_gudang_nama',strtolower($request->m_gudang_nama))->first();
                 $data = array(
                     'm_gudang_m_w_id'	=>	$request->m_gudang_m_w_id,
                     'm_gudang_nama'	=>	strtolower($request->m_gudang_nama),
                     'm_gudang_created_by' => Auth::id(),
                     'm_gudang_created_at' => Carbon::now(),
                 );
-                if ($validate == null) {
+                if (empty($validate)) {
                     DB::table('m_gudang')->insert($data);
                     $masterbb = DB::table('m_produk')
                     ->select('m_produk_id')->get();
@@ -85,7 +85,7 @@ class GudangController extends Controller
             } elseif ($request->action == 'edit') {
                 $validate = DB::table('m_gudang')
                 ->where('m_gudang_m_w_id',$request->m_gudang_m_w_id)
-                ->where('m_gudang_nama',$request->m_gudang_nama)->first();
+                ->where('m_gudang_nama',strtolower($request->m_gudang_nama))->first();
                 $data = array(
                     'm_gudang_m_w_id'	=>	$request->m_gudang_m_w_id,
                     'm_gudang_nama'	=>	strtolower($request->m_gudang_nama),

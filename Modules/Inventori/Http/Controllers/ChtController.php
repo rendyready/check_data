@@ -14,11 +14,16 @@ class ChtController extends Controller
      * Display a listing of the resource.
      * @return Renderable
      */
-    public function index()
-    {   
+    public function index(Request $request)
+    {   $waroeng_id = Auth::user()->waroeng_id;
+        $gudang_default = DB::table('m_gudang')->select('m_gudang_id')
+        ->where('m_gudang_m_w_id',$waroeng_id)->where('m_gudang_nama','gudang utama waroeng')->first()->m_gudang_id;
+        $gudang_id = (empty($request->gudang_id)) ? $gudang_default : $request->gudang_id ; 
         $data = new \stdClass();
+        $data->gudang = DB::table('m_gudang')
+        ->where('m_gudang_m_w_id',$waroeng_id)
+        ->whereNotIn('m_gudang_nama',['gudang produksi waroeng'])->get();
         $data->tgl_now = Carbon::now()->format('Y-m-d');
-        $waroeng_id = Auth::user()->waroeng_id;
         $data->nama_waroeng = DB::table('m_w')->select('m_w_nama')->where('m_w_id',$waroeng_id)->first();
         $data->satuan = DB::table('m_satuan')->get();
         $data->cht = DB::table('rekap_beli_detail')
@@ -28,9 +33,10 @@ class ChtController extends Controller
                  'm_satuan_kode')
         ->leftjoin('rekap_beli','rekap_beli_code','rekap_beli_detail_rekap_beli_code')
         ->leftjoin('m_produk','rekap_beli_detail_m_produk_id','m_produk_id')
-        ->leftjoin('m_satuan','m_produk_m_satuan_id','m_satuan_id')
+        ->leftjoin('m_satuan','m_produk_utama_m_satuan_id','m_satuan_id')
         ->where('rekap_beli_tgl',$data->tgl_now)
         ->where('rekap_beli_m_w_id',$waroeng_id)
+        ->where('rekap_beli_gudang_id',$gudang_id)
         ->whereNull('rekap_beli_detail_terima')
         ->get();
         return view('inventori::form_cht',compact('data'));

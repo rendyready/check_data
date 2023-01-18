@@ -12,49 +12,60 @@
                 <form id="formAction" action="{{route('beli.simpan')}}" method="post">
                   @csrf
                 <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <div class="row mb-1">
-                            <label class="col-sm-4 col-form-label-sm" for="rekap_beli_created_by">Operator</label>
-                            <div class="col-sm-8">
+                            <label class="col-sm-3 col-form-label-sm" for="rekap_beli_created_by">Operator</label>
+                            <div class="col-sm-9">
                               <input type="text" class="form-control form-control-sm" id="rekap_beli_created_by" name="rekap_beli_created_by" value="{{Auth::user()->name}}" readonly>
                             </div>
                         </div>
                         <div class="row mb-1">
-                            <label class="col-sm-4 col-form-label" for="example-hf-text">Waroeng</label>
-                            <div class="col-sm-8">
+                            <label class="col-sm-3 col-form-label-sm" for="example-hf-text">Waroeng</label>
+                            <div class="col-sm-9">
                               <input type="text" class="form-control form-control-sm" id="rekap_beli_m_w" name="rekap_beli_m_w" value="{{$data->waroeng_nama->m_w_nama}}" readonly>
                             </div>
                         </div>
+                        <div class="row mb-2">
+                          <label class="col-sm-3 col-form-label-sm" for="rekap_beli_gudang_id">Masuk Gudang</label>
+                          <div class="col-sm-9">
+                            <select class="js-select2 form-control-sm" style="width: 100%;" name="rekap_beli_gudang_id" id="rekap_beli_gudang_id" data-placeholder="Pilih Gudang" required>
+                            <option></option>
+                            @foreach ($data->gudang as $item)
+                                <option value="{{$item->m_gudang_id}}">{{ucwords($item->m_gudang_nama)}}</option>
+                            @endforeach
+                            </select>
+                          </div>
+                      </div>
                     </div>
                     <div class="col-md-4">
                         <div class="row mb-1">
-                            <label class="col-sm-5 col-form-label" for="rekap_beli_code">No Nota</label>
+                            <label class="col-sm-5 col-form-label-sm" for="rekap_beli_code">No Nota</label>
                             <div class="col-sm-7">
                               <input type="text" class="form-control form-control-sm" id="rekap_beli_code" name="rekap_beli_code" value="{{$data->code}}" readonly>
                             </div>
                         </div>
                         <div class="row mb-1">
-                          <label class="col-sm-5 col-form-label" for="rekap_beli_code_nota">Nota Suplier</label>
+                          <label class="col-sm-5 col-form-label-sm" for="rekap_beli_code_nota">Nota Suplier</label>
                           <div class="col-sm-7">
                             <input type="text" class="form-control form-control-sm" id="rekap_beli_code_nota" name="rekap_beli_code_nota" value="" placeholder="Nota Supplier">
                           </div>
                       </div>
                         <div class="row mb-1">
-                            <label class="col-sm-5 col-form-label" for="rekap_beli_tgl">Tanggal</label>
+                            <label class="col-sm-5 col-form-label-sm" for="rekap_beli_tgl">Tanggal</label>
                             <div class="col-sm-7">
                               <input type="date" class="form-control form-control-sm" value="{{$data->tgl_now}}" readonly id="rekap_beli_tgl" name="rekap_beli_tgl" required>
                             </div>
                         </div>
                         <div class="row mb-1">
-                            <label class="col-sm-5 col-form-label" for="rekap_beli_jth_tmp">Jth Tempo</label>
+                            <label class="col-sm-5 col-form-label-sm" for="rekap_beli_jth_tmp">Jth Tempo</label>
                             <div class="col-sm-7">
                               <input type="date" class="form-control form-control-sm" value="{{$data->tgl_now}}" id="rekap_beli_jth_tmp" name="rekap_beli_jth_tmp" readonly required>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-5">
+                    <div class="col-md-4">
                         <div class="row mb-2">
-                            <label class="col-sm-4 col-form-label" for="rekap_beli_supplier_id">Kode Supplier</label>
+                            <label class="col-sm-4 col-form-label-sm" for="rekap_beli_supplier_id">Kode Supplier</label>
                             <div class="col-sm-8">
                               <select class="js-select2 form-control-sm" style="width: 100%;" name="rekap_beli_supplier_id" id="rekap_beli_supplier_id" data-placeholder="pilih supplier" required>
                               <option></option>
@@ -62,21 +73,21 @@
                             </div>
                         </div>
                         <div class="row mb-1">
-                            <label class="col-sm-4 col-form-label" for="rekap_beli_supplier_nama">Nama</label>
+                            <label class="col-sm-4 col-form-label-sm" for="rekap_beli_supplier_nama">Nama</label>
                             <div class="col-sm-8">
                               <input type="text" class="form-control supplier form-control-sm" id="rekap_beli_supplier_nama" name="rekap_beli_supplier_nama" readonly required>
                             </div>
                         </div>
                         <div class="row mb-1">
-                            <label class="col-sm-4 col-form-label" for="rekap_beli_supplier_telp">No Telpn</label>
+                            <label class="col-sm-4 col-form-label-sm" for="rekap_beli_supplier_telp">No Telpn</label>
                             <div class="col-sm-8">
                               <input type="text" class="form-control supplier form-control-sm" id="rekap_beli_supplier_telp" name="rekap_beli_supplier_telp" readonly required>
                             </div>
                         </div>
                         <div class="row mb-1">
-                            <label class="col-sm-4 col-form-label" for="rekap_beli_supplier_alamat">Alamat</label>
+                            <label class="col-sm-4 col-form-label-sm" for="rekap_beli_supplier_alamat">Alamat</label>
                             <div class="col-sm-8">
-                             <textarea class="supplier" name="rekap_beli_supplier_alamat" id="rekap_beli_supplier_alamat" cols="30" rows="3" readonly required></textarea>
+                             <textarea class="supplier" name="rekap_beli_supplier_alamat" id="rekap_beli_supplier_alamat" cols="23" rows="3" readonly required></textarea>
                             </div>
                         </div>
                     </div>

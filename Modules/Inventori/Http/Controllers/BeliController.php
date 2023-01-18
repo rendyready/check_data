@@ -20,7 +20,11 @@ class BeliController extends Controller
         $get_max_id = DB::table('rekap_beli')->orderBy('rekap_beli_id','desc')->first();
         $user = Auth::id();
         $data->waroeng_nama = DB::table('m_w')->select('m_w_nama')->where('m_w_id',Auth::user()->waroeng_id)->first();
-        $data->tgl_now = Carbon::now()->format('Y-m-d'); 
+        $data->tgl_now = Carbon::now()->format('Y-m-d');
+        $data->gudang = DB::table('m_gudang')
+        ->where('m_gudang_m_w_id',Auth::user()->waroeng_id)
+        ->whereNotIn('m_gudang_nama',['gudang produksi waroeng'])
+        ->get(); 
         $data->code = (empty($get_max_id->rekap_beli_id)) ? $urut = "1000001". $user : $urut = substr($get_max_id->rekap_beli_code,0,-1)+'1'. $user; 
         return view('inventori::form_beli',compact('data'));
     }
@@ -66,6 +70,7 @@ class BeliController extends Controller
             'rekap_beli_supplier_telp' => $request->rekap_beli_supplier_telp,
             'rekap_beli_supplier_alamat' => $request->rekap_beli_supplier_alamat,
             'rekap_beli_m_w_id' => Auth::user()->waroeng_id,
+            'rekap_beli_gudang_id' => $request->rekap_beli_gudang_id,
             'rekap_beli_disc' => $request->rekap_beli_disc,
             'rekap_beli_disc_rp' => $request->rekap_beli_disc_rp,
             'rekap_beli_ppn' => $request->rekap_beli_ppn,
@@ -94,6 +99,7 @@ class BeliController extends Controller
                 'rekap_beli_detail_disc' => $request->rekap_beli_detail_disc[$key],
                 'rekap_beli_detail_discrp' => $request->rekap_beli_detail_discrp[$key],
                 'rekap_beli_detail_subtot' => $request->rekap_beli_detail_subtot[$key],
+                'rekap_beli_detail_m_w_id' => Auth::user()->waroeng_id,
                 'rekap_beli_detail_created_by' => Auth::id(),
                 'rekap_beli_detail_created_at' => Carbon::now()
             );
