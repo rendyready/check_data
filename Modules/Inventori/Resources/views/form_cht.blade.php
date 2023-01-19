@@ -48,9 +48,13 @@
                 </div>
                 <br>
                 <div class="table-responsive">
-                <table id="form" class="table table-sm table-bordered table-striped table-vcenter">
+                <table id="tb-cht" class="table table-sm table-bordered table-striped table-vcenter">
                     <thead>
                         <th>No</th>
+                        <th hidden>A</th>
+                        <th hidden>B</th>
+                        <th hidden>C</th>
+                        <th hidden>D</th>
                         <th>Supplier</th>
                         <th>Nama Barang</th>
                         <th>Keterangan</th>
@@ -59,7 +63,7 @@
                         <th>Satuan CHT</th>
                     </thead>
                     <tbody>
-                      @php
+                      {{-- @php
                           $no=1;
                       @endphp
                       @foreach ($data->cht as $item)  
@@ -76,14 +80,15 @@
                         <td><input type="number" class="form-control number form-control-sm" name="rekap_beli_detail_terima[]" id="rekap_beli_detail_terima"></td>
                         <td><input type="text" class="form-control number form-control-sm" name="rekap_beli_detail_satuan_terima[]" id="rekap_beli_detail_satuan_terima" value="{{$item->m_satuan_kode}}" readonly></td>
                       </tr>
-                      @endforeach
+                      @endforeach --}}
                     </tbody>
                 </table>
+                </div>
                 <div class="block-content block-content-full text-end bg-transparent">
-                    <button type="submit" class="btn btn-sm btn-success btn-save">Simpan</button>
-                  </div>
+                  <input type="submit" class="btn btn-sm btn-success btn-save">
                 </div>
                 </form>
+                
           </div>
         </div>
       </div>
@@ -95,13 +100,33 @@
 <script type="module">
  $(document).ready(function(){
   Codebase.helpersOnLoad(['jq-select2']);
+  var table;
   $(".number").on("keypress", function (evt) {
     if (evt.which != 8 && evt.which != 0 && evt.which < 48 || evt.which > 57)
     {
         evt.preventDefault();
     }
     });
-  $('')      
+  // $('#formAction').on('submit',function (e) {
+    
+  // })
+  $('#rekap_beli_gudang_id').on('change',function() {
+    var id = $(this).val()
+    $(function() {
+           table = $('#tb-cht').DataTable({
+              buttons:[],
+              destroy:true,
+              paging:false,
+              serverside:true,
+              ajax: {
+              url: "/inventori/cht/list",
+              data: {id:id}, 
+              type: "GET",
+                }
+            });
+    });
+    $('.hide').hide()
+  })      
 });
 </script>
 @endsection

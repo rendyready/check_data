@@ -26,23 +26,24 @@ class ChtController extends Controller
         $data->tgl_now = Carbon::now()->format('Y-m-d');
         $data->nama_waroeng = DB::table('m_w')->select('m_w_nama')->where('m_w_id',$waroeng_id)->first();
         $data->satuan = DB::table('m_satuan')->get();
-        $data->cht = DB::table('rekap_beli_detail')
-        ->select('rekap_beli_detail_id','rekap_beli_detail_rekap_beli_code',
-                'rekap_beli_detail_m_produk_id','rekap_beli_detail_subtot','rekap_beli_supplier_nama','rekap_beli_detail_m_produk_nama',
-                 'rekap_beli_detail_catatan','rekap_beli_detail_qty',
-                 'm_satuan_kode')
-        ->leftjoin('rekap_beli','rekap_beli_code','rekap_beli_detail_rekap_beli_code')
-        ->leftjoin('m_produk','rekap_beli_detail_m_produk_id','m_produk_id')
-        ->leftjoin('m_satuan','m_produk_utama_m_satuan_id','m_satuan_id')
-        ->where('rekap_beli_tgl',$data->tgl_now)
-        ->where('rekap_beli_m_w_id',$waroeng_id)
-        ->where('rekap_beli_gudang_id',$gudang_id)
-        ->whereNull('rekap_beli_detail_terima')
-        ->get();
+        // $data->cht = DB::table('rekap_beli_detail')
+        // ->select('rekap_beli_detail_id','rekap_beli_detail_rekap_beli_code',
+        //         'rekap_beli_detail_m_produk_id','rekap_beli_detail_subtot','rekap_beli_supplier_nama','rekap_beli_detail_m_produk_nama',
+        //          'rekap_beli_detail_catatan','rekap_beli_detail_qty',
+        //          'm_satuan_kode')
+        // ->leftjoin('rekap_beli','rekap_beli_code','rekap_beli_detail_rekap_beli_code')
+        // ->leftjoin('m_produk','rekap_beli_detail_m_produk_id','m_produk_id')
+        // ->leftjoin('m_satuan','m_produk_utama_m_satuan_id','m_satuan_id')
+        // ->where('rekap_beli_tgl',$data->tgl_now)
+        // ->where('rekap_beli_m_w_id',$waroeng_id)
+        // ->where('rekap_beli_gudang_id',$gudang_id)
+        // ->whereNull('rekap_beli_detail_terima')
+        // ->get();
         return view('inventori::form_cht',compact('data'));
     }
     public function simpan(Request $request)
-    {   $waroeng_id = Auth::user()->waroeng_id;
+    {  
+        $waroeng_id = Auth::user()->waroeng_id;
         $gudang_id = DB::table('m_gudang')
         ->where('m_gudang_m_w_id',$waroeng_id)
         ->where('m_gudang_nama','gudang utama')->select('m_gudang_id')->first();
@@ -89,39 +90,43 @@ class ChtController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function show($id)
-    {
-        return view('inventori::show');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
-    public function edit($id)
-    {
-        return view('inventori::edit');
-    }
-
-    /**
-     * Update the specified resource in storage.
-     * @param Request $request
-     * @param int $id
-     * @return Renderable
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     * @param int $id
-     * @return Renderable
-     */
-    public function destroy($id)
-    {
-        //
+    public function list(Request $request)
+    {   
+        $data = new \stdClass();
+        $data->tgl_now = Carbon::now()->format('Y-m-d');
+        $waroeng_id = Auth::user()->waroeng_id;
+        $cht = DB::table('rekap_beli_detail')
+        ->select('rekap_beli_detail_id','rekap_beli_detail_rekap_beli_code',
+                'rekap_beli_detail_m_produk_id','rekap_beli_detail_subtot','rekap_beli_supplier_nama','rekap_beli_detail_m_produk_nama',
+                 'rekap_beli_detail_catatan','rekap_beli_detail_qty',
+                 'm_satuan_kode')
+        ->leftjoin('rekap_beli','rekap_beli_code','rekap_beli_detail_rekap_beli_code')
+        ->leftjoin('m_produk','rekap_beli_detail_m_produk_id','m_produk_id')
+        ->leftjoin('m_satuan','m_produk_utama_m_satuan_id','m_satuan_id')
+        ->where('rekap_beli_tgl',$data->tgl_now)
+        ->where('rekap_beli_m_w_id',$waroeng_id)
+        ->where('rekap_beli_gudang_id',$request->id)
+        ->whereNull('rekap_beli_detail_terima')
+        ->get();
+        $no = 0;
+        $data = array();
+        foreach ($cht as $item) {
+            $row = array();
+            $no++;
+            $row[] = $no;
+            $row[] = '<input type="hidden" class="form-control hide form-control-sm" name="rekap_beli_detail_id[]" id="rekap_beli_detail_id" value="'.$item->rekap_beli_detail_id.'" readonly></td>';
+            $row[] = '<input style="display: none;" type="hidden" hide class="form-control form-control-sm" name="rekap_beli_detail_rekap_beli_code[]" id="rekap_beli_detail_rekap_beli_code" value="'.$item->rekap_beli_detail_rekap_beli_code.'" readonly>';
+            $row[] = '<input style="display: none;" type="hidden" hide class="form-control form-control-sm" name="rekap_beli_detail_m_produk_id[]" id="rekap_beli_detail_m_produk_id" value="'.$item->rekap_beli_detail_m_produk_id.'" readonly>';
+            $row[] = '<input style="display: none;" type="hidden" hide class="form-control form-control-sm" name="rekap_beli_detail_subtot[]" id="rekap_beli_detail_subtot" value="'.$item->rekap_beli_detail_subtot.'" readonly>';
+            $row[] = $item->rekap_beli_supplier_nama;
+            $row[] = '<input type="text" class="form-control form-control-sm" name="rekap_beli_detail_m_produk_nama[]" id="rekap_beli_detail_m_produk_nama" value="'.$item->rekap_beli_detail_m_produk_nama.'" readonly>';
+            $row[] = $item->rekap_beli_detail_catatan;
+            $row[] = $item->rekap_beli_detail_qty;
+            $row[] = '<input type="number" class="form-control number form-control-sm" name="rekap_beli_detail_terima[]" id="rekap_beli_detail_terima">';
+            $row[] = '<input type="text" class="form-control number form-control-sm" name="rekap_beli_detail_satuan_terima[]" id="rekap_beli_detail_satuan_terima" value="'.$item->m_satuan_kode.'" readonly>';
+            $data[] = $row;
+        }
+        $output = array("data" => $data);
+        return response()->json($output);
     }
 }

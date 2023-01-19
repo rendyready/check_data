@@ -29,41 +29,30 @@ class MAreaController extends Controller
         if ($request->ajax()) {
             if ($request->action == 'add') {
                 $aa = Str::upper(preg_replace(array('/\s{2,}/', '/[\t\n]/'), ' ', $request->m_area_nama));
-                $aa = $request->m_area_nama;
+                // $aa = $request->m_area_nama;
                 $aa = str::lower(trim($aa));
 
                 $tb = DB::table('m_area')->selectRaw('m_area_nama')->whereRaw('LOWER(m_area_nama) =' . "'$aa'")->first();
 
                 // Count
                 $count = '601';
-                $DB = DB::table('m_area')->select('m_area_id')->where('m_area_id', 0)->orderBy('m_area_id', 'asc')->get();
-                $DBcount = count($DB);
-                if ($DBcount == 0) {
-                    return $count;
-                } elseif ($DBcount == $DBcount) {
-                    return   $DBcount + 1;
+                $DB = DB::table('m_area')->get()->count('m_area_id');
+                if ($DB == 0) {
+                     $DBCount = $count;
+                } else {
+                      $DBCount = $count+($DB + 1);
                 }
 
-                if (!empty($aa == null)) {
+                if ($aa == null) {
                     return response(['Messages' => 'Data Tidak Boleh Kosong !']);
-                } elseif ($tb == true) {
+                } elseif (!empty($tb)) {
                     // return response($this);
                     return response(['Messages' => 'Data Duplicate !']);
                 } else {
                     if ($tb == null) {
-                        $data = DB::table('m_area')->insert([
+                        DB::table('m_area')->insert([
                             'm_area_nama'    => Str::upper(trim($request->m_area_nama)),
-                            'm_area_code'    => function ($request, $data) {
-                                $data = $request->m_area_code;
-                                $count = '601';
-                                $DB = DB::table('m_area')->select('m_area_id')->where('m_area_id', 0)->orderBy('m_area_id', 'asc')->get();
-                                $data = count($DB);
-                                if ($data == 0) {
-                                    $data = $count;
-                                } elseif ($data == $data) {
-                                    $data = $data + 1;
-                                }
-                            },
+                            'm_area_code'    => $DBCount,
                             'm_area_created_by' => Auth::id(),
                             'm_area_created_at' => Carbon::now(),
                         ]);
@@ -73,24 +62,17 @@ class MAreaController extends Controller
                     }
                 }
             } elseif ($request->action == 'edit') {
-                $chkEdit = $request->m_area_nama;
-                $chkEdit = Str::lower($chkEdit);
-                $validate = DB::table('m_area')->selectRaw('m_area_nama')->whereRaw(' LOWER(m_area_nama) =' . "'$chkEdit'")->get();
-
-                $ii = Str::upper($request->m_area_nama);
+                $ii = Str::lower($request->m_area_nama);
                 $trim = trim(preg_replace(array('/\s{2,}/', '/[\t\n]/'), ' ', $ii));
-
-                // Return Insert Data
+                $validate = DB::table('m_area')->selectRaw('m_area_nama')->whereRaw(' LOWER(m_area_nama) =' . "'$trim'")->get();
                 $data = array(
-                    'm_area_nama'    => $trim,
-                    'm_area_code'    => $request->m_area_code,
+                    'm_area_nama'    => Str::upper($trim),
                     'm_area_updated_by' => Auth::id(),
                     'm_area_updated_at' => Carbon::now(),
                 );
-                if ($validate == null) {
-                    DB::table('m_area')->select('m_area_id', $request->id)->where('m_area_id', $request->id)
+                if (!empty($validate)) {
+                    DB::table('m_area')->where('m_area_id', $request->id)
                         ->update($data);
-                    return $data;
                     return response(['Messages' => 'Data Update !']);
                 } else {
                     return response(['Messages' => 'Data Gagal Update !']);

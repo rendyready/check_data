@@ -70,28 +70,9 @@
           message: data.Messages
         });
         setTimeout(function() {
-          window.location.reload();
-        }, 3000);
-        if (data.action == 'add') {
-          setTimeout(function() {
             window.location.reload();
           }, 3000);
-        }
-        if (data.action == 'edit') {
-          setTimeout(function() {
-            window.location.reload();
-          }, 3000);
-        }
-        if (data.action == 'delete') {
-          $('#' + data.id).remove();
-          setTimeout(function() {
-            window.location.reload();
-          });
-        }
       },
-
-
-
     });
 
     $("#sample_data").append(
