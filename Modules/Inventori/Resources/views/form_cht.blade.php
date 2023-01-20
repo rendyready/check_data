@@ -9,7 +9,7 @@
               Form Input CHT Terima
           </div>
           <div class="block-content text-muted">
-                <form id="formAction" action="{{route('cht.simpan')}}" method="post">
+                <form id="formAction">
                   @csrf
                 <div class="row">
                     <div class="col-md-5">
@@ -51,10 +51,10 @@
                 <table id="tb-cht" class="table table-sm table-bordered table-striped table-vcenter">
                     <thead>
                         <th>No</th>
-                        <th hidden>A</th>
-                        <th hidden>B</th>
-                        <th hidden>C</th>
-                        <th hidden>D</th>
+                        <th hidden>id</th>
+                        <th hidden>code</th>
+                        <th hidden>detail</th>
+                        <th hidden>produk_id</th>
                         <th>Supplier</th>
                         <th>Nama Barang</th>
                         <th>Keterangan</th>
@@ -63,24 +63,7 @@
                         <th>Satuan CHT</th>
                     </thead>
                     <tbody>
-                      {{-- @php
-                          $no=1;
-                      @endphp
-                      @foreach ($data->cht as $item)  
-                      <tr>
-                        <td>{{$no++}}</td>
-                        <td hidden><input type="text" class="form-control form-control-sm" name="rekap_beli_detail_id[]" id="rekap_beli_detail_id" value="{{$item->rekap_beli_detail_id}}" readonly></td>
-                        <td hidden><input type="text" class="form-control form-control-sm" name="rekap_beli_detail_rekap_beli_code[]" id="rekap_beli_detail_rekap_beli_code" value="{{$item->rekap_beli_detail_rekap_beli_code}}" readonly></td>
-                        <td hidden><input type="text" class="form-control form-control-sm" name="rekap_beli_detail_m_produk_id[]" id="rekap_beli_detail_m_produk_id" value="{{$item->rekap_beli_detail_m_produk_id}}" readonly></td>
-                        <td hidden><input type="text" class="form-control form-control-sm" name="rekap_beli_detail_subtot[]" id="rekap_beli_detail_subtot" value="{{$item->rekap_beli_detail_subtot}}" readonly></td>
-                        <td>{{$item->rekap_beli_supplier_nama}}</td>
-                        <td ><input type="text" class="form-control form-control-sm" name="rekap_beli_detail_m_produk_nama[]" id="rekap_beli_detail_m_produk_nama" value="{{$item->rekap_beli_detail_m_produk_nama}}" readonly></td>
-                        <td>{{$item->rekap_beli_detail_catatan}}</td>
-                        <td>{{$item->rekap_beli_detail_qty}}</td>
-                        <td><input type="number" class="form-control number form-control-sm" name="rekap_beli_detail_terima[]" id="rekap_beli_detail_terima"></td>
-                        <td><input type="text" class="form-control number form-control-sm" name="rekap_beli_detail_satuan_terima[]" id="rekap_beli_detail_satuan_terima" value="{{$item->m_satuan_kode}}" readonly></td>
-                      </tr>
-                      @endforeach --}}
+                     
                     </tbody>
                 </table>
                 </div>
@@ -88,7 +71,6 @@
                   <input type="submit" class="btn btn-sm btn-success btn-save">
                 </div>
                 </form>
-                
           </div>
         </div>
       </div>
@@ -107,9 +89,6 @@
         evt.preventDefault();
     }
     });
-  // $('#formAction').on('submit',function (e) {
-    
-  // })
   $('#rekap_beli_gudang_id').on('change',function() {
     var id = $(this).val()
     $(function() {
@@ -118,6 +97,25 @@
               destroy:true,
               paging:false,
               serverside:true,
+              columnDefs: [
+            {
+                target: 1,
+                visible: false,
+                searchable: false,
+            },
+            {
+                target: 2,
+                visible: false,
+            },
+            {
+                target: 3,
+                visible: false,
+                searchable: false,
+            },
+            {
+                target: 4,
+                visible: false,
+            }],
               ajax: {
               url: "/inventori/cht/list",
               data: {id:id}, 
@@ -125,8 +123,32 @@
                 }
             });
     });
-    $('.hide').hide()
-  })      
+  }) 
+  $('#formAction').submit( function(e){
+                if(!e.isDefaultPrevented()){
+                  table.columns([1,2,3,4]).visible(true);
+                  var dataf = $('#formAction').serialize();
+                    $.ajax({
+                        url : "{{ route('cht.simpan') }}",
+                        type : "POST",
+                        data : dataf,
+                        success : function(data){
+                            $.notify({
+                              align: 'right',       
+                              from: 'top',                
+                              type: 'success',               
+                              icon: 'fa fa-success me-5',    
+                              message: 'Berhasil Simpan'
+                            });
+                           window.location.reload();
+                        },
+                        error : function(){
+                            alert("Tidak dapat menyimpan data!");
+                        }
+                    });
+                    return false;
+                }
+            });
 });
 </script>
 @endsection
