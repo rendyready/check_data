@@ -34,6 +34,7 @@ class MKasirAkse extends Model
 
 	protected $casts = [
 		'm_kasir_akses_m_w_id' => 'int',
+		'm_kasir_akses_approvel' => 'int',
 		'm_kasir_akses_created_by' => 'int',
 		'm_kasir_akses_updated_by' => 'int',
 		'm_kasir_akses_deleted_by' => 'int'
@@ -50,6 +51,7 @@ class MKasirAkse extends Model
 		'm_kasir_akses_fitur',
 		'm_kasir_akses_default_role',
 		'm_kasir_akses_temp_role',
+		'm_kasir_akses_approvel',
 		'm_kasir_akses_created_by',
 		'm_kasir_akses_updated_by',
 		'm_kasir_akses_deleted_by',
