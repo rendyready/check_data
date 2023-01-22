@@ -28,7 +28,7 @@
               @foreach ($data as $item)
               <tr>
                 <td>{{$item->m_area_id}}</td>
-                <td>{{$item->m_area_nama}} </td>
+                <td>{{ucwords($item->m_area_nama)}} </td>
                 <td>{{$item->m_area_code}}</td>
               </tr>
               @endforeach
@@ -53,6 +53,7 @@
     $('#sample_data').Tabledit({
       url: '{{ route("action.area") }}',
       dataType: "json",
+      deleteButton:false,
       columns: {
         identifier: [0, 'id'],
         editable: [
@@ -65,13 +66,13 @@
         Codebase.helpers('jq-notify', {
           align: 'right', // 'right', 'left', 'center'
           from: 'top', // 'top', 'bottom'
-          type: 'danger', // 'info', 'success', 'warning', 'danger'
+          type: data.type, // 'info', 'success', 'warning', 'danger'
           icon: 'fa fa-info me-5', // Icon class
           message: data.Messages
         });
         setTimeout(function() {
             window.location.reload();
-          }, 3000);
+          }, 750);
       },
     });
 

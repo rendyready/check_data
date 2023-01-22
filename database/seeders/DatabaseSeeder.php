@@ -44,6 +44,7 @@ class DatabaseSeeder extends Seeder
             List_AktTableSeeder::class,
             SupplierSeeder::class,
             NmGudangTableSeeder::class,
+            ProdukCodeSeeder::class,
        ]);
     }
 }

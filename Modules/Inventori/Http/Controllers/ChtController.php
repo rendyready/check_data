@@ -87,6 +87,7 @@ class ChtController extends Controller
         ->where('rekap_beli_m_w_id',$waroeng_id)
         ->where('rekap_beli_gudang_id',$request->id)
         ->whereNull('rekap_beli_detail_terima')
+        ->orderBy('rekap_beli_supplier_id','asc')
         ->get();
         $no = 0;
         $data = array();

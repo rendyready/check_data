@@ -25,7 +25,7 @@ class ProdukController extends Controller
             ->leftjoin('m_klasifikasi_produk', 'm_produk_m_klasifikasi_produk_id', 'm_klasifikasi_produk_id')
             ->get();
         $data->satuan = DB::table('m_satuan')->get();
-        $data->klasifikasi = DB::table('m_klasifikasi_produk')->get();
+        $data->klasifikasi = DB::table('m_klasifikasi_produk')->where('m_klasifikasi_produk_id',4)->get();
         $data->jenisproduk = DB::table('m_jenis_produk')->get();
         $data->plot_produksi = DB::table('m_plot_produksi')->get();
         return view('master::m_produk', compact('data'));
@@ -38,15 +38,13 @@ class ProdukController extends Controller
     public function simpan(request $request)
     {
         if ($request->ajax()) {
-            $produkCode = Str::lower(preg_replace(array('/\s{2,}/', '/[\t\n]/'), ' ', $request->m_produk_code));
             $produkNama = Str::lower(preg_replace(array('/\s{2,}/', '/[\t\n]/'), ' ', $request->m_produk_nama));
             $produkUrut = Str::upper(preg_replace(array('/\s{2,}/', '/[\t\n]/'), ' ', $request->m_produk_urut));
             $check = DB::table('m_produk')
                 ->select('m_produk_id')
                 ->selectRaw('m_produk_code,m_produk_urut')
                 ->selectRaw('m_produk_nama')
-                ->whereRaw('LOWER(m_produk_code)=' . "'$produkCode'")
-             ->whereRaw('LOWER(m_produk_urut)=' . "'$produkUrut'")
+                ->whereRaw('LOWER(m_produk_urut)=' . "'$produkUrut'")
                 ->whereRaw('LOWER(m_produk_nama)=' . "'$produkNama'")
                 ->orderBy('m_produk_id', 'asc')
                 ->first();
@@ -54,8 +52,10 @@ class ProdukController extends Controller
                 if (!empty($check)) {
                     return response()->json(['messages' => 'Data Simpan Double !', 'type' => 'danger']);
                 } else {
+                    $produk_code = DB::table('m_produk_code')->where('m_produk_code_id',1)->first();
+                    $code = $produk_code->m_produk_code_mn+1 ;
                     DB::table('m_produk')->insert([
-                        "m_produk_code" => Str::lower($request->m_produk_code),
+                        "m_produk_code" => "mn-".$code,
                         "m_produk_nama" => $request->m_produk_nama,
                         "m_produk_urut" => $request->m_produk_urut,
                         "m_produk_cr" => $request->m_produk_cr,
@@ -64,7 +64,6 @@ class ProdukController extends Controller
                         "m_produk_sc" => $request->m_produk_sc,
                         "m_produk_m_jenis_produk_id" => $request->m_produk_m_jenis_produk_id,
                         "m_produk_utama_m_satuan_id" => $request->m_produk_utama_m_satuan_id,
-                        "m_produk_produksi_m_satuan_id" => $request->m_produk_produksi_m_satuan_id,
                         "m_produk_m_plot_produksi_id" => $request->m_produk_m_plot_produksi_id,
                         "m_produk_m_klasifikasi_produk_id" => $request->m_produk_m_klasifikasi_produk_id,
                         "m_produk_jual" => $request->m_produk_jual,
@@ -73,16 +72,15 @@ class ProdukController extends Controller
                         "m_produk_created_by" => Auth::id(),
                         "m_produk_created_at" => Carbon::now(),
                     ]);
+                    DB::table('m_produk_code')->where('m_produk_code_id',1)->update(['m_produk_code_mn'=>$code]);
                     return response(['messages' => 'Berhasil Tambah Produk !', 'type' => 'success']);
                 }
             } else {
-                // return $check->m_produk_id;
                 if ($request->m_produk_id==null ) {
                     return response()->json(['messages' => 'Data Edit Double !', 'type' => 'danger']);
                 } else {
                     DB::table('m_produk')->where('m_produk_id', $request->m_produk_id)
                         ->update([
-                            "m_produk_code" => Str::lower($request->m_produk_code),
                             "m_produk_nama" => $request->m_produk_nama,
                             "m_produk_urut" => $request->m_produk_urut,
                             "m_produk_cr" => $request->m_produk_cr,
@@ -91,7 +89,6 @@ class ProdukController extends Controller
                             "m_produk_sc" => $request->m_produk_sc,
                             "m_produk_m_jenis_produk_id" => $request->m_produk_m_jenis_produk_id,
                             "m_produk_utama_m_satuan_id" => $request->m_produk_utama_m_satuan_id,
-                            "m_produk_produksi_m_satuan_id" => $request->m_produk_produksi_m_satuan_id,
                             "m_produk_m_plot_produksi_id" => $request->m_produk_m_plot_produksi_id,
                             "m_produk_m_klasifikasi_produk_id" => $request->m_produk_m_klasifikasi_produk_id,
                             "m_produk_jual" => $request->m_produk_jual,
