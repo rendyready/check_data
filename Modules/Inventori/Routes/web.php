@@ -65,3 +65,9 @@ Route::group(['prefix' => 'inventori', 'controller' => GudangController::class, 
     Route::post('m_gudang/action', 'action')->name('m_gudang.action');
     Route::get('m_gudang/edit/{id}', 'edit')->name('m_gudang.edit');
 });
+//Master BB
+Route::group(['prefix' => 'inventori', 'controller' => MasterBBController::class, 'middleware' => ['auth', 'web']], function () {
+    Route::get('m_bb', 'index')->name('m_bb.index');
+    Route::post('m_bb/simpan', 'simpan')->name('simpan.m_bb');
+    Route::get('m_bb/list/{id}', 'list')->name('m_bb.list');
+});

@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('m_produk_status')->default('1');
             $table->string('m_produk_tax')->default('1');
             $table->string('m_produk_sc')->default('1');
-            $table->bigInteger('m_produk_m_jenis_produk_id');
+            $table->bigInteger('m_produk_m_jenis_produk_id')->nullable();
             $table->bigInteger('m_produk_utama_m_satuan_id');
             $table->bigInteger('m_produk_produksi_m_satuan_id')->nullable();
             $table->bigInteger('m_produk_m_plot_produksi_id')->nullable();

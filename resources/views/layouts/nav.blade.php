@@ -367,6 +367,11 @@
                 </a>
                 <ul class="nav-main-submenu">
                   <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('inventori/m_bb') ? ' active' : '' }}" href="{{route('m_bb.index')}}">
+                      <span class="nav-main-link-name">Data Bahan Baku</span>
+                    </a>
+                  </li>
+                  <li class="nav-main-item">
                     <a class="nav-main-link{{ request()->is('inventori/m_gudang') ? ' active' : '' }}" href="{{route('m_gudang.index')}}">
                       <span class="nav-main-link-name">Data Gudang</span>
                     </a>

@@ -37,7 +37,7 @@ class BeliController extends Controller
     {
         $data = new \stdClass();
         $nama_barang = DB::table('m_produk')
-        ->select('m_produk_id','m_produk_nama')->get();
+        ->select('m_produk_id','m_produk_nama')->whereNotIn('m_produk_m_klasifikasi_produk_id',[4])->get();
         $supplierku = DB::table('m_supplier')->get();
         $satuan = DB::table('m_satuan')->get();
         foreach ($nama_barang as $key => $v) {
