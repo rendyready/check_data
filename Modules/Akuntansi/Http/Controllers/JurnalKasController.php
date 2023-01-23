@@ -7,6 +7,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Validator;
+use Carbon\Carbon;
 class JurnalKasController extends Controller
 {
     public function index()
