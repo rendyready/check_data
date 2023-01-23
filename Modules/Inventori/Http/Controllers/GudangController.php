@@ -64,7 +64,7 @@ class GudangController extends Controller
                 if (empty($validate)) {
                     DB::table('m_gudang')->insert($data);
                     $masterbb = DB::table('m_produk')
-                    ->select('m_produk_id')->get();
+                    ->select('m_produk_id')->whereNotIn('m_produk_m_klasifikasi_produk_id',[4])->get();
                     $gudang_id = DB::table('m_gudang')->max('m_gudang_id');
                     foreach ($masterbb as $key) {
                         $data_bb = array(
@@ -76,7 +76,6 @@ class GudangController extends Controller
                         );
                         DB::table('m_stok')->insert($data_bb);
                     }
-                    
                     return response(['messages' => 'Berhasil Tambah Gudang !','type' => 'success']);
                 } else {
                     return response(['messages' => 'Gagal Tambah Gudang Sudah Ada!','type'=> 'danger']);
@@ -107,7 +106,6 @@ class GudangController extends Controller
             }
     		return response()->json($request);
     	}
-        
     }
 
     /**
