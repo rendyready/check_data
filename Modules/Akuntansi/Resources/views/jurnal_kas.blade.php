@@ -40,7 +40,7 @@
                                     <div class="col-md-8">
                                         <input type="date" value="<?= date('Y-m-d') ?>" id="filter-tanggal"
                                             class="cari form-control " style="width: 100%;"
-                                            name="m_jurnal_kas_kas_tanggal">
+                                            name="m_jurnal_kas_tanggal">
                                     </div>
                                 </div>
                                 <div class="row mb-2 col-6">
@@ -80,7 +80,7 @@
                                                 </td>
                                                 <td>
                                                     <input type="text" placeholder="Input Particul"
-                                                        id="m_jurnal_kas_kas_particul" name="m_jurnal_kas_particul[]"
+                                                        id="m_jurnal_kas_particul" name="m_jurnal_kas_particul[]"
                                                         class="form-control set form-control-sm" />
                                                 </td>
                                                 <td>
@@ -176,7 +176,7 @@ $(document).ready(function() {
             url: '{{route("jurnal.tampil")}}',
             data : {
                 m_jurnal_kas_m_waroeng_id: filwaroeng,
-                m_jurnal_kas_kas: filkas,
+                m_jurnal_kas: filkas,
                 m_jurnal_kas_tanggal: filtanggal,
             },
             type : "GET",
@@ -218,7 +218,7 @@ $(document).ready(function() {
                     url: '{{route("jurnal.tampil")}}',
                     data : {
                         m_jurnal_kas_m_waroeng_id: filwaroeng2,
-                        m_jurnal_kas_kas: filkas2,
+                        m_jurnal_kas: filkas2,
                         m_jurnal_kas_tanggal: filtanggal2,
                     },
                     type : "GET",
@@ -274,7 +274,7 @@ $(document).ready(function() {
             url: '{{route("jurnal.tampil")}}',
             data : {
                 m_jurnal_kas_m_waroeng_id: filwaroeng,
-                m_jurnal_kas_kas: filkas,
+                m_jurnal_kas: filkas,
                 m_jurnal_kas_tanggal: filtanggal,
             },
             type : "GET",

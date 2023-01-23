@@ -37,7 +37,7 @@ class JurnalKasController extends Controller
             ->join('m_w', 'm_w_id', 'm_jurnal_kas_m_waroeng_id')
             ->select('m_jurnal_kas_m_rekening_no_akun', 'm_jurnal_kas_m_rekening_nama', 'm_jurnal_kas_particul', 'm_jurnal_kas_saldo', 'm_jurnal_kas_user', 'm_jurnal_kas_no_bukti')
             ->where('m_jurnal_kas_m_waroeng_id', $request->m_jurnal_kas_m_waroeng_id)
-            ->where('m_jurnal_kas', $request->m_jurnal_kas_kas)
+            ->where('m_jurnal_kas', $request->m_jurnal_kas)
             ->whereDate('m_jurnal_kas_tanggal', $tanggal)
             ->orderBy('m_jurnal_kas_id', 'DESC')
             ->get();
@@ -84,7 +84,7 @@ class JurnalKasController extends Controller
                 $data = array(
                     'm_jurnal_kas_m_waroeng_id' => $request->m_jurnal_kas_m_waroeng_id,
                     'm_jurnal_kas_tanggal' => $request->m_jurnal_kas_tanggal,
-                    'm_jurnal_kas_kas' => $request->m_jurnal_kas,
+                    'm_jurnal_kas' => $request->m_jurnal_kas,
                     'm_jurnal_kas_m_rekening_no_akun' => $request->m_jurnal_kas_m_rekening_no_akun[$key],
                     'm_jurnal_kas_m_rekening_nama' => $request->m_jurnal_kas_m_rekening_nama[$key],
                     'm_jurnal_kas_particul' => $request->m_jurnal_kas_particul[$key],
