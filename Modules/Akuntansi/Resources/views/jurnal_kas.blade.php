@@ -16,7 +16,7 @@
                                         for="example-hf-text">Waroeng</label>
                                     <div class="col-sm-8">
                                         <select id="filter-waroeng" style="width: 100%;"
-                                            class="cari js-select2 form-control" name="m_jurnal_kas_kas_m_waroeng_id">
+                                            class="cari js-select2 form-control" name="m_jurnal_kas_m_waroeng_id">
                                             @foreach ($waroeng as $wrg)
                                                 <option value="{{ $wrg->m_w_id }}"> {{ $wrg->m_w_nama }} </option>
                                             @endforeach
@@ -28,7 +28,7 @@
                                         Transaksi</label>
                                     <div class="col-md-8">
                                         <select id="filter-kas" class="cari js-select2 form-control kas-click"
-                                            style="width: 100%;" name="m_jurnal_kas_kas">
+                                            style="width: 100%;" name="m_jurnal_kas">
                                             <option value="km">Kas Masuk</option>
                                             <option value="kk">Kas Keluar</option>
                                         </select>
@@ -68,24 +68,24 @@
                                         <tbody>
                                             <tr>
                                                 <td>
-                                                    <input type="text" placeholder="Input Nomor Akun"
-                                                        id="m_jurnal_kas_kas_m_rekening_no_akun"
-                                                        name="m_jurnal_kas_kas_m_rekening_no_akun[]"
+                                                    <input type="number" placeholder="Input Nomor Akun"
+                                                        id="m_jurnal_kas_m_rekening_no_akun"
+                                                        name="m_jurnal_kas_m_rekening_no_akun[]"
                                                         class="form-control set form-control-sm no-akun" />
                                                 </td>
                                                 <td>
                                                     <input type="text" id="m_rekening_nama"
-                                                        name="m_jurnal_kas_kas_m_rekening_nama[]"
+                                                        name="m_jurnal_kas_m_rekening_nama[]"
                                                         class="form-control set form-control-sm showrek" readonly />
                                                 </td>
                                                 <td>
                                                     <input type="text" placeholder="Input Particul"
-                                                        id="m_jurnal_kas_kas_particul" name="m_jurnal_kas_kas_particul[]"
+                                                        id="m_jurnal_kas_kas_particul" name="m_jurnal_kas_particul[]"
                                                         class="form-control set form-control-sm" />
                                                 </td>
                                                 <td>
-                                                    <input type="text" placeholder="Input Kredit"
-                                                        id="m_jurnal_kas_kas_kredit" name="m_jurnal_kas_kas_saldo[]"
+                                                    <input type="number" placeholder="Input Kredit"
+                                                        id="m_jurnal_kas_kredit" name="m_jurnal_kas_saldo[]"
                                                         class="form-control set form-control-sm saldo" />
                                                 </td>
                                                 <td>
@@ -156,10 +156,10 @@ $(document).ready(function() {
     $('.tambah').on('click', function() {
       no++;
       $('#form').append('<tr class="hapus" id="row' + no + '">' +
-        '<td><input type="text" placeholder="Input Nomor Akun" id="m_jurnal_kas_m_rekening_no_akunjq'+ no +'" name="m_jurnal_kas_m_rekening_no_akun[]" class="form-control set form-control-sm no-akunjq" required/></td>' +
+        '<td><input type="number" placeholder="Input Nomor Akun" id="m_jurnal_kas_m_rekening_no_akunjq'+ no +'" name="m_jurnal_kas_m_rekening_no_akun[]" class="form-control set form-control-sm no-akunjq" required/></td>' +
         '<td><input type="text" id="m_rekening_namajq' + no + '" class="js-select2 form-control showrekjq" name="m_jurnal_kas_m_rekening_nama[]" readonly/></td>' +
         '<td><input type="text" class="form-control form-control-sm" name="m_jurnal_kas_particul[]" id="m_jurnal_kas_particul" placeholder="Input Particul" required></td>' +
-        '<td><input type="text" class="form-control form-control-sm saldo" name="m_jurnal_kas_saldo[]" id="m_jurnal_kas_kredit" placeholder="Input Kredit" required></td>' +
+        '<td><input type="number" class="form-control form-control-sm saldo" name="m_jurnal_kas_saldo[]" id="m_jurnal_kas_kredit" placeholder="Input Kredit" required></td>' +
         '<td><button type="button" id="' + no + '" class="btn btn-danger btn_remove saldo"> - </button></td> </tr> ');
     });
 

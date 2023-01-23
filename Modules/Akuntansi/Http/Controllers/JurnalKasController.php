@@ -51,7 +51,7 @@ class JurnalKasController extends Controller
         $cek_data = DB::table('m_jurnal_kas')
             ->join('m_w', 'm_w_id', 'm_jurnal_kas_m_waroeng_id')
             ->select('m_jurnal_kas_no_bukti')
-            ->where('m_jurnal_kas_kas', $prefix1)
+            ->where('m_jurnal_kas', $prefix1)
             ->where('m_jurnal_kas_m_waroeng_id', $prefix3)
             ->whereDate('m_jurnal_kas_tanggal', $tanggal)
             ->orderby('m_jurnal_kas_id', 'DESC');
@@ -79,11 +79,11 @@ class JurnalKasController extends Controller
 
         if ($validator->passes()) {
             foreach ($request->m_jurnal_kas_particul as $key => $value) {
-                $code = self::generatecode($request->m_jurnal_kas_kas, $request->m_jurnal_kas_tanggal, $request->m_jurnal_kas_m_waroeng_id);
+                $code = self::generatecode($request->m_jurnal_kas, $request->m_jurnal_kas_tanggal, $request->m_jurnal_kas_m_waroeng_id);
                 $data = array(
                     'm_jurnal_kas_m_waroeng_id' => $request->m_jurnal_kas_m_waroeng_id,
                     'm_jurnal_kas_tanggal' => $request->m_jurnal_kas_tanggal,
-                    'm_jurnal_kas_kas' => $request->m_jurnal_kas_kas,
+                    'm_jurnal_kas_kas' => $request->m_jurnal_kas,
                     'm_jurnal_kas_m_rekening_no_akun' => $request->m_jurnal_kas_m_rekening_no_akun[$key],
                     'm_jurnal_kas_m_rekening_nama' => $request->m_jurnal_kas_m_rekening_nama[$key],
                     'm_jurnal_kas_particul' => $request->m_jurnal_kas_particul[$key],

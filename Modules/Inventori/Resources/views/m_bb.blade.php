@@ -16,7 +16,7 @@
             <thead>
               <tr>
                 <th>No.</th>
-                <th>Kode BB</th>
+                <th>Kode Bahan Baku</th>
                 <th>Nama BB</th>
                 <th>Satuan Utama</th>
                 <th>Satuan Produksi</th>

@@ -45,7 +45,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-5">
                                     <div class="row mb-1">
                                         <label class="col-sm-5 col-form-label-sm" for="rekap_rusak">User Waroeng</label>
                                         <div class="col-sm-7">

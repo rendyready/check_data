@@ -23,6 +23,7 @@ class ProdukController extends Controller
             ->leftjoin('m_jenis_produk', 'm_produk_m_jenis_produk_id', 'm_jenis_produk_id')
             ->leftjoin('m_satuan', 'm_produk_utama_m_satuan_id', 'm_satuan_id')
             ->leftjoin('m_klasifikasi_produk', 'm_produk_m_klasifikasi_produk_id', 'm_klasifikasi_produk_id')
+            ->whereIn('m_produk_m_klasifikasi_produk_id',[4])
             ->get();
         $data->satuan = DB::table('m_satuan')->get();
         $data->klasifikasi = DB::table('m_klasifikasi_produk')->where('m_klasifikasi_produk_id',4)->get();

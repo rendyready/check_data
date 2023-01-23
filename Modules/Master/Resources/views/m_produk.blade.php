@@ -27,9 +27,12 @@
               </tr>
             </thead>
             <tbody id="tablecontents">
+              @php
+                  $no=1;
+              @endphp
               @foreach ($data->produk as $item)
               <tr class="row1">
-                <td>{{$item->m_produk_id}}</td>
+                <td>{{$no++;}}</td>
                 <td>{{strtoupper($item->m_produk_code)}}</td>
                 <td>{{$item->m_produk_nama}}</td>
                 <td>{{$item->m_produk_urut}}</td>

@@ -15,10 +15,10 @@ class ProdukCodeSeeder extends Seeder
     public function run()
     {
         DB::table('m_produk_code')->insert([
-            'm_produk_code_bb' => '300000',
-            'm_produk_code_bo' => '200000',
-            'm_produk_code_tl' => '100000',
-            'm_produk_code_mn' => '400000',
+            'm_produk_code_bb' => '300012',
+            'm_produk_code_bo' => '200010',
+            'm_produk_code_tl' => '100010',
+            'm_produk_code_mn' => '400032',
         ]);
     }
 }
