@@ -61,6 +61,27 @@ class ChtController extends Controller
                     'm_stok_detail_created_at' => Carbon::now()
                 );
                 DB::table('m_stok_detail')->insert($data);
+
+                $data_stok = DB::table('m_stok')
+                ->where('m_stok_gudang_id',$request->rekap_beli_gudang_id)
+                ->where('m_stok_m_produk_id',$request->rekap_beli_detail_m_produk_id[$key])
+                ->first();
+
+                $get_detail = DB::table('m_stok_detail')
+                ->select('m_stok_detail_hpp','m_stok_detail_masuk')
+                ->where('m_stok_detail_gudang_id',$request->rekap_beli_gudang_id)
+                ->where('m_stok_detail_m_produk_id',$request->rekap_beli_detail_m_produk_id[$key])
+                ->orderBy('m_stok_detail_id','desc')
+                ->first();
+
+                $data2 = array( 'm_stok_hpp' => $get_detail->m_stok_detail_hpp,
+                                'm_stok_masuk' => $data_stok->m_stok_masuk+ $get_detail->m_stok_detail_masuk,
+                                'm_stok_saldo' => $data_stok->m_stok_saldo+$get_detail->m_stok_detail_masuk
+                            );
+                DB::table('m_stok')->where('m_stok_gudang_id',$request->rekap_beli_gudang_id)
+                ->where('m_stok_m_produk_id',$request->rekap_beli_detail_m_produk_id[$key])
+                ->update($data2);
+
             }                
         }
     }

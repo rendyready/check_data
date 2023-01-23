@@ -145,7 +145,8 @@
                         '<td><input type="number" class="form-control number form-control-sm harga" name="rekap_rusak_detail_harga[]" id="rekap_rusak_detail_harga'+no+'" readonly></td>'+
                         '<td><input type="number" class="form-control number form-control-sm subharga" name="rekap_rusak_detail_sub_harga[]" id="rekap_rusak_detail_sub_harga" readonly></td>'+
                         '<td><button type="button" id="'+no+'" class="btn btn-danger btn_remove"><i class="fa fa-trash"></i></button></td></tr>');
-    });
+        Codebase.helpersOnLoad(['jq-select2']);
+        });
 
 	$(document).on('click', '.btn_remove', function(){
 		var button_id = $(this).attr("id"); 
@@ -157,10 +158,12 @@
           console.log("Saving value " + $(this).val());
           var index = $(this).attr('id'); 
           var g_id = $('#m_gudang_id').val();
-          console.log(g_id);
+          if ((g_id == '')) {
+            alert('pilih gudang dahulu');
+          }
           $.get("/inventori/stok/"+g_id, function(data){
             $.each(data, function(key, value) {
-              $('#'+index).remove()
+              $('#'+index)
               .append($('<option>', { value : key })
               .text(value));
               }); 
@@ -172,9 +175,9 @@
           var current = $(this).val();
           var id = $(this).data('id');
           var satuan_id = id.slice(18);  
-          // $.get("/master/m_satuan/"+current, function(data){
-          //   $('#m_satuan'+satuan_id).val(data.m_satuan_kode);
-          // });
+          $.get("/master/m_satuan/"+current, function(data){
+            $('#m_satuan'+satuan_id).val(data.m_satuan_kode);
+          });
                 var values = $('[name="rekap_rusak_detail_m_produk_id[]"]').map(function() {
         return this.value.trim();
       }).get();
