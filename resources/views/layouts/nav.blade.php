@@ -385,7 +385,7 @@
               </li>
               <li class="nav-main-item">
                 <a class="nav-main-link{{ request()->is('invetori/po') ? ' active' : '' }}" href="{{route('po.index')}}">
-                  <span class="nav-main-link-name">Purc hase Order (PO)</span>
+                  <span class="nav-main-link-name">Purchase Order (PO)</span>
                 </a>
               </li>
               <li class="nav-main-item">
@@ -422,13 +422,18 @@
                 </a>
               </li>
               <li class="nav-main-item">
-                <a class="nav-main-link{{ request()->is('akuntansi/link_akt') ? ' active' : '' }}" href="{{route('rek_link.index')}}">
-                  <span class="nav-main-link-name">Link Akuntansi</span>
+                <a class="nav-main-link{{ request()->is('akuntansi/jurnal_kas') ? ' active' : '' }}" href="{{route('jurnal_kas.index')}}">
+                  <span class="nav-main-link-name">Jurnal Kas</span>
                 </a>
               </li>
               <li class="nav-main-item">
-                <a class="nav-main-link{{ request()->is('akuntansi/jurnal') ? ' active' : '' }}" href="{{route('jurnal.index')}}">
-                  <span class="nav-main-link-name">Jurnal Akuntansi</span>
+                <a class="nav-main-link{{ request()->is('akuntansi/jurnal_bank') ? ' active' : '' }}" href="{{route('jurnal_bank.index')}}">
+                  <span class="nav-main-link-name">Jurnal Bank</span>
+                </a>
+              </li>
+              <li class="nav-main-item">
+                <a class="nav-main-link{{ request()->is('akuntansi/jurnal_umum') ? ' active' : '' }}" href="{{route('jurnal_umum.index')}}">
+                  <span class="nav-main-link-name">Jurnal Umum</span>
                 </a>
               </li>
             </ul>
