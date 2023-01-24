@@ -105,4 +105,12 @@ class MStokController extends Controller
         }
         return response()->json($list);
     }
+    public function get_harga($id_g,$id_p)
+    {
+        $data = DB::table('m_stok')
+                ->where('m_stok_gudang_id',$id_g)
+                ->where('m_stok_m_produk_id',$id_p)
+        ->first()->m_stok_hpp;
+        return response()->json($data);
+    }
 }
