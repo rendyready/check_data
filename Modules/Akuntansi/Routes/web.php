@@ -41,4 +41,10 @@ Route::prefix('akuntansi')->middleware('auth', 'web')
             Route::post('jurnal_kas/insert', 'simpan')->name('jurnal.simpan');
             Route::post('jurnal_kas/validasi', 'validasi')->name('jurnal.validasi');
         });
+
+        Route::controller(LinkAkuntansiController::class)->group(function () {
+            Route::get('link', 'index')->name('link.index');
+            Route::get('link/rekening', 'rekeninglink')->name('link.rekening');
+            Route::get('link/list', 'list')->name('link.list');
+        });
     });

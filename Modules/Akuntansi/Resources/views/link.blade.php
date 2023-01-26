@@ -15,8 +15,8 @@
                                 <table id="linkAkuntansi" class="table table-sm table-bordered table-striped table-vcenter" style="width:100%">
                                     <thead>
                                         <th>Akuntansi</th>
-                                        <th>No Rekening</th>
                                         <th>Nama Akun</th>
+                                        <th>No Rekening</th>
                                     </thead>
                                     <tbody>
                                         @php
@@ -28,8 +28,8 @@
                                             @endphp
                                         <tr>
                                             <td>{{$items->list_akt_nama}}</td>
-                                            <td id="{{$no}}"><select class="js-select2 js-states form-select masterRekening" id="m_rekening_no_akun" name="m_rekening_no_akun[]" style="width: 100%;"></select></td>
-                                            <td><input id="fieldName{{$no}}" name="m_rekening_nama" readonly></td>
+                                            <td id="{{$no}}"><select class="js-select2 form-select masterRekening" id="m_rekening_no_akun" name="m_rekening_nama[]" style="width: 100%;"></select></td>
+                                            <td><input id="fieldName{{$no}}" name="m_rekening_no_akun" readonly></td>
                                         </tr>
                                         @endforeach
                                     </tbody>
@@ -48,11 +48,13 @@
 @section('js')
 <script type="module">
     $(document).ready(function() {
+        Codebase.helpersOnLoad(['jq-select2']);
         $.ajaxSetup({
             headers: {
                 'X-CSRF-Token': $("input[name=_token]").val()
             }
         });
+        
         $.ajax({
             url: '{{route("link.list")}}',
             type: 'GET',
@@ -63,14 +65,11 @@
                     'order': false,
                 });
                 $.each(data, function(key, value) {
-                    $('.masterRekening')
-                        .append($('<option>', {
-                                value: key
-                            })
-                            .text(value[0]));
+                    $('.masterRekening').append($('<option>', {value: key}).text(value[0]));
                 });
             }
         })
+        
         $('#linkAkuntansi').on('change', '.masterRekening', function(s) {
             s.preventDefault()
             let getData = $(this).val()
@@ -85,7 +84,7 @@
                 },
                 success: function(response) {
 
-                   $('#fieldName'+idNo).val(response.m_rekening_nama)
+                   $('#fieldName'+idNo).val(response.m_rekening_no_akun)
                    
                 }
             });

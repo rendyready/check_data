@@ -70,9 +70,9 @@
                                                             required />
                                                     </td>
                                                     <td>
-                                                        <input type="number" placeholder="Input Saldo Rekening"
+                                                        <input type="number" step="any" placeholder="Input Saldo Rekening"
                                                             id="m_rekening_saldo" name="m_rekening_saldo[]"
-                                                            class="form-control set saldo form-control-sm" required />
+                                                            class="form-control set saldo form-control-sm"  required />
                                                     </td>
                                                     <td>
                                                         <button type="button" class="btn tambah btn-primary">+</button>
@@ -288,11 +288,15 @@
 
     //validasi nama
     $(document).on("change", ".m_rekening_nama", function() {
-        var nama = $('#m_rekening_nama').val().toLowerCase();
+        var nama                = $('#m_rekening_nama').val().toLowerCase();
+        var waroengid           = $('#filter-waroeng').val();
+        var rekeningkategori    = $('#filter-rekening').val();
                 $.ajax({
                 url: "{{ route('rekening.validasinama') }}",
                 data : {
                     m_rekening_nama: nama,
+                    m_rekening_m_waroeng_id: waroengid,
+                    m_rekening_kategori: rekeningkategori,
                 },
                 type: "get",
                 success: function(data) {
@@ -306,11 +310,15 @@
 
         //validasi no akun
         $(document).on("change", ".m_rekening_no_akun", function() {
-        var no = $('#m_rekening_no_akun').val();
+            var no = $('#m_rekening_no_akun').val();
+            var waroengid           = $('#filter-waroeng').val();
+            var rekeningkategori    = $('#filter-rekening').val();
                 $.ajax({
                 url: "{{ route('rekening.validasino') }}",
                 data : {
                 m_rekening_no_akun: no,
+                m_rekening_m_waroeng_id: waroengid,
+                m_rekening_kategori: rekeningkategori,
                 },
                 type: "get",
                 success: function(data) {
@@ -328,10 +336,14 @@
         $(document).on("change", ".m_rekening_namajq", function() {
         var id   = $(this).closest("tr").index(); 
         var nama = $('#m_rekening_namajq'+id).val().toLowerCase();
+        var waroengid           = $('#filter-waroeng').val();
+        var rekeningkategori    = $('#filter-rekening').val();
                 $.ajax({
                 url: "{{ route('rekening.validasinama') }}",
                 data : {
                     m_rekening_nama: nama,
+                    m_rekening_m_waroeng_id: waroengid,
+                    m_rekening_kategori: rekeningkategori,
                 },
                 type: "get",
                 success: function(data) {
@@ -347,10 +359,14 @@
         $(document).on("change", ".m_rekening_no_akunjq", function() {
         var id = $(this).closest("tr").index(); 
         var no = $('#m_rekening_no_akunjq'+id).val();
+        var waroengid           = $('#filter-waroeng').val();
+        var rekeningkategori    = $('#filter-rekening').val();
                 $.ajax({
                 url: "{{ route('rekening.validasino') }}",
                 data : {
                 m_rekening_no_akun: no,
+                m_rekening_m_waroeng_id: waroengid,
+                m_rekening_kategori: rekeningkategori,
                 },
                 type: "get",
                 success: function(data) {
@@ -371,10 +387,11 @@
 
     //copyrecord
     $(document).on('click', '#copyrecord', function() {
-        var waroengasal     = $('#filter-waroeng').val();
-        var waroengtj       = $('#m_rekening_m_waroeng_id2').val();
+        var waroengasal      = $('#filter-waroeng').val();
+        var waroengtj        = $('#m_rekening_m_waroeng_id2').val();
         var waroengasal1     = $('#filter-waroeng').val();
         var waroengtj1       = $('#m_rekening_m_waroeng_id2').val();
+        var saldo            = $('#m_rekening_copy_saldo').val();
     if(waroengasal1 != waroengtj1){
 
         $.ajax({
@@ -382,6 +399,7 @@
             data : { 
                 waroeng_asal: waroengasal,
                 waroeng_tujuan: waroengtj,
+                m_rekening_copy_saldo: saldo,
             },            
             type : "GET",
             success: function(data) {
