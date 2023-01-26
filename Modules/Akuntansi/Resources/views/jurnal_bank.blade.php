@@ -84,7 +84,7 @@
                                                         class="form-control set form-control-sm" />
                                                 </td>
                                                 <td>
-                                                    <input type="number" placeholder="Input Kredit" id="m_jurnal_kredit"
+                                                    <input type="number" step="any" placeholder="Input Kredit" id="m_jurnal_kredit"
                                                         name="m_jurnal_bank_saldo[]"
                                                         class="form-control set form-control-sm saldo" />
                                                 </td>
@@ -157,7 +157,7 @@ $(document).ready(function() {
       no++;
       $('#form').append('<tr class="hapus" id="row' + no + '">' +
         '<td><input type="text" placeholder="Input Nomor Akun" id="m_jurnal_m_rekening_no_akunjq'+ no +'" name="m_jurnal_bank_m_rekening_no_akun[]" class="form-control set form-control-sm no-akunjq" required/></td>' +
-        '<td><input type="text" id="m_rekening_namajq' + no + '" class="js-select2 form-control showrekjq" name="m_jurnal_bank_m_rekening_nama[]" readonly/></td>' +
+        '<td><input type="text" id="m_rekening_namajq' + no + '" class="js-select2 form-control set form-control-sm showrekjq" name="m_jurnal_bank_m_rekening_nama[]" readonly/></td>' +
         '<td><input type="text" class="form-control form-control-sm" name="m_jurnal_bank_particul[]" id="m_jurnal_particul" placeholder="Input Particul" required></td>' +
         '<td><input type="text" class="form-control form-control-sm saldo" name="m_jurnal_bank_saldo[]" id="m_jurnal_kredit" placeholder="Input Kredit" required></td>' +
         '<td><button type="button" id="' + no + '" class="btn btn-danger btn_remove saldo"> - </button></td> </tr> ');

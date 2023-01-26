@@ -27,7 +27,7 @@ class LinkAkuntansiController extends Controller
             ->get();
 
         // return response()->json([$link, $data]);
-        return view('akuntansi::master.link', compact('data'));
+        return view('akuntansi::link', compact('data'));
     }
 
     /**
@@ -39,10 +39,11 @@ class LinkAkuntansiController extends Controller
         $list2 = DB::table('m_rekening')
             ->select('m_rekening_no_akun', 'm_rekening_id', 'm_rekening_nama')
             ->orderBy('m_rekening_no_akun', 'asc')
+            ->distinct('m_rekening_no_akun')
             ->get();
         $data = array();
         foreach ($list2 as $val) {
-            $data[$val->m_rekening_id] = [$val->m_rekening_no_akun];
+            $data[$val->m_rekening_id] = [$val->m_rekening_nama];
         }
 
         return response()->json($data);
@@ -53,9 +54,9 @@ class LinkAkuntansiController extends Controller
     {
         $rekening = DB::table('m_rekening')
             ->where('m_rekening_id', $request->data)
-            ->select('m_rekening_nama')->first();
+            ->select('m_rekening_no_akun')->first();
 
-        return  response()->json( $rekening);
+        return  response()->json($rekening);
     }
     /**
      * Store a newly created resource in storage.

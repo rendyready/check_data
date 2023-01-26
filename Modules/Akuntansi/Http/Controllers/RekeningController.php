@@ -36,18 +36,20 @@ class RekeningController extends Controller
     }
     public function validasinama(Request $request)
     {
-        $val = $request->m_rekening_nama;
         $validasi = DB::table('m_rekening')
-            ->where('m_rekening_nama', $val)
+            ->where('m_rekening_nama', $request->m_rekening_nama)
+            ->where('m_rekening_m_waroeng_id', $request->m_rekening_m_waroeng_id)
+            ->where('m_rekening_kategori', $request->m_rekening_kategori)
             ->count();
         return response()->json($validasi);
 
     }
     public function validasino(Request $request)
     {
-        $val = $request->m_rekening_no_akun;
         $validasi = DB::table('m_rekening')
-            ->where('m_rekening_no_akun', $val)
+            ->where('m_rekening_no_akun', $request->m_rekening_no_akun)
+            ->where('m_rekening_m_waroeng_id', $request->m_rekening_m_waroeng_id)
+            ->where('m_rekening_kategori', $request->m_rekening_kategori)
             ->count();
         return response()->json($validasi);
 
@@ -85,7 +87,7 @@ class RekeningController extends Controller
                 ->where('m_rekening_nama', $key->m_rekening_nama)
                 ->first();
             if (empty($get_data2)) {
-                $saldo = ($request->m_rekening_saldo_copy == 'tidak') ? 0 : $key->m_rekening_saldo ;
+                $saldo = ($request->m_rekening_copy_saldo == 'tidak') ? 0 : $key->m_rekening_saldo ;
                 $data = array(
                     'm_rekening_m_waroeng_id' => $request->waroeng_tujuan,
                     'm_rekening_kategori' => $key->m_rekening_kategori,

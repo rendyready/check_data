@@ -96,7 +96,7 @@ class JurnalUmumController extends Controller
                     'm_jurnal_umum_kredit' => $request->m_jurnal_umum_kredit[$key],
                     'm_jurnal_umum_user' => Auth::user()->name,
                     'm_jurnal_umum_no_bukti' => $code,
-                    'm_jurnal_umum_created_by' => Auth::id,
+                    'm_jurnal_umum_created_by' => Auth::id(),
                     'm_jurnal_umum_created_at' => Carbon::now()
                 );
                 DB::table('m_jurnal_umum')->insert($data);

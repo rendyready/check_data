@@ -84,7 +84,7 @@
                                                         class="form-control set form-control-sm" />
                                                 </td>
                                                 <td>
-                                                    <input type="number" placeholder="Input Kredit"
+                                                    <input type="number" step="any" placeholder="Input Kredit"
                                                         id="m_jurnal_kas_kredit" name="m_jurnal_kas_saldo[]"
                                                         class="form-control set form-control-sm saldo" />
                                                 </td>
@@ -157,10 +157,17 @@ $(document).ready(function() {
       no++;
       $('#form').append('<tr class="hapus" id="row' + no + '">' +
         '<td><input type="number" placeholder="Input Nomor Akun" id="m_jurnal_kas_m_rekening_no_akunjq'+ no +'" name="m_jurnal_kas_m_rekening_no_akun[]" class="form-control set form-control-sm no-akunjq" required/></td>' +
-        '<td><input type="text" id="m_rekening_namajq' + no + '" class="js-select2 form-control showrekjq" name="m_jurnal_kas_m_rekening_nama[]" readonly/></td>' +
+        '<td><input type="text" id="m_rekening_namajq' + no + '" class="js-select2 form-control set form-control-sm showrekjq" name="m_jurnal_kas_m_rekening_nama[]" readonly/></td>' +
         '<td><input type="text" class="form-control form-control-sm" name="m_jurnal_kas_particul[]" id="m_jurnal_kas_particul" placeholder="Input Particul" required></td>' +
         '<td><input type="number" class="form-control form-control-sm saldo" name="m_jurnal_kas_saldo[]" id="m_jurnal_kas_kredit" placeholder="Input Kredit" required></td>' +
         '<td><button type="button" id="' + no + '" class="btn btn-danger btn_remove saldo"> - </button></td> </tr> ');
+    });
+
+     //hapus multiple
+     $(document).on('click', '.btn_remove', function() {
+      var button_id = $(this).attr("id");
+      $('#row' + button_id).remove();
+      $('.saldo').trigger("input");
     });
 
     var filwaroeng  = $('#filter-waroeng').val();
@@ -253,13 +260,6 @@ $(document).ready(function() {
                 $(".print-error-msg").find("ul").append('<li>Kolom masih kosong, atau tanggal bukan hari ini. Silahkan periksa kembali.</li>');
             });
         }
-
-    //hapus multiple
-    $(document).on('click', '.btn_remove', function() {
-      var button_id = $(this).attr("id");
-      $('#row' + button_id).remove();
-      $('.saldo').trigger("input");
-    });
 
     //filter tampil
     $('.cari').on('change', function() {

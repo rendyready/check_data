@@ -441,6 +441,13 @@
                   <span class="nav-main-link-name">Jurnal Umum</span>
                 </a>
               </li>
+                  <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('akuntansi/link') ? ' active' : '' }}" href="{{route('link.index')}}">
+                      <span class="nav-main-link-name">Link Akuntansi</span>
+                    </a>
+                  </li>
+                </ul>
+              </li>
             </ul>
           </li>
           <li class="nav-main-heading">Pengaturan</li>

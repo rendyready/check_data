@@ -66,12 +66,12 @@
                                                         class="form-control set form-control-sm" />
                                                 </td>
                                                 <td>
-                                                    <input type="number" placeholder="Input Debit" id="m_jurnal_debit"
+                                                    <input type="number" step="any" placeholder="Input Debit" id="m_jurnal_debit"
                                                         name="m_jurnal_umum_debit[]"
                                                         class="form-control set form-control-sm saldodebit" />
                                                 </td>
                                                 <td>
-                                                    <input type="number" placeholder="Input Kredit" id="m_jurnal_kredit"
+                                                    <input type="number" step="any" placeholder="Input Kredit" id="m_jurnal_kredit"
                                                         name="m_jurnal_umum_kredit[]"
                                                         class="form-control set form-control-sm saldokredit" />
                                                 </td>
@@ -86,10 +86,10 @@
                                             <label for="total">Total</label>
                                         </div>
                                         <div class="col-sm-2">
-                                            <input type="number" class="form-control set" id="totaldebit" readonly />
+                                            <input type="number" step="any" class="form-control set" id="totaldebit" readonly />
                                         </div>
                                         <div class="col-sm-2">
-                                            <input type="number" class="form-control set" id="totalkredit" readonly />
+                                            <input type="number" step="any" class="form-control set" id="totalkredit" readonly />
                                         </div>
                                     </div>
                                     <div class="bg-transparent text-center">
@@ -149,7 +149,7 @@ $(document).ready(function() {
       no++;
       $('#form').append('<tr class="hapus" id="row' + no + '">' +
         '<td><input type="number" placeholder="Input Nomor Akun" id="m_jurnal_m_rekening_no_akunjq'+ no +'" name="m_jurnal_umum_m_rekening_no_akun[]" class="form-control set form-control-sm no-akunjq" required/></td>' +
-        '<td><input type="text" id="m_rekening_namajq' + no + '" class="js-select2 form-control showrekjq" name="m_jurnal_umum_m_rekening_nama[]" readonly/></td>' +
+        '<td><input type="text" id="m_rekening_namajq' + no + '" class="js-select2 form-control set form-control-sm showrekjq" name="m_jurnal_umum_m_rekening_nama[]" readonly/></td>' +
         '<td><input type="text" class="form-control form-control-sm" name="m_jurnal_umum_particul[]" id="m_jurnal_particul" placeholder="Input Particul" required></td>' +
         '<td><input type="number" class="form-control form-control-sm saldodebit" name="m_jurnal_umum_debit[]" id="m_jurnal_debit" placeholder="Input Kredit" required></td>' +
         '<td><input type="number" class="form-control form-control-sm saldokredit" name="m_jurnal_umum_kredit[]" id="m_jurnal_kredit" placeholder="Input Kredit" required></td>' +
