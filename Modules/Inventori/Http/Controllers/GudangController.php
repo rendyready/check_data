@@ -63,15 +63,18 @@ class GudangController extends Controller
                 if (empty($validate)) {
                     DB::table('m_gudang')->insert($data);
                     $masterbb = DB::table('m_produk')
-                        ->select('m_produk_id','m_produk_produksi_m_satuan_id','m_produk_utama_m_satuan_id')->whereNotIn('m_produk_m_klasifikasi_produk_id', [4])->get();
+                        ->select('m_produk_id','m_produk_produksi_m_satuan_id','m_produk_utama_m_satuan_id')
+                        ->whereNotIn('m_produk_m_klasifikasi_produk_id', [4])->get();
                     $gudang_id = DB::table('m_gudang')->max('m_gudang_id');
                     foreach ($masterbb as $key) {
-                        $satuan = ($request->m_gudang_nama == 'gudang produksi waroeng') ? 
+                        $satuan_id = ($request->m_gudang_nama == 'gudang produksi waroeng') ? 
                         $key->m_produk_produksi_m_satuan_id : $key->m_produk_utama_m_satuan_id;
+                        $satuan_kode = DB::table('m_satuan')->where('m_satuan_id',$satuan_id)->first()->m_satuan_kode;
                         $data_bb = array(
                             'm_stok_m_produk_id' => $key->m_produk_id,
                             'm_stok_gudang_id' => $gudang_id,
-                            'm_stok_m_satuan_id' => $satuan,
+                            'm_stok_satuan_id' => $satuan_id,
+                            'm_stok_satuan' => $satuan_kode,
                             'm_stok_awal' => 0,
                             'm_stok_created_by' => Auth::id(),
                             'm_stok_created_at' => Carbon::now(),

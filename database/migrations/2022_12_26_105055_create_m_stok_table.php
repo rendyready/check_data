@@ -17,7 +17,8 @@ return new class extends Migration
             $table->id('m_stok_id');
             $table->bigInteger('m_stok_m_produk_id');
             $table->bigInteger('m_stok_gudang_id');
-            $table->bigInteger('m_stok_m_satuan_id')->nullable();
+            $table->bigInteger('m_stok_satuan_id')->nullable();
+            $table->string('m_stok_satuan')->nullable();
             $table->decimal('m_stok_awal')->default(0);
             $table->decimal('m_stok_masuk',18,2)->default(0);
             $table->decimal('m_stok_keluar',18,2)->default(0);

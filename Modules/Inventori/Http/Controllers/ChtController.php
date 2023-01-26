@@ -33,27 +33,32 @@ class ChtController extends Controller
         foreach ($request->rekap_beli_detail_id as $key => $value) {
             $save_beli = DB::table('rekap_beli_detail')
                 ->where('rekap_beli_detail_id',$request->rekap_beli_detail_id[$key])
-                ->update(['rekap_beli_detail_terima'=>$request->rekap_beli_detail_terima[$key],
-                          'rekap_beli_detail_satuan_terima' => $request->rekap_beli_detail_satuan_terima[$key]]);
+                ->update(['rekap_beli_detail_terima_qty'=>$request->rekap_beli_detail_terima_qty[$key]]);
                        
-            if (!empty($request->rekap_beli_detail_terima[$key])) {
-                 $data_terakhir = DB::table('m_stok_detail')
+            if (!empty($request->rekap_beli_detail_terima_qty[$key])) {
+                 $last_mutasi = DB::table('m_stok_detail')
                 ->select('m_stok_detail_hpp','m_stok_detail_saldo')
                 ->where('m_stok_detail_gudang_id',$request->rekap_beli_gudang_id)
                 ->where('m_stok_detail_m_produk_id',$request->rekap_beli_detail_m_produk_id[$key])
                 ->orderBy('m_stok_detail_id','desc')
                 ->first();
-              
-                $saldo_terakhir = (empty($data_terakhir)) ? 0 : $data_terakhir->m_stok_detail_saldo ;
-                $hpp_terakhir = (empty($data_terakhir)) ? 0 : $data_terakhir->m_stok_detail_hpp ;
-                $data_masuk = $request->rekap_beli_detail_terima[$key];
+
+                $data_stok = DB::table('m_stok')
+                ->where('m_stok_gudang_id',$request->rekap_beli_gudang_id)
+                ->where('m_stok_m_produk_id',$request->rekap_beli_detail_m_produk_id[$key])
+                ->first();
+
+                $saldo_terakhir = (empty($last_mutasi)) ? 0 : $last_mutasi->m_stok_detail_saldo ;
+                $hpp_terakhir = (empty($last_mutasi)) ? 0 : $last_mutasi->m_stok_detail_hpp ;
+                $data_masuk = $request->rekap_beli_detail_terima_qty[$key];
                 $data = array(
                     'm_stok_detail_m_produk_id' => $request->rekap_beli_detail_m_produk_id[$key],
                     'm_stok_detail_tgl'=> Carbon::now(),
                     'm_stok_detail_m_produk_nama' => $request->rekap_beli_detail_m_produk_nama[$key],
-                    'm_stok_detail_satuan' => $request->rekap_beli_detail_satuan_terima[$key],
-                    'm_stok_detail_masuk' => $request->rekap_beli_detail_terima[$key],
-                    'm_stok_detail_saldo' => $saldo_terakhir + $request->rekap_beli_detail_terima[$key],
+                    'm_stok_detail_satuan_id' => $data_stok->m_stok_satuan_id,
+                    'm_stok_detail_satuan' => $data_stok->m_stok_satuan,
+                    'm_stok_detail_masuk' => $request->rekap_beli_detail_terima_qty[$key],
+                    'm_stok_detail_saldo' => $saldo_terakhir + $request->rekap_beli_detail_terima_qty[$key],
                     'm_stok_detail_hpp' => ($request->rekap_beli_detail_subtot[$key]+($saldo_terakhir*$hpp_terakhir))/($saldo_terakhir+$data_masuk),
                     'm_stok_detail_catatan' => 'Pembelian'.$request->rekap_beli_detail_rekap_beli_code[$key],
                     'm_stok_detail_gudang_id' => $request->rekap_beli_gudang_id,
@@ -61,12 +66,6 @@ class ChtController extends Controller
                     'm_stok_detail_created_at' => Carbon::now()
                 );
                 DB::table('m_stok_detail')->insert($data);
-
-                $data_stok = DB::table('m_stok')
-                ->where('m_stok_gudang_id',$request->rekap_beli_gudang_id)
-                ->where('m_stok_m_produk_id',$request->rekap_beli_detail_m_produk_id[$key])
-                ->first();
-
                 $get_detail = DB::table('m_stok_detail')
                 ->select('m_stok_detail_hpp','m_stok_detail_masuk')
                 ->where('m_stok_detail_gudang_id',$request->rekap_beli_gudang_id)
@@ -100,14 +99,13 @@ class ChtController extends Controller
         ->select('rekap_beli_detail_id','rekap_beli_detail_rekap_beli_code',
                 'rekap_beli_detail_m_produk_id','rekap_beli_detail_subtot','rekap_beli_supplier_nama','rekap_beli_detail_m_produk_nama',
                  'rekap_beli_detail_catatan','rekap_beli_detail_qty',
-                 'm_satuan_kode')
+                 'rekap_beli_detail_satuan_terima')
         ->leftjoin('rekap_beli','rekap_beli_code','rekap_beli_detail_rekap_beli_code')
         ->leftjoin('m_produk','rekap_beli_detail_m_produk_id','m_produk_id')
-        ->leftjoin('m_satuan','m_produk_utama_m_satuan_id','m_satuan_id')
         ->where('rekap_beli_tgl',$data->tgl_now)
         ->where('rekap_beli_m_w_id',$waroeng_id)
         ->where('rekap_beli_gudang_id',$request->id)
-        ->whereNull('rekap_beli_detail_terima')
+        ->whereNull('rekap_beli_detail_terima_qty')
         ->orderBy('rekap_beli_supplier_id','asc')
         ->get();
         $no = 0;
@@ -124,8 +122,8 @@ class ChtController extends Controller
             $row[] = '<input type="text" class="form-control form-control-sm" name="rekap_beli_detail_m_produk_nama[]" id="rekap_beli_detail_m_produk_nama" value="'.$item->rekap_beli_detail_m_produk_nama.'" readonly>';
             $row[] = $item->rekap_beli_detail_catatan;
             $row[] = $item->rekap_beli_detail_qty;
-            $row[] = '<input type="number" class="form-control number form-control-sm" name="rekap_beli_detail_terima[]" id="rekap_beli_detail_terima">';
-            $row[] = '<input type="text" class="form-control number form-control-sm" name="rekap_beli_detail_satuan_terima[]" id="rekap_beli_detail_satuan_terima" value="'.$item->m_satuan_kode.'" readonly>';
+            $row[] = '<input type="number" class="form-control number form-control-sm" name="rekap_beli_detail_terima_qty[]" id="rekap_beli_detail_terima_qty">';
+            $row[] = ucwords($item->rekap_beli_detail_satuan_terima);
             $data[] = $row;
         }
         $output = array("data" => $data);
