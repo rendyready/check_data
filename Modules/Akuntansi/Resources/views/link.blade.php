@@ -28,7 +28,10 @@
                                             @endphp
                                         <tr>
                                             <td>{{$items->list_akt_nama}}</td>
-                                            <td id="{{$no}}"><select class="js-select2 form-select masterRekening" id="m_rekening_no_akun" name="m_rekening_nama[]" style="width: 100%;"></select></td>
+                                            <td id="{{$no}}">
+                                                <select class="js-select2 form-select masterRekening" id="m_rekening_no_akun" name="m_rekening_nama[]" style="width: 100%;">
+                                                </select>
+                                            </td>
                                             <td><input id="fieldName{{$no}}" name="m_rekening_no_akun" readonly></td>
                                         </tr>
                                         @endforeach

@@ -73,10 +73,12 @@
                                                         name="m_jurnal_kas_m_rekening_no_akun[]"
                                                         class="form-control set form-control-sm no-akun" />
                                                 </td>
-                                                <td>
-                                                    <input type="text" id="m_rekening_nama"
+                                                <td>                                                   
+                                                    <select id="m_rekening_nama"
                                                         name="m_jurnal_kas_m_rekening_nama[]"
-                                                        class="form-control set form-control-sm showrek" readonly />
+                                                        class="js-select2 showrek" style="width:100%;">
+                                                        {{-- <option value='0'>-- Pilih Rekening --</option> --}}
+                                                    </select>
                                                 </td>
                                                 <td>
                                                     <input type="text" placeholder="Input Particul"
@@ -311,7 +313,7 @@ $(document).ready(function() {
     });  
     
     //show nama rekening
-    $(document).on('keyup', '.no-akun', function() {
+    $(document).on('keyup', '#m_jurnal_kas_m_rekening_no_akun', function() {
         var filnomor    = $('#m_jurnal_kas_m_rekening_no_akun').val();
             $.ajax({
             type: "get",
@@ -320,14 +322,23 @@ $(document).ready(function() {
                 m_rekening_no_akun: filnomor,
                 },
                 success: function(data){
-                    console.log(data);    
-                    if(data.m_rekening_nama == undefined){
-                        
-                        $('#m_rekening_nama').val("");
+                    console.log(data);
 
+                    if(data != undefined){    
+                        $('#m_rekening_nama').empty();
+                        $('#m_rekening_nama').append('<option value="'+ data.m_rekening_nama +'">' + data.m_rekening_nama + '</option>');
                     } else {
+                        $.ajax({
+                            url: '{{route("jurnal.rekeninglink")}}',
+                            type: 'GET',
+                            dataType: 'Json',
+                            success: function(data) {
+                                $.each(data, function(key, value) {
+                                    $('#m_rekening_nama').append($('<option>', {value: key}).text(value[0]));
+                                });
+                            }
+                        });
 
-                        $('#m_rekening_nama').val(data.m_rekening_nama);
                     }
                 }
         });
@@ -354,6 +365,37 @@ $(document).ready(function() {
                 }
         });
     });
+
+    //show data select option
+   $.ajax({
+            url: '{{route("jurnal.rekeninglink")}}',
+            type: 'GET',
+            dataType: 'Json',
+            success: function(data) {
+                $('#m_rekening_nama').append('<option>-- Pilih Nama Rekening --</option>'); 
+                $.each(data, function(key, value) {
+                    $('#m_rekening_nama').append($('<option>', {value: key}).text(value[0]));
+                });
+            }
+        })
+
+    //show no rekening
+    $(document).on('change', '#m_rekening_nama', function() {
+        var filnama    = $('#m_rekening_nama').val();
+            $.ajax({
+            type: "get",
+            url: '{{ route("jurnal.carijurnalnamaakun") }}',
+            data: {
+                m_rekening_nama: filnama,
+                },
+                success: function(data){
+                    console.log(data);    
+                        $('#m_jurnal_kas_m_rekening_no_akun').val(data.m_rekening_no_akun);
+                }
+        });
+    });
+
+
 });
 </script>
 @endsection

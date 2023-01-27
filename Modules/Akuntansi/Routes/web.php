@@ -37,9 +37,10 @@ Route::prefix('akuntansi')->middleware('auth', 'web')
             Route::get('jurnal_kas', 'index')->name('jurnal_kas.index');
             Route::get('jurnal_kas/tampil', 'tampil')->name('jurnal.tampil');
             Route::get('jurnal_kas/carijurnalnoakun', 'carijurnalnoakun')->name('jurnal.carijurnalnoakun');
-            Route::get('jurnal_kas/carijurnalnamarek', 'carijurnalnamarek')->name('jurnal.carijurnalnamarek');
+            Route::get('jurnal_kas/carijurnalnamaakun', 'carijurnalnamaakun')->name('jurnal.carijurnalnamaakun');
             Route::post('jurnal_kas/insert', 'simpan')->name('jurnal.simpan');
             Route::post('jurnal_kas/validasi', 'validasi')->name('jurnal.validasi');
+            Route::get('jurnal_kas/rekeninglink', 'rekeninglink')->name('jurnal.rekeninglink');
         });
 
         Route::controller(LinkAkuntansiController::class)->group(function () {
