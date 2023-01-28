@@ -36,22 +36,26 @@ class JurnalKasController extends Controller
 
     public function carijurnalnamaakun(Request $request)
     {
+        
         $norek = DB::table('m_rekening')
             ->select('m_rekening_no_akun')
             ->where('m_rekening_nama', $request->m_rekening_nama)
             ->first();
 
         return response()->json($norek);
+        
     }
 
     public function carijurnalnoakun(Request $request)
     {
+
         $norek = DB::table('m_rekening')
             ->select('m_rekening_nama')
             ->where('m_rekening_no_akun', $request->m_rekening_no_akun)
             ->first();
 
         return response()->json($norek);
+            
     }
 
     public function tampil(Request $request)

@@ -76,8 +76,7 @@
                                                 <td>                                                   
                                                     <select id="m_rekening_nama"
                                                         name="m_jurnal_kas_m_rekening_nama[]"
-                                                        class="js-select2 showrek" style="width:100%;">
-                                                        {{-- <option value='0'>-- Pilih Rekening --</option> --}}
+                                                        class="js-select2 set showrek" style="width:100%;">
                                                     </select>
                                                 </td>
                                                 <td>
@@ -157,18 +156,17 @@ $(document).ready(function() {
     var no = 0;
     $('.tambah').on('click', function() {
       no++;
-      $('#form').append('<tr class="hapus" id="row' + no + '">' +
+      $('#form').append('<tr class="hapus" id="' + no + '">' +
         '<td><input type="number" placeholder="Input Nomor Akun" id="m_jurnal_kas_m_rekening_no_akunjq'+ no +'" name="m_jurnal_kas_m_rekening_no_akun[]" class="form-control set form-control-sm no-akunjq" required/></td>' +
-        '<td><input type="text" id="m_rekening_namajq' + no + '" class="js-select2 form-control set form-control-sm showrekjq" name="m_jurnal_kas_m_rekening_nama[]" readonly/></td>' +
+        '<td><select id="m_rekening_namajq' + no + '" style="width:100%;" class="js-select2 set showrekjq" name="m_jurnal_kas_m_rekening_nama[]"></select></td>' +
         '<td><input type="text" class="form-control form-control-sm" name="m_jurnal_kas_particul[]" id="m_jurnal_kas_particul" placeholder="Input Particul" required></td>' +
         '<td><input type="number" class="form-control form-control-sm saldo" name="m_jurnal_kas_saldo[]" id="m_jurnal_kas_kredit" placeholder="Input Kredit" required></td>' +
-        '<td><button type="button" id="' + no + '" class="btn btn-danger btn_remove saldo"> - </button></td> </tr> ');
+        '<td><button type="button" class="btn btn-danger btn_remove saldo"> - </button></td> </tr> ');
     });
 
      //hapus multiple
      $(document).on('click', '.btn_remove', function() {
-      var button_id = $(this).attr("id");
-      $('#row' + button_id).remove();
+      $(this).parents('tr').remove();
       $('.saldo').trigger("input");
     });
 
@@ -311,8 +309,39 @@ $(document).ready(function() {
             $('.kas').html('Kredit')
         }
     });  
-    
-    //show nama rekening
+
+    //default select nama rekening
+        $.ajax({
+            url: '{{route("jurnal.rekeninglink")}}',
+            type: 'GET',
+            dataType: 'Json',
+            success: function(data) {
+                $('#m_rekening_nama').append('<option>-- Pilih Nama Rekening --</option>'); 
+                $.each(data, function(key, value) {
+                    $('#m_rekening_nama').append('<option value="'+ value +'">' + value + '</option>');
+                });
+            }
+        })    
+
+        //default select nama rekening jquery
+        $('.tambah').on('click', function() {
+            var id = $(this).closest("tr").attr("id"); 
+            console.log(id);
+            $.ajax({
+                url: '{{route("jurnal.rekeninglink")}}',
+                type: 'GET',
+                dataType: 'Json',
+                success: function(data) {
+                    console.log(data);
+                    $('#m_rekening_namajq'+id).append('<option>-- Pilih Nama Rekening --</option>'); 
+                    $.each(data, function(key, value) {
+                        $('#m_rekening_namajq'+id).append('<option value="'+ value +'">' + value + '</option>');
+                    });
+                },
+            });
+        });
+
+         //show nama rekening
     $(document).on('keyup', '#m_jurnal_kas_m_rekening_no_akun', function() {
         var filnomor    = $('#m_jurnal_kas_m_rekening_no_akun').val();
             $.ajax({
@@ -323,32 +352,30 @@ $(document).ready(function() {
                 },
                 success: function(data){
                     console.log(data);
-
-                    if(data != undefined){    
-                        $('#m_rekening_nama').empty();
-                        $('#m_rekening_nama').append('<option value="'+ data.m_rekening_nama +'">' + data.m_rekening_nama + '</option>');
-                    } else {
                         $.ajax({
-                            url: '{{route("jurnal.rekeninglink")}}',
-                            type: 'GET',
-                            dataType: 'Json',
-                            success: function(data) {
-                                $.each(data, function(key, value) {
-                                    $('#m_rekening_nama').append($('<option>', {value: key}).text(value[0]));
-                                });
-                            }
-                        });
-
-                    }
+                                url: '{{route("jurnal.rekeninglink")}}',
+                                type: 'GET',
+                                dataType: 'Json',
+                                success: function(data) {
+                                    $('#m_rekening_nama').append('<option>-- Pilih Nama Rekening --</option>'); 
+                                    $.each(data, function(key, value) {
+                                        $('#m_rekening_nama').append('<option value="'+ value +'">' + value + '</option>');
+                                    });
+                                }
+                            });
+                            $('#m_rekening_nama').empty();
+                            $.each(data, function(key, value) {
+                                $('#m_rekening_nama').append('<option value="'+ data.m_rekening_nama +'">' + data.m_rekening_nama + '</option>');
+                            });
+                                  
                 }
         });
     });
 
     //show nama rekening jquery
     $(document).on('keyup', '.no-akunjq', function() {
-        var id           = $(this).closest("tr").index(); 
+        var id           = $(this).closest("tr").attr("id"); 
         var filnomor2    = $('#m_jurnal_kas_m_rekening_no_akunjq'+id).val();
-                 console.log(id);     
             $.ajax({
             type: "get",
             url: '{{ route("jurnal.carijurnalnoakun") }}',
@@ -356,28 +383,24 @@ $(document).ready(function() {
                 m_rekening_no_akun: filnomor2
                 },
                 success: function(data){
-                    // console.log('ini id kolom'+id);
-                    if(data.m_rekening_nama == undefined){
-                        $('#m_rekening_namajq'+id).val("");
-                    } else {
-                        $('#m_rekening_namajq'+id).val(data.m_rekening_nama);                    
-                    }
+                            $.ajax({
+                                url: '{{route("jurnal.rekeninglink")}}',
+                                type: 'GET',
+                                dataType: 'Json',
+                                success: function(data) {
+                                    $('#m_rekening_namajq'+id).append('<option>-- Pilih Nama Rekening --</option>'); 
+                                    $.each(data, function(key, value) {
+                                        $('#m_rekening_namajq'+id).append('<option value="'+ value +'">' + value + '</option>');
+                                    });
+                                }
+                            });
+                            $('#m_rekening_namajq'+id).empty();
+                            $.each(data, function(key, value) {
+                                $('#m_rekening_namajq'+id).append('<option value="'+ data.m_rekening_nama +'">' + data.m_rekening_nama + '</option>');
+                            });
                 }
         });
     });
-
-    //show data select option
-   $.ajax({
-            url: '{{route("jurnal.rekeninglink")}}',
-            type: 'GET',
-            dataType: 'Json',
-            success: function(data) {
-                $('#m_rekening_nama').append('<option>-- Pilih Nama Rekening --</option>'); 
-                $.each(data, function(key, value) {
-                    $('#m_rekening_nama').append($('<option>', {value: key}).text(value[0]));
-                });
-            }
-        })
 
     //show no rekening
     $(document).on('change', '#m_rekening_nama', function() {
@@ -391,6 +414,23 @@ $(document).ready(function() {
                 success: function(data){
                     console.log(data);    
                         $('#m_jurnal_kas_m_rekening_no_akun').val(data.m_rekening_no_akun);
+                }
+        });
+    });
+
+    //show no rekening jquery
+    $(document).on('change', '.showrekjq', function() {
+        var id           = $(this).closest("tr").attr("id"); 
+        var filnama    = $('#m_rekening_nama'+id).val();
+            $.ajax({
+            type: "get",
+            url: '{{ route("jurnal.carijurnalnamaakun") }}',
+            data: {
+                m_rekening_nama: filnama,
+                },
+                success: function(data){
+                    console.log(data);    
+                        $('#m_jurnal_kas_m_rekening_no_akun'+id).val(data.m_rekening_no_akun);
                 }
         });
     });

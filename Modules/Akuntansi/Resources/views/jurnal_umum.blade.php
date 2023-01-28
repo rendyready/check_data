@@ -147,13 +147,13 @@ $(document).ready(function() {
     var no = 0;
     $('.tambah').on('click', function() {
       no++;
-      $('#form').append('<tr class="hapus" id="row' + no + '">' +
+      $('#form').append('<tr class="hapus" id="' + no + '">' +
         '<td><input type="number" placeholder="Input Nomor Akun" id="m_jurnal_m_rekening_no_akunjq'+ no +'" name="m_jurnal_umum_m_rekening_no_akun[]" class="form-control set form-control-sm no-akunjq" required/></td>' +
         '<td><input type="text" id="m_rekening_namajq' + no + '" class="js-select2 form-control set form-control-sm showrekjq" name="m_jurnal_umum_m_rekening_nama[]" readonly/></td>' +
         '<td><input type="text" class="form-control form-control-sm" name="m_jurnal_umum_particul[]" id="m_jurnal_particul" placeholder="Input Particul" required></td>' +
         '<td><input type="number" class="form-control form-control-sm saldodebit" name="m_jurnal_umum_debit[]" id="m_jurnal_debit" placeholder="Input Kredit" required></td>' +
         '<td><input type="number" class="form-control form-control-sm saldokredit" name="m_jurnal_umum_kredit[]" id="m_jurnal_kredit" placeholder="Input Kredit" required></td>' +
-        '<td><button type="button" id="' + no + '" class="btn btn-danger btn_remove saldodebit saldokredit"> - </button></td> </tr> ');
+        '<td><button type="button" class="btn btn-danger btn_remove saldodebit saldokredit"> - </button></td> </tr> ');
     });
 
     var filwaroeng  = $('#filter-waroeng').val();
@@ -255,8 +255,7 @@ $(document).ready(function() {
 
     //hapus multiple
     $(document).on('click', '.btn_remove', function() {
-      var button_id = $(this).attr("id");
-      $('#row' + button_id).remove();
+      $(this).parents('tr').remove();
       $('.saldodebit').trigger("input");
       $('.saldokredit').trigger("input");
     });
@@ -334,7 +333,7 @@ $(document).ready(function() {
 
     //show nama rekening jquery
     $(document).on('keyup', '.no-akunjq', function() {
-        var id           = $(this).closest("tr").index(); 
+        var id           = $(this).closest("tr").attr("id"); 
         var filnomor2    = $('#m_jurnal_m_rekening_no_akunjq'+id).val();   
             $.ajax({
             type: "get",
