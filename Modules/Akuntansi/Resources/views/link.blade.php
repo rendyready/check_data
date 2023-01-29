@@ -32,7 +32,7 @@
                                                 <select class="js-select2 form-select masterRekening" id="m_rekening_no_akun" name="m_rekening_nama[]" style="width: 100%;">
                                                 </select>
                                             </td>
-                                            <td><input id="fieldName{{$no}}" name="m_rekening_no_akun" readonly></td>
+                                            <td><input type="text" id="fieldName{{$no}}" name="m_rekening_no_akun" readonly></td>
                                         </tr>
                                         @endforeach
                                     </tbody>
@@ -58,7 +58,8 @@
             }
         });
         
-        $.ajax({
+    $('.masterRekening').select2();
+       $.ajax({
             url: '{{route("link.list")}}',
             type: 'GET',
             dataType: 'Json',

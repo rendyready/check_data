@@ -19,18 +19,21 @@ Route::prefix('akuntansi')->middleware('auth', 'web')
             Route::get('jurnal_bank', 'index')->name('jurnal_bank.index');
             Route::get('jurnal_bank/tampil', 'tampil')->name('jurnal_bank.tampil');
             Route::get('jurnal_bank/carijurnalnoakun', 'carijurnalnoakun')->name('jurnal_bank.carijurnalnoakun');
-            Route::get('jurnal_bank/carijurnalnamarek', 'carijurnalnamarek')->name('jurnal_bank.carijurnalnamarek');
+            Route::get('jurnal_bank/carijurnalnamaakun', 'carijurnalnamaakun')->name('jurnal_bank.carijurnalnamaakun');
             Route::post('jurnal_bank/insert', 'simpan')->name('jurnal_bank.simpan');
             Route::post('jurnal_bank/validasi', 'validasi')->name('jurnal_bank.validasi');
+            Route::get('jurnal_bank/rekeninglink', 'rekeninglink')->name('jurnal_bank.rekeninglink');
+
         });
 
         Route::controller(JurnalUmumController::class)->group(function () {
             Route::get('jurnal_umum', 'index')->name('jurnal_umum.index');
             Route::get('jurnal_umum/tampil', 'tampil')->name('jurnal_umum.tampil');
             Route::get('jurnal_umum/carijurnalnoakun', 'carijurnalnoakun')->name('jurnal_umum.carijurnalnoakun');
-            Route::get('jurnal_umum/carijurnalnamarek', 'carijurnalnamarek')->name('jurnal_umum.carijurnalnamarek');
+            Route::get('jurnal_umum/carijurnalnamaakun', 'carijurnalnamaakun')->name('jurnal_umum.carijurnalnamaakun');
             Route::post('jurnal_umum/insert', 'simpan')->name('jurnal_umum.simpan');
             Route::post('jurnal_umum/validasi', 'validasi')->name('jurnal_umum.validasi');
+            Route::get('jurnal_umum/rekeninglink', 'rekeninglink')->name('jurnal_umum.rekeninglink');
         });
 
         Route::controller(JurnalKasController::class)->group(function () {

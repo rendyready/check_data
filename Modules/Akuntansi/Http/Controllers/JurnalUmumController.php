@@ -23,6 +23,33 @@ class JurnalUmumController extends Controller
         ]);
     }
 
+    public function rekeninglink(Request $request)
+    {
+        $list2 = DB::table('m_rekening')
+        ->select('m_rekening_no_akun', 'm_rekening_id', 'm_rekening_nama')
+        ->orderBy('m_rekening_no_akun', 'asc')
+        ->distinct('m_rekening_no_akun')
+        ->get();
+        $data = array();
+        foreach ($list2 as $val) {
+            $data[$val->m_rekening_nama] = [$val->m_rekening_nama];
+        }
+
+        return response()->json($data);
+    }
+
+    public function carijurnalnamaakun(Request $request)
+    {
+        
+        $norek = DB::table('m_rekening')
+            ->select('m_rekening_no_akun')
+            ->where('m_rekening_nama', $request->m_rekening_nama)
+            ->first();
+
+        return response()->json($norek);
+        
+    }
+
     public function carijurnalnoakun(Request $request)
     {
         $norek = DB::table('m_rekening')
