@@ -404,6 +404,11 @@
                 </a>
               </li>
               <li class="nav-main-item">
+                <a class="nav-main-link{{ request()->is('invetori/m_gudang/out') ? ' active' : '' }}" href="{{route('m_gudang_out.index')}}">
+                  <span class="nav-main-link-name">Tranfer/Keluar Gudang</span>
+                </a>
+              </li>
+              <li class="nav-main-item">
                 <a class="nav-main-link{{ request()->is('invetori/penjualan_inv') ? ' active' : '' }}" href="{{route('penjualan_inv.index')}}">
                   <span class="nav-main-link-name">Penjualan Barang</span>
                 </a>

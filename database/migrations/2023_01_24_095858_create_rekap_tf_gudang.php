@@ -19,7 +19,7 @@ return new class extends Migration
             $table->bigInteger('rekap_tf_gudang_asal_id');
             $table->bigInteger('rekap_tf_gudang_tujuan_id');
             $table->date('rekap_tf_gudang_tgl_kirim');
-            $table->date('rekap_tf_gudang_tgl_terima');
+            $table->date('rekap_tf_gudang_tgl_terima')->nullable();
             $table->bigInteger('rekap_tf_gudang_created_by');
             $table->bigInteger('rekap_tf_gudang_updated_by')->nullable();
             $table->bigInteger('rekap_tf_gudang_deleted_by')->nullable();
