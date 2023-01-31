@@ -212,7 +212,7 @@ $(document).ready(function() {
             $('.hapus').remove();
             $('.print-error-msg').remove();
             $('.set').val('');
-            $('.set_select option:first').prop('selected',true).trigger( "change" );
+            $('.set_select').empty().trigger('input');
 
             var filwaroeng2  = $('#filter-waroeng').val();
             var filkas2      = $('#filter-kas').val();
@@ -324,6 +324,21 @@ $(document).ready(function() {
             }
         })    
 
+        //trigger select nama rekening
+        $('#m_rekening_nama').on('input', function() {
+        $.ajax({
+            url: '{{route("jurnal.rekeninglink")}}',
+            type: 'GET',
+            dataType: 'Json',
+            success: function(data) {
+                $('#m_rekening_nama').append('<option></option>'); 
+                $.each(data, function(key, value) {
+                    $('#m_rekening_nama').append('<option value="'+ value +'">' + value + '</option>');
+                });
+            }
+        }); 
+    }); 
+
         //default select nama rekening jquery
         $('.tambah').on('click', function() {
             var id = $(this).closest("tr").index()+no++; 
@@ -344,7 +359,7 @@ $(document).ready(function() {
         });
 
          //show nama rekening
-    $(document.body).on('keyup', '#m_jurnal_kas_m_rekening_no_akun', function() {
+    $(document).on('keyup', '#m_jurnal_kas_m_rekening_no_akun', function() {
         var filnomor    = $('#m_jurnal_kas_m_rekening_no_akun').val();
             $.ajax({
             type: "get",
@@ -354,13 +369,12 @@ $(document).ready(function() {
                 },
                 success: function(data){
                     console.log(data);
-                    if(data){
                             $('#m_rekening_nama').empty();
                             $.each(data, function(key, value) {
                                 $('#m_rekening_nama').append('<option value="'+ data.m_rekening_nama +'">' + data.m_rekening_nama + '</option>');
                             });
-                        }
-                        $('#m_rekening_nama option:first').prop('selected',true).trigger( "change" );                                 
+                            $('#m_rekening_nama').trigger("input");                             
+                           
                 }
         });
     });
@@ -376,13 +390,22 @@ $(document).ready(function() {
                 m_rekening_no_akun: filnomor2
                 },
                 success: function(data){
-                    if(data){
+                    
                             $('#m_rekening_namajq'+id).empty();
                             $.each(data, function(key, value) {
                                 $('#m_rekening_namajq'+id).append('<option value="'+ data.m_rekening_nama +'">' + data.m_rekening_nama + '</option>');
                             });
-                    }
-                    $('#m_rekening_nama option:first'+id).prop('selected',true).trigger( "change" );
+                            $.ajax({
+                                url: '{{route("jurnal.rekeninglink")}}',
+                                type: 'GET',
+                                dataType: 'Json',
+                                success: function(data) {
+                                    $('#m_rekening_namajq'+id).append('<option></option>'); 
+                                    $.each(data, function(key, value) {
+                                        $('#m_rekening_namajq'+id).append('<option value="'+ value +'">' + value + '</option>');
+                                    });
+                                }
+                            });                              
                 }
         });
     });
