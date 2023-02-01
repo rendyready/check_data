@@ -29,7 +29,7 @@
                                         <tr>
                                             <td>{{$items->list_akt_nama}}</td>
                                             <td id="{{$no}}">
-                                                <select class="js-select2 form-select masterRekening" id="m_rekening_no_akun" name="m_rekening_nama[]" style="width: 100%;">
+                                                <select class="js-select2 form-select masterRekening" id="m_rekening_no_akun{{$no}}" name="m_rekening_nama[]" style="width: 100%;">
                                                 </select>
                                             </td>
                                             <td><input type="text" id="fieldName{{$no}}" name="m_rekening_no_akun" readonly></td>
@@ -51,6 +51,8 @@
 @section('js')
 <script type="module">
     $(document).ready(function() {
+        var idNo=$(this).parent().attr('id')
+        $('#m_rekening_no_akun'+idNo).select2();
         Codebase.helpersOnLoad(['jq-select2']);
         $.ajaxSetup({
             headers: {
@@ -58,7 +60,6 @@
             }
         });
         
-    $('.masterRekening').select2();
        $.ajax({
             url: '{{route("link.list")}}',
             type: 'GET',

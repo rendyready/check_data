@@ -202,7 +202,13 @@ $(document).ready(function() {
           data: $('form').serialize(),
           success: function(data) {
             if($.isEmptyObject(data.error)){         
-            alert('Data Berhasil Ditambahkan');
+                Codebase.helpers('jq-notify', {
+                              align: 'right', // 'right', 'left', 'center'
+                              from: 'top', // 'top', 'bottom'
+                              type: data.type, // 'info', 'success', 'warning', 'danger'
+                              icon: 'fa fa-info me-5', // Icon class
+                              message: data.messages
+                            });
             $('.hapus').remove();
             $('.print-error-msg').remove();
             $('.set').val('');

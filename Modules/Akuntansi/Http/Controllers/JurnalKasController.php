@@ -28,7 +28,7 @@ class JurnalKasController extends Controller
         ->get();
         $data = array();
         foreach ($list2 as $val) {
-            $data[$val->m_rekening_nama] = [$val->m_rekening_nama];
+            $data[$val->m_rekening_id] = [$val->m_rekening_nama];
         }
 
         return response()->json($data);
@@ -39,7 +39,7 @@ class JurnalKasController extends Controller
         
         $norek = DB::table('m_rekening')
             ->select('m_rekening_no_akun')
-            ->where('m_rekening_nama', $request->m_rekening_nama)
+            ->where('m_rekening_id', $request->m_rekening_id)
             ->first();
 
         return response()->json($norek);
@@ -50,7 +50,7 @@ class JurnalKasController extends Controller
     {
 
         $norek = DB::table('m_rekening')
-            ->select('m_rekening_nama')
+            ->select('m_rekening_id')
             ->where('m_rekening_no_akun', $request->m_rekening_no_akun)
             ->first();
 
@@ -110,12 +110,16 @@ class JurnalKasController extends Controller
         if ($validator->passes()) {
             foreach ($request->m_jurnal_kas_particul as $key => $value) {
                 $code = self::generatecode($request->m_jurnal_kas, $request->m_jurnal_kas_tanggal, $request->m_jurnal_kas_m_waroeng_id);
+                $rekening_nama = DB::table('m_jurnal_kas')
+                                ->where('m_jurnal_kas_m_rekening_no_akun', $request->m_jurnal_kas_m_rekening_no_akun[$key])
+                                ->select('m_jurnal_kas_m_rekening_nama')
+                                ->first()->m_jurnal_kas_m_rekening_nama;
                 $data = array(
                     'm_jurnal_kas_m_waroeng_id' => $request->m_jurnal_kas_m_waroeng_id,
                     'm_jurnal_kas_tanggal' => $request->m_jurnal_kas_tanggal,
                     'm_jurnal_kas' => $request->m_jurnal_kas,
                     'm_jurnal_kas_m_rekening_no_akun' => $request->m_jurnal_kas_m_rekening_no_akun[$key],
-                    'm_jurnal_kas_m_rekening_nama' => $request->m_jurnal_kas_m_rekening_nama[$key],
+                    'm_jurnal_kas_m_rekening_nama' => $rekening_nama,
                     'm_jurnal_kas_particul' => $request->m_jurnal_kas_particul[$key],
                     'm_jurnal_kas_saldo' => $request->m_jurnal_kas_saldo[$key],
                     'm_jurnal_kas_user' => Auth::user()->name,
@@ -125,7 +129,7 @@ class JurnalKasController extends Controller
                 );
                 DB::table('m_jurnal_kas')->insert($data);
             }
-            return response()->json(['message' => 'Berhasil Menambakan', 'type' => 'success']);
+            return response()->json(['messages' => 'Berhasil Menambakan', 'type' => 'success']);
         }
         return response()->json(['error' => $validator->errors()->all()]);
     }
