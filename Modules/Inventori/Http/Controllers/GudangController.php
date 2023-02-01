@@ -127,16 +127,17 @@ class GudangController extends Controller
     public function gudang_out()
     {
         $data = new \stdClass();
-        $get_max_id = DB::table('rekap_rusak')->orderBy('rekap_rusak_id','desc')->first();
+        $get_max_id = DB::table('rekap_tf_gudang')->orderBy('rekap_tf_gudang_id','desc')->first();
         $user = Auth::id();
         $w_id = Auth::user()->waroeng_id;
         $waroeng_nama = DB::table('m_w')->select('m_w_nama')->where('m_w_id',$w_id)->first();
-        $data->code = (empty($get_max_id->rekap_rusak_id)) ? $urut = "600001". $user : $urut = substr($get_max_id->rekap_rusak_code,0,-1)+'1'. $user; 
+        $data->code = (empty($get_max_id->rekap_tf_gudang_id)) ? $urut = "600001". $user : $urut = substr($get_max_id->rekap_tf_code,0,-1)+'1'. $user; 
         $data->tgl_now = Carbon::now()->format('Y-m-d');
         $data->gudang = DB::table('m_gudang')->select('m_gudang_id','m_gudang_nama')
         ->where('m_gudang_m_w_id',$w_id)->get();
         return view('inventori::form_keluar_g', compact('data','waroeng_nama'));
     }
+    
     function gudang_out_save(Request $request)
     {
         $tf_nota = array(
@@ -144,6 +145,8 @@ class GudangController extends Controller
             'rekap_tf_gudang_asal_id' => $request->rekap_tf_gudang_asal_id,
             'rekap_tf_gudang_tujuan_id' => $request->rekap_tf_gudang_tujuan_id,
             'rekap_tf_gudang_tgl_kirim' => Carbon::now(),
+            'rekap_tf_gudang_ongkir' => $ongkir = (empty($request->rekap_tf_gudang_ongkir)) ? 0 : $request->rekap_tf_gudang_ongkir ,
+            'rekap_tf_gudang_grand_tot' => $request->rekap_tf_gudang_grand_tot,
             'rekap_tf_gudang_created_by' => Auth::id(),
             'rekap_tf_gudang_created_at' => Carbon::now() 
         );
@@ -197,6 +200,6 @@ class GudangController extends Controller
             );
             DB::table('m_stok')->update($m_stok);
         }
-        return redirect()->back();
+        return redirect()->route('m_gudang_out.index')->with(['sukses' => 'Berhasil Transfer']);
     }
 }
