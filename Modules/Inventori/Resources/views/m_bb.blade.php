@@ -7,22 +7,21 @@
       <div class="block block-themed h-100 mb-0">
         <div class="block-header bg-pulse">
           <h3 class="block-title">
-            Master Produk
+            Master Bahan Baku
         </div>
         <div class="block-content text-muted">
-          <a class="btn btn-success buttonInsert"><i class="fa fa-plus"></i>Produk</a>
+          <a class="btn btn-success buttonInsert"><i class="fa fa-plus"></i>Bahan Baku</a>
           @csrf
           <table id="m_w_jenis" class="table table-sm table-bordered table-striped table-vcenter js-dataTable-full">
             <thead>
               <tr>
                 <th>No.</th>
-                <th>Kode Menu</th>
-                <th>Nama Menu</th>
-                <th>Urut Menu</th>
-                <th>Status Menu</th>
-                <th>Jenis Produk</th>
+                <th>Kode Bahan Baku</th>
+                <th>Nama BB</th>
                 <th>Satuan Utama</th>
-                <th>Dijual</th>
+                <th>Satuan Produksi</th>
+                <th>Klasifikasi</th>
+                <th>Status BB</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -32,19 +31,18 @@
               @endphp
               @foreach ($data->produk as $item)
               <tr class="row1">
-                <td>{{$no++;}}</td>
+                <td>{{$no++}}</td>
                 <td>{{strtoupper($item->m_produk_code)}}</td>
                 <td>{{$item->m_produk_nama}}</td>
-                <td>{{$item->m_produk_urut}}</td>
+                <td>{{$item->satuan_utama}}</td>
+                <td>{{$item->satuan_produksi}}</td>
+                <td>{{strtoupper($item->m_klasifikasi_produk_nama)}}</td>
                 <td>@if ($item->m_produk_status ==1)
                   <span class="badge rounded-pill bg-success">Aktif</span>
                   @else
                   <span class="badge rounded-pill bg-danger">Non Aktif</span>
                   @endif
                 </td>
-                <td>{{$item->m_jenis_produk_nama}}</td>
-                <td>{{$item->m_satuan_kode}}</td>
-                <td>{{ucwords($item->m_produk_jual)}}</td>
                 <td><a class="btn btn-sm btn-warning buttonEdit" value="{{$item->m_produk_id}}" title="Edit"><i class="fa fa-pencil"></i></a></td>
               </tr>
               @endforeach
@@ -75,20 +73,12 @@
                 <input type="hidden" id="m_produk_id" name="m_produk_id">
               </div>
               <div class="mb-4">
-                <label class="form-label" for="m_produk_nama">Produk Nama</label>
+                <label class="form-label" for="m_produk_nama">BB Nama</label>
                 <input type="text" class="form-control" id="m_produk_nama" name="m_produk_nama" placeholder="Masukan Nama">
               </div>
               <div class="mb-4">
-                <label class="form-label" for="m_produk_cr">Produk CR</label>
-                <input type="text" class="form-control" id="m_produk_cr" name="m_produk_cr" placeholder="Masukan Nama CR">
-              </div>
-              <div class="mb-4">
-                <label class="form-label" for="m_produk_urut">Produk Urut</label>
-                <input type="text" class="form-control" id="m_produk_urut" name="m_produk_urut" placeholder="Masukan Urutan Produk">
-              </div>
-              <div class="mb-4">
                 <div class="form-group">
-                  <label for="m_produk_utama_m_satuan_id">Produk Satuan Utama</label>
+                  <label for="m_produk_utama_m_satuan_id">BB Satuan Utama</label>
                   <div>
                     <select class="js-select2" id="m_produk_utama_m_satuan_id" name="m_produk_utama_m_satuan_id" style="width: 100%;" data-container="#form_produk" data-placeholder="Choose one..">
                       <option></option>
@@ -101,25 +91,12 @@
               </div>
               <div class="mb-4">
                 <div class="form-group">
-                  <label for="m_produk_m_jenis_produk_id">Produk Jenis</label>
+                  <label for="m_produk_produksi_m_satuan_id">BB Satuan Produksi</label>
                   <div>
-                    <select class="js-select2" id="m_produk_m_jenis_produk_id" name="m_produk_m_jenis_produk_id" style="width: 100%;" data-container="#form_produk" data-placeholder="Choose one..">
+                    <select class="js-select2" id="m_produk_produksi_m_satuan_id" name="m_produk_produksi_m_satuan_id" style="width: 100%;" data-container="#form_produk" data-placeholder="Choose one..">
                       <option></option>
-                      @foreach ($data->jenisproduk as $item)
-                      <option value="{{$item->m_jenis_produk_id}}">{{$item->m_jenis_produk_nama}}</option>
-                      @endforeach
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <div class="mb-4">
-                <div class="form-group">
-                  <label for="m_produk_m_plot_produksi_id">Plot Produksi</label>
-                  <div>
-                    <select class="js-select2" id="m_produk_m_plot_produksi_id" name="m_produk_m_plot_produksi_id" style="width: 100%;" data-container="#form_produk" data-placeholder="Choose one..">
-                      <option></option>
-                      @foreach ($data->plot_produksi as $item)
-                      <option value="{{$item->m_plot_produksi_id}}">{{$item->m_plot_produksi_nama}}</option>
+                      @foreach ($data->satuan as $item)
+                      <option value="{{$item->m_satuan_id}}">{{$item->m_satuan_kode}}</option>
                       @endforeach
                     </select>
                   </div>
@@ -129,7 +106,7 @@
                 <div class="form-group">
                   <label for="m_produk_m_klasifikasi_produk_id">Klasifikasi Produk</label>
                   <div>
-                    <select id="m_produk_m_klasifikasi_produk_id" name="m_produk_m_klasifikasi_produk_id" style="width: 100%;">
+                    <select class="js-select2" id="m_produk_m_klasifikasi_produk_id" name="m_produk_m_klasifikasi_produk_id" style="width: 100%;">
                       @foreach ($data->klasifikasi as $item)
                       <option value="{{$item->m_klasifikasi_produk_id}}">{{strtoupper($item->m_klasifikasi_produk_nama)}}</option>
                       @endforeach
@@ -144,8 +121,8 @@
                     <select class="js-select2" id="m_produk_hpp" name="m_produk_hpp" style="width: 100%;" data-container="#form_produk" data-placeholder="Choose one..">
                       <option></option>
                       <option value="scp">SCP</option>
-                      <option value="sales">Sales</option>
-                      <option value="overhead">Overhead</option>
+                      <option value="sales">SALES</option>
+                      <option value="overhead">OVERHEAD</option>
                     </select>
                   </div>
                 </div>
@@ -154,9 +131,9 @@
                 <div class="form-group">
                   <label for="m_produk_status">Produk SCP</label>
                   <div>
-                    <select id="m_produk_scp" name="m_produk_scp" style="width: 100%;">
-                      <option value="Ya">Ya</option>
-                      <option value="Tidak">Tidak</option>
+                    <select class="js-select2" id="m_produk_scp" name="m_produk_scp" style="width: 100%;">
+                      <option value="ya">Ya</option>
+                      <option value="tidak">Tidak</option>
                     </select>
                   </div>
                 </div>
@@ -165,31 +142,9 @@
                 <div class="form-group">
                   <label for="m_produk_status">Produk Status</label>
                   <div>
-                    <select id="m_produk_status" name="m_produk_status" style="width: 100%;">
+                    <select class="js-select2" id="m_produk_status" name="m_produk_status" style="width: 100%;">
                       <option value="1">Aktif</option>
                       <option value="0">Non Aktif</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <div class="mb-4">
-                <div class="form-group">
-                  <label for="m_produk_tax">Status Pajak</label>
-                  <div>
-                    <select id="m_produk_tax" name="m_produk_tax" style="width: 100%;">
-                      <option value="1">Ya</option>
-                      <option value="0">Tidak</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <div class="mb-4">
-                <div class="form-group">
-                  <label for="m_produk_sc">Status Service Charge</label>
-                  <div>
-                    <select id="m_produk_sc" name="m_produk_sc" style="width: 100%;">
-                      <option value="0">Non Aktif</option>
-                      <option value="1">Aktif</option>
                     </select>
                   </div>
                 </div>
@@ -198,9 +153,9 @@
                 <div class="form-group">
                   <label for="m_produk_jual">Dijual Di CR</label>
                   <div>
-                    <select id="m_produk_jual" name="m_produk_jual" style="width: 100%;">
-                      <option value="ya">Ya</option>
+                    <select class="js-select2" id="m_produk_jual" name="m_produk_jual" style="width: 100%;">
                       <option value="tidak">Tidak</option>
+                      <option value="ya">Ya</option>
                     </select>
                   </div>
                 </div>
@@ -239,12 +194,12 @@
       var id = $(this).attr('value');
       $('[name="action"]').val('add');
       $('#form_produk form')[0].reset();
-      $("#myModalLabel").html('Tambah Produk');
+      $("#myModalLabel").html('Tambah Bahan Baku');
       $("#form_produk").modal('show');
     });
     $(".buttonEdit").on('click', function() {
       var id = $(this).attr('value');
-      $("#myModalLabel").html('Ubah Produk');
+      $("#myModalLabel").html('Ubah Bahan Baku');
       $('[name="action"]').val('edit');
       $.ajax({
         url: "/master/produk/list/" + id,
@@ -275,7 +230,7 @@
     $('#formAction').submit( function(e){
                 if(!e.isDefaultPrevented()){
                     $.ajax({
-                        url : "{{ route('simpan.m_produk') }}",
+                        url : "{{ route('simpan.m_bb') }}",
                         type : "POST",
                         data : $('#form_produk form').serialize(),
                         success : function(data){

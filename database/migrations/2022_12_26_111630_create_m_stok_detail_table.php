@@ -18,14 +18,15 @@ return new class extends Migration
             $table->date('m_stok_detail_tgl');
             $table->bigInteger('m_stok_detail_m_produk_id');
             $table->string('m_stok_detail_m_produk_nama');
-            $table->string('m_stok_detail_satuan');
+            $table->bigInteger('m_stok_detail_satuan_id');
+            $table->string('m_stok_detail_gudang_id');
+            $table->string('m_stok_detail_satuan')->nullable();
             $table->decimal('m_stok_detail_masuk',15,2)->nullable();
             $table->decimal('m_stok_detail_keluar',15,2)->nullable();
             $table->decimal('m_stok_detail_saldo',15,2);
             $table->decimal('m_stok_detail_so',15,2)->nullable();
             $table->decimal('m_stok_detail_hpp',18,2);
             $table->string('m_stok_detail_catatan');
-            $table->string('m_stok_detail_gudang_id');
             $table->bigInteger('m_stok_detail_created_by');
             $table->bigInteger('m_stok_detail_updated_by')->nullable();
             $table->bigInteger('m_stok_detail_deleted_by')->nullable();

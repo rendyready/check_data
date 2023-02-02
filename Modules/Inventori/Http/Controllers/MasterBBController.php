@@ -1,16 +1,15 @@
 <?php
 
-namespace Modules\Master\Http\Controllers;
+namespace Modules\Inventori\Http\Controllers;
 
-use Carbon\Carbon;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use illuminate\Support\Str;
-
-class ProdukController extends Controller
+use Carbon\Carbon;
+class MasterBBController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -20,16 +19,20 @@ class ProdukController extends Controller
     {
         $data = new \stdClass();
         $data->produk = DB::table('m_produk')
+            ->select(
+                'm_produk_code','m_produk_nama','m_produk_status','m_produk_id','m_klasifikasi_produk_nama',
+                'ms1.m_satuan_kode as satuan_utama','ms2.m_satuan_kode as satuan_produksi')
             ->leftjoin('m_jenis_produk', 'm_produk_m_jenis_produk_id', 'm_jenis_produk_id')
-            ->leftjoin('m_satuan', 'm_produk_utama_m_satuan_id', 'm_satuan_id')
-            ->leftjoin('m_klasifikasi_produk', 'm_produk_m_klasifikasi_produk_id', 'm_klasifikasi_produk_id')
-            ->whereIn('m_produk_m_klasifikasi_produk_id',[4])
+            ->leftjoin('m_satuan as ms1', 'm_produk_utama_m_satuan_id', 'ms1.m_satuan_id')
+            ->leftjoin('m_satuan as ms2', 'm_produk_produksi_m_satuan_id', 'ms2.m_satuan_id')
+            ->join('m_klasifikasi_produk', 'm_produk_m_klasifikasi_produk_id', 'm_klasifikasi_produk_id')
+            ->whereNotIn('m_produk_m_klasifikasi_produk_id',[4])
             ->get();
         $data->satuan = DB::table('m_satuan')->get();
-        $data->klasifikasi = DB::table('m_klasifikasi_produk')->where('m_klasifikasi_produk_id',4)->get();
+        $data->klasifikasi = DB::table('m_klasifikasi_produk')->whereNotIn('m_klasifikasi_produk_id',[4])->get();
         $data->jenisproduk = DB::table('m_jenis_produk')->get();
         $data->plot_produksi = DB::table('m_plot_produksi')->get();
-        return view('master::m_produk', compact('data'));
+        return view('inventori::m_bb', compact('data'));
     }
 
     /**
@@ -54,18 +57,26 @@ class ProdukController extends Controller
                     return response()->json(['messages' => 'Data Simpan Double !', 'type' => 'danger']);
                 } else {
                     $produk_code = DB::table('m_produk_code')->where('m_produk_code_id',1)->first();
-                    $code = $produk_code->m_produk_code_mn+1 ;
+                    $kat = $request->m_produk_m_klasifikasi_produk_id;
+                    if ($kat == 1) {
+                        $code = 'tl-'.$produk_code->m_produk_code_tl+1 ;
+                        $row = 'm_produk_code_tl';
+                        $urut = $produk_code->m_produk_code_tl+1 ;   
+                    } elseif($kat == 2) {
+                        $code = 'bo-'.$produk_code->m_produk_code_bo+1 ;
+                        $row = 'm_produk_code_bo';
+                        $urut = $produk_code->m_produk_code_bo+1 ;
+                    } else {
+                        $code = 'bb-'.$produk_code->m_produk_code_bb+1 ;
+                        $row = 'm_produk_code_bb';
+                        $urut = $produk_code->m_produk_code_bb+1 ;
+                    }
                     DB::table('m_produk')->insert([
-                        "m_produk_code" => "mn-".$code,
+                        "m_produk_code" => $code,
                         "m_produk_nama" => $request->m_produk_nama,
-                        "m_produk_urut" => $request->m_produk_urut,
-                        "m_produk_cr" => $request->m_produk_cr,
                         "m_produk_status" => $request->m_produk_status,
-                        "m_produk_tax" => $request->m_produk_tax,
-                        "m_produk_sc" => $request->m_produk_sc,
-                        "m_produk_m_jenis_produk_id" => $request->m_produk_m_jenis_produk_id,
                         "m_produk_utama_m_satuan_id" => $request->m_produk_utama_m_satuan_id,
-                        "m_produk_m_plot_produksi_id" => $request->m_produk_m_plot_produksi_id,
+                        "m_produk_produksi_m_satuan_id" => $request->m_produk_produksi_m_satuan_id,
                         "m_produk_m_klasifikasi_produk_id" => $request->m_produk_m_klasifikasi_produk_id,
                         "m_produk_jual" => $request->m_produk_jual,
                         "m_produk_scp" => $request->m_produk_scp,
@@ -73,8 +84,8 @@ class ProdukController extends Controller
                         "m_produk_created_by" => Auth::id(),
                         "m_produk_created_at" => Carbon::now(),
                     ]);
-                    DB::table('m_produk_code')->where('m_produk_code_id',1)->update(['m_produk_code_mn'=>$code]);
-                    return response(['messages' => 'Berhasil Tambah Produk !', 'type' => 'success']);
+                    DB::table('m_produk_code')->where('m_produk_code_id',1)->update([$row=>$urut]);
+                    return response(['messages' => 'Berhasil Tambah BB !', 'type' => 'success']);
                 }
             } else {
                 if ($request->m_produk_id==null ) {
@@ -83,14 +94,9 @@ class ProdukController extends Controller
                     DB::table('m_produk')->where('m_produk_id', $request->m_produk_id)
                         ->update([
                             "m_produk_nama" => $request->m_produk_nama,
-                            "m_produk_urut" => $request->m_produk_urut,
-                            "m_produk_cr" => $request->m_produk_cr,
                             "m_produk_status" => $request->m_produk_status,
-                            "m_produk_tax" => $request->m_produk_tax,
-                            "m_produk_sc" => $request->m_produk_sc,
-                            "m_produk_m_jenis_produk_id" => $request->m_produk_m_jenis_produk_id,
                             "m_produk_utama_m_satuan_id" => $request->m_produk_utama_m_satuan_id,
-                            "m_produk_m_plot_produksi_id" => $request->m_produk_m_plot_produksi_id,
+                            "m_produk_produksi_m_satuan_id" => $request->m_produk_produksi_m_satuan_id,
                             "m_produk_m_klasifikasi_produk_id" => $request->m_produk_m_klasifikasi_produk_id,
                             "m_produk_jual" => $request->m_produk_jual,
                             "m_produk_scp" => $request->m_produk_scp,
@@ -98,7 +104,7 @@ class ProdukController extends Controller
                             "m_produk_updated_by" => Auth::id(),
                             "m_produk_updated_at" => Carbon::now(),
                         ]);
-                        return response(['messages' => 'Berhasil Edit Produk !', 'type' => 'success']);
+                        return response(['messages' => 'Berhasil Edit BB !', 'type' => 'success']);
                 }
             }
         }

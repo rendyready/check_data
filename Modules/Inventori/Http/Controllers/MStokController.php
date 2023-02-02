@@ -33,7 +33,7 @@ class MStokController extends Controller
     function list($id) {
         $stok = DB::table('m_stok')
             ->rightjoin('m_produk', 'm_produk_id', 'm_stok_m_produk_id')
-            ->rightjoin('m_satuan', 'm_produk_m_satuan_id', 'm_satuan_id')
+            ->rightjoin('m_satuan', 'm_produk_utama_m_satuan_id', 'm_satuan_id')
             ->where('m_stok_gudang_id', $id)
             ->select('m_stok_awal', 'm_produk_nama', 'm_satuan_kode','m_stok_hpp')
             ->get();
@@ -104,5 +104,13 @@ class MStokController extends Controller
             $list[$v->m_produk_id]=$v->m_produk_nama;
         }
         return response()->json($list);
+    }
+    public function get_harga($id_g,$id_p)
+    {
+        $data = DB::table('m_stok')
+                ->where('m_stok_gudang_id',$id_g)
+                ->where('m_stok_m_produk_id',$id_p)
+        ->first()->m_stok_hpp;
+        return response()->json($data);
     }
 }

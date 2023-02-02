@@ -6,10 +6,10 @@
                 <div class="block block-themed h-100 mb-0">
                     <div class="block-header bg-pulse">
                         <h3 class="block-title">
-                            Form Input Barang Rusak
+                            FORM TRANSFER DAN KELUAR GUDANG
                     </div>
                     <div class="block-content text-muted">
-                        <form action="{{ route('rusak.simpan') }}" method="post">
+                        <form action="{{ route('m_gudang_out.simpan') }}" method="post">
                             @csrf
                             <div class="row">
                                 <div class="col-md-3">
@@ -22,19 +22,14 @@
                                                 value="{{ Auth::user()->name }}" readonly>
                                         </div>
                                     </div>
-                                    {{-- <div class="row mb-1">
-                            <label class="col-sm-4 col-form-label" for="example-hf-text">Pukul</label>
-                            <div class="col-sm-8">
-                                <h3 id="time">13:00</h3>
-                            </div>
-                        </div> --}}
                                 </div>
                                 <div class="col-md-4">
                                     <div class="row mb-1">
-                                        <label class="col-sm-4 col-form-label" for="rekap_rusak_code">No Bukti</label>
+                                        <label class="col-sm-4 col-form-label" for="rekap_tf_g_detail_code">No Bukti</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control form-control-sm" id="rekap_rusak_code"
-                                                name="rekap_rusak_code" value="{{ $data->code }}" readonly>
+                                            <input type="text" class="form-control form-control-sm"
+                                                id="rekap_tf_g_detail_code" name="rekap_tf_code" value="{{ $data->code }}"
+                                                readonly>
                                         </div>
                                     </div>
                                     <div class="row mb-1">
@@ -47,7 +42,7 @@
                                 </div>
                                 <div class="col-md-5">
                                     <div class="row mb-1">
-                                        <label class="col-sm-5 col-form-label-sm" for="rekap_rusak">User Waroeng</label>
+                                        <label class="col-sm-5 col-form-label-sm" for="rekap_rusak">Operator</label>
                                         <div class="col-sm-7">
                                             <input type="text" class="form-control form-control-sm"
                                                 id="rekap_rusak_m_w_nama" name="rekap_rusak_m_w_nama"
@@ -55,25 +50,47 @@
                                         </div>
                                     </div>
                                     <div class="row mb-1">
-                                        <label class="col-sm-5 col-form-label" for="rekap_rusak">Gudang</label>
-                                        <div class="col-sm-7">
-                                            <select class="js-select2" name="m_gudang_id"
-                                                id="m_gudang_id"
+                                        <label class="col-sm-4 col-form-label" for="rekap_tf_gudang_asal_id">Gudang
+                                            Asal</label>
+                                        <div class="col-sm-8">
+                                            <select class="js-select2" name="rekap_tf_gudang_asal_id"
+                                                id="rekap_tf_gudang_asal_id"
                                                 style="width: 100%;"data-placeholder="Pilih Gudang" required>
                                                 <option></option>
                                                 @foreach ($data->gudang as $item)
-                                                    <option value="{{$item->m_gudang_id}}">{{ucwords($item->m_gudang_nama)}}</option>
+                                                    <option value="{{ $item->m_gudang_id }}">
+                                                        {{ ucwords($item->m_gudang_nama) }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-1">
+                                        <label class="col-sm-4 col-form-label" for="rekap_tf_gudang_tujuan_id">Gudang
+                                            Tujuan</label>
+                                        <div class="col-sm-8">
+                                            <select class="js-select2" name="rekap_tf_gudang_tujuan_id"
+                                                id="rekap_tf_gudang_tujuan_id"
+                                                style="width: 100%;"data-placeholder="Pilih Gudang" required>
+                                                <option></option>
+                                                @foreach ($data->gudang as $item)
+                                                    <option value="{{ $item->m_gudang_id }}">
+                                                        {{ ucwords($item->m_gudang_nama) }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            @if ($message = Session::get('sukses'))
+                                <div class="alert alert-success alert-block">
+                                    <button type="button" class="close" data-dismiss="alert">×</button>
+                                    <strong>{{ $message }}</strong>
+                                </div>
+                            @endif
                             <div class="table-responsive">
                                 <table id="form" class="table table-sm table-bordered table-striped table-vcenter">
                                     <thead>
                                         <th>Nama Barang</th>
-                                        <th>Keterangan</th>
                                         <th>Qty</th>
                                         <th>Harga@</th>
                                         <th>Sub Harga</th>
@@ -83,30 +100,26 @@
                                     <tbody>
                                         <tr>
                                             <td><select class="js-select2 nama_barang"
-                                                    name="rekap_rusak_detail_m_produk_id[]"
-                                                    id="rekap_rusak_detail_m_produk_id1"
+                                                    name="rekap_tf_g_detail_m_produk_id[]"
+                                                    id="rekap_tf_g_detail_m_produk_id1"
                                                     style="width: 100%;"data-placeholder="Pilih Nama Barang" required>
                                                     <option></option>
                                                 </select></td>
-                                            <td>
-                                                <textarea class="form-control form-control-sm" name="rekap_rusak_detail_catatan[]" id="rekap_rusak_detail_catatan"
-                                                    cols="50" required placeholder="keterangan rusak"></textarea>
-                                            </td>
                                             <td><input type="number" step="0.01"
                                                     class="form-control number form-control-sm qty"
-                                                    name="rekap_rusak_detail_qty[]" id="rekap_rusak_detail_qty1" required>
+                                                    name="rekap_tf_g_detail_qty_kirim[]" maxlength="9" max="100"
+                                                    id="rekap_tf_g_detail_qty_kirim1" required>
                                             </td>
                                             <td><input type="number" class="form-control number form-control-sm harga"
-                                                    name="rekap_rusak_detail_hpp[]" id="rekap_rusak_detail_hpp1"
-                                                    readonly></td>
+                                                    name="rekap_tf_g_detail_hpp[]" id="rekap_tf_g_detail_hpp1" readonly>
+                                            </td>
                                             <td><input type="number" class="form-control number form-control-sm subtotal"
-                                                    name="rekap_rusak_detail_sub_total[]" id="rekap_rusak_detail_sub_total"
+                                                    name="rekap_tf_g_detail_sub_total[]" id="rekap_tf_g_detail_sub_total"
                                                     readonly></td>
                                         </tr>
                                     </tbody>
                                     <tfoot>
                                         <th>Nama Barang</th>
-                                        <th>Keterangan</th>
                                         <th>Qty</th>
                                         <th>Harga@</th>
                                         <th>Sub Harga</th>
@@ -114,6 +127,39 @@
                                                     class="fa fa-plus"></i></button></th>
                                     </tfoot>
                                 </table>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h3>Total <span id="total_sum_value"></span></h3>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="row mb-1">
+                                            <label class="col-sm-4 col-form-label" for="grdtot">Jumlah
+                                                Total</label>
+                                            <div class="col-sm-6">
+                                                <input type="text" class="form-control form-control-sm grdtot"
+                                                    id="grdtot" name="grdtot" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-1">
+                                            <label class="col-sm-4 col-form-label" for="rekap_tf_gudang_ongkir">Ongkos
+                                                Kirim</label>
+                                            <div class="col-sm-6">
+                                                <input type="text" class="form-control form-control-sm ongkir"
+                                                    id="rekap_tf_gudang_ongkir" name="rekap_tf_gudang_ongkir">
+                                            </div>
+                                        </div>
+                                        <div class="row mb-1">
+                                            <label class="col-sm-4 col-form-label" for="rekap_tf_gudang_grand_tot">Jumlah
+                                                Akhir</label>
+                                            <div class="col-sm-6">
+                                                <input type="text"
+                                                    class="form-control form-control-sm rekap_tf_gudang_grand_tot"
+                                                    id="rekap_tf_gudang_grand_tot" name="rekap_tf_gudang_grand_tot"
+                                                    readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="block-content block-content-full text-end bg-transparent">
                                     <button type="submit" class="btn btn-sm btn-success">Simpan</button>
                                 </div>
@@ -134,16 +180,15 @@
       'X-CSRF-Token' : $("input[name=_token]").val()
         }
       });
-    Codebase.helpersOnLoad(['jq-select2']);
+    Codebase.helpersOnLoad(['jq-select2',]);
 	  var no =2;
 	  $('.tambah').on('click',function(){
 	    no++;
 		$('#form').append('<tr id="row'+no+'">'+
-                        '<td><select class="js-select2 nama_barang" name="rekap_rusak_detail_m_produk_id[]" id="rekap_rusak_detail_m_produk_id'+no+'" style="width: 100%;" data-placeholder="Pilih Nama Barang" required><option></option></select></td>'+
-                        '<td><textarea class="form-control form-control-sm" name="rekap_rusak_detail_catatan[]" id="rekap_rusak_detail_catatan" cols="50" required placeholder="keterangan rusak"></textarea></td>'+
-                        '<td><input type="number" min="0.01" step="0.01" class="form-control form-control-sm qty" name="rekap_rusak_detail_qty[]" id="rekap_rusak_detail_qty" required></td>'+
-                        '<td><input type="number" class="form-control number form-control-sm harga" name="rekap_rusak_detail_hpp[]" id="rekap_rusak_detail_hpp'+no+'" readonly></td>'+
-                        '<td><input type="number" class="form-control number form-control-sm subtotal" name="rekap_rusak_detail_sub_total[]" id="rekap_rusak_detail_sub_total" readonly></td>'+
+                        '<td><select class="js-select2 nama_barang" name="rekap_tf_g_detail_m_produk_id[]" id="rekap_tf_g_detail_m_produk_id'+no+'" style="width: 100%;" data-placeholder="Pilih Nama Barang" required><option></option></select></td>'+
+                        '<td><input type="number" min="0.01" step="0.01" class="form-control form-control-sm qty" name="rekap_tf_g_detail_qty_kirim[]" id="rekap_tf_g_detail_qty_kirim" required></td>'+
+                        '<td><input type="number" class="form-control number form-control-sm harga" name="rekap_tf_g_detail_hpp[]" id="rekap_tf_g_detail_hpp'+no+'" readonly></td>'+
+                        '<td><input type="number" class="form-control number form-control-sm subtotal" name="rekap_tf_g_detail_sub_total[]" id="rekap_tf_g_detail_sub_total" readonly></td>'+
                         '<td><button type="button" id="'+no+'" class="btn btn-danger btn_remove"><i class="fa fa-trash"></i></button></td></tr>');
         Codebase.helpersOnLoad(['jq-select2']);
         });
@@ -157,10 +202,11 @@
     $(document).on('select2:open', '.nama_barang', function(){
           console.log("Saving value " + $(this).val());
           var index = $(this).attr('id'); 
-          var g_id = $('#m_gudang_id').val();
+          var g_id = $('#rekap_tf_gudang_asal_id').val();
           if ((g_id == '')) {
             alert('pilih gudang dahulu');
           }
+          if ($(this).val()=='') {
           $.get("/inventori/stok/"+g_id, function(data){
             $.each(data, function(key, value) {
               $('#'+index)
@@ -168,21 +214,22 @@
               .text(value));
               }); 
           });
+        }
           $(this).data('val', $(this).val());
           $(this).data('id',index);
       }).on('change','.nama_barang', function(e){
           var prev = $(this).data('val');
           var current = $(this).val();
-          var g_id = $('#m_gudang_id').val();
+          var g_id = $('#rekap_tf_gudang_asal_id').val();
           var id = $(this).data('id');
-          var harga_id = id.slice(30);
-          console.log(id);
-          console.log(harga_id);  
-          $.get("/inventori/stok_harga/"+g_id+"/"+current, function(data){
+          var harga_id = id.slice(29);
+          console.log(harga_id);
+          console.log('ini current'+current);
+            $.get("/inventori/stok_harga/"+g_id+"/"+current, function(data){
             console.log('harga',data);
-            $('#rekap_rusak_detail_hpp'+harga_id).val(data);
+            $('#rekap_tf_g_detail_hpp'+harga_id).val(data);
           });
-                var values = $('[name="rekap_rusak_detail_m_produk_id[]"]').map(function() {
+            var values = $('[name="rekap_tf_g_detail_m_produk_id[]"]').map(function() {
         return this.value.trim();
       }).get();
       var unique =  [...new Set(values)];
@@ -198,13 +245,13 @@
         evt.preventDefault();
     }
     });
-    $("#form, .qty, .harga").on('input', function () {
+    $("#form, .qty, .harga, .ongkir").on('input', function () {
       var $tblrows = $("#form tbody tr");
       $tblrows.each(function (index) {
           var $tblrow = $(this);
           $tblrow.find(".qty, .harga").on('input', function () {
-              var qty = $tblrow.find("[name='rekap_rusak_detail_qty[]']").val();
-              var price = $tblrow.find("[name='rekap_rusak_detail_hpp[]']").val();
+              var qty = $tblrow.find("[name='rekap_tf_g_detail_qty_kirim[]']").val();
+              var price = $tblrow.find("[name='rekap_tf_g_detail_hpp[]']").val();
               var subTotal = parseFloat(qty) * parseFloat(price);
               if (!isNaN(subTotal)) { 
                   $tblrow.find('.subtotal').val(subTotal.toFixed(2));
@@ -213,10 +260,34 @@
                       var stval = parseFloat($(this).val());
                       grandTotal += isNaN(stval) ? 0 : stval;
                   });
+                  $('.grdtot').val(grandTotal.toFixed(2)); 
               }
           });
       });
-    });  
+      var grdtot = 0;
+          $(".subtotal").each(function () {
+                          var stval = parseFloat($(this).val());
+                          grdtot += isNaN(stval) ? 0 : stval;
+          });
+          var ongkir = $("[name='rekap_tf_gudang_ongkir']").val();
+         if (ongkir==="") {
+            var ongkir = 0;
+         }
+          var rekap_beli_tot_nom = parseFloat(grdtot)+ parseFloat(ongkir);
+          $('#rekap_tf_gudang_grand_tot').val(rekap_beli_tot_nom.toFixed(2));
+          $('#total_sum_value').html(': Rp '+rekap_beli_tot_nom.toFixed(2));
+    });
+    $('#rekap_tf_gudang_tujuan_id').on('change',function () {
+        var asal = $('#rekap_tf_gudang_asal_id').val();
+        var tujuan = $(this).val();
+        if (asal == tujuan) {
+            alert('Tujuan dan Asal Gudang Tidak Boleh Sama !!!');
+            $('#rekap_tf_gudang_tujuan_id').val('').trigger('change');
+        } 
+    });
+    $('.close').on('click',function () {
+        $('.alert').remove();
+    })  
 
        
 });

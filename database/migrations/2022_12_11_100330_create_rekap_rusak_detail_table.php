@@ -17,11 +17,13 @@ return new class extends Migration
             $table->id('rekap_rusak_id');
             $table->string('rekap_rusak_detail_rekap_rusak_code');
             $table->bigInteger('rekap_rusak_detail_m_produk_id');
+            $table->bigInteger('rekap_rusak_detail_gudang_id');
             $table->string('rekap_rusak_detail_m_produk_code');
             $table->string('rekap_rusak_detail_m_produk_nama');
-            $table->decimal('rekap_rusak_detail_qty',5,2);
+            $table->decimal('rekap_rusak_detail_qty',6,2);
+            $table->decimal('rekap_rusak_detail_hpp',10,2);
+            $table->decimal('rekap_rusak_detail_sub_total',12,2);
             $table->string('rekap_rusak_detail_satuan')->nullable();
-            $table->string('rekap_rusak_detail_isi')->nullable();
             $table->string('rekap_rusak_detail_catatan');
             $table->bigInteger('rekap_rusak_detail_created_by');
             $table->bigInteger('rekap_rusak_detail_updated_by')->nullable();

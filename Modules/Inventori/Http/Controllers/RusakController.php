@@ -49,16 +49,45 @@ class RusakController extends Controller
             $data = array(
                 'rekap_rusak_detail_rekap_rusak_code'=> $request->rekap_rusak_code,
                 'rekap_rusak_detail_m_produk_id' => $request->rekap_rusak_detail_m_produk_id[$key],
+                'rekap_rusak_detail_gudang_id' => $request->m_gudang_id,
                 'rekap_rusak_detail_m_produk_code' => $produk->m_produk_code,
                 'rekap_rusak_detail_m_produk_nama' => $produk->m_produk_nama,
                 'rekap_rusak_detail_qty' => $request->rekap_rusak_detail_qty[$key],
-                'rekap_rusak_detail_isi' => $request->rekap_rusak_detail_isi[$key],
-                'rekap_rusak_detail_satuan' => $request->rekap_rusak_detail_satuan[$key],
+                'rekap_rusak_detail_hpp' => $request->rekap_rusak_detail_hpp[$key],
+                'rekap_rusak_detail_sub_total' => $request->rekap_rusak_detail_sub_total[$key],
                 'rekap_rusak_detail_catatan' => $request->rekap_rusak_detail_catatan[$key],
                 'rekap_rusak_detail_created_by' => Auth::id(),
                 'rekap_rusak_detail_created_at' => Carbon::now()
             );
             DB::table('rekap_rusak_detail')->insert($data);
+
+            $data_stok = DB::table('m_stok')
+            ->where('m_stok_gudang_id',$request->m_gudang_id)
+            ->where('m_stok_m_produk_id',$request->rekap_rusak_detail_m_produk_id[$key])
+            ->first();
+            $data2 = array( 
+                            'm_stok_keluar' => $data_stok->m_stok_keluar+$request->rekap_rusak_detail_qty[$key],
+                            'm_stok_saldo' => $data_stok->m_stok_saldo-$request->rekap_rusak_detail_qty[$key],
+                            'm_stok_rusak' => $data_stok->m_stok_rusak+$request->rekap_rusak_detail_qty[$key]
+                        );
+            DB::table('m_stok')->where('m_stok_gudang_id',$request->rekap_beli_gudang_id)
+            ->where('m_stok_m_produk_id',$request->rekap_rusak_detail_m_produk_id[$key])
+            ->update($data2);
+
+            $input_detail = array(
+                'm_stok_detail_m_produk_id' => $request->rekap_rusak_detail_m_produk_id[$key],
+                'm_stok_detail_tgl'=> Carbon::now(),
+                'm_stok_detail_m_produk_nama' => $produk->m_produk_nama,
+                // 'm_stok_detail_satuan' => $request->rekap_beli_detail_satuan_terima[$key],
+                'm_stok_detail_keluar' => $request->rekap_rusak_detail_qty[$key],
+                'm_stok_detail_saldo' => $data_stok->m_stok_saldo - $request->rekap_rusak_detail_qty[$key],
+                'm_stok_detail_hpp' => $data_stok->m_stok_hpp,
+                'm_stok_detail_catatan' => 'Rusak'.$request->rekap_rusak_code,
+                'm_stok_detail_gudang_id' => $request->m_gudang_id,
+                'm_stok_detail_created_by' => Auth::id(),
+                'm_stok_detail_created_at' => Carbon::now()
+            );
+            DB::table('m_stok_detail')->insert($input_detail);
         }
         return redirect()->back()->with('success', 'your message,here'); 
     }

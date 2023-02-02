@@ -21,19 +21,17 @@
                 <th>Urut Menu</th>
                 <th>Status Menu</th>
                 <th>Jenis Produk</th>
+                <th>Klasifikasi</th>
                 <th>Satuan Utama</th>
                 <th>Dijual</th>
                 <th>Action</th>
               </tr>
             </thead>
             <tbody id="tablecontents">
-              @php
-                  $no=1;
-              @endphp
               @foreach ($data->produk as $item)
               <tr class="row1">
-                <td>{{$no++;}}</td>
-                <td>{{strtoupper($item->m_produk_code)}}</td>
+                <td>{{$item->m_produk_id}}</td>
+                <td>{{$item->m_produk_code}}</td>
                 <td>{{$item->m_produk_nama}}</td>
                 <td>{{$item->m_produk_urut}}</td>
                 <td>@if ($item->m_produk_status ==1)
@@ -43,8 +41,9 @@
                   @endif
                 </td>
                 <td>{{$item->m_jenis_produk_nama}}</td>
+                <td>{{$item->m_klasifikasi_produk_nama}}</td>
                 <td>{{$item->m_satuan_kode}}</td>
-                <td>{{ucwords($item->m_produk_jual)}}</td>
+                <td>{{$item->m_produk_jual}}</td>
                 <td><a class="btn btn-sm btn-warning buttonEdit" value="{{$item->m_produk_id}}" title="Edit"><i class="fa fa-pencil"></i></a></td>
               </tr>
               @endforeach
@@ -73,6 +72,8 @@
               <div class="mb-4">
                 <input type="hidden" id="action" name="action">
                 <input type="hidden" id="m_produk_id" name="m_produk_id">
+                <label class="form-label" for="m_produk_code">Produk Code</label>
+                <input type="text" class="form-control" id="m_produk_code" name="m_produk_code" placeholder="Masukan code">
               </div>
               <div class="mb-4">
                 <label class="form-label" for="m_produk_nama">Produk Nama</label>
@@ -91,6 +92,19 @@
                   <label for="m_produk_utama_m_satuan_id">Produk Satuan Utama</label>
                   <div>
                     <select class="js-select2" id="m_produk_utama_m_satuan_id" name="m_produk_utama_m_satuan_id" style="width: 100%;" data-container="#form_produk" data-placeholder="Choose one..">
+                      <option></option>
+                      @foreach ($data->satuan as $item)
+                      <option value="{{$item->m_satuan_id}}">{{$item->m_satuan_kode}}</option>
+                      @endforeach
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="mb-4">
+                <div class="form-group">
+                  <label for="m_produk_produksi_m_satuan_id">Produk Satuan Produksi</label>
+                  <div>
+                    <select class="js-select2" id="m_produk_produksi_m_satuan_id" name="m_produk_produksi_m_satuan_id" style="width: 100%;" data-container="#form_produk" data-placeholder="Choose one..">
                       <option></option>
                       @foreach ($data->satuan as $item)
                       <option value="{{$item->m_satuan_id}}">{{$item->m_satuan_kode}}</option>
@@ -129,9 +143,10 @@
                 <div class="form-group">
                   <label for="m_produk_m_klasifikasi_produk_id">Klasifikasi Produk</label>
                   <div>
-                    <select id="m_produk_m_klasifikasi_produk_id" name="m_produk_m_klasifikasi_produk_id" style="width: 100%;">
+                    <select class="js-select2" id="m_produk_m_klasifikasi_produk_id" name="m_produk_m_klasifikasi_produk_id" style="width: 100%;" data-container="#form_produk" data-placeholder="Choose one..">
+                      <option></option>
                       @foreach ($data->klasifikasi as $item)
-                      <option value="{{$item->m_klasifikasi_produk_id}}">{{strtoupper($item->m_klasifikasi_produk_nama)}}</option>
+                      <option value="{{$item->m_klasifikasi_produk_id}}">{{$item->m_klasifikasi_produk_nama}}</option>
                       @endforeach
                     </select>
                   </div>
@@ -153,55 +168,75 @@
               <div class="mb-4">
                 <div class="form-group">
                   <label for="m_produk_status">Produk SCP</label>
-                  <div>
-                    <select id="m_produk_scp" name="m_produk_scp" style="width: 100%;">
-                      <option value="Ya">Ya</option>
-                      <option value="Tidak">Tidak</option>
-                    </select>
+                  <div class="space-x-2">
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" id="m_produk_scp1" name="m_produk_scp" value="Ya" checked>
+                      <label class="form-check-label" for="m_produk_scp1">Ya</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" id="m_produk_scp0" name="m_produk_scp" value="Tidak" checked>
+                      <label class="form-check-label" for="m_produk_scp0">Tidak</label>
+                    </div>
                   </div>
                 </div>
               </div>
               <div class="mb-4">
                 <div class="form-group">
                   <label for="m_produk_status">Produk Status</label>
-                  <div>
-                    <select id="m_produk_status" name="m_produk_status" style="width: 100%;">
-                      <option value="1">Aktif</option>
-                      <option value="0">Non Aktif</option>
-                    </select>
+                  <div class="space-x-2">
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" id="m_produk_status1" name="m_produk_status" value="1" checked>
+                      <label class="form-check-label" for="m_produk_status">Aktif</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" id="m_produk_status0" name="m_produk_status" value="0" checked>
+                      <label class="form-check-label" for="m_produk_status">Non Aktif</label>
+                    </div>
                   </div>
                 </div>
               </div>
               <div class="mb-4">
                 <div class="form-group">
-                  <label for="m_produk_tax">Status Pajak</label>
-                  <div>
-                    <select id="m_produk_tax" name="m_produk_tax" style="width: 100%;">
-                      <option value="1">Ya</option>
-                      <option value="0">Tidak</option>
-                    </select>
+                  <label for="m_produk_status">Status Pajak</label>
+                  <div class="space-x-2">
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" id="m_produk_tax1" name="m_produk_tax" value="1" checked>
+                      <label class="form-check-label" for="m_produk_tax">Aktif</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" id="m_produk_tax0" name="m_produk_tax" value="0" checked>
+                      <label class="form-check-label" for="m_produk_tax">Non Aktif</label>
+                    </div>
                   </div>
                 </div>
               </div>
               <div class="mb-4">
                 <div class="form-group">
-                  <label for="m_produk_sc">Status Service Charge</label>
-                  <div>
-                    <select id="m_produk_sc" name="m_produk_sc" style="width: 100%;">
-                      <option value="0">Non Aktif</option>
-                      <option value="1">Aktif</option>
-                    </select>
+                  <label for="m_produk_status">Status Service Charge</label>
+                  <div class="space-x-2">
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" id="m_produk_sc1" name="m_produk_sc" value="1" checked>
+                      <label class="form-check-label" for="m_produk_sc">Aktif</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" id="m_produk_sc0" name="m_produk_sc" value="0" checked>
+                      <label class="form-check-label" for="m_produk_sc">Non Aktif</label>
+                    </div>
                   </div>
                 </div>
               </div>
               <div class="mb-4">
                 <div class="form-group">
-                  <label for="m_produk_jual">Dijual Di CR</label>
-                  <div>
-                    <select id="m_produk_jual" name="m_produk_jual" style="width: 100%;">
-                      <option value="ya">Ya</option>
-                      <option value="tidak">Tidak</option>
-                    </select>
+                  <label for="m_produk_status">Dijual Di CR</label>
+                  <div class="space-x-2">
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" id="m_produk_jual1" name="m_produk_jual" value="Ya" checked>
+                      <label class="form-check-label" for="m_produk_jual">Ya</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" id="m_produk_jual0" name="m_produk_jual" value="Tidak" checked>
+                      <label class="form-check-label" for="m_produk_jual">Tidak</label>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -231,7 +266,6 @@
       processing: false,
       serverSide: false,
       destroy: true,
-      pageLength:25,
       order: [0, 'asc'],
     });
     $('.js-select2').select2({dropdownParent: $('#formAction')})
@@ -289,7 +323,7 @@
                             });
                             setTimeout(function() {
                               window.location.reload();
-                            }, 800);
+                            }, 3000);
                         },
                         error : function(){
                             alert("Tidak dapat menyimpan data!");

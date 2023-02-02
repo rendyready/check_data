@@ -28,7 +28,7 @@ class MAreaController extends Controller
     {
         if ($request->ajax()) {
             if ($request->action == 'add') {
-                $aa = Str::upper(preg_replace(array('/\s{2,}/', '/[\t\n]/'), ' ', $request->m_area_nama));
+                $aa = Str::lower(preg_replace(array('/\s{2,}/', '/[\t\n]/'), ' ', $request->m_area_nama));
                 // $aa = $request->m_area_nama;
                 $aa = str::lower(trim($aa));
 
@@ -40,25 +40,25 @@ class MAreaController extends Controller
                 if ($DB == 0) {
                      $DBCount = $count;
                 } else {
-                      $DBCount = $count+($DB + 1);
+                      $DBCount = '6'.$DB + 1;
                 }
 
                 if ($aa == null) {
-                    return response(['Messages' => 'Data Tidak Boleh Kosong !']);
+                    return response(['Messages' => 'Data Tidak Boleh Kosong !','type' => 'danger']);
                 } elseif (!empty($tb)) {
                     // return response($this);
-                    return response(['Messages' => 'Data Duplicate !']);
+                    return response(['Messages' => 'Data Duplikat !','type' => 'danger']);
                 } else {
                     if ($tb == null) {
                         DB::table('m_area')->insert([
-                            'm_area_nama'    => Str::upper(trim($request->m_area_nama)),
+                            'm_area_nama'    => Str::lower(trim($request->m_area_nama)),
                             'm_area_code'    => $DBCount,
                             'm_area_created_by' => Auth::id(),
                             'm_area_created_at' => Carbon::now(),
                         ]);
-                        return response(['Messages' => 'Congratulations !']);
+                        return response(['Messages' => 'Berhasil Tambah Area !','type' => 'success']);
                     } else {
-                        return response(['Messages' => 'Data Duplicate !']);
+                        return response(['Messages' => 'Data Duplikat !','type' => 'danger']);
                     }
                 }
             } elseif ($request->action == 'edit') {
@@ -66,16 +66,16 @@ class MAreaController extends Controller
                 $trim = trim(preg_replace(array('/\s{2,}/', '/[\t\n]/'), ' ', $ii));
                 $validate = DB::table('m_area')->selectRaw('m_area_nama')->whereRaw(' LOWER(m_area_nama) =' . "'$trim'")->get();
                 $data = array(
-                    'm_area_nama'    => Str::upper($trim),
+                    'm_area_nama'    => Str::lower($trim),
                     'm_area_updated_by' => Auth::id(),
                     'm_area_updated_at' => Carbon::now(),
                 );
                 if (!empty($validate)) {
                     DB::table('m_area')->where('m_area_id', $request->id)
                         ->update($data);
-                    return response(['Messages' => 'Data Update !']);
+                    return response(['Messages' => 'Data Update !','type' => 'success']);
                 } else {
-                    return response(['Messages' => 'Data Gagal Update !']);
+                    return response(['Messages' => 'Data Gagal Update !','type' => 'danger']);
                 }
             } else {
                 $dataRaws = $request->id;

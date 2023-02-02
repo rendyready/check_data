@@ -44,7 +44,8 @@ class DatabaseSeeder extends Seeder
             SupplierSeeder::class,
             NmGudangTableSeeder::class,
             MKasirAksesTableSeeder::class,
-            MPaymentMethodeTable::class
+            MPaymentMethodeTable::class,
+            ProdukCodeSeeder::class,
        ]);
     }
 }
