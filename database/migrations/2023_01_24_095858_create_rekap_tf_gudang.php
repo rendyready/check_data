@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('rekap_tf_gudang', function (Blueprint $table) {
             $table->id('rekap_tf_gudang_id');
-            $table->string('rekap_tf_code');
+            $table->string('rekap_tf_gudang_code');
             $table->bigInteger('rekap_tf_gudang_asal_id');
             $table->bigInteger('rekap_tf_gudang_tujuan_id');
             $table->date('rekap_tf_gudang_tgl_kirim');

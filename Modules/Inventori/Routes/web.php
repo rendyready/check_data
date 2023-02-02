@@ -65,8 +65,10 @@ Route::group(['prefix' => 'inventori', 'controller' => GudangController::class, 
     Route::get('m_gudang/list', 'list')->name('m_gudang.list');
     Route::post('m_gudang/action', 'action')->name('m_gudang.action');
     Route::get('m_gudang/edit/{id}', 'edit')->name('m_gudang.edit');
-    Route::get('m_gudang/out','gudang_out')->name('m_gudang_out.index');
-    Route::post('m_gudang/out_simpan','gudang_out_save')->name('m_gudang_out.simpan');
+    Route::get('gudang/out','gudang_out')->name('m_gudang_out.index');
+    Route::post('gudang/out_simpan','gudang_out_save')->name('m_gudang_out.simpan');
+    Route::get('gudang/terima','gudang_terima')->name('m_gudang.terima_tf');
+    Route::get('gudang/listtf','gudang_list_tf')->name('gudang.tf_list');
 });
 //Master BB
 Route::group(['prefix' => 'inventori', 'controller' => MasterBBController::class, 'middleware' => ['auth', 'web']], function () {
