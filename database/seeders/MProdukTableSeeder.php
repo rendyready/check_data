@@ -101,7 +101,7 @@ class MProdukTableSeeder extends Seeder
                 'm_produk_created_by'=>'1',
             ],
             [
-                'm_produk_code' =>'	FG-11-000-011',
+                'm_produk_code' =>'FG-11-000-011',
                 'm_produk_nama' => 'Sambal Bawang Tomat',
                 'm_produk_urut' =>' 001-006',
                 'm_produk_cr' => 'Sambal Bawang Tomat',
@@ -118,7 +118,7 @@ class MProdukTableSeeder extends Seeder
                 'm_produk_created_by'=>'1',
             ],
             [
-                'm_produk_code' =>'	FG-11-000-026',
+                'm_produk_code' =>'FG-11-000-026',
                 'm_produk_nama' => 'Sambal Bawang Brambang Goreng',
                 'm_produk_urut' => '001-007',
                 'm_produk_cr' => 'Sambal Bawang Brambang Goreng',
@@ -135,7 +135,7 @@ class MProdukTableSeeder extends Seeder
                 'm_produk_created_by'=>'1',
             ],
             [
-                'm_produk_code' =>'	FG-11-000-044',
+                'm_produk_code' =>'FG-11-000-044',
                 'm_produk_nama' => 'Sambal Matah',
                 'm_produk_urut' => '001-007',
                 'm_produk_cr' => 'Sambal Matah',
@@ -152,7 +152,7 @@ class MProdukTableSeeder extends Seeder
                 'm_produk_created_by'=>'1',
             ],
             [
-                'm_produk_code' =>'	FG-11-000-020',
+                'm_produk_code' =>'FG-11-000-020',
                 'm_produk_nama' => 'Sambal Gobal-Gabul',
                 'm_produk_urut' => '001-009',
                 'm_produk_cr' => 'Sambal Gobal-Gabul',
@@ -305,7 +305,7 @@ class MProdukTableSeeder extends Seeder
                 'm_produk_created_by'=>'1',
             ],
             [
-                'm_produk_code' =>'	FG-11-000-007',
+                'm_produk_code' =>'FG-11-000-007',
                 'm_produk_nama' => 'Sambal Trasi Tomat Segar',
                 'm_produk_urut' =>'001-018',
                 'm_produk_cr' => 'Sambal Trasi Tomat Segar',
@@ -441,7 +441,7 @@ class MProdukTableSeeder extends Seeder
                 'm_produk_created_by'=>'1',
             ],
             [
-                'm_produk_code' =>'	FG-12-000-046',
+                'm_produk_code' =>'FG-12-000-046',
                 'm_produk_nama' => 'Bebek Paha (Goreng)',
                 'm_produk_urut' =>'002-015',
                 'm_produk_cr' => 'Bebek Paha (Goreng)',
@@ -475,7 +475,7 @@ class MProdukTableSeeder extends Seeder
                 'm_produk_created_by'=>'1',
             ],
             [
-                'm_produk_code' =>'	FG-12-000-029',
+                'm_produk_code' =>'FG-12-000-029',
                 'm_produk_nama' => 'Ikan Bandeng (Goreng)',
                 'm_produk_urut' =>'002-018',
                 'm_produk_cr' => 'Ikan Bandeng (Goreng)',
@@ -492,7 +492,7 @@ class MProdukTableSeeder extends Seeder
                 'm_produk_created_by'=>'1',
             ],
             [
-                'm_produk_code' =>'	FG-12-000-058',
+                'm_produk_code' =>'FG-12-000-058',
                 'm_produk_nama' => 'Ikan Gurame (Goreng)',
                 'm_produk_urut' =>'002-022',
                 'm_produk_cr' => 'Ikan Gurame (Goreng)',
@@ -509,7 +509,7 @@ class MProdukTableSeeder extends Seeder
                 'm_produk_created_by'=>'1',
             ],
             [
-                'm_produk_code' =>'	FG-12-000-058',
+                'm_produk_code' =>'FG-12-000-058',
                 'm_produk_nama' => 'Ikan Gurame (Goreng)',
                 'm_produk_urut' =>'002-022',
                 'm_produk_cr' => 'Ikan Gurame (Goreng)',
@@ -526,7 +526,7 @@ class MProdukTableSeeder extends Seeder
                 'm_produk_created_by'=>'1',
             ],
             [
-                'm_produk_code' =>'	RM-17-000-106',
+                'm_produk_code' =>'RM-17-000-106',
                 'm_produk_nama' => 'Ayam Negeri Dada Asin Frozen',
                 'm_produk_urut' =>'000-001',
                 'm_produk_cr' => 'Ayam Negeri Dada Asin Frozen',
@@ -543,7 +543,7 @@ class MProdukTableSeeder extends Seeder
                 'm_produk_created_by'=>'1',
             ],
             [
-                'm_produk_code' =>'	RM-17-000-011',
+                'm_produk_code' =>'RM-17-000-011',
                 'm_produk_nama' => 'Bumbu Tabur Bawang',
                 'm_produk_urut' =>'000-002',
                 'm_produk_cr' => 'Bumbu Tabur Bawang',

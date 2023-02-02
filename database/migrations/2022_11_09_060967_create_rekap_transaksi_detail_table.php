@@ -27,6 +27,9 @@ return new class extends Migration
             $table->decimal('r_t_detail_nominal_sc', 15,2)->default(0);
             $table->decimal('r_t_detail_nominal_sharing_profit_in', 15,2)->default(0);
             $table->decimal('r_t_detail_nominal_sharing_profit_out', 15,2)->default(0);
+            $table->decimal('r_t_detail_nominal_discount', 15,2)->default(0);
+            $table->string('r_t_detail_note')->nullable();
+            $table->string('r_t_detail_status')->nullable();
             $table->char('r_t_detail_status_sync', 10)->default('0');
             $table->bigInteger('r_t_detail_created_by');
             $table->bigInteger('r_t_detail_updated_by')->nullable();
