@@ -33,7 +33,7 @@ class JurnalBankController extends Controller
         ->get();
         $data = array();
         foreach ($list2 as $val) {
-            $data[$val->m_rekening_nama] = [$val->m_rekening_nama];
+            $data[$val->m_rekening_id] = [$val->m_rekening_nama];
         }
 
         return response()->json($data);
@@ -44,7 +44,7 @@ class JurnalBankController extends Controller
         
         $norek = DB::table('m_rekening')
             ->select('m_rekening_no_akun')
-            ->where('m_rekening_nama', $request->m_rekening_nama)
+            ->where('m_rekening_id', $request->m_rekening_id)
             ->first();
 
         return response()->json($norek);
@@ -54,7 +54,7 @@ class JurnalBankController extends Controller
     public function carijurnalnoakun(Request $request)
     {
         $norek = DB::table('m_rekening')
-            ->select('m_rekening_nama')
+            ->select('m_rekening_id')
             ->where('m_rekening_no_akun', $request->m_rekening_no_akun)
             ->first();
 
@@ -119,12 +119,16 @@ class JurnalBankController extends Controller
         if ($validator->passes()) {
             foreach ($request->m_jurnal_bank_particul as $key => $value) {
                 $code = self::generatecode($request->m_jurnal_bank_kas, $request->m_jurnal_bank_tanggal, $request->m_jurnal_bank_m_waroeng_id);
+                $rekening_nama = DB::table('m_jurnal_bank')
+                                ->where('m_jurnal_bank_m_rekening_no_akun', $request->m_jurnal_bank_m_rekening_no_akun[$key])
+                                ->select('m_jurnal_bank_m_rekening_nama')
+                                ->first()->m_jurnal_bank_m_rekening_nama;
                 $data = array(
                     'm_jurnal_bank_m_waroeng_id' => $request->m_jurnal_bank_m_waroeng_id,
                     'm_jurnal_bank_tanggal' => $request->m_jurnal_bank_tanggal,
                     'm_jurnal_bank_kas' => $request->m_jurnal_bank_kas,
                     'm_jurnal_bank_m_rekening_no_akun' => $request->m_jurnal_bank_m_rekening_no_akun[$key],
-                    'm_jurnal_bank_m_rekening_nama' => $request->m_jurnal_bank_m_rekening_nama[$key],
+                    'm_jurnal_bank_m_rekening_nama' => $rekening_nama,
                     'm_jurnal_bank_particul' => $request->m_jurnal_bank_particul[$key],
                     'm_jurnal_bank_saldo' => $request->m_jurnal_bank_saldo[$key],
                     'm_jurnal_bank_user' => Auth::user()->name,

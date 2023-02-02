@@ -49,5 +49,7 @@ Route::prefix('akuntansi')->middleware('auth', 'web')
             Route::get('link', 'index')->name('link.index');
             Route::get('link/rekening', 'rekeninglink')->name('link.rekening');
             Route::get('link/list', 'list')->name('link.list');
+            Route::get('link/update', 'update')->name('link.update');
+            Route::get('link/tampil_isi', 'tampil_isi')->name('link.tampil_isi');
         });
     });

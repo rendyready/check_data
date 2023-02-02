@@ -32,7 +32,7 @@ class JurnalUmumController extends Controller
         ->get();
         $data = array();
         foreach ($list2 as $val) {
-            $data[$val->m_rekening_nama] = [$val->m_rekening_nama];
+            $data[$val->m_rekening_id] = [$val->m_rekening_nama];
         }
 
         return response()->json($data);
@@ -43,7 +43,7 @@ class JurnalUmumController extends Controller
         
         $norek = DB::table('m_rekening')
             ->select('m_rekening_no_akun')
-            ->where('m_rekening_nama', $request->m_rekening_nama)
+            ->where('m_rekening_id', $request->m_rekening_id)
             ->first();
 
         return response()->json($norek);
@@ -53,7 +53,7 @@ class JurnalUmumController extends Controller
     public function carijurnalnoakun(Request $request)
     {
         $norek = DB::table('m_rekening')
-            ->select('m_rekening_nama')
+            ->select('m_rekening_id')
             ->where('m_rekening_no_akun', $request->m_rekening_no_akun)
             ->first();
 
@@ -113,11 +113,15 @@ class JurnalUmumController extends Controller
         if ($validator->passes()) {
             foreach ($request->m_jurnal_umum_particul as $key => $value) {
                 $code = self::generatecode($request->m_jurnal_umum_tanggal, $request->m_jurnal_umum_m_waroeng_id);
+                $rekening_nama = DB::table('m_jurnal_umum')
+                                ->where('m_jurnal_umum_m_rekening_no_akun', $request->m_jurnal_umum_m_rekening_no_akun[$key])
+                                ->select('m_jurnal_umum_m_rekening_nama')
+                                ->first()->m_jurnal_umum_m_rekening_nama;
                 $data = array(
                     'm_jurnal_umum_m_waroeng_id' => $request->m_jurnal_umum_m_waroeng_id,
                     'm_jurnal_umum_tanggal' => $request->m_jurnal_umum_tanggal,
                     'm_jurnal_umum_m_rekening_no_akun' => $request->m_jurnal_umum_m_rekening_no_akun[$key],
-                    'm_jurnal_umum_m_rekening_nama' => $request->m_jurnal_umum_m_rekening_nama[$key],
+                    'm_jurnal_umum_m_rekening_nama' => $rekening_nama,
                     'm_jurnal_umum_particul' => $request->m_jurnal_umum_particul[$key],
                     'm_jurnal_umum_debit' => $request->m_jurnal_umum_debit[$key],
                     'm_jurnal_umum_kredit' => $request->m_jurnal_umum_kredit[$key],

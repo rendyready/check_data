@@ -159,10 +159,10 @@ $(document).ready(function() {
     $('.tambah').on('click', function() {
       no++;
       $('#form').append('<tr class="hapus" id="' + no + '">' +
-        '<td><input type="number" placeholder="Input Nomor Akun" id="m_jurnal_kas_m_rekening_no_akunjq'+ no +'" name="m_jurnal_kas_m_rekening_no_akun[]" class="form-control form-control-sm no-akunjq text-center" required/></td>' +
+        '<td><input type="number" placeholder="Input Nomor Akun" id="m_jurnal_kas_m_rekening_no_akunjq'+ no +'" name="m_jurnal_kas_m_rekening_no_akun[]" class="form-control form-control-sm no_akunjq text-center"/></td>' +
         '<td><select id="m_rekening_namajq' + no + '" style="width:200px;" class="js-select2 showrekjq" name="m_jurnal_kas_m_rekening_nama[]"></select></td>' +
-        '<td><input type="text" class="form-control form-control-sm text-center" name="m_jurnal_kas_particul[]" id="m_jurnal_kas_particul" placeholder="Input Particul" required></td>' +
-        '<td><input type="number" class="form-control form-control-sm saldo text-end" name="m_jurnal_kas_saldo[]" id="m_jurnal_kas_kredit" placeholder="Input Saldo" required></td>' +
+        '<td><input type="text" class="form-control form-control-sm text-center" name="m_jurnal_kas_particul[]" id="m_jurnal_kas_particul" placeholder="Input Particul"></td>' +
+        '<td><input type="number" step="any" class="form-control form-control-sm saldo text-end" name="m_jurnal_kas_saldo[]" id="m_jurnal_kas_kredit" placeholder="Input Saldo"></td>' +
         '<td><button type="button" class="btn btn-danger btn_remove saldo"> - </button></td> </tr> ');
     });
 
@@ -173,31 +173,29 @@ $(document).ready(function() {
     });
 
     
-        var tanpa_rupiah = document.getElementById('m_jurnal_kas_kredit');
-        tanpa_rupiah.addEventListener('keyup', function(e)
-        {
-            tanpa_rupiah.value = formatRupiah(this.value);
-        });
+    //     var tanpa_rupiah = document.getElementById('m_jurnal_kas_kredit');
+    //     tanpa_rupiah.addEventListener('keyup', function(e)
+    //     {
+    //         tanpa_rupiah.value = formatRupiah(this.value);
+    //     });
 
-    /* Fungsi */
-    function formatRupiah(angka, prefix)
-    {
-        var number_string = angka.replace(/[^,\d]/g, '').toString(),
-            split    = number_string.split(','),
-            sisa     = split[0].length % 3,
-            rupiah     = split[0].substr(0, sisa),
-            ribuan     = split[0].substr(sisa).match(/\d{3}/gi);
+    // /* Fungsi */
+    // function formatRupiah(angka, prefix)
+    // {
+    //     var number_string = angka.replace(/[^,\d]/g, '').toString(),
+    //         split    = number_string.split(','),
+    //         sisa     = split[0].length % 3,
+    //         rupiah     = split[0].substr(0, sisa),
+    //         ribuan     = split[0].substr(sisa).match(/\d{3}/gi);
             
-        if (ribuan) {
-            separator = sisa ? '.' : '';
-            rupiah += separator + ribuan.join('.');
-        }
+    //     if (ribuan) {
+    //         separator = sisa ? '.' : '';
+    //         rupiah += separator + ribuan.join('.');
+    //     }
         
-        rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
-        return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
-    }
-
-
+    //     rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+    //     return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
+    // }
 
     var filwaroeng  = $('#filter-waroeng').val();
     var filkas      = $('#filter-kas').val();
@@ -326,7 +324,7 @@ $(document).ready(function() {
     });
 
     //auto sum multiple insert
-    $(document).on("input", ".saldo", function() {
+    $(document).on('input', '.saldo', function() {
         var sum = 0;
         $(".saldo").each(function(){
             sum += +$(this).val();
@@ -336,7 +334,7 @@ $(document).ready(function() {
     });
 
     //auto change debit/kredit
-    $(document).on("change", ".kas-click", function() {
+    $('.kas-click').on('change', function() {
         var kas = $(this).val();
         if (kas == 'kk') {
             $('.kas').html('Debit')
@@ -371,7 +369,7 @@ $(document).ready(function() {
                     // console.log(data);
                     $('#m_rekening_namajq'+id).append('<option></option>'); 
                     $.each(data, function(key, value) {
-                        $('#m_rekening_namajq'+id).append('<option value="'+ value +'">' + value + '</option>');
+                        $('#m_rekening_namajq'+id).append('<option value="'+ key +'">' + value + '</option>');
                     });
                 },
             });
@@ -387,45 +385,28 @@ $(document).ready(function() {
                 m_rekening_no_akun: filnomor,
                 },
                 success: function(data){
-                    console.log(data);
-                            $('#m_rekening_nama').val(data.m_rekening_id).trigger("change");                               
+                    // console.log(data);
+                    $('#m_rekening_nama').val(data.m_rekening_id).trigger("change");                               
                 }
         });
     });
 
     //show nama rekening jquery
-    $('.no-akunjq').on('keyup', function() {
+    $(document).on('keyup', '.no_akunjq', function() {
         var id           = $(this).closest("tr").attr("id"); 
         var filnomor2    = $('#m_jurnal_kas_m_rekening_no_akunjq'+id).val();
             $.ajax({
             type: "get",
             url: '{{ route("jurnal.carijurnalnoakun") }}',
             data: {
-                m_rekening_no_akun: filnomor2
+                m_rekening_no_akun: filnomor2,
                 },
                 success: function(data){
-                    
-                            $('#m_rekening_namajq'+id).empty();
-                            $.each(data, function(key, value) {
-                                $('#m_rekening_namajq'+id).append('<option value="'+ data.m_rekening_nama +'">' + data.m_rekening_nama + '</option>');
-                            });
-                            $.ajax({
-                                url: '{{route("jurnal.rekeninglink")}}',
-                                type: 'GET',
-                                dataType: 'Json',
-                                success: function(data) {
-                                    // $('#m_rekening_namajq'+id).empty(); 
-                                    $('#m_rekening_namajq'+id).append('<option></option>'); 
-                                    $.each(data, function(key, value) {
-                                        $('#m_rekening_namajq'+id).append('<option value="'+ value +'">' + value + '</option>');
-                                    });
-                                }
-                            });                              
+                    // console.log(data);
+                $('#m_rekening_namajq'+id).val(data.m_rekening_id).trigger("change");                              
                 }
         });
     });
-
-    var asal;
 
     //show no rekening
     $('#m_rekening_nama').on('select2:select', function() { 
@@ -444,14 +425,14 @@ $(document).ready(function() {
     });
 
     //show no rekening jquery
-    $('.showrekjq').on('change', function() {
+    $(document).on('select2:select', '.showrekjq', function() {
         var id           = $(this).closest("tr").attr("id"); 
-        var filnama    = $('#m_rekening_namajq'+id).val();
+        var filnama      = $('#m_rekening_namajq'+id).val();
             $.ajax({
             type: "get",
             url: '{{ route("jurnal.carijurnalnamaakun") }}',
             data: {
-                m_rekening_nama: filnama,
+                m_rekening_id: filnama,
                 },
                 success: function(data){
                     console.log(data);    
