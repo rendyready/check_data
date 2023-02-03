@@ -141,7 +141,7 @@ class GudangController extends Controller
     function gudang_out_save(Request $request)
     {
         $tf_nota = array(
-            'rekap_tf_code' => $request->rekap_tf_code,
+            'rekap_tf_gudang_code' => $request->rekap_tf_code,
             'rekap_tf_gudang_asal_id' => $request->rekap_tf_gudang_asal_id,
             'rekap_tf_gudang_tujuan_id' => $request->rekap_tf_gudang_tujuan_id,
             'rekap_tf_gudang_tgl_kirim' => Carbon::now(),
@@ -201,5 +201,40 @@ class GudangController extends Controller
             DB::table('m_stok')->update($m_stok);
         }
         return redirect()->route('m_gudang_out.index')->with(['sukses' => 'Berhasil Transfer']);
+    }
+    public function gudang_terima()
+    {
+        $waroeng_id = Auth::user()->waroeng_id;
+        $gudang_default = DB::table('m_gudang')->select('m_gudang_id')
+        ->where('m_gudang_m_w_id',$waroeng_id)->where('m_gudang_nama','gudang utama waroeng')->first()->m_gudang_id;
+        $gudang_id = (empty($request->gudang_id)) ? $gudang_default : $request->gudang_id ; 
+        $data = new \stdClass();
+        $data->gudang = DB::table('m_gudang')
+        ->where('m_gudang_m_w_id',$waroeng_id)
+        ->whereNotIn('m_gudang_nama',['gudang produksi waroeng'])->get();
+        $data->tgl_now = Carbon::now()->format('Y-m-d');
+        $data->nama_waroeng = DB::table('m_w')->select('m_w_nama')->where('m_w_id',$waroeng_id)->first();
+        $data->satuan = DB::table('m_satuan')->get();
+        return view('inventori::form_terima_g',compact('data'));
+    }
+    public function gudang_list_tf(Request $request)
+    {
+        $list_tf = DB::table('rekap_tf_gudang')
+                ->where('rekap_tf_gudang_tujuan_id',$request)
+                ->leftjoin('m_gudang','m_gudang_id','rekap_tf_gudang_tujuan_id')
+                ->leftjoin('m_w','m_gudang_m_w_id','m_w_id')
+                ->get();
+        $no = 0;
+        foreach ($list_tf as $key ) {
+            $data = array();
+                $no++;
+                $row[] = $no;
+                $row[] = $key->rekap_tf_gudang_code;
+                $row[] = ucwords($item->rekap_beli_detail_satuan_terima);
+                $data[] = $row;
+
+            $output = array("data" => $data);
+            return response()->json($output);            
+        }
     }
 }
