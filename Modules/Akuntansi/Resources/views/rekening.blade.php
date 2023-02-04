@@ -58,21 +58,21 @@
                                             <tbody>
                                                 <tr>
                                                     <td>
-                                                        <input type="number" placeholder="Input Nomor Akun"
+                                                        <input type="text" placeholder="Input Nomor Akun"
                                                             id="m_rekening_no_akun" name="m_rekening_no_akun[]"
-                                                            class="form-control set form-control-sm m_rekening_no_akun"
+                                                            class="form-control set form-control-sm m_rekening_no_akun text-center"
                                                             required />
                                                     </td>
                                                     <td>
                                                         <input type="text" placeholder="Input Nama Rekening"
                                                             id="m_rekening_nama" name="m_rekening_nama[]"
-                                                            class="form-control set form-control-sm m_rekening_nama"
+                                                            class="form-control set form-control-sm m_rekening_nama text-center"
                                                             required />
                                                     </td>
                                                     <td>
                                                         <input type="number" step="any" placeholder="Input Saldo Rekening"
                                                             id="m_rekening_saldo" name="m_rekening_saldo[]"
-                                                            class="form-control set saldo form-control-sm"  required />
+                                                            class="form-control set saldo form-control-sm text-end"  required />
                                                     </td>
                                                     <td>
                                                         <button type="button" class="btn tambah btn-primary">+</button>
@@ -84,7 +84,7 @@
                                             <label class="col-sm-2 col-form-label" id="categoryAccount"
                                                 for="example-hf-text">Total </label>
                                             <div class="col-sm-8">
-                                                <input type="number" class="form-control set form-control-sm" id="total"
+                                                <input type="number" class="form-control set form-control-sm text-end" style="color:aliceblue; background-color: rgba(230, 42, 42, 0.6);" id="total"
                                                     readonly>
                                             </div>
                                         </div>
@@ -167,9 +167,9 @@
     $('.tambah').on('click', function() {
       no++;
       $('#form').append('<tr class="hapus" id="row' + no + '">' +
-        '<td><input type="number" class="form-control form-control-sm m_rekening_no_akunjq" name="m_rekening_no_akun[]" id="m_rekening_no_akunjq' + no + '" placeholder="Input Nama Akun" required></td>' +
-        '<td><input type="text" class="form-control form-control-sm m_rekening_namajq" name="m_rekening_nama[]" id="m_rekening_namajq' + no + '" placeholder="Input Nama Rekening" required></td>' +
-        '<td><input type="number" class="form-control saldo form-control-sm" name="m_rekening_saldo[]" id="m_rekening_saldo" placeholder="Input Saldo Rekening" required></td>' +
+        '<td><input type="text" class="form-control form-control-sm m_rekening_no_akunjq text-center" name="m_rekening_no_akun[]" id="m_rekening_no_akunjq' + no + '" placeholder="Input Nama Akun" required></td>' +
+        '<td><input type="text" class="form-control form-control-sm m_rekening_namajq text-center" name="m_rekening_nama[]" id="m_rekening_namajq' + no + '" placeholder="Input Nama Rekening" required></td>' +
+        '<td><input type="number" class="form-control saldo form-control-sm text-end" name="m_rekening_saldo[]" id="m_rekening_saldo" placeholder="Input Saldo Rekening" required></td>' +
         '<td><button type="button" id="' + no + '" class="btn btn-danger btn_remove"> - </button></td> </tr> ');
     });
 

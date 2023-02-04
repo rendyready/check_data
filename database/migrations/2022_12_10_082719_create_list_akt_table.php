@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('list_akt', function (Blueprint $table) {
             $table->id('list_akt_id');
             $table->string('list_akt_nama');
-            $table->bigInteger('list_akt_m_rekening_id')->nullable();
+            $table->string('list_akt_m_rekening_id')->nullable();
             $table->bigInteger('list_akt_created_by');
             $table->bigInteger('list_akt_updated_by')->nullable();
             $table->bigInteger('list_akt_deleted_by')->nullable();

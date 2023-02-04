@@ -29,12 +29,11 @@
                                         <tr>
                                             <td>{{$items->list_akt_nama}}</td>
                                             <td id="{{$no}}">
-                                                <select class="js-select2 form-select masterRekening text-center" id="m_rekening_no_akun{{$no}}" name="m_rekening_nama[]" style="width: 100%;">
-                                                    <option>{{ $items->m_rekening_nama}}</option>
-                                                    {{-- <option value="{{$items->list_akt_m_rekening_id}}">{{$items->m_rekening_nama}}</option> --}}
+                                                <select class="js-select2 form-select masterRekening text-center" id="m_rekening_no_akun{{$no}}" name="list_akt_m_rekening_id[]" style="width: 100%;">
+                                                    <option value="{{$items->m_rekening_no_akun}}">{{$items->m_rekening_nama}}</option>
                                                 </select>
                                             </td>
-                                            <td><input type="text" id="fieldName{{$no}}" name="m_rekening_no_akun" value="{{ $items->list_akt_m_rekening_id}}" class="text-center" readonly></td>
+                                            <td><input type="text" id="fieldName{{$no}}" name="m_rekening_no_akun" value="{{$items->list_akt_m_rekening_id}}" class="form-control text-center" style="color:aliceblue; background-color: rgba(204,0,0, 0.6); " readonly></td>
                                         </tr>
                                         @endforeach
                                     </tbody>
@@ -54,28 +53,11 @@
 <script type="module">
     $(document).ready(function() {
         Codebase.helpersOnLoad(['jq-select2']);
-        var idNo=$(this).parent().attr('id')
-        $('#m_rekening_no_akun'+idNo).select2();
         $.ajaxSetup({
             headers: {
                 'X-CSRF-Token': $("input[name=_token]").val()
             }
         });
-
-        // $.ajax({
-        //         url: '{{route("link.tampil_isi")}}',
-        //         type: 'GET',
-        //         dataType: 'Json',
-        //         success: function(data) {
-                    // $('#linkAkuntansi').DataTable({
-                    //     'paging': false,
-                    //     'order': false,
-                    // });
-                        // $('.masterRekening').append('<option>' + data.m_rekening_no_akun + '</option>'); 
-                    // $('.masterRekening').val('data.list_akt_m_rekening_id').attr('selected', true).trigger("change");   
-            //     }                            
-
-            // })
             
             $.ajax({
                 url: '{{route("link.list")}}',
@@ -92,13 +74,28 @@
                     });
                 }
             })
-        
+
+            $(document).on("change", ".masterRekening", function() { 
+                var id             = $(this).closest('tr').index()+1;
+                var no_rekening    = $('#m_rekening_no_akun'+id).val();
+                $.ajax({
+                    url: '{{route("link.update")}}',
+                    type: 'POST',
+                    dataType: 'Json',
+                    data:{
+                        list_akt_id: id,
+                        list_akt_m_rekening_id: no_rekening,
+                    },
+                    success: function(data) {
+                        alert('Berhasil Update');
+                    }
+                })
+            })
         
         $('#linkAkuntansi').on('change', '.masterRekening', function(s) {
             s.preventDefault()
             let getData = $(this).val()
             var idNo=$(this).parent().attr('id')
-            console.log(idNo);
             $.ajax({
                 url: '{{route("link.rekening")}}',
                 type: 'GET',
@@ -107,26 +104,10 @@
                    data: getData
                 },
                 success: function(response) {
-
+                    console.log(response);
                    $('#fieldName'+idNo).val(response.m_rekening_no_akun)
                    
                 }
-            });
-        });
-        
-        $('#m_rekening_no_akun').change(function(e) {
-        e.preventDefault();
-        let no_rekening   = $('#fieldName').val();
-            $.ajax({
-                url: '{{route("link.update")}}',
-                type: "PUT",
-                cache: false,
-                data: {
-                    "list_akt_m_rekening_id": no_rekening,
-                },
-                success:function(response){
-                    alert('berhasil update');
-                },
             });
         });
 

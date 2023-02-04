@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id('m_rekening_id');
             $table->bigInteger('m_rekening_m_waroeng_id');
             $table->string('m_rekening_kategori');
-            $table->bigInteger('m_rekening_no_akun');
+            $table->string('m_rekening_no_akun');
             $table->string('m_rekening_nama');
             $table->integer('m_rekening_saldo');
             $table->bigInteger('m_rekening_created_by');

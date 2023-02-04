@@ -68,7 +68,7 @@
                                         <tbody>
                                             <tr>
                                                 <td>
-                                                    <input type="number" placeholder="Input Nomor Akun"
+                                                    <input type="text" placeholder="Input Nomor Akun"
                                                         id="m_jurnal_kas_m_rekening_no_akun"
                                                         name="m_jurnal_kas_m_rekening_no_akun[]"
                                                         class="form-control set form-control-sm no-akun text-center" />
@@ -85,9 +85,9 @@
                                                         class="form-control set form-control-sm text-center" />
                                                 </td>
                                                 <td>
-                                                    <input type="number" step="any" placeholder="Input Saldo"
+                                                    <input type="number" placeholder="Input Saldo"
                                                         id="m_jurnal_kas_kredit" name="m_jurnal_kas_saldo[]"
-                                                        class="form-control set form-control-sm saldo text-end"/>
+                                                        class="form-control set form-control-sm saldo text-end mask"/>
                                                 </td>
                                                 <td>
                                                     <button type="button" class="btn tambah btn-primary">+</button>
@@ -99,7 +99,7 @@
                                         <label class="col-sm-2 col-form-label" id="categoryAccount"
                                             for="example-hf-text">Total </label>
                                         <div class="col-sm-8">
-                                            <input type="number" class="form-control set form-control-sm text-end" id="total"
+                                            <input type="number" class="form-control set form-control-sm text-end" id="total" style="color:aliceblue; background-color: rgba(230, 42, 42, 0.6);"
                                                 readonly>
                                         </div>
                                     </div>
@@ -150,7 +150,7 @@
 @endsection
 @section('js')
     <!-- js -->
-
+    
     <script type="module">
 
 $(document).ready(function() {
@@ -159,10 +159,10 @@ $(document).ready(function() {
     $('.tambah').on('click', function() {
       no++;
       $('#form').append('<tr class="hapus" id="' + no + '">' +
-        '<td><input type="number" placeholder="Input Nomor Akun" id="m_jurnal_kas_m_rekening_no_akunjq'+ no +'" name="m_jurnal_kas_m_rekening_no_akun[]" class="form-control form-control-sm no_akunjq text-center"/></td>' +
+        '<td><input type="text" placeholder="Input Nomor Akun" id="m_jurnal_kas_m_rekening_no_akunjq'+ no +'" name="m_jurnal_kas_m_rekening_no_akun[]" class="form-control form-control-sm no_akunjq text-center"/></td>' +
         '<td><select id="m_rekening_namajq' + no + '" style="width:200px;" class="js-select2 showrekjq" name="m_jurnal_kas_m_rekening_nama[]"></select></td>' +
         '<td><input type="text" class="form-control form-control-sm text-center" name="m_jurnal_kas_particul[]" id="m_jurnal_kas_particul" placeholder="Input Particul"></td>' +
-        '<td><input type="number" step="any" class="form-control form-control-sm saldo text-end" name="m_jurnal_kas_saldo[]" id="m_jurnal_kas_kredit" placeholder="Input Saldo"></td>' +
+        '<td><input type="number" class="form-control form-control-sm saldo text-end mask" name="m_jurnal_kas_saldo[]" id="m_jurnal_kas_kredit" placeholder="Input Saldo"></td>' +
         '<td><button type="button" class="btn btn-danger btn_remove saldo"> - </button></td> </tr> ');
     });
 
@@ -172,31 +172,83 @@ $(document).ready(function() {
       $('.saldo').trigger("input");
     });
 
-    
-    //     var tanpa_rupiah = document.getElementById('m_jurnal_kas_kredit');
-    //     tanpa_rupiah.addEventListener('keyup', function(e)
-    //     {
-    //         tanpa_rupiah.value = formatRupiah(this.value);
-    //     });
+        // $(document).on('input', '.number-separator', function (e) {
+        //     if (/^[0-9.,]+$/.test($(this).val())) {
+        //     $(this).val(
+        //         parseFloat($(this).val().replace(/,/g, '')).toLocaleString('en')
+        //     );
+        //     } else {
+        //     $(this).val(
+        //         $(this)
+        //         .val()
+        //         .substring(0, $(this).val().length - 1)
+        //     );
+        //     }
+        // });
 
-    // /* Fungsi */
-    // function formatRupiah(angka, prefix)
-    // {
-    //     var number_string = angka.replace(/[^,\d]/g, '').toString(),
-    //         split    = number_string.split(','),
-    //         sisa     = split[0].length % 3,
-    //         rupiah     = split[0].substr(0, sisa),
-    //         ribuan     = split[0].substr(sisa).match(/\d{3}/gi);
-            
-    //     if (ribuan) {
-    //         separator = sisa ? '.' : '';
-    //         rupiah += separator + ribuan.join('.');
-    //     }
+        $("input.mask").each((i,ele)=>{
+            let clone=$(ele).clone(false)
+            clone.attr("type","text")
+            let ele1=$(ele)
+            clone.val(Number(ele1.val()).toLocaleString("id"))
+            $(ele).after(clone)
+            $(ele).hide()
+            clone.mouseenter(()=>{
+                ele1.show()
+                clone.hide()
+            })
+            setInterval(()=>{
+                let newv=Number(ele1.val()).toLocaleString("id")
+                if(clone.val()!=newv){
+                    clone.val(newv)
+                }
+            })
+            $(ele).mouseleave(()=>{
+                $(clone).show()
+                $(ele1).hide()
+            })
+        })
+
+        $("input#total").each((i,ele)=>{
+            let clone=$(ele).clone(false)
+            clone.attr("type","text")
+            let ele1=$(ele)
+            clone.val(Number(ele1.val()).toLocaleString("id"))
+            $(ele).after(clone)
+            $(ele).hide()
+            setInterval(()=>{
+                let newv=Number(ele1.val()).toLocaleString("id")
+                if(clone.val()!=newv){
+                    clone.val(newv)
+                }
+            },10)
+            $(ele).mouseleave(()=>{
+                $(clone).show()
+                $(ele1).hide()
+            })
+        })
+
+    //auto sum multiple insert
+    $(document).on('input', '.saldo', function() {
+        var sum = 0;
+        $(".saldo").each(function(){
+            sum += parseFloat($(this).val().replace());
+            // sum += $(this).val();
+        });
+        $('#total').val(sum);
         
-    //     rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
-    //     return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
-    // }
+    });
 
+    //  //auto sum multiple insert
+    //  $(document).on('input', '.saldo', function() {
+    //     var sum = 0;
+    //     $(".saldo").each(function(){
+    //         sum += +$(this).val();
+    //     });
+    //     $('#total').val(sum);
+        
+    // });
+    
     var filwaroeng  = $('#filter-waroeng').val();
     var filkas      = $('#filter-kas').val();
     var filtanggal  = $('#filter-tanggal').val();
@@ -323,15 +375,7 @@ $(document).ready(function() {
       });
     });
 
-    //auto sum multiple insert
-    $(document).on('input', '.saldo', function() {
-        var sum = 0;
-        $(".saldo").each(function(){
-            sum += +$(this).val();
-        });
-        $('#total').val(sum);
-        
-    });
+    
 
     //auto change debit/kredit
     $('.kas-click').on('change', function() {
@@ -386,7 +430,7 @@ $(document).ready(function() {
                 },
                 success: function(data){
                     // console.log(data);
-                    $('#m_rekening_nama').val(data.m_rekening_id).trigger("change");                               
+                    $('#m_rekening_nama').val(data.m_rekening_nama).trigger("change");                               
                 }
         });
     });
@@ -403,7 +447,7 @@ $(document).ready(function() {
                 },
                 success: function(data){
                     // console.log(data);
-                $('#m_rekening_namajq'+id).val(data.m_rekening_id).trigger("change");                              
+                $('#m_rekening_namajq'+id).val(data.m_rekening_nama).trigger("change");                              
                 }
         });
     });
@@ -415,7 +459,7 @@ $(document).ready(function() {
             type: "get",
             url: '{{ route("jurnal.carijurnalnamaakun") }}',
             data: {
-                m_rekening_id: filnama,
+                m_rekening_nama: filnama,
                 },
                 success: function(data){
                     console.log(data);    
@@ -432,7 +476,7 @@ $(document).ready(function() {
             type: "get",
             url: '{{ route("jurnal.carijurnalnamaakun") }}',
             data: {
-                m_rekening_id: filnama,
+                m_rekening_nama: filnama,
                 },
                 success: function(data){
                     console.log(data);    

@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('m_jurnal_umum', function (Blueprint $table) {
             $table->id('m_jurnal_umum_id');
             $table->bigInteger('m_jurnal_umum_m_waroeng_id');
-            $table->bigInteger('m_jurnal_umum_m_rekening_no_akun');
+            $table->string('m_jurnal_umum_m_rekening_no_akun');
             $table->string('m_jurnal_umum_m_rekening_nama');
             $table->date('m_jurnal_umum_tanggal');
             $table->string('m_jurnal_umum_particul');

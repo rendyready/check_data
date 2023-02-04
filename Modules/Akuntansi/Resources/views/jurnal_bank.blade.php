@@ -68,7 +68,7 @@
                                         <tbody>
                                             <tr>
                                                 <td>
-                                                    <input type="number" placeholder="Input Nomor Akun"
+                                                    <input type="text" placeholder="Input Nomor Akun"
                                                         id="m_jurnal_bank_m_rekening_no_akun"
                                                         name="m_jurnal_bank_m_rekening_no_akun[]"
                                                         class="form-control set form-control-sm no-akun text-center" />
@@ -99,7 +99,7 @@
                                         <label class="col-sm-2 col-form-label" id="categoryAccount"
                                             for="example-hf-text">Total </label>
                                         <div class="col-sm-8">
-                                            <input type="number" class="form-control set form-control-sm" id="total"
+                                            <input type="number" class="form-control set form-control-sm text-end" style="color:aliceblue; background-color: rgba(230, 42, 42, 0.6);" id="total"
                                                 readonly>
                                         </div>
                                     </div>
@@ -359,7 +359,7 @@ $(document).ready(function() {
                 },
                 success: function(data){
                       // console.log(data);
-                      $('#m_rekening_nama').val(data.m_rekening_id).trigger("change");
+                      $('#m_rekening_nama').val(data.m_rekening_nama).trigger("change");
                 }
         });
     });
@@ -376,7 +376,7 @@ $(document).ready(function() {
                 },
                 success: function(data){
                     // console.log(data);
-                $('#m_rekening_namajq'+id).val(data.m_rekening_id).trigger("change");         
+                $('#m_rekening_namajq'+id).val(data.m_rekening_nama).trigger("change");         
                 }
         });
     });
@@ -388,7 +388,7 @@ $(document).ready(function() {
             type: "get",
             url: '{{ route("jurnal_bank.carijurnalnamaakun") }}',
             data: {
-                m_rekening_id: filnama,
+                m_rekening_nama: filnama,
                 },
                 success: function(data){
                     console.log(data);    
@@ -405,7 +405,7 @@ $(document).ready(function() {
             type: "get",
             url: '{{ route("jurnal_bank.carijurnalnamaakun") }}',
             data: {
-                m_rekening_id: filnama,
+                m_rekening_nama: filnama,
                 },
                 success: function(data){
                     console.log(data);    

@@ -50,7 +50,7 @@
                                         <tbody>
                                             <tr>
                                                 <td>
-                                                    <input type="number" placeholder="Input Nomor Akun"
+                                                    <input type="text" placeholder="Input Nomor Akun"
                                                         id="m_jurnal_umum_m_rekening_no_akun"
                                                         name="m_jurnal_umum_m_rekening_no_akun[]"
                                                         class="form-control set form-control-sm no-akun text-center" />
@@ -87,10 +87,10 @@
                                             <label for="total">Total</label>
                                         </div>
                                         <div class="col-sm-2">
-                                            <input type="number" step="any" class="form-control set" id="totaldebit" readonly />
+                                            <input type="number" step="any" class="form-control set text-end" id="totaldebit" style="color:aliceblue; background-color: rgba(230, 42, 42, 0.6);" readonly />
                                         </div>
                                         <div class="col-sm-2">
-                                            <input type="number" step="any" class="form-control set" id="totalkredit" readonly />
+                                            <input type="number" step="any" class="form-control set text-end" id="totalkredit" style="color:aliceblue; background-color: rgba(230, 42, 42, 0.6);" readonly />
                                         </div>
                                     </div>
                                     <div class="bg-transparent text-center">
@@ -149,7 +149,7 @@ $(document).ready(function() {
     $('.tambah').on('click', function() {
       no++;
       $('#form').append('<tr class="hapus" id="' + no + '">' +
-        '<td><input type="number" placeholder="Input Nomor Akun" id="m_jurnal_umum_m_rekening_no_akunjq'+ no +'" name="m_jurnal_umum_m_rekening_no_akun[]" class="form-control form-control-sm no-akunjq text-center"/></td>' +
+        '<td><input type="text" placeholder="Input Nomor Akun" id="m_jurnal_umum_m_rekening_no_akunjq'+ no +'" name="m_jurnal_umum_m_rekening_no_akun[]" class="form-control form-control-sm no-akunjq text-center"/></td>' +
         '<td><select id="m_rekening_namajq' + no + '" class="js-select2 showrekjq" name="m_jurnal_umum_m_rekening_nama[]" style="width:200px;"></select></td>' +
         '<td><input type="text" class="form-control form-control-sm text-center" name="m_jurnal_umum_particul[]" id="m_jurnal_particul" placeholder="Input Particul"></td>' +
         '<td><input type="number" step="any" class="form-control form-control-sm saldodebit text-end" name="m_jurnal_umum_debit[]" id="m_jurnal_debit" placeholder="Input Debit"></td>' +
@@ -359,7 +359,7 @@ $(document).ready(function() {
                 },
                 success: function(data){
                     console.log(data);
-                    $('#m_rekening_nama').val(data.m_rekening_id).trigger("change");                                                       
+                    $('#m_rekening_nama').val(data.m_rekening_nama).trigger("change");                                                       
                 }
         });
     });
@@ -376,7 +376,7 @@ $(document).ready(function() {
                 },
                 success: function(data){
                 // console.log(data);
-                $('#m_rekening_namajq'+id).val(data.m_rekening_id).trigger("change");                           
+                $('#m_rekening_namajq'+id).val(data.m_rekening_nama).trigger("change");                           
                 }
         });
     });
@@ -388,7 +388,7 @@ $(document).ready(function() {
             type: "get",
             url: '{{ route("jurnal_umum.carijurnalnamaakun") }}',
             data: {
-                m_rekening_id: filnama,
+                m_rekening_nama: filnama,
                 },
                 success: function(data){
                     console.log(data);    
@@ -405,7 +405,7 @@ $(document).ready(function() {
             type: "get",
             url: '{{ route("jurnal_umum.carijurnalnamaakun") }}',
             data: {
-                m_rekening_id: filnama,
+                m_rekening_nama: filnama,
                 },
                 success: function(data){
                     console.log(data);    
