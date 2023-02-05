@@ -230,7 +230,8 @@ class GudangController extends Controller
                 $no++;
                 $row[] = $no;
                 $row[] = $key->rekap_tf_gudang_code;
-                $row[] = ucwords($item->rekap_beli_detail_satuan_terima);
+                $row[] = $key->rekap_tf_gudang_tgl_kirim;
+                $row[] = $key->m_w_nama;
                 $data[] = $row;
 
             $output = array("data" => $data);
