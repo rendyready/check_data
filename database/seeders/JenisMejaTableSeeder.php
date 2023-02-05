@@ -71,6 +71,18 @@ class JenisMejaTableSeeder extends Seeder
                 'm_meja_jenis_space' => 0,
                 'm_meja_jenis_status' => 1,
                 'm_meja_jenis_created_by' => 1
+            ],
+            [
+                'm_meja_jenis_nama' => 'express',
+                'm_meja_jenis_space' => 1,
+                'm_meja_jenis_status' => 1,
+                'm_meja_jenis_created_by' => 1
+            ],
+            [
+                'm_meja_jenis_nama' => 'Bungkus',
+                'm_meja_jenis_space' => 1,
+                'm_meja_jenis_status' => 1,
+                'm_meja_jenis_created_by' => 1
             ]
         ]);
     }

@@ -33,7 +33,6 @@ class DatabaseSeeder extends Seeder
             MLevelJabatanTableSeeder::class,
             MJabatanTableSeeder::class,
             MProdukTableSeeder::class,
-            PinSeeder::class,
             ConfigSubJenisProdukTableSeeder::class,
             MMenuHargaTableSeeder::class,
             ConfigFooterTableSeeder::class,
@@ -44,6 +43,8 @@ class DatabaseSeeder extends Seeder
             List_AktTableSeeder::class,
             SupplierSeeder::class,
             NmGudangTableSeeder::class,
+            MKasirAksesTableSeeder::class,
+            MPaymentMethodeTable::class,
             ProdukCodeSeeder::class,
        ]);
     }
