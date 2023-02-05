@@ -18,22 +18,17 @@ class LinkAkuntansiController extends Controller
     public function index()
     {
         $list = DB::table('list_akt')
-            ->select('list_akt_nama')
-            ->whereNull('list_akt_deleted_at')->orderBy('list_akt_id', 'asc')->get();
-
-        $data = DB::table('link_akt')->rightJoin('list_akt', 'list_akt_id', 'link_akt_list_akt_id')
-            ->select('list_akt_id', 'list_akt_nama',)
-            ->whereNull('link_akt_deleted_at')->orderBy('list_akt_id', 'asc')
+            ->select('list_akt_nama', 'list_akt_m_rekening_id', 'm_rekening_nama', 'list_akt_id', 'm_rekening_no_akun')
+            ->leftjoin('m_rekening', 'm_rekening_no_akun', 'list_akt_m_rekening_id')
+            ->whereNull('list_akt_deleted_at')
+            ->orderBy('list_akt_id', 'asc')
+            ->distinct()
             ->get();
 
-        // return response()->json([$link, $data]);
-        return view('akuntansi::link', compact('data'));
+        // return response()->json($list);
+        return view('akuntansi::link', compact('list'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     * @return Renderable
-     */
     public function list()
     {
         $list2 = DB::table('m_rekening')
@@ -43,7 +38,7 @@ class LinkAkuntansiController extends Controller
             ->get();
         $data = array();
         foreach ($list2 as $val) {
-            $data[$val->m_rekening_id] = [$val->m_rekening_nama];
+            $data[$val->m_rekening_no_akun] = [$val->m_rekening_nama];
         }
 
         return response()->json($data);
@@ -53,11 +48,28 @@ class LinkAkuntansiController extends Controller
     public function rekeninglink(Request $request)
     {
         $rekening = DB::table('m_rekening')
-            ->where('m_rekening_id', $request->data)
+            ->where('m_rekening_no_akun', $request->data)
             ->select('m_rekening_no_akun')->first();
 
         return  response()->json($rekening);
     }
+
+    public function update(Request $request)
+    {
+        $norek = $request->list_akt_m_rekening_id;
+        $update = DB::table('list_akt')
+            ->where('list_akt_id', $request->list_akt_id)
+            ->update(['list_akt_m_rekening_id' => $norek]);
+
+        return response()->json([ 'msg' => 'Berhasil Update' . $norek]);
+
+    }
+
+    public function show($id)
+    {
+        return view('akuntansi::show');
+    }
+
     /**
      * Store a newly created resource in storage.
      * @param Request $request
@@ -69,16 +81,6 @@ class LinkAkuntansiController extends Controller
     }
 
     /**
-     * Show the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
-    public function show($id)
-    {
-        return view('akuntansi::show');
-    }
-
-    /**
      * Show the form for editing the specified resource.
      * @param int $id
      * @return Renderable
@@ -86,17 +88,6 @@ class LinkAkuntansiController extends Controller
     public function edit($id)
     {
         return view('akuntansi::edit');
-    }
-
-    /**
-     * Update the specified resource in storage.
-     * @param Request $request
-     * @param int $id
-     * @return Renderable
-     */
-    public function update(Request $request, $id)
-    {
-        //
     }
 
     /**

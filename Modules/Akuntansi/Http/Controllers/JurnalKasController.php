@@ -125,7 +125,7 @@ class JurnalKasController extends Controller
                 );
                 DB::table('m_jurnal_kas')->insert($data);
             }
-            return response()->json(['message' => 'Berhasil Menambakan', 'type' => 'success']);
+            return response()->json(['messages' => 'Berhasil Menambakan', 'type' => 'success']);
         }
         return response()->json(['error' => $validator->errors()->all()]);
     }

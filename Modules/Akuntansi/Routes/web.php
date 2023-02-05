@@ -23,7 +23,6 @@ Route::prefix('akuntansi')->middleware('auth', 'web')
             Route::post('jurnal_bank/insert', 'simpan')->name('jurnal_bank.simpan');
             Route::post('jurnal_bank/validasi', 'validasi')->name('jurnal_bank.validasi');
             Route::get('jurnal_bank/rekeninglink', 'rekeninglink')->name('jurnal_bank.rekeninglink');
-
         });
 
         Route::controller(JurnalUmumController::class)->group(function () {
@@ -50,5 +49,6 @@ Route::prefix('akuntansi')->middleware('auth', 'web')
             Route::get('link', 'index')->name('link.index');
             Route::get('link/rekening', 'rekeninglink')->name('link.rekening');
             Route::get('link/list', 'list')->name('link.list');
+            Route::post('link/update', 'update')->name('link.update');
         });
     });

@@ -22,17 +22,18 @@
                                         @php
                                             $no =0;
                                         @endphp
-                                        @foreach($data as $items)
+                                        @foreach($list as $items)
                                             @php
                                                 $no++;
                                             @endphp
                                         <tr>
                                             <td>{{$items->list_akt_nama}}</td>
                                             <td id="{{$no}}">
-                                                <select class="js-select2 form-select masterRekening" id="m_rekening_no_akun" name="m_rekening_nama[]" style="width: 100%;">
+                                                <select class="js-select2 form-select masterRekening text-center" id="m_rekening_no_akun{{$no}}" name="list_akt_m_rekening_id[]" style="width: 100%;">
+                                                    <option value="{{$items->m_rekening_no_akun}}">{{$items->m_rekening_nama}}</option>
                                                 </select>
                                             </td>
-                                            <td><input type="text" id="fieldName{{$no}}" name="m_rekening_no_akun" readonly></td>
+                                            <td><input type="text" id="fieldName{{$no}}" name="m_rekening_no_akun" value="{{$items->list_akt_m_rekening_id}}" class="form-control text-center" style="color:aliceblue; background-color: rgba(204,0,0, 0.6); " readonly></td>
                                         </tr>
                                         @endforeach
                                     </tbody>
@@ -57,28 +58,44 @@
                 'X-CSRF-Token': $("input[name=_token]").val()
             }
         });
-        
-    $('.masterRekening').select2();
-       $.ajax({
-            url: '{{route("link.list")}}',
-            type: 'GET',
-            dataType: 'Json',
-            success: function(data) {
-                $('#linkAkuntansi').DataTable({
-                    'paging': false,
-                    'order': false,
-                });
-                $.each(data, function(key, value) {
-                    $('.masterRekening').append($('<option>', {value: key}).text(value[0]));
-                });
-            }
-        })
+            
+            $.ajax({
+                url: '{{route("link.list")}}',
+                type: 'GET',
+                dataType: 'Json',
+                success: function(data) {
+                    $('#linkAkuntansi').DataTable({
+                        'paging': false,
+                        'order': false,
+                    });
+                    $('.masterRekening').append('<option></option>'); 
+                    $.each(data, function(key, value) {
+                        $('.masterRekening').append($('<option>', {value: key}).text(value[0]));
+                    });
+                }
+            })
+
+            $(document).on("change", ".masterRekening", function() { 
+                var id             = $(this).closest('tr').index()+1;
+                var no_rekening    = $('#m_rekening_no_akun'+id).val();
+                $.ajax({
+                    url: '{{route("link.update")}}',
+                    type: 'POST',
+                    dataType: 'Json',
+                    data:{
+                        list_akt_id: id,
+                        list_akt_m_rekening_id: no_rekening,
+                    },
+                    success: function(data) {
+                        alert('Berhasil Update');
+                    }
+                })
+            })
         
         $('#linkAkuntansi').on('change', '.masterRekening', function(s) {
             s.preventDefault()
             let getData = $(this).val()
             var idNo=$(this).parent().attr('id')
-            console.log(idNo);
             $.ajax({
                 url: '{{route("link.rekening")}}',
                 type: 'GET',
@@ -87,12 +104,13 @@
                    data: getData
                 },
                 success: function(response) {
-
+                    console.log(response);
                    $('#fieldName'+idNo).val(response.m_rekening_no_akun)
                    
                 }
             });
         });
+
     });
 </script>
 @endsection
