@@ -112,6 +112,8 @@ class JurnalUmumController extends Controller
 
         if ($validator->passes()) {
             foreach ($request->m_jurnal_umum_particul as $key => $value) {
+                $str1 = str_replace('.', '', $request->m_jurnal_umum_debit[$key]);
+                $str2 = str_replace('.', '', $request->m_jurnal_umum_kredit[$key]);
                 $code = self::generatecode($request->m_jurnal_umum_tanggal, $request->m_jurnal_umum_m_waroeng_id);
                 $data = array(
                     'm_jurnal_umum_m_waroeng_id' => $request->m_jurnal_umum_m_waroeng_id,
@@ -119,8 +121,8 @@ class JurnalUmumController extends Controller
                     'm_jurnal_umum_m_rekening_no_akun' => $request->m_jurnal_umum_m_rekening_no_akun[$key],
                     'm_jurnal_umum_m_rekening_nama' => $request->m_jurnal_umum_m_rekening_nama[$key],
                     'm_jurnal_umum_particul' => $request->m_jurnal_umum_particul[$key],
-                    'm_jurnal_umum_debit' => $request->m_jurnal_umum_debit[$key],
-                    'm_jurnal_umum_kredit' => $request->m_jurnal_umum_kredit[$key],
+                    'm_jurnal_umum_debit' => str_replace(',', '.', $str1),
+                    'm_jurnal_umum_kredit' => str_replace(',', '.', $str2),
                     'm_jurnal_umum_user' => Auth::user()->name,
                     'm_jurnal_umum_no_bukti' => $code,
                     'm_jurnal_umum_created_by' => Auth::id(),
