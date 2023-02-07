@@ -109,6 +109,7 @@ class JurnalKasController extends Controller
 
         if ($validator->passes()) {
             foreach ($request->m_jurnal_kas_particul as $key => $value) {
+                $str1 = str_replace('.', '', $request->m_jurnal_kas_saldo[$key]);
                 $code = self::generatecode($request->m_jurnal_kas, $request->m_jurnal_kas_tanggal, $request->m_jurnal_kas_m_waroeng_id);
                 $data = array(
                     'm_jurnal_kas_m_waroeng_id' => $request->m_jurnal_kas_m_waroeng_id,
@@ -117,7 +118,7 @@ class JurnalKasController extends Controller
                     'm_jurnal_kas_m_rekening_no_akun' => $request->m_jurnal_kas_m_rekening_no_akun[$key],
                     'm_jurnal_kas_m_rekening_nama' => $request->m_jurnal_kas_m_rekening_nama[$key],
                     'm_jurnal_kas_particul' => $request->m_jurnal_kas_particul[$key],
-                    'm_jurnal_kas_saldo' => $request->m_jurnal_kas_saldo[$key],
+                    'm_jurnal_kas_saldo' => str_replace(',', '.', $str1),
                     'm_jurnal_kas_user' => Auth::user()->name,
                     'm_jurnal_kas_no_bukti' => $code,
                     'm_jurnal_kas_created_by' => Auth::id(),

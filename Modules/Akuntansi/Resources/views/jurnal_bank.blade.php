@@ -85,9 +85,9 @@
                                                         class="form-control set form-control-sm text-center" />
                                                 </td>
                                                 <td>
-                                                    <input type="number" step="any" placeholder="Input Saldo" id="m_jurnal_kredit"
+                                                    <input type="text" step="any" placeholder="Input Saldo" id="m_jurnal_kredit"
                                                         name="m_jurnal_bank_saldo[]"
-                                                        class="form-control set form-control-sm saldo text-end" />
+                                                        class="form-control set form-control-sm saldo text-end number" />
                                                 </td>
                                                 <td>
                                                     <button type="button" class="btn tambah btn-primary">+</button>
@@ -99,7 +99,7 @@
                                         <label class="col-sm-2 col-form-label" id="categoryAccount"
                                             for="example-hf-text">Total </label>
                                         <div class="col-sm-8">
-                                            <input type="number" class="form-control set form-control-sm text-end" style="color:aliceblue; background-color: rgba(230, 42, 42, 0.6);" id="total"
+                                            <input type="text" class="form-control set form-control-sm text-end mask" style="color:aliceblue; background-color: rgba(230, 42, 42, 0.6);" id="total"
                                                 readonly>
                                         </div>
                                     </div>
@@ -160,8 +160,52 @@ $(document).ready(function() {
         '<td><input type="text" placeholder="Input Nomor Akun" id="m_jurnal_bank_m_rekening_no_akunjq'+ no +'" name="m_jurnal_bank_m_rekening_no_akun[]" class="form-control form-control-sm no-akunjq text-center"/></td>' +
         '<td><select id="m_rekening_namajq' + no + '" class="js-select2 showrekjq" style="width:200px;" name="m_jurnal_bank_m_rekening_nama[]"></select></td>' +
         '<td><input type="text" class="form-control form-control-sm text-center" name="m_jurnal_bank_particul[]" id="m_jurnal_particul" placeholder="Input Particul"></td>' +
-        '<td><input type="number" step="any" class="form-control form-control-sm saldo text-end" name="m_jurnal_bank_saldo[]" id="m_jurnal_kredit" placeholder="Input Saldo"></td>' +
+        '<td><input type="text" step="any" class="form-control form-control-sm saldo text-end number" name="m_jurnal_bank_saldo[]" id="m_jurnal_kredit" placeholder="Input Saldo"></td>' +
         '<td><button type="button" class="btn btn-danger btn_remove saldo"> - </button></td> </tr> ');
+    });
+
+    $(document).on('input', '.number', function () {
+			var angka = $(this).val();
+			var number_string = angka.replace(/[^,\d]/g, '').toString(),
+			split   		= number_string.split(','),
+			sisa     		= split[0].length % 3,
+			angka_hasil     = split[0].substr(0, sisa),
+			ribuan     		= split[0].substr(sisa).match(/\d{3}/gi);
+
+			if(ribuan){
+				var separator = sisa ? '.' : '';
+				angka_hasil += separator + ribuan.join('.');
+			}
+
+			$(this).val(angka_hasil = split[1] != undefined ? angka_hasil + ',' + split[1] : angka_hasil);
+    });
+
+    $("input.mask").each((i,ele)=>{
+            let clone=$(ele).clone(false)
+            clone.attr("type","text")
+            let ele1=$(ele)
+            clone.val(Number(ele1.val()).toLocaleString("id"))
+            $(ele).after(clone)
+            $(ele).hide()
+            setInterval(()=>{
+                let newv=Number(ele1.val()).toLocaleString("id")
+                if(clone.val()!=newv){
+                    clone.val(newv)
+                }
+            },10)
+            $(ele).mouseleave(()=>{
+                $(clone).show()
+                $(ele1).hide()
+            })
+        })
+
+     //auto sum multiple insert
+     $(document).on('input', '.saldo', function() {
+        var sum = 0;
+        $(".saldo").each(function(){
+            sum += +$(this).val().replace(/\./g, '').replace(/\,/g, '.');
+        });
+        $('#total').val(sum);  
     });
 
     var filwaroeng  = $('#filter-waroeng').val();
@@ -294,16 +338,6 @@ $(document).ready(function() {
             { data: 'm_jurnal_bank_no_bukti' },
         ],
       });
-    });
-
-    //auto sum multiple insert
-    $(document).on('input', '.saldo', function() {
-        var sum = 0;
-        $(".saldo").each(function(){
-            sum += +$(this).val();
-        });
-        $('#total').val(sum);
-        
     });
 
     //auto change debit/kredit
