@@ -56,7 +56,7 @@ class MProdukTableSeeder extends Seeder
                 ],
                 [
                   "m_produk_code"=> "tl-100003",
-                  "m_produk_nama"=> "plastik 11",
+                  "m_produk_nama"=> "plastik 1kg",
                   "m_produk_urut"=> null,
                   "m_produk_cr"=> null,
                   "m_produk_status"=> 1,
@@ -493,7 +493,7 @@ class MProdukTableSeeder extends Seeder
                 ],
                 [
                   "m_produk_code"=> "tl-100026",
-                  "m_produk_nama"=> "plastik 1,5 1",
+                  "m_produk_nama"=> "plastik 1,5kg",
                   "m_produk_urut"=> null,
                   "m_produk_cr"=> null,
                   "m_produk_status"=> 1,
@@ -512,7 +512,7 @@ class MProdukTableSeeder extends Seeder
                 ],
                 [
                   "m_produk_code"=> "tl-100027",
-                  "m_produk_nama"=> "plastik 3 1",
+                  "m_produk_nama"=> "plastik 3 kg",
                   "m_produk_urut"=> null,
                   "m_produk_cr"=> null,
                   "m_produk_status"=> 1,
@@ -607,7 +607,7 @@ class MProdukTableSeeder extends Seeder
                 ],
                 [
                   "m_produk_code"=> "tl-100032",
-                  "m_produk_nama"=> "plastik 6ing klip",
+                  "m_produk_nama"=> "plastik packing klip",
                   "m_produk_urut"=> null,
                   "m_produk_cr"=> null,
                   "m_produk_status"=> 1,
@@ -626,7 +626,7 @@ class MProdukTableSeeder extends Seeder
                 ],
                 [
                   "m_produk_code"=> "tl-100033",
-                  "m_produk_nama"=> "plastik 6ing 7",
+                  "m_produk_nama"=> "plastik packing roll",
                   "m_produk_urut"=> null,
                   "m_produk_cr"=> null,
                   "m_produk_status"=> 1,
@@ -949,7 +949,7 @@ class MProdukTableSeeder extends Seeder
                 ],
                 [
                   "m_produk_code"=> "tl-100050",
-                  "m_produk_nama"=> "plastik 1/21 tipis",
+                  "m_produk_nama"=> "plastik 1/2kg tipis",
                   "m_produk_urut"=> null,
                   "m_produk_cr"=> null,
                   "m_produk_status"=> 1,
@@ -968,7 +968,7 @@ class MProdukTableSeeder extends Seeder
                 ],
                 [
                   "m_produk_code"=> "tl-100051",
-                  "m_produk_nama"=> "plastik 1/41 tipis",
+                  "m_produk_nama"=> "plastik 1/4kg tipis",
                   "m_produk_urut"=> null,
                   "m_produk_cr"=> null,
                   "m_produk_status"=> 1,
@@ -987,7 +987,7 @@ class MProdukTableSeeder extends Seeder
                 ],
                 [
                   "m_produk_code"=> "tl-100052",
-                  "m_produk_nama"=> "plastik 11 tipis",
+                  "m_produk_nama"=> "plastik 1kg tipis",
                   "m_produk_urut"=> null,
                   "m_produk_cr"=> null,
                   "m_produk_status"=> 1,
@@ -15655,9 +15655,9 @@ class MProdukTableSeeder extends Seeder
                 ],
                 [
                   "m_produk_code"=> "mn-400443",
-                  "m_produk_nama"=> "paket parcel a ",
+                  "m_produk_nama"=> "paket parcel a",
                   "m_produk_urut"=> "011-133",
-                  "m_produk_cr"=> "paket parcel a ",
+                  "m_produk_cr"=> "paket parcel a",
                   "m_produk_status"=> 1,
                   "m_produk_tax"=> 2,
                   "m_produk_sc"=> 1,
@@ -15674,9 +15674,9 @@ class MProdukTableSeeder extends Seeder
                 ],
                 [
                   "m_produk_code"=> "mn-400444",
-                  "m_produk_nama"=> "paket parcel b ",
+                  "m_produk_nama"=> "paket parcel b",
                   "m_produk_urut"=> "011-134",
-                  "m_produk_cr"=> "paket parcel b ",
+                  "m_produk_cr"=> "paket parcel b",
                   "m_produk_status"=> 1,
                   "m_produk_tax"=> 2,
                   "m_produk_sc"=> 1,
@@ -15693,9 +15693,9 @@ class MProdukTableSeeder extends Seeder
                 ],
                 [
                   "m_produk_code"=> "mn-400445",
-                  "m_produk_nama"=> "paket parcel c ",
+                  "m_produk_nama"=> "paket parcel c",
                   "m_produk_urut"=> "011-135",
-                  "m_produk_cr"=> "paket parcel c ",
+                  "m_produk_cr"=> "paket parcel c",
                   "m_produk_status"=> 1,
                   "m_produk_tax"=> 2,
                   "m_produk_sc"=> 1,
@@ -15712,9 +15712,9 @@ class MProdukTableSeeder extends Seeder
                 ],
                 [
                   "m_produk_code"=> "mn-400446",
-                  "m_produk_nama"=> "paket sembako a ",
+                  "m_produk_nama"=> "paket sembako a",
                   "m_produk_urut"=> "011-136",
-                  "m_produk_cr"=> "paket sembako a ",
+                  "m_produk_cr"=> "paket sembako a",
                   "m_produk_status"=> 1,
                   "m_produk_tax"=> 2,
                   "m_produk_sc"=> 1,
@@ -15731,9 +15731,9 @@ class MProdukTableSeeder extends Seeder
                 ],
                 [
                   "m_produk_code"=> "mn-400447",
-                  "m_produk_nama"=> "paket sembako b ",
+                  "m_produk_nama"=> "paket sembako b",
                   "m_produk_urut"=> "011-137",
-                  "m_produk_cr"=> "paket sembako b ",
+                  "m_produk_cr"=> "paket sembako b",
                   "m_produk_status"=> 1,
                   "m_produk_tax"=> 2,
                   "m_produk_sc"=> 1,
@@ -15750,9 +15750,9 @@ class MProdukTableSeeder extends Seeder
                 ],
                 [
                   "m_produk_code"=> "mn-400448",
-                  "m_produk_nama"=> "paket sembako c ",
+                  "m_produk_nama"=> "paket sembako c",
                   "m_produk_urut"=> "011-138",
-                  "m_produk_cr"=> "paket sembako c ",
+                  "m_produk_cr"=> "paket sembako c",
                   "m_produk_status"=> 1,
                   "m_produk_tax"=> 2,
                   "m_produk_sc"=> 1,
