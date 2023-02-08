@@ -13,51 +13,49 @@ class ConfigMejaTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('m_meja')->truncate();
+        DB::table("m_meja")->truncate();
 
-        DB::table('m_meja')->insert([
-            [
-                'm_meja_nama' =>'Meja Kotak Lesehan',
-                'm_meja_m_meja_jenis_id' =>5,
-                'm_meja_m_w_id'=>1,
-                'm_meja_type'=>'Lesehan',
-                'm_meja_created_by'=>1,
-            ],
-            [
-                'm_meja_nama' =>'Meja Couple Kotak',
-                'm_meja_m_meja_jenis_id' =>6,
-                'm_meja_m_w_id'=>1,
-                'm_meja_type'=>'Berdiri', 
-                'm_meja_created_by'=>1,
-            ],
-            [
-                'm_meja_nama' =>'Meja Couple Kotak',
-                'm_meja_m_meja_jenis_id' =>6,
-                'm_meja_m_w_id'=>5,
-                'm_meja_type'=>'Berdiri',    
-                'm_meja_created_by'=>1,
-            ],
-            [
-                'm_meja_nama' =>'Meja Kotak Lesehan',
-                'm_meja_m_meja_jenis_id' =>5,
-                'm_meja_m_w_id'=>5,
-                'm_meja_type'=>'Lesehan',    
-                'm_meja_created_by'=>1,
-            ],
-            [
-                'm_meja_nama' =>'Meja Couple Kotak',
-                'm_meja_m_meja_jenis_id' =>6,
-                'm_meja_m_w_id'=>8,
-                'm_meja_type'=>'Berdiri',
-                'm_meja_created_by'=>1,
-            ],
-            [
-                'm_meja_nama' =>'Meja Kotak Lesehan',
-                'm_meja_m_meja_jenis_id' =>5,
-                'm_meja_m_w_id'=>8,
-                'm_meja_type'=>'Lesehan',
-                'm_meja_created_by'=>1,
-            ],
-        ]);
+        DB::statement('
+INSERT INTO "m_meja" ("m_meja_id", "m_meja_nama", "m_meja_m_meja_jenis_id", "m_meja_m_w_id", "m_meja_type", "m_meja_created_by", "m_meja_updated_by", "m_meja_deleted_by", "m_meja_created_at", "m_meja_updated_at", "m_meja_deleted_at") VALUES (1, "00", 6, 1, "meja", 2, NULL, NULL, "2022-12-04 13:11:06+07", NULL, NULL);
+INSERT INTO "m_meja" ("m_meja_id", "m_meja_nama", "m_meja_m_meja_jenis_id", "m_meja_m_w_id", "m_meja_type", "m_meja_created_by", "m_meja_updated_by", "m_meja_deleted_by", "m_meja_created_at", "m_meja_updated_at", "m_meja_deleted_at") VALUES (2, "01", 5, 1, "meja", 2, NULL, NULL, "2022-12-04 13:12:46+07", NULL, NULL);
+INSERT INTO "m_meja" ("m_meja_id", "m_meja_nama", "m_meja_m_meja_jenis_id", "m_meja_m_w_id", "m_meja_type", "m_meja_created_by", "m_meja_updated_by", "m_meja_deleted_by", "m_meja_created_at", "m_meja_updated_at", "m_meja_deleted_at") VALUES (3, "02", 5, 1, "meja", 2, NULL, NULL, "2022-12-04 13:12:46+07", NULL, NULL);
+INSERT INTO "m_meja" ("m_meja_id", "m_meja_nama", "m_meja_m_meja_jenis_id", "m_meja_m_w_id", "m_meja_type", "m_meja_created_by", "m_meja_updated_by", "m_meja_deleted_by", "m_meja_created_at", "m_meja_updated_at", "m_meja_deleted_at") VALUES (4, "03", 5, 1, "meja", 2, NULL, NULL, "2022-12-04 13:12:46+07", NULL, NULL);
+INSERT INTO "m_meja" ("m_meja_id", "m_meja_nama", "m_meja_m_meja_jenis_id", "m_meja_m_w_id", "m_meja_type", "m_meja_created_by", "m_meja_updated_by", "m_meja_deleted_by", "m_meja_created_at", "m_meja_updated_at", "m_meja_deleted_at") VALUES (5, "04", 5, 1, "meja", 2, NULL, NULL, "2022-12-04 13:12:46+07", NULL, NULL);
+INSERT INTO "m_meja" ("m_meja_id", "m_meja_nama", "m_meja_m_meja_jenis_id", "m_meja_m_w_id", "m_meja_type", "m_meja_created_by", "m_meja_updated_by", "m_meja_deleted_by", "m_meja_created_at", "m_meja_updated_at", "m_meja_deleted_at") VALUES (6, "05", 5, 1, "meja", 2, NULL, NULL, "2022-12-04 13:12:46+07", NULL, NULL);
+INSERT INTO "m_meja" ("m_meja_id", "m_meja_nama", "m_meja_m_meja_jenis_id", "m_meja_m_w_id", "m_meja_type", "m_meja_created_by", "m_meja_updated_by", "m_meja_deleted_by", "m_meja_created_at", "m_meja_updated_at", "m_meja_deleted_at") VALUES (7, "06", 5, 1, "meja", 2, NULL, NULL, "2022-12-04 13:12:46+07", NULL, NULL);
+INSERT INTO "m_meja" ("m_meja_id", "m_meja_nama", "m_meja_m_meja_jenis_id", "m_meja_m_w_id", "m_meja_type", "m_meja_created_by", "m_meja_updated_by", "m_meja_deleted_by", "m_meja_created_at", "m_meja_updated_at", "m_meja_deleted_at") VALUES (8, "07", 5, 1, "meja", 2, NULL, NULL, "2022-12-04 13:12:46+07", NULL, NULL);
+INSERT INTO "m_meja" ("m_meja_id", "m_meja_nama", "m_meja_m_meja_jenis_id", "m_meja_m_w_id", "m_meja_type", "m_meja_created_by", "m_meja_updated_by", "m_meja_deleted_by", "m_meja_created_at", "m_meja_updated_at", "m_meja_deleted_at") VALUES (9, "08", 5, 1, "meja", 2, NULL, NULL, "2022-12-04 13:12:46+07", NULL, NULL);
+INSERT INTO "m_meja" ("m_meja_id", "m_meja_nama", "m_meja_m_meja_jenis_id", "m_meja_m_w_id", "m_meja_type", "m_meja_created_by", "m_meja_updated_by", "m_meja_deleted_by", "m_meja_created_at", "m_meja_updated_at", "m_meja_deleted_at") VALUES (10, "09", 5, 1, "meja", 2, NULL, NULL, "2022-12-04 13:12:46+07", NULL, NULL);
+INSERT INTO "m_meja" ("m_meja_id", "m_meja_nama", "m_meja_m_meja_jenis_id", "m_meja_m_w_id", "m_meja_type", "m_meja_created_by", "m_meja_updated_by", "m_meja_deleted_by", "m_meja_created_at", "m_meja_updated_at", "m_meja_deleted_at") VALUES (11, "10", 5, 1, "meja", 2, NULL, NULL, "2022-12-04 13:12:46+07", NULL, NULL);
+INSERT INTO "m_meja" ("m_meja_id", "m_meja_nama", "m_meja_m_meja_jenis_id", "m_meja_m_w_id", "m_meja_type", "m_meja_created_by", "m_meja_updated_by", "m_meja_deleted_by", "m_meja_created_at", "m_meja_updated_at", "m_meja_deleted_at") VALUES (12, "11", 5, 1, "meja", 2, NULL, NULL, "2022-12-04 13:12:46+07", NULL, NULL);
+INSERT INTO "m_meja" ("m_meja_id", "m_meja_nama", "m_meja_m_meja_jenis_id", "m_meja_m_w_id", "m_meja_type", "m_meja_created_by", "m_meja_updated_by", "m_meja_deleted_by", "m_meja_created_at", "m_meja_updated_at", "m_meja_deleted_at") VALUES (13, "12", 5, 1, "meja", 2, NULL, NULL, "2022-12-04 13:12:46+07", NULL, NULL);
+INSERT INTO "m_meja" ("m_meja_id", "m_meja_nama", "m_meja_m_meja_jenis_id", "m_meja_m_w_id", "m_meja_type", "m_meja_created_by", "m_meja_updated_by", "m_meja_deleted_by", "m_meja_created_at", "m_meja_updated_at", "m_meja_deleted_at") VALUES (14, "13", 5, 1, "meja", 2, NULL, NULL, "2022-12-04 13:12:46+07", NULL, NULL);
+INSERT INTO "m_meja" ("m_meja_id", "m_meja_nama", "m_meja_m_meja_jenis_id", "m_meja_m_w_id", "m_meja_type", "m_meja_created_by", "m_meja_updated_by", "m_meja_deleted_by", "m_meja_created_at", "m_meja_updated_at", "m_meja_deleted_at") VALUES (15, "14", 5, 1, "meja", 2, NULL, NULL, "2022-12-04 13:12:46+07", NULL, NULL);
+INSERT INTO "m_meja" ("m_meja_id", "m_meja_nama", "m_meja_m_meja_jenis_id", "m_meja_m_w_id", "m_meja_type", "m_meja_created_by", "m_meja_updated_by", "m_meja_deleted_by", "m_meja_created_at", "m_meja_updated_at", "m_meja_deleted_at") VALUES (16, "15", 5, 1, "meja", 2, NULL, NULL, "2022-12-04 13:12:46+07", NULL, NULL);
+INSERT INTO "m_meja" ("m_meja_id", "m_meja_nama", "m_meja_m_meja_jenis_id", "m_meja_m_w_id", "m_meja_type", "m_meja_created_by", "m_meja_updated_by", "m_meja_deleted_by", "m_meja_created_at", "m_meja_updated_at", "m_meja_deleted_at") VALUES (17, "16", 5, 1, "meja", 2, NULL, NULL, "2022-12-04 13:12:46+07", NULL, NULL);
+INSERT INTO "m_meja" ("m_meja_id", "m_meja_nama", "m_meja_m_meja_jenis_id", "m_meja_m_w_id", "m_meja_type", "m_meja_created_by", "m_meja_updated_by", "m_meja_deleted_by", "m_meja_created_at", "m_meja_updated_at", "m_meja_deleted_at") VALUES (18, "17", 5, 1, "meja", 2, NULL, NULL, "2022-12-04 13:12:46+07", NULL, NULL);
+INSERT INTO "m_meja" ("m_meja_id", "m_meja_nama", "m_meja_m_meja_jenis_id", "m_meja_m_w_id", "m_meja_type", "m_meja_created_by", "m_meja_updated_by", "m_meja_deleted_by", "m_meja_created_at", "m_meja_updated_at", "m_meja_deleted_at") VALUES (19, "18", 5, 1, "meja", 2, NULL, NULL, "2022-12-04 13:12:46+07", NULL, NULL);
+INSERT INTO "m_meja" ("m_meja_id", "m_meja_nama", "m_meja_m_meja_jenis_id", "m_meja_m_w_id", "m_meja_type", "m_meja_created_by", "m_meja_updated_by", "m_meja_deleted_by", "m_meja_created_at", "m_meja_updated_at", "m_meja_deleted_at") VALUES (20, "19", 5, 1, "meja", 2, NULL, NULL, "2022-12-04 13:12:46+07", NULL, NULL);
+INSERT INTO "m_meja" ("m_meja_id", "m_meja_nama", "m_meja_m_meja_jenis_id", "m_meja_m_w_id", "m_meja_type", "m_meja_created_by", "m_meja_updated_by", "m_meja_deleted_by", "m_meja_created_at", "m_meja_updated_at", "m_meja_deleted_at") VALUES (21, "20", 5, 1, "meja", 2, NULL, NULL, "2022-12-04 13:12:46+07", NULL, NULL);
+INSERT INTO "m_meja" ("m_meja_id", "m_meja_nama", "m_meja_m_meja_jenis_id", "m_meja_m_w_id", "m_meja_type", "m_meja_created_by", "m_meja_updated_by", "m_meja_deleted_by", "m_meja_created_at", "m_meja_updated_at", "m_meja_deleted_at") VALUES (22, "21", 5, 1, "meja", 2, NULL, NULL, "2022-12-04 13:12:46+07", NULL, NULL);
+INSERT INTO "m_meja" ("m_meja_id", "m_meja_nama", "m_meja_m_meja_jenis_id", "m_meja_m_w_id", "m_meja_type", "m_meja_created_by", "m_meja_updated_by", "m_meja_deleted_by", "m_meja_created_at", "m_meja_updated_at", "m_meja_deleted_at") VALUES (23, "22", 5, 1, "meja", 2, NULL, NULL, "2022-12-04 13:12:46+07", NULL, NULL);
+INSERT INTO "m_meja" ("m_meja_id", "m_meja_nama", "m_meja_m_meja_jenis_id", "m_meja_m_w_id", "m_meja_type", "m_meja_created_by", "m_meja_updated_by", "m_meja_deleted_by", "m_meja_created_at", "m_meja_updated_at", "m_meja_deleted_at") VALUES (24, "23", 5, 1, "meja", 2, NULL, NULL, "2022-12-04 13:12:46+07", NULL, NULL);
+INSERT INTO "m_meja" ("m_meja_id", "m_meja_nama", "m_meja_m_meja_jenis_id", "m_meja_m_w_id", "m_meja_type", "m_meja_created_by", "m_meja_updated_by", "m_meja_deleted_by", "m_meja_created_at", "m_meja_updated_at", "m_meja_deleted_at") VALUES (25, "24", 5, 1, "meja", 2, NULL, NULL, "2022-12-04 13:12:46+07", NULL, NULL);
+INSERT INTO "m_meja" ("m_meja_id", "m_meja_nama", "m_meja_m_meja_jenis_id", "m_meja_m_w_id", "m_meja_type", "m_meja_created_by", "m_meja_updated_by", "m_meja_deleted_by", "m_meja_created_at", "m_meja_updated_at", "m_meja_deleted_at") VALUES (26, "25", 5, 1, "meja", 2, NULL, NULL, "2022-12-04 13:12:46+07", NULL, NULL);
+INSERT INTO "m_meja" ("m_meja_id", "m_meja_nama", "m_meja_m_meja_jenis_id", "m_meja_m_w_id", "m_meja_type", "m_meja_created_by", "m_meja_updated_by", "m_meja_deleted_by", "m_meja_created_at", "m_meja_updated_at", "m_meja_deleted_at") VALUES (27, "Express 01", 10, 1, "express", 2, NULL, NULL, "2022-12-08 11:18:28+07", NULL, NULL);
+INSERT INTO "m_meja" ("m_meja_id", "m_meja_nama", "m_meja_m_meja_jenis_id", "m_meja_m_w_id", "m_meja_type", "m_meja_created_by", "m_meja_updated_by", "m_meja_deleted_by", "m_meja_created_at", "m_meja_updated_at", "m_meja_deleted_at") VALUES (28, "Express 02", 10, 1, "express", 2, NULL, NULL, "2022-12-08 11:18:28+07", NULL, NULL);
+INSERT INTO "m_meja" ("m_meja_id", "m_meja_nama", "m_meja_m_meja_jenis_id", "m_meja_m_w_id", "m_meja_type", "m_meja_created_by", "m_meja_updated_by", "m_meja_deleted_by", "m_meja_created_at", "m_meja_updated_at", "m_meja_deleted_at") VALUES (29, "Express 03", 10, 1, "express", 2, NULL, NULL, "2022-12-08 11:18:28+07", NULL, NULL);
+INSERT INTO "m_meja" ("m_meja_id", "m_meja_nama", "m_meja_m_meja_jenis_id", "m_meja_m_w_id", "m_meja_type", "m_meja_created_by", "m_meja_updated_by", "m_meja_deleted_by", "m_meja_created_at", "m_meja_updated_at", "m_meja_deleted_at") VALUES (31, "Bks 01", 11, 1, "bungkus", 2, NULL, NULL, "2022-12-08 11:27:33+07", NULL, NULL);
+INSERT INTO "m_meja" ("m_meja_id", "m_meja_nama", "m_meja_m_meja_jenis_id", "m_meja_m_w_id", "m_meja_type", "m_meja_created_by", "m_meja_updated_by", "m_meja_deleted_by", "m_meja_created_at", "m_meja_updated_at", "m_meja_deleted_at") VALUES (32, "Bks 02", 11, 1, "bungkus", 2, NULL, NULL, "2022-12-08 11:27:33+07", NULL, NULL);
+INSERT INTO "m_meja" ("m_meja_id", "m_meja_nama", "m_meja_m_meja_jenis_id", "m_meja_m_w_id", "m_meja_type", "m_meja_created_by", "m_meja_updated_by", "m_meja_deleted_by", "m_meja_created_at", "m_meja_updated_at", "m_meja_deleted_at") VALUES (33, "Bks 03", 11, 1, "bungkus", 2, NULL, NULL, "2022-12-08 11:27:33+07", NULL, NULL);
+INSERT INTO "m_meja" ("m_meja_id", "m_meja_nama", "m_meja_m_meja_jenis_id", "m_meja_m_w_id", "m_meja_type", "m_meja_created_by", "m_meja_updated_by", "m_meja_deleted_by", "m_meja_created_at", "m_meja_updated_at", "m_meja_deleted_at") VALUES (34, "Bks 04", 11, 1, "bungkus", 2, NULL, NULL, "2022-12-08 11:27:33+07", NULL, NULL);
+INSERT INTO "m_meja" ("m_meja_id", "m_meja_nama", "m_meja_m_meja_jenis_id", "m_meja_m_w_id", "m_meja_type", "m_meja_created_by", "m_meja_updated_by", "m_meja_deleted_by", "m_meja_created_at", "m_meja_updated_at", "m_meja_deleted_at") VALUES (35, "Bks 05", 11, 1, "bungkus", 2, NULL, NULL, "2022-12-08 11:27:33+07", NULL, NULL);
+INSERT INTO "m_meja" ("m_meja_id", "m_meja_nama", "m_meja_m_meja_jenis_id", "m_meja_m_w_id", "m_meja_type", "m_meja_created_by", "m_meja_updated_by", "m_meja_deleted_by", "m_meja_created_at", "m_meja_updated_at", "m_meja_deleted_at") VALUES (36, "Bks 06", 11, 1, "bungkus", 2, NULL, NULL, "2022-12-08 11:27:33+07", NULL, NULL);
+INSERT INTO "m_meja" ("m_meja_id", "m_meja_nama", "m_meja_m_meja_jenis_id", "m_meja_m_w_id", "m_meja_type", "m_meja_created_by", "m_meja_updated_by", "m_meja_deleted_by", "m_meja_created_at", "m_meja_updated_at", "m_meja_deleted_at") VALUES (37, "Bks 07", 11, 1, "bungkus", 2, NULL, NULL, "2022-12-08 11:27:33+07", NULL, NULL);
+INSERT INTO "m_meja" ("m_meja_id", "m_meja_nama", "m_meja_m_meja_jenis_id", "m_meja_m_w_id", "m_meja_type", "m_meja_created_by", "m_meja_updated_by", "m_meja_deleted_by", "m_meja_created_at", "m_meja_updated_at", "m_meja_deleted_at") VALUES (38, "Bks 08", 11, 1, "bungkus", 2, NULL, NULL, "2022-12-08 11:27:33+07", NULL, NULL);
+INSERT INTO "m_meja" ("m_meja_id", "m_meja_nama", "m_meja_m_meja_jenis_id", "m_meja_m_w_id", "m_meja_type", "m_meja_created_by", "m_meja_updated_by", "m_meja_deleted_by", "m_meja_created_at", "m_meja_updated_at", "m_meja_deleted_at") VALUES (39, "Bks 09", 11, 1, "bungkus", 2, NULL, NULL, "2022-12-08 11:27:33+07", NULL, NULL);
+INSERT INTO "m_meja" ("m_meja_id", "m_meja_nama", "m_meja_m_meja_jenis_id", "m_meja_m_w_id", "m_meja_type", "m_meja_created_by", "m_meja_updated_by", "m_meja_deleted_by", "m_meja_created_at", "m_meja_updated_at", "m_meja_deleted_at") VALUES (40, "Bks 10", 11, 1, "bungkus", 2, NULL, NULL, "2022-12-08 11:27:33+07", NULL, NULL);
+INSERT INTO "m_meja" ("m_meja_id", "m_meja_nama", "m_meja_m_meja_jenis_id", "m_meja_m_w_id", "m_meja_type", "m_meja_created_by", "m_meja_updated_by", "m_meja_deleted_by", "m_meja_created_at", "m_meja_updated_at", "m_meja_deleted_at") VALUES (30, "Express 04", 10, 1, "express", 2, NULL, NULL, "2022-12-08 11:18:28+07", NULL, NULL);
+');
     }
 }
