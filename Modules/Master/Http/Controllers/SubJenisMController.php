@@ -34,11 +34,11 @@ class SubJenisMController extends Controller
                 } else {
                     $data = array(
                         'm_sub_jenis_produk_nama'    =>  Str::lower($request->m_sub_jenis_produk_nama),
-                        'm_sub_jenis_produk_m_jenis_produk_id' => $request->array(m_sub_jenis_produk_m_jenis_produk_id, m_sub_jenis_produk),
+                        'm_sub_jenis_produk_m_jenis_produk_id' => $request->m_jenis_produk_id,
                         'm_sub_jenis_produk_created_by' => Auth::id(),
                         'm_sub_jenis_produk_created_at' => Carbon::now(),
                     );
-                    DB::table('m_sub_jenis_produk', 'm_jenis_produk')->insert($data);
+                    DB::table('m_sub_jenis_produk')->insert($data);
                     return response(['Messages' => 'Congratulations !']);
                 }
             } elseif ($request->action == 'edit') {

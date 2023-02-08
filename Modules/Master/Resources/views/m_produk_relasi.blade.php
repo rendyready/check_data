@@ -121,7 +121,7 @@
                       console.log(respond)
                         $("#id").val(respond.config_sub_jenis_produk_id).trigger('change');
                         $("#config_sub_jenis_produk_m_produk_id").val(respond.config_sub_jenis_produk_m_produk_id).trigger('change');
-                        $("#config_sub_jenis_produk_m_kategori_id").val(respond.config_sub_jenis_produk_m_kategori_id).trigger('change');
+                        $("#config_sub_jenis_produk_m_kategori_id").val(respond.config_sub_jenis_produk_m_sub_jenis_produk_id).trigger('change');
                     },
                     error: function() {
                     }

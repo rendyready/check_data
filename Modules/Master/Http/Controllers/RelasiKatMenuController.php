@@ -37,7 +37,7 @@ class RelasiKatMenuController extends Controller
         //don't need validate
         $data = DB::table('config_sub_jenis_produk')->insert([
             "config_sub_jenis_produk_m_produk_id" => $request->config_sub_jenis_produk_m_produk_id,
-            "config_sub_jenis_produk_m_sub_jenis_produk_id" => $request->config_sub_jenis_produk_m_sub_jenis_produk_id,
+            "config_sub_jenis_produk_m_sub_jenis_produk_id" => $request->config_sub_jenis_produk_m_kategori_id,
             "config_sub_jenis_produk_created_by" => Auth::id(),
             "config_sub_jenis_produk_created_at" => Carbon::now(),
         ]);
