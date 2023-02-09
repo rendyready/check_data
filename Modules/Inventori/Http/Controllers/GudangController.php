@@ -131,7 +131,7 @@ class GudangController extends Controller
         $user = Auth::id();
         $w_id = Auth::user()->waroeng_id;
         $waroeng_nama = DB::table('m_w')->select('m_w_nama')->where('m_w_id',$w_id)->first();
-        $data->code = (empty($get_max_id->rekap_tf_gudang_id)) ? $urut = "600001". $user : $urut = substr($get_max_id->rekap_tf_code,0,-1)+'1'. $user; 
+        $data->code = (empty($get_max_id->rekap_tf_gudang_id)) ? $urut = "600001". $user : $urut = substr($get_max_id->rekap_tf_gudang_code,0,-1)+'1'. $user; 
         $data->tgl_now = Carbon::now()->format('Y-m-d');
         $data->gudang = DB::table('m_gudang')->select('m_gudang_id','m_gudang_nama')
         ->where('m_gudang_m_w_id',$w_id)->get();
