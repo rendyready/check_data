@@ -31,17 +31,17 @@
                                         <div class="col-md-8">
                                             <select id="filter-rekening" class="cari js-select2 form-control "
                                                 style="width: 100%;" name="m_rekening_kategori">
-                                                <option value="Aktiva Lancar">Aktiva Lancar</option>
-                                                <option value="Aktiva Tetap">Aktiva Tetap</option>
-                                                <option value="Modal">Modal</option>
-                                                <option value="Kewajiban Jangka Pendek">Kewajiban Jangka Pendek</option>
-                                                <option value="Kewajiban Jangka Panjang">Kewajiban Jangka Panjang
+                                                <option value="aktiva lancar">Aktiva Lancar</option>
+                                                <option value="aktiva tetap">Aktiva Tetap</option>
+                                                <option value="modal">Modal</option>
+                                                <option value="kewajiban jangka pendek">Kewajiban Jangka Pendek</option>
+                                                <option value="kewajiban jangka panjang">Kewajiban Jangka Panjang
                                                 </option>
-                                                <option value="Pendapatan Operasional">Pendapatan Operasional</option>
-                                                <option value="Pendapatan Non Operasional">Pendapatan Non Operasional
+                                                <option value="pendapatan operasional">Pendapatan Operasional</option>
+                                                <option value="pendapatan non operasional">Pendapatan Non Operasional
                                                 </option>
-                                                <option value="Badan Organisasi">Badan Organisasi</option>
-                                                <option value="Badan Usaha">Badan Usaha</option>
+                                                <option value="badan organisasi">Badan Organisasi</option>
+                                                <option value="badan usaha">Badan Usaha</option>
                                             </select>
                                         </div>
                                     </div>
