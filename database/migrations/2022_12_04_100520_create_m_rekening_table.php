@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('m_rekening_kategori');
             $table->string('m_rekening_no_akun');
             $table->string('m_rekening_nama');
-            $table->integer('m_rekening_saldo');
+            $table->float('m_rekening_saldo');
             $table->bigInteger('m_rekening_created_by');
             $table->bigInteger('m_rekening_updated_by')->nullable();
             $table->bigInteger('m_rekening_deleted_by')->nullable();

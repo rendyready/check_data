@@ -16,10 +16,6 @@ class List_AktTableSeeder extends Seeder
         DB::table('list_akt')->truncate();
         DB::table('list_akt')->insert([
             [
-                'list_akt_nama' =>'Pembelian',
-                'list_akt_created_by'=>1,
-            ], 
-            [
                 'list_akt_nama' =>'Hutang Dagang',
                 'list_akt_created_by'=>1,
             ], 
@@ -48,15 +44,7 @@ class List_AktTableSeeder extends Seeder
                 'list_akt_created_by'=>1,
             ], 
             [
-                'list_akt_nama' =>'Barang Rusak Pembantu',
-                'list_akt_created_by'=>1,
-            ],  
-            [
                 'list_akt_nama' =>'HPP Penjualan',
-                'list_akt_created_by'=>1,
-            ], 
-            [
-                'list_akt_nama' =>'HPP Pembelian',
                 'list_akt_created_by'=>1,
             ], 
         ]);

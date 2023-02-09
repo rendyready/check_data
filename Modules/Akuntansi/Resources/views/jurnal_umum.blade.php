@@ -215,6 +215,12 @@ $(document).ready(function() {
     
     //tampil
         $('#jurnal-tampil').DataTable({
+            "columnDefs": [
+                { 
+                  "render": DataTable.render.number( '.', ',', 2, 'Rp. ' ),
+                  "targets":[3, 4],
+                }
+            ],
         button:[],
         destroy: true,
         lengthMenu: [ 10, 25, 50, 75, 100],
@@ -267,6 +273,12 @@ $(document).ready(function() {
             var filwaroeng2  = $('#filter-waroeng').val();
             var filtanggal2  = $('#filter-tanggal').val();
             $('#jurnal-tampil').DataTable({
+                "columnDefs": [
+                    { 
+                    "render": DataTable.render.number( '.', ',', 2, 'Rp. ' ),
+                    "targets":[3, 4],
+                    }
+                ],
                 button:[],
                 destroy: true,
                 lengthMenu: [ 10, 25, 50, 75, 100],
@@ -325,6 +337,12 @@ $(document).ready(function() {
         var filwaroeng  = $('#filter-waroeng').val();
         var filtanggal  = $('#filter-tanggal').val();
         $('#jurnal-tampil').DataTable({
+            "columnDefs": [
+                { 
+                  "render": DataTable.render.number( '.', ',', 2, 'Rp. ' ),
+                  "targets":[3, 4],
+                }
+            ],
         button:[],
         destroy: true,
         lengthMenu: [ 10, 25, 50, 75, 100],

@@ -58,12 +58,13 @@ class RekeningController extends Controller
     public function simpan(Request $request)
     {
         foreach ($request->m_rekening_no_akun as $key => $value) {
+            $str1 = str_replace('.', '', $request->m_rekening_saldo[$key]);
             $data = array(
                 'm_rekening_m_waroeng_id' => $request->m_rekening_m_waroeng_id,
                 'm_rekening_kategori' => $request->m_rekening_kategori,
                 'm_rekening_no_akun' => $request->m_rekening_no_akun[$key],
                 'm_rekening_nama' => strtolower($request->m_rekening_nama[$key]),
-                'm_rekening_saldo' => $request->m_rekening_saldo[$key],
+                'm_rekening_saldo' => str_replace(',', '.', $str1),
                 'm_rekening_created_by' => Auth::id(),
                 'm_rekening_created_at' => Carbon::now()
 

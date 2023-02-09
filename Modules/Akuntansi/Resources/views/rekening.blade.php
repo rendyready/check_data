@@ -70,9 +70,9 @@
                                                             required />
                                                     </td>
                                                     <td>
-                                                        <input type="number" step="any" placeholder="Input Saldo Rekening"
+                                                        <input type="text" step="any" placeholder="Input Saldo Rekening"
                                                             id="m_rekening_saldo" name="m_rekening_saldo[]"
-                                                            class="form-control set saldo form-control-sm text-end"  required />
+                                                            class="form-control set saldo form-control-sm text-end number"  required />
                                                     </td>
                                                     <td>
                                                         <button type="button" class="btn tambah btn-primary">+</button>
@@ -84,7 +84,7 @@
                                             <label class="col-sm-2 col-form-label" id="categoryAccount"
                                                 for="example-hf-text">Total </label>
                                             <div class="col-sm-8">
-                                                <input type="number" class="form-control set form-control-sm text-end" style="color:aliceblue; background-color: rgba(230, 42, 42, 0.6);" id="total"
+                                                <input type="text" class="form-control set form-control-sm text-end mask" style="color:aliceblue; background-color: rgba(230, 42, 42, 0.6);" id="total"
                                                     readonly>
                                             </div>
                                         </div>
@@ -169,14 +169,64 @@
       $('#form').append('<tr class="hapus" id="row' + no + '">' +
         '<td><input type="text" class="form-control form-control-sm m_rekening_no_akunjq text-center" name="m_rekening_no_akun[]" id="m_rekening_no_akunjq' + no + '" placeholder="Input Nama Akun" required></td>' +
         '<td><input type="text" class="form-control form-control-sm m_rekening_namajq text-center" name="m_rekening_nama[]" id="m_rekening_namajq' + no + '" placeholder="Input Nama Rekening" required></td>' +
-        '<td><input type="number" class="form-control saldo form-control-sm text-end" name="m_rekening_saldo[]" id="m_rekening_saldo" placeholder="Input Saldo Rekening" required></td>' +
+        '<td><input type="text" class="form-control saldo form-control-sm text-end number" name="m_rekening_saldo[]" id="m_rekening_saldo" placeholder="Input Saldo Rekening" required></td>' +
         '<td><button type="button" id="' + no + '" class="btn btn-danger btn_remove"> - </button></td> </tr> ');
+    });
+
+    $(document).on('input', '.number', function () {
+			var angka = $(this).val();
+			var number_string = angka.replace(/[^,\d]/g, '').toString(),
+			split   		= number_string.split(','),
+			sisa     		= split[0].length % 3,
+			angka_hasil     = split[0].substr(0, sisa),
+			ribuan     		= split[0].substr(sisa).match(/\d{3}/gi);
+
+			if(ribuan){
+				var separator = sisa ? '.' : '';
+				angka_hasil += separator + ribuan.join('.');
+			}
+
+			$(this).val(angka_hasil = split[1] != undefined ? angka_hasil + ',' + split[1] : angka_hasil);
+    });
+
+    $("input.mask").each((i,ele)=>{
+            let clone=$(ele).clone(false)
+            clone.attr("type","text")
+            let ele1=$(ele)
+            clone.val(Number(ele1.val()).toLocaleString("id"))
+            $(ele).after(clone)
+            $(ele).hide()
+            setInterval(()=>{
+                let newv=Number(ele1.val()).toLocaleString("id")
+                if(clone.val()!=newv){
+                    clone.val(newv)
+                }
+            },10)
+            $(ele).mouseleave(()=>{
+                $(clone).show()
+                $(ele1).hide()
+            })
+        })
+
+     //auto sum multiple insert
+     $(document).on('input', '.saldo', function() {
+        var sum = 0;
+        $(".saldo").each(function(){
+            sum += +$(this).val().replace(/\./g, '').replace(/\,/g, '.');
+        });
+        $('#total').val(sum);  
     });
 
     var waroengid           = $('#filter-waroeng').val();
     var rekeningkategori    = $('#filter-rekening').val();
     
         $('#rekening-tampil').DataTable({
+            "columnDefs": [
+                { 
+                  "render": DataTable.render.number( '.', ',', 2, 'Rp. ' ),
+                  "targets":3,
+                }
+            ],
         button:[],
         destroy: true,
         lengthMenu: [ 10, 25, 50, 75, 100],
@@ -218,6 +268,12 @@
             var rekeningkategori2 = $('#filter-rekening').val();
 
             $('#rekening-tampil').DataTable({
+                "columnDefs": [
+                    { 
+                    "render": DataTable.render.number( '.', ',', 2, 'Rp. ' ),
+                    "targets":3,
+                    }
+                ],
                 button:[],
                 destroy: true,
                 lengthMenu: [ 10, 25, 50, 75, 100],
@@ -255,6 +311,12 @@
         var waroengid = $('#filter-waroeng').val();
         var rekeningkategori = $('#filter-rekening').val();
         $('#rekening-tampil').DataTable({
+            "columnDefs": [
+                { 
+                  "render": DataTable.render.number( '.', ',', 2, 'Rp. ' ),
+                  "targets":3,
+                }
+            ],
         button:[],
         destroy: true,
         lengthMenu: [ 10, 25, 50, 75, 100],
@@ -275,15 +337,6 @@
         ],
 
       });
-    });
-
-    $(document).on("input", ".saldo", function() {
-        var sum = 0;
-        $(".saldo").each(function(){
-            sum += +$(this).val();
-        });
-        $('#total').val(sum);
-        
     });
 
     //validasi nama
