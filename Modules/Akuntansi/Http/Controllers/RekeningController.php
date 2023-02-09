@@ -42,7 +42,7 @@ class RekeningController extends Controller
             ->where('m_rekening_kategori', $request->m_rekening_kategori)
             ->count();
         return response()->json($validasi);
-
+        
     }
     public function validasino(Request $request)
     {

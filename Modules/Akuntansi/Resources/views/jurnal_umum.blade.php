@@ -67,13 +67,13 @@
                                                         class="form-control set form-control-sm text-center" />
                                                 </td>
                                                 <td>
-                                                    <input type="text" step="any" placeholder="Input Debit" id="m_jurnal_debit"
-                                                        name="m_jurnal_umum_debit[]"
+                                                    <input type="text" step="any" id="m_jurnal_debit"
+                                                        name="m_jurnal_umum_debit[]" value="0"
                                                         class="form-control set form-control-sm saldodebit text-end number" />
                                                 </td>
                                                 <td>
-                                                    <input type="text" step="any" placeholder="Input Kredit" id="m_jurnal_kredit"
-                                                        name="m_jurnal_umum_kredit[]"
+                                                    <input type="text" step="any" id="m_jurnal_kredit"
+                                                        name="m_jurnal_umum_kredit[]" value="0"
                                                         class="form-control set form-control-sm saldokredit text-end number" />
                                                 </td>
                                                 <td>
@@ -152,8 +152,8 @@ $(document).ready(function() {
         '<td><input type="text" placeholder="Input Nomor Akun" id="m_jurnal_umum_m_rekening_no_akunjq'+ no +'" name="m_jurnal_umum_m_rekening_no_akun[]" class="form-control form-control-sm no-akunjq text-center"/></td>' +
         '<td><select id="m_rekening_namajq' + no + '" class="js-select2 showrekjq" name="m_jurnal_umum_m_rekening_nama[]" style="width:200px;"></select></td>' +
         '<td><input type="text" class="form-control form-control-sm text-center" name="m_jurnal_umum_particul[]" id="m_jurnal_particul" placeholder="Input Particul"></td>' +
-        '<td><input type="text" step="any" class="form-control form-control-sm saldodebit text-end number" name="m_jurnal_umum_debit[]" id="m_jurnal_debit" placeholder="Input Debit"></td>' +
-        '<td><input type="text" step="any" class="form-control form-control-sm saldokredit text-end number" name="m_jurnal_umum_kredit[]" id="m_jurnal_kredit" placeholder="Input Kredit"></td>' +
+        '<td><input type="text" step="any" class="form-control form-control-sm saldodebit text-end number" name="m_jurnal_umum_debit[]" id="m_jurnal_debit" value="0"></td>' +
+        '<td><input type="text" step="any" class="form-control form-control-sm saldokredit text-end number" name="m_jurnal_umum_kredit[]" id="m_jurnal_kredit" value="0"></td>' +
         '<td><button type="button" class="btn btn-danger btn_remove saldodebit saldokredit"> - </button></td> </tr> ');
     });
 
