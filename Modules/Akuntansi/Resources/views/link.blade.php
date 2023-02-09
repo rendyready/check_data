@@ -87,7 +87,13 @@
                         list_akt_m_rekening_id: no_rekening,
                     },
                     success: function(data) {
-                        alert('Berhasil Update');
+                        Codebase.helpers('jq-notify', {
+                              align: 'right', // 'right', 'left', 'center'
+                              from: 'top', // 'top', 'bottom'
+                              type: data.type, // 'info', 'success', 'warning', 'danger'
+                              icon: 'fa fa-info me-5', // Icon class
+                              message: data.messages
+                            });
                     }
                 })
             })

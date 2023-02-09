@@ -31,17 +31,17 @@
                                         <div class="col-md-8">
                                             <select id="filter-rekening" class="cari js-select2 form-control "
                                                 style="width: 100%;" name="m_rekening_kategori">
-                                                <option value="Aktiva Lancar">Aktiva Lancar</option>
-                                                <option value="Aktiva Tetap">Aktiva Tetap</option>
-                                                <option value="Modal">Modal</option>
-                                                <option value="Kewajiban Jangka Pendek">Kewajiban Jangka Pendek</option>
-                                                <option value="Kewajiban Jangka Panjang">Kewajiban Jangka Panjang
+                                                <option value="aktiva lancar">Aktiva Lancar</option>
+                                                <option value="aktiva tetap">Aktiva Tetap</option>
+                                                <option value="modal">Modal</option>
+                                                <option value="kewajiban jangka pendek">Kewajiban Jangka Pendek</option>
+                                                <option value="kewajiban jangka panjang">Kewajiban Jangka Panjang
                                                 </option>
-                                                <option value="Pendapatan Operasional">Pendapatan Operasional</option>
-                                                <option value="Pendapatan Non Operasional">Pendapatan Non Operasional
+                                                <option value="pendapatan operasional">Pendapatan Operasional</option>
+                                                <option value="pendapatan non operasional">Pendapatan Non Operasional
                                                 </option>
-                                                <option value="Badan Organisasi">Badan Organisasi</option>
-                                                <option value="Badan Usaha">Badan Usaha</option>
+                                                <option value="badan organisasi">Badan Organisasi</option>
+                                                <option value="badan usaha">Badan Usaha</option>
                                             </select>
                                         </div>
                                     </div>
@@ -223,8 +223,8 @@
         $('#rekening-tampil').DataTable({
             "columnDefs": [
                 { 
-                  "render": DataTable.render.number( '.', ',', 2, 'Rp. ' ),
                   "targets":3,
+                  "render": DataTable.render.number( '.', ',', 2, 'Rp. ' ),
                 }
             ],
         button:[],
@@ -354,7 +354,13 @@
                 type: "get",
                 success: function(data) {
                     if (data > 0){
-                    alert('Nama rekening yang anda inputkan sama/ duplikat ! ');
+                        Codebase.helpers('jq-notify', {
+                              align: 'right', // 'right', 'left', 'center'
+                              from: 'top', // 'top', 'bottom'
+                              type: data.type, // 'info', 'success', 'warning', 'danger'
+                              icon: 'fa fa-info me-5', // Icon class
+                              message: 'Nama rekening yang anda inputkan sama/ duplikat !'
+                            });
                     $('.m_rekening_nama').val('');
                     }  
                 },
@@ -378,7 +384,13 @@
 
                     // console.log(data);
                     if (data > 0){
-                    alert('No Akun yang anda inputkan sama/duplikat ! ');
+                        Codebase.helpers('jq-notify', {
+                              align: 'right', // 'right', 'left', 'center'
+                              from: 'top', // 'top', 'bottom'
+                              type: data.type, // 'info', 'success', 'warning', 'danger'
+                              icon: 'fa fa-info me-5', // Icon class
+                              message: 'No Akun yang anda inputkan sama/duplikat ! '
+                            });
                     $('.m_rekening_no_akun').val('');
                     }  
                 },
@@ -401,7 +413,13 @@
                 type: "get",
                 success: function(data) {
                     if (data > 0){
-                    alert('Nama rekening yang anda inputkan sama/ duplikat ! ');
+                        Codebase.helpers('jq-notify', {
+                              align: 'right', // 'right', 'left', 'center'
+                              from: 'top', // 'top', 'bottom'
+                              type: data.type, // 'info', 'success', 'warning', 'danger'
+                              icon: 'fa fa-info me-5', // Icon class
+                              message: 'Nama rekening yang anda inputkan sama/ duplikat !'
+                            });   
                     $('#m_rekening_namajq'+id).val('');
                     }  
                 },
@@ -424,7 +442,13 @@
                 type: "get",
                 success: function(data) {
                     if (data > 0){
-                    alert('No Akun yang anda inputkan sama/duplikat ! ');
+                        Codebase.helpers('jq-notify', {
+                              align: 'right', // 'right', 'left', 'center'
+                              from: 'top', // 'top', 'bottom'
+                              type: data.type, // 'info', 'success', 'warning', 'danger'
+                              icon: 'fa fa-info me-5', // Icon class
+                              message: 'No Akun yang anda inputkan sama/duplikat ! '
+                            });
                     $('#m_rekening_no_akunjq'+id).val('');
                     }  
                 },
@@ -466,8 +490,13 @@
             },
         });
       }else{
-      alert('waroeng yang anda pilih sama dengan yang di halaman !');
-      $('#m_rekening_m_waroeng_id2').val('-- Pilih Waroeng --');
+        Codebase.helpers('jq-notify', {
+                              align: 'right', // 'right', 'left', 'center'
+                              from: 'top', // 'top', 'bottom'
+                              icon: 'fa fa-info me-5', // Icon class
+                              message: 'waroeng yang anda pilih sama dengan yang di halaman !'
+                            });
+      $('#m_rekening_m_waroeng_id2').val('-- Pilih Waroeng --').trigger('change');
       }
     });
 
