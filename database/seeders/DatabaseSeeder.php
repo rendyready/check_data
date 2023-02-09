@@ -41,6 +41,7 @@ class DatabaseSeeder extends Seeder
             // ConfigMejaTableSeeder::class,
             MFaqTableSeeder::class,
             List_AktTableSeeder::class,
+            MRekeningTableSeeder::class,
             SupplierSeeder::class,
             NmGudangTableSeeder::class,
             MKasirAksesTableSeeder::class,
