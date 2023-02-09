@@ -2,14 +2,12 @@
 
 namespace Modules\Master\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 use illuminate\Support\Str;
 
 class ProdukController extends Controller
@@ -23,19 +21,15 @@ class ProdukController extends Controller
         $data = new \stdClass();
         $data->produk = DB::table('m_produk')
             ->leftjoin('m_jenis_produk', 'm_produk_m_jenis_produk_id', 'm_jenis_produk_id')
-            ->leftjoin('m_satuan', 'm_produk_m_satuan_id', 'm_satuan_id')
+            ->leftjoin('m_satuan', 'm_produk_utama_m_satuan_id', 'm_satuan_id')
             ->leftjoin('m_klasifikasi_produk', 'm_produk_m_klasifikasi_produk_id', 'm_klasifikasi_produk_id')
+            ->whereIn('m_produk_m_klasifikasi_produk_id',[4])
             ->get();
         $data->satuan = DB::table('m_satuan')->get();
-        $data->klasifikasi = DB::table('m_klasifikasi_produk')->get();
+        $data->klasifikasi = DB::table('m_klasifikasi_produk')->where('m_klasifikasi_produk_id',4)->get();
         $data->jenisproduk = DB::table('m_jenis_produk')->get();
         $data->plot_produksi = DB::table('m_plot_produksi')->get();
         return view('master::m_produk', compact('data'));
-
-
-        echo "<pre>";
-        dd($data);
-        echo "</pre>";
     }
 
     /**
@@ -44,36 +38,69 @@ class ProdukController extends Controller
      */
     public function simpan(request $request)
     {
-        $raw = [
-            'm_produk_code' => ['required', 'unique:m_produk', 'max:255'],
-        ];
-        $value = [
-            "m_produk_code" => Str::lower($request->m_produk_code),
-        ];
-        $validate = Validator::make($value, $raw);
-        if ($validate->fails()) {
-            return response(['Messages' => 'Data Duplidate !']);
-        } else {
-            DB::table('m_produk')->insert([
-                "m_produk_code" => Str::lower($request->m_produk_code),
-                "m_produk_nama" => $request->m_produk_nama,
-                "m_produk_urut" => $request->m_produk_urut,
-                "m_produk_cr" => $request->m_produk_cr,
-                "m_produk_status" => $request->m_produk_status,
-                "m_produk_tax" => $request->m_produk_tax,
-                "m_produk_sc" => $request->m_produk_sc,
-                "m_produk_m_jenis_produk_id" => $request->m_produk_m_jenis_produk_id,
-                "m_produk_m_satuan_id" => $request->m_produk_m_satuan_id,
-                "m_produk_m_plot_produksi_id" => $request->m_produk_m_plot_produksi_id,
-                "m_produk_m_klasifikasi_produk_id" => $request->m_produk_m_klasifikasi_produk_id,
-                "m_produk_jual" => $request->m_produk_jual,
-                "m_produk_scp" => $request->m_produk_scp,
-                "m_produk_hpp" => $request->m_produk_hpp,
-                "m_produk_created_by" => Auth::id(),
-                "m_produk_created_at" => Carbon::now(),
-            ]);
-            return Redirect::route('m_produk.index');
-            return response(['Messages' => true]);
+        if ($request->ajax()) {
+            $produkNama = Str::lower(preg_replace(array('/\s{2,}/', '/[\t\n]/'), ' ', $request->m_produk_nama));
+            $produkUrut = Str::upper(preg_replace(array('/\s{2,}/', '/[\t\n]/'), ' ', $request->m_produk_urut));
+            $check = DB::table('m_produk')
+                ->select('m_produk_id')
+                ->selectRaw('m_produk_code,m_produk_urut')
+                ->selectRaw('m_produk_nama')
+                ->whereRaw('LOWER(m_produk_urut)=' . "'$produkUrut'")
+                ->whereRaw('LOWER(m_produk_nama)=' . "'$produkNama'")
+                ->orderBy('m_produk_id', 'asc')
+                ->first();
+            if ($request->action == 'add') {
+                if (!empty($check)) {
+                    return response()->json(['messages' => 'Data Simpan Double !', 'type' => 'danger']);
+                } else {
+                    $produk_code = DB::table('m_produk_code')->where('m_produk_code_id',1)->first();
+                    $code = $produk_code->m_produk_code_mn+1 ;
+                    DB::table('m_produk')->insert([
+                        "m_produk_code" => "mn-".$code,
+                        "m_produk_nama" => $request->m_produk_nama,
+                        "m_produk_urut" => $request->m_produk_urut,
+                        "m_produk_cr" => $request->m_produk_cr,
+                        "m_produk_status" => $request->m_produk_status,
+                        "m_produk_tax" => $request->m_produk_tax,
+                        "m_produk_sc" => $request->m_produk_sc,
+                        "m_produk_m_jenis_produk_id" => $request->m_produk_m_jenis_produk_id,
+                        "m_produk_utama_m_satuan_id" => $request->m_produk_utama_m_satuan_id,
+                        "m_produk_m_plot_produksi_id" => $request->m_produk_m_plot_produksi_id,
+                        "m_produk_m_klasifikasi_produk_id" => $request->m_produk_m_klasifikasi_produk_id,
+                        "m_produk_jual" => $request->m_produk_jual,
+                        "m_produk_scp" => $request->m_produk_scp,
+                        "m_produk_hpp" => $request->m_produk_hpp,
+                        "m_produk_created_by" => Auth::id(),
+                        "m_produk_created_at" => Carbon::now(),
+                    ]);
+                    DB::table('m_produk_code')->where('m_produk_code_id',1)->update(['m_produk_code_mn'=>$code]);
+                    return response(['messages' => 'Berhasil Tambah Produk !', 'type' => 'success']);
+                }
+            } else {
+                if ($request->m_produk_id==null ) {
+                    return response()->json(['messages' => 'Data Edit Double !', 'type' => 'danger']);
+                } else {
+                    DB::table('m_produk')->where('m_produk_id', $request->m_produk_id)
+                        ->update([
+                            "m_produk_nama" => $request->m_produk_nama,
+                            "m_produk_urut" => $request->m_produk_urut,
+                            "m_produk_cr" => $request->m_produk_cr,
+                            "m_produk_status" => $request->m_produk_status,
+                            "m_produk_tax" => $request->m_produk_tax,
+                            "m_produk_sc" => $request->m_produk_sc,
+                            "m_produk_m_jenis_produk_id" => $request->m_produk_m_jenis_produk_id,
+                            "m_produk_utama_m_satuan_id" => $request->m_produk_utama_m_satuan_id,
+                            "m_produk_m_plot_produksi_id" => $request->m_produk_m_plot_produksi_id,
+                            "m_produk_m_klasifikasi_produk_id" => $request->m_produk_m_klasifikasi_produk_id,
+                            "m_produk_jual" => $request->m_produk_jual,
+                            "m_produk_scp" => $request->m_produk_scp,
+                            "m_produk_hpp" => $request->m_produk_hpp,
+                            "m_produk_updated_by" => Auth::id(),
+                            "m_produk_updated_at" => Carbon::now(),
+                        ]);
+                        return response(['messages' => 'Berhasil Edit Produk !', 'type' => 'success']);
+                }
+            }
         }
     }
 
@@ -82,79 +109,9 @@ class ProdukController extends Controller
      * @param Request $request
      * @return Renderable
      */
-    public function list($id)
+    function list($id)
     {
         $data = DB::table('m_produk')->where('m_produk_id', $id)->first();
         return response()->json($data, 200);
-    }
-
-    /**
-     * Show the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
-    public function show($id)
-    {
-        return view('master::show');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
-    public function edit(request $request)
-    {
-        $rawData = [
-            'm_produk_code' => ['required', 'unique:m_produk'],
-        ];
-        $value = ['m_produk_code' => Str::lower($request->m_produk_code),];
-        $validate = Validator::make($value, $rawData);
-        if ($validate->fails()) {
-            return response(['Messages' => 'Data Duplidate !']);
-        } else {
-            DB::table('m_produk')->where('m_produk_id', $request->m_produk_id)
-                ->update([
-                    "m_produk_code" => $request->m_produk_code,
-                    "m_produk_nama" => $request->m_produk_nama,
-                    "m_produk_urut" => $request->m_produk_urut,
-                    "m_produk_cr" => $request->m_produk_cr,
-                    "m_produk_status" => $request->m_produk_status,
-                    "m_produk_tax" => $request->m_produk_tax,
-                    "m_produk_sc" => $request->m_produk_sc,
-                    "m_produk_m_jenis_produk_id" => $request->m_produk_m_jenis_produk_id,
-                    "m_produk_m_satuan_id" => $request->m_produk_m_satuan_id,
-                    "m_produk_m_plot_produksi_id" => $request->m_produk_m_plot_produksi_id,
-                    "m_produk_m_klasifikasi_produk_id" => $request->m_produk_m_klasifikasi_produk_id,
-                    "m_produk_jual" => $request->m_produk_jual,
-                    "m_produk_scp" => $request->m_produk_scp,
-                    "m_produk_hpp" => $request->m_produk_hpp,
-                    "m_produk_updated_by" => Auth::id(),
-                    "m_produk_updated_at" => Carbon::now(),
-                ]);
-        }
-        return Redirect::route('m_produk.index');
-        return response(['Messages' => 'Data Update !']);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     * @param Request $request
-     * @param int $id
-     * @return Renderable
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     * @param int $id
-     * @return Renderable
-     */
-    public function destroy($id)
-    {
-        //
-    }
+    } 
 }

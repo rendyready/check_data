@@ -21,9 +21,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property float $r_m_m_kredit
  * @property string $r_m_m_keterangan
  * @property int $r_m_m_m_w_id
- * @property string $r_m_m_m_w_nama
+ * @property string|null $r_m_m_m_w_nama
  * @property int $r_m_m_m_area_id
- * @property string $r_m_m_m_area_nama
+ * @property string|null $r_m_m_m_area_nama
  * @property string $r_m_m_status_sync
  * @property int $r_m_m_created_by
  * @property int|null $r_m_m_updated_by

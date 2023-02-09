@@ -23,7 +23,7 @@ class RelasiKatMenuController extends Controller
             ->leftjoin('m_produk', 'config_sub_jenis_produk_m_produk_id', 'm_produk_id')
             ->leftjoin('m_sub_jenis_produk', 'config_sub_jenis_produk_m_sub_jenis_produk_id', 'm_sub_jenis_produk_id')
             ->get();
-        $data->produk = DB::table('m_produk')->get();
+        $data->produk = DB::table('m_produk')->where('m_produk_m_klasifikasi_produk_id',4)->get();
         $data->kategori = DB::table('m_sub_jenis_produk')->get();
         return view('master::m_produk_relasi', compact('data'));
     }
@@ -37,7 +37,7 @@ class RelasiKatMenuController extends Controller
         //don't need validate
         $data = DB::table('config_sub_jenis_produk')->insert([
             "config_sub_jenis_produk_m_produk_id" => $request->config_sub_jenis_produk_m_produk_id,
-            "config_sub_jenis_produk_m_sub_jenis_produk_id" => $request->config_sub_jenis_produk_m_sub_jenis_produk_id,
+            "config_sub_jenis_produk_m_sub_jenis_produk_id" => $request->config_sub_jenis_produk_m_kategori_id,
             "config_sub_jenis_produk_created_by" => Auth::id(),
             "config_sub_jenis_produk_created_at" => Carbon::now(),
         ]);

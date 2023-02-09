@@ -7,7 +7,6 @@
 namespace App\Models;
 
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -15,8 +14,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * Class TmpTransaction
  * 
  * @property uuid $tmp_transaction_id
- * @property uuid|null $tmp_transaction_id_parent
+ * @property int $tmp_transaction_split_number
  * @property int|null $tmp_transaction_m_t_t_id
+ * @property int|null $tmp_transaction_m_w_id
  * @property string|null $tmp_transaction_note_number
  * @property string|null $tmp_transaction_customer_name
  * @property time without time zone|null $tmp_transaction_order_time
@@ -27,8 +27,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string|null $deleted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * 
- * @property Collection|TmpTransactionDetail[] $tmp_transaction_details
  *
  * @package App\Models
  */
@@ -41,8 +39,9 @@ class TmpTransaction extends Model
 
 	protected $casts = [
 		'tmp_transaction_id' => 'uuid',
-		'tmp_transaction_id_parent' => 'uuid',
+		'tmp_transaction_split_number' => 'int',
 		'tmp_transaction_m_t_t_id' => 'int',
+		'tmp_transaction_m_w_id' => 'int',
 		'tmp_transaction_order_time' => 'time without time zone',
 		'tmp_transaction_table_list' => 'binary',
 		'tmp_transaction_status' => 'int',
@@ -50,8 +49,9 @@ class TmpTransaction extends Model
 	];
 
 	protected $fillable = [
-		'tmp_transaction_id_parent',
+		'tmp_transaction_split_number',
 		'tmp_transaction_m_t_t_id',
+		'tmp_transaction_m_w_id',
 		'tmp_transaction_note_number',
 		'tmp_transaction_customer_name',
 		'tmp_transaction_order_time',
@@ -60,9 +60,4 @@ class TmpTransaction extends Model
 		'tmp_transaction_reason_status',
 		'tmp_transaction_created_by'
 	];
-
-	public function tmp_transaction_details()
-	{
-		return $this->hasMany(TmpTransactionDetail::class, 'tmp_transaction_detail_tmp_transaction_id');
-	}
 }

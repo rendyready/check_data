@@ -2,15 +2,11 @@
 
 namespace Modules\Akuntansi\Http\Controllers;
 
-use Carbon\Carbon;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
-
-class ListaktController extends Controller
+class JurnalAkuntansiController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,33 +14,16 @@ class ListaktController extends Controller
      */
     public function index()
     {
-        $data = new \stdClass();
-        $data->no = 1;
-        $data->listakt = DB::table('list_akt')
-        ->select('list_akt_nama')
-        ->get();
-        
-        return view('akuntansi::master.list_akt',compact('data'));
-  
+        return view('akuntansi::master.jurnal');
     }
 
     /**
      * Show the form for creating a new resource.
      * @return Renderable
      */
-    public function save(Request $request)
+    public function create()
     {
-        // for($i=$request->mulai_list;$i<=$request->selesai_list;$i++)
-        // {
-       $data= DB::table('list_akt')->insert([
-            'list_akt_nama'=>$request->list_akt_nama,
-            'list_akt_created_by'=>Auth::id(),
-            'list_akt_created_at'=>Carbon::now(),
-        ]);
-        // }
-        return redirect()->route('rek_list.index');
-        
-        
+        return view('akuntansi::create');
     }
 
     /**

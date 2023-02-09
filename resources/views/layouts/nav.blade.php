@@ -361,10 +361,32 @@
               <span class="nav-main-link-name">Inventori</span>
             </a>
             <ul class="nav-main-submenu">
-              <li class="nav-main-item">
-                <a class="nav-main-link{{ request()->is('inventori/supplier') ? ' active' : '' }}" href="{{route('supplier.index')}}">
-                  <span class="nav-main-link-name">Supplier & Pelanggan</span>
+              <li class="nav-main-item{{ request()->is('inventori/*') ? ' open' : '' }}">
+                <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
+                  <span class="nav-main-link-name">Master</span>
                 </a>
+                <ul class="nav-main-submenu">
+                  <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('inventori/m_bb') ? ' active' : '' }}" href="{{route('m_bb.index')}}">
+                      <span class="nav-main-link-name">Data Bahan Baku</span>
+                    </a>
+                  </li>
+                  <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('inventori/m_gudang') ? ' active' : '' }}" href="{{route('m_gudang.index')}}">
+                      <span class="nav-main-link-name">Data Gudang</span>
+                    </a>
+                  </li>
+                  <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('inventori/stok_awal') ? ' active' : '' }}" href="{{route('stok_awal.index')}}">
+                      <span class="nav-main-link-name">Stok Awal</span>
+                    </a>
+                  </li>
+                  <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('inventori/supplier') ? ' active' : '' }}" href="{{route('supplier.index')}}">
+                      <span class="nav-main-link-name">Supplier & Pelanggan</span>
+                    </a>
+                  </li>
+                </ul>
               </li>
               <li class="nav-main-item">
                 <a class="nav-main-link{{ request()->is('invetori/po') ? ' active' : '' }}" href="{{route('po.index')}}">
@@ -374,6 +396,16 @@
               <li class="nav-main-item">
                 <a class="nav-main-link{{ request()->is('invetori/beli') ? ' active' : '' }}" href="{{route('beli.index')}}">
                   <span class="nav-main-link-name">Pembelian</span>
+                </a>
+              </li>
+              <li class="nav-main-item">
+                <a class="nav-main-link{{ request()->is('invetori/cht') ? ' active' : '' }}" href="{{route('cht.index')}}">
+                  <span class="nav-main-link-name">CHT Pembelian</span>
+                </a>
+              </li>
+              <li class="nav-main-item">
+                <a class="nav-main-link{{ request()->is('invetori/m_gudang/out') ? ' active' : '' }}" href="{{route('m_gudang_out.index')}}">
+                  <span class="nav-main-link-name">Tranfer/Keluar Gudang</span>
                 </a>
               </li>
               <li class="nav-main-item">
@@ -395,17 +427,32 @@
             </a>
             <ul class="nav-main-submenu">
               <li class="nav-main-item">
-                <a class="nav-main-link{{ request()->is('akuntansi/rekening') ? ' active' : '' }}" href="{{route('rek.index')}}">
-                  <span class="nav-main-link-name">Rekening</span>
+                <a class="nav-main-link{{ request()->is('akuntansi/rekening') ? ' active' : '' }}" href="{{route('rekening.index')}}">
+                  <span class="nav-main-link-name">Rekening Akuntansi</span>
                 </a>
               </li>
               <li class="nav-main-item">
-                <a class="nav-main-link{{ request()->is('akuntansi/link_akt') ? ' active' : '' }}" href="{{route('rek_link.index')}}">
-                  <span class="nav-main-link-name">Link Akuntansi</span>
+                <a class="nav-main-link{{ request()->is('akuntansi/jurnal_kas') ? ' active' : '' }}" href="{{route('jurnal_kas.index')}}">
+                  <span class="nav-main-link-name">Jurnal Kas</span>
                 </a>
               </li>
-            </ul>
-          </li>
+              <li class="nav-main-item">
+                <a class="nav-main-link{{ request()->is('akuntansi/jurnal_bank') ? ' active' : '' }}" href="{{route('jurnal_bank.index')}}">
+                  <span class="nav-main-link-name">Jurnal Bank</span>
+                </a>
+              </li>
+              <li class="nav-main-item">
+                <a class="nav-main-link{{ request()->is('akuntansi/jurnal_umum') ? ' active' : '' }}" href="{{route('jurnal_umum.index')}}">
+                  <span class="nav-main-link-name">Jurnal Umum</span>
+                </a>
+              </li>
+                  <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('akuntansi/link') ? ' active' : '' }}" href="{{route('link.index')}}">
+                      <span class="nav-main-link-name">Link Akuntansi</span>
+                    </a>
+                  </li>
+                </ul>
+              </li>
           <li class="nav-main-heading">Pengaturan</li>
           <li class="nav-main-item{{ request()->is('users/*') ? ' open' : '' }}">
             <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">

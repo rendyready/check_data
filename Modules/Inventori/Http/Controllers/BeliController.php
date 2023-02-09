@@ -15,11 +15,16 @@ class BeliController extends Controller
      * @return Renderable
      */
     public function index()
-    {   $data = new \stdClass();
-        
+    {   
+        $data = new \stdClass();
         $get_max_id = DB::table('rekap_beli')->orderBy('rekap_beli_id','desc')->first();
         $user = Auth::id();
-        $data->tgl_now = Carbon::now()->format('Y-m-d'); 
+        $data->waroeng_nama = DB::table('m_w')->select('m_w_nama')->where('m_w_id',Auth::user()->waroeng_id)->first();
+        $data->tgl_now = Carbon::now()->format('Y-m-d');
+        $data->gudang = DB::table('m_gudang')
+        ->where('m_gudang_m_w_id',Auth::user()->waroeng_id)
+        ->whereNotIn('m_gudang_nama',['gudang produksi waroeng'])
+        ->get(); 
         $data->code = (empty($get_max_id->rekap_beli_id)) ? $urut = "1000001". $user : $urut = substr($get_max_id->rekap_beli_code,0,-1)+'1'. $user; 
         return view('inventori::form_beli',compact('data'));
     }
@@ -32,7 +37,7 @@ class BeliController extends Controller
     {
         $data = new \stdClass();
         $nama_barang = DB::table('m_produk')
-        ->select('m_produk_id','m_produk_nama')->get();
+        ->select('m_produk_id','m_produk_nama')->whereNotIn('m_produk_m_klasifikasi_produk_id',[4])->get();
         $supplierku = DB::table('m_supplier')->get();
         $satuan = DB::table('m_satuan')->get();
         foreach ($nama_barang as $key => $v) {
@@ -53,7 +58,8 @@ class BeliController extends Controller
      * @return Renderable
      */
     public function simpan(Request $request)
-    {
+    {   $terbayar = (empty($request->rekap_beli_terbayar)) ? 0 : $request->rekap_beli_terbayar;
+        $ongkir  = (empty($request->rekap_beli_ongkir)) ? 0 : $request->rekap_beli_ongkir;
         $rekap_beli = array(
             'rekap_beli_code' => $request->rekap_beli_code,
             'rekap_beli_code_nota' => $request->rekap_beli_code_nota,
@@ -64,35 +70,39 @@ class BeliController extends Controller
             'rekap_beli_supplier_telp' => $request->rekap_beli_supplier_telp,
             'rekap_beli_supplier_alamat' => $request->rekap_beli_supplier_alamat,
             'rekap_beli_m_w_id' => Auth::user()->waroeng_id,
+            'rekap_beli_gudang_id' => $request->rekap_beli_gudang_id,
             'rekap_beli_disc' => $request->rekap_beli_disc,
             'rekap_beli_disc_rp' => $request->rekap_beli_disc_rp,
             'rekap_beli_ppn' => $request->rekap_beli_ppn,
             'rekap_beli_ppn_rp' => $request->rekap_beli_ppn_rp,
-            'rekap_beli_ongkir' => $request->rekap_beli_ongkir,
-            'rekap_beli_terbayar' => $request->rekap_beli_terbayar,
+            'rekap_beli_ongkir' => $ongkir,
+            'rekap_beli_terbayar' => $terbayar,
             'rekap_beli_tersisa' => $request->rekap_beli_tersisa,
             'rekap_beli_tot_nom' => $request->rekap_beli_tot_nom,
             'rekap_beli_created_at' => Carbon::now(),
             'rekap_beli_created_by' => Auth::id()
-
         );
 
         $insert = DB::table('rekap_beli')->insert($rekap_beli);
         foreach ($request->rekap_beli_detail_qty as $key => $value) {
             $produk = DB::table('m_produk')
+            ->leftjoin('m_satuan','m_produk_utama_m_satuan_id','m_satuan_id')
             ->where('m_produk_id',$request->rekap_beli_detail_m_produk_id[$key])
             ->first();
             $data = array(
-                'rekap_beli_detal_rekap_beli_id'=> $request->rekap_beli_code[$key],
+                'rekap_beli_detail_rekap_beli_code'=> $request->rekap_beli_code,
                 'rekap_beli_detail_m_produk_id' => $request->rekap_beli_detail_m_produk_id[$key],
                 'rekap_beli_detail_m_produk_code' => $produk->m_produk_code,
                 'rekap_beli_detail_m_produk_nama' => $produk->m_produk_nama,
+                'rekap_beli_detail_satuan_id' => $produk->m_produk_utama_m_satuan_id,
+                'rekap_beli_detail_satuan_terima' => $produk->m_satuan_kode,
                 'rekap_beli_detail_catatan' => $request->rekap_beli_detail_catatan[$key],
                 'rekap_beli_detail_qty' => $request->rekap_beli_detail_qty[$key],
                 'rekap_beli_detail_harga' => $request->rekap_beli_detail_harga[$key],
                 'rekap_beli_detail_disc' => $request->rekap_beli_detail_disc[$key],
                 'rekap_beli_detail_discrp' => $request->rekap_beli_detail_discrp[$key],
                 'rekap_beli_detail_subtot' => $request->rekap_beli_detail_subtot[$key],
+                'rekap_beli_detail_m_w_id' => Auth::user()->waroeng_id,
                 'rekap_beli_detail_created_by' => Auth::id(),
                 'rekap_beli_detail_created_at' => Carbon::now()
             );

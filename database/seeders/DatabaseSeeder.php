@@ -33,16 +33,20 @@ class DatabaseSeeder extends Seeder
             MLevelJabatanTableSeeder::class,
             MJabatanTableSeeder::class,
             MProdukTableSeeder::class,
-            PinSeeder::class,
-            ConfigSubJenisProdukTableSeeder::class,
+            // ConfigSubJenisProdukTableSeeder::class,
             MMenuHargaTableSeeder::class,
             ConfigFooterTableSeeder::class,
             MResepTableSeeder::class,
             MResepDetailTableSeeder::class,
-            ConfigMejaTableSeeder::class,
+            // ConfigMejaTableSeeder::class,
             MFaqTableSeeder::class,
             List_AktTableSeeder::class,
+            MRekeningTableSeeder::class,
             SupplierSeeder::class,
+            NmGudangTableSeeder::class,
+            MKasirAksesTableSeeder::class,
+            MPaymentMethodeTable::class,
+            ProdukCodeSeeder::class,
        ]);
     }
 }

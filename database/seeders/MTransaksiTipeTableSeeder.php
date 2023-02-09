@@ -17,59 +17,59 @@ class MTransaksiTipeTableSeeder extends Seeder
 
         DB::table('m_transaksi_tipe')->insert([
             [
-                'm_t_t_name' => 'Grab',
+                'm_t_t_name' => 'dine in',
+                'm_t_t_profit_price' => 0,
+                'm_t_t_profit_in' => 0,
+                'm_t_t_profit_out'=> 0,
+                'm_t_t_group'=>'reguler',
+                'm_t_t_created_by'=> 1
+            ],
+            [
+                'm_t_t_name' => 'take away',
+                'm_t_t_profit_price' => 0,
+                'm_t_t_profit_in' => 0,
+                'm_t_t_profit_out'=> 0,
+                'm_t_t_group'=>'reguler',
+                'm_t_t_created_by'=> 1
+            ],
+            [
+                'm_t_t_name' => 'grab',
                 'm_t_t_profit_price' => 0.35,
                 'm_t_t_profit_in' => 0.2,
                 'm_t_t_profit_out'=> 0.15,
-                'm_t_t_group'=>'Ojol',
+                'm_t_t_group'=>'ojol',
                 'm_t_t_created_by'=> 1
             ],
             [
-                'm_t_t_name' => 'Gojek',
+                'm_t_t_name' => 'gojek',
                 'm_t_t_profit_price' => 0.35,
                 'm_t_t_profit_in' => 0.23,
                 'm_t_t_profit_out'=> 0.12,
-                'm_t_t_group'=>'Ojol',
+                'm_t_t_group'=>'ojol',
                 'm_t_t_created_by'=> 1
             ],
             [
-                'm_t_t_name' => 'Takeaway',
-                'm_t_t_profit_price' => 0,
-                'm_t_t_profit_in' => 0,
-                'm_t_t_profit_out'=> 0,
-                'm_t_t_group'=>'Reguler',
+                'm_t_t_name' => 'grabmart',
+                'm_t_t_profit_price' => 0.35,
+                'm_t_t_profit_in' => 0.23,
+                'm_t_t_profit_out'=> 0.12,
+                'm_t_t_group'=>'ojol',
                 'm_t_t_created_by'=> 1
             ],
             [
-                'm_t_t_name' => 'Grabmart',
-                'm_t_t_profit_price' => 0.94,
-                'm_t_t_profit_in' => 0,
-                'm_t_t_profit_out'=> 0,
-                'm_t_t_group'=>'Ojol',
-                'm_t_t_created_by'=> 1
-            ],
-            [
-                'm_t_t_name' => 'Dine In',
-                'm_t_t_profit_price' => 0,
-                'm_t_t_profit_in' => 0,
-                'm_t_t_profit_out'=> 0,
-                'm_t_t_group'=>'Reguler',
-                'm_t_t_created_by'=> 1
-            ],
-            [
-                'm_t_t_name' => 'ShopeeFood',
+                'm_t_t_name' => 'shopeefood',
                 'm_t_t_profit_price' => 0.25,
                 'm_t_t_profit_in' => 0.19,
                 'm_t_t_profit_out'=> 0.06,
-                'm_t_t_group'=>'Ojol',
+                'm_t_t_group'=>'ojol',
                 'm_t_t_created_by'=> 1
             ],
             [
-                'm_t_t_name' => 'Maxim',
+                'm_t_t_name' => 'maxim',
                 'm_t_t_profit_price' => 0,
                 'm_t_t_profit_in' => 0,
                 'm_t_t_profit_out'=> 0,
-                'm_t_t_group'=>'Ojol',
+                'm_t_t_group'=>'ojol',
                 'm_t_t_created_by'=> 1
             ],
            

@@ -15,11 +15,11 @@ return new class extends Migration
     {
         Schema::create('m_rekening', function (Blueprint $table) {
             $table->id('m_rekening_id');
-            $table->bigInteger('m_rekening_m_w_id');
+            $table->bigInteger('m_rekening_m_waroeng_id');
             $table->string('m_rekening_kategori');
             $table->string('m_rekening_no_akun');
             $table->string('m_rekening_nama');
-            $table->integer('m_rekening_saldo');
+            $table->float('m_rekening_saldo');
             $table->bigInteger('m_rekening_created_by');
             $table->bigInteger('m_rekening_updated_by')->nullable();
             $table->bigInteger('m_rekening_deleted_by')->nullable();

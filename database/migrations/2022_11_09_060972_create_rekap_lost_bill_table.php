@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id('r_l_b_id');
             $table->bigInteger('r_l_b_sync_id')->nullable();
             $table->bigInteger('r_l_b_rekap_modal_id');
-            $table->string('r_l_b_tmp_transaction_id')->comment('Untuk cek duplikasi input');
+            // $table->string('r_l_b_tmp_transaction_id')->comment('Untuk cek duplikasi input');
             $table->date('r_l_b_tanggal');
             $table->time('r_l_b_jam');
             $table->string('r_l_b_nota_code');
@@ -25,13 +25,15 @@ return new class extends Migration
             $table->decimal('r_l_b_nominal', 15,2)->default(0);
             $table->decimal('r_l_b_nominal_pajak', 15,2)->default(0);
             $table->decimal('r_l_b_nominal_sc', 15,2)->default(0);
-            $table->decimal('r_l_b_nominal_sharing_profit', 15,2)->default(0);
+            $table->decimal('r_l_b_nominal_sharing_profit_in', 15,2)->default(0);
+            $table->decimal('r_l_b_nominal_sharing_profit_out', 15,2)->default(0);
             $table->string('r_l_b_keterangan');
             $table->bigInteger('r_l_b_m_w_id');
-            $table->string('r_l_b_m_w_nama');
+            $table->string('r_l_b_m_w_nama')->nullable();
             $table->bigInteger('r_l_b_m_area_id');
-            $table->string('r_l_b_m_area_nama');
-            $table->char('r_l_b_status_sync', 1)->default('0');
+            $table->string('r_l_b_m_area_nama')->nullable();
+            $table->char('r_l_b_status_sync', 10)->default('0');
+            $table->bigInteger('r_l_b_approved_by')->nullable();
             $table->bigInteger('r_l_b_created_by');
             $table->bigInteger('r_l_b_updated_by')->nullable();
             $table->bigInteger('r_l_b_deleted_by')->nullable();

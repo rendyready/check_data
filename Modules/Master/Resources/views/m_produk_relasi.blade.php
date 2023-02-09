@@ -65,7 +65,7 @@
                       <select class="js-select2" id="config_sub_jenis_produk_m_produk_id" name="config_sub_jenis_produk_m_produk_id" style="width: 100%;" data-container="#modal-block-select2" data-placeholder="Choose one..">
                           <option></option>
                           @foreach ($data->produk as $item)
-                              <option value="{{$item->m_produk_id}}">{{ $item->m_produk_nama}}</option>
+                              <option value="{{$item->m_produk_id}}">{{ ucwords($item->m_produk_nama)}}</option>
                           @endforeach
                       </select>
                   </div>
@@ -121,7 +121,7 @@
                       console.log(respond)
                         $("#id").val(respond.config_sub_jenis_produk_id).trigger('change');
                         $("#config_sub_jenis_produk_m_produk_id").val(respond.config_sub_jenis_produk_m_produk_id).trigger('change');
-                        $("#config_sub_jenis_produk_m_kategori_id").val(respond.config_sub_jenis_produk_m_kategori_id).trigger('change');
+                        $("#config_sub_jenis_produk_m_kategori_id").val(respond.config_sub_jenis_produk_m_sub_jenis_produk_id).trigger('change');
                     },
                     error: function() {
                     }

@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('m_pajak', function (Blueprint $table) {
             $table->id('m_pajak_id');
-            $table->decimal('m_pajak_value',3,2);
+            $table->decimal('m_pajak_value',5,2);
             $table->bigInteger('m_pajak_created_by');
             $table->bigInteger('m_pajak_updated_by')->nullable();
             $table->bigInteger('m_pajak_deleted_by')->nullable();

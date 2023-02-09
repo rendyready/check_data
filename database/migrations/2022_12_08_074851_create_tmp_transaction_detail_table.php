@@ -15,7 +15,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('tmp_transaction_detail', function (Blueprint $table) {
-            // $table->uuid('tmp_transaction_detail_id')->default(DB::raw('gen_random_uuid()'))->primary();
+            $table->uuid('tmp_transaction_detail_id')->default(DB::raw('gen_random_uuid()'))->primary();
             $table->uuid('tmp_transaction_detail_tmp_transaction_id');
             $table->bigInteger('tmp_transaction_detail_m_produk_id')->nullable();
             $table->integer('tmp_transaction_detail_qty')->default(1)->comment('qty menu');
@@ -28,7 +28,8 @@ return new class extends Migration
             $table->decimal('tmp_transaction_detail_tax',8,2)->default(0)->comment('percentage tax');
             $table->decimal('tmp_transaction_detail_service_charge',8,2)->nullable()->comment('percentage percentage charge');
             $table->decimal('tmp_transaction_detail_discount',8,2)->default(0)->comment('percentage discount');
-            $table->decimal('tmp_transaction_detail_price',10,2)->default(0);
+            $table->decimal('tmp_transaction_detail_price',15,2)->default(0);
+            $table->decimal('tmp_transaction_detail_nominal',15,2)->default(0);
             $table->text('tmp_transaction_detail_custom_menu')->nullable();
             $table->boolean('tmp_transaction_detail_tax_status')->default(true);
             $table->boolean('tmp_transaction_detail_service_charge_status')->default(true);

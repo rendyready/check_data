@@ -16,48 +16,44 @@ class List_AktTableSeeder extends Seeder
         DB::table('list_akt')->truncate();
         DB::table('list_akt')->insert([
             [
-                'list_akt_nama' =>'Pembelian',
-                'list_akt_created_by'=>1,
-            ], 
-            [
                 'list_akt_nama' =>'Hutang Dagang',
                 'list_akt_created_by'=>1,
+                'list_akt_m_rekening_id'=>'02.02.01',
             ], 
             [
                 'list_akt_nama' =>'PPN Pembelian',
                 'list_akt_created_by'=>1,
+                'list_akt_m_rekening_id'=>'05.01.06',
             ],  
             [
                 'list_akt_nama' =>'Ongkir Pembelian',
                 'list_akt_created_by'=>1,
+                'list_akt_m_rekening_id'=>'05.01.07',
             ],  
             [
                 'list_akt_nama' =>'Penjualan ',
                 'list_akt_created_by'=>1,
+                'list_akt_m_rekening_id'=>'04.01.01',
             ],  
             [
                 'list_akt_nama' =>'PPN Penjualan',
                 'list_akt_created_by'=>1,
+                'list_akt_m_rekening_id'=>'01.02.01',
             ], 
             [
                 'list_akt_nama' =>'Ongkir Penjualan',
                 'list_akt_created_by'=>1,
+                'list_akt_m_rekening_id'=>'01.02.01',
             ],  
             [
                 'list_akt_nama' =>'Barang Rusak Menu',
                 'list_akt_created_by'=>1,
+                'list_akt_m_rekening_id'=>'05.01.04',
             ], 
-            [
-                'list_akt_nama' =>'Barang Rusak Pembantu',
-                'list_akt_created_by'=>1,
-            ],  
             [
                 'list_akt_nama' =>'HPP Penjualan',
                 'list_akt_created_by'=>1,
-            ], 
-            [
-                'list_akt_nama' =>'HPP Pembelian',
-                'list_akt_created_by'=>1,
+                'list_akt_m_rekening_id'=>'05.01.01',
             ], 
         ]);
         }

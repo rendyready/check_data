@@ -18,9 +18,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon $r_u_t_tanggal
  * @property float $r_u_t_nominal
  * @property int $r_u_t_m_w_id
- * @property string $r_u_t_m_w_nama
+ * @property string|null $r_u_t_m_w_nama
  * @property int $r_u_t_m_area_id
- * @property string $r_u_t_m_area_nama
+ * @property string|null $r_u_t_m_area_nama
  * @property string $r_u_t_keterangan
  * @property string $r_u_t_status_sync
  * @property int $r_u_t_created_by

@@ -41,6 +41,8 @@ class User extends Authenticatable
 		'password',
 		'remember_token',
 		'created_by',
-		'updated_by'
+		'updated_by',
+		'waroeng_id',
+		'waroeng_akses'
 	];
 }

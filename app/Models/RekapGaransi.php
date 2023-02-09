@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int|null $rekap_garansi_sync_id
  * @property int $rekap_garansi_r_t_id
  * @property int $rekap_garansi_m_produk_id
- * @property string $rekap_garansi_m_produk_nama
+ * @property string|null $rekap_garansi_m_produk_nama
  * @property float $rekap_garansi_price
  * @property int $rekap_garansi_qty
  * @property float $rekap_garansi_nominal

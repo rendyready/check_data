@@ -12,7 +12,7 @@
 */
 
 //Master Area Route
-
+use illuminate\Support\Facades\Route;
 use Modules\Master\Http\Controllers\MWaroengController;
 
 Route::group(['prefix' => 'master', 'controller' => MAreaController::class, 'middleware' => ['auth', 'web']], function () {
@@ -86,6 +86,7 @@ Route::group(['prefix' => 'master', 'controller' => MejaController::class, 'midd
 Route::group(['prefix' => 'master', 'controller' => MSatuanController::class, 'middleware' => ['auth', 'web']], function () {
     Route::get('m_satuan', 'index')->name('m_satuan.index');
     Route::post('m_satuan/action', 'action')->name('action.m_satuan');
+    Route::get('m_satuan/{id}','satuan_kode_produk');
 });
 //Master Klasifikasi
 Route::group(['prefix' => 'master', 'controller' => ProdKlasifikasiController::class, 'middleware' => ['auth', 'web']], function () {
@@ -102,7 +103,6 @@ Route::group(['prefix' => 'master', 'controller' => FooterController::class, 'mi
 Route::group(['prefix' => 'master', 'controller' => ProdukController::class, 'middleware' => ['auth', 'web']], function () {
     Route::get('m_produk', 'index')->name('m_produk.index');
     Route::post('produk/simpan', 'simpan')->name('simpan.m_produk');
-    Route::post('produk/edit', 'edit')->name('edit.m_produk');
     Route::get('produk/list/{id}', 'list')->name('m_produk.list');
 });
 //Master Produk Relasi

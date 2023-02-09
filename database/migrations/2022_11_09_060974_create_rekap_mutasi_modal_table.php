@@ -23,10 +23,10 @@ return new class extends Migration
             $table->decimal('r_m_m_kredit',10,2)->default(0);
             $table->string('r_m_m_keterangan');
             $table->bigInteger('r_m_m_m_w_id');
-            $table->string('r_m_m_m_w_nama');
+            $table->string('r_m_m_m_w_nama')->nullable();
             $table->bigInteger('r_m_m_m_area_id');
-            $table->string('r_m_m_m_area_nama');
-            $table->char('r_m_m_status_sync', 1)->default('0');
+            $table->string('r_m_m_m_area_nama')->nullable();
+            $table->char('r_m_m_status_sync', 10)->default('0');
             $table->bigInteger('r_m_m_created_by');
             $table->bigInteger('r_m_m_updated_by')->nullable();
             $table->bigInteger('r_m_m_deleted_by')->nullable();

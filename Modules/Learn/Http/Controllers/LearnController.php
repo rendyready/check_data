@@ -5,15 +5,19 @@ namespace Modules\Learn\Http\Controllers;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 class LearnController extends Controller
 {
     /**
      * Display a listing of the resource.
      * @return Renderable
      */
-    public function index()
+    public function index(Request $request)
     {
+        $id = 1;
+        return   $data = DB::table('m_w_jenis')->where('m_w_jenis_id',$id)->first();
         return view('learn::index');
     }
 

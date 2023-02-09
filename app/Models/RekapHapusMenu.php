@@ -20,19 +20,21 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $r_h_m_nota_code
  * @property string $r_h_m_bigboss
  * @property int $r_h_m_m_produk_id
- * @property string $r_h_m_m_produk_nama
+ * @property string|null $r_h_m_m_produk_nama
  * @property int $r_h_m_qty
  * @property float $r_h_m_price
  * @property float $r_h_m_nominal
  * @property float $r_h_m_nominal_pajak
  * @property float $r_h_m_nominal_sc
- * @property float $r_h_m_nominal_sharing_profit
+ * @property float $r_h_m_nominal_sharing_profit_in
+ * @property float $r_h_m_nominal_sharing_profit_out
  * @property string $r_h_m_keterangan
  * @property int $r_h_m_m_w_id
- * @property string $r_h_m_m_w_nama
+ * @property string|null $r_h_m_m_w_nama
  * @property int $r_h_m_m_area_id
- * @property string $r_h_m_m_area_nama
+ * @property string|null $r_h_m_m_area_nama
  * @property string $r_h_m_status_sync
+ * @property int|null $r_h_m_approved_by
  * @property int $r_h_m_created_by
  * @property int|null $r_h_m_updated_by
  * @property int|null $r_h_m_deleted_by
@@ -58,9 +60,11 @@ class RekapHapusMenu extends Model
 		'r_h_m_nominal' => 'float',
 		'r_h_m_nominal_pajak' => 'float',
 		'r_h_m_nominal_sc' => 'float',
-		'r_h_m_nominal_sharing_profit' => 'float',
+		'r_h_m_nominal_sharing_profit_in' => 'float',
+		'r_h_m_nominal_sharing_profit_out' => 'float',
 		'r_h_m_m_w_id' => 'int',
 		'r_h_m_m_area_id' => 'int',
+		'r_h_m_approved_by' => 'int',
 		'r_h_m_created_by' => 'int',
 		'r_h_m_updated_by' => 'int',
 		'r_h_m_deleted_by' => 'int'
@@ -87,13 +91,15 @@ class RekapHapusMenu extends Model
 		'r_h_m_nominal',
 		'r_h_m_nominal_pajak',
 		'r_h_m_nominal_sc',
-		'r_h_m_nominal_sharing_profit',
+		'r_h_m_nominal_sharing_profit_in',
+		'r_h_m_nominal_sharing_profit_out',
 		'r_h_m_keterangan',
 		'r_h_m_m_w_id',
 		'r_h_m_m_w_nama',
 		'r_h_m_m_area_id',
 		'r_h_m_m_area_nama',
 		'r_h_m_status_sync',
+		'r_h_m_approved_by',
 		'r_h_m_created_by',
 		'r_h_m_updated_by',
 		'r_h_m_deleted_by',

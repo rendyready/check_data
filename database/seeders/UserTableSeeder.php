@@ -64,11 +64,15 @@ class UserTableSeeder extends Seeder
                     'name' => 'administrator',
                     'email' => 'administrator@email.com',
                     'password' => Hash::make('IT@kinanthi'),
+                    'waroeng_id' => 1,
+                    'waroeng_akses' => "[1,2,3,4,5,9,10]"
                 ],
                 [
                     'name' => 'admin',
                     'email' => 'admin@email.com',
                     'password' => Hash::make('password'),
+                    'waroeng_id' => 1,
+                    'waroeng_akses' => "[1,2,3]"
                 ],
                ]
         );
