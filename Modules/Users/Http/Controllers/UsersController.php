@@ -44,17 +44,17 @@ class UsersController extends Controller
      */
     public function action(Request $request)
     {
-        $rules = [
-            'email' => 'required|unique:users|max:255'
+        // $rules = [
+        //     'email' => 'required|unique:users|max:255'
 
-        ];
-        $data_validate = array(
-            'email'	=>	strtolower($request->email)
-        );
-        $validator = \Validator::make($data_validate,$rules);
-        if ($validator->fails()) {
-            return response()->json(['error'=>true, 'message'=>$validator->messages()->get('*')]);
-        }
+        // ];
+        // $data_validate = array(
+        //     'email'	=>	strtolower($request->email)
+        // );
+        // $validator = \Validator::make($data_validate,$rules);
+        // if ($validator->fails()) {
+        //     return response()->json(['error'=>true, 'message'=>$validator->messages()->get('*')]);
+        // }
             if ($request->action == 'add') {
                 $data = array(
                     'name'    =>    strtolower($request->name),
@@ -66,7 +66,7 @@ class UsersController extends Controller
                 );
                 DB::table('users')->insert($data);
                 $user = DB::table('users')->max('id');
-                DB::table('users')->where('id', $user)->first()->assignRole($request->roles);
+               User::where('id', $user)->first()->assignRole($request->roles);
                 
             } elseif ($request->action == 'edit') {
                if (!empty($request->password)) {

@@ -90,6 +90,19 @@
               </div>
               <div class="mb-4">
                 <div class="form-group">
+                  <label for="m_meja_type">Group Meja</label>
+                  <div>
+                      <select class="js-select2" id="m_meja_type" name="m_meja_type" style="width: 100%;" data-container="#modal-block-select2" data-placeholder="Choose one..">
+                        <option></option> 
+                        <option value="meja">Meja</option>
+                         <option value="bungkus">Bungkus</option>
+                         <option value="express">Express</option>
+                      </select>
+                  </div>
+              </div>
+              </div>
+              <div class="mb-4">
+                <div class="form-group">
                   <label for="waroeng">Waroeng</label>
                   <div>
                       <select class="js-select2" id="waroeng" name="waroeng" style="width: 100%;" data-container="#modal-block-select2" data-placeholder="Choose one..">

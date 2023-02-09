@@ -32,11 +32,19 @@ class MejaController extends Controller
     public function simpan(Request $request)
     {
         for ($i = $request->mulai_meja; $i <= $request->selesai_meja; $i++) {
+            if ($request->m_meja_type == 'meja') {
+                $nama = str_pad($i, 2, '0', STR_PAD_LEFT);
+            } elseif ($request->m_meja_type == 'bungkus') {
+                $nama = 'Bks '.str_pad($i, 2, '0', STR_PAD_LEFT);
+            } else {
+                $nama = 'Express '.str_pad($i, 2, '0', STR_PAD_LEFT);
+            }
+            
             $data = DB::table('m_meja')->insert([
-                "m_meja_nama" => str_pad($i, 2, '0', STR_PAD_LEFT),
+                "m_meja_nama" => $nama,
                 "m_meja_m_meja_jenis_id" => $request->jenis_meja,
                 "m_meja_m_w_id" => $request->waroeng,
-                "m_meja_type" => 'meja',
+                "m_meja_type" => $request->m_meja_type,
                 "m_meja_created_by" => Auth::id(),
                 "m_meja_created_at" => Carbon::now(),
             ]);

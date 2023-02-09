@@ -15,7 +15,7 @@ class MMenuHargaTableSeeder extends Seeder
     {
         DB::table('m_menu_harga')->truncate();
 
-        $produk = DB::table('m_produk')->get();
+        $produk = DB::table('m_produk')->where('m_produk_m_klasifikasi_produk_id',4)->get();
 
         for ($n=1; $n <= 7 ; $n++) { 
             foreach ($produk as $key => $value) {
