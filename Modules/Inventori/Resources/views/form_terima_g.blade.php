@@ -45,9 +45,8 @@
                         <th>Tgl Kirim</th>
                         <th>Pengirim</th>
                         <th>Gudang Asal</th>
-                        <th>Penerima</th>
-                        <th>Gudang Terima</th>
                         <th>Status</th>
+                        <th>Aksi</th>
                     </thead>
                     <tbody>
                      
@@ -81,38 +80,17 @@
               paging:false,
               serverside:true,
               ajax: {
-              url: "/inventori/cht/list",
-              data: {id:id}, 
+              url: "/inventori/gudang/listtf",
+              data: {gudang_id:id}, 
               type: "GET",
                 }
             });
     });
-  }) 
-  $('#formAction').submit( function(e){
-                if(!e.isDefaultPrevented()){
-                  table.columns([1,2,3,4]).visible(true);
-                  var dataf = $('#formAction').serialize();
-                    $.ajax({
-                        url : "{{ route('cht.simpan') }}",
-                        type : "POST",
-                        data : dataf,
-                        success : function(data){
-                            $.notify({
-                              align: 'right',       
-                              from: 'top',                
-                              type: 'success',               
-                              icon: 'fa fa-success me-5',    
-                              message: 'Berhasil Simpan'
-                            });
-                           window.location.reload();
-                        },
-                        error : function(){
-                            alert("Tidak dapat menyimpan data!");
-                        }
-                    });
-                    return false;
-                }
-            });
+  })
+    $("#tb-cht").on('click','.buttonCHT', function() {
+        var id = $(this).attr('value');
+        window.location.href = "{{URL::to('restaurants/20')}}"
+    });  
 });
 </script>
 @endsection

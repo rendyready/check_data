@@ -202,6 +202,7 @@ class GudangController extends Controller
         }
         return redirect()->route('m_gudang_out.index')->with(['sukses' => 'Berhasil Transfer']);
     }
+
     public function gudang_terima()
     {
         $waroeng_id = Auth::user()->waroeng_id;
@@ -211,31 +212,40 @@ class GudangController extends Controller
         $data = new \stdClass();
         $data->gudang = DB::table('m_gudang')
         ->where('m_gudang_m_w_id',$waroeng_id)
-        ->whereNotIn('m_gudang_nama',['gudang produksi waroeng'])->get();
+        ->get();
         $data->tgl_now = Carbon::now()->format('Y-m-d');
         $data->nama_waroeng = DB::table('m_w')->select('m_w_nama')->where('m_w_id',$waroeng_id)->first();
         $data->satuan = DB::table('m_satuan')->get();
         return view('inventori::form_terima_g',compact('data'));
     }
+
     public function gudang_list_tf(Request $request)
     {
-        $list_tf = DB::table('rekap_tf_gudang')
-                ->where('rekap_tf_gudang_tujuan_id',$request)
-                ->leftjoin('m_gudang','m_gudang_id','rekap_tf_gudang_tujuan_id')
+         $list_tf = DB::table('rekap_tf_gudang')
+                 ->where('rekap_tf_gudang_tujuan_id', $request->gudang_id)
+                ->leftjoin('m_gudang','m_gudang_id','rekap_tf_gudang_asal_id')
                 ->leftjoin('m_w','m_gudang_m_w_id','m_w_id')
+                ->orderBy('rekap_tf_gudang_id','desc')
                 ->get();
         $no = 0;
-        foreach ($list_tf as $key ) {
+        foreach ($list_tf as $key ) { 
             $data = array();
                 $no++;
                 $row[] = $no;
                 $row[] = $key->rekap_tf_gudang_code;
-                $row[] = $key->rekap_tf_gudang_tgl_kirim;
+                $row[] = tanggal_indonesia($key->rekap_tf_gudang_tgl_kirim);
                 $row[] = $key->m_w_nama;
+                $row[] = ucwords($key->m_gudang_nama);
+                $row[] = $status = ($key->rekap_tf_gudang_tgl_terima==null) ? 'Belum CHT' : 'Sudah CHT';
+                $row[] =  $aksi = ($key->rekap_tf_gudang_tgl_terima==null) ? '<a id="buttonCHT" class="btn btn-sm buttonCHT btn-success" value="'.$key->rekap_tf_gudang_id.'" title="CHT"><i class="fa fa-pencil"></i></a>' : '<a id="buttonDetail" class="btn btn-sm buttonDetail btn-info" value="'.$key->rekap_tf_gudang_id.'" title="Detail"><i class="fa fa-eye"></i></a>';
                 $data[] = $row;
-
             $output = array("data" => $data);
             return response()->json($output);            
         }
+      
     }
+    public function gudang_terima_transfer(request $request) {
+        
+    }
+
 }
