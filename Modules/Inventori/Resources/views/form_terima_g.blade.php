@@ -6,7 +6,7 @@
         <div class="block block-themed h-100 mb-0">
           <div class="block-header bg-pulse">
             <h3 class="block-title">
-              TERIMA GUDANG
+              LIST TERIMA GUDANG
           </div>
           <div class="block-content text-muted">
                 <div class="row">
@@ -42,7 +42,7 @@
                     <thead>
                         <th>No</th>
                         <th>No Bukti</th>
-                        <th>Tgl Kirim</th>
+                        <th>Tgl Keluar</th>
                         <th>Pengirim</th>
                         <th>Gudang Asal</th>
                         <th>Status</th>
@@ -86,10 +86,10 @@
                 }
             });
     });
-  })
+    })
     $("#tb-cht").on('click','.buttonCHT', function() {
         var id = $(this).attr('value');
-        window.location.href = "{{URL::to('restaurants/20')}}"
+        window.location.href = "/inventori/gudang/terima/transfer/"+id
     });  
 });
 </script>

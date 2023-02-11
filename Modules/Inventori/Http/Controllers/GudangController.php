@@ -145,7 +145,6 @@ class GudangController extends Controller
             'rekap_tf_gudang_asal_id' => $request->rekap_tf_gudang_asal_id,
             'rekap_tf_gudang_tujuan_id' => $request->rekap_tf_gudang_tujuan_id,
             'rekap_tf_gudang_tgl_kirim' => Carbon::now(),
-            'rekap_tf_gudang_ongkir' => $ongkir = (empty($request->rekap_tf_gudang_ongkir)) ? 0 : $request->rekap_tf_gudang_ongkir ,
             'rekap_tf_gudang_grand_tot' => $request->rekap_tf_gudang_grand_tot,
             'rekap_tf_gudang_created_by' => Auth::id(),
             'rekap_tf_gudang_created_at' => Carbon::now() 
@@ -244,7 +243,7 @@ class GudangController extends Controller
         }
       
     }
-    public function gudang_terima_transfer(request $request) {
+    public function gudang_terima_transfer($id) {
         
     }
 

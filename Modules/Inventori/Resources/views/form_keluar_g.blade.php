@@ -92,6 +92,7 @@
                                     <thead>
                                         <th>Nama Barang</th>
                                         <th>Qty</th>
+                                        <th>Satuan</th>
                                         <th>Harga@</th>
                                         <th>Sub Harga</th>
                                         <th><button type="button" class="btn tambah btn-success"><i
@@ -110,6 +111,7 @@
                                                     name="rekap_tf_g_detail_qty_kirim[]" maxlength="9" max="100"
                                                     id="rekap_tf_g_detail_qty_kirim1" required>
                                             </td>
+                                            <td id="satuan1"></td>
                                             <td><input type="number" class="form-control number form-control-sm harga"
                                                     name="rekap_tf_g_detail_hpp[]" id="rekap_tf_g_detail_hpp1" readonly>
                                             </td>
@@ -121,6 +123,7 @@
                                     <tfoot>
                                         <th>Nama Barang</th>
                                         <th>Qty</th>
+                                        <th>Satuan</th>
                                         <th>Harga@</th>
                                         <th>Sub Harga</th>
                                         <th><button type="button" class="btn tambah btn-success"><i
@@ -132,22 +135,6 @@
                                         <h3>Total <span id="total_sum_value"></span></h3>
                                     </div>
                                     <div class="col-md-6">
-                                        <div class="row mb-1">
-                                            <label class="col-sm-4 col-form-label" for="grdtot">Jumlah
-                                                Total</label>
-                                            <div class="col-sm-6">
-                                                <input type="text" class="form-control form-control-sm grdtot"
-                                                    id="grdtot" name="grdtot" readonly>
-                                            </div>
-                                        </div>
-                                        <div class="row mb-1">
-                                            <label class="col-sm-4 col-form-label" for="rekap_tf_gudang_ongkir">Ongkos
-                                                Kirim</label>
-                                            <div class="col-sm-6">
-                                                <input type="text" class="form-control form-control-sm ongkir"
-                                                    id="rekap_tf_gudang_ongkir" name="rekap_tf_gudang_ongkir">
-                                            </div>
-                                        </div>
                                         <div class="row mb-1">
                                             <label class="col-sm-4 col-form-label" for="rekap_tf_gudang_grand_tot">Jumlah
                                                 Akhir</label>
@@ -180,25 +167,49 @@
       'X-CSRF-Token' : $("input[name=_token]").val()
         }
       });
-    Codebase.helpersOnLoad(['jq-select2',]);
+      var datas;
+    $('#rekap_tf_gudang_tujuan_id, #rekap_tf_gudang_asal_id').on('change',function () {
+        var asal = $('#rekap_tf_gudang_asal_id').val();
+        var tujuan = $('#rekap_tf_gudang_tujuan_id').val();
+        if (asal == tujuan) {
+            alert('Tujuan dan Asal Gudang Tidak Boleh Sama !!!');
+            $('#rekap_tf_gudang_tujuan_id').val('').trigger('change');
+        }
+        $.get("/inventori/stok/"+asal, function(data){
+            datas = data;
+            $.each(data, function(key, value) {
+              $('#rekap_tf_g_detail_m_produk_id1')
+              .append($('<option>', { value : key })
+              .text(value));
+         });
+        });  
+    });
+    Codebase.helpersOnLoad(['jq-select2']);
 	  var no =2;
 	  $('.tambah').on('click',function(){
 	    no++;
 		$('#form').append('<tr id="row'+no+'">'+
                         '<td><select class="js-select2 nama_barang" name="rekap_tf_g_detail_m_produk_id[]" id="rekap_tf_g_detail_m_produk_id'+no+'" style="width: 100%;" data-placeholder="Pilih Nama Barang" required><option></option></select></td>'+
                         '<td><input type="number" min="0.01" step="0.01" class="form-control form-control-sm qty" name="rekap_tf_g_detail_qty_kirim[]" id="rekap_tf_g_detail_qty_kirim" required></td>'+
+                        '<td id="satuan'+no+'"></td>'+
                         '<td><input type="number" class="form-control number form-control-sm harga" name="rekap_tf_g_detail_hpp[]" id="rekap_tf_g_detail_hpp'+no+'" readonly></td>'+
                         '<td><input type="number" class="form-control number form-control-sm subtotal" name="rekap_tf_g_detail_sub_total[]" id="rekap_tf_g_detail_sub_total" readonly></td>'+
                         '<td><button type="button" id="'+no+'" class="btn btn-danger btn_remove"><i class="fa fa-trash"></i></button></td></tr>');
         Codebase.helpersOnLoad(['jq-select2']);
+        $.each(datas, function(key, value) {
+              $('#rekap_tf_g_detail_m_produk_id'+no)
+              .append($('<option>', { value : key })
+              .text(value));
+         }); 
         });
-
 	$(document).on('click', '.btn_remove', function(){
 		var button_id = $(this).attr("id"); 
 		$('#row'+button_id+'').remove();
       var $tblrows = $("#form");
       $tblrows.find('.qty').trigger('input');
+      console.log(test);
 	});
+
     $(document).on('select2:open', '.nama_barang', function(){
           console.log("Saving value " + $(this).val());
           var index = $(this).attr('id'); 
@@ -206,15 +217,6 @@
           if ((g_id == '')) {
             alert('pilih gudang dahulu');
           }
-          if ($(this).val()=='') {
-          $.get("/inventori/stok/"+g_id, function(data){
-            $.each(data, function(key, value) {
-              $('#'+index)
-              .append($('<option>', { value : key })
-              .text(value));
-              }); 
-          });
-        }
           $(this).data('val', $(this).val());
           $(this).data('id',index);
       }).on('change','.nama_barang', function(e){
@@ -223,11 +225,9 @@
           var g_id = $('#rekap_tf_gudang_asal_id').val();
           var id = $(this).data('id');
           var harga_id = id.slice(29);
-          console.log(harga_id);
-          console.log('ini current'+current);
             $.get("/inventori/stok_harga/"+g_id+"/"+current, function(data){
-            console.log('harga',data);
-            $('#rekap_tf_g_detail_hpp'+harga_id).val(data);
+            $('#rekap_tf_g_detail_hpp'+harga_id).val(data.m_stok_hpp);
+            $('#satuan'+harga_id).html(data.m_stok_satuan);
           });
             var values = $('[name="rekap_tf_g_detail_m_produk_id[]"]').map(function() {
         return this.value.trim();
@@ -269,21 +269,8 @@
                           var stval = parseFloat($(this).val());
                           grdtot += isNaN(stval) ? 0 : stval;
           });
-          var ongkir = $("[name='rekap_tf_gudang_ongkir']").val();
-         if (ongkir==="") {
-            var ongkir = 0;
-         }
-          var rekap_beli_tot_nom = parseFloat(grdtot)+ parseFloat(ongkir);
-          $('#rekap_tf_gudang_grand_tot').val(rekap_beli_tot_nom.toFixed(2));
-          $('#total_sum_value').html(': Rp '+rekap_beli_tot_nom.toFixed(2));
-    });
-    $('#rekap_tf_gudang_tujuan_id').on('change',function () {
-        var asal = $('#rekap_tf_gudang_asal_id').val();
-        var tujuan = $(this).val();
-        if (asal == tujuan) {
-            alert('Tujuan dan Asal Gudang Tidak Boleh Sama !!!');
-            $('#rekap_tf_gudang_tujuan_id').val('').trigger('change');
-        } 
+          $('#rekap_tf_gudang_grand_tot').val(grdtot.toFixed(2));
+          $('#total_sum_value').html(': Rp '+grdtot.toFixed(2));
     });
     $('.close').on('click',function () {
         $('.alert').remove();

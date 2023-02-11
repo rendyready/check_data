@@ -20,7 +20,6 @@ return new class extends Migration
             $table->bigInteger('rekap_tf_gudang_tujuan_id');
             $table->date('rekap_tf_gudang_tgl_kirim');
             $table->date('rekap_tf_gudang_tgl_terima')->nullable();
-            $table->decimal('rekap_tf_gudang_ongkir',14,2);
             $table->decimal('rekap_tf_gudang_grand_tot',16,2);
             $table->bigInteger('rekap_tf_gudang_created_by');
             $table->bigInteger('rekap_tf_gudang_updated_by')->nullable();
