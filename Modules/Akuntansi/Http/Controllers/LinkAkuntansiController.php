@@ -61,7 +61,7 @@ class LinkAkuntansiController extends Controller
             ->where('list_akt_id', $request->list_akt_id)
             ->update(['list_akt_m_rekening_id' => $norek]);
 
-        return response()->json([ 'msg' => 'Berhasil Update' . $norek]);
+        return response()->json([ 'messages' => 'Berhasil Update' , 'type' => 'success']);
 
     }
 

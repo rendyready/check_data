@@ -223,8 +223,8 @@
         $('#rekening-tampil').DataTable({
             "columnDefs": [
                 { 
-                  "render": DataTable.render.number( '.', ',', 2, 'Rp. ' ),
                   "targets":3,
+                  "render": DataTable.render.number( '.', ',', 2, 'Rp. ' ),
                 }
             ],
         button:[],
@@ -354,7 +354,13 @@
                 type: "get",
                 success: function(data) {
                     if (data > 0){
-                    alert('Nama rekening yang anda inputkan sama/ duplikat ! ');
+                        Codebase.helpers('jq-notify', {
+                              align: 'right', // 'right', 'left', 'center'
+                              from: 'top', // 'top', 'bottom'
+                              type: data.type, // 'info', 'success', 'warning', 'danger'
+                              icon: 'fa fa-info me-5', // Icon class
+                              message: 'Nama rekening yang anda inputkan sama/ duplikat !'
+                            });
                     $('.m_rekening_nama').val('');
                     }  
                 },
@@ -378,7 +384,13 @@
 
                     // console.log(data);
                     if (data > 0){
-                    alert('No Akun yang anda inputkan sama/duplikat ! ');
+                        Codebase.helpers('jq-notify', {
+                              align: 'right', // 'right', 'left', 'center'
+                              from: 'top', // 'top', 'bottom'
+                              type: data.type, // 'info', 'success', 'warning', 'danger'
+                              icon: 'fa fa-info me-5', // Icon class
+                              message: 'No Akun yang anda inputkan sama/duplikat ! '
+                            });
                     $('.m_rekening_no_akun').val('');
                     }  
                 },
@@ -401,7 +413,13 @@
                 type: "get",
                 success: function(data) {
                     if (data > 0){
-                    alert('Nama rekening yang anda inputkan sama/ duplikat ! ');
+                        Codebase.helpers('jq-notify', {
+                              align: 'right', // 'right', 'left', 'center'
+                              from: 'top', // 'top', 'bottom'
+                              type: data.type, // 'info', 'success', 'warning', 'danger'
+                              icon: 'fa fa-info me-5', // Icon class
+                              message: 'Nama rekening yang anda inputkan sama/ duplikat !'
+                            });   
                     $('#m_rekening_namajq'+id).val('');
                     }  
                 },
@@ -424,7 +442,13 @@
                 type: "get",
                 success: function(data) {
                     if (data > 0){
-                    alert('No Akun yang anda inputkan sama/duplikat ! ');
+                        Codebase.helpers('jq-notify', {
+                              align: 'right', // 'right', 'left', 'center'
+                              from: 'top', // 'top', 'bottom'
+                              type: data.type, // 'info', 'success', 'warning', 'danger'
+                              icon: 'fa fa-info me-5', // Icon class
+                              message: 'No Akun yang anda inputkan sama/duplikat ! '
+                            });
                     $('#m_rekening_no_akunjq'+id).val('');
                     }  
                 },
@@ -466,8 +490,13 @@
             },
         });
       }else{
-      alert('waroeng yang anda pilih sama dengan yang di halaman !');
-      $('#m_rekening_m_waroeng_id2').val('-- Pilih Waroeng --');
+        Codebase.helpers('jq-notify', {
+                              align: 'right', // 'right', 'left', 'center'
+                              from: 'top', // 'top', 'bottom'
+                              icon: 'fa fa-info me-5', // Icon class
+                              message: 'waroeng yang anda pilih sama dengan yang di halaman !'
+                            });
+      $('#m_rekening_m_waroeng_id2').val('-- Pilih Waroeng --').trigger('change');
       }
     });
 

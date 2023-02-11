@@ -334,7 +334,7 @@ $(document).ready(function() {
             "columnDefs": [
                 { 
                   "render": DataTable.render.number( '.', ',', 2, 'Rp. ' ),
-                  "targets":3,
+                  "targets":[3],
                 }
             ],
         button:[],
@@ -359,8 +359,6 @@ $(document).ready(function() {
         ],
       });
     });
-
-    
 
     //auto change debit/kredit
     $('.kas-click').on('change', function() {
