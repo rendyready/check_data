@@ -6,7 +6,7 @@
                 <div class="block block-themed h-100 mb-0">
                     <div class="block-header bg-pulse">
                         <h3 class="block-title">
-                            FORM TRANSFER DAN KELUAR GUDANG
+                            FORM KELUAR DARI GUDANG
                     </div>
                     <div class="block-content text-muted">
                         <form action="{{ route('m_gudang_out.simpan') }}" method="post">
@@ -201,6 +201,24 @@
               .append($('<option>', { value : key })
               .text(value));
          }); 
+        });
+        $('table').on('keyup',function(e){
+            if (e.which === 9){
+	    no++;
+		$('#form').append('<tr id="row'+no+'">'+
+                        '<td><select class="js-select2 nama_barang" name="rekap_tf_g_detail_m_produk_id[]" id="rekap_tf_g_detail_m_produk_id'+no+'" style="width: 100%;" data-placeholder="Pilih Nama Barang" required><option></option></select></td>'+
+                        '<td><input type="number" min="0.01" step="0.01" class="form-control form-control-sm qty" name="rekap_tf_g_detail_qty_kirim[]" id="rekap_tf_g_detail_qty_kirim" required></td>'+
+                        '<td id="satuan'+no+'"></td>'+
+                        '<td><input type="number" class="form-control number form-control-sm harga" name="rekap_tf_g_detail_hpp[]" id="rekap_tf_g_detail_hpp'+no+'" readonly></td>'+
+                        '<td><input type="number" class="form-control number form-control-sm subtotal" name="rekap_tf_g_detail_sub_total[]" id="rekap_tf_g_detail_sub_total" readonly></td>'+
+                        '<td><button type="button" id="'+no+'" class="btn btn-danger btn_remove"><i class="fa fa-trash"></i></button></td></tr>');
+        Codebase.helpersOnLoad(['jq-select2']);
+        $.each(datas, function(key, value) {
+              $('#rekap_tf_g_detail_m_produk_id'+no)
+              .append($('<option>', { value : key })
+              .text(value));
+         });
+        } 
         });
 	$(document).on('click', '.btn_remove', function(){
 		var button_id = $(this).attr("id"); 

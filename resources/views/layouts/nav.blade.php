@@ -405,7 +405,12 @@
               </li>
               <li class="nav-main-item">
                 <a class="nav-main-link{{ request()->is('invetori/m_gudang/out') ? ' active' : '' }}" href="{{route('m_gudang_out.index')}}">
-                  <span class="nav-main-link-name">Tranfer/Keluar Gudang</span>
+                  <span class="nav-main-link-name">Keluar Gudang</span>
+                </a>
+              </li>
+              <li class="nav-main-item">
+                <a class="nav-main-link{{ request()->is('invetori/gudang/terima') ? ' active' : '' }}" href="{{route('m_gudang.terima_tf')}}">
+                  <span class="nav-main-link-name">Terima Gudang</span>
                 </a>
               </li>
               <li class="nav-main-item">

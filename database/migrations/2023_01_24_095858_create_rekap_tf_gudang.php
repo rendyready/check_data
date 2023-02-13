@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('rekap_tf_gudang_code');
             $table->bigInteger('rekap_tf_gudang_asal_id'); 
             $table->bigInteger('rekap_tf_gudang_tujuan_id');
-            $table->date('rekap_tf_gudang_tgl_kirim');
+            $table->datetime('rekap_tf_gudang_tgl_kirim');
             $table->date('rekap_tf_gudang_tgl_terima')->nullable();
             $table->decimal('rekap_tf_gudang_grand_tot',16,2);
             $table->bigInteger('rekap_tf_gudang_created_by');

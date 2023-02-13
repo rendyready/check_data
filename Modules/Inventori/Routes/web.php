@@ -70,6 +70,7 @@ Route::group(['prefix' => 'inventori', 'controller' => GudangController::class, 
     Route::get('gudang/terima','gudang_terima')->name('m_gudang.terima_tf');
     Route::get('gudang/listtf','gudang_list_tf')->name('gudang.tf_list');
     Route::get('gudang/terima/transfer/{id}','gudang_terima_transfer')->name('gudang.tf_terima');
+    Route::post('gudang/terima/simpan','gudang_terima_simpan')->name('gudang.terima_simpan');
 
 });
 //Master BB
