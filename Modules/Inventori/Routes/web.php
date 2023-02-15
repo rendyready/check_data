@@ -79,3 +79,9 @@ Route::group(['prefix' => 'inventori', 'controller' => MasterBBController::class
     Route::post('m_bb/simpan', 'simpan')->name('simpan.m_bb');
     Route::get('m_bb/list/{id}', 'list')->name('m_bb.list');
 });
+//Pecah Gabung Barang
+Route::group(['prefix' => 'inventori', 'controller' => PecahGabungController::class, 'middleware' => ['auth', 'web']], function () {
+    Route::get('pecah_gabung', 'index')->name('pcb.index');
+    Route::post('m_bb/simpan', 'simpan')->name('simpan.m_bb');
+    Route::get('m_bb/list/{id}', 'list')->name('m_bb.list');
+});
