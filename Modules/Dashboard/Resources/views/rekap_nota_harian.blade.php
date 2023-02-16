@@ -1,165 +1,147 @@
 @extends('layouts.app')
 @section('content')
-    <div class="content">
-        <div class="row items-push">
-            <div class="col-md-12 col-xl-12">
-                <div class="block block-themed h-100 mb-0">
-                    <div class="block-header bg-pulse">
-
-                    </div>
-                    <div class="block-content text-muted">
-                        <form id="detail_insert">
-                            <div class="col-md-12">
-                                <div class="row mb-2 col-6">
-                                    <label class="col-sm-4 col-form-label" id="namaWaroeng"
-                                        for="example-hf-text">Waroeng</label>
-                                    <div class="col-sm-8">
-                                        <select id="filter-waroeng" style="width: 100%;"
-                                            class="cari js-select2 form-control" name="m_jurnal_kas_m_waroeng_id">
-                                            @foreach ($data->waroeng as $wrg)
-                                                <option value="{{ $wrg->m_w_id }}"> {{ $wrg->m_w_nama }} </option>
+<div class="content">
+    <div class="row items-push">
+      <div class="col-md-12 col-xl-12">
+        <div class="block block-themed h-100 mb-0">
+          <div class="block-header bg-pulse">
+            <h3 class="block-title">
+              Rekap Nota Penjualan Harian
+            </h3>
+              </div>
+                <div class="block-content text-muted">
+                    <form id="rekap_insert">
+                        {{-- @csrf --}}
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="row mb-2">
+                                    <label class="col-sm-3 col-form-label">Area</label>
+                                    <div class="col-sm-9">
+                                        <select id="filter_area" data-placeholder="Pilih Area" style="width: 100%;"
+                                            class="cari f-area js-select2 form-control" name="r_t_m_area_id">
+                                            <option></option>
+                                            @foreach ($data->area as $area)
+                                                <option value="{{ $area->m_area_id }}"> {{ $area->m_area_nama }} </option>
                                             @endforeach
                                         </select>
                                     </div>
                                 </div>
+                            </div>
 
-                                <div class="row mb-2 col-6">
-                                    <label class="col-sm-4 col-form-label" id="categoryAccount"
-                                        for="example-hf-text">Tanggal</label>
-                                    <div class="col-md-8">
-                                        <input type="date" value="<?= date('Y-m-d') ?>" id="filter-tanggal"
-                                            class="cari form-control " style="width: 100%;"
-                                            name="m_jurnal_kas_tanggal">
-                                    </div>
-                                </div>
-                                <div class="row mb-2 col-6">
-                                    <label class="col-sm-4 col-form-label" id="categoryAccount" for="example-hf-text">Nama Operator</label>
-                                    <div class="col-md-8">
-                                        <select id="filter-kas" class="cari js-select2 form-control kas-click"
-                                            style="width: 100%;" name="m_jurnal_kas">
-                                            <option value="km">Kas Masuk</option>
-                                            <option value="kk">Kas Keluar</option>
+                            <div class="col-sm-5">
+                                <div class="row mb-2">
+                                    <label class="col-sm-3 col-form-label">Waroeng</label>
+                                    <div class="col-sm-9">
+                                        <select id="filter_waroeng" style="width: 100%;"
+                                            class="cari f-wrg js-select2 form-control" data-placeholder="Pilih Waroeng" name="r_t_m_w_id">
+                                            <option></option>
                                         </select>
                                     </div>
                                 </div>
-                                
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="content">
-        <div class="row items-push">
-            <div class="col-md-12 col-xl-12">
-                <div class="block block-themed h-100 mb-0">
-                    <div class="block-header bg-pulse">
-                        <h3 class="block-title">
-                            Detail Nota
-                        </h3>
-                    </div>
-                    <div class="block block-rounded">
-                        <div class="block-content text-mute">
-                            <div class="table-responsive">
-                                <table id="jurnal-tampil" class="table table-bordered table-striped table-vcenter mb-4">
-                                    <thead class="justify-content-center">
-                                        <tr>
-                                            <th>Tanggal</th>
-                                            <th>No Nota</th>
-                                            <th>Operator</th>
-                                            <th>Item</th>
-                                            <th>Qty</th>
-                                            <th>Harga</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="dataReload">
-                                    </tbody>
-                                </table>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
+
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="row mb-1">
+                                    <label class="col-sm-3 col-form-label" >Tanggal</label>
+                                    <div class="col-sm-9 datepicker">
+                                        <input name="r_t_tanggal" class="cari form-control form-control-sm" type="text" placeholder="Pilih Tanggal.." id="filter_tanggal" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div> 
+
+                        <div class="col-sm-8">
+                            <button type="button" id="cari"
+                                class="btn btn-primary btn-sm col-1 mt-2 mb-3">Cari</button>
+                        </div>
+
+                    </form>      
+                
+            <table id="tampil_rekap" class="table table-sm table-bordered table-striped table-vcenter js-dataTable-full">
+              <thead>
+                <tr>
+                  <th>Tanggal</th>
+                  <th>Total Penjualan</th>
+                  {{-- <th>Pembayaran</th> --}}
+                </tr>
+              </thead>
+              <tbody id="show_data">
+              </tbody>
+            </table>
+          </div>
         </div>
+      </div>
     </div>
+    </div>
+</div>
 @endsection
 @section('js')
     <!-- js -->
-    
     <script type="module">
-
 $(document).ready(function() {
     Codebase.helpersOnLoad(['jq-select2']);
-    
-//     var filwaroeng  = $('#filter-waroeng').val();
-//     var filkas      = $('#filter-kas').val();
-//     var filtanggal  = $('#filter-tanggal').val();
 
-//     //tampil
-//         $('#jurnal-tampil').DataTable({
-//             "columnDefs": [
-//                 { 
-//                   "render": DataTable.render.number( '.', ',', 2, 'Rp. ' ),
-//                   "targets":3,
-//                 }
-//             ],
-//         button:[],
-//         destroy: true,
-//         lengthMenu: [ 10, 25, 50, 75, 100],
-//         ajax: {
-//             url: '{{route("jurnal.tampil")}}',
-//             data : {
-//                 m_jurnal_kas_m_waroeng_id: filwaroeng,
-//                 m_jurnal_kas: filkas,
-//                 m_jurnal_kas_tanggal: filtanggal,
-//             },
-//             type : "GET",
-//             },
-//             columns: [
-//             { data: 'm_jurnal_kas_m_rekening_no_akun' },
-//             { data: 'm_jurnal_kas_m_rekening_nama' },
-//             { data: 'm_jurnal_kas_particul' },
-//             { data: 'm_jurnal_kas_saldo' },
-//             { data: 'm_jurnal_kas_user' },
-//             { data: 'm_jurnal_kas_no_bukti' },
-//         ],
-//       });
+    $('#cari').on('click', function() {
+        var waroeng  = $('#filter_waroeng').val();
+        var tanggal  = $('#filter_tanggal').val();
+        console.log(tanggal);
+    $('#tampil_rekap').DataTable({
+        button: [],
+        destroy: true,
+        orderCellsTop: true,
+        processing: true,
+        autoWidth: true,
+        lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+        pageLength: 10,
+        ajax: {
+            url: '{{route("harian.show")}}',
+            data : {
+                waroeng: waroeng,
+                tanggal: tanggal,
+            },
+            type : "GET",
+            },
+            success:function(data){ 
+                console.log(data);
+            }
+      });
+    });
 
-//     //filter tampil
-//     $('.cari').on('change', function() {
-//         var filwaroeng  = $('#filter-waroeng').val();
-//         var filkas      = $('#filter-kas').val();
-//         var filtanggal  = $('#filter-tanggal').val();
-//         $('#jurnal-tampil').DataTable({
-//             "columnDefs": [
-//                 { 
-//                   "render": DataTable.render.number( '.', ',', 2, 'Rp. ' ),
-//                   "targets":[3],
-//                 }
-//             ],
-//         button:[],
-//         destroy: true,
-//         lengthMenu: [ 10, 25, 50, 75, 100],
-//         ajax: {
-//             url: '{{route("jurnal.tampil")}}',
-//             data : {
-//                 m_jurnal_kas_m_waroeng_id: filwaroeng,
-//                 m_jurnal_kas: filkas,
-//                 m_jurnal_kas_tanggal: filtanggal,
-//             },
-//             type : "GET",
-//             },
-//             columns: [
-//             { data: 'm_jurnal_kas_m_rekening_no_akun' },
-//             { data: 'm_jurnal_kas_m_rekening_nama' },
-//             { data: 'm_jurnal_kas_particul' },
-//             { data: 'm_jurnal_kas_saldo' },
-//             { data: 'm_jurnal_kas_user' },
-//             { data: 'm_jurnal_kas_no_bukti' },
-//         ],
-//       });
-//     });
+    $('#filter_area').change(function(){
+        var id_area = $(this).val();    
+        if(id_area){
+            $.ajax({
+            type:"GET",
+            url: '{{route("harian.select_waroeng")}}',
+            dataType: 'JSON',
+            data : {
+                id_area: id_area,
+            },
+            success:function(res){               
+                if(res){
+                    $("#filter_waroeng").empty();
+                    $("#filter_waroeng").append('<option></option>');
+                    $.each(res,function(key,value){
+                        $("#filter_waroeng").append('<option value="'+key+'">'+value+'</option>');
+                    });
+                }else{
+                $("#filter_waroeng").empty();
+                }
+            }
+            });
+        }else{
+            $("#filter_waroeng").empty();
+        }      
+    });
+
+    $('#filter_tanggal').flatpickr({
+            mode: "range",
+            dateFormat: 'Y-m-d',
+            // noCalendar: false,
+            // allowInput: true,            
+    });
 
 });
 </script>

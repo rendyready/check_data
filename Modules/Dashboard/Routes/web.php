@@ -21,9 +21,9 @@ Route::prefix('dashboard')->middleware('auth', 'web')
     ->group(function () {
 
         Route::view('/', 'dashboard::dashboard');
-        Route::match(['get', 'post'], '/dashboard', function () {
-            return view('dashboard::dashboard');
-        });
+        // Route::match(['get', 'post'], '/dashboard', function () {
+        //     return view('dashboard::dashboard');
+        // });
 
         Route::controller(DetailNotaController::class)->group(function () {
             Route::get('detail', 'index')->name('detail.index');
@@ -37,6 +37,8 @@ Route::prefix('dashboard')->middleware('auth', 'web')
 
         Route::controller(RekapNotaHarianController::class)->group(function () {
             Route::get('harian', 'index')->name('harian.index');
+            Route::get('harian/show', 'show')->name('harian.show');
+            Route::get('harian/select_waroeng', 'select_waroeng')->name('harian.select_waroeng');
         });
 
 });

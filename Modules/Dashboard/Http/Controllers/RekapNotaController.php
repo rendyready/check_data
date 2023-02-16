@@ -34,7 +34,7 @@ class RekapNotaController extends Controller
             ->get();
         $data = array();
         foreach ($waroeng as $val) {
-            $data[$val->m_w_code] = [$val->m_w_nama];
+            $data[$val->m_w_id] = [$val->m_w_nama];
         }
         return response()->json($data);
     }
@@ -44,36 +44,21 @@ class RekapNotaController extends Controller
         return view('dashboard::create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     * @param Request $request
-     * @return Renderable
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Show the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
     public function show(Request $request)
     {
+        $dates = explode('to' ,$request->tanggal);
         $get = DB::table('rekap_transaksi')
-        ->join('rekap_transaksi_detail', 'r_t_detail_sync_id', 'r_t_sync_id')
-        ->join('users', 'id', 'r_t_created_by')
-        // ->join('rekap_payment_transaksi', 'r_p_t_sync_id', 'r_t_sync_id')
-        // ->where('r_t_m_area_id', $request->area)
-        // ->where('r_t_m_w_id', $request->waroeng)
-        // ->where('r_t_tanggal', $request->tanggal)
-        ->orderBy('r_t_id', 'ASC')
-        ->get();
+                ->join('rekap_transaksi_detail', 'r_t_detail_sync_id', 'r_t_sync_id')
+                ->join('users', 'id', 'r_t_created_by')
+                ->where('r_t_m_w_id', $request->waroeng)
+                ->where('r_t_created_by', $request->operator)
+                ->whereBetween('r_t_tanggal', $dates)
+                ->orderBy('r_t_id', 'ASC')
+                ->get();
         $data = array();
         foreach ($get as $value) {
             $row = array();
-            $row[] = $value->r_t_tanggal;
+            $row[] = date('d-m-Y', strtotime($value->r_t_tanggal));
             $row[] = $value->name;
             $row[] = $value->r_t_nota_code;
             $row[] = rupiah($value->r_t_nominal);
