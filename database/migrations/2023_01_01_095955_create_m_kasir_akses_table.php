@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('m_kasir_akses_fitur')->comment('lostbill,cancel menu,cancel transaksi, cancel menu after bill, void, edit transaksi');
             $table->string('m_kasir_akses_default_role')->default('deny')->comment('allow,deny');
             $table->string('m_kasir_akses_temp_role')->default('deny')->comment('allow,deny');
+            // $table->string('m_kasir_akses_method')->default('onsite')->comment('onsite,offsite');
             $table->bigInteger('m_kasir_akses_approvel')->nullable();
             $table->bigInteger('m_kasir_akses_created_by');
             $table->bigInteger('m_kasir_akses_updated_by')->nullable();

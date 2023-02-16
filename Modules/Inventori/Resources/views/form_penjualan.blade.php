@@ -6,7 +6,7 @@
         <div class="block block-themed h-100 mb-0">
           <div class="block-header bg-pulse">
             <h3 class="block-title">
-              Form Input Penjualan Barang
+              FORM PENJUALAN BARANG GUDANG
           </div>
           <div class="block-content text-muted">
                 <form action="{{route('penjualan_inv.simpan')}}" method="post">

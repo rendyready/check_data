@@ -69,10 +69,19 @@ Route::group(['prefix' => 'inventori', 'controller' => GudangController::class, 
     Route::post('gudang/out_simpan','gudang_out_save')->name('m_gudang_out.simpan');
     Route::get('gudang/terima','gudang_terima')->name('m_gudang.terima_tf');
     Route::get('gudang/listtf','gudang_list_tf')->name('gudang.tf_list');
+    Route::get('gudang/terima/transfer/{id}','gudang_terima_transfer')->name('gudang.tf_terima');
+    Route::post('gudang/terima/simpan','gudang_terima_simpan')->name('gudang.terima_simpan');
+
 });
 //Master BB
 Route::group(['prefix' => 'inventori', 'controller' => MasterBBController::class, 'middleware' => ['auth', 'web']], function () {
     Route::get('m_bb', 'index')->name('m_bb.index');
+    Route::post('m_bb/simpan', 'simpan')->name('simpan.m_bb');
+    Route::get('m_bb/list/{id}', 'list')->name('m_bb.list');
+});
+//Pecah Gabung Barang
+Route::group(['prefix' => 'inventori', 'controller' => PecahGabungController::class, 'middleware' => ['auth', 'web']], function () {
+    Route::get('pecah_gabung', 'index')->name('pcb.index');
     Route::post('m_bb/simpan', 'simpan')->name('simpan.m_bb');
     Route::get('m_bb/list/{id}', 'list')->name('m_bb.list');
 });
