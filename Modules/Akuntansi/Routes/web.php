@@ -13,6 +13,9 @@ Route::prefix('akuntansi')->middleware('auth', 'web')
             Route::get('rekening/copyrecord', 'copyrecord')->name('rekening.copyrecord');
             Route::get('rekening/validasinama', 'validasinama')->name('rekening.validasinama');
             Route::get('rekening/validasino', 'validasino')->name('rekening.validasino');
+            Route::post('rekening/delete/{id}', 'delete')->name('rekening.delete');
+            Route::get('rekening/edit/{id}', 'edit')->name('rekening.edit');
+            Route::post('rekening/edit/simpan_edit', 'simpan_edit')->name('rekening.simpan_edit');
         });
 
         Route::controller(JurnalBankController::class)->group(function () {

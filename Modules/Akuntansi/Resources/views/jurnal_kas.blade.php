@@ -412,7 +412,7 @@ $(document).ready(function() {
                 m_rekening_no_akun: filnomor,
                 },
                 success: function(data){
-                    // console.log(data);
+                    console.log(data);
                     $('#m_rekening_nama').val(data.m_rekening_nama).trigger("change");                               
                 }
         });

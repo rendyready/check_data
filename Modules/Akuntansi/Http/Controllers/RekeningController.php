@@ -14,32 +14,47 @@ class RekeningController extends Controller
      * Display a listing of the resource.
      * @return Renderable
      */
-    public function index()
-    {
-        $wrg = DB::table('m_w')
+    public function index(Request $request)
+    {       
+        $data = new \stdClass();
+        $data->waroeng = DB::table('m_w')
             ->orderby('m_w_id', 'ASC')
             ->get();
-        return view('akuntansi::rekening', ['waroeng' => $wrg]);
+        $data->rekening = DB::table('m_rekening')
+            ->join('m_w', 'm_w_id', 'm_rekening_m_waroeng_id')
+            ->select('m_rekening_kategori', 'm_rekening_no_akun', 'm_rekening_nama', 'm_rekening_saldo')
+            ->orderBy('m_rekening_id', 'DESC')
+            ->get();
+        return view('akuntansi::rekening', compact('data'));
     }
 
     public function tampil(Request $request)
     {
-        $data = DB::table('m_rekening')
-            ->join('m_w', 'm_w_id', 'm_rekening_m_waroeng_id')
-            ->select('m_rekening_kategori', 'm_rekening_no_akun', 'm_rekening_nama', 'm_rekening_saldo')
-            ->where('m_rekening_kategori', $request->m_rekening_kategori)
-            ->where('m_rekening_m_waroeng_id', $request->m_rekening_m_waroeng_id)
-            ->orderBy('m_rekening_id', 'DESC')
-            ->get();
-        $output = array('data' => $data);
+        $get = DB::table('m_rekening')
+                ->join('m_w', 'm_w_id', 'm_rekening_m_waroeng_id')
+                ->where('m_rekening_kategori', $request->m_rekening_kategori)
+                ->where('m_rekening_m_waroeng_id', $request->m_rekening_m_waroeng_id)
+                ->orderBy('m_rekening_no_akun', 'ASC')
+                ->get();
+        $data = array();
+        foreach ($get as $value) {
+            $row = array();
+            $row[] = $value->m_rekening_kategori;
+            $row[] = $value->m_rekening_no_akun;
+            $row[] = $value->m_rekening_nama;
+            $row[] = rupiah($value->m_rekening_saldo);
+            $row[] = '<a id="buttonEdit" class="btn btn-sm buttonEdit btn-success" value="'.$value->m_rekening_no_akun.'" title="Edit"><i class="fa fa-pencil"></i></a> <a id="buttonHapus" class="btn btn-sm buttonHapus btn-warning" value="'.$value->m_rekening_no_akun.'" title="Hapus"><i class="fa fa-trash"></i></a>';
+            $data[] = $row;
+        }
+        $output = array("data" => $data);
         return response()->json($output);
     }
+
     public function validasinama(Request $request)
     {
         $validasi = DB::table('m_rekening')
             ->where('m_rekening_nama', $request->m_rekening_nama)
             ->where('m_rekening_m_waroeng_id', $request->m_rekening_m_waroeng_id)
-            ->where('m_rekening_kategori', $request->m_rekening_kategori)
             ->count();
         return response()->json($validasi);
         
@@ -49,7 +64,6 @@ class RekeningController extends Controller
         $validasi = DB::table('m_rekening')
             ->where('m_rekening_no_akun', $request->m_rekening_no_akun)
             ->where('m_rekening_m_waroeng_id', $request->m_rekening_m_waroeng_id)
-            ->where('m_rekening_kategori', $request->m_rekening_kategori)
             ->count();
         return response()->json($validasi);
 
@@ -104,4 +118,80 @@ class RekeningController extends Controller
         return response()->json(['messages' => 'Berhasil copy ke waroeng lain', 'type' => 'success']);
     }
 
+    public function edit($id)
+    {
+        $data = DB::table('m_rekening')->where('m_rekening_no_akun',$id)->first();
+        return response()->json($data);
+    }
+
+    public function simpan_edit(Request $request)
+    {
+        $validasi1 = DB::table('m_jurnal_kas')
+                    ->select('m_jurnal_kas_m_rekening_no_akun')
+                    ->where('m_jurnal_kas_m_rekening_no_akun', $request->m_rekening_no_akun)
+                    ->count();
+
+        $validasi2 = DB::table('m_jurnal_bank')
+                    ->select('m_jurnal_bank_m_rekening_no_akun')
+                    ->where('m_jurnal_bank_m_rekening_no_akun', $request->m_rekening_no_akun)
+                    ->count();
+
+        $validasi3 = DB::table('m_jurnal_umum')
+                    ->select('m_jurnal_umum_m_rekening_no_akun')
+                    ->where('m_jurnal_umum_m_rekening_no_akun', $request->m_rekening_no_akun)
+                    ->count();
+
+        $validasi4 = DB::table('list_akt')
+                    ->select('list_akt_m_rekening_id')
+                    ->where('list_akt_m_rekening_id', $request->m_rekening_no_akun)
+                    ->count();
+
+        $validasi = $validasi1 + $validasi2 + $validasi3 + $validasi4;
+        if($validasi == 0){
+        $str1 = str_replace('.', '', $request->m_rekening_saldo);
+        $data = array(
+            'm_rekening_no_akun'	=>	$request->m_rekening_no_akun,
+            'm_rekening_nama'	    =>	$request->m_rekening_nama,
+            'm_rekening_saldo'	    =>	str_replace(',', '.', $str1),
+            'm_rekening_updated_by' => Auth::id(),
+            'm_rekening_updated_at' => Carbon::now(),
+        );
+        $update = DB::table('m_rekening')->where('m_rekening_no_akun', $request->m_rekening_no_akun)
+        ->update($data);
+
+        return response()->json($update); 
+    } 
+    return response()->json($validasi);
+    }
+
+    public function delete(Request $request, $id)
+    {
+        $validasi1 = DB::table('m_jurnal_kas')
+                    ->select('m_jurnal_kas_m_rekening_no_akun')
+                    ->where('m_jurnal_kas_m_rekening_no_akun', $request->m_rekening_no_akun)
+                    ->count();
+
+        $validasi2 = DB::table('m_jurnal_bank')
+                    ->select('m_jurnal_bank_m_rekening_no_akun')
+                    ->where('m_jurnal_bank_m_rekening_no_akun', $request->m_rekening_no_akun)
+                    ->count();
+
+        $validasi3 = DB::table('m_jurnal_umum')
+                    ->select('m_jurnal_umum_m_rekening_no_akun')
+                    ->where('m_jurnal_umum_m_rekening_no_akun', $request->m_rekening_no_akun)
+                    ->count();
+
+        $validasi4 = DB::table('list_akt')
+                    ->select('list_akt_m_rekening_id')
+                    ->where('list_akt_m_rekening_id', $request->m_rekening_no_akun)
+                    ->count();
+        $validasi = $validasi1 + $validasi2 + $validasi3 + $validasi4;
+        if($validasi === 0){
+        $delete = DB::table('m_rekening')
+            ->where('m_rekening_no_akun', $id)
+            ->delete();
+            return response()->json($delete);
+        }
+        return response()->json($validasi);
+    }
 }
