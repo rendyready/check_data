@@ -15,19 +15,19 @@
                                 <div class="col-md-5">
                                     <div class="row mb-1">
                                         <label class="col-sm-4 col-form-label-sm"
-                                            for="rekap_beli_created_by">Operator</label>
+                                            for="rekap_pcb_created_by_name">Operator</label>
                                         <div class="col-sm-8">
                                             <input type="text" class="form-control form-control-sm"
-                                                id="rekap_beli_created_by" name="rekap_beli_created_by"
+                                                id="rekap_pcb_created_by_name" name="rekap_pcb_created_by_name"
                                                 value="{{ Auth::user()->name }}" readonly>
                                         </div>
                                     </div>
                                     <div class="row mb-1">
-                                        <label class="col-sm-4 col-form-label-sm" for="rekap_beli_gudang_id">Asal
+                                        <label class="col-sm-4 col-form-label-sm" for="rekap_pcb_gudang_asal_id">Asal
                                             Gudang</label>
                                         <div class="col-sm-8">
                                             <select class="js-select2 form-control-sm" style="width: 100%;"
-                                                name="rekap_beli_gudang_id" id="rekap_beli_gudang_id"
+                                                name="rekap_pcb_gudang_asal_id" id="rekap_pcb_gudang_asal_id"
                                                 data-placeholder="Pilih Gudang" required>
                                                 <option></option>
                                                 @foreach ($data->gudang as $item)
@@ -38,11 +38,11 @@
                                         </div>
                                     </div>
                                     <div class="row mb-1">
-                                        <label class="col-sm-4 col-form-label-sm" for="aksi">Aksi
+                                        <label class="col-sm-4 col-form-label-sm" for="rekap_pcb_aksi">Aksi
                                         </label>
                                         <div class="col-sm-8">
-                                            <select class="js-select2 form-control-sm" style="width: 100%;" name="aksi"
-                                                id="aksi" data-placeholder="Pilih" required>
+                                            <select class="js-select2 form-control-sm" style="width: 100%;" name="rekap_pcb_aksi"
+                                                id="rekap_pcb_aksi" data-placeholder="Pilih" required>
                                                 <option></option>
                                                 <option value="pecah">Pecah Barang</option>
                                                 <option value="gabung">Gabung Barang</option>
@@ -60,10 +60,10 @@
                                         </div>
                                     </div>
                                     <div class="row mb-1">
-                                        <label class="col-sm-5 col-form-label-sm" for="rekap_beli_code">No Nota</label>
+                                        <label class="col-sm-5 col-form-label-sm" for="rekap_pcb_code">No Nota</label>
                                         <div class="col-sm-7">
-                                            <input type="text" class="form-control form-control-sm" id="rekap_beli_code"
-                                                name="rekap_beli_code" value="{{ $data->code }}" readonly>
+                                            <input type="text" class="form-control form-control-sm" id="rekap_pcb_code"
+                                                name="rekap_pcb_code" value="{{ $data->code }}" readonly>
                                         </div>
                                     </div>
                                 </div>
@@ -81,27 +81,34 @@
                                 <div class="col-md-6">
                                     <label for="proses">BARANG YANG AKAN DIPROSES</label>
                                     <div class="row mb-1">
-                                        <label class="col-sm-4 col-form-label-sm" for="nama_waroeng">Nama Barang</label>
+                                        <label class="col-sm-4 col-form-label-sm" for="rekap_pcb_brg_asal_id">Nama Barang</label>
                                         <div class="col-sm-8">
                                             <select class="js-select2 nama_barang form-control-sm" style="width: 100%;"
-                                                name="rekap_pcb_produk_asal_id" id="rekap_pcb_produk_asal_id"
+                                                name="rekap_pcb_brg_asal_id" id="rekap_pcb_brg_asal_id"
                                                 data-placeholder="Pilih Barang" required>
                                                 <option></option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="row mb-1">
-                                        <label class="col-sm-4 col-form-label-sm" for="nama_waroeng">Satuan</label>
+                                        <label class="col-sm-4 col-form-label-sm" for="rekap_pcb_brg_asal_satuan_id">Satuan</label>
                                         <div class="col-sm-4">
-                                            <input type="text" class="form-control form-control-sm" id="nama_waroeng"
-                                                name="nama_waroeng" readonly>
+                                            <input type="text" class="form-control form-control-sm" id="rekap_pcb_brg_asal_satuan_id"
+                                                name="rekap_pcb_brg_asal_satuan_id" readonly>
                                         </div>
                                     </div>
                                     <div class="row mb-1">
-                                        <label class="col-sm-4 col-form-label-sm" for="nama_waroeng">Isi</label>
+                                        <label class="col-sm-4 col-form-label-sm" for="rekap_pcb_brg_asal_isi">Isi</label>
                                         <div class="col-sm-4">
-                                            <input type="text" class="form-control form-control-sm" id="nama_waroeng"
-                                                name="nama_waroeng" readonly>
+                                            <input type="text" class="form-control form-control-sm" id="rekap_pcb_brg_asal_isi"
+                                                name="rekap_pcb_brg_asal_isi" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-1">
+                                        <label class="col-sm-4 col-form-label-sm" for="diambil">Diambil</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control form-control-sm" id="diambil"
+                                                name="diambil">
                                         </div>
                                     </div>
                                 </div>
@@ -133,6 +140,16 @@
                                                 name="nama_waroeng" readonly>
                                         </div>
                                     </div>
+                                    <div class="row mb-1">
+                                        <label class="col-sm-4 col-form-label-sm" for="diambil">Sisa</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control form-control-sm" id="diambil"
+                                                name="diambil" readonly>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <a class="btn btn-sm btn-success"><i class="fa fa-plus"></i>Tambah</a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <br>
@@ -150,7 +167,6 @@
                                         <th>Qty Hasil</th>
                                     </thead>
                                     <tbody>
-
                                     </tbody>
                                 </table>
                             </div>
@@ -169,48 +185,32 @@
     <script type="module">
  $(document).ready(function(){
   Codebase.helpersOnLoad(['jq-select2']);
-  var table;
+  var table,dt;
   $(".number").on("keypress", function (evt) {
     if (evt.which != 8 && evt.which != 0 && evt.which < 48 || evt.which > 57)
     {
         evt.preventDefault();
     }
     });
-  $('#rekap_beli_gudang_id').on('change',function() {
-    var id = $(this).val()
-    $(function() {
-           table = $('#tb-cht').DataTable({
-              buttons:[],
-              destroy:true,
-              paging:false,
-              serverside:true,
-              columnDefs: [
-            {
-                target: 1,
-                visible: false,
-                searchable: false,
-            },
-            {
-                target: 2,
-                visible: false,
-            },
-            {
-                target: 3,
-                visible: false,
-                searchable: false,
-            },
-            {
-                target: 4,
-                visible: false,
-            }],
-              ajax: {
-              url: "/inventori/cht/list",
-              data: {id:id}, 
-              type: "GET",
-                }
+  $('#rekap_pcb_gudang_asal_id').on('change',function() {
+    var g_id = $(this).val();
+    $.get("/inventori/stok/"+g_id, function(data){
+            dt = data;
+            $.each(data, function(key, value) {
+              $('.nama_barang')
+              .append($('<option>', { value : key })
+              .text(value));
             });
     });
-  }) 
+  });
+  $('#rekap_pcb_brg_asal_id').on('change',function() {
+    var id = $(this).val();
+    var g_id = $('#rekap_pcb_brg_asal_id').val()
+    $.get("/inventori/stok_harga/"+g_id+"/"+id, function(data){
+           $('#rekap_pcb_brg_asal_satuan_id').val(data.m_stok_satuan)
+        //    $('#').val()
+    });
+  });  
   $('#formAction').submit( function(e){
                 if(!e.isDefaultPrevented()){
                   table.columns([1,2,3,4]).visible(true);
