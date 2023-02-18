@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('rekap_pcb_brg_asal_satuan');
             $table->string('rekap_pcb_brg_asal_isi');
             $table->string('rekap_pcb_brg_asal_qty',15,2);
-            $table->decimal('rekap_pcb_brg_asal_hpp');
+            $table->decimal('rekap_pcb_brg_asal_hppisi');
             $table->bigInteger('rekap_pcb_brg_hasil_id');
             $table->string('rekap_pcb_brg_hasil_nama');
             $table->bigInteger('rekap_pcb_brg_hasil_satuan_id');
@@ -34,6 +34,7 @@ return new class extends Migration
             $table->string('rekap_pcb_brg_hasil_qty',15,2);
             $table->decimal('rekap_pcb_brg_hasil_hpp');
             $table->bigInteger('rekap_pcb_created_by');
+            $table->string('rekap_pcb_created_by_name');
             $table->bigInteger('rekap_pcb_updated_by')->nullable();
             $table->bigInteger('rekap_pcb_deleted_by')->nullable();
             $table->timestampTz('rekap_pcb_created_at')->useCurrent();

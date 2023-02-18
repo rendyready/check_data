@@ -261,7 +261,7 @@
           $("#m_produk_m_klasifikasi_produk_id").val(respond.m_produk_m_klasifikasi_produk_id).trigger('change');
           $("#m_produk_m_plot_produksi_id").val(respond.m_produk_m_plot_produksi_id).trigger('change');
           $("#m_produk_utama_m_satuan_id").val(respond.m_produk_utama_m_satuan_id).trigger('change');
-          $("#m_produk_produksi_m_satuan_id").val(respond.m_produk_produksi_m_satuan_id).trigger('change');
+          $("#m_produk_isi_m_satuan_id").val(respond.m_produk_isi_m_satuan_id).trigger('change');
           $("#m_produk_nama").val(respond.m_produk_nama).trigger('change');
           $("#m_produk_sc").val(respond.m_produk_sc).trigger('change');
           $("#m_produk_scp").val(respond.m_produk_scp).trigger('change');

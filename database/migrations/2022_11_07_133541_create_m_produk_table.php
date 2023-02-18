@@ -24,7 +24,8 @@ return new class extends Migration
             $table->string('m_produk_sc')->default('1');
             $table->bigInteger('m_produk_m_jenis_produk_id')->nullable();
             $table->bigInteger('m_produk_utama_m_satuan_id');
-            $table->bigInteger('m_produk_produksi_m_satuan_id')->nullable();
+            $table->bigInteger('m_produk_isi_m_satuan_id')->nullable();
+            $table->string('m_produk_qty_isi');
             $table->bigInteger('m_produk_m_plot_produksi_id')->nullable();
             $table->bigInteger('m_produk_m_klasifikasi_produk_id')->nullable();
             $table->string('m_produk_jual')->default('tidak'); // ya = dijual di CR, tidak = tidak dijual di CR
