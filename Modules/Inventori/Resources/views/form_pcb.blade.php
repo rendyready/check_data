@@ -139,7 +139,6 @@
                             <div class="table-responsive">
                                 <table id="tb-cht" class="table table-sm table-bordered table-striped table-vcenter">
                                     <thead>
-                                        <th>No</th>
                                         <th>Barang Proses</th>
                                         <th>Satuan</th>
                                         <th>Isi</th>

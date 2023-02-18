@@ -24,7 +24,7 @@ class MasterBBController extends Controller
                 'ms1.m_satuan_kode as satuan_utama','ms2.m_satuan_kode as satuan_produksi')
             ->leftjoin('m_jenis_produk', 'm_produk_m_jenis_produk_id', 'm_jenis_produk_id')
             ->leftjoin('m_satuan as ms1', 'm_produk_utama_m_satuan_id', 'ms1.m_satuan_id')
-            ->leftjoin('m_satuan as ms2', 'm_produk_produksi_m_satuan_id', 'ms2.m_satuan_id')
+            ->leftjoin('m_satuan as ms2', 'm_produk_isi_m_satuan_id', 'ms2.m_satuan_id')
             ->join('m_klasifikasi_produk', 'm_produk_m_klasifikasi_produk_id', 'm_klasifikasi_produk_id')
             ->whereNotIn('m_produk_m_klasifikasi_produk_id',[4])
             ->get();
@@ -76,7 +76,7 @@ class MasterBBController extends Controller
                         "m_produk_nama" => $request->m_produk_nama,
                         "m_produk_status" => $request->m_produk_status,
                         "m_produk_utama_m_satuan_id" => $request->m_produk_utama_m_satuan_id,
-                        "m_produk_produksi_m_satuan_id" => $request->m_produk_produksi_m_satuan_id,
+                        "m_produk_isi_m_satuan_id" => $request->m_produk_isi_m_satuan_id,
                         "m_produk_m_klasifikasi_produk_id" => $request->m_produk_m_klasifikasi_produk_id,
                         "m_produk_jual" => $request->m_produk_jual,
                         "m_produk_scp" => $request->m_produk_scp,
@@ -96,7 +96,7 @@ class MasterBBController extends Controller
                             "m_produk_nama" => $request->m_produk_nama,
                             "m_produk_status" => $request->m_produk_status,
                             "m_produk_utama_m_satuan_id" => $request->m_produk_utama_m_satuan_id,
-                            "m_produk_produksi_m_satuan_id" => $request->m_produk_produksi_m_satuan_id,
+                            "m_produk_isi_m_satuan_id" => $request->m_produk_isi_m_satuan_id,
                             "m_produk_m_klasifikasi_produk_id" => $request->m_produk_m_klasifikasi_produk_id,
                             "m_produk_jual" => $request->m_produk_jual,
                             "m_produk_scp" => $request->m_produk_scp,
