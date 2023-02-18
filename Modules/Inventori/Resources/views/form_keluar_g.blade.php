@@ -181,7 +181,7 @@
               $('#rekap_tf_g_detail_m_produk_id1')
               .append($('<option>', { value : key })
               .text(value));
-         });
+            });
         });  
     });
     Codebase.helpersOnLoad(['jq-select2']);
