@@ -14,7 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::create('m_produk', function (Blueprint $table) {
-            $table->id('m_produk_id');
+            $table->id('id');
+            $table->string('m_produk_id')->unique();
             $table->string('m_produk_code')->nullable();
             $table->string('m_produk_nama');
             $table->string('m_produk_urut')->nullable();
@@ -22,12 +23,12 @@ return new class extends Migration
             $table->string('m_produk_status')->default('1');
             $table->string('m_produk_tax')->default('1');
             $table->string('m_produk_sc')->default('1');
-            $table->bigInteger('m_produk_m_jenis_produk_id')->nullable();
-            $table->bigInteger('m_produk_utama_m_satuan_id');
-            $table->bigInteger('m_produk_isi_m_satuan_id')->nullable();
-            $table->string('m_produk_qty_isi');
-            $table->bigInteger('m_produk_m_plot_produksi_id')->nullable();
-            $table->bigInteger('m_produk_m_klasifikasi_produk_id')->nullable();
+            $table->string('m_produk_m_jenis_produk_id')->nullable();
+            $table->string('m_produk_utama_m_satuan_id');
+            $table->string('m_produk_isi_m_satuan_id')->nullable();
+            $table->integer('m_produk_qty_isi')->default(1);
+            $table->string('m_produk_m_plot_produksi_id')->nullable();
+            $table->string('m_produk_m_klasifikasi_produk_id')->nullable();
             $table->string('m_produk_jual')->default('tidak'); // ya = dijual di CR, tidak = tidak dijual di CR
             $table->string('m_produk_scp');
             $table->string('m_produk_hpp');

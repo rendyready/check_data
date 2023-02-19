@@ -17,6 +17,7 @@ class MProdukTableSeeder extends Seeder
         DB::table('m_produk')->insert(
             [
                 [
+                  "m_produk_id"=> "tl-100001",
                   "m_produk_code"=> "tl-100001",
                   "m_produk_nama"=> "plastik tong sampah",
                   "m_produk_urut"=> null,
@@ -36,6 +37,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "tl-100002",
                   "m_produk_code"=> "tl-100002",
                   "m_produk_nama"=> "kresek jumbo sampah",
                   "m_produk_urut"=> null,
@@ -55,6 +57,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "tl-100003",
                   "m_produk_code"=> "tl-100003",
                   "m_produk_nama"=> "plastik 1kg",
                   "m_produk_urut"=> null,
@@ -74,6 +77,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "tl-100004",
                   "m_produk_code"=> "tl-100004",
                   "m_produk_nama"=> "plastik 1/2kg",
                   "m_produk_urut"=> null,
@@ -93,6 +97,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "tl-100005",
                   "m_produk_code"=> "tl-100005",
                   "m_produk_nama"=> "plastik 1/4kg",
                   "m_produk_urut"=> null,
@@ -112,6 +117,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "tl-100006",
                   "m_produk_code"=> "tl-100006",
                   "m_produk_nama"=> "plastik 2kg",
                   "m_produk_urut"=> null,
@@ -131,6 +137,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "tl-100007",
                   "m_produk_code"=> "tl-100007",
                   "m_produk_nama"=> "plastik es",
                   "m_produk_urut"=> null,
@@ -150,6 +157,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "tl-100008",
                   "m_produk_code"=> "tl-100008",
                   "m_produk_nama"=> "plastik 5kg",
                   "m_produk_urut"=> null,
@@ -169,6 +177,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "tl-100009",
                   "m_produk_code"=> "tl-100009",
                   "m_produk_nama"=> "deterjen",
                   "m_produk_urut"=> null,
@@ -188,6 +197,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "tl-100010",
                   "m_produk_code"=> "tl-100010",
                   "m_produk_nama"=> "sabun cair",
                   "m_produk_urut"=> null,
@@ -207,6 +217,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "tl-100011",
                   "m_produk_code"=> "tl-100011",
                   "m_produk_nama"=> "sabun colek",
                   "m_produk_urut"=> null,
@@ -226,6 +237,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "tl-100012",
                   "m_produk_code"=> "tl-100012",
                   "m_produk_nama"=> "spon cuci",
                   "m_produk_urut"=> null,
@@ -245,6 +257,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "tl-100013",
                   "m_produk_code"=> "tl-100013",
                   "m_produk_nama"=> "sarung tangan",
                   "m_produk_urut"=> null,
@@ -264,6 +277,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "tl-100014",
                   "m_produk_code"=> "tl-100014",
                   "m_produk_nama"=> "sabut alumunium",
                   "m_produk_urut"=> null,
@@ -283,6 +297,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "tl-100015",
                   "m_produk_code"=> "tl-100015",
                   "m_produk_nama"=> "gelas cup",
                   "m_produk_urut"=> null,
@@ -302,6 +317,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "tl-100016",
                   "m_produk_code"=> "tl-100016",
                   "m_produk_nama"=> "mika buah",
                   "m_produk_urut"=> null,
@@ -321,6 +337,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "tl-100017",
                   "m_produk_code"=> "tl-100017",
                   "m_produk_nama"=> "plastik warp",
                   "m_produk_urut"=> null,
@@ -340,6 +357,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "tl-100018",
                   "m_produk_code"=> "tl-100018",
                   "m_produk_nama"=> "soda kue",
                   "m_produk_urut"=> null,
@@ -359,6 +377,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "tl-100019",
                   "m_produk_code"=> "tl-100019",
                   "m_produk_nama"=> "tusuk sate",
                   "m_produk_urut"=> null,
@@ -378,6 +397,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "tl-100020",
                   "m_produk_code"=> "tl-100020",
                   "m_produk_nama"=> "karet pentil",
                   "m_produk_urut"=> null,
@@ -397,6 +417,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "tl-100021",
                   "m_produk_code"=> "tl-100021",
                   "m_produk_nama"=> "tutup gelas cup",
                   "m_produk_urut"=> null,
@@ -416,6 +437,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "tl-100022",
                   "m_produk_code"=> "tl-100022",
                   "m_produk_nama"=> "plastik/kresek lorek",
                   "m_produk_urut"=> null,
@@ -435,6 +457,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "tl-100023",
                   "m_produk_code"=> "tl-100023",
                   "m_produk_nama"=> "plastik/kresek kangkung",
                   "m_produk_urut"=> null,
@@ -454,6 +477,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "tl-100024",
                   "m_produk_code"=> "tl-100024",
                   "m_produk_nama"=> "kawat emas",
                   "m_produk_urut"=> null,
@@ -473,6 +497,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "tl-100025",
                   "m_produk_code"=> "tl-100025",
                   "m_produk_nama"=> "sabun bayi",
                   "m_produk_urut"=> null,
@@ -492,6 +517,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "tl-100026",
                   "m_produk_code"=> "tl-100026",
                   "m_produk_nama"=> "plastik 1,5kg",
                   "m_produk_urut"=> null,
@@ -511,6 +537,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "tl-100027",
                   "m_produk_code"=> "tl-100027",
                   "m_produk_nama"=> "plastik 3 kg",
                   "m_produk_urut"=> null,
@@ -530,6 +557,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "tl-100028",
                   "m_produk_code"=> "tl-100028",
                   "m_produk_nama"=> "rafia",
                   "m_produk_urut"=> null,
@@ -549,6 +577,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "tl-100029",
                   "m_produk_code"=> "tl-100029",
                   "m_produk_nama"=> "abu gosok",
                   "m_produk_urut"=> null,
@@ -568,6 +597,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "tl-100030",
                   "m_produk_code"=> "tl-100030",
                   "m_produk_nama"=> "daun pisang",
                   "m_produk_urut"=> null,
@@ -587,6 +617,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "tl-100031",
                   "m_produk_code"=> "tl-100031",
                   "m_produk_nama"=> "kertas bungkus",
                   "m_produk_urut"=> null,
@@ -606,6 +637,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "tl-100032",
                   "m_produk_code"=> "tl-100032",
                   "m_produk_nama"=> "plastik packing klip",
                   "m_produk_urut"=> null,
@@ -625,6 +657,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "tl-100033",
                   "m_produk_code"=> "tl-100033",
                   "m_produk_nama"=> "plastik packing roll",
                   "m_produk_urut"=> null,
@@ -644,6 +677,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "tl-100034",
                   "m_produk_code"=> "tl-100034",
                   "m_produk_nama"=> "bubuk pembersih",
                   "m_produk_urut"=> null,
@@ -663,6 +697,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "tl-100035",
                   "m_produk_code"=> "tl-100035",
                   "m_produk_nama"=> "hot cup",
                   "m_produk_urut"=> null,
@@ -682,6 +717,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "tl-100036",
                   "m_produk_code"=> "tl-100036",
                   "m_produk_nama"=> "boks nasi pesan antar",
                   "m_produk_urut"=> null,
@@ -701,6 +737,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "tl-100037",
                   "m_produk_code"=> "tl-100037",
                   "m_produk_nama"=> "sendok plastik pa",
                   "m_produk_urut"=> null,
@@ -720,6 +757,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "tl-100038",
                   "m_produk_code"=> "tl-100038",
                   "m_produk_nama"=> "plastik tisu sendok pa",
                   "m_produk_urut"=> null,
@@ -739,6 +777,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "tl-100039",
                   "m_produk_code"=> "tl-100039",
                   "m_produk_nama"=> "kertas bungkus nasi",
                   "m_produk_urut"=> null,
@@ -758,6 +797,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "tl-100040",
                   "m_produk_code"=> "tl-100040",
                   "m_produk_nama"=> "kertas bungkus lauk",
                   "m_produk_urut"=> null,
@@ -777,6 +817,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "tl-100041",
                   "m_produk_code"=> "tl-100041",
                   "m_produk_nama"=> "kresek pesan antar",
                   "m_produk_urut"=> null,
@@ -796,6 +837,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "tl-100042",
                   "m_produk_code"=> "tl-100042",
                   "m_produk_nama"=> "kresek sampah kecil",
                   "m_produk_urut"=> null,
@@ -815,6 +857,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "tl-100043",
                   "m_produk_code"=> "tl-100043",
                   "m_produk_nama"=> "doos nasi",
                   "m_produk_urut"=> null,
@@ -834,6 +877,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "tl-100044",
                   "m_produk_code"=> "tl-100044",
                   "m_produk_nama"=> "mika nasi doos",
                   "m_produk_urut"=> null,
@@ -853,6 +897,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "tl-100045",
                   "m_produk_code"=> "tl-100045",
                   "m_produk_nama"=> "sendok plastik nasi doos",
                   "m_produk_urut"=> null,
@@ -872,6 +917,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "tl-100046",
                   "m_produk_code"=> "tl-100046",
                   "m_produk_nama"=> "garpu plastik nasi doos",
                   "m_produk_urut"=> null,
@@ -891,6 +937,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "tl-100047",
                   "m_produk_code"=> "tl-100047",
                   "m_produk_nama"=> "plastik tisu sendok nasi doos",
                   "m_produk_urut"=> null,
@@ -910,6 +957,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "tl-100048",
                   "m_produk_code"=> "tl-100048",
                   "m_produk_nama"=> "cup sambal",
                   "m_produk_urut"=> null,
@@ -929,6 +977,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "tl-100049",
                   "m_produk_code"=> "tl-100049",
                   "m_produk_nama"=> "plastik cup sealer",
                   "m_produk_urut"=> null,
@@ -948,6 +997,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "tl-100050",
                   "m_produk_code"=> "tl-100050",
                   "m_produk_nama"=> "plastik 1/2kg tipis",
                   "m_produk_urut"=> null,
@@ -967,6 +1017,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "tl-100051",
                   "m_produk_code"=> "tl-100051",
                   "m_produk_nama"=> "plastik 1/4kg tipis",
                   "m_produk_urut"=> null,
@@ -986,6 +1037,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "tl-100052",
                   "m_produk_code"=> "tl-100052",
                   "m_produk_nama"=> "plastik 1kg tipis",
                   "m_produk_urut"=> null,
@@ -1005,6 +1057,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "tl-100053",
                   "m_produk_code"=> "tl-100053",
                   "m_produk_nama"=> "cup sedang",
                   "m_produk_urut"=> null,
@@ -1024,6 +1077,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "tl-100054",
                   "m_produk_code"=> "tl-100054",
                   "m_produk_nama"=> "cup besar",
                   "m_produk_urut"=> null,
@@ -1043,6 +1097,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "tl-100055",
                   "m_produk_code"=> "tl-100055",
                   "m_produk_nama"=> "paperbag panjang",
                   "m_produk_urut"=> null,
@@ -1062,6 +1117,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "tl-100056",
                   "m_produk_code"=> "tl-100056",
                   "m_produk_nama"=> "paperbag lebar",
                   "m_produk_urut"=> null,
@@ -1081,6 +1137,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "tl-100057",
                   "m_produk_code"=> "tl-100057",
                   "m_produk_nama"=> "solasi",
                   "m_produk_urut"=> null,
@@ -1100,6 +1157,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "tl-100058",
                   "m_produk_code"=> "tl-100058",
                   "m_produk_nama"=> "styrofoam kecil",
                   "m_produk_urut"=> null,
@@ -1119,6 +1177,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "tl-100059",
                   "m_produk_code"=> "tl-100059",
                   "m_produk_nama"=> "styrofoam besar",
                   "m_produk_urut"=> null,
@@ -1138,6 +1197,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bo-200001",
                   "m_produk_code"=> "bo-200001",
                   "m_produk_nama"=> "kresek kecil",
                   "m_produk_urut"=> null,
@@ -1157,6 +1217,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bo-200002",
                   "m_produk_code"=> "bo-200002",
                   "m_produk_nama"=> "kresek tanggung",
                   "m_produk_urut"=> null,
@@ -1176,6 +1237,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bo-200003",
                   "m_produk_code"=> "bo-200003",
                   "m_produk_nama"=> "pembersih lantai",
                   "m_produk_urut"=> null,
@@ -1195,6 +1257,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bo-200004",
                   "m_produk_code"=> "bo-200004",
                   "m_produk_nama"=> "pipet",
                   "m_produk_urut"=> null,
@@ -1214,6 +1277,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bo-200005",
                   "m_produk_code"=> "bo-200005",
                   "m_produk_nama"=> "handsoap",
                   "m_produk_urut"=> null,
@@ -1233,6 +1297,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bo-200006",
                   "m_produk_code"=> "bo-200006",
                   "m_produk_nama"=> "tisu makan",
                   "m_produk_urut"=> null,
@@ -1252,6 +1317,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bo-200007",
                   "m_produk_code"=> "bo-200007",
                   "m_produk_nama"=> "tusuk gigi",
                   "m_produk_urut"=> null,
@@ -1271,6 +1337,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bo-200008",
                   "m_produk_code"=> "bo-200008",
                   "m_produk_nama"=> "kamper gantung",
                   "m_produk_urut"=> null,
@@ -1290,6 +1357,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bo-200009",
                   "m_produk_code"=> "bo-200009",
                   "m_produk_nama"=> "kamper bola",
                   "m_produk_urut"=> null,
@@ -1309,6 +1377,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bo-200010",
                   "m_produk_code"=> "bo-200010",
                   "m_produk_nama"=> "pengharum ruangan",
                   "m_produk_urut"=> null,
@@ -1328,6 +1397,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bo-200011",
                   "m_produk_code"=> "bo-200011",
                   "m_produk_nama"=> "isi stapler besar",
                   "m_produk_urut"=> null,
@@ -1347,6 +1417,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bo-200012",
                   "m_produk_code"=> "bo-200012",
                   "m_produk_nama"=> "isi stapler kecil",
                   "m_produk_urut"=> null,
@@ -1366,6 +1437,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bo-200013",
                   "m_produk_code"=> "bo-200013",
                   "m_produk_nama"=> "tisu handtowel",
                   "m_produk_urut"=> null,
@@ -1385,6 +1457,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bo-200014",
                   "m_produk_code"=> "bo-200014",
                   "m_produk_nama"=> "pembersih porselen",
                   "m_produk_urut"=> null,
@@ -1404,6 +1477,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bo-200015",
                   "m_produk_code"=> "bo-200015",
                   "m_produk_nama"=> "pembersih kaca",
                   "m_produk_urut"=> null,
@@ -1423,6 +1497,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bo-200016",
                   "m_produk_code"=> "bo-200016",
                   "m_produk_nama"=> "pengharum pakaian",
                   "m_produk_urut"=> null,
@@ -1442,6 +1517,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bo-200017",
                   "m_produk_code"=> "bo-200017",
                   "m_produk_nama"=> "tisu sendok",
                   "m_produk_urut"=> null,
@@ -1461,6 +1537,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bo-200018",
                   "m_produk_code"=> "bo-200018",
                   "m_produk_nama"=> "plastik sendok",
                   "m_produk_urut"=> null,
@@ -1480,6 +1557,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bo-200019",
                   "m_produk_code"=> "bo-200019",
                   "m_produk_nama"=> "kertas sendok",
                   "m_produk_urut"=> null,
@@ -1499,6 +1577,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bo-200020",
                   "m_produk_code"=> "bo-200020",
                   "m_produk_nama"=> "tisu toilet",
                   "m_produk_urut"=> null,
@@ -1518,6 +1597,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bo-200021",
                   "m_produk_code"=> "bo-200021",
                   "m_produk_nama"=> "garpu buah",
                   "m_produk_urut"=> null,
@@ -1537,6 +1617,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bo-200022",
                   "m_produk_code"=> "bo-200022",
                   "m_produk_nama"=> "kresek besar",
                   "m_produk_urut"=> null,
@@ -1556,6 +1637,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bo-200023",
                   "m_produk_code"=> "bo-200023",
                   "m_produk_nama"=> "pipet bubble",
                   "m_produk_urut"=> null,
@@ -1575,6 +1657,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bo-200024",
                   "m_produk_code"=> "bo-200024",
                   "m_produk_nama"=> "mika telur",
                   "m_produk_urut"=> null,
@@ -1594,6 +1677,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bo-200025",
                   "m_produk_code"=> "bo-200025",
                   "m_produk_nama"=> "kresek kecil wbd",
                   "m_produk_urut"=> null,
@@ -1613,6 +1697,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bo-200026",
                   "m_produk_code"=> "bo-200026",
                   "m_produk_nama"=> "kresek tanggung wbd",
                   "m_produk_urut"=> null,
@@ -1632,6 +1717,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bo-200027",
                   "m_produk_code"=> "bo-200027",
                   "m_produk_nama"=> "kresek besar wbd",
                   "m_produk_urut"=> null,
@@ -1651,6 +1737,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bo-200028",
                   "m_produk_code"=> "bo-200028",
                   "m_produk_nama"=> "kresek jumbo wbd",
                   "m_produk_urut"=> null,
@@ -1670,6 +1757,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bo-200029",
                   "m_produk_code"=> "bo-200029",
                   "m_produk_nama"=> "dettol handwash",
                   "m_produk_urut"=> null,
@@ -1689,6 +1777,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bo-200030",
                   "m_produk_code"=> "bo-200030",
                   "m_produk_nama"=> "handsanitizer",
                   "m_produk_urut"=> null,
@@ -1708,6 +1797,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300001",
                   "m_produk_code"=> "bb-300001",
                   "m_produk_nama"=> "asem",
                   "m_produk_urut"=> null,
@@ -1727,6 +1817,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300002",
                   "m_produk_code"=> "bb-300002",
                   "m_produk_nama"=> "air 3",
                   "m_produk_urut"=> null,
@@ -1746,6 +1837,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300003",
                   "m_produk_code"=> "bb-300003",
                   "m_produk_nama"=> "air mineral 220 ml",
                   "m_produk_urut"=> null,
@@ -1765,6 +1857,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300004",
                   "m_produk_code"=> "bb-300004",
                   "m_produk_nama"=> "air mineral 330 ml",
                   "m_produk_urut"=> null,
@@ -1784,6 +1877,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300005",
                   "m_produk_code"=> "bb-300005",
                   "m_produk_nama"=> "air mineral 600 ml",
                   "m_produk_urut"=> null,
@@ -1803,6 +1897,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300006",
                   "m_produk_code"=> "bb-300006",
                   "m_produk_nama"=> "ajinomotto",
                   "m_produk_urut"=> null,
@@ -1822,6 +1917,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300007",
                   "m_produk_code"=> "bb-300007",
                   "m_produk_nama"=> "alpukat",
                   "m_produk_urut"=> null,
@@ -1841,6 +1937,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300008",
                   "m_produk_code"=> "bb-300008",
                   "m_produk_nama"=> "apel",
                   "m_produk_urut"=> null,
@@ -1860,6 +1957,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300009",
                   "m_produk_code"=> "bb-300009",
                   "m_produk_nama"=> "aqua 1500 ml",
                   "m_produk_urut"=> null,
@@ -1879,6 +1977,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300010",
                   "m_produk_code"=> "bb-300010",
                   "m_produk_nama"=> "aqua 330 ml",
                   "m_produk_urut"=> null,
@@ -1898,6 +1997,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300011",
                   "m_produk_code"=> "bb-300011",
                   "m_produk_nama"=> "aqua 600 ml",
                   "m_produk_urut"=> null,
@@ -1917,6 +2017,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300012",
                   "m_produk_code"=> "bb-300012",
                   "m_produk_nama"=> "ayam dada",
                   "m_produk_urut"=> null,
@@ -1936,6 +2037,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300013",
                   "m_produk_code"=> "bb-300013",
                   "m_produk_nama"=> "ayam kampung dada",
                   "m_produk_urut"=> null,
@@ -1955,6 +2057,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300014",
                   "m_produk_code"=> "bb-300014",
                   "m_produk_nama"=> "ayam kampung dada asin frozen",
                   "m_produk_urut"=> null,
@@ -1974,6 +2077,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300015",
                   "m_produk_code"=> "bb-300015",
                   "m_produk_nama"=> "ayam dada bacem",
                   "m_produk_urut"=> null,
@@ -1993,6 +2097,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300016",
                   "m_produk_code"=> "bb-300016",
                   "m_produk_nama"=> "ayam paha bacem",
                   "m_produk_urut"=> null,
@@ -2012,6 +2117,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300017",
                   "m_produk_code"=> "bb-300017",
                   "m_produk_nama"=> "ayam dada crispy",
                   "m_produk_urut"=> null,
@@ -2031,6 +2137,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300018",
                   "m_produk_code"=> "bb-300018",
                   "m_produk_nama"=> "ayam paha crispy",
                   "m_produk_urut"=> null,
@@ -2050,6 +2157,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300019",
                   "m_produk_code"=> "bb-300019",
                   "m_produk_nama"=> "ayam kampung dada frozen",
                   "m_produk_urut"=> null,
@@ -2069,6 +2177,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300020",
                   "m_produk_code"=> "bb-300020",
                   "m_produk_nama"=> "ayam kampung paha asin frozen",
                   "m_produk_urut"=> null,
@@ -2088,6 +2197,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300021",
                   "m_produk_code"=> "bb-300021",
                   "m_produk_nama"=> "ayam kampung paha atas",
                   "m_produk_urut"=> null,
@@ -2107,6 +2217,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300022",
                   "m_produk_code"=> "bb-300022",
                   "m_produk_nama"=> "ayam kampung paha frozen",
                   "m_produk_urut"=> null,
@@ -2126,6 +2237,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300023",
                   "m_produk_code"=> "bb-300023",
                   "m_produk_nama"=> "ayam negeri dada asin frozen",
                   "m_produk_urut"=> null,
@@ -2145,6 +2257,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300024",
                   "m_produk_code"=> "bb-300024",
                   "m_produk_nama"=> "ayam negeri dada frozen",
                   "m_produk_urut"=> null,
@@ -2164,6 +2277,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300025",
                   "m_produk_code"=> "bb-300025",
                   "m_produk_nama"=> "ayam negeri paha asin frozen",
                   "m_produk_urut"=> null,
@@ -2183,6 +2297,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300026",
                   "m_produk_code"=> "bb-300026",
                   "m_produk_nama"=> "ayam negeri paha frozen",
                   "m_produk_urut"=> null,
@@ -2202,6 +2317,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300027",
                   "m_produk_code"=> "bb-300027",
                   "m_produk_nama"=> "ayam paha atas",
                   "m_produk_urut"=> null,
@@ -2221,6 +2337,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300028",
                   "m_produk_code"=> "bb-300028",
                   "m_produk_nama"=> "ayam paket murah",
                   "m_produk_urut"=> null,
@@ -2240,6 +2357,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300029",
                   "m_produk_code"=> "bb-300029",
                   "m_produk_nama"=> "babat",
                   "m_produk_urut"=> null,
@@ -2259,6 +2377,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300030",
                   "m_produk_code"=> "bb-300030",
                   "m_produk_nama"=> "babat sapi frozen",
                   "m_produk_urut"=> null,
@@ -2278,6 +2397,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300031",
                   "m_produk_code"=> "bb-300031",
                   "m_produk_nama"=> "babat sapi sambal tomat frozen",
                   "m_produk_urut"=> null,
@@ -2297,6 +2417,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300032",
                   "m_produk_code"=> "bb-300032",
                   "m_produk_nama"=> "baking soda",
                   "m_produk_urut"=> null,
@@ -2316,6 +2437,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300033",
                   "m_produk_code"=> "bb-300033",
                   "m_produk_nama"=> "baking powder - 45 gr/btl",
                   "m_produk_urut"=> null,
@@ -2335,6 +2457,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300034",
                   "m_produk_code"=> "bb-300034",
                   "m_produk_nama"=> "bandeng",
                   "m_produk_urut"=> null,
@@ -2354,6 +2477,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300035",
                   "m_produk_code"=> "bb-300035",
                   "m_produk_nama"=> "bawal",
                   "m_produk_urut"=> null,
@@ -2373,6 +2497,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300036",
                   "m_produk_code"=> "bb-300036",
                   "m_produk_nama"=> "bawal laut",
                   "m_produk_urut"=> null,
@@ -2392,6 +2517,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300037",
                   "m_produk_code"=> "bb-300037",
                   "m_produk_nama"=> "bawang merah",
                   "m_produk_urut"=> null,
@@ -2411,6 +2537,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300038",
                   "m_produk_code"=> "bb-300038",
                   "m_produk_nama"=> "bawang putih",
                   "m_produk_urut"=> null,
@@ -2430,6 +2557,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300039",
                   "m_produk_code"=> "bb-300039",
                   "m_produk_nama"=> "bayam",
                   "m_produk_urut"=> null,
@@ -2449,6 +2577,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300040",
                   "m_produk_code"=> "bb-300040",
                   "m_produk_nama"=> "bebek dada",
                   "m_produk_urut"=> null,
@@ -2468,6 +2597,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300041",
                   "m_produk_code"=> "bb-300041",
                   "m_produk_nama"=> "bebek dada asin frozen",
                   "m_produk_urut"=> null,
@@ -2487,6 +2617,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300042",
                   "m_produk_code"=> "bb-300042",
                   "m_produk_nama"=> "bebek dada bacem frozen",
                   "m_produk_urut"=> null,
@@ -2506,6 +2637,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300043",
                   "m_produk_code"=> "bb-300043",
                   "m_produk_nama"=> "bebek dada frozen",
                   "m_produk_urut"=> null,
@@ -2525,6 +2657,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300044",
                   "m_produk_code"=> "bb-300044",
                   "m_produk_nama"=> "bebek paha",
                   "m_produk_urut"=> null,
@@ -2544,6 +2677,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300045",
                   "m_produk_code"=> "bb-300045",
                   "m_produk_nama"=> "bebek paha asin frozen",
                   "m_produk_urut"=> null,
@@ -2563,6 +2697,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300046",
                   "m_produk_code"=> "bb-300046",
                   "m_produk_nama"=> "bebek paha bacem frozen",
                   "m_produk_urut"=> null,
@@ -2582,6 +2717,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300047",
                   "m_produk_code"=> "bb-300047",
                   "m_produk_nama"=> "bebek paha frozen",
                   "m_produk_urut"=> null,
@@ -2601,6 +2737,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300048",
                   "m_produk_code"=> "bb-300048",
                   "m_produk_nama"=> "belimbing",
                   "m_produk_urut"=> null,
@@ -2620,6 +2757,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300049",
                   "m_produk_code"=> "bb-300049",
                   "m_produk_nama"=> "belut",
                   "m_produk_urut"=> null,
@@ -2639,6 +2777,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300050",
                   "m_produk_code"=> "bb-300050",
                   "m_produk_nama"=> "belut mentah",
                   "m_produk_urut"=> null,
@@ -2658,6 +2797,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300051",
                   "m_produk_code"=> "bb-300051",
                   "m_produk_nama"=> "beras",
                   "m_produk_urut"=> null,
@@ -2677,6 +2817,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300052",
                   "m_produk_code"=> "bb-300052",
                   "m_produk_nama"=> "beras c4",
                   "m_produk_urut"=> null,
@@ -2696,6 +2837,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300053",
                   "m_produk_code"=> "bb-300053",
                   "m_produk_nama"=> "beras campuran",
                   "m_produk_urut"=> null,
@@ -2715,6 +2857,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300054",
                   "m_produk_code"=> "bb-300054",
                   "m_produk_nama"=> "beras mentik",
                   "m_produk_urut"=> null,
@@ -2734,6 +2877,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300055",
                   "m_produk_code"=> "bb-300055",
                   "m_produk_nama"=> "beras c4 grade a",
                   "m_produk_urut"=> null,
@@ -2753,6 +2897,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300056",
                   "m_produk_code"=> "bb-300056",
                   "m_produk_nama"=> "beras c4 grade b",
                   "m_produk_urut"=> null,
@@ -2772,6 +2917,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300057",
                   "m_produk_code"=> "bb-300057",
                   "m_produk_nama"=> "beras rojo lele",
                   "m_produk_urut"=> null,
@@ -2791,6 +2937,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300058",
                   "m_produk_code"=> "bb-300058",
                   "m_produk_nama"=> "brambang goreng",
                   "m_produk_urut"=> null,
@@ -2810,6 +2957,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300059",
                   "m_produk_code"=> "bb-300059",
                   "m_produk_nama"=> "brokoli",
                   "m_produk_urut"=> null,
@@ -2829,6 +2977,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300060",
                   "m_produk_code"=> "bb-300060",
                   "m_produk_nama"=> "briket batok kelapa",
                   "m_produk_urut"=> null,
@@ -2848,6 +2997,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300061",
                   "m_produk_code"=> "bb-300061",
                   "m_produk_nama"=> "bumbu ayam",
                   "m_produk_urut"=> null,
@@ -2867,6 +3017,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300062",
                   "m_produk_code"=> "bb-300062",
                   "m_produk_nama"=> "bumbu bakaran",
                   "m_produk_urut"=> null,
@@ -2886,6 +3037,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300063",
                   "m_produk_code"=> "bb-300063",
                   "m_produk_nama"=> "bumbu ca",
                   "m_produk_urut"=> null,
@@ -2905,6 +3057,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300064",
                   "m_produk_code"=> "bb-300064",
                   "m_produk_nama"=> "bumbu ca 0,125 1",
                   "m_produk_urut"=> null,
@@ -2924,6 +3077,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300065",
                   "m_produk_code"=> "bb-300065",
                   "m_produk_nama"=> "bumbu ca 1 1",
                   "m_produk_urut"=> null,
@@ -2943,6 +3097,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300066",
                   "m_produk_code"=> "bb-300066",
                   "m_produk_nama"=> "bumbu darbul",
                   "m_produk_urut"=> null,
@@ -2962,6 +3117,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300067",
                   "m_produk_code"=> "bb-300067",
                   "m_produk_nama"=> "bumbu ikan",
                   "m_produk_urut"=> null,
@@ -2981,6 +3137,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300068",
                   "m_produk_code"=> "bb-300068",
                   "m_produk_nama"=> "bumbu kaldu ss",
                   "m_produk_urut"=> null,
@@ -3000,6 +3157,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300069",
                   "m_produk_code"=> "bb-300069",
                   "m_produk_nama"=> "bumbu pasta ayam asin - 0.5 pkt/10",
                   "m_produk_urut"=> null,
@@ -3019,6 +3177,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300070",
                   "m_produk_code"=> "bb-300070",
                   "m_produk_nama"=> "bumbu pasta ayam bacem - 0.5 pkt/10",
                   "m_produk_urut"=> null,
@@ -3038,6 +3197,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300071",
                   "m_produk_code"=> "bb-300071",
                   "m_produk_nama"=> "bumbu pasta ayam kampung - 0.5 pkt/10",
                   "m_produk_urut"=> null,
@@ -3057,6 +3217,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300072",
                   "m_produk_code"=> "bb-300072",
                   "m_produk_nama"=> "bumbu pasta bebek - 0.5 pkt/10",
                   "m_produk_urut"=> null,
@@ -3076,6 +3237,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300073",
                   "m_produk_code"=> "bb-300073",
                   "m_produk_nama"=> "bumbu pasta iga dan paru - 0.5 pkt/10",
                   "m_produk_urut"=> null,
@@ -3095,6 +3257,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300074",
                   "m_produk_code"=> "bb-300074",
                   "m_produk_nama"=> "bumbu tabur - 0.5 1/10",
                   "m_produk_urut"=> null,
@@ -3114,6 +3277,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300075",
                   "m_produk_code"=> "bb-300075",
                   "m_produk_nama"=> "bumbu tabur bawang",
                   "m_produk_urut"=> null,
@@ -3133,6 +3297,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300076",
                   "m_produk_code"=> "bb-300076",
                   "m_produk_nama"=> "buncis",
                   "m_produk_urut"=> null,
@@ -3152,6 +3317,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300077",
                   "m_produk_code"=> "bb-300077",
                   "m_produk_nama"=> "cabe keriting hijau",
                   "m_produk_urut"=> null,
@@ -3171,6 +3337,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300078",
                   "m_produk_code"=> "bb-300078",
                   "m_produk_nama"=> "cabe keriting merah",
                   "m_produk_urut"=> null,
@@ -3190,6 +3357,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300079",
                   "m_produk_code"=> "bb-300079",
                   "m_produk_nama"=> "cabe rawit hijau",
                   "m_produk_urut"=> null,
@@ -3209,6 +3377,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300080",
                   "m_produk_code"=> "bb-300080",
                   "m_produk_nama"=> "cabe rawit merah",
                   "m_produk_urut"=> null,
@@ -3228,6 +3397,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300081",
                   "m_produk_code"=> "bb-300081",
                   "m_produk_nama"=> "cabe rokoto hijau",
                   "m_produk_urut"=> null,
@@ -3247,6 +3417,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300082",
                   "m_produk_code"=> "bb-300082",
                   "m_produk_nama"=> "cabe rokoto merah",
                   "m_produk_urut"=> null,
@@ -3266,6 +3437,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300083",
                   "m_produk_code"=> "bb-300083",
                   "m_produk_nama"=> "cabe teropong hijau",
                   "m_produk_urut"=> null,
@@ -3285,6 +3457,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300084",
                   "m_produk_code"=> "bb-300084",
                   "m_produk_nama"=> "cabe teropong merah",
                   "m_produk_urut"=> null,
@@ -3304,6 +3477,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300085",
                   "m_produk_code"=> "bb-300085",
                   "m_produk_nama"=> "cah tauge",
                   "m_produk_urut"=> null,
@@ -3323,6 +3497,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300086",
                   "m_produk_code"=> "bb-300086",
                   "m_produk_nama"=> "cengkeh",
                   "m_produk_urut"=> null,
@@ -3342,6 +3517,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300087",
                   "m_produk_code"=> "bb-300087",
                   "m_produk_nama"=> "coffiemix",
                   "m_produk_urut"=> null,
@@ -3361,6 +3537,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300088",
                   "m_produk_code"=> "bb-300088",
                   "m_produk_nama"=> "coklat bubuk",
                   "m_produk_urut"=> null,
@@ -3380,6 +3557,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300089",
                   "m_produk_code"=> "bb-300089",
                   "m_produk_nama"=> "coklat bubuk (cokles)",
                   "m_produk_urut"=> null,
@@ -3399,6 +3577,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300090",
                   "m_produk_code"=> "bb-300090",
                   "m_produk_nama"=> "creamer - 10 3/6",
                   "m_produk_urut"=> null,
@@ -3418,6 +3597,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300091",
                   "m_produk_code"=> "bb-300091",
                   "m_produk_nama"=> "creamer - 450 gr/10",
                   "m_produk_urut"=> null,
@@ -3437,6 +3617,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300092",
                   "m_produk_code"=> "bb-300092",
                   "m_produk_nama"=> "cumi",
                   "m_produk_urut"=> null,
@@ -3456,6 +3637,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300093",
                   "m_produk_code"=> "bb-300093",
                   "m_produk_nama"=> "daging sapi",
                   "m_produk_urut"=> null,
@@ -3475,6 +3657,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300094",
                   "m_produk_code"=> "bb-300094",
                   "m_produk_nama"=> "daun cengkeh",
                   "m_produk_urut"=> null,
@@ -3494,6 +3677,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300095",
                   "m_produk_code"=> "bb-300095",
                   "m_produk_nama"=> "daun pisang",
                   "m_produk_urut"=> null,
@@ -3513,6 +3697,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300096",
                   "m_produk_code"=> "bb-300096",
                   "m_produk_nama"=> "daun jeruk",
                   "m_produk_urut"=> null,
@@ -3532,6 +3717,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300097",
                   "m_produk_code"=> "bb-300097",
                   "m_produk_nama"=> "daun melinjo / daun so",
                   "m_produk_urut"=> null,
@@ -3551,6 +3737,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300098",
                   "m_produk_code"=> "bb-300098",
                   "m_produk_nama"=> "daun pandan",
                   "m_produk_urut"=> null,
@@ -3570,6 +3757,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300099",
                   "m_produk_code"=> "bb-300099",
                   "m_produk_nama"=> "daun parsley",
                   "m_produk_urut"=> null,
@@ -3589,6 +3777,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300100",
                   "m_produk_code"=> "bb-300100",
                   "m_produk_nama"=> "daun singkong",
                   "m_produk_urut"=> null,
@@ -3608,6 +3797,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300101",
                   "m_produk_code"=> "bb-300101",
                   "m_produk_nama"=> "daun ubi",
                   "m_produk_urut"=> null,
@@ -3627,6 +3817,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300102",
                   "m_produk_code"=> "bb-300102",
                   "m_produk_nama"=> "durian",
                   "m_produk_urut"=> null,
@@ -3646,6 +3837,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300103",
                   "m_produk_code"=> "bb-300103",
                   "m_produk_nama"=> "es batu",
                   "m_produk_urut"=> null,
@@ -3665,6 +3857,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300104",
                   "m_produk_code"=> "bb-300104",
                   "m_produk_nama"=> "gabus",
                   "m_produk_urut"=> null,
@@ -3684,6 +3877,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300105",
                   "m_produk_code"=> "bb-300105",
                   "m_produk_nama"=> "garam bata",
                   "m_produk_urut"=> null,
@@ -3703,6 +3897,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300106",
                   "m_produk_code"=> "bb-300106",
                   "m_produk_nama"=> "garam halus refina",
                   "m_produk_urut"=> null,
@@ -3722,6 +3917,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300107",
                   "m_produk_code"=> "bb-300107",
                   "m_produk_nama"=> "garam halus dapur 1",
                   "m_produk_urut"=> null,
@@ -3741,6 +3937,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300108",
                   "m_produk_code"=> "bb-300108",
                   "m_produk_nama"=> "garam halus wbd 250 gr",
                   "m_produk_urut"=> null,
@@ -3760,6 +3957,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300109",
                   "m_produk_code"=> "bb-300109",
                   "m_produk_nama"=> "gembung",
                   "m_produk_urut"=> null,
@@ -3779,6 +3977,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300110",
                   "m_produk_code"=> "bb-300110",
                   "m_produk_nama"=> "gereh kranjang",
                   "m_produk_urut"=> null,
@@ -3798,6 +3997,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300111",
                   "m_produk_code"=> "bb-300111",
                   "m_produk_nama"=> "gula jawa",
                   "m_produk_urut"=> null,
@@ -3817,6 +4017,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300112",
                   "m_produk_code"=> "bb-300112",
                   "m_produk_nama"=> "gula pasir",
                   "m_produk_urut"=> null,
@@ -3836,6 +4037,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300113",
                   "m_produk_code"=> "bb-300113",
                   "m_produk_nama"=> "gula pasir 11",
                   "m_produk_urut"=> null,
@@ -3855,6 +4057,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300114",
                   "m_produk_code"=> "bb-300114",
                   "m_produk_nama"=> "gurame",
                   "m_produk_urut"=> null,
@@ -3874,6 +4077,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300115",
                   "m_produk_code"=> "bb-300115",
                   "m_produk_nama"=> "iga sapi",
                   "m_produk_urut"=> null,
@@ -3893,6 +4097,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300116",
                   "m_produk_code"=> "bb-300116",
                   "m_produk_nama"=> "iga sapi frozen",
                   "m_produk_urut"=> null,
@@ -3912,6 +4117,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300117",
                   "m_produk_code"=> "bb-300117",
                   "m_produk_nama"=> "iga sapi sambal tomat frozen",
                   "m_produk_urut"=> null,
@@ -3931,6 +4137,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300118",
                   "m_produk_code"=> "bb-300118",
                   "m_produk_nama"=> "iso",
                   "m_produk_urut"=> null,
@@ -3950,6 +4157,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300119",
                   "m_produk_code"=> "bb-300119",
                   "m_produk_nama"=> "iso frozen",
                   "m_produk_urut"=> null,
@@ -3969,6 +4177,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300120",
                   "m_produk_code"=> "bb-300120",
                   "m_produk_nama"=> "iso sapi sambal tomat frozen",
                   "m_produk_urut"=> null,
@@ -3988,6 +4197,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300121",
                   "m_produk_code"=> "bb-300121",
                   "m_produk_nama"=> "jagung",
                   "m_produk_urut"=> null,
@@ -4007,6 +4217,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300122",
                   "m_produk_code"=> "bb-300122",
                   "m_produk_nama"=> "jahe",
                   "m_produk_urut"=> null,
@@ -4026,6 +4237,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300123",
                   "m_produk_code"=> "bb-300123",
                   "m_produk_nama"=> "jahe jeruk kencur",
                   "m_produk_urut"=> null,
@@ -4045,6 +4257,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300124",
                   "m_produk_code"=> "bb-300124",
                   "m_produk_nama"=> "jambal ca jadi",
                   "m_produk_urut"=> null,
@@ -4064,6 +4277,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300125",
                   "m_produk_code"=> "bb-300125",
                   "m_produk_nama"=> "jambal kresek tanggung",
                   "m_produk_urut"=> null,
@@ -4083,6 +4297,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300126",
                   "m_produk_code"=> "bb-300126",
                   "m_produk_nama"=> "jambal lauk jadi - 10 3/6",
                   "m_produk_urut"=> null,
@@ -4102,6 +4317,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300127",
                   "m_produk_code"=> "bb-300127",
                   "m_produk_nama"=> "jambu",
                   "m_produk_urut"=> null,
@@ -4121,6 +4337,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300128",
                   "m_produk_code"=> "bb-300128",
                   "m_produk_nama"=> "jamur",
                   "m_produk_urut"=> null,
@@ -4140,6 +4357,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300129",
                   "m_produk_code"=> "bb-300129",
                   "m_produk_nama"=> "jengkol",
                   "m_produk_urut"=> null,
@@ -4159,6 +4377,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300130",
                   "m_produk_code"=> "bb-300130",
                   "m_produk_nama"=> "jeruk buah",
                   "m_produk_urut"=> null,
@@ -4178,6 +4397,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300131",
                   "m_produk_code"=> "bb-300131",
                   "m_produk_nama"=> "jeruk limau",
                   "m_produk_urut"=> null,
@@ -4197,6 +4417,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300132",
                   "m_produk_code"=> "bb-300132",
                   "m_produk_nama"=> "jeruk nipis",
                   "m_produk_urut"=> null,
@@ -4216,6 +4437,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300133",
                   "m_produk_code"=> "bb-300133",
                   "m_produk_nama"=> "jeruk peras",
                   "m_produk_urut"=> null,
@@ -4235,6 +4457,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300134",
                   "m_produk_code"=> "bb-300134",
                   "m_produk_nama"=> "jinten",
                   "m_produk_urut"=> null,
@@ -4254,6 +4477,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300135",
                   "m_produk_code"=> "bb-300135",
                   "m_produk_nama"=> "jipang",
                   "m_produk_urut"=> null,
@@ -4273,6 +4497,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300136",
                   "m_produk_code"=> "bb-300136",
                   "m_produk_nama"=> "jipang wbd",
                   "m_produk_urut"=> null,
@@ -4292,6 +4517,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300137",
                   "m_produk_code"=> "bb-300137",
                   "m_produk_nama"=> "kacang panjang",
                   "m_produk_urut"=> null,
@@ -4311,6 +4537,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300138",
                   "m_produk_code"=> "bb-300138",
                   "m_produk_nama"=> "kacang tanah",
                   "m_produk_urut"=> null,
@@ -4330,6 +4557,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300139",
                   "m_produk_code"=> "bb-300139",
                   "m_produk_nama"=> "kakap",
                   "m_produk_urut"=> null,
@@ -4349,6 +4577,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300140",
                   "m_produk_code"=> "bb-300140",
                   "m_produk_nama"=> "kangkung",
                   "m_produk_urut"=> null,
@@ -4368,6 +4597,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300141",
                   "m_produk_code"=> "bb-300141",
                   "m_produk_nama"=> "kapulaga",
                   "m_produk_urut"=> null,
@@ -4387,6 +4617,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300142",
                   "m_produk_code"=> "bb-300142",
                   "m_produk_nama"=> "kapulaga",
                   "m_produk_urut"=> null,
@@ -4406,6 +4637,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300143",
                   "m_produk_code"=> "bb-300143",
                   "m_produk_nama"=> "kayu manis",
                   "m_produk_urut"=> null,
@@ -4425,6 +4657,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300144",
                   "m_produk_code"=> "bb-300144",
                   "m_produk_nama"=> "kecambah",
                   "m_produk_urut"=> null,
@@ -4444,6 +4677,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300145",
                   "m_produk_code"=> "bb-300145",
                   "m_produk_nama"=> "kecambah panjang",
                   "m_produk_urut"=> null,
@@ -4463,6 +4697,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300146",
                   "m_produk_code"=> "bb-300146",
                   "m_produk_nama"=> "kecambah wbd",
                   "m_produk_urut"=> null,
@@ -4482,6 +4717,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300147",
                   "m_produk_code"=> "bb-300147",
                   "m_produk_nama"=> "kecap 2 burung wbd",
                   "m_produk_urut"=> null,
@@ -4501,6 +4737,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300148",
                   "m_produk_code"=> "bb-300148",
                   "m_produk_nama"=> "kecap bango",
                   "m_produk_urut"=> null,
@@ -4520,6 +4757,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300149",
                   "m_produk_code"=> "bb-300149",
                   "m_produk_nama"=> "kecap belibis",
                   "m_produk_urut"=> null,
@@ -4539,6 +4777,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300150",
                   "m_produk_code"=> "bb-300150",
                   "m_produk_nama"=> "kecap o",
                   "m_produk_urut"=> null,
@@ -4558,6 +4797,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300151",
                   "m_produk_code"=> "bb-300151",
                   "m_produk_nama"=> "keju",
                   "m_produk_urut"=> null,
@@ -4577,6 +4817,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300152",
                   "m_produk_code"=> "bb-300152",
                   "m_produk_nama"=> "kelapa",
                   "m_produk_urut"=> null,
@@ -4596,6 +4837,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300153",
                   "m_produk_code"=> "bb-300153",
                   "m_produk_nama"=> "kemangi",
                   "m_produk_urut"=> null,
@@ -4615,6 +4857,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300154",
                   "m_produk_code"=> "bb-300154",
                   "m_produk_nama"=> "kembung",
                   "m_produk_urut"=> null,
@@ -4634,6 +4877,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300155",
                   "m_produk_code"=> "bb-300155",
                   "m_produk_nama"=> "kemiri",
                   "m_produk_urut"=> null,
@@ -4653,6 +4897,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300156",
                   "m_produk_code"=> "bb-300156",
                   "m_produk_nama"=> "kencur",
                   "m_produk_urut"=> null,
@@ -4672,6 +4917,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300157",
                   "m_produk_code"=> "bb-300157",
                   "m_produk_nama"=> "kenikir",
                   "m_produk_urut"=> null,
@@ -4691,6 +4937,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300158",
                   "m_produk_code"=> "bb-300158",
                   "m_produk_nama"=> "kentang wbd",
                   "m_produk_urut"=> null,
@@ -4710,6 +4957,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300159",
                   "m_produk_code"=> "bb-300159",
                   "m_produk_nama"=> "ketumbar",
                   "m_produk_urut"=> null,
@@ -4729,6 +4977,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300160",
                   "m_produk_code"=> "bb-300160",
                   "m_produk_nama"=> "ketumbar 100 gr",
                   "m_produk_urut"=> null,
@@ -4748,6 +4997,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300161",
                   "m_produk_code"=> "bb-300161",
                   "m_produk_nama"=> "kol",
                   "m_produk_urut"=> null,
@@ -4767,6 +5017,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300162",
                   "m_produk_code"=> "bb-300162",
                   "m_produk_nama"=> "kopi hitam",
                   "m_produk_urut"=> null,
@@ -4786,6 +5037,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300163",
                   "m_produk_code"=> "bb-300163",
                   "m_produk_nama"=> "kopi tubruk",
                   "m_produk_urut"=> null,
@@ -4805,6 +5057,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300164",
                   "m_produk_code"=> "bb-300164",
                   "m_produk_nama"=> "kopi khoirun - 5 3/6",
                   "m_produk_urut"=> null,
@@ -4824,6 +5077,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300165",
                   "m_produk_code"=> "bb-300165",
                   "m_produk_nama"=> "kopi unggul - 5 3/6",
                   "m_produk_urut"=> null,
@@ -4843,6 +5097,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300166",
                   "m_produk_code"=> "bb-300166",
                   "m_produk_nama"=> "krupuk ikan - 20 3/bal eh",
                   "m_produk_urut"=> null,
@@ -4862,6 +5117,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300167",
                   "m_produk_code"=> "bb-300167",
                   "m_produk_nama"=> "krupuk ikan - 20 3/bal sr",
                   "m_produk_urut"=> null,
@@ -4881,6 +5137,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300168",
                   "m_produk_code"=> "bb-300168",
                   "m_produk_nama"=> "krupuk ikan - 20 3/bal yn",
                   "m_produk_urut"=> null,
@@ -4900,6 +5157,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300169",
                   "m_produk_code"=> "bb-300169",
                   "m_produk_nama"=> "krupuk eksternal",
                   "m_produk_urut"=> null,
@@ -4919,6 +5177,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300170",
                   "m_produk_code"=> "bb-300170",
                   "m_produk_nama"=> "kulit ayam",
                   "m_produk_urut"=> null,
@@ -4938,6 +5197,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300171",
                   "m_produk_code"=> "bb-300171",
                   "m_produk_nama"=> "kunyit",
                   "m_produk_urut"=> null,
@@ -4957,6 +5217,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300172",
                   "m_produk_code"=> "bb-300172",
                   "m_produk_nama"=> "kurma",
                   "m_produk_urut"=> null,
@@ -4976,6 +5237,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300173",
                   "m_produk_code"=> "bb-300173",
                   "m_produk_nama"=> "kurma takjil isi 3",
                   "m_produk_urut"=> null,
@@ -4995,6 +5257,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300174",
                   "m_produk_code"=> "bb-300174",
                   "m_produk_nama"=> "kurma takjil isi 7",
                   "m_produk_urut"=> null,
@@ -5014,6 +5277,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300175",
                   "m_produk_code"=> "bb-300175",
                   "m_produk_nama"=> "kwe",
                   "m_produk_urut"=> null,
@@ -5033,6 +5297,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300176",
                   "m_produk_code"=> "bb-300176",
                   "m_produk_nama"=> "laos",
                   "m_produk_urut"=> null,
@@ -5052,6 +5317,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300177",
                   "m_produk_code"=> "bb-300177",
                   "m_produk_nama"=> "layur",
                   "m_produk_urut"=> null,
@@ -5071,6 +5337,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300178",
                   "m_produk_code"=> "bb-300178",
                   "m_produk_nama"=> "le mineral 1500 ml",
                   "m_produk_urut"=> null,
@@ -5090,6 +5357,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300179",
                   "m_produk_code"=> "bb-300179",
                   "m_produk_nama"=> "le mineral 330 ml",
                   "m_produk_urut"=> null,
@@ -5109,6 +5377,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300180",
                   "m_produk_code"=> "bb-300180",
                   "m_produk_nama"=> "le mineral 600 ml",
                   "m_produk_urut"=> null,
@@ -5128,6 +5397,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300181",
                   "m_produk_code"=> "bb-300181",
                   "m_produk_nama"=> "lele",
                   "m_produk_urut"=> null,
@@ -5147,6 +5417,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300182",
                   "m_produk_code"=> "bb-300182",
                   "m_produk_nama"=> "leunca",
                   "m_produk_urut"=> null,
@@ -5166,6 +5437,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300183",
                   "m_produk_code"=> "bb-300183",
                   "m_produk_nama"=> "lime powder",
                   "m_produk_urut"=> null,
@@ -5185,6 +5457,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300184",
                   "m_produk_code"=> "bb-300184",
                   "m_produk_nama"=> "lipton ice tea",
                   "m_produk_urut"=> null,
@@ -5204,6 +5477,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300185",
                   "m_produk_code"=> "bb-300185",
                   "m_produk_nama"=> "loncang",
                   "m_produk_urut"=> null,
@@ -5223,6 +5497,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300186",
                   "m_produk_code"=> "bb-300186",
                   "m_produk_nama"=> "madu",
                   "m_produk_urut"=> null,
@@ -5242,6 +5517,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300187",
                   "m_produk_code"=> "bb-300187",
                   "m_produk_nama"=> "madu kaliandra 500 ml",
                   "m_produk_urut"=> null,
@@ -5261,6 +5537,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300188",
                   "m_produk_code"=> "bb-300188",
                   "m_produk_nama"=> "mangga",
                   "m_produk_urut"=> null,
@@ -5280,6 +5557,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300189",
                   "m_produk_code"=> "bb-300189",
                   "m_produk_nama"=> "mangga muda",
                   "m_produk_urut"=> null,
@@ -5299,6 +5577,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300190",
                   "m_produk_code"=> "bb-300190",
                   "m_produk_nama"=> "margarine",
                   "m_produk_urut"=> null,
@@ -5318,6 +5597,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300191",
                   "m_produk_code"=> "bb-300191",
                   "m_produk_nama"=> "melon",
                   "m_produk_urut"=> null,
@@ -5337,6 +5617,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300192",
                   "m_produk_code"=> "bb-300192",
                   "m_produk_nama"=> "merica butir - 0.5 1/10",
                   "m_produk_urut"=> null,
@@ -5356,6 +5637,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300193",
                   "m_produk_code"=> "bb-300193",
                   "m_produk_nama"=> "merica halus",
                   "m_produk_urut"=> null,
@@ -5375,6 +5657,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300194",
                   "m_produk_code"=> "bb-300194",
                   "m_produk_nama"=> "milo",
                   "m_produk_urut"=> null,
@@ -5394,6 +5677,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300195",
                   "m_produk_code"=> "bb-300195",
                   "m_produk_nama"=> "milo - 960 gr/10",
                   "m_produk_urut"=> null,
@@ -5413,6 +5697,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300196",
                   "m_produk_code"=> "bb-300196",
                   "m_produk_nama"=> "minyak curah",
                   "m_produk_urut"=> null,
@@ -5432,6 +5717,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300197",
                   "m_produk_code"=> "bb-300197",
                   "m_produk_nama"=> "minyak goreng",
                   "m_produk_urut"=> null,
@@ -5451,6 +5737,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300198",
                   "m_produk_code"=> "bb-300198",
                   "m_produk_nama"=> "miwon",
                   "m_produk_urut"=> null,
@@ -5470,6 +5757,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300199",
                   "m_produk_code"=> "bb-300199",
                   "m_produk_nama"=> "nanas",
                   "m_produk_urut"=> null,
@@ -5489,6 +5777,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300200",
                   "m_produk_code"=> "bb-300200",
                   "m_produk_nama"=> "nanas muda",
                   "m_produk_urut"=> null,
@@ -5508,6 +5797,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300201",
                   "m_produk_code"=> "bb-300201",
                   "m_produk_nama"=> "nangka",
                   "m_produk_urut"=> null,
@@ -5527,6 +5817,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300202",
                   "m_produk_code"=> "bb-300202",
                   "m_produk_nama"=> "nestle 1500 ml",
                   "m_produk_urut"=> null,
@@ -5546,6 +5837,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300203",
                   "m_produk_code"=> "bb-300203",
                   "m_produk_nama"=> "nestle 330 ml",
                   "m_produk_urut"=> null,
@@ -5565,6 +5857,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300204",
                   "m_produk_code"=> "bb-300204",
                   "m_produk_nama"=> "nestle 600 ml",
                   "m_produk_urut"=> null,
@@ -5584,6 +5877,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300205",
                   "m_produk_code"=> "bb-300205",
                   "m_produk_nama"=> "nila",
                   "m_produk_urut"=> null,
@@ -5603,6 +5897,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300206",
                   "m_produk_code"=> "bb-300206",
                   "m_produk_nama"=> "nutrisari",
                   "m_produk_urut"=> null,
@@ -5622,6 +5917,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300207",
                   "m_produk_code"=> "bb-300207",
                   "m_produk_nama"=> "pala bubuk",
                   "m_produk_urut"=> null,
@@ -5641,6 +5937,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300208",
                   "m_produk_code"=> "bb-300208",
                   "m_produk_nama"=> "parcel a",
                   "m_produk_urut"=> null,
@@ -5660,6 +5957,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300209",
                   "m_produk_code"=> "bb-300209",
                   "m_produk_nama"=> "parcel b",
                   "m_produk_urut"=> null,
@@ -5679,6 +5977,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300210",
                   "m_produk_code"=> "bb-300210",
                   "m_produk_nama"=> "parcel c",
                   "m_produk_urut"=> null,
@@ -5698,6 +5997,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300211",
                   "m_produk_code"=> "bb-300211",
                   "m_produk_nama"=> "paru frozen",
                   "m_produk_urut"=> null,
@@ -5717,6 +6017,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300212",
                   "m_produk_code"=> "bb-300212",
                   "m_produk_nama"=> "paru sapi",
                   "m_produk_urut"=> null,
@@ -5736,6 +6037,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300213",
                   "m_produk_code"=> "bb-300213",
                   "m_produk_nama"=> "paru sapi sambal tomat frozen",
                   "m_produk_urut"=> null,
@@ -5755,6 +6057,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300214",
                   "m_produk_code"=> "bb-300214",
                   "m_produk_nama"=> "pepaya",
                   "m_produk_urut"=> null,
@@ -5774,6 +6077,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300215",
                   "m_produk_code"=> "bb-300215",
                   "m_produk_nama"=> "perkedel",
                   "m_produk_urut"=> null,
@@ -5793,6 +6097,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300216",
                   "m_produk_code"=> "bb-300216",
                   "m_produk_nama"=> "pete",
                   "m_produk_urut"=> null,
@@ -5812,6 +6117,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300217",
                   "m_produk_code"=> "bb-300217",
                   "m_produk_nama"=> "pisang",
                   "m_produk_urut"=> null,
@@ -5831,6 +6137,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300218",
                   "m_produk_code"=> "bb-300218",
                   "m_produk_nama"=> "rempelo ati",
                   "m_produk_urut"=> null,
@@ -5850,6 +6157,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300219",
                   "m_produk_code"=> "bb-300219",
                   "m_produk_nama"=> "rempelo ati kampung",
                   "m_produk_urut"=> null,
@@ -5869,6 +6177,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300220",
                   "m_produk_code"=> "bb-300220",
                   "m_produk_nama"=> "royco",
                   "m_produk_urut"=> null,
@@ -5888,6 +6197,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300221",
                   "m_produk_code"=> "bb-300221",
                   "m_produk_nama"=> "royco sapi",
                   "m_produk_urut"=> null,
@@ -5907,6 +6217,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300222",
                   "m_produk_code"=> "bb-300222",
                   "m_produk_nama"=> "salam",
                   "m_produk_urut"=> null,
@@ -5926,6 +6237,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300223",
                   "m_produk_code"=> "bb-300223",
                   "m_produk_nama"=> "sambel pecel",
                   "m_produk_urut"=> null,
@@ -5945,6 +6257,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300224",
                   "m_produk_code"=> "bb-300224",
                   "m_produk_nama"=> "santan",
                   "m_produk_urut"=> null,
@@ -5964,6 +6277,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300225",
                   "m_produk_code"=> "bb-300225",
                   "m_produk_nama"=> "saos tiram",
                   "m_produk_urut"=> null,
@@ -5983,6 +6297,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300226",
                   "m_produk_code"=> "bb-300226",
                   "m_produk_nama"=> "sawo",
                   "m_produk_urut"=> null,
@@ -6002,6 +6317,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300227",
                   "m_produk_code"=> "bb-300227",
                   "m_produk_nama"=> "secang",
                   "m_produk_urut"=> null,
@@ -6021,6 +6337,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300228",
                   "m_produk_code"=> "bb-300228",
                   "m_produk_nama"=> "selada",
                   "m_produk_urut"=> null,
@@ -6040,6 +6357,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300229",
                   "m_produk_code"=> "bb-300229",
                   "m_produk_nama"=> "semangka",
                   "m_produk_urut"=> null,
@@ -6059,6 +6377,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300230",
                   "m_produk_code"=> "bb-300230",
                   "m_produk_nama"=> "serai",
                   "m_produk_urut"=> null,
@@ -6078,6 +6397,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300231",
                   "m_produk_code"=> "bb-300231",
                   "m_produk_nama"=> "sirsak",
                   "m_produk_urut"=> null,
@@ -6097,6 +6417,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300232",
                   "m_produk_code"=> "bb-300232",
                   "m_produk_nama"=> "snack emping",
                   "m_produk_urut"=> null,
@@ -6116,6 +6437,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300233",
                   "m_produk_code"=> "bb-300233",
                   "m_produk_nama"=> "snack kacang bawang",
                   "m_produk_urut"=> null,
@@ -6135,6 +6457,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300234",
                   "m_produk_code"=> "bb-300234",
                   "m_produk_nama"=> "snack kacang goreng",
                   "m_produk_urut"=> null,
@@ -6154,6 +6477,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300235",
                   "m_produk_code"=> "bb-300235",
                   "m_produk_nama"=> "snack keripik tempe",
                   "m_produk_urut"=> null,
@@ -6173,6 +6497,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300236",
                   "m_produk_code"=> "bb-300236",
                   "m_produk_nama"=> "snack keripik usus",
                   "m_produk_urut"=> null,
@@ -6192,6 +6517,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300237",
                   "m_produk_code"=> "bb-300237",
                   "m_produk_nama"=> "snack marning",
                   "m_produk_urut"=> null,
@@ -6211,6 +6537,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300238",
                   "m_produk_code"=> "bb-300238",
                   "m_produk_nama"=> "sotong",
                   "m_produk_urut"=> null,
@@ -6230,6 +6557,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300239",
                   "m_produk_code"=> "bb-300239",
                   "m_produk_nama"=> "ss lemon c",
                   "m_produk_urut"=> null,
@@ -6249,6 +6577,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300240",
                   "m_produk_code"=> "bb-300240",
                   "m_produk_nama"=> "strawberry",
                   "m_produk_urut"=> null,
@@ -6268,6 +6597,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300241",
                   "m_produk_code"=> "bb-300241",
                   "m_produk_nama"=> "susu coklat",
                   "m_produk_urut"=> null,
@@ -6287,6 +6617,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300242",
                   "m_produk_code"=> "bb-300242",
                   "m_produk_nama"=> "susu etta goatmilk wbd",
                   "m_produk_urut"=> null,
@@ -6306,6 +6637,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300243",
                   "m_produk_code"=> "bb-300243",
                   "m_produk_nama"=> "susu kambing",
                   "m_produk_urut"=> null,
@@ -6325,6 +6657,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300244",
                   "m_produk_code"=> "bb-300244",
                   "m_produk_nama"=> "susu putih",
                   "m_produk_urut"=> null,
@@ -6344,6 +6677,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300245",
                   "m_produk_code"=> "bb-300245",
                   "m_produk_nama"=> "tahu",
                   "m_produk_urut"=> null,
@@ -6363,6 +6697,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300246",
                   "m_produk_code"=> "bb-300246",
                   "m_produk_nama"=> "tape ketan",
                   "m_produk_urut"=> null,
@@ -6382,6 +6717,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300247",
                   "m_produk_code"=> "bb-300247",
                   "m_produk_nama"=> "teh 999",
                   "m_produk_urut"=> null,
@@ -6401,6 +6737,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300248",
                   "m_produk_code"=> "bb-300248",
                   "m_produk_nama"=> "teh 8",
                   "m_produk_urut"=> null,
@@ -6420,6 +6757,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300249",
                   "m_produk_code"=> "bb-300249",
                   "m_produk_nama"=> "teh kotak takjil",
                   "m_produk_urut"=> null,
@@ -6439,6 +6777,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300250",
                   "m_produk_code"=> "bb-300250",
                   "m_produk_nama"=> "teh racikan ss - 0.5 pkt/10",
                   "m_produk_urut"=> null,
@@ -6458,6 +6797,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300251",
                   "m_produk_code"=> "bb-300251",
                   "m_produk_nama"=> "teh racikan ss 1 pkt - 5 pkt/6",
                   "m_produk_urut"=> null,
@@ -6477,6 +6817,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300252",
                   "m_produk_code"=> "bb-300252",
                   "m_produk_nama"=> "teh tarik",
                   "m_produk_urut"=> null,
@@ -6496,6 +6837,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300253",
                   "m_produk_code"=> "bb-300253",
                   "m_produk_nama"=> "teh tjatot",
                   "m_produk_urut"=> null,
@@ -6515,6 +6857,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300254",
                   "m_produk_code"=> "bb-300254",
                   "m_produk_nama"=> "teh tongji",
                   "m_produk_urut"=> null,
@@ -6534,6 +6877,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300255",
                   "m_produk_code"=> "bb-300255",
                   "m_produk_nama"=> "telur",
                   "m_produk_urut"=> null,
@@ -6553,6 +6897,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300256",
                   "m_produk_code"=> "bb-300256",
                   "m_produk_nama"=> "telur bebek bacem frozen",
                   "m_produk_urut"=> null,
@@ -6572,6 +6917,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300257",
                   "m_produk_code"=> "bb-300257",
                   "m_produk_nama"=> "tempe",
                   "m_produk_urut"=> null,
@@ -6591,6 +6937,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300258",
                   "m_produk_code"=> "bb-300258",
                   "m_produk_nama"=> "tepung bumbu",
                   "m_produk_urut"=> null,
@@ -6610,6 +6957,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300259",
                   "m_produk_code"=> "bb-300259",
                   "m_produk_nama"=> "tepung kentang",
                   "m_produk_urut"=> null,
@@ -6629,6 +6977,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300260",
                   "m_produk_code"=> "bb-300260",
                   "m_produk_nama"=> "tepung segitiga biru",
                   "m_produk_urut"=> null,
@@ -6648,6 +6997,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300261",
                   "m_produk_code"=> "bb-300261",
                   "m_produk_nama"=> "teri",
                   "m_produk_urut"=> null,
@@ -6667,6 +7017,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300262",
                   "m_produk_code"=> "bb-300262",
                   "m_produk_nama"=> "terong hijau",
                   "m_produk_urut"=> null,
@@ -6686,6 +7037,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300263",
                   "m_produk_code"=> "bb-300263",
                   "m_produk_nama"=> "terong ungu",
                   "m_produk_urut"=> null,
@@ -6705,6 +7057,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300264",
                   "m_produk_code"=> "bb-300264",
                   "m_produk_nama"=> "timun",
                   "m_produk_urut"=> null,
@@ -6724,6 +7077,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300265",
                   "m_produk_code"=> "bb-300265",
                   "m_produk_nama"=> "tomat",
                   "m_produk_urut"=> null,
@@ -6743,6 +7097,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300266",
                   "m_produk_code"=> "bb-300266",
                   "m_produk_nama"=> "tomat hijau",
                   "m_produk_urut"=> null,
@@ -6762,6 +7117,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300267",
                   "m_produk_code"=> "bb-300267",
                   "m_produk_nama"=> "trasi",
                   "m_produk_urut"=> null,
@@ -6781,6 +7137,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300268",
                   "m_produk_code"=> "bb-300268",
                   "m_produk_nama"=> "trasi bonang",
                   "m_produk_urut"=> null,
@@ -6800,6 +7157,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300269",
                   "m_produk_code"=> "bb-300269",
                   "m_produk_nama"=> "trasi juwana",
                   "m_produk_urut"=> null,
@@ -6819,6 +7177,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300270",
                   "m_produk_code"=> "bb-300270",
                   "m_produk_nama"=> "trasi no 1",
                   "m_produk_urut"=> null,
@@ -6838,6 +7197,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300271",
                   "m_produk_code"=> "bb-300271",
                   "m_produk_nama"=> "trasi nt sl",
                   "m_produk_urut"=> null,
@@ -6857,6 +7217,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300272",
                   "m_produk_code"=> "bb-300272",
                   "m_produk_nama"=> "trasi nt sr",
                   "m_produk_urut"=> null,
@@ -6876,6 +7237,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300273",
                   "m_produk_code"=> "bb-300273",
                   "m_produk_nama"=> "trasi plencing",
                   "m_produk_urut"=> null,
@@ -6895,6 +7257,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300274",
                   "m_produk_code"=> "bb-300274",
                   "m_produk_nama"=> "trasi premium",
                   "m_produk_urut"=> null,
@@ -6914,6 +7277,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300275",
                   "m_produk_code"=> "bb-300275",
                   "m_produk_nama"=> "trasi super",
                   "m_produk_urut"=> null,
@@ -6933,6 +7297,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300276",
                   "m_produk_code"=> "bb-300276",
                   "m_produk_nama"=> "trasi tuban",
                   "m_produk_urut"=> null,
@@ -6952,6 +7317,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300277",
                   "m_produk_code"=> "bb-300277",
                   "m_produk_nama"=> "trasi udang (ismail)",
                   "m_produk_urut"=> null,
@@ -6971,6 +7337,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300278",
                   "m_produk_code"=> "bb-300278",
                   "m_produk_nama"=> "trasi yn",
                   "m_produk_urut"=> null,
@@ -6990,6 +7357,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300279",
                   "m_produk_code"=> "bb-300279",
                   "m_produk_nama"=> "udang",
                   "m_produk_urut"=> null,
@@ -7009,6 +7377,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300280",
                   "m_produk_code"=> "bb-300280",
                   "m_produk_nama"=> "vit levite berries",
                   "m_produk_urut"=> null,
@@ -7028,6 +7397,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300281",
                   "m_produk_code"=> "bb-300281",
                   "m_produk_nama"=> "vit levite leci",
                   "m_produk_urut"=> null,
@@ -7047,6 +7417,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300282",
                   "m_produk_code"=> "bb-300282",
                   "m_produk_nama"=> "vit levite lemon",
                   "m_produk_urut"=> null,
@@ -7066,6 +7437,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300283",
                   "m_produk_code"=> "bb-300283",
                   "m_produk_nama"=> "wader",
                   "m_produk_urut"=> null,
@@ -7085,6 +7457,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300284",
                   "m_produk_code"=> "bb-300284",
                   "m_produk_nama"=> "wedang pedas",
                   "m_produk_urut"=> null,
@@ -7104,6 +7477,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300285",
                   "m_produk_code"=> "bb-300285",
                   "m_produk_nama"=> "wedang uwuh",
                   "m_produk_urut"=> null,
@@ -7123,6 +7497,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300286",
                   "m_produk_code"=> "bb-300286",
                   "m_produk_nama"=> "wortel",
                   "m_produk_urut"=> null,
@@ -7142,6 +7517,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300287",
                   "m_produk_code"=> "bb-300287",
                   "m_produk_nama"=> "gas",
                   "m_produk_urut"=> null,
@@ -7161,6 +7537,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300288",
                   "m_produk_code"=> "bb-300288",
                   "m_produk_nama"=> "blue gas",
                   "m_produk_urut"=> null,
@@ -7180,6 +7557,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300289",
                   "m_produk_code"=> "bb-300289",
                   "m_produk_nama"=> "arang",
                   "m_produk_urut"=> null,
@@ -7199,6 +7577,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300290",
                   "m_produk_code"=> "bb-300290",
                   "m_produk_nama"=> "lavarock (batu bakaran)",
                   "m_produk_urut"=> null,
@@ -7218,6 +7597,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300291",
                   "m_produk_code"=> "bb-300291",
                   "m_produk_nama"=> "touch gas",
                   "m_produk_urut"=> null,
@@ -7237,6 +7617,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "bb-300292",
                   "m_produk_code"=> "bb-300292",
                   "m_produk_nama"=> "briket batok kelapa",
                   "m_produk_urut"=> null,
@@ -7256,6 +7637,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400001",
                   "m_produk_code"=> "mn-400001",
                   "m_produk_nama"=> "juice alpukat",
                   "m_produk_urut"=> "001-001",
@@ -7275,6 +7657,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400002",
                   "m_produk_code"=> "mn-400002",
                   "m_produk_nama"=> "juice coffeemix",
                   "m_produk_urut"=> "001-002",
@@ -7294,6 +7677,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400003",
                   "m_produk_code"=> "mn-400003",
                   "m_produk_nama"=> "juice jambu",
                   "m_produk_urut"=> "001-003",
@@ -7313,6 +7697,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400004",
                   "m_produk_code"=> "mn-400004",
                   "m_produk_nama"=> "juice jeruk",
                   "m_produk_urut"=> "001-004",
@@ -7332,6 +7717,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400005",
                   "m_produk_code"=> "mn-400005",
                   "m_produk_nama"=> "juice mangga",
                   "m_produk_urut"=> "001-005",
@@ -7351,6 +7737,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400006",
                   "m_produk_code"=> "mn-400006",
                   "m_produk_nama"=> "juice melon",
                   "m_produk_urut"=> "001-006",
@@ -7370,6 +7757,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400007",
                   "m_produk_code"=> "mn-400007",
                   "m_produk_nama"=> "juice nanas",
                   "m_produk_urut"=> "001-007",
@@ -7389,6 +7777,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400008",
                   "m_produk_code"=> "mn-400008",
                   "m_produk_nama"=> "juice nangka",
                   "m_produk_urut"=> "001-008",
@@ -7408,6 +7797,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400009",
                   "m_produk_code"=> "mn-400009",
                   "m_produk_nama"=> "juice timun",
                   "m_produk_urut"=> "001-009",
@@ -7427,6 +7817,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400010",
                   "m_produk_code"=> "mn-400010",
                   "m_produk_nama"=> "juice pepaya nipis",
                   "m_produk_urut"=> "001-010",
@@ -7446,6 +7837,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400011",
                   "m_produk_code"=> "mn-400011",
                   "m_produk_nama"=> "juice semangka",
                   "m_produk_urut"=> "001-011",
@@ -7465,6 +7857,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400012",
                   "m_produk_code"=> "mn-400012",
                   "m_produk_nama"=> "juice sirsak bulan",
                   "m_produk_urut"=> "001-012",
@@ -7484,6 +7877,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400013",
                   "m_produk_code"=> "mn-400013",
                   "m_produk_nama"=> "juice gobal-gabul",
                   "m_produk_urut"=> "001-013",
@@ -7503,6 +7897,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400014",
                   "m_produk_code"=> "mn-400014",
                   "m_produk_nama"=> "juice strawberry",
                   "m_produk_urut"=> "001-014",
@@ -7522,6 +7917,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400015",
                   "m_produk_code"=> "mn-400015",
                   "m_produk_nama"=> "juice mix",
                   "m_produk_urut"=> "001-015",
@@ -7541,6 +7937,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400016",
                   "m_produk_code"=> "mn-400016",
                   "m_produk_nama"=> "juice tomat",
                   "m_produk_urut"=> "001-016",
@@ -7560,6 +7957,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400017",
                   "m_produk_code"=> "mn-400017",
                   "m_produk_nama"=> "juice wortel",
                   "m_produk_urut"=> "001-017",
@@ -7579,6 +7977,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400018",
                   "m_produk_code"=> "mn-400018",
                   "m_produk_nama"=> "juice coklat",
                   "m_produk_urut"=> "001-018",
@@ -7598,6 +7997,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400019",
                   "m_produk_code"=> "mn-400019",
                   "m_produk_nama"=> "juice daging durian",
                   "m_produk_urut"=> "001-019",
@@ -7617,6 +8017,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400020",
                   "m_produk_code"=> "mn-400020",
                   "m_produk_nama"=> "air es",
                   "m_produk_urut"=> "001-020",
@@ -7636,6 +8037,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400021",
                   "m_produk_code"=> "mn-400021",
                   "m_produk_nama"=> "coffeemix es",
                   "m_produk_urut"=> "001-021",
@@ -7655,6 +8057,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400022",
                   "m_produk_code"=> "mn-400022",
                   "m_produk_nama"=> "coffeemix panas",
                   "m_produk_urut"=> "001-022",
@@ -7674,6 +8077,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400023",
                   "m_produk_code"=> "mn-400023",
                   "m_produk_nama"=> "coklat es",
                   "m_produk_urut"=> "001-023",
@@ -7693,6 +8097,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400024",
                   "m_produk_code"=> "mn-400024",
                   "m_produk_nama"=> "coklat panas",
                   "m_produk_urut"=> "001-024",
@@ -7712,6 +8117,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400025",
                   "m_produk_code"=> "mn-400025",
                   "m_produk_nama"=> "jeruk es",
                   "m_produk_urut"=> "001-025",
@@ -7731,6 +8137,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400026",
                   "m_produk_code"=> "mn-400026",
                   "m_produk_nama"=> "jeruk panas",
                   "m_produk_urut"=> "001-026",
@@ -7750,6 +8157,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400027",
                   "m_produk_code"=> "mn-400027",
                   "m_produk_nama"=> "jeruk nipis es",
                   "m_produk_urut"=> "001-027",
@@ -7769,6 +8177,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400028",
                   "m_produk_code"=> "mn-400028",
                   "m_produk_nama"=> "jeruk nipis panas",
                   "m_produk_urut"=> "001-028",
@@ -7788,6 +8197,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400029",
                   "m_produk_code"=> "mn-400029",
                   "m_produk_nama"=> "teh jeruk nipis es",
                   "m_produk_urut"=> "001-029",
@@ -7807,6 +8217,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400030",
                   "m_produk_code"=> "mn-400030",
                   "m_produk_nama"=> "teh jeruk nipis panas",
                   "m_produk_urut"=> "001-030",
@@ -7826,6 +8237,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400031",
                   "m_produk_code"=> "mn-400031",
                   "m_produk_nama"=> "susu coklat es",
                   "m_produk_urut"=> "001-031",
@@ -7845,6 +8257,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400032",
                   "m_produk_code"=> "mn-400032",
                   "m_produk_nama"=> "susu coklat panas",
                   "m_produk_urut"=> "001-032",
@@ -7864,6 +8277,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400033",
                   "m_produk_code"=> "mn-400033",
                   "m_produk_nama"=> "teh es",
                   "m_produk_urut"=> "001-033",
@@ -7883,6 +8297,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400034",
                   "m_produk_code"=> "mn-400034",
                   "m_produk_nama"=> "teh panas",
                   "m_produk_urut"=> "001-034",
@@ -7902,6 +8317,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400035",
                   "m_produk_code"=> "mn-400035",
                   "m_produk_nama"=> "jeruk tawar es",
                   "m_produk_urut"=> "001-035",
@@ -7921,6 +8337,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400036",
                   "m_produk_code"=> "mn-400036",
                   "m_produk_nama"=> "jeruk tawar panas",
                   "m_produk_urut"=> "001-036",
@@ -7940,6 +8357,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400037",
                   "m_produk_code"=> "mn-400037",
                   "m_produk_nama"=> "jeruk nipis tawar es",
                   "m_produk_urut"=> "001-037",
@@ -7959,6 +8377,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400038",
                   "m_produk_code"=> "mn-400038",
                   "m_produk_nama"=> "jeruk nipis tawar panas",
                   "m_produk_urut"=> "001-038",
@@ -7978,6 +8397,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400039",
                   "m_produk_code"=> "mn-400039",
                   "m_produk_nama"=> "teh tawar es",
                   "m_produk_urut"=> "001-039",
@@ -7997,6 +8417,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400040",
                   "m_produk_code"=> "mn-400040",
                   "m_produk_nama"=> "teh tawar panas",
                   "m_produk_urut"=> "001-040",
@@ -8016,6 +8437,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400041",
                   "m_produk_code"=> "mn-400041",
                   "m_produk_nama"=> "es batu",
                   "m_produk_urut"=> "001-041",
@@ -8035,6 +8457,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400042",
                   "m_produk_code"=> "mn-400042",
                   "m_produk_nama"=> "teh jeruk nipis tawar es",
                   "m_produk_urut"=> "001-042",
@@ -8054,6 +8477,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400043",
                   "m_produk_code"=> "mn-400043",
                   "m_produk_nama"=> "teh jeruk nipis tawar panas",
                   "m_produk_urut"=> "001-043",
@@ -8073,6 +8497,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400044",
                   "m_produk_code"=> "mn-400044",
                   "m_produk_nama"=> "wedang pedas gobal gabul",
                   "m_produk_urut"=> "001-044",
@@ -8092,6 +8517,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400045",
                   "m_produk_code"=> "mn-400045",
                   "m_produk_nama"=> "kopi hitam es",
                   "m_produk_urut"=> "001-045",
@@ -8111,6 +8537,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400046",
                   "m_produk_code"=> "mn-400046",
                   "m_produk_nama"=> "kopi hitam panas",
                   "m_produk_urut"=> "001-046",
@@ -8130,6 +8557,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400047",
                   "m_produk_code"=> "mn-400047",
                   "m_produk_nama"=> "lemon tea es",
                   "m_produk_urut"=> "001-047",
@@ -8149,6 +8577,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400048",
                   "m_produk_code"=> "mn-400048",
                   "m_produk_nama"=> "lemon tea panas",
                   "m_produk_urut"=> "001-048",
@@ -8168,6 +8597,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400049",
                   "m_produk_code"=> "mn-400049",
                   "m_produk_nama"=> "kopi susu es",
                   "m_produk_urut"=> "001-049",
@@ -8187,6 +8617,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400050",
                   "m_produk_code"=> "mn-400050",
                   "m_produk_nama"=> "kopi susu panas",
                   "m_produk_urut"=> "001-050",
@@ -8206,6 +8637,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400051",
                   "m_produk_code"=> "mn-400051",
                   "m_produk_nama"=> "lemon tea tawar es",
                   "m_produk_urut"=> "001-051",
@@ -8225,6 +8657,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400052",
                   "m_produk_code"=> "mn-400052",
                   "m_produk_nama"=> "lemon tea tawar panas",
                   "m_produk_urut"=> "001-052",
@@ -8244,6 +8677,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400053",
                   "m_produk_code"=> "mn-400053",
                   "m_produk_nama"=> "susu kambing es",
                   "m_produk_urut"=> "001-053",
@@ -8263,6 +8697,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400054",
                   "m_produk_code"=> "mn-400054",
                   "m_produk_nama"=> "susu kambing panas",
                   "m_produk_urut"=> "001-054",
@@ -8282,6 +8717,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400055",
                   "m_produk_code"=> "mn-400055",
                   "m_produk_nama"=> "teh tarik es",
                   "m_produk_urut"=> "001-055",
@@ -8301,6 +8737,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400056",
                   "m_produk_code"=> "mn-400056",
                   "m_produk_nama"=> "teh tarik panas",
                   "m_produk_urut"=> "001-056",
@@ -8320,6 +8757,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400057",
                   "m_produk_code"=> "mn-400057",
                   "m_produk_nama"=> "milo es",
                   "m_produk_urut"=> "001-057",
@@ -8339,6 +8777,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400058",
                   "m_produk_code"=> "mn-400058",
                   "m_produk_nama"=> "milo panas",
                   "m_produk_urut"=> "001-058",
@@ -8358,6 +8797,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400059",
                   "m_produk_code"=> "mn-400059",
                   "m_produk_nama"=> "buah mix / campur",
                   "m_produk_urut"=> "002-001",
@@ -8377,6 +8817,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400060",
                   "m_produk_code"=> "mn-400060",
                   "m_produk_nama"=> "buah melon",
                   "m_produk_urut"=> "002-002",
@@ -8396,6 +8837,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400061",
                   "m_produk_code"=> "mn-400061",
                   "m_produk_nama"=> "buah nanas",
                   "m_produk_urut"=> "002-003",
@@ -8415,6 +8857,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400062",
                   "m_produk_code"=> "mn-400062",
                   "m_produk_nama"=> "buah pepaya",
                   "m_produk_urut"=> "002-004",
@@ -8434,6 +8877,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400063",
                   "m_produk_code"=> "mn-400063",
                   "m_produk_nama"=> "buah semangka",
                   "m_produk_urut"=> "002-005",
@@ -8453,6 +8897,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400064",
                   "m_produk_code"=> "mn-400064",
                   "m_produk_nama"=> "sambal bajak",
                   "m_produk_urut"=> "003-001",
@@ -8472,6 +8917,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400065",
                   "m_produk_code"=> "mn-400065",
                   "m_produk_nama"=> "sambal bawang",
                   "m_produk_urut"=> "003-002",
@@ -8491,6 +8937,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400066",
                   "m_produk_code"=> "mn-400066",
                   "m_produk_nama"=> "sambal bawang bakar",
                   "m_produk_urut"=> "003-003",
@@ -8510,6 +8957,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400067",
                   "m_produk_code"=> "mn-400067",
                   "m_produk_nama"=> "sambal bawang goreng",
                   "m_produk_urut"=> "003-004",
@@ -8529,6 +8977,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400068",
                   "m_produk_code"=> "mn-400068",
                   "m_produk_nama"=> "sambal bawang lombok ijo",
                   "m_produk_urut"=> "003-005",
@@ -8548,6 +8997,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400069",
                   "m_produk_code"=> "mn-400069",
                   "m_produk_nama"=> "sambal bawang tomat",
                   "m_produk_urut"=> "003-006",
@@ -8567,6 +9017,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400070",
                   "m_produk_code"=> "mn-400070",
                   "m_produk_nama"=> "sambal belut",
                   "m_produk_urut"=> "003-007",
@@ -8586,6 +9037,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400071",
                   "m_produk_code"=> "mn-400071",
                   "m_produk_nama"=> "sambal gobal-gabul",
                   "m_produk_urut"=> "003-008",
@@ -8605,6 +9057,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400072",
                   "m_produk_code"=> "mn-400072",
                   "m_produk_nama"=> "sambal kecap",
                   "m_produk_urut"=> "003-009",
@@ -8624,6 +9077,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400073",
                   "m_produk_code"=> "mn-400073",
                   "m_produk_nama"=> "sambal mangga muda",
                   "m_produk_urut"=> "003-010",
@@ -8643,6 +9097,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400074",
                   "m_produk_code"=> "mn-400074",
                   "m_produk_nama"=> "sambal nanas",
                   "m_produk_urut"=> "003-011",
@@ -8662,6 +9117,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400075",
                   "m_produk_code"=> "mn-400075",
                   "m_produk_nama"=> "sambal rempelo ati",
                   "m_produk_urut"=> "003-012",
@@ -8681,6 +9137,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400076",
                   "m_produk_code"=> "mn-400076",
                   "m_produk_nama"=> "sambal tahu",
                   "m_produk_urut"=> "003-013",
@@ -8700,6 +9157,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400077",
                   "m_produk_code"=> "mn-400077",
                   "m_produk_nama"=> "sambal tempe",
                   "m_produk_urut"=> "003-014",
@@ -8719,6 +9177,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400078",
                   "m_produk_code"=> "mn-400078",
                   "m_produk_nama"=> "sambal tomat trasi matang",
                   "m_produk_urut"=> "003-015",
@@ -8738,6 +9197,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400079",
                   "m_produk_code"=> "mn-400079",
                   "m_produk_nama"=> "sambal trasi brambang tomat",
                   "m_produk_urut"=> "003-016",
@@ -8757,6 +9217,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400080",
                   "m_produk_code"=> "mn-400080",
                   "m_produk_nama"=> "sambal trasi lombok ijo",
                   "m_produk_urut"=> "003-017",
@@ -8776,6 +9237,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400081",
                   "m_produk_code"=> "mn-400081",
                   "m_produk_nama"=> "sambal trasi matang",
                   "m_produk_urut"=> "003-018",
@@ -8795,6 +9257,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400082",
                   "m_produk_code"=> "mn-400082",
                   "m_produk_nama"=> "sambal trasi segar",
                   "m_produk_urut"=> "003-019",
@@ -8814,6 +9277,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400083",
                   "m_produk_code"=> "mn-400083",
                   "m_produk_nama"=> "sambal trasi tomat segar",
                   "m_produk_urut"=> "003-020",
@@ -8833,6 +9297,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400084",
                   "m_produk_code"=> "mn-400084",
                   "m_produk_nama"=> "sambal bawang brambang goreng",
                   "m_produk_urut"=> "003-021",
@@ -8852,6 +9317,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400085",
                   "m_produk_code"=> "mn-400085",
                   "m_produk_nama"=> "sambal wader",
                   "m_produk_urut"=> "003-022",
@@ -8871,6 +9337,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400086",
                   "m_produk_code"=> "mn-400086",
                   "m_produk_nama"=> "sambal cumi",
                   "m_produk_urut"=> "003-023",
@@ -8890,6 +9357,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400087",
                   "m_produk_code"=> "mn-400087",
                   "m_produk_nama"=> "sambal jamur",
                   "m_produk_urut"=> "003-024",
@@ -8909,6 +9377,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400088",
                   "m_produk_code"=> "mn-400088",
                   "m_produk_nama"=> "sambal pete",
                   "m_produk_urut"=> "003-025",
@@ -8928,6 +9397,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400089",
                   "m_produk_code"=> "mn-400089",
                   "m_produk_nama"=> "sambal terong",
                   "m_produk_urut"=> "003-026",
@@ -8947,6 +9417,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400090",
                   "m_produk_code"=> "mn-400090",
                   "m_produk_nama"=> "sambal udang pedas",
                   "m_produk_urut"=> "003-027",
@@ -8966,6 +9437,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400091",
                   "m_produk_code"=> "mn-400091",
                   "m_produk_nama"=> "sambal jengkol",
                   "m_produk_urut"=> "003-028",
@@ -8985,6 +9457,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400092",
                   "m_produk_code"=> "mn-400092",
                   "m_produk_nama"=> "sambal gongso",
                   "m_produk_urut"=> "003-029",
@@ -9004,6 +9477,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400093",
                   "m_produk_code"=> "mn-400093",
                   "m_produk_nama"=> "sambal gudangan",
                   "m_produk_urut"=> "003-030",
@@ -9023,6 +9497,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400094",
                   "m_produk_code"=> "mn-400094",
                   "m_produk_nama"=> "sambal pecel",
                   "m_produk_urut"=> "003-031",
@@ -9042,6 +9517,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400095",
                   "m_produk_code"=> "mn-400095",
                   "m_produk_nama"=> "sambal plencing",
                   "m_produk_urut"=> "003-032",
@@ -9061,6 +9537,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400096",
                   "m_produk_code"=> "mn-400096",
                   "m_produk_nama"=> "sambal matah",
                   "m_produk_urut"=> "003-033",
@@ -9080,6 +9557,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400097",
                   "m_produk_code"=> "mn-400097",
                   "m_produk_nama"=> "sambal pindang",
                   "m_produk_urut"=> "003-034",
@@ -9099,6 +9577,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400098",
                   "m_produk_code"=> "mn-400098",
                   "m_produk_nama"=> "sambal telur ceplok",
                   "m_produk_urut"=> "003-035",
@@ -9118,6 +9597,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400099",
                   "m_produk_code"=> "mn-400099",
                   "m_produk_nama"=> "sambal masak teri",
                   "m_produk_urut"=> "003-036",
@@ -9137,6 +9617,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400100",
                   "m_produk_code"=> "mn-400100",
                   "m_produk_nama"=> "sambal padang",
                   "m_produk_urut"=> "003-037",
@@ -9156,6 +9637,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400101",
                   "m_produk_code"=> "mn-400101",
                   "m_produk_nama"=> "sambal gongso rempelo ati",
                   "m_produk_urut"=> "003-038",
@@ -9175,6 +9657,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400102",
                   "m_produk_code"=> "mn-400102",
                   "m_produk_nama"=> "sambal mangga muda cs",
                   "m_produk_urut"=> "003-039",
@@ -9194,6 +9677,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400103",
                   "m_produk_code"=> "mn-400103",
                   "m_produk_nama"=> "sambal masak teri cs",
                   "m_produk_urut"=> "003-040",
@@ -9213,6 +9697,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400104",
                   "m_produk_code"=> "mn-400104",
                   "m_produk_nama"=> "sambal cumi cs",
                   "m_produk_urut"=> "003-041",
@@ -9232,6 +9717,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400105",
                   "m_produk_code"=> "mn-400105",
                   "m_produk_nama"=> "sambal jamur cs",
                   "m_produk_urut"=> "003-042",
@@ -9251,6 +9737,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400106",
                   "m_produk_code"=> "mn-400106",
                   "m_produk_nama"=> "sambal pete cs",
                   "m_produk_urut"=> "003-043",
@@ -9270,6 +9757,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400107",
                   "m_produk_code"=> "mn-400107",
                   "m_produk_nama"=> "sambal terong cs",
                   "m_produk_urut"=> "003-044",
@@ -9289,6 +9777,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400108",
                   "m_produk_code"=> "mn-400108",
                   "m_produk_nama"=> "sambal udang pedas cs",
                   "m_produk_urut"=> "003-045",
@@ -9308,6 +9797,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400109",
                   "m_produk_code"=> "mn-400109",
                   "m_produk_nama"=> "sambal gongso rempelo ati cs",
                   "m_produk_urut"=> "003-046",
@@ -9327,6 +9817,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400110",
                   "m_produk_code"=> "mn-400110",
                   "m_produk_nama"=> "sambal jengkol cs",
                   "m_produk_urut"=> "003-047",
@@ -9346,6 +9837,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400111",
                   "m_produk_code"=> "mn-400111",
                   "m_produk_nama"=> "sambal bawang jos",
                   "m_produk_urut"=> "003-048",
@@ -9365,6 +9857,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400112",
                   "m_produk_code"=> "mn-400112",
                   "m_produk_nama"=> "sambal nanas cs",
                   "m_produk_urut"=> "003-049",
@@ -9384,6 +9877,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400113",
                   "m_produk_code"=> "mn-400113",
                   "m_produk_nama"=> "sambal gongso cs",
                   "m_produk_urut"=> "003-050",
@@ -9403,6 +9897,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400114",
                   "m_produk_code"=> "mn-400114",
                   "m_produk_nama"=> "ayam negri dada (goreng)",
                   "m_produk_urut"=> "004-001",
@@ -9422,6 +9917,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400115",
                   "m_produk_code"=> "mn-400115",
                   "m_produk_nama"=> "ayam negri dada (bakar)",
                   "m_produk_urut"=> "004-002",
@@ -9441,6 +9937,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400116",
                   "m_produk_code"=> "mn-400116",
                   "m_produk_nama"=> "ayam negri paha (goreng)",
                   "m_produk_urut"=> "004-003",
@@ -9460,6 +9957,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400117",
                   "m_produk_code"=> "mn-400117",
                   "m_produk_nama"=> "ayam negri paha (bakar)",
                   "m_produk_urut"=> "004-004",
@@ -9479,6 +9977,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400118",
                   "m_produk_code"=> "mn-400118",
                   "m_produk_nama"=> "ayam kampung paha (goreng)",
                   "m_produk_urut"=> "004-005",
@@ -9498,6 +9997,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400119",
                   "m_produk_code"=> "mn-400119",
                   "m_produk_nama"=> "ayam kampung paha (bakar)",
                   "m_produk_urut"=> "004-006",
@@ -9517,6 +10017,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400120",
                   "m_produk_code"=> "mn-400120",
                   "m_produk_nama"=> "ayam kampung dada (goreng)",
                   "m_produk_urut"=> "004-007",
@@ -9536,6 +10037,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400121",
                   "m_produk_code"=> "mn-400121",
                   "m_produk_nama"=> "ayam kampung dada (bakar)",
                   "m_produk_urut"=> "004-008",
@@ -9555,6 +10057,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400122",
                   "m_produk_code"=> "mn-400122",
                   "m_produk_nama"=> "bebek paha (goreng)",
                   "m_produk_urut"=> "004-009",
@@ -9574,6 +10077,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400123",
                   "m_produk_code"=> "mn-400123",
                   "m_produk_nama"=> "bebek paha (bakar)",
                   "m_produk_urut"=> "004-010",
@@ -9593,6 +10097,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400124",
                   "m_produk_code"=> "mn-400124",
                   "m_produk_nama"=> "bebek dada (goreng)",
                   "m_produk_urut"=> "004-011",
@@ -9612,6 +10117,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400125",
                   "m_produk_code"=> "mn-400125",
                   "m_produk_nama"=> "bebek dada (bakar)",
                   "m_produk_urut"=> "004-012",
@@ -9631,6 +10137,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400126",
                   "m_produk_code"=> "mn-400126",
                   "m_produk_nama"=> "ikan bawal (goreng)",
                   "m_produk_urut"=> "004-013",
@@ -9650,6 +10157,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400127",
                   "m_produk_code"=> "mn-400127",
                   "m_produk_nama"=> "ikan bawal (bakar)",
                   "m_produk_urut"=> "004-014",
@@ -9669,6 +10177,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400128",
                   "m_produk_code"=> "mn-400128",
                   "m_produk_nama"=> "ikan bandeng (goreng)",
                   "m_produk_urut"=> "004-015",
@@ -9688,6 +10197,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400129",
                   "m_produk_code"=> "mn-400129",
                   "m_produk_nama"=> "ikan bandeng (bakar)",
                   "m_produk_urut"=> "004-016",
@@ -9707,6 +10217,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400130",
                   "m_produk_code"=> "mn-400130",
                   "m_produk_nama"=> "belut sawah polos",
                   "m_produk_urut"=> "004-017",
@@ -9726,6 +10237,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400131",
                   "m_produk_code"=> "mn-400131",
                   "m_produk_nama"=> "cumi tepung (goreng)",
                   "m_produk_urut"=> "004-018",
@@ -9745,6 +10257,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400132",
                   "m_produk_code"=> "mn-400132",
                   "m_produk_nama"=> "ikan gabus asin (goreng)",
                   "m_produk_urut"=> "004-019",
@@ -9764,6 +10277,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400133",
                   "m_produk_code"=> "mn-400133",
                   "m_produk_nama"=> "ikan gabus asin (bakar)",
                   "m_produk_urut"=> "004-020",
@@ -9783,6 +10297,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400134",
                   "m_produk_code"=> "mn-400134",
                   "m_produk_nama"=> "ikan gurame (goreng)",
                   "m_produk_urut"=> "004-021",
@@ -9802,6 +10317,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400135",
                   "m_produk_code"=> "mn-400135",
                   "m_produk_nama"=> "ikan gurame (bakar)",
                   "m_produk_urut"=> "004-022",
@@ -9821,6 +10337,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400136",
                   "m_produk_code"=> "mn-400136",
                   "m_produk_nama"=> "jambal asin",
                   "m_produk_urut"=> "004-023",
@@ -9840,6 +10357,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400137",
                   "m_produk_code"=> "mn-400137",
                   "m_produk_nama"=> "ikan lele (goreng)",
                   "m_produk_urut"=> "004-024",
@@ -9859,6 +10377,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400138",
                   "m_produk_code"=> "mn-400138",
                   "m_produk_nama"=> "ikan lele (bakar)",
                   "m_produk_urut"=> "004-025",
@@ -9878,6 +10397,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400139",
                   "m_produk_code"=> "mn-400139",
                   "m_produk_nama"=> "ikan lele tepung (goreng)",
                   "m_produk_urut"=> "004-026",
@@ -9897,6 +10417,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400140",
                   "m_produk_code"=> "mn-400140",
                   "m_produk_nama"=> "ikan lele tepung (bakar)",
                   "m_produk_urut"=> "004-027",
@@ -9916,6 +10437,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400141",
                   "m_produk_code"=> "mn-400141",
                   "m_produk_nama"=> "ikan nila (goreng)",
                   "m_produk_urut"=> "004-028",
@@ -9935,6 +10457,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400142",
                   "m_produk_code"=> "mn-400142",
                   "m_produk_nama"=> "ikan nila (bakar)",
                   "m_produk_urut"=> "004-029",
@@ -9954,6 +10477,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400143",
                   "m_produk_code"=> "mn-400143",
                   "m_produk_nama"=> "ikan pindang (goreng)",
                   "m_produk_urut"=> "004-030",
@@ -9973,6 +10497,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400144",
                   "m_produk_code"=> "mn-400144",
                   "m_produk_nama"=> "ikan pindang (bakar)",
                   "m_produk_urut"=> "004-031",
@@ -9992,6 +10517,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400145",
                   "m_produk_code"=> "mn-400145",
                   "m_produk_nama"=> "udang tepung (goreng)",
                   "m_produk_urut"=> "004-032",
@@ -10011,6 +10537,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400146",
                   "m_produk_code"=> "mn-400146",
                   "m_produk_nama"=> "ikan wader",
                   "m_produk_urut"=> "004-033",
@@ -10030,6 +10557,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400147",
                   "m_produk_code"=> "mn-400147",
                   "m_produk_nama"=> "babat sapi (goreng)",
                   "m_produk_urut"=> "004-034",
@@ -10049,6 +10577,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400148",
                   "m_produk_code"=> "mn-400148",
                   "m_produk_nama"=> "babat sapi (bakar)",
                   "m_produk_urut"=> "004-035",
@@ -10068,6 +10597,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400149",
                   "m_produk_code"=> "mn-400149",
                   "m_produk_nama"=> "iga sapi (goreng)",
                   "m_produk_urut"=> "004-036",
@@ -10087,6 +10617,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400150",
                   "m_produk_code"=> "mn-400150",
                   "m_produk_nama"=> "iga sapi (bakar)",
                   "m_produk_urut"=> "004-037",
@@ -10106,6 +10637,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400151",
                   "m_produk_code"=> "mn-400151",
                   "m_produk_nama"=> "iso sapi (goreng)",
                   "m_produk_urut"=> "004-038",
@@ -10125,6 +10657,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400152",
                   "m_produk_code"=> "mn-400152",
                   "m_produk_nama"=> "iso sapi (bakar)",
                   "m_produk_urut"=> "004-039",
@@ -10144,6 +10677,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400153",
                   "m_produk_code"=> "mn-400153",
                   "m_produk_nama"=> "paru sapi (goreng)",
                   "m_produk_urut"=> "004-040",
@@ -10163,6 +10697,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400154",
                   "m_produk_code"=> "mn-400154",
                   "m_produk_nama"=> "paru sapi (bakar)",
                   "m_produk_urut"=> "004-041",
@@ -10182,6 +10717,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400155",
                   "m_produk_code"=> "mn-400155",
                   "m_produk_nama"=> "daging sapi (goreng)",
                   "m_produk_urut"=> "004-042",
@@ -10201,6 +10737,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400156",
                   "m_produk_code"=> "mn-400156",
                   "m_produk_nama"=> "daging sapi (bakar)",
                   "m_produk_urut"=> "004-043",
@@ -10220,6 +10757,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400157",
                   "m_produk_code"=> "mn-400157",
                   "m_produk_nama"=> "jamur tepung",
                   "m_produk_urut"=> "004-044",
@@ -10239,6 +10777,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400158",
                   "m_produk_code"=> "mn-400158",
                   "m_produk_nama"=> "perkedel ayam (goreng)",
                   "m_produk_urut"=> "004-045",
@@ -10258,6 +10797,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400159",
                   "m_produk_code"=> "mn-400159",
                   "m_produk_nama"=> "perkedel ayam (bakar)",
                   "m_produk_urut"=> "004-046",
@@ -10277,6 +10817,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400160",
                   "m_produk_code"=> "mn-400160",
                   "m_produk_nama"=> "rempelo ati (goreng)",
                   "m_produk_urut"=> "004-047",
@@ -10296,6 +10837,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400161",
                   "m_produk_code"=> "mn-400161",
                   "m_produk_nama"=> "rempelo ati (bakar)",
                   "m_produk_urut"=> "004-048",
@@ -10315,6 +10857,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400162",
                   "m_produk_code"=> "mn-400162",
                   "m_produk_nama"=> "tahu (goreng)",
                   "m_produk_urut"=> "004-049",
@@ -10334,6 +10877,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400163",
                   "m_produk_code"=> "mn-400163",
                   "m_produk_nama"=> "tahu (bakar)",
                   "m_produk_urut"=> "004-050",
@@ -10353,6 +10897,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400164",
                   "m_produk_code"=> "mn-400164",
                   "m_produk_nama"=> "telur ceplok (goreng)",
                   "m_produk_urut"=> "004-051",
@@ -10372,6 +10917,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400165",
                   "m_produk_code"=> "mn-400165",
                   "m_produk_nama"=> "telur ceplok (bakar)",
                   "m_produk_urut"=> "004-052",
@@ -10391,6 +10937,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400166",
                   "m_produk_code"=> "mn-400166",
                   "m_produk_nama"=> "telur dadar biasa (goreng)",
                   "m_produk_urut"=> "004-053",
@@ -10410,6 +10957,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400167",
                   "m_produk_code"=> "mn-400167",
                   "m_produk_nama"=> "telur dadar biasa (bakar)",
                   "m_produk_urut"=> "004-054",
@@ -10429,6 +10977,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400168",
                   "m_produk_code"=> "mn-400168",
                   "m_produk_nama"=> "telur dadar gobal-gabul (goreng)",
                   "m_produk_urut"=> "004-055",
@@ -10448,6 +10997,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400169",
                   "m_produk_code"=> "mn-400169",
                   "m_produk_nama"=> "telur dadar gobal-gabul (bakar)",
                   "m_produk_urut"=> "004-056",
@@ -10467,6 +11017,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400170",
                   "m_produk_code"=> "mn-400170",
                   "m_produk_nama"=> "tempe (goreng)",
                   "m_produk_urut"=> "004-057",
@@ -10486,6 +11037,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400171",
                   "m_produk_code"=> "mn-400171",
                   "m_produk_nama"=> "tempe (bakar)",
                   "m_produk_urut"=> "004-058",
@@ -10505,6 +11057,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400172",
                   "m_produk_code"=> "mn-400172",
                   "m_produk_nama"=> "tempe tepung (goreng)",
                   "m_produk_urut"=> "004-059",
@@ -10524,6 +11077,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400173",
                   "m_produk_code"=> "mn-400173",
                   "m_produk_nama"=> "tempe tepung (bakar)",
                   "m_produk_urut"=> "004-060",
@@ -10543,6 +11097,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400174",
                   "m_produk_code"=> "mn-400174",
                   "m_produk_nama"=> "tahu tempe (goreng)",
                   "m_produk_urut"=> "004-061",
@@ -10562,6 +11117,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400175",
                   "m_produk_code"=> "mn-400175",
                   "m_produk_nama"=> "tahu tempe (bakar)",
                   "m_produk_urut"=> "004-062",
@@ -10581,6 +11137,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400176",
                   "m_produk_code"=> "mn-400176",
                   "m_produk_nama"=> "kulit ayam (goreng)",
                   "m_produk_urut"=> "004-063",
@@ -10600,6 +11157,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400177",
                   "m_produk_code"=> "mn-400177",
                   "m_produk_nama"=> "kulit ayam (bakar)",
                   "m_produk_urut"=> "004-064",
@@ -10619,6 +11177,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400178",
                   "m_produk_code"=> "mn-400178",
                   "m_produk_nama"=> "teri goreng",
                   "m_produk_urut"=> "004-065",
@@ -10638,6 +11197,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400179",
                   "m_produk_code"=> "mn-400179",
                   "m_produk_nama"=> "perkedel ayam (goreng) cs",
                   "m_produk_urut"=> "004-066",
@@ -10657,6 +11217,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400180",
                   "m_produk_code"=> "mn-400180",
                   "m_produk_nama"=> "perkedel ayam (bakar) cs",
                   "m_produk_urut"=> "004-067",
@@ -10676,6 +11237,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400181",
                   "m_produk_code"=> "mn-400181",
                   "m_produk_nama"=> "kulit ayam tepung",
                   "m_produk_urut"=> "004-068",
@@ -10695,6 +11257,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400182",
                   "m_produk_code"=> "mn-400182",
                   "m_produk_nama"=> "belut goreng tepung ",
                   "m_produk_urut"=> "004-069",
@@ -10714,6 +11277,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400183",
                   "m_produk_code"=> "mn-400183",
                   "m_produk_nama"=> "ayam pedas gobal gabul",
                   "m_produk_urut"=> "004-070",
@@ -10733,6 +11297,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400184",
                   "m_produk_code"=> "mn-400184",
                   "m_produk_nama"=> "ayam goreng dada krispy",
                   "m_produk_urut"=> "004-071",
@@ -10752,6 +11317,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400185",
                   "m_produk_code"=> "mn-400185",
                   "m_produk_nama"=> "ayam goreng paha krispy",
                   "m_produk_urut"=> "004-072",
@@ -10771,6 +11337,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400186",
                   "m_produk_code"=> "mn-400186",
                   "m_produk_nama"=> "tahu gobal-gabul",
                   "m_produk_urut"=> "004-073",
@@ -10790,6 +11357,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400187",
                   "m_produk_code"=> "mn-400187",
                   "m_produk_nama"=> "tahu gobal-gabul cs",
                   "m_produk_urut"=> "004-074",
@@ -10809,6 +11377,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400188",
                   "m_produk_code"=> "mn-400188",
                   "m_produk_nama"=> "ayam negri dada (bakar pedas)",
                   "m_produk_urut"=> "004-075",
@@ -10828,6 +11397,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400189",
                   "m_produk_code"=> "mn-400189",
                   "m_produk_nama"=> "ayam negri paha (bakar pedas)",
                   "m_produk_urut"=> "004-076",
@@ -10847,6 +11417,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400190",
                   "m_produk_code"=> "mn-400190",
                   "m_produk_nama"=> "ayam kampung paha (bakar pedas)",
                   "m_produk_urut"=> "004-077",
@@ -10866,6 +11437,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400191",
                   "m_produk_code"=> "mn-400191",
                   "m_produk_nama"=> "ayam kampung dada (bakar pedas)",
                   "m_produk_urut"=> "004-078",
@@ -10885,6 +11457,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400192",
                   "m_produk_code"=> "mn-400192",
                   "m_produk_nama"=> "bebek paha (bakar pedas)",
                   "m_produk_urut"=> "004-079",
@@ -10904,6 +11477,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400193",
                   "m_produk_code"=> "mn-400193",
                   "m_produk_nama"=> "bebek dada (bakar pedas)",
                   "m_produk_urut"=> "004-080",
@@ -10923,6 +11497,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400194",
                   "m_produk_code"=> "mn-400194",
                   "m_produk_nama"=> "ikan bawal (bakar pedas)",
                   "m_produk_urut"=> "004-081",
@@ -10942,6 +11517,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400195",
                   "m_produk_code"=> "mn-400195",
                   "m_produk_nama"=> "ikan bandeng (bakar pedas)",
                   "m_produk_urut"=> "004-082",
@@ -10961,6 +11537,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400196",
                   "m_produk_code"=> "mn-400196",
                   "m_produk_nama"=> "ikan gabus asin (bakar pedas)",
                   "m_produk_urut"=> "004-083",
@@ -10980,6 +11557,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400197",
                   "m_produk_code"=> "mn-400197",
                   "m_produk_nama"=> "ikan gurame (bakar pedas)",
                   "m_produk_urut"=> "004-084",
@@ -10999,6 +11577,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400198",
                   "m_produk_code"=> "mn-400198",
                   "m_produk_nama"=> "ikan lele (bakar pedas)",
                   "m_produk_urut"=> "004-085",
@@ -11018,6 +11597,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400199",
                   "m_produk_code"=> "mn-400199",
                   "m_produk_nama"=> "ikan lele tepung (bakar pedas)",
                   "m_produk_urut"=> "004-086",
@@ -11037,6 +11617,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400200",
                   "m_produk_code"=> "mn-400200",
                   "m_produk_nama"=> "ikan nila (bakar pedas)",
                   "m_produk_urut"=> "004-087",
@@ -11056,6 +11637,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400201",
                   "m_produk_code"=> "mn-400201",
                   "m_produk_nama"=> "ikan pindang (bakar pedas)",
                   "m_produk_urut"=> "004-088",
@@ -11075,6 +11657,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400202",
                   "m_produk_code"=> "mn-400202",
                   "m_produk_nama"=> "babat sapi (bakar pedas)",
                   "m_produk_urut"=> "004-089",
@@ -11094,6 +11677,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400203",
                   "m_produk_code"=> "mn-400203",
                   "m_produk_nama"=> "iga sapi (bakar pedas)",
                   "m_produk_urut"=> "004-090",
@@ -11113,6 +11697,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400204",
                   "m_produk_code"=> "mn-400204",
                   "m_produk_nama"=> "iso sapi (bakar pedas)",
                   "m_produk_urut"=> "004-091",
@@ -11132,6 +11717,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400205",
                   "m_produk_code"=> "mn-400205",
                   "m_produk_nama"=> "paru sapi (bakar pedas)",
                   "m_produk_urut"=> "004-092",
@@ -11151,6 +11737,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400206",
                   "m_produk_code"=> "mn-400206",
                   "m_produk_nama"=> "daging sapi (bakar pedas)",
                   "m_produk_urut"=> "004-093",
@@ -11170,6 +11757,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400207",
                   "m_produk_code"=> "mn-400207",
                   "m_produk_nama"=> "perkedel ayam (bakar pedas)",
                   "m_produk_urut"=> "004-094",
@@ -11189,6 +11777,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400208",
                   "m_produk_code"=> "mn-400208",
                   "m_produk_nama"=> "rempelo ati (bakar pedas)",
                   "m_produk_urut"=> "004-095",
@@ -11208,6 +11797,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400209",
                   "m_produk_code"=> "mn-400209",
                   "m_produk_nama"=> "tahu (bakar pedas)",
                   "m_produk_urut"=> "004-096",
@@ -11227,6 +11817,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400210",
                   "m_produk_code"=> "mn-400210",
                   "m_produk_nama"=> "telur ceplok (bakar pedas)",
                   "m_produk_urut"=> "004-097",
@@ -11246,6 +11837,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400211",
                   "m_produk_code"=> "mn-400211",
                   "m_produk_nama"=> "telur dadar biasa (bakar pedas)",
                   "m_produk_urut"=> "004-098",
@@ -11265,6 +11857,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400212",
                   "m_produk_code"=> "mn-400212",
                   "m_produk_nama"=> "telur dadar gobal-gabul (bakar pedas)",
                   "m_produk_urut"=> "004-099",
@@ -11284,6 +11877,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400213",
                   "m_produk_code"=> "mn-400213",
                   "m_produk_nama"=> "tempe (bakar pedas)",
                   "m_produk_urut"=> "004-100",
@@ -11303,6 +11897,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400214",
                   "m_produk_code"=> "mn-400214",
                   "m_produk_nama"=> "tempe tepung (bakar pedas)",
                   "m_produk_urut"=> "004-101",
@@ -11322,6 +11917,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400215",
                   "m_produk_code"=> "mn-400215",
                   "m_produk_nama"=> "tahu tempe (bakar pedas)",
                   "m_produk_urut"=> "004-102",
@@ -11341,6 +11937,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400216",
                   "m_produk_code"=> "mn-400216",
                   "m_produk_nama"=> "kulit ayam (bakar pedas)",
                   "m_produk_urut"=> "004-103",
@@ -11360,6 +11957,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400217",
                   "m_produk_code"=> "mn-400217",
                   "m_produk_nama"=> "perkedel ayam (bakar pedas) cs",
                   "m_produk_urut"=> "004-104",
@@ -11379,6 +11977,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400218",
                   "m_produk_code"=> "mn-400218",
                   "m_produk_nama"=> "ca jamur",
                   "m_produk_urut"=> "005-001",
@@ -11398,6 +11997,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400219",
                   "m_produk_code"=> "mn-400219",
                   "m_produk_nama"=> "gudangan",
                   "m_produk_urut"=> "005-002",
@@ -11417,6 +12017,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400220",
                   "m_produk_code"=> "mn-400220",
                   "m_produk_nama"=> "ca kangkung",
                   "m_produk_urut"=> "005-003",
@@ -11436,6 +12037,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400221",
                   "m_produk_code"=> "mn-400221",
                   "m_produk_nama"=> "tumis kangkung",
                   "m_produk_urut"=> "005-004",
@@ -11455,6 +12057,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400222",
                   "m_produk_code"=> "mn-400222",
                   "m_produk_nama"=> "karedok",
                   "m_produk_urut"=> "005-005",
@@ -11474,6 +12077,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400223",
                   "m_produk_code"=> "mn-400223",
                   "m_produk_nama"=> "lalapan",
                   "m_produk_urut"=> "005-006",
@@ -11493,6 +12097,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400224",
                   "m_produk_code"=> "mn-400224",
                   "m_produk_nama"=> "pecel",
                   "m_produk_urut"=> "005-007",
@@ -11512,6 +12117,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400225",
                   "m_produk_code"=> "mn-400225",
                   "m_produk_nama"=> "pete goreng",
                   "m_produk_urut"=> "005-008",
@@ -11531,6 +12137,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400226",
                   "m_produk_code"=> "mn-400226",
                   "m_produk_nama"=> "plencing jawa",
                   "m_produk_urut"=> "005-009",
@@ -11550,6 +12157,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400227",
                   "m_produk_code"=> "mn-400227",
                   "m_produk_nama"=> "sayur asem",
                   "m_produk_urut"=> "005-010",
@@ -11569,6 +12177,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400228",
                   "m_produk_code"=> "mn-400228",
                   "m_produk_nama"=> "ca tauge",
                   "m_produk_urut"=> "005-011",
@@ -11588,6 +12197,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400229",
                   "m_produk_code"=> "mn-400229",
                   "m_produk_nama"=> "tumis tauge",
                   "m_produk_urut"=> "005-012",
@@ -11607,6 +12217,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400230",
                   "m_produk_code"=> "mn-400230",
                   "m_produk_nama"=> "terong goreng",
                   "m_produk_urut"=> "005-013",
@@ -11626,6 +12237,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400231",
                   "m_produk_code"=> "mn-400231",
                   "m_produk_nama"=> "trancam",
                   "m_produk_urut"=> "005-014",
@@ -11645,6 +12257,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400232",
                   "m_produk_code"=> "mn-400232",
                   "m_produk_nama"=> "tumis terong",
                   "m_produk_urut"=> "005-015",
@@ -11664,6 +12277,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400233",
                   "m_produk_code"=> "mn-400233",
                   "m_produk_nama"=> "kobis goreng",
                   "m_produk_urut"=> "005-016",
@@ -11683,6 +12297,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400234",
                   "m_produk_code"=> "mn-400234",
                   "m_produk_nama"=> "tumis jengkol",
                   "m_produk_urut"=> "005-017",
@@ -11702,6 +12317,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400235",
                   "m_produk_code"=> "mn-400235",
                   "m_produk_nama"=> "tumis jamur",
                   "m_produk_urut"=> "005-018",
@@ -11721,6 +12337,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400236",
                   "m_produk_code"=> "mn-400236",
                   "m_produk_nama"=> "daun singkong pedas",
                   "m_produk_urut"=> "005-019",
@@ -11740,6 +12357,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400237",
                   "m_produk_code"=> "mn-400237",
                   "m_produk_nama"=> "kobis goreng tepung",
                   "m_produk_urut"=> "005-020",
@@ -11759,6 +12377,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400238",
                   "m_produk_code"=> "mn-400238",
                   "m_produk_nama"=> "kemangi goreng tepung",
                   "m_produk_urut"=> "005-021",
@@ -11778,6 +12397,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400239",
                   "m_produk_code"=> "mn-400239",
                   "m_produk_nama"=> "ca jamur cs",
                   "m_produk_urut"=> "005-022",
@@ -11797,6 +12417,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400240",
                   "m_produk_code"=> "mn-400240",
                   "m_produk_nama"=> "gudangan cs",
                   "m_produk_urut"=> "005-023",
@@ -11816,6 +12437,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400241",
                   "m_produk_code"=> "mn-400241",
                   "m_produk_nama"=> "ca kangkung cs",
                   "m_produk_urut"=> "005-024",
@@ -11835,6 +12457,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400242",
                   "m_produk_code"=> "mn-400242",
                   "m_produk_nama"=> "tumis kangkung cs",
                   "m_produk_urut"=> "005-025",
@@ -11854,6 +12477,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400243",
                   "m_produk_code"=> "mn-400243",
                   "m_produk_nama"=> "pecel cs",
                   "m_produk_urut"=> "005-026",
@@ -11873,6 +12497,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400244",
                   "m_produk_code"=> "mn-400244",
                   "m_produk_nama"=> "plencing jawa cs",
                   "m_produk_urut"=> "005-027",
@@ -11892,6 +12517,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400245",
                   "m_produk_code"=> "mn-400245",
                   "m_produk_nama"=> "ca tauge cs",
                   "m_produk_urut"=> "005-028",
@@ -11911,6 +12537,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400246",
                   "m_produk_code"=> "mn-400246",
                   "m_produk_nama"=> "tumis tauge cs",
                   "m_produk_urut"=> "005-029",
@@ -11930,6 +12557,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400247",
                   "m_produk_code"=> "mn-400247",
                   "m_produk_nama"=> "trancam cs",
                   "m_produk_urut"=> "005-030",
@@ -11949,6 +12577,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400248",
                   "m_produk_code"=> "mn-400248",
                   "m_produk_nama"=> "kobis goreng cs",
                   "m_produk_urut"=> "005-031",
@@ -11968,6 +12597,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400249",
                   "m_produk_code"=> "mn-400249",
                   "m_produk_nama"=> "tumis jamur cs",
                   "m_produk_urut"=> "005-032",
@@ -11987,6 +12617,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400250",
                   "m_produk_code"=> "mn-400250",
                   "m_produk_nama"=> "karedok cs",
                   "m_produk_urut"=> "005-033",
@@ -12006,6 +12637,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400251",
                   "m_produk_code"=> "mn-400251",
                   "m_produk_nama"=> "ca telur ",
                   "m_produk_urut"=> "005-034",
@@ -12025,6 +12657,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400252",
                   "m_produk_code"=> "mn-400252",
                   "m_produk_nama"=> "ca buncis",
                   "m_produk_urut"=> "005-035",
@@ -12044,6 +12677,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400253",
                   "m_produk_code"=> "mn-400253",
                   "m_produk_nama"=> "tumis buncis",
                   "m_produk_urut"=> "005-036",
@@ -12063,6 +12697,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400254",
                   "m_produk_code"=> "mn-400254",
                   "m_produk_nama"=> "ca buncis cs",
                   "m_produk_urut"=> "005-037",
@@ -12082,6 +12717,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400255",
                   "m_produk_code"=> "mn-400255",
                   "m_produk_nama"=> "tumis buncis cs",
                   "m_produk_urut"=> "005-038",
@@ -12101,6 +12737,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400256",
                   "m_produk_code"=> "mn-400256",
                   "m_produk_nama"=> "tumis terong cs",
                   "m_produk_urut"=> "005-039",
@@ -12120,6 +12757,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400257",
                   "m_produk_code"=> "mn-400257",
                   "m_produk_nama"=> "tumis jengkol cs",
                   "m_produk_urut"=> "005-040",
@@ -12139,6 +12777,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400258",
                   "m_produk_code"=> "mn-400258",
                   "m_produk_nama"=> "daun singkong pedas cs",
                   "m_produk_urut"=> "005-041",
@@ -12158,6 +12797,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400259",
                   "m_produk_code"=> "mn-400259",
                   "m_produk_nama"=> "ca telur cs",
                   "m_produk_urut"=> "005-042",
@@ -12177,6 +12817,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400260",
                   "m_produk_code"=> "mn-400260",
                   "m_produk_nama"=> "nasi putih (per orang)",
                   "m_produk_urut"=> "006-001",
@@ -12196,6 +12837,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400261",
                   "m_produk_code"=> "mn-400261",
                   "m_produk_nama"=> "nasi putih (cething)",
                   "m_produk_urut"=> "006-002",
@@ -12215,6 +12857,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400262",
                   "m_produk_code"=> "mn-400262",
                   "m_produk_nama"=> "paket ayam telur gobal gabul",
                   "m_produk_urut"=> "007-001",
@@ -12234,6 +12877,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400263",
                   "m_produk_code"=> "mn-400263",
                   "m_produk_nama"=> "paket lele sambal tomat",
                   "m_produk_urut"=> "007-002",
@@ -12253,6 +12897,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400264",
                   "m_produk_code"=> "mn-400264",
                   "m_produk_nama"=> "paket nila pedas abis",
                   "m_produk_urut"=> "007-003",
@@ -12272,6 +12917,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400265",
                   "m_produk_code"=> "mn-400265",
                   "m_produk_nama"=> "paket telur dadar tahu sambal kecap",
                   "m_produk_urut"=> "007-004",
@@ -12291,6 +12937,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400266",
                   "m_produk_code"=> "mn-400266",
                   "m_produk_nama"=> "paket pedas gobal-gabul",
                   "m_produk_urut"=> "007-005",
@@ -12310,6 +12957,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400267",
                   "m_produk_code"=> "mn-400267",
                   "m_produk_nama"=> "paket ayam goreng",
                   "m_produk_urut"=> "007-006",
@@ -12329,6 +12977,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400268",
                   "m_produk_code"=> "mn-400268",
                   "m_produk_nama"=> "paket bebek goreng",
                   "m_produk_urut"=> "007-007",
@@ -12348,6 +12997,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400269",
                   "m_produk_code"=> "mn-400269",
                   "m_produk_nama"=> "paket udang goreng",
                   "m_produk_urut"=> "007-008",
@@ -12367,6 +13017,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400270",
                   "m_produk_code"=> "mn-400270",
                   "m_produk_nama"=> "paket lele goreng",
                   "m_produk_urut"=> "007-009",
@@ -12386,6 +13037,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400271",
                   "m_produk_code"=> "mn-400271",
                   "m_produk_nama"=> "paket telur goreng",
                   "m_produk_urut"=> "007-010",
@@ -12405,6 +13057,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400272",
                   "m_produk_code"=> "mn-400272",
                   "m_produk_nama"=> "paket ala carte",
                   "m_produk_urut"=> "007-011",
@@ -12424,6 +13077,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400273",
                   "m_produk_code"=> "mn-400273",
                   "m_produk_nama"=> "paket bakwan goreng",
                   "m_produk_urut"=> "007-012",
@@ -12443,6 +13097,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400274",
                   "m_produk_code"=> "mn-400274",
                   "m_produk_nama"=> "paket tahu kriyuk",
                   "m_produk_urut"=> "007-013",
@@ -12462,6 +13117,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400275",
                   "m_produk_code"=> "mn-400275",
                   "m_produk_nama"=> "paket tempe kriyuk",
                   "m_produk_urut"=> "007-014",
@@ -12481,6 +13137,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400276",
                   "m_produk_code"=> "mn-400276",
                   "m_produk_nama"=> "kerupuk ruwet",
                   "m_produk_urut"=> "009-001",
@@ -12500,6 +13157,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400277",
                   "m_produk_code"=> "mn-400277",
                   "m_produk_nama"=> "kerupuk ikan ss",
                   "m_produk_urut"=> "009-002",
@@ -12519,6 +13177,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400278",
                   "m_produk_code"=> "mn-400278",
                   "m_produk_nama"=> "kerupuk ikan",
                   "m_produk_urut"=> "009-003",
@@ -12538,6 +13197,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400279",
                   "m_produk_code"=> "mn-400279",
                   "m_produk_nama"=> "biaya doss 1",
                   "m_produk_urut"=> "008-001",
@@ -12557,6 +13217,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400280",
                   "m_produk_code"=> "mn-400280",
                   "m_produk_nama"=> "biaya doss 2",
                   "m_produk_urut"=> "008-002",
@@ -12576,6 +13237,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400281",
                   "m_produk_code"=> "mn-400281",
                   "m_produk_nama"=> "le minerale 330 ml",
                   "m_produk_urut"=> "009-004",
@@ -12595,6 +13257,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400282",
                   "m_produk_code"=> "mn-400282",
                   "m_produk_nama"=> "nestle 330 ml",
                   "m_produk_urut"=> "009-005",
@@ -12614,6 +13277,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400283",
                   "m_produk_code"=> "mn-400283",
                   "m_produk_nama"=> "le minerale 600 ml",
                   "m_produk_urut"=> "009-006",
@@ -12633,6 +13297,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400284",
                   "m_produk_code"=> "mn-400284",
                   "m_produk_nama"=> "nestle 600 ml",
                   "m_produk_urut"=> "009-007",
@@ -12652,6 +13317,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400285",
                   "m_produk_code"=> "mn-400285",
                   "m_produk_nama"=> "le minerale 1500ml",
                   "m_produk_urut"=> "009-008",
@@ -12671,6 +13337,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400286",
                   "m_produk_code"=> "mn-400286",
                   "m_produk_nama"=> "nestle 1500 ml",
                   "m_produk_urut"=> "009-009",
@@ -12690,6 +13357,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400287",
                   "m_produk_code"=> "mn-400287",
                   "m_produk_nama"=> "brambang goreng",
                   "m_produk_urut"=> "008-003",
@@ -12709,6 +13377,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400288",
                   "m_produk_code"=> "mn-400288",
                   "m_produk_nama"=> "kuah kaldu sapi",
                   "m_produk_urut"=> "008-004",
@@ -12728,6 +13397,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400289",
                   "m_produk_code"=> "mn-400289",
                   "m_produk_nama"=> "plus tepung",
                   "m_produk_urut"=> "008-005",
@@ -12747,6 +13417,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400290",
                   "m_produk_code"=> "mn-400290",
                   "m_produk_nama"=> "plus bakar",
                   "m_produk_urut"=> "008-006",
@@ -12766,6 +13437,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400291",
                   "m_produk_code"=> "mn-400291",
                   "m_produk_nama"=> "aice chocolate crispy stick 60g",
                   "m_produk_urut"=> "009-010",
@@ -12785,6 +13457,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400292",
                   "m_produk_code"=> "mn-400292",
                   "m_produk_nama"=> "aice chocolate stick 40g",
                   "m_produk_urut"=> "009-011",
@@ -12804,6 +13477,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400293",
                   "m_produk_code"=> "mn-400293",
                   "m_produk_nama"=> "aice mango slush stick 65g",
                   "m_produk_urut"=> "009-012",
@@ -12823,6 +13497,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400294",
                   "m_produk_code"=> "mn-400294",
                   "m_produk_nama"=> "aice milk melon stick 50g",
                   "m_produk_urut"=> "009-013",
@@ -12842,6 +13517,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400295",
                   "m_produk_code"=> "mn-400295",
                   "m_produk_nama"=> "aice mochi vanila",
                   "m_produk_urut"=> "009-014",
@@ -12861,6 +13537,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400296",
                   "m_produk_code"=> "mn-400296",
                   "m_produk_nama"=> "aice nanas stick",
                   "m_produk_urut"=> "009-015",
@@ -12880,6 +13557,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400297",
                   "m_produk_code"=> "mn-400297",
                   "m_produk_nama"=> "aice semangka stick 65g",
                   "m_produk_urut"=> "009-016",
@@ -12899,6 +13577,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400298",
                   "m_produk_code"=> "mn-400298",
                   "m_produk_nama"=> "aice strawberry crispy",
                   "m_produk_urut"=> "009-017",
@@ -12918,6 +13597,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400299",
                   "m_produk_code"=> "mn-400299",
                   "m_produk_nama"=> "aice sweet corn stick 52g",
                   "m_produk_urut"=> "009-018",
@@ -12937,6 +13617,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400300",
                   "m_produk_code"=> "mn-400300",
                   "m_produk_nama"=> "aice mochi chocolate",
                   "m_produk_urut"=> "009-019",
@@ -12956,6 +13637,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400301",
                   "m_produk_code"=> "mn-400301",
                   "m_produk_nama"=> "c.classico blk&wht",
                   "m_produk_urut"=> "009-020",
@@ -12975,6 +13657,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400302",
                   "m_produk_code"=> "mn-400302",
                   "m_produk_nama"=> "feast chocolate",
                   "m_produk_urut"=> "009-021",
@@ -12994,6 +13677,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400303",
                   "m_produk_code"=> "mn-400303",
                   "m_produk_nama"=> "feast vanilla",
                   "m_produk_urut"=> "009-022",
@@ -13013,6 +13697,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400304",
                   "m_produk_code"=> "mn-400304",
                   "m_produk_nama"=> "populaire choco",
                   "m_produk_urut"=> "009-023",
@@ -13032,6 +13717,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400305",
                   "m_produk_code"=> "mn-400305",
                   "m_produk_nama"=> "populaire strwbry",
                   "m_produk_urut"=> "009-024",
@@ -13051,6 +13737,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400306",
                   "m_produk_code"=> "mn-400306",
                   "m_produk_nama"=> "p.pop choco magma",
                   "m_produk_urut"=> "009-025",
@@ -13070,6 +13757,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400307",
                   "m_produk_code"=> "mn-400307",
                   "m_produk_nama"=> "p.pop trico",
                   "m_produk_urut"=> "009-026",
@@ -13089,6 +13777,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400308",
                   "m_produk_code"=> "mn-400308",
                   "m_produk_nama"=> "p.pop banana boat",
                   "m_produk_urut"=> "009-027",
@@ -13108,6 +13797,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400309",
                   "m_produk_code"=> "mn-400309",
                   "m_produk_nama"=> "p.pop rainbow pwr",
                   "m_produk_urut"=> "009-028",
@@ -13127,6 +13817,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400310",
                   "m_produk_code"=> "mn-400310",
                   "m_produk_nama"=> "c.disc chocolate",
                   "m_produk_urut"=> "009-029",
@@ -13146,6 +13837,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400311",
                   "m_produk_code"=> "mn-400311",
                   "m_produk_nama"=> "beras khas ss 5kg",
                   "m_produk_urut"=> "011-001",
@@ -13165,6 +13857,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400312",
                   "m_produk_code"=> "mn-400312",
                   "m_produk_nama"=> "beras khas ss 3kg",
                   "m_produk_urut"=> "011-002",
@@ -13184,6 +13877,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400313",
                   "m_produk_code"=> "mn-400313",
                   "m_produk_nama"=> "beras c4 grade a @5kg",
                   "m_produk_urut"=> "011-003",
@@ -13203,6 +13897,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400314",
                   "m_produk_code"=> "mn-400314",
                   "m_produk_nama"=> "beras c4 grade b @5kg",
                   "m_produk_urut"=> "011-004",
@@ -13222,6 +13917,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400315",
                   "m_produk_code"=> "mn-400315",
                   "m_produk_nama"=> "gula pasir ss @1kg",
                   "m_produk_urut"=> "011-005",
@@ -13241,6 +13937,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400316",
                   "m_produk_code"=> "mn-400316",
                   "m_produk_nama"=> "minyak goreng filma 2ltr",
                   "m_produk_urut"=> "011-006",
@@ -13260,6 +13957,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400317",
                   "m_produk_code"=> "mn-400317",
                   "m_produk_nama"=> "minyak goreng filma 1ltr",
                   "m_produk_urut"=> "011-007",
@@ -13279,6 +13977,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400318",
                   "m_produk_code"=> "mn-400318",
                   "m_produk_nama"=> "minyak goreng sovia 2ltr",
                   "m_produk_urut"=> "011-008",
@@ -13298,6 +13997,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400319",
                   "m_produk_code"=> "mn-400319",
                   "m_produk_nama"=> "minyak goreng sovia 1ltr",
                   "m_produk_urut"=> "011-009",
@@ -13317,6 +14017,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400320",
                   "m_produk_code"=> "mn-400320",
                   "m_produk_nama"=> "minyak goreng sania 1ltr",
                   "m_produk_urut"=> "011-010",
@@ -13336,6 +14037,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400321",
                   "m_produk_code"=> "mn-400321",
                   "m_produk_nama"=> "minyak goreng sania 2ltr",
                   "m_produk_urut"=> "011-011",
@@ -13355,6 +14057,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400322",
                   "m_produk_code"=> "mn-400322",
                   "m_produk_nama"=> "tepung bumbu ss @1/2kg",
                   "m_produk_urut"=> "011-012",
@@ -13374,6 +14077,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400323",
                   "m_produk_code"=> "mn-400323",
                   "m_produk_nama"=> "tepung bumbu ss 1kg",
                   "m_produk_urut"=> "011-013",
@@ -13393,6 +14097,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400324",
                   "m_produk_code"=> "mn-400324",
                   "m_produk_nama"=> "tepung bumbu ss 1/2kg rsl",
                   "m_produk_urut"=> "011-014",
@@ -13412,6 +14117,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400325",
                   "m_produk_code"=> "mn-400325",
                   "m_produk_nama"=> "tepung bumbu ss 1kg rsl",
                   "m_produk_urut"=> "011-015",
@@ -13431,6 +14137,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400326",
                   "m_produk_code"=> "mn-400326",
                   "m_produk_nama"=> "tepung kentang 250 gr",
                   "m_produk_urut"=> "011-016",
@@ -13450,6 +14157,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400327",
                   "m_produk_code"=> "mn-400327",
                   "m_produk_nama"=> "telur ayam 500gr",
                   "m_produk_urut"=> "011-017",
@@ -13469,6 +14177,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400328",
                   "m_produk_code"=> "mn-400328",
                   "m_produk_nama"=> "beras ss cmr @3kg",
                   "m_produk_urut"=> "011-018",
@@ -13488,6 +14197,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400329",
                   "m_produk_code"=> "mn-400329",
                   "m_produk_nama"=> "beras ss cmr @5kg",
                   "m_produk_urut"=> "011-019",
@@ -13507,6 +14217,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400330",
                   "m_produk_code"=> "mn-400330",
                   "m_produk_nama"=> "asem jawa",
                   "m_produk_urut"=> "011-020",
@@ -13526,6 +14237,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400331",
                   "m_produk_code"=> "mn-400331",
                   "m_produk_nama"=> "garam bata",
                   "m_produk_urut"=> "011-021",
@@ -13545,6 +14257,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400332",
                   "m_produk_code"=> "mn-400332",
                   "m_produk_nama"=> "garam refina @250gr",
                   "m_produk_urut"=> "011-022",
@@ -13564,6 +14277,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400333",
                   "m_produk_code"=> "mn-400333",
                   "m_produk_nama"=> "gula jawa 0.5kg",
                   "m_produk_urut"=> "011-023",
@@ -13583,6 +14297,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400334",
                   "m_produk_code"=> "mn-400334",
                   "m_produk_nama"=> "kemiri 100gr",
                   "m_produk_urut"=> "011-024",
@@ -13602,6 +14317,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400335",
                   "m_produk_code"=> "mn-400335",
                   "m_produk_nama"=> "kemiri 250gr",
                   "m_produk_urut"=> "011-025",
@@ -13621,6 +14337,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400336",
                   "m_produk_code"=> "mn-400336",
                   "m_produk_nama"=> "ketumbar 50gr",
                   "m_produk_urut"=> "011-026",
@@ -13640,6 +14357,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400337",
                   "m_produk_code"=> "mn-400337",
                   "m_produk_nama"=> "ketumbar 100gr",
                   "m_produk_urut"=> "011-027",
@@ -13659,6 +14377,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400338",
                   "m_produk_code"=> "mn-400338",
                   "m_produk_nama"=> "merica 50gr",
                   "m_produk_urut"=> "011-028",
@@ -13678,6 +14397,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400339",
                   "m_produk_code"=> "mn-400339",
                   "m_produk_nama"=> "merica 100gr",
                   "m_produk_urut"=> "011-029",
@@ -13697,6 +14417,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400340",
                   "m_produk_code"=> "mn-400340",
                   "m_produk_nama"=> "kecap bango 220ml",
                   "m_produk_urut"=> "011-030",
@@ -13716,6 +14437,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400341",
                   "m_produk_code"=> "mn-400341",
                   "m_produk_nama"=> "kecap gandaria",
                   "m_produk_urut"=> "011-031",
@@ -13735,6 +14457,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400342",
                   "m_produk_code"=> "mn-400342",
                   "m_produk_nama"=> "kecap ss",
                   "m_produk_urut"=> "011-032",
@@ -13754,6 +14477,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400343",
                   "m_produk_code"=> "mn-400343",
                   "m_produk_nama"=> "kecap sedap",
                   "m_produk_urut"=> "011-033",
@@ -13773,6 +14497,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400344",
                   "m_produk_code"=> "mn-400344",
                   "m_produk_nama"=> "kecap abc",
                   "m_produk_urut"=> "011-034",
@@ -13792,6 +14517,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400345",
                   "m_produk_code"=> "mn-400345",
                   "m_produk_nama"=> "kecap indofood",
                   "m_produk_urut"=> "011-035",
@@ -13811,6 +14537,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400346",
                   "m_produk_code"=> "mn-400346",
                   "m_produk_nama"=> "kecap 2 burung",
                   "m_produk_urut"=> "011-036",
@@ -13830,6 +14557,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400347",
                   "m_produk_code"=> "mn-400347",
                   "m_produk_nama"=> "saos tiram",
                   "m_produk_urut"=> "011-037",
@@ -13849,6 +14577,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400348",
                   "m_produk_code"=> "mn-400348",
                   "m_produk_nama"=> "bumbu darbul ss",
                   "m_produk_urut"=> "011-038",
@@ -13868,6 +14597,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400349",
                   "m_produk_code"=> "mn-400349",
                   "m_produk_nama"=> "ajinomoto 100gr",
                   "m_produk_urut"=> "011-039",
@@ -13887,6 +14617,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400350",
                   "m_produk_code"=> "mn-400350",
                   "m_produk_nama"=> "ajinomoto 250gr",
                   "m_produk_urut"=> "011-040",
@@ -13906,6 +14637,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400351",
                   "m_produk_code"=> "mn-400351",
                   "m_produk_nama"=> "royco sapi 100gr",
                   "m_produk_urut"=> "011-041",
@@ -13925,6 +14657,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400352",
                   "m_produk_code"=> "mn-400352",
                   "m_produk_nama"=> "royco ayam 100gr",
                   "m_produk_urut"=> "011-042",
@@ -13944,6 +14677,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400353",
                   "m_produk_code"=> "mn-400353",
                   "m_produk_nama"=> "sambel pecel",
                   "m_produk_urut"=> "011-043",
@@ -13963,6 +14697,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400354",
                   "m_produk_code"=> "mn-400354",
                   "m_produk_nama"=> "bawang merah 10gr",
                   "m_produk_urut"=> "011-044",
@@ -13982,6 +14717,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400355",
                   "m_produk_code"=> "mn-400355",
                   "m_produk_nama"=> "bawang putih 10gr",
                   "m_produk_urut"=> "011-045",
@@ -14001,6 +14737,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400356",
                   "m_produk_code"=> "mn-400356",
                   "m_produk_nama"=> "wedang pedas",
                   "m_produk_urut"=> "011-046",
@@ -14020,6 +14757,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400357",
                   "m_produk_code"=> "mn-400357",
                   "m_produk_nama"=> "ramuan teh ss",
                   "m_produk_urut"=> "011-047",
@@ -14039,6 +14777,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400358",
                   "m_produk_code"=> "mn-400358",
                   "m_produk_nama"=> "super goat",
                   "m_produk_urut"=> "011-048",
@@ -14058,6 +14797,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400359",
                   "m_produk_code"=> "mn-400359",
                   "m_produk_nama"=> "kopi hitam",
                   "m_produk_urut"=> "011-049",
@@ -14077,6 +14817,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400360",
                   "m_produk_code"=> "mn-400360",
                   "m_produk_nama"=> "cokless",
                   "m_produk_urut"=> "011-050",
@@ -14096,6 +14837,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400361",
                   "m_produk_code"=> "mn-400361",
                   "m_produk_nama"=> "etta goat milk",
                   "m_produk_urut"=> "011-051",
@@ -14115,6 +14857,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400362",
                   "m_produk_code"=> "mn-400362",
                   "m_produk_nama"=> "susuka",
                   "m_produk_urut"=> "011-052",
@@ -14134,6 +14877,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400363",
                   "m_produk_code"=> "mn-400363",
                   "m_produk_nama"=> "indomie rebus ayam bawang",
                   "m_produk_urut"=> "011-053",
@@ -14153,6 +14897,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400364",
                   "m_produk_code"=> "mn-400364",
                   "m_produk_nama"=> "indomie rebus ayam spesial",
                   "m_produk_urut"=> "011-054",
@@ -14172,6 +14917,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400365",
                   "m_produk_code"=> "mn-400365",
                   "m_produk_nama"=> "indomie rebus soto",
                   "m_produk_urut"=> "011-055",
@@ -14191,6 +14937,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400366",
                   "m_produk_code"=> "mn-400366",
                   "m_produk_nama"=> "indomie rebus kari",
                   "m_produk_urut"=> "011-056",
@@ -14210,6 +14957,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400367",
                   "m_produk_code"=> "mn-400367",
                   "m_produk_nama"=> "indomie goreng ayam",
                   "m_produk_urut"=> "011-057",
@@ -14229,6 +14977,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400368",
                   "m_produk_code"=> "mn-400368",
                   "m_produk_nama"=> "indomie goreng hype abis",
                   "m_produk_urut"=> "011-058",
@@ -14248,6 +14997,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400369",
                   "m_produk_code"=> "mn-400369",
                   "m_produk_nama"=> "indomie goreng ayam geprek",
                   "m_produk_urut"=> "011-059",
@@ -14267,6 +15017,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400370",
                   "m_produk_code"=> "mn-400370",
                   "m_produk_nama"=> "indomie goreng rendang",
                   "m_produk_urut"=> "011-060",
@@ -14286,6 +15037,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400371",
                   "m_produk_code"=> "mn-400371",
                   "m_produk_nama"=> "propolis hjr 10ml",
                   "m_produk_urut"=> "011-061",
@@ -14305,6 +15057,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400372",
                   "m_produk_code"=> "mn-400372",
                   "m_produk_nama"=> "lemon c ss 250ml",
                   "m_produk_urut"=> "011-062",
@@ -14324,6 +15077,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400373",
                   "m_produk_code"=> "mn-400373",
                   "m_produk_nama"=> "madu ss 500ml",
                   "m_produk_urut"=> "011-063",
@@ -14343,6 +15097,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400374",
                   "m_produk_code"=> "mn-400374",
                   "m_produk_nama"=> "madu ss 250ml",
                   "m_produk_urut"=> "011-064",
@@ -14362,6 +15117,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400375",
                   "m_produk_code"=> "mn-400375",
                   "m_produk_nama"=> "alanabi",
                   "m_produk_urut"=> "011-065",
@@ -14381,6 +15137,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400376",
                   "m_produk_code"=> "mn-400376",
                   "m_produk_nama"=> "minyak gosok hijra",
                   "m_produk_urut"=> "011-066",
@@ -14400,6 +15157,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400377",
                   "m_produk_code"=> "mn-400377",
                   "m_produk_nama"=> "belut goreng 100gr",
                   "m_produk_urut"=> "011-067",
@@ -14419,6 +15177,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400378",
                   "m_produk_code"=> "mn-400378",
                   "m_produk_nama"=> "belut goreng 250gr",
                   "m_produk_urut"=> "011-068",
@@ -14438,6 +15197,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400379",
                   "m_produk_code"=> "mn-400379",
                   "m_produk_nama"=> "wader goreng 100gr",
                   "m_produk_urut"=> "011-069",
@@ -14457,6 +15217,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400380",
                   "m_produk_code"=> "mn-400380",
                   "m_produk_nama"=> "wader goreng 250gr",
                   "m_produk_urut"=> "011-070",
@@ -14476,6 +15237,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400381",
                   "m_produk_code"=> "mn-400381",
                   "m_produk_nama"=> "brambang goreng 50gr",
                   "m_produk_urut"=> "011-071",
@@ -14495,6 +15257,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400382",
                   "m_produk_code"=> "mn-400382",
                   "m_produk_nama"=> "brambang goreng 100gr",
                   "m_produk_urut"=> "011-072",
@@ -14514,6 +15277,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400383",
                   "m_produk_code"=> "mn-400383",
                   "m_produk_nama"=> "teri 'ss'",
                   "m_produk_urut"=> "011-073",
@@ -14533,6 +15297,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400384",
                   "m_produk_code"=> "mn-400384",
                   "m_produk_nama"=> "ikan jambal kering @250gr",
                   "m_produk_urut"=> "011-074",
@@ -14552,6 +15317,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400385",
                   "m_produk_code"=> "mn-400385",
                   "m_produk_nama"=> "daging sapi mentah",
                   "m_produk_urut"=> "011-075",
@@ -14571,6 +15337,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400386",
                   "m_produk_code"=> "mn-400386",
                   "m_produk_nama"=> "daging durian frozen @0.5kg",
                   "m_produk_urut"=> "011-076",
@@ -14590,6 +15357,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400387",
                   "m_produk_code"=> "mn-400387",
                   "m_produk_nama"=> "telur bebek bacem frozen",
                   "m_produk_urut"=> "011-077",
@@ -14609,6 +15377,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400388",
                   "m_produk_code"=> "mn-400388",
                   "m_produk_nama"=> "bebek dada bacem frozen+sambal",
                   "m_produk_urut"=> "011-078",
@@ -14628,6 +15397,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400389",
                   "m_produk_code"=> "mn-400389",
                   "m_produk_nama"=> "bebek paha bacem frozen+sambal",
                   "m_produk_urut"=> "011-079",
@@ -14647,6 +15417,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400390",
                   "m_produk_code"=> "mn-400390",
                   "m_produk_nama"=> "bebek dada frozen+sambal",
                   "m_produk_urut"=> "011-080",
@@ -14666,6 +15437,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400391",
                   "m_produk_code"=> "mn-400391",
                   "m_produk_nama"=> "bebek paha frozen+sambal",
                   "m_produk_urut"=> "011-081",
@@ -14685,6 +15457,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400392",
                   "m_produk_code"=> "mn-400392",
                   "m_produk_nama"=> "ayam negeri dada frozen+sambal",
                   "m_produk_urut"=> "011-082",
@@ -14704,6 +15477,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400393",
                   "m_produk_code"=> "mn-400393",
                   "m_produk_nama"=> "ayam negeri paha frozen+sambal",
                   "m_produk_urut"=> "011-083",
@@ -14723,6 +15497,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400394",
                   "m_produk_code"=> "mn-400394",
                   "m_produk_nama"=> "ayam kmpg dada frozen+sambal",
                   "m_produk_urut"=> "011-084",
@@ -14742,6 +15517,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400395",
                   "m_produk_code"=> "mn-400395",
                   "m_produk_nama"=> "ayam kmpg paha frozen+sambal",
                   "m_produk_urut"=> "011-085",
@@ -14761,6 +15537,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400396",
                   "m_produk_code"=> "mn-400396",
                   "m_produk_nama"=> "babat frozen+sambal",
                   "m_produk_urut"=> "011-086",
@@ -14780,6 +15557,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400397",
                   "m_produk_code"=> "mn-400397",
                   "m_produk_nama"=> "iso frozen+sambal",
                   "m_produk_urut"=> "011-087",
@@ -14799,6 +15577,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400398",
                   "m_produk_code"=> "mn-400398",
                   "m_produk_nama"=> "iga frozen+sambal",
                   "m_produk_urut"=> "011-088",
@@ -14818,6 +15597,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400399",
                   "m_produk_code"=> "mn-400399",
                   "m_produk_nama"=> "paru frozen+sambal",
                   "m_produk_urut"=> "011-089",
@@ -14837,6 +15617,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400400",
                   "m_produk_code"=> "mn-400400",
                   "m_produk_nama"=> "sabun cuci piring @1ltr",
                   "m_produk_urut"=> "011-090",
@@ -14856,6 +15637,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400401",
                   "m_produk_code"=> "mn-400401",
                   "m_produk_nama"=> "deterjent liquid @1ltr",
                   "m_produk_urut"=> "011-091",
@@ -14875,6 +15657,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400402",
                   "m_produk_code"=> "mn-400402",
                   "m_produk_nama"=> "cairan pembersih lantai @1ltr",
                   "m_produk_urut"=> "011-092",
@@ -14894,6 +15677,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400403",
                   "m_produk_code"=> "mn-400403",
                   "m_produk_nama"=> "handsoap @1ltr",
                   "m_produk_urut"=> "011-093",
@@ -14913,6 +15697,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400404",
                   "m_produk_code"=> "mn-400404",
                   "m_produk_nama"=> "karbol wangi @1ltr",
                   "m_produk_urut"=> "011-094",
@@ -14932,6 +15717,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400405",
                   "m_produk_code"=> "mn-400405",
                   "m_produk_nama"=> "sabun cuci piring @5ltr",
                   "m_produk_urut"=> "011-095",
@@ -14951,6 +15737,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400406",
                   "m_produk_code"=> "mn-400406",
                   "m_produk_nama"=> "deterjent liquid @5ltr",
                   "m_produk_urut"=> "011-096",
@@ -14970,6 +15757,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400407",
                   "m_produk_code"=> "mn-400407",
                   "m_produk_nama"=> "cairan pembersih lantai @5ltr",
                   "m_produk_urut"=> "011-097",
@@ -14989,6 +15777,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400408",
                   "m_produk_code"=> "mn-400408",
                   "m_produk_nama"=> "handsoap @5ltr",
                   "m_produk_urut"=> "011-098",
@@ -15008,6 +15797,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400409",
                   "m_produk_code"=> "mn-400409",
                   "m_produk_nama"=> "karbol wangi @5ltr",
                   "m_produk_urut"=> "011-099",
@@ -15027,6 +15817,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400410",
                   "m_produk_code"=> "mn-400410",
                   "m_produk_nama"=> "cobek sambal ‘ss’",
                   "m_produk_urut"=> "011-100",
@@ -15046,6 +15837,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400411",
                   "m_produk_code"=> "mn-400411",
                   "m_produk_nama"=> "cobek batu ss besar",
                   "m_produk_urut"=> "011-101",
@@ -15065,6 +15857,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400412",
                   "m_produk_code"=> "mn-400412",
                   "m_produk_nama"=> "cobek batu ss kecil",
                   "m_produk_urut"=> "011-102",
@@ -15084,6 +15877,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400413",
                   "m_produk_code"=> "mn-400413",
                   "m_produk_nama"=> "cobek lauk",
                   "m_produk_urut"=> "011-103",
@@ -15103,6 +15897,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400414",
                   "m_produk_code"=> "mn-400414",
                   "m_produk_nama"=> "kaos sambal ss",
                   "m_produk_urut"=> "011-104",
@@ -15122,6 +15917,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400415",
                   "m_produk_code"=> "mn-400415",
                   "m_produk_nama"=> "kaos 18 tahun panjang",
                   "m_produk_urut"=> "011-105",
@@ -15141,6 +15937,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400416",
                   "m_produk_code"=> "mn-400416",
                   "m_produk_nama"=> "kaos 18 tahun pendek",
                   "m_produk_urut"=> "011-106",
@@ -15160,6 +15957,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400417",
                   "m_produk_code"=> "mn-400417",
                   "m_produk_nama"=> "piring lidi besar",
                   "m_produk_urut"=> "011-107",
@@ -15179,6 +15977,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400418",
                   "m_produk_code"=> "mn-400418",
                   "m_produk_nama"=> "piring lidi kecil",
                   "m_produk_urut"=> "011-108",
@@ -15198,6 +15997,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400419",
                   "m_produk_code"=> "mn-400419",
                   "m_produk_nama"=> "wakul nasi",
                   "m_produk_urut"=> "011-109",
@@ -15217,6 +16017,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400420",
                   "m_produk_code"=> "mn-400420",
                   "m_produk_nama"=> "enthong",
                   "m_produk_urut"=> "011-110",
@@ -15236,6 +16037,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400421",
                   "m_produk_code"=> "mn-400421",
                   "m_produk_nama"=> "tomat",
                   "m_produk_urut"=> "011-111",
@@ -15255,6 +16057,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400422",
                   "m_produk_code"=> "mn-400422",
                   "m_produk_nama"=> "timun",
                   "m_produk_urut"=> "011-112",
@@ -15274,6 +16077,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400423",
                   "m_produk_code"=> "mn-400423",
                   "m_produk_nama"=> "terong ungu",
                   "m_produk_urut"=> "011-113",
@@ -15293,6 +16097,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400424",
                   "m_produk_code"=> "mn-400424",
                   "m_produk_nama"=> "loncang",
                   "m_produk_urut"=> "011-114",
@@ -15312,6 +16117,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400425",
                   "m_produk_code"=> "mn-400425",
                   "m_produk_nama"=> "cabe rawit merah",
                   "m_produk_urut"=> "011-115",
@@ -15331,6 +16137,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400426",
                   "m_produk_code"=> "mn-400426",
                   "m_produk_nama"=> "kobis",
                   "m_produk_urut"=> "011-116",
@@ -15350,6 +16157,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400427",
                   "m_produk_code"=> "mn-400427",
                   "m_produk_nama"=> "jeruk nipis",
                   "m_produk_urut"=> "011-117",
@@ -15369,6 +16177,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400428",
                   "m_produk_code"=> "mn-400428",
                   "m_produk_nama"=> "alpokat",
                   "m_produk_urut"=> "011-118",
@@ -15388,6 +16197,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400429",
                   "m_produk_code"=> "mn-400429",
                   "m_produk_nama"=> "ubi madu",
                   "m_produk_urut"=> "011-119",
@@ -15407,6 +16217,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400430",
                   "m_produk_code"=> "mn-400430",
                   "m_produk_nama"=> "cabe keriting merah",
                   "m_produk_urut"=> "011-120",
@@ -15426,6 +16237,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400431",
                   "m_produk_code"=> "mn-400431",
                   "m_produk_nama"=> "wortel",
                   "m_produk_urut"=> "011-121",
@@ -15445,6 +16257,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400432",
                   "m_produk_code"=> "mn-400432",
                   "m_produk_nama"=> "sawi putih",
                   "m_produk_urut"=> "011-122",
@@ -15464,6 +16277,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400433",
                   "m_produk_code"=> "mn-400433",
                   "m_produk_nama"=> "kentang",
                   "m_produk_urut"=> "011-123",
@@ -15483,6 +16297,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400434",
                   "m_produk_code"=> "mn-400434",
                   "m_produk_nama"=> "jipang",
                   "m_produk_urut"=> "011-124",
@@ -15502,6 +16317,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400435",
                   "m_produk_code"=> "mn-400435",
                   "m_produk_nama"=> "sawi hijau",
                   "m_produk_urut"=> "011-125",
@@ -15521,6 +16337,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400436",
                   "m_produk_code"=> "mn-400436",
                   "m_produk_nama"=> "jagung",
                   "m_produk_urut"=> "011-126",
@@ -15540,6 +16357,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400437",
                   "m_produk_code"=> "mn-400437",
                   "m_produk_nama"=> "semangka",
                   "m_produk_urut"=> "011-127",
@@ -15559,6 +16377,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400438",
                   "m_produk_code"=> "mn-400438",
                   "m_produk_nama"=> "kecambah",
                   "m_produk_urut"=> "011-128",
@@ -15578,6 +16397,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400439",
                   "m_produk_code"=> "mn-400439",
                   "m_produk_nama"=> "melon",
                   "m_produk_urut"=> "011-129",
@@ -15597,6 +16417,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400440",
                   "m_produk_code"=> "mn-400440",
                   "m_produk_nama"=> "pepaya",
                   "m_produk_urut"=> "011-130",
@@ -15616,6 +16437,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400441",
                   "m_produk_code"=> "mn-400441",
                   "m_produk_nama"=> "pisang",
                   "m_produk_urut"=> "011-131",
@@ -15635,6 +16457,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400442",
                   "m_produk_code"=> "mn-400442",
                   "m_produk_nama"=> "pete",
                   "m_produk_urut"=> "011-132",
@@ -15654,6 +16477,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400443",
                   "m_produk_code"=> "mn-400443",
                   "m_produk_nama"=> "paket parcel a",
                   "m_produk_urut"=> "011-133",
@@ -15673,6 +16497,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400444",
                   "m_produk_code"=> "mn-400444",
                   "m_produk_nama"=> "paket parcel b",
                   "m_produk_urut"=> "011-134",
@@ -15692,6 +16517,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400445",
                   "m_produk_code"=> "mn-400445",
                   "m_produk_nama"=> "paket parcel c",
                   "m_produk_urut"=> "011-135",
@@ -15711,6 +16537,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400446",
                   "m_produk_code"=> "mn-400446",
                   "m_produk_nama"=> "paket sembako a",
                   "m_produk_urut"=> "011-136",
@@ -15730,6 +16557,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400447",
                   "m_produk_code"=> "mn-400447",
                   "m_produk_nama"=> "paket sembako b",
                   "m_produk_urut"=> "011-137",
@@ -15749,6 +16577,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400448",
                   "m_produk_code"=> "mn-400448",
                   "m_produk_nama"=> "paket sembako c",
                   "m_produk_urut"=> "011-138",
@@ -15768,6 +16597,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400449",
                   "m_produk_code"=> "mn-400449",
                   "m_produk_nama"=> "packing parcel a",
                   "m_produk_urut"=> "011-139",
@@ -15787,6 +16617,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400450",
                   "m_produk_code"=> "mn-400450",
                   "m_produk_nama"=> "packing parcel b",
                   "m_produk_urut"=> "011-140",
@@ -15806,6 +16637,7 @@ class MProdukTableSeeder extends Seeder
                   
                 ],
                 [
+                  "m_produk_id"=> "mn-400451",
                   "m_produk_code"=> "mn-400451",
                   "m_produk_nama"=> "packing parcel c",
                   "m_produk_urut"=> "011-141",

@@ -16,24 +16,28 @@ class PajakTableSeeder extends Seeder
         DB::table('m_pajak')->truncate();
 
         DB::table('m_pajak')->insert([
+            'm_pajak_id' => '1',
             'm_pajak_value' => 0.0,
             'm_pajak_created_by'=> 1,
             
         ]);
 
         DB::table('m_pajak')->insert([
+            'm_pajak_id' => '2',
             'm_pajak_value' => 0.10,
             'm_pajak_created_by'=> 1,
             
         ]);
 
         DB::table('m_pajak')->insert([
+            'm_pajak_id' => '3',
             'm_pajak_value' => 0.11,
             'm_pajak_created_by'=> 1,
             
         ]);
 
         DB::table('m_pajak')->insert([
+            'm_pajak_id' => '4',
             'm_pajak_value' => 0.12,
             'm_pajak_created_by'=> 1,
             

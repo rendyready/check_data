@@ -14,14 +14,15 @@ return new class extends Migration
     public function up()
     {
         Schema::create('rekap_uang_tips', function (Blueprint $table) {
-            $table->id('r_u_t_id');
-            $table->bigInteger('r_u_t_sync_id')->nullable();
-            $table->bigInteger('r_u_t_rekap_modal_id');
+            $table->id('id');
+            $table->string('r_u_t_id')->unique();
+            // $table->bigInteger('r_u_t_sync_id')->nullable();
+            $table->string('r_u_t_rekap_modal_id');
             $table->date('r_u_t_tanggal');
             $table->decimal('r_u_t_nominal',8,2);
-            $table->bigInteger('r_u_t_m_w_id');
+            $table->string('r_u_t_m_w_id');
             $table->string('r_u_t_m_w_nama')->nullable();
-            $table->bigInteger('r_u_t_m_area_id');
+            $table->string('r_u_t_m_area_id');
             $table->string('r_u_t_m_area_nama')->nullable();
             $table->string('r_u_t_keterangan');
             $table->char('r_u_t_status_sync', 10)->default('0');

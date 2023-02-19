@@ -61,6 +61,7 @@ class UserTableSeeder extends Seeder
         DB::table('users')->insert(
             [
                 [
+                    'users_id' => '1',
                     'name' => 'administrator',
                     'email' => 'administrator@email.com',
                     'password' => Hash::make('IT@kinanthi'),
@@ -68,6 +69,7 @@ class UserTableSeeder extends Seeder
                     'waroeng_akses' => "[1,2,3,4,5,9,10]"
                 ],
                 [
+                    'users_id' => '2',
                     'name' => 'admin',
                     'email' => 'admin@email.com',
                     'password' => Hash::make('password'),

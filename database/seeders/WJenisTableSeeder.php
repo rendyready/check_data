@@ -18,26 +18,32 @@ class WJenisTableSeeder extends Seeder
 
         DB::table('m_w_jenis')->insert([
             [
+                'm_w_jenis_id' => '1',
                 'm_w_jenis_nama' => 'Waroeng Area',
                 'm_w_jenis_created_by' => 1
             ],
             [
+                'm_w_jenis_id' => '2',
                 'm_w_jenis_nama' => 'Waroeng Mandiri',
                 'm_w_jenis_created_by' => 1
             ],
             [
+                'm_w_jenis_id' => '3',
                 'm_w_jenis_nama' => 'Waroeng Khusus',
                 'm_w_jenis_created_by' => 1
             ],
             [
+                'm_w_jenis_id' => '4',
                 'm_w_jenis_nama' => 'Kantor Pusat',
                 'm_w_jenis_created_by' => 1
             ],
             [
+                'm_w_jenis_id' => '5',
                 'm_w_jenis_nama' => 'Kantor Area',
                 'm_w_jenis_created_by' => 1
             ],
             [
+                'm_w_jenis_id' => '6',
                 'm_w_jenis_nama' => 'Dapur Area',
                 'm_w_jenis_created_by' => 1
             ]

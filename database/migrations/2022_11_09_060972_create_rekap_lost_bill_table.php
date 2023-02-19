@@ -14,9 +14,10 @@ return new class extends Migration
     public function up()
     {
         Schema::create('rekap_lost_bill', function (Blueprint $table) {
-            $table->id('r_l_b_id');
-            $table->bigInteger('r_l_b_sync_id')->nullable();
-            $table->bigInteger('r_l_b_rekap_modal_id');
+            $table->id('id');
+            $table->string('r_l_b_id')->unique();
+            // $table->bigInteger('r_l_b_sync_id')->nullable();
+            $table->string('r_l_b_rekap_modal_id');
             // $table->string('r_l_b_tmp_transaction_id')->comment('Untuk cek duplikasi input');
             $table->date('r_l_b_tanggal');
             $table->time('r_l_b_jam');
@@ -28,9 +29,9 @@ return new class extends Migration
             $table->decimal('r_l_b_nominal_sharing_profit_in', 15,2)->default(0);
             $table->decimal('r_l_b_nominal_sharing_profit_out', 15,2)->default(0);
             $table->string('r_l_b_keterangan');
-            $table->bigInteger('r_l_b_m_w_id');
+            $table->string('r_l_b_m_w_id');
             $table->string('r_l_b_m_w_nama')->nullable();
-            $table->bigInteger('r_l_b_m_area_id');
+            $table->string('r_l_b_m_area_id');
             $table->string('r_l_b_m_area_nama')->nullable();
             $table->char('r_l_b_status_sync', 10)->default('0');
             $table->bigInteger('r_l_b_approved_by')->nullable();
