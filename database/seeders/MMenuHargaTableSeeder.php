@@ -19,10 +19,12 @@ class MMenuHargaTableSeeder extends Seeder
 
         for ($n=1; $n <= 7 ; $n++) { 
             foreach ($produk as $key => $value) {
+                $id = DB::select("select nextval('m_menu_harga_id_seq');")[0]->nextval;
                 DB::table('m_menu_harga')->insert([
+                    'm_menu_harga_id'=> "{$id}",
                     'm_menu_harga_nominal'=> (rand(2,25) . '000'),
-                    'm_menu_harga_m_jenis_nota_id'=> $n,
-                    'm_menu_harga_m_produk_id'=> $value->m_produk_id,
+                    'm_menu_harga_m_jenis_nota_id'=> "{$n}",
+                    'm_menu_harga_m_produk_id'=> "{$value->m_produk_id}",
                     'm_menu_harga_status'=> '1',
                     'm_menu_harga_tax_status'=> '1',
                     'm_menu_harga_sc_status'=> '0',

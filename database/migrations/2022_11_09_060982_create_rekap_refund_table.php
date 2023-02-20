@@ -14,17 +14,18 @@ return new class extends Migration
     public function up()
     {
         Schema::create('rekap_refund', function (Blueprint $table) {
-            $table->id('r_r_id');
-            $table->bigInteger('r_r_sync_id')->nullable();
-            $table->bigInteger('r_r_rekap_modal_id');
-            $table->bigInteger('r_r_r_t_id');
+            $table->id('id');
+            $table->string('r_r_id')->unique();
+            // $table->bigInteger('r_r_sync_id')->nullable();
+            $table->string('r_r_rekap_modal_id');
+            $table->string('r_r_r_t_id');
             $table->string('r_r_nota_code');
             $table->string('r_r_bigboss');
             $table->date('r_r_tanggal');
             $table->time('r_r_jam');
-            $table->bigInteger('r_r_m_area_id');
+            $table->string('r_r_m_area_id');
             $table->string('r_r_m_area_nama')->nullable();
-            $table->bigInteger('r_r_m_w_id');
+            $table->string('r_r_m_w_id');
             $table->string('r_r_m_w_nama')->nullable();
             $table->decimal('r_r_nominal_refund', 15,2)->default(0);
             $table->decimal('r_r_nominal_refund_pajak', 15,2)->default(0);

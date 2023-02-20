@@ -14,7 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::create('m_payment_method', function (Blueprint $table) {
-            $table->id('m_payment_method_id');
+            $table->id('id');
+            $table->string('m_payment_method_id')->unique();
             $table->string('m_payment_method_type'); //cash,transfer
             $table->string('m_payment_method_name');
             $table->string('m_payment_method_color')->nullable()->default('#B7C4CF');

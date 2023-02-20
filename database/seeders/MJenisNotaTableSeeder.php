@@ -17,8 +17,9 @@ class MJenisNotaTableSeeder extends Seeder
         for ($i=1; $i <= 7 ; $i++) { 
             DB::table('m_jenis_nota')->insert([
                 [
-                    'm_jenis_nota_m_w_id' => 1,
-                    'm_jenis_nota_m_t_t_id' => $i,
+                    'm_jenis_nota_id' => $i,
+                    'm_jenis_nota_m_w_id' => '1',
+                    'm_jenis_nota_m_t_t_id' => "{$i}",
                     'm_jenis_nota_created_by' => 1
                 ]
             ]);

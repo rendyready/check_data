@@ -14,7 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::create('m_area', function (Blueprint $table) {
-            $table->id('m_area_id');
+            $table->id('id');
+            $table->string('m_area_id')->unique();
             $table->string('m_area_nama');
             $table->string('m_area_code');
             $table->bigInteger('m_area_created_by');

@@ -14,11 +14,13 @@ return new class extends Migration
     public function up()
     {
         Schema::create('rekap_modal_detail', function (Blueprint $table) {
-            $table->id('rekap_modal_detail_id');
-            $table->bigInteger('rekap_modal_detail_sync_id')->nullable();
+            $table->id('id');
+            $table->string('rekap_modal_detail_id')->unique();
+            // $table->bigInteger('rekap_modal_detail_sync_id')->nullable();
             $table->bigInteger('rekap_modal_detail_qty')->nullable()->default(0);
-            $table->bigInteger('rekap_modal_detail_m_modal_tipe_id');
-            $table->bigInteger('rekap_modal_detail_rekap_modal_id');
+            $table->string('rekap_modal_detail_m_modal_tipe_id');
+            $table->string('rekap_modal_detail_rekap_modal_id');
+            $table->char('rekap_modal_detail_status_sync', 10)->default('0');
             $table->bigInteger('rekap_modal_detail_created_by');
             $table->bigInteger('rekap_modal_detail_deleted_by')->nullable();
             $table->bigInteger('rekap_modal_detail_updated_by')->nullable();

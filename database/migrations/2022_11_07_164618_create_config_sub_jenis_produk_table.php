@@ -14,9 +14,10 @@ return new class extends Migration
     public function up()
     {
         Schema::create('config_sub_jenis_produk', function (Blueprint $table) {
-            $table->id('config_sub_jenis_produk_id');
-            $table->bigInteger('config_sub_jenis_produk_m_produk_id');
-            $table->bigInteger('config_sub_jenis_produk_m_sub_jenis_produk_id');
+            $table->id('id');
+            $table->string('config_sub_jenis_produk_id')->unique();
+            $table->string('config_sub_jenis_produk_m_produk_id');
+            $table->string('config_sub_jenis_produk_m_sub_jenis_produk_id');
             $table->bigInteger('config_sub_jenis_produk_created_by');
             $table->bigInteger('config_sub_jenis_produk_updated_by')->nullable();
             $table->bigInteger('config_sub_jenis_produk_deleted_by')->nullable();

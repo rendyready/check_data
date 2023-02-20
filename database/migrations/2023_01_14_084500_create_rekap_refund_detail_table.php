@@ -14,10 +14,11 @@ return new class extends Migration
     public function up()
     {
         Schema::create('rekap_refund_detail', function (Blueprint $table) {
-            $table->id('r_r_detail_id');
-            $table->bigInteger('r_r_detail_sync_id')->nullable();
-            $table->bigInteger('r_r_detail_r_r_id');
-            $table->bigInteger('r_r_detail_m_produk_id');
+            $table->id('id');
+            $table->string('r_r_detail_id')->unique();
+            // $table->bigInteger('r_r_detail_sync_id')->nullable();
+            $table->string('r_r_detail_r_r_id');
+            $table->string('r_r_detail_m_produk_id');
             $table->string('r_r_detail_m_produk_nama')->nullable();
             $table->decimal('r_r_detail_price', 8,2);
             $table->integer('r_r_detail_qty');

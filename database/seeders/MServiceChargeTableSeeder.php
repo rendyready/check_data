@@ -17,14 +17,17 @@ class MServiceChargeTableSeeder extends Seeder
 
         DB::table('m_sc')->insert([
             [
+                'm_sc_id' => '1',
                 'm_sc_value' => 0.00,
                 'm_sc_created_by' => 1
             ],
             [
+                'm_sc_id' => '2',
                 'm_sc_value' => 0.05,
                 'm_sc_created_by' => 1
             ],
             [
+                'm_sc_id' => '3',
                 'm_sc_value' => 0.03,
                 'm_sc_created_by' => 1
             ], 
