@@ -15,17 +15,17 @@ return new class extends Migration
     {
         Schema::create('m_w', function (Blueprint $table) {
             $table->id('id');
-            $table->string('m_w_id')->unique();
+            $table->unsignedBigInteger('m_w_id');
             $table->string('m_w_nama');
             $table->string('m_w_code');
-            $table->string('m_w_m_area_id');
-            $table->string('m_w_m_w_jenis_id');
+            $table->unsignedBigInteger('m_w_m_area_id');
+            $table->unsignedBigInteger('m_w_m_w_jenis_id');
             $table->char('m_w_status')->default('1');
             $table->text('m_w_alamat');
             $table->char('m_w_m_kode_nota',10); // Nota A, Nota B
-            $table->string('m_w_m_pajak_id');
-            $table->string('m_w_m_modal_tipe_id');
-            $table->string('m_w_m_sc_id');
+            $table->unsignedBigInteger('m_w_m_pajak_id');
+            $table->unsignedBigInteger('m_w_m_modal_tipe_id');
+            $table->unsignedBigInteger('m_w_m_sc_id');
             $table->integer('m_w_decimal')->default(0);
             $table->string('m_w_pembulatan')->default('tidak');
             $table->char('m_w_currency',5)->default('Rp');

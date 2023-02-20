@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('m_footer', function (Blueprint $table) {
             $table->id('id');
-            $table->string('m_footer_id')->unique();
-            $table->string('m_footer_m_w_id');
+            $table->unsignedBigInteger('m_footer_id');
+            $table->unsignedBigInteger('m_footer_m_w_id');
             $table->string('m_footer_value');
             $table->integer('m_footer_priority');
             $table->bigInteger('m_footer_created_by');

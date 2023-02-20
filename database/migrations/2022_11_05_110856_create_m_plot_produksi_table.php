@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('m_plot_produksi', function (Blueprint $table) {
             $table->id('id');
-            $table->string('m_plot_produksi_id')->unique();
+            $table->bigInteger('m_plot_produksi_id')->unsigned();
             $table->string('m_plot_produksi_nama');
             $table->bigInteger('m_plot_produksi_created_by');
             $table->bigInteger('m_plot_produksi_updated_by')->nullable();

@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('m_transaksi_tipe', function (Blueprint $table) {
             $table->id('id');
-            $table->string('m_t_t_id')->unique();
+            $table->unsignedBigInteger('m_t_t_id');
             $table->string('m_t_t_name');
             $table->decimal('m_t_t_profit_price', 8, 2);
             $table->decimal('m_t_t_profit_in', 8, 2);

@@ -23,9 +23,9 @@ return new class extends Migration
             $table->decimal('r_m_m_debit',10,2)->default(0);
             $table->decimal('r_m_m_kredit',10,2)->default(0);
             $table->string('r_m_m_keterangan');
-            $table->string('r_m_m_m_w_id');
+            $table->unsignedBigInteger('r_m_m_m_w_id');
             $table->string('r_m_m_m_w_nama')->nullable();
-            $table->string('r_m_m_m_area_id');
+            $table->unsignedBigInteger('r_m_m_m_area_id');
             $table->string('r_m_m_m_area_nama')->nullable();
             $table->char('r_m_m_status_sync', 10)->default('0');
             $table->bigInteger('r_m_m_created_by');

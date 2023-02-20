@@ -26,9 +26,9 @@ return new class extends Migration
             // $table->smallInteger('r_t_shift');
             $table->date('r_t_tanggal');
             $table->time('r_t_jam');
-            $table->string('r_t_m_area_id');
+            $table->unsignedBigInteger('r_t_m_area_id');
             $table->string('r_t_m_area_nama')->nullable();
-            $table->string('r_t_m_w_id');
+            $table->unsignedBigInteger('r_t_m_w_id');
             $table->string('r_t_m_w_nama')->nullable();
             $table->decimal('r_t_nominal', 15,2)->default(0);
             $table->decimal('r_t_nominal_pajak', 15,2)->default(0);
@@ -56,7 +56,7 @@ return new class extends Migration
             // $table->decimal('r_t_tax_percent',5,2)->default(0);
             // $table->decimal('r_t_sc_percent',5,2)->default(0);
 
-            $table->string('r_t_m_t_t_id');
+            $table->unsignedBigInteger('r_t_m_t_t_id');
             // $table->string('r_t_m_t_t_name');
             $table->string('r_t_status');
             $table->string('r_t_catatan')->nullable();

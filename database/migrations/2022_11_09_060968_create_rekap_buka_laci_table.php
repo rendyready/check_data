@@ -21,9 +21,9 @@ return new class extends Migration
             $table->date('r_b_l_tanggal');
             $table->integer('r_b_l_qty');
             $table->string('r_b_l_keterangan');
-            $table->string('r_b_l_m_w_id');
+            $table->unsignedBigInteger('r_b_l_m_w_id');
             $table->string('r_b_l_m_w_nama');
-            $table->string('r_b_l_m_area_id');
+            $table->unsignedBigInteger('r_b_l_m_area_id');
             $table->string('r_b_l_m_area_nama');
             $table->char('r_b_l_status_sync', 10)->default('0');
             $table->bigInteger('r_b_l_created_by');

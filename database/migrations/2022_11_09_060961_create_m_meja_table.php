@@ -15,10 +15,10 @@ return new class extends Migration
     {
         Schema::create('m_meja', function (Blueprint $table) {
             $table->id('id');
-            $table->string('m_meja_id')->unique();
+            $table->unsignedBigInteger('m_meja_id');
             $table->string('m_meja_nama');
-            $table->string('m_meja_m_meja_jenis_id');
-            $table->string('m_meja_m_w_id');
+            $table->unsignedBigInteger('m_meja_m_meja_jenis_id');
+            $table->unsignedBigInteger('m_meja_m_w_id');
             $table->string('m_meja_type')->comment('meja,express,bungkus');
             $table->bigInteger('m_meja_created_by');
             $table->bigInteger('m_meja_updated_by')->nullable();

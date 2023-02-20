@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('m_kasir_akses', function (Blueprint $table) {
             $table->id('id');
             $table->string('m_kasir_akses_id')->unique();
-            $table->string('m_kasir_akses_m_w_id');
+            $table->unsignedBigInteger('m_kasir_akses_m_w_id');
             $table->string('m_kasir_akses_fitur')->comment('lostbill,cancel menu,cancel transaksi, cancel menu after bill, void, edit transaksi');
             $table->string('m_kasir_akses_default_role')->default('deny')->comment('allow,deny');
             $table->string('m_kasir_akses_temp_role')->default('deny')->comment('allow,deny');

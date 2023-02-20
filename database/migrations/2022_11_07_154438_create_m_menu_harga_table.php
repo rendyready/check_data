@@ -15,10 +15,10 @@ return new class extends Migration
     {
         Schema::create('m_menu_harga', function (Blueprint $table) {
             $table->id('id');
-            $table->string('m_menu_harga_id')->unique();
+            $table->unsignedBigInteger('m_menu_harga_id');
             $table->decimal('m_menu_harga_nominal', 15, 2);
-            $table->string('m_menu_harga_m_jenis_nota_id');
-            $table->string('m_menu_harga_m_produk_id');
+            $table->unsignedBigInteger('m_menu_harga_m_jenis_nota_id');
+            $table->unsignedBigInteger('m_menu_harga_m_produk_id');
             $table->char('m_menu_harga_status')->default('0');
             $table->char('m_menu_harga_tax_status')->default('0');
             $table->char('m_menu_harga_sc_status')->default('0');

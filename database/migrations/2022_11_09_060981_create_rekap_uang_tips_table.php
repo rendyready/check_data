@@ -20,9 +20,9 @@ return new class extends Migration
             $table->string('r_u_t_rekap_modal_id');
             $table->date('r_u_t_tanggal');
             $table->decimal('r_u_t_nominal',8,2);
-            $table->string('r_u_t_m_w_id');
+            $table->unsignedBigInteger('r_u_t_m_w_id');
             $table->string('r_u_t_m_w_nama')->nullable();
-            $table->string('r_u_t_m_area_id');
+            $table->unsignedBigInteger('r_u_t_m_area_id');
             $table->string('r_u_t_m_area_nama')->nullable();
             $table->string('r_u_t_keterangan');
             $table->char('r_u_t_status_sync', 10)->default('0');

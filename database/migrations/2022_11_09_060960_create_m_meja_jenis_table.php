@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('m_meja_jenis', function (Blueprint $table) {
             $table->id('id');
-            $table->string('m_meja_jenis_id')->unique();
+            $table->unsignedBigInteger('m_meja_jenis_id');
             $table->string('m_meja_jenis_nama');
             $table->integer('m_meja_jenis_space');
             $table->char('m_meja_jenis_status', 1)->nullable()->default('0');

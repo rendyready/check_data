@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('r_t_detail_id')->unique();
             // $table->bigInteger('r_t_detail_sync_id')->nullable();
             $table->string('r_t_detail_r_t_id');
-            $table->string('r_t_detail_m_produk_id');
+            $table->unsignedBigInteger('r_t_detail_m_produk_id');
             $table->string('r_t_detail_m_produk_nama')->nullable();
             $table->string('r_t_detail_custom')->nullable();
             $table->decimal('r_t_detail_price', 8,2);

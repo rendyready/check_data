@@ -28,16 +28,16 @@ return new class extends Migration
             // $table->bigInteger('r_h_t_m_meja_id');
             // $table->string('r_h_t_m_meja_nama');
             $table->string('r_h_t_bigboss');
-            $table->string('r_h_t_m_area_id');
+            $table->unsignedBigInteger('r_h_t_m_area_id');
             $table->string('r_h_t_m_area_nama')->nullable();
-            $table->string('r_h_t_m_w_id');
+            $table->unsignedBigInteger('r_h_t_m_w_id');
             $table->string('r_h_t_m_w_nama')->nullable();
             $table->decimal('r_h_t_nominal', 15,2)->default(0);
             $table->decimal('r_h_t_nominal_pajak', 15,2)->default(0);
             $table->decimal('r_h_t_nominal_sc', 15,2)->default(0);
             $table->decimal('r_h_t_nominal_sharing_profit_in', 15,2)->default(0);
             $table->decimal('r_h_t_nominal_sharing_profit_out', 15,2)->default(0);
-            $table->string('r_h_t_m_t_t_id');
+            $table->unsignedBigInteger('r_h_t_m_t_t_id');
             // $table->string('r_h_t_m_t_t_name');
             // $table->decimal('r_h_t_m_t_t_profit_price', 3)->default(0);
             // $table->decimal('r_h_t_m_t_t_profit_in', 3)->default(0);
@@ -45,7 +45,7 @@ return new class extends Migration
             $table->char('r_h_t_status_sync', 10)->default('0');
             // $table->bigInteger('r_h_t_kasir_id');
             // $table->string('r_h_t_kasir_nama');
-            $table->bigInteger('r_h_t_approved_by')->nullable();
+            $table->unsignedBigInteger('r_h_t_approved_by')->nullable();
             $table->bigInteger('r_h_t_created_by');
             $table->bigInteger('r_h_t_updated_by')->nullable();
             $table->bigInteger('r_h_t_deleted_by')->nullable();

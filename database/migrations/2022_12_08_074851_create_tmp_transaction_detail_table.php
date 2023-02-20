@@ -17,7 +17,7 @@ return new class extends Migration
         Schema::create('tmp_transaction_detail', function (Blueprint $table) {
             $table->uuid('tmp_transaction_detail_id')->default(DB::raw('gen_random_uuid()'))->primary();
             $table->uuid('tmp_transaction_detail_tmp_transaction_id');
-            $table->string('tmp_transaction_detail_m_produk_id')->nullable();
+            $table->unsignedBigInteger('tmp_transaction_detail_m_produk_id')->nullable();
             $table->integer('tmp_transaction_detail_qty')->default(1)->comment('qty menu');
             $table->bigInteger('tmp_transaction_detail_created_by')->nullable();
             $table->softDeletes();

@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('m_sc', function (Blueprint $table) {
             $table->id('id');
-            $table->string('m_sc_id')->unique();
+            $table->unsignedBigInteger('m_sc_id');
             $table->decimal('m_sc_value',5,2);
             $table->bigInteger('m_sc_created_by');
             $table->bigInteger('m_sc_updated_by')->nullable();

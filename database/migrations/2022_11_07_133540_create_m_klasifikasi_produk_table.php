@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('m_klasifikasi_produk', function (Blueprint $table) {
             $table->id('id');
-            $table->string('m_klasifikasi_produk_id')->unique();
+            $table->bigInteger('m_klasifikasi_produk_id')->unsigned();
             $table->string('m_klasifikasi_produk_nama');
             $table->string('m_klasifikasi_produk_prefix');
             $table->integer('m_klasifikasi_produk_last_id')->default(1);

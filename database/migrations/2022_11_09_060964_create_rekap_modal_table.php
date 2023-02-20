@@ -17,9 +17,9 @@ return new class extends Migration
             $table->id('id');
             $table->string('rekap_modal_id')->unique();
             // $table->bigInteger('rekap_modal_sync_id')->nullable();
-            $table->string('rekap_modal_m_w_id');
+            $table->unsignedBigInteger('rekap_modal_m_w_id');
             $table->string('rekap_modal_m_w_nama')->nullable();
-            $table->string('rekap_modal_m_area_id')->nullable();
+            $table->unsignedBigInteger('rekap_modal_m_area_id')->nullable();
             $table->string('rekap_modal_m_area_nama')->nullable();
             $table->integer('rekap_modal_sesi')->default(1);
             $table->dateTime('rekap_modal_tanggal')->useCurrent();

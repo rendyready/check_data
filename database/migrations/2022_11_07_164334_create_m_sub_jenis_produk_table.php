@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('m_sub_jenis_produk', function (Blueprint $table) {
             $table->id('id');
-            $table->string('m_sub_jenis_produk_id')->unique();
+            $table->unsignedBigInteger('m_sub_jenis_produk_id');
             $table->string('m_sub_jenis_produk_nama');
-            $table->bigInteger('m_sub_jenis_produk_m_jenis_produk_id');
+            $table->unsignedBigInteger('m_sub_jenis_produk_m_jenis_produk_id');
             $table->bigInteger('m_sub_jenis_produk_created_by');
             $table->bigInteger('m_sub_jenis_produk_updated_by')->nullable();
             $table->bigInteger('m_sub_jenis_produk_deleted_by')->nullable();
