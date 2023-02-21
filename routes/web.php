@@ -16,4 +16,4 @@ use App\Http\Controllers\Master\SatuanController;
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/coba/{table}', [App\Http\Controllers\Controller::class, 'getNextId']);
+Route::get('/coba/{table}', [App\Http\Controllers\Controller::class, 'getMasterId']);
