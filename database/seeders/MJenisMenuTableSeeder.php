@@ -68,7 +68,7 @@ class MJenisMenuTableSeeder extends Seeder
             ],
             [
                 'm_jenis_produk_id' => '8',
-                'm_jenis_produk_nama' => 'laain-lain',
+                'm_jenis_produk_nama' => 'lain-lain',
                 'm_jenis_produk_odcr55' => null,
                 'm_jenis_produk_created_by' => 1,
                 'm_jenis_produk_urut' => 8

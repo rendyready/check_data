@@ -15,14 +15,16 @@
             <thead>
               <tr>
                 <th>No.</th>
-                <th>NAMA KLASIFIKASI</th>
+                <th>Kode Prefix</th>
+                <th>Nama Klasifikasi</th>
               </tr>
             </thead>
             <tbody id="tablecontents">
               @foreach ($data as $item)
               <tr>
                 <td>{{$item->m_klasifikasi_produk_id}}</td>
-                <td>{{$item->m_klasifikasi_produk_nama}}</td>
+                <td>{{$item->m_klasifikasi_produk_prefix}}</td>
+                <td>{{ucwords($item->m_klasifikasi_produk_nama)}}</td>
               </tr>
               @endforeach
             </tbody>
@@ -49,7 +51,8 @@
       columns: {
         identifier: [0, 'id'],
         editable: [
-          [1, 'm_klasifikasi_produk_nama']
+          [1, 'm_klasifikasi_produk_prefix'],
+          [2, 'm_klasifikasi_produk_nama']
         ]
       },
       restoreButton: false,
@@ -62,10 +65,10 @@
           message: data.Messages
         });
         setTimeout(function() {
-          window.location.reload();
+          // window.location.reload();
         }, 3000);
         if (data.action == 'add') {
-          window.location.reload();
+          // window.location.reload();
         }
         if (data.action == 'delete') {
           $('#' + data.id).remove();

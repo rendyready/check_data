@@ -21,7 +21,7 @@ class WJenisController extends Controller
     public function action(Request $request)
     {
         if ($request->ajax()) {
-            $DBjenisNama = Str::upper(preg_replace(array('/\s{2,}/', '/[\t\n]/'), ' ', $request->m_w_jenis_nama));
+            $DBjenisNama = Str::lower(preg_replace(array('/\s{2,}/', '/[\t\n]/'), ' ', $request->m_w_jenis_nama));
             $jenisNama = Str::lower(trim($DBjenisNama));
             $DBJenisWaroeng = DB::table('m_w_jenis')->selectRaw('m_w_jenis_nama')
                 ->whereRaw('LOWER(m_w_jenis_nama)' . '=' . "'$jenisNama'")->first();
@@ -32,6 +32,7 @@ class WJenisController extends Controller
                     return response(['Messages' => 'Data Duplicate !']);
                 } else {
                     $data = array(
+                        'm_w_jenis_id' => $this->getMasterId('m_w_jenis'),
                         'm_w_jenis_nama'    =>  $DBjenisNama,
                         'm_w_jenis_created_by' => Auth::id(),
                         'm_w_jenis_created_at' => Carbon::now(),

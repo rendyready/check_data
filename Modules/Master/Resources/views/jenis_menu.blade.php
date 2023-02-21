@@ -24,8 +24,8 @@
               @foreach ($data as $item)
               <tr class="row1">
                 <td>{{$item->m_jenis_produk_id}}</td>
-                <td>{{$item->m_jenis_produk_nama}}</td>
-                <td>{{$item->m_jenis_produk_odcr55}}</td>
+                <td>{{ucwords($item->m_jenis_produk_nama)}}</td>
+                <td>{{ucwords($item->m_jenis_produk_odcr55)}}</td>
                 <td>{{$item->m_jenis_produk_urut}}</td>
               </tr>
               @endforeach
@@ -118,9 +118,9 @@
         Codebase.helpers('jq-notify', {
           align: 'right', // 'right', 'left', 'center'
           from: 'top', // 'top', 'bottom'
-          type: 'danger', // 'info', 'success', 'warning', 'danger'
+          type: data.type, // 'info', 'success', 'warning', 'danger'
           icon: 'fa fa-info me-5', // Icon class
-          message: data.m_jenis_produk_nama + '<br></br>' + data.m_jenis_produk_odcr55 + '<br></br>',
+          message: data.Messages,
         });
         setTimeout(function() {
           window.location.reload();

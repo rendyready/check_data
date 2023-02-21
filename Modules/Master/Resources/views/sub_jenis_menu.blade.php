@@ -23,8 +23,8 @@
               @foreach ($data->sub as $item)
               <tr>
                 <td>{{$item->m_sub_jenis_produk_id}}</td>
-                <td>{{$item->m_sub_jenis_produk_nama}}</td>
-                <td>{{$item->m_jenis_produk_nama}}</td>
+                <td>{{ucwords($item->m_sub_jenis_produk_nama)}}</td>
+                <td>{{ucwords($item->m_jenis_produk_nama)}}</td>
               </tr>
               @endforeach
             </tbody>

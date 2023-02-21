@@ -21,37 +21,42 @@ class PajakController extends Controller
         return view('master::pajak', compact('data'));
     }
     public function action(Request $request)
-    {
-        $raw = ['m_pajak_value' => Str::lower($request->m_pajak_value)];
-        $value = ['m_pajak_value' => ['required']];
-        $validate = Validator::make($raw, $value);
-        if ($validate->fails()) {
-            return response(['Message' => 'Data Duplicate !'])->redirectTo('m_pajak.index');
-        } else {
-            if ($validate->ajax()) {
+    {       $validate = DB::table('m_pajak')->where('m_pajak_value',$request->m_pajak_value)->first();
+            if ($request->ajax()) {
                 if ($request->action == 'add') {
-                    $data = array(
-                        'm_pajak_value'    =>    $request->m_pajak_value,
-                        'm_pajak_created_by' => Auth::id(),
-                        'm_pajak_created_at' => Carbon::now(),
-                    );
-                    DB::table('m_pajak')->insert($data);
+                    if (!empty($validate)) {
+                        return response(['messages' => 'Pajak Duplikat !','type' => 'danger']);
+                    } else {
+                        $data = array(
+                            'm_pajak_id' => $this->getMasterId('m_pajak'),
+                            'm_pajak_value'    =>    $request->m_pajak_value,
+                            'm_pajak_created_by' => Auth::id(),
+                            'm_pajak_created_at' => Carbon::now(),
+                        );
+                        DB::table('m_pajak')->insert($data);
+                        return response(['messages' => 'Berhasil Tambah Pajak !','type' => 'success']);
+                    }
                 } elseif ($request->action == 'edit') {
-                    $data = array(
-                        'm_pajak_value'    =>    $request->m_pajak_value,
-                        'm_pajak_updated_by' => Auth::id(),
-                        'm_pajak_updated_at' => Carbon::now(),
-                    );
-                    DB::table('m_pajak')->where('m_pajak_id', $request->id)
-                        ->update($data);
+                    if (!empty($validate)) {
+                        return response(['messages' => 'Pajak Edit Duplikat !','type' => 'danger']);
+                    } else {
+                        $data = array(
+                            'm_pajak_value'    =>    $request->m_pajak_value,
+                            'm_pajak_updated_by' => Auth::id(),
+                            'm_pajak_updated_at' => Carbon::now(),
+                        );
+                        DB::table('m_pajak')->where('m_pajak_id', $request->id)
+                            ->update($data);
+                        return response(['messages' => 'Berhasil Edit Pajak !','type' => 'success']);
+                    }
                 } else {
-                    $softdelete = array('m_pajak_jenis_deleted_at' => Carbon::now());
+                    $softdelete = array('m_pajak_deleted_at' => Carbon::now());
                     DB::table('m_pajak')
                         ->where('m_pajak_id', $request->id)
                         ->update($softdelete);
                 }
-                return redirect()->route('m_pajak.index')->with(['Success' => $data]);
+                return response(['messages' => 'Berhasil Menghapus !','type' => 'success','request'=>$request->all()]);
             }
-        }
+        
     }
 }

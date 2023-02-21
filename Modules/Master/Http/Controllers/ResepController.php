@@ -4,7 +4,7 @@ namespace Modules\Master\Http\Controllers;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -23,7 +23,7 @@ class ResepController extends Controller
         $data->resep = DB::table('m_resep')
             ->leftjoin('m_produk', 'm_resep_m_produk_id', 'm_produk_id')
             ->get();
-        $data->produk = DB::table('m_produk')->get();
+        $data->produk = DB::table('m_produk')->where('m_produk_m_klasifikasi_produk_id',4)->get();
         return view('master::m_resep', compact('data'));
         // return $data;
     }
@@ -36,13 +36,14 @@ class ResepController extends Controller
     public function simpan(Request $request)
     {
         $data = DB::table('m_resep')->insert([
+            "m_resep_id" => $this->getMasterId('m_resep'),
             "m_resep_m_produk_id" => $request->m_resep_m_produk_id,
             "m_resep_keterangan" => $request->m_resep_keterangan,
             "m_resep_status" => $request->m_resep_status,
             "m_resep_created_by" => Auth::id(),
             "m_resep_created_at" => Carbon::now(),
         ]);
-        return response(['Success' => $data]);
+        return redirect()->back();
     }
 
     /**
@@ -101,6 +102,7 @@ class ResepController extends Controller
         if ($request->ajax()) {
             if ($request->action == 'add') {
                 $data = array(
+                    'm_resep_detail_id' => $this->getMasterId('m_resep_detail'),
                     'm_resep_detail_m_resep_id'    =>    $request->id,
                     'm_resep_detail_bb_id'    =>    $request->m_resep_detail_bb_id,
                     'm_resep_detail_bb_qty'    =>    $request->m_resep_detail_bb_qty,
@@ -129,7 +131,7 @@ class ResepController extends Controller
     {
         $data = new \stdClass();
         $satuan = DB::table('m_satuan')->get();
-        $bb = DB::table('m_produk')->get();
+        $bb = DB::table('m_produk')->where('m_produk_m_klasifikasi_produk_id',3)->get();
         foreach ($satuan as $key => $v) {
             $data->satuan[$v->m_satuan_id] = $v->m_satuan_kode;
         }

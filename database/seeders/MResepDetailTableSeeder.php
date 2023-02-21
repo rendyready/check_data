@@ -17,6 +17,7 @@ class MResepDetailTableSeeder extends Seeder
 
         DB::table('m_resep_detail')->insert([
             [
+                'm_resep_detail_id' => 1,
                 'm_resep_detail_m_resep_id' =>1,
                 'm_resep_detail_bb_id'=>1,
                 'm_resep_detail_bb_qty'=>2,
@@ -24,6 +25,7 @@ class MResepDetailTableSeeder extends Seeder
                 'm_resep_detail_created_by'=>1,
             ],
             [
+                'm_resep_detail_id' => 1,
                 'm_resep_detail_m_resep_id' =>13,
                 'm_resep_detail_bb_id'=>13,
                 'm_resep_detail_bb_qty'=>2,
@@ -31,6 +33,7 @@ class MResepDetailTableSeeder extends Seeder
                 'm_resep_detail_created_by'=>1,
             ],
             [
+                'm_resep_detail_id' => 1,
                 'm_resep_detail_m_resep_id' =>21,
                 'm_resep_detail_bb_id'=>21,
                 'm_resep_detail_bb_qty'=>2,
@@ -38,6 +41,7 @@ class MResepDetailTableSeeder extends Seeder
                 'm_resep_detail_created_by'=>1,
             ],
             [
+                'm_resep_detail_id' => 1,
                 'm_resep_detail_m_resep_id' =>31,
                 'm_resep_detail_bb_id'=>31,
                 'm_resep_detail_bb_qty'=>20,
@@ -45,6 +49,7 @@ class MResepDetailTableSeeder extends Seeder
                 'm_resep_detail_created_by'=>1,
             ],
             [
+                'm_resep_detail_id' => 1,
                 'm_resep_detail_m_resep_id' =>32,
                 'm_resep_detail_bb_id'=>32,
                 'm_resep_detail_bb_qty'=>11,
@@ -52,5 +57,6 @@ class MResepDetailTableSeeder extends Seeder
                 'm_resep_detail_created_by'=>1,
             ],
         ]);
+        DB::select("update m_resep_detail set m_resep_detail_id = id;");
     }
 }
