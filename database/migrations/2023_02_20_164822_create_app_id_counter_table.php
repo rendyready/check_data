@@ -18,6 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('app_id_counter_m_w_id');
             $table->string('app_id_counter_table');
             $table->unsignedBigInteger('app_id_counter_value');
+            $table->date('app_id_counter_date');
             $table->timestamps();
         });
     }
@@ -29,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('app_idtable_counter');
+        Schema::dropIfExists('app_id_counter');
     }
 };
