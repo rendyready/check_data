@@ -20,7 +20,7 @@ class Controller extends BaseController
         // $data = DB::select("select nextval('{$table}_id_seq');")[0]->nextval;
 
         #Get Last Increment Used
-        $maxId = DB::select("SELECT MAX(id) FROM users;")[0]->max;
+        $maxId = DB::select("SELECT MAX(id) FROM {$table};")[0]->max;
 
         #GET Current Increment of table (Recomended method)
         $currentId = DB::select("SELECT last_value FROM {$table}_id_seq;")[0]->last_value;
@@ -35,6 +35,16 @@ class Controller extends BaseController
 
     public function getNextId($table,$waroengId)
     {
+        #Get Last Increment Used
+        $maxId = DB::select("SELECT MAX(id) FROM {$table};")[0]->max;
+
+        #GET Current Increment of table (Recomended method)
+        $currentId = DB::select("SELECT last_value FROM {$table}_id_seq;")[0]->last_value;
+
+        if ($maxId != $currentId) {
+            DB::select("SELECT setval('{$table}_id_seq', {$maxId});");
+        }
+
         $words = explode("_", $table);
         $prefix = "";
 
