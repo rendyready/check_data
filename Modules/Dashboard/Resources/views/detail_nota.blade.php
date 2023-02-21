@@ -11,8 +11,17 @@
               </div>
                 <div class="block-content text-muted">
                     <form id="rekap_insert">
-                        {{-- @csrf --}}
-                        <div class="row">
+                      <div class="row">
+                        <div class="col-md-5">
+                            <div class="row mb-1">
+                                <label class="col-sm-3 col-form-label" >Tanggal</label>
+                                <div class="col-sm-9 datepicker">
+                                    <input name="r_t_tanggal" class="cari form-control form-control" type="text" placeholder="Pilih Tanggal.." id="filter_tanggal" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                      <div class="row">
                             <div class="col-md-5">
                                 <div class="row mb-2">
                                     <label class="col-sm-3 col-form-label">Area</label>
@@ -27,7 +36,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="col-sm-5">
                                 <div class="row mb-2">
                                     <label class="col-sm-3 col-form-label">Waroeng</label>
@@ -40,18 +48,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div class="row">
-                            <div class="col-md-5">
-                                <div class="row mb-1">
-                                    <label class="col-sm-3 col-form-label" >Tanggal</label>
-                                    <div class="col-sm-9 datepicker">
-                                        <input name="r_t_tanggal" class="cari form-control form-control" type="text" placeholder="Pilih Tanggal.." id="filter_tanggal" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
                         <div class="row">
                             <div class="col-md-5">
                                 <div class="row mb-3">
@@ -68,19 +64,12 @@
                                 </div>
                             </div>
                         </div> 
-
                         <div class="col-sm-8">
-                            <button type="button" id="cari"
-                                class="btn btn-primary btn-sm col-1 mt-2 mb-5">Cari</button>
-                        </div>
-                    </form>
-                    <div id="show_nota" class="row">
-                      
-                    </div>      
-                    
+                            <button type="button" id="cari" class="btn btn-primary btn-sm col-1 mt-2 mb-5">Cari</button>
+                    </div>
+                </form>
+              <div id="show_nota" class="row">       
           </div>
-        </div>
-      </div>
     </div>
 </div>
 @endsection
@@ -89,40 +78,11 @@
     <script type="module">
 $(document).ready(function() {
     Codebase.helpersOnLoad(['jq-select2']);
-
-//     $('#cari').on('click', function() {
-//         var waroeng  = $('#filter_waroeng').val();
-//         var tanggal  = $('#filter_tanggal').val();
-//         var operator = $('#filter_operator').val();
-//         console.log(tanggal);
-//     $('#tampil_rekap').DataTable({
-//         button: [],
-//         destroy: true,
-//         orderCellsTop: true,
-//         processing: true,
-//         autoWidth: true,
-//         lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
-//         pageLength: 10,
-//         ajax: {
-//             url: '{{route("rekap.show")}}',
-//             data : {
-//                 waroeng: waroeng,
-//                 tanggal: tanggal,
-//                 operator: operator,
-//             },
-//             type : "GET",
-//             },
-//             success:function(data){ 
-//                 console.log(data);
-//             }
-//       });
-//     });
-
-      $('#cari').click(function(){
+      
+    $('#cari').click(function(){
         var waroeng  = $('#filter_waroeng').val();
         var tanggal  = $('#filter_tanggal').val();
         var operator = $('#filter_operator').val();    
-       
             $.ajax({
             type:"GET",
             url: '{{route("detail.show")}}',
@@ -134,45 +94,38 @@ $(document).ready(function() {
               operator: operator,
             },
             success:function(data){  
-              console.log(data);
-              $.each(data, function (index, item) {
-                var sum = item.r_t_detail_qty*item.r_t_detail_price;
+              $.each(data.transaksi_rekap, function (key, value) {
+                // console.log(item.r_t_id);
                 $('#show_nota').append('<div class="col-xl-4">'+
                         '<div class="block block-rounded mb-1">'+
                           '<div class="block-header block-header-default block-header-rtl bg-pulse">'+
-                            '<h3 class="block-title text-light"><small class="fw-semibold">'+ item.r_t_nota_code +'</small><br><small>Dine-In</small></h3>'+
+                            '<h3 class="block-title text-light"><small class="fw-semibold">'+ value.r_t_nota_code +'</small><br><small>'+ value.m_t_t_name +'</small></h3>'+
                             '<div class="alert alert-warning py-2 mb-0">'+
-                              '<h3 class="block-title text-black"><i class="fa fa-calendar opacity-50 ms-1"></i> <small>'+ item.r_t_tanggal +'</small>'+
-                                '<br><small class="fw-semibold">'+ item.name +'</small></h3>'+
+                              '<h3 class="block-title text-black"><i class="fa fa-calendar opacity-50 ms-1"></i> <small>'+ value.r_t_tanggal +'</small>'+
+                                '<br><small class="fw-semibold">'+ value.name +'</small></h3>'+
                             '</div>'+
                           '</div>'+
                           '<div class="block-content mb-4" style="background-color: rgba(224, 224, 224, 0.5)">'+
-                            '<table class="table table-border" style="font-size: 13px;">'+
+                            '<table class="table table-border table-striped table-vcenter js-dataTable-full" style="font-size: 13px;">'+
+                              '<thead id="sub_nota'+ value.r_t_id +'">'+
+                                '</thead>'+
                               '<tbody>'+
-                                '<tr style="background-color: white;">'+
-                                  '<td>'+
-                                    '<small class="fw-semibold" style="font-size: 15px;">'+ item.r_t_detail_m_produk_nama +'</small> <br>'+
-                                    '<small>'+ item.r_t_detail_qty +' x '+ item.r_t_detail_nominal +'</small>'+
-                                  '</td>'+
-                                  '<td class="text-end fw-semibold" >'+ item.r_t_detail_nominal + ''+
-                                  '</td>'+
-                                '</tr>'+
                                 '<tr style="background-color: white;" class="text-end fw-semibold">'+
                                   '<td>Total</td>'+
                                   '<td>'+
-                                    ''+ item.r_t_nominal +''+
+                                    ''+ value.r_t_nominal +''+
                                   '</td>'+
                                 '</tr>'+
                                 '<tr style="background-color: white;" class="text-end fw-semibold">'+
                                   '<td>Tax (10%)</td>'+
                                   '<td>'+
-                                    ''+ item.r_t_nominal_pajak +''+
+                                    ''+ value.r_t_nominal_pajak +''+
                                   '</td>'+
                                 '</tr>'+
                                 '<tr style="background-color: white;" class="text-end fw-semibold">'+
-                                  '<td>Bayar</td>'+
+                                  '<td>Bayar ('+ value.m_payment_method_type +') </td>'+
                                   '<td>'+
-                                    ''+ item.r_t_nominal_total_bayar +''+
+                                    ''+ value.r_t_nominal_total_bayar +''+
                                   '</td>'+
                                 '</tr>'+
                               '</tbody>'+
@@ -180,10 +133,21 @@ $(document).ready(function() {
                           '</div>'+
                         '</div>'+
                       '</div>');
-              });
-              
-            }
-                      
+                    });
+                    $.each(data.detail_nota, function (key, item) {
+                        // console.log(item.r_t_detail_r_t_id);
+                        $('#sub_nota'+ item.r_t_detail_r_t_id).append(
+                                '<tr style="background-color: white;">'+
+                                  '<td>'+
+                                    '<small class="fw-semibold" style="font-size: 15px;">'+ item.r_t_detail_m_produk_nama +'</small> <br>'+
+                                    '<small>'+ item.r_t_detail_qty +' x '+ item.r_t_detail_price +'</small>'+
+                                  '</td>'+
+                                  '<td class="text-end fw-semibold" >'+ item.r_t_detail_nominal + ''+
+                                  '</td>'+
+                                '</tr>'
+                          );
+                      });
+            }           
           });           
     });
 

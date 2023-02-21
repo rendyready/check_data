@@ -50,20 +50,23 @@ class RekapNotaHarianController extends Controller
 
     public function show(Request $request)
     {
-        $data1 = new \stdClass();
         $dates = explode('to' ,$request->tanggal);
         $get = DB::table('rekap_transaksi')
-                ->join('rekap_transaksi_detail', 'r_t_detail_sync_id', 'r_t_sync_id')
-                ->select(DB::raw("SUM(r_t_nominal) as total"), 'r_t_tanggal')
+                ->join('rekap_transaksi_detail', 'r_t_detail_r_t_id', 'r_t_id')
+                ->join('rekap_payment_transaksi', 'r_p_t_r_t_id', 'r_t_id')
+                ->join('m_payment_method', 'm_payment_method_id', 'r_p_t_m_payment_method_id')
+                ->select(DB::raw("SUM(r_t_nominal) as total"), 'r_t_tanggal', 'm_payment_method_type', 'm_payment_method_name')
                 ->where('r_t_m_w_id', $request->waroeng)
                 ->whereBetween('r_t_tanggal', $dates)
-                ->groupBy('r_t_tanggal')
+                ->groupBy('r_t_tanggal', 'm_payment_method_type', 'm_payment_method_name')
                 ->orderBy('r_t_tanggal', 'ASC')
                 ->get();
         $data = array();
         foreach ($get as $value) {
             $row = array();
             $row[] = date('d-m-Y', strtotime($value->r_t_tanggal));
+            $row[] = $value->m_payment_method_type;
+            $row[] = $value->m_payment_method_name;
             $row[] = rupiah($value->total);
             $data[] = $row;
         }

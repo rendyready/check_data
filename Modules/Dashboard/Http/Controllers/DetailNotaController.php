@@ -9,10 +9,7 @@ use Illuminate\Contracts\Support\Renderable;
 
 class DetailNotaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     * @return Renderable
-     */
+
     public function index()
     {
         $data = new \stdClass();
@@ -24,6 +21,9 @@ class DetailNotaController extends Controller
             ->get();
         $data->user = DB::table('users')
             ->orderby('id', 'ASC')
+            ->get();
+        $data->transaksi_rekap = DB::table('rekap_transaksi')
+            ->orderby('r_t_id', 'ASC')
             ->get();
         return view('dashboard::detail_nota', compact('data'));
     }
@@ -43,10 +43,6 @@ class DetailNotaController extends Controller
         return response()->json($data);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     * @return Renderable
-     */
     public function create()
     {
         return view('dashboard::create');
@@ -70,16 +66,19 @@ class DetailNotaController extends Controller
     public function show(Request $request)
     {
         $dates = explode('to' ,$request->tanggal);
-        $data = DB::table('rekap_transaksi')
-                ->join('rekap_transaksi_detail', 'r_t_detail_sync_id', 'r_t_sync_id')
-                ->join('users', 'id', 'r_t_created_by')
-                // ->select('r_t_nota_code', 'r_t_tanggal', 'name', 'r_t_detail_m_produk_nama', 'r_t_detail_qty', 'r_t_detail_price', 'r_t_m_w_id', 'r_t_created_by', 'r_t_detail_r_t_id', 'r_t_detail_sync_id', 'r_t_sync_id')
-                ->where('r_t_m_w_id', $request->waroeng)
-                ->where('r_t_created_by', $request->operator)
-                ->whereBetween('r_t_tanggal', $dates)
-                // ->groupBy('r_t_sync_id')
-                ->orderBy('r_t_id', 'ASC')
-                ->get();
+        $data = new \stdClass();
+        $data->transaksi_rekap = DB::table('rekap_transaksi')
+            ->join('users', 'id', 'r_t_created_by')
+            ->join('m_transaksi_tipe', 'm_t_t_id', 'r_t_m_t_t_id')
+            ->join('rekap_payment_transaksi', 'r_p_t_r_t_id', 'r_t_id')
+            ->join('m_payment_method', 'm_payment_method_id', 'r_p_t_m_payment_method_id')
+            ->where('r_t_m_w_id', $request->waroeng)
+            ->where('r_t_created_by', $request->operator)
+            ->whereBetween('r_t_tanggal', $dates)
+            ->orderby('r_t_id', 'ASC')
+            ->get();
+        $data->detail_nota = DB::table('rekap_transaksi_detail')
+            ->get();
         return response()->json($data);
     }
 

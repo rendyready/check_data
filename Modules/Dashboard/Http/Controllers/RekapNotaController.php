@@ -21,6 +21,8 @@ class RekapNotaController extends Controller
         $data->user = DB::table('users')
             ->orderby('id', 'ASC')
             ->get();
+        $data->transaksi_rekap = DB::table('rekap_transaksi')
+            ->get();
         return view('dashboard::rekap_nota', compact('data'));
     }
 
@@ -48,8 +50,10 @@ class RekapNotaController extends Controller
     {
         $dates = explode('to' ,$request->tanggal);
         $get = DB::table('rekap_transaksi')
-                ->join('rekap_transaksi_detail', 'r_t_detail_sync_id', 'r_t_sync_id')
+                ->join('rekap_transaksi_detail', 'r_t_detail_r_t_id', 'r_t_id')
                 ->join('users', 'id', 'r_t_created_by')
+                ->join('rekap_payment_transaksi', 'r_p_t_r_t_id', 'r_t_id')
+                ->join('m_payment_method', 'm_payment_method_id', 'r_p_t_m_payment_method_id')
                 ->where('r_t_m_w_id', $request->waroeng)
                 ->where('r_t_created_by', $request->operator)
                 ->whereBetween('r_t_tanggal', $dates)
@@ -61,31 +65,36 @@ class RekapNotaController extends Controller
             $row[] = date('d-m-Y', strtotime($value->r_t_tanggal));
             $row[] = $value->name;
             $row[] = $value->r_t_nota_code;
-            $row[] = rupiah($value->r_t_nominal);
-            $row[] = rupiah($value->r_t_nominal_pajak);
-            $row[] = rupiah($value->r_t_nominal_total_bayar);
+            $row[] = rupiah($value->r_t_nominal, 0);
+            $row[] = rupiah($value->r_t_nominal_pajak, 0);
+            $row[] = rupiah($value->r_t_nominal_total_bayar, 0);
+            $row[] = $value->m_payment_method_type;
+            $row[] = $value->m_payment_method_name;
+            $row[] ='<a id="button_detail" class="btn btn-sm buttonEdit btn-info" value="'.$value->r_t_id.'" title="Detail Nota"><i class="fa-sharp fa-solid fa-file"></i></a>';
             $data[] = $row;
         }
         $output = array("data" => $data);
         return response()->json($output);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
-    public function edit($id)
+
+    public function detail($id)
     {
-        return view('dashboard::edit');
+        $data = new \stdClass();
+        $data->transaksi_rekap = DB::table('rekap_transaksi')
+                ->join('users', 'id', 'r_t_created_by')
+                ->join('rekap_payment_transaksi', 'r_p_t_r_t_id', 'r_t_id')
+                ->join('m_payment_method', 'm_payment_method_id', 'r_p_t_m_payment_method_id')
+                ->join('m_transaksi_tipe', 'm_t_t_id', 'r_t_m_t_t_id')
+                ->where('r_t_id', $id)
+                ->first();
+        $data->detail_nota = DB::table('rekap_transaksi_detail')
+            ->where('r_t_detail_r_t_id', $id)
+            ->get();
+        return response()->json($data);
     }
 
-    /**
-     * Update the specified resource in storage.
-     * @param Request $request
-     * @param int $id
-     * @return Renderable
-     */
+
     public function update(Request $request, $id)
     {
         //
