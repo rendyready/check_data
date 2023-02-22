@@ -18,17 +18,37 @@ class TransTipeController extends Controller
         return view('master::transaksi_tipe', compact('data'));
     }
     public function action(Request $request)
-    {
-        $val = ['m_t_t_name' => ['required', 'unique:m_transaksi_tipe']];
-        $value = ['m_t_t_name' => Str::lower($request->m_t_t_name)];
-        $validate = \Validator::make($value, $val);
-        if ($validate->fails()) {
-            return response(['Message' => 'Data Dupliate']);
+    {   $name = trim(strtolower(preg_replace('!\s+!', ' ', $request->m_t_t_name)));
+        $rules = [
+            'm_t_t_name' => 'required|unique:m_transaksi_tipe|max:255',
+            'm_t_t_profit_price' => 'required',
+            'm_t_t_profit_in' => 'required',
+            'm_t_t_profit_out' => 'required',
+            'm_t_t_group' => 'required',
+        ];
+        $data_validate = array(
+            'm_t_t_name' =>  $name,
+            'm_t_t_profit_price' => $request->m_t_t_profit_price,
+            'm_t_t_profit_in' => $request->m_t_t_profit_in,
+            'm_t_t_profit_out' => $request->m_t_t_profit_out,
+            'm_t_t_group' => $request->m_t_t_group,
+        );
+        $validator = Validator::make($data_validate, $rules, $messages = [
+            'm_t_t_name.required' => 'Nama Belum Terisi',
+            'm_t_t_name.unique' => 'Nama Duplikat',
+            'm_t_t_profit_price.required' => 'Profit Price Belum Terisi',
+            'm_t_t_profit_in.required' => 'Profit In Belum Terisi',
+            'm_t_t_profit_out.required' => 'Profit Out Belum Terisi',
+            'm_t_t_group.required' => 'Kelompok Belum Terisi'
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['error'=>$validator->messages()->all(),'type'=>'danger']);
         } else {
-            if ($validate->ajax()) {
+            if ($request->ajax()) {
                 if ($request->action == 'add') {
                     $data = array(
-                        'm_t_t_name' => Str::lower($request->m_t_t_name),
+                        'm_t_t_id' => $this->getMasterId('m_transaksi_tipe'),
+                        'm_t_t_name' => $name,
                         'm_t_t_profit_price' => $request->m_t_t_profit_price,
                         'm_t_t_profit_in' => $request->m_t_t_profit_in,
                         'm_t_t_profit_out' => $request->m_t_t_profit_out,
@@ -52,7 +72,7 @@ class TransTipeController extends Controller
                         ->where('m_t_t_id', $request->m_t_t_id)
                         ->update($softdelete);
                 }
-                return response(['Congratulations' => $data]);
+                return response()->json(['error'=>['Berhasil'],'type'=>'success']);
             }
         }
     }

@@ -20,23 +20,25 @@ class MSatuanController extends Controller
     }
     public function action(Request $request)
     {
-        $raw = [
-            'm_satuan_kode' => Str::lower($request->m_satuan_kode),
-
+        $m_satuan_kode = trim(strtolower(preg_replace('!\s+!', ' ', $request->m_satuan_kode)));
+        $rules = [
+            'm_satuan_kode' => 'required|unique:m_satuan|max:255',
         ];
-        $value = [
-            'm_satuan_kode' => ['required', 'unique:m_satuan', 'max:225'],
-
-        ];
-        $validate = \Validator::make($raw, $value);
-        if ($validate->fails()) {
-            return response()
-                ->json(['Messages' => 'Data Duplicate !']);
+        $data_validate = array(
+            'm_satuan_kode' =>  $m_satuan_kode,
+        );
+        $validator = Validator::make($data_validate, $rules, $messages = [
+            'm_satuan_kode.required' => 'Satuan Belum Terisi',
+            'm_satuan_kode.unique' => 'Satuan Telah Ada !',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['error'=>$validator->messages()->all(),'type'=>'danger']);
         } else {
             if ($request->ajax()) {
                 if ($request->action == 'add') {
                     $data = array(
-                        'm_satuan_kode'    =>   Str::lower($request->m_satuan_kode),
+                        'm_satuan_id' => $this->getMasterId('m_satuan'),
+                        'm_satuan_kode'=>   $m_satuan_kode,
                         'm_satuan_keterangan'    =>    $request->m_satuan_keterangan,
                         'm_satuan_created_by' => Auth::id(),
                         'm_satuan_created_at' => Carbon::now(),
@@ -57,7 +59,7 @@ class MSatuanController extends Controller
                         ->where('m_satuan_id', $request->id)
                         ->update($softdelete);
                 }
-                return response(['Messages' => 'Congratulations !']);
+                return response()->json(['error'=>['Berhasil'],'type'=>'success']);
             }
         }
     }

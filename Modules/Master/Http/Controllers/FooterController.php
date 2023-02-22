@@ -22,17 +22,30 @@ class FooterController extends Controller
     public function action(Request $request)
     {
 
-        $val = [
-            'm_footer_value' => ['required', 'max:255'],
-            'm_footer_priorty' => ['required', 'max:255']
+        $m_footer_value = trim(strtolower(preg_replace('!\s+!', ' ', $request->m_footer_value)));
+        $rules = [
+            'm_footer_value' => 'required|max:255',
+            'm_footer_priority' => 'required',
+            'm_footer_m_w_id' => 'required'
         ];
-        $validate = Validator::make($request->all(), $val);
-        if ($validate->fails()) {
-            return response(['Message' => 'Tidak Boleh Kosong !']);
+        $data_validate = array(
+            'm_footer_value' =>  $m_footer_value,
+            'm_footer_priority' =>    $request->m_footer_priority,
+            'm_footer_m_w_id' => $request->m_footer_m_w_id,
+        );
+        $validator = Validator::make($data_validate, $rules, $messages = [
+            'm_footer_value.required' => 'Keterangan Belum Terisi',
+            'm_footer_value.max' => 'Maksimal 255 Karakter Terpenuhi !',
+            'm_footer_priority.required' => 'Urutan Belum Terisi',
+            'm_footer_m_w_id.required' => 'Waroeng Belum Terisi'
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['error'=>$validator->messages()->all(),'type'=>'danger']);
         } else {
-            if ($validate->ajax()) {
+            if ($request->ajax()) {
                 if ($request->action == 'add') {
                     $data = array(
+                        'm_footer_id' => $this->getMasterId('m_footer'),
                         'm_footer_value'    =>    $request->m_footer_value,
                         'm_footer_m_w_id' =>    $request->m_footer_m_w_id,
                         'm_footer_priority' =>    $request->m_footer_priority,
@@ -56,7 +69,7 @@ class FooterController extends Controller
                         ->where('m_footer_id', $request->m_footer_id)
                         ->update($softdelete);
                 }
-                return response()->json($request);
+                return response()->json(['error'=>['Berhasil'],'type'=>'success']);
             }
         }
     }

@@ -15,5 +15,11 @@ use App\Http\Controllers\Master\SatuanController;
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+// Dashboard Route
+Route::middleware(['auth', 'web'])->group(function () {
+    Route::view('/', 'home');
+    Route::match(['get', 'post'], '/home', function () {
+        return view('home');
+    });
+});
 Route::get('/coba/{table}', [App\Http\Controllers\Controller::class, 'getNextId']);

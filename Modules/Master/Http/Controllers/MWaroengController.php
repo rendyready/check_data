@@ -24,9 +24,7 @@ class MWaroengController extends Controller
             ->select(
                 'm_w_id',
                 'm_w_nama',
-                'm_w_alamat',
                 'm_area_nama',
-                'm_w_status',
                 'm_w_jenis_nama',
                 'm_w_m_kode_nota',
                 'm_pajak_value',
@@ -34,9 +32,8 @@ class MWaroengController extends Controller
                 'm_modal_tipe_nama'
             )
             ->get();
-        return view('master::m_waroeng', compact('data'));
-
-        return $data;
+        $area = DB::table('m_area')->get();
+        return view('master::m_waroeng', compact('data','area'));
     }
     public function list()
     {

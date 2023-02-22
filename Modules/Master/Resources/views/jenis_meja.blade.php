@@ -67,17 +67,19 @@
         ]
       },
       restoreButton: false,
-      onSuccess: function(data, textStatus, jqXHR) {
-        Codebase.helpers('jq-notify', {
+      onSuccess: function(data) {
+        $.each(data.error, function(key, value) {
+           Codebase.helpers('jq-notify', {
           align: 'right', // 'right', 'left', 'center'
           from: 'top', // 'top', 'bottom'
-          type: 'danger', // 'info', 'success', 'warning', 'danger'
+          type: data.type, // 'info', 'success', 'warning', 'danger'
           icon: 'fa fa-info me-5', // Icon class
-          message: data.m_meja_jenis_nama + '<br></br>' + data.m_meja_jenis_status + '<br></br>' + data.m_meja_jenis_space,
+          message: value,
+        });
         });
         setTimeout(function() {
           window.location.reload();
-        }, 3300);
+        }, 3000);
       }
     });
     $("#m_meja_jenis").append(

@@ -79,7 +79,7 @@
                 <div class="form-group">
                   <label for="jenis_meja">Jenis Meja</label>
                   <div>
-                      <select class="js-select2" id="jenis_meja" name="jenis_meja" style="width: 100%;" data-container="#modal-block-select2" data-placeholder="Choose one..">
+                      <select class="js-select2" id="jenis_meja" name="jenis_meja" style="width: 100%;" data-container="#modal-block-select2" data-placeholder="Choose one.." required>
                           <option></option>
                           @foreach ($data->jenis_meja as $item)
                               <option value="{{$item->m_meja_jenis_id}}">{{ $item->m_meja_jenis_nama}}</option>
@@ -92,7 +92,7 @@
                 <div class="form-group">
                   <label for="m_meja_type">Group Meja</label>
                   <div>
-                      <select class="js-select2" id="m_meja_type" name="m_meja_type" style="width: 100%;" data-container="#modal-block-select2" data-placeholder="Choose one..">
+                      <select class="js-select2" id="m_meja_type" name="m_meja_type" style="width: 100%;" data-container="#modal-block-select2" data-placeholder="Choose one.." required>
                         <option></option> 
                         <option value="meja">Meja</option>
                          <option value="bungkus">Bungkus</option>
@@ -105,7 +105,7 @@
                 <div class="form-group">
                   <label for="waroeng">Waroeng</label>
                   <div>
-                      <select class="js-select2" id="waroeng" name="waroeng" style="width: 100%;" data-container="#modal-block-select2" data-placeholder="Choose one..">
+                      <select class="js-select2" id="waroeng" name="waroeng" style="width: 100%;" data-container="#modal-block-select2" data-placeholder="Choose one.." required>
                           <option></option>
                           @foreach ($data->waroeng as $item)
                               <option value="{{$item->m_w_id}}">{{ $item->m_w_nama}}</option>

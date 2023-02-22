@@ -64,18 +64,23 @@
       identifier:[0, 'm_t_t_id'],
       editable:[[1,'m_t_t_name'],[2, 'm_t_t_profit_in','number',att_num],
       [3,'m_t_t_profit_out','number',att_num],[4,'m_t_t_profit_price','number',att_num],
-      [5,'m_t_t_group','select','{"ojol":"Ojol","reguler":"Reguler"}']]
+      [5,'m_t_t_group','select','{"ojol":"ojol","reguler":"reguler"}']]
     },
     restoreButton:false,
-    onSuccess:function(data, textStatus, jqXHR)
+    onSuccess:function(data)
     {
-      if (data.action == 'add') {
-        window.location.reload();
-      }
-      if(data.action == 'delete')
-      {
-        $('#'+data.id).remove();
-      }
+      $.each(data.error, function(key, value) {
+           Codebase.helpers('jq-notify', {
+          align: 'right', // 'right', 'left', 'center'
+          from: 'top', // 'top', 'bottom'
+          type: data.type, // 'info', 'success', 'warning', 'danger'
+          icon: 'fa fa-info me-5', // Icon class
+          message: value,
+        });
+        });
+        setTimeout(function() {
+          window.location.reload();
+        }, 3000);
     }
   });
   $("#m_transaksi_tipe").append(
