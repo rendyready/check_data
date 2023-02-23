@@ -153,18 +153,56 @@
                                             </div>
                                         </div>
                                         <div class="mb-4">
-                                          <div class="form-group">
-                                              <label for="m_w_m_pajak_id">Pajak</label>
-                                              <select class="js-select2" id="m_w_m_pajak_id" name="m_w_m_pajak_id"
-                                                  style="width: 100%;" data-placeholder="Pilih Pajak" required>
-                                                  <option></option>
-                                                  @foreach ($pajak as $item)
-                                                      <option value="{{ $item->m_pajak_id }}">
-                                                          {{ $item->m_pajak_value }}</option>
-                                                  @endforeach
-                                              </select>
-                                          </div>
-                                      </div>
+                                            <div class="form-group">
+                                                <label for="m_w_m_sc_id">Service Charge</label>
+                                                <select class="js-select2" id="m_w_m_sc_id" name="m_w_m_sc_id"
+                                                    style="width: 100%;" data-placeholder="Pilih Service Charge" required>
+                                                    <option></option>
+                                                    @foreach ($pajak as $item)
+                                                        <option value="{{ $item->m_pajak_id }}">
+                                                            {{ $item->m_pajak_value }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="mb-4">
+                                            <div class="form-group">
+                                                <label for="m_w_m_modal_tipe_id">Modal Tipe</label>
+                                                <select class="js-select2" id="m_w_m_modal_tipe_id"
+                                                    name="m_w_m_modal_tipe_id" style="width: 100%;"
+                                                    data-placeholder="Pilih Tipe Modal" required>
+                                                    <option></option>
+                                                    @foreach ($modaltipe as $item)
+                                                        <option value="{{ $item->m_modal_tipe_id }}">
+                                                            {{ $item->m_modal_tipe_nama }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="mb-4">
+                                            <div class="form-group">
+                                                <label for="m_w_decimal">Decimal</label>
+                                                <select class="js-select2" id="m_w_decimal"
+                                                    name="m_w_decimal" style="width: 100%;"
+                                                    data-placeholder="Pilih Tipe Digit Decimal" required>
+                                                    <option></option>
+                                                    <option value="0">0</option>
+                                                    <option value="2">2</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="mb-4">
+                                            <div class="form-group">
+                                                <label for="m_w_pembulatan">Pembulatan</label>
+                                                <select class="js-select2" id="m_w_pembulatan"
+                                                    name="m_w_pembulatan" style="width: 100%;"
+                                                    data-placeholder="Pilih Pembulatan" required>
+                                                    <option></option>
+                                                    <option value="ya">ya</option>
+                                                    <option value="tidak">tidak</option>
+                                                </select>
+                                            </div>
+                                        </div>
                                         <div class="block-content block-content-full text-end bg-transparent">
                                             <button type="button" class="btn btn-sm btn-alt-secondary me-1"
                                                 data-bs-dismiss="modal">Close</button>
