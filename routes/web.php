@@ -15,6 +15,8 @@ use App\Http\Controllers\Master\SatuanController;
 
 Auth::routes();
 
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/coba/{table}', [App\Http\Controllers\Controller::class, 'getMasterId']);
 // Dashboard Route
 Route::middleware(['auth', 'web'])->group(function () {
     Route::view('/', 'home');
@@ -22,4 +24,3 @@ Route::middleware(['auth', 'web'])->group(function () {
         return view('home');
     });
 });
-Route::get('/coba/{table}', [App\Http\Controllers\Controller::class, 'getNextId']);

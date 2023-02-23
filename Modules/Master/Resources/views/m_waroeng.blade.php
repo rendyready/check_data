@@ -152,7 +152,19 @@
                                                 </select>
                                             </div>
                                         </div>
-
+                                        <div class="mb-4">
+                                          <div class="form-group">
+                                              <label for="m_w_m_pajak_id">Pajak</label>
+                                              <select class="js-select2" id="m_w_m_pajak_id" name="m_w_m_pajak_id"
+                                                  style="width: 100%;" data-placeholder="Pilih Pajak" required>
+                                                  <option></option>
+                                                  @foreach ($pajak as $item)
+                                                      <option value="{{ $item->m_pajak_id }}">
+                                                          {{ $item->m_pajak_value }}</option>
+                                                  @endforeach
+                                              </select>
+                                          </div>
+                                      </div>
                                         <div class="block-content block-content-full text-end bg-transparent">
                                             <button type="button" class="btn btn-sm btn-alt-secondary me-1"
                                                 data-bs-dismiss="modal">Close</button>
