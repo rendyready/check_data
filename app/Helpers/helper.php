@@ -98,8 +98,8 @@ function terbilang($angka) {
 	return $terbilang;
 }
 
-function rupiah($angka){
-	$hasil = "Rp ".number_format($angka,2,',','.');
+function rupiah($angka,$decimal = 2){
+	$hasil = "Rp ".number_format($angka,$decimal,',','.');
 	return $hasil;	 
 }
 function number_to_alphabet($number) {

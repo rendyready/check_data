@@ -27,12 +27,16 @@ Route::prefix('dashboard')->middleware('auth', 'web')
 
         Route::controller(DetailNotaController::class)->group(function () {
             Route::get('detail', 'index')->name('detail.index');
+            Route::get('detail/show', 'show')->name('detail.show');
+            Route::get('detail/select_waroeng', 'select_waroeng')->name('detail.select_waroeng');
         });
 
         Route::controller(RekapNotaController::class)->group(function () {
             Route::get('rekap', 'index')->name('rekap.index');
             Route::get('rekap/show', 'show')->name('rekap.show');
             Route::get('rekap/select_waroeng', 'select_waroeng')->name('rekap.select_waroeng');
+            Route::get('rekap/detail/{id}', 'detail')->name('rekap.detail');
+
         });
 
         Route::controller(RekapNotaHarianController::class)->group(function () {

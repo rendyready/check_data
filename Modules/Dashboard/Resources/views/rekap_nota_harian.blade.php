@@ -11,7 +11,18 @@
               </div>
                 <div class="block-content text-muted">
                     <form id="rekap_insert">
-                        {{-- @csrf --}}
+                        
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="row mb-1">
+                                    <label class="col-sm-3 col-form-label" >Tanggal</label>
+                                    <div class="col-sm-9 datepicker">
+                                        <input name="r_t_tanggal" class="cari form-control" type="text" placeholder="Pilih Tanggal.." id="filter_tanggal" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div> 
+
                         <div class="row">
                             <div class="col-md-5">
                                 <div class="row mb-2">
@@ -41,17 +52,6 @@
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-md-5">
-                                <div class="row mb-1">
-                                    <label class="col-sm-3 col-form-label" >Tanggal</label>
-                                    <div class="col-sm-9 datepicker">
-                                        <input name="r_t_tanggal" class="cari form-control form-control-sm" type="text" placeholder="Pilih Tanggal.." id="filter_tanggal" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div> 
-
                         <div class="col-sm-8">
                             <button type="button" id="cari"
                                 class="btn btn-primary btn-sm col-1 mt-2 mb-3">Cari</button>
@@ -59,12 +59,13 @@
 
                     </form>      
                 
-            <table id="tampil_rekap" class="table table-sm table-bordered table-striped table-vcenter js-dataTable-full">
+            <table id="tampil_rekap" class="table table-sm table-bordered table-hover table-striped table-vcenter js-dataTable-full nowrap">
               <thead>
-                <tr>
+                <tr class="justify-content-center">
                   <th>Tanggal</th>
-                  <th>Total Penjualan</th>
-                  {{-- <th>Pembayaran</th> --}}
+                  <th>Payment</th>
+                  <th>Jenis Payment</th>
+                  <th class="text_end">Total Penjualan</th>
                 </tr>
               </thead>
               <tbody id="show_data">
@@ -93,6 +94,9 @@ $(document).ready(function() {
         orderCellsTop: true,
         processing: true,
         autoWidth: true,
+        "columnDefs": [
+            {"className": "dt-right", "targets": "[-2]"}
+        ],
         lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
         pageLength: 10,
         ajax: {
