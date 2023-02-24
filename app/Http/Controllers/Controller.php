@@ -21,20 +21,18 @@ class Controller extends BaseController
 
         #Get Last Increment Used
         $maxId = DB::select("SELECT MAX(id) FROM {$table};")[0]->max;
-        if (empty($maxId)) {
-            $maxId =1;
-        }
-
+        
         #GET Current Increment of table (Recomended method)
         $currentId = DB::select("SELECT last_value FROM {$table}_id_seq;")[0]->last_value;
-        if ($maxId != $currentId) {
-            DB::select("SELECT setval('{$table}_id_seq', {$maxId});");
-            $currentId = $maxId;
+        $nextId = $currentId;
+        if (!empty($maxId) && $currentId >= 1) {
+            if ($maxId != $currentId) {
+                DB::select("SELECT setval('{$table}_id_seq', {$maxId});");
+                $currentId = $maxId;
+            }
+            $nextId = $currentId+1;
         }
-        $nextId = $currentId+1;
-        // if ($maxId == 1) {
-        //     $nextId = $currentId;
-        // }
+        
         return $nextId;
     }
 
@@ -42,12 +40,14 @@ class Controller extends BaseController
     {
         #Get Last Increment Used
         $maxId = DB::select("SELECT MAX(id) FROM {$table};")[0]->max;
-
+        
         #GET Current Increment of table (Recomended method)
         $currentId = DB::select("SELECT last_value FROM {$table}_id_seq;")[0]->last_value;
 
-        if ($maxId != $currentId) {
-            DB::select("SELECT setval('{$table}_id_seq', {$maxId});");
+        if (!empty($maxId) && $currentId >= 1) {
+            if ($maxId != $currentId) {
+                DB::select("SELECT setval('{$table}_id_seq', {$maxId});");
+            }
         }
 
         $words = explode("_", $table);
