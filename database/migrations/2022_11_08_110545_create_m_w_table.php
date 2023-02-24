@@ -20,15 +20,15 @@ return new class extends Migration
             $table->string('m_w_code');
             $table->unsignedBigInteger('m_w_m_area_id');
             $table->unsignedBigInteger('m_w_m_w_jenis_id');
-            $table->char('m_w_status')->default('1');
+            $table->string('m_w_status')->default('1');
             $table->text('m_w_alamat');
-            $table->char('m_w_m_kode_nota',10); // Nota A, Nota B
+            $table->string('m_w_m_kode_nota',10); // Nota A, Nota B
             $table->unsignedBigInteger('m_w_m_pajak_id');
             $table->unsignedBigInteger('m_w_m_modal_tipe_id');
             $table->unsignedBigInteger('m_w_m_sc_id');
             $table->integer('m_w_decimal')->default(0);
             $table->string('m_w_pembulatan')->default('tidak');
-            $table->char('m_w_currency',5)->default('Rp');
+            $table->string('m_w_currency',5)->default('Rp');
             // $table->decimal('m_w_grab',3,2)->default(0); 
             // $table->decimal('m_w_gojek',3,2)->default(0); 
             // $table->char('m_menu_profit',1)->default('1');
