@@ -47,6 +47,7 @@ class MJenisMenuController extends Controller
                     return response(['Messages' => 'Data Duplidate']);
                 } else {
                     $data = array(
+                        'm_jenis_produk_id' => $this->getMasterId('m_jenis_produk'),
                         'm_jenis_produk_nama' => Str::lower($request->m_jenis_produk_nama),
                         'm_jenis_produk_odcr55' => $request->m_jenis_produk_odcr55,
                         'm_jenis_produk_urut' => $count + 1,
@@ -54,7 +55,7 @@ class MJenisMenuController extends Controller
                         'm_jenis_produk_created_at' => Carbon::now(),
                     );
                     DB::table('m_jenis_produk')->insert($data);
-                    return response(['Messages' => 'Congratulations !']);
+                    return response(['Messages' => 'Berhasil Menambah','type' => 'success']);
                 }
             } elseif ($request->action == 'edit') {
                 $data = array(
@@ -65,7 +66,7 @@ class MJenisMenuController extends Controller
                 );
                 DB::table('m_jenis_produk')->where('m_jenis_produk_id', $request->id)
                     ->update($data);
-                return response(['Messages' => 'Data Updated !']);
+                return response(['Messages' => 'Data Updated !','type' => 'success']);
             } else {
                 $softdelete = array('m_jenis_produk_deleted_at' => Carbon::now());
                 DB::table('m_jenis_produk')

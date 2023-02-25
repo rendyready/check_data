@@ -14,8 +14,11 @@ return new class extends Migration
     public function up()
     {
         Schema::create('m_klasifikasi_produk', function (Blueprint $table) {
-            $table->id('m_klasifikasi_produk_id');
-            $table->string('m_klasifikasi_produk_nama'); //'mentah','setengah jadi','jadi'
+            $table->id('id');
+            $table->bigInteger('m_klasifikasi_produk_id')->unsigned();
+            $table->string('m_klasifikasi_produk_nama');
+            $table->string('m_klasifikasi_produk_prefix');
+            $table->integer('m_klasifikasi_produk_last_id')->default(1);
             $table->bigInteger('m_klasifikasi_produk_created_by');
             $table->bigInteger('m_klasifikasi_produk_updated_by')->nullable();
             $table->bigInteger('m_klasifikasi_produk_deleted_by')->nullable();

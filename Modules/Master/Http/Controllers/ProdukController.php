@@ -5,7 +5,7 @@ namespace Modules\Master\Http\Controllers;
 use Carbon\Carbon;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use illuminate\Support\Str;
@@ -53,8 +53,8 @@ class ProdukController extends Controller
                 if (!empty($check)) {
                     return response()->json(['messages' => 'Data Simpan Double !', 'type' => 'danger']);
                 } else {
-                    $produk_code = DB::table('m_produk_code')->where('m_produk_code_id',1)->first();
-                    $code = $produk_code->m_produk_code_mn+1 ;
+                    $produk_code = DB::table('m_klasifikasi_produk')->where('m_klasifikasi_produk_id',4)->first();
+                    $code = $produk_code->m_klasifikasi_produk_last_id+1 ;
                     DB::table('m_produk')->insert([
                         "m_produk_code" => "mn-".$code,
                         "m_produk_nama" => $request->m_produk_nama,

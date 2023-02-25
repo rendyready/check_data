@@ -56,14 +56,19 @@
         ]
       },
       restoreButton: false,
-      onSuccess: function(data, textStatus, jqXHR, Messages) {
-        Codebase.helpers('jq-notify', {
+      onSuccess: function(data) {
+        $.each(data.error, function(key, value) {
+           Codebase.helpers('jq-notify', {
           align: 'right', // 'right', 'left', 'center'
           from: 'top', // 'top', 'bottom'
-          type: 'danger', // 'info', 'success', 'warning', 'danger'
+          type: data.type, // 'info', 'success', 'warning', 'danger'
           icon: 'fa fa-info me-5', // Icon class
-          message: data.Messages
+          message: value,
         });
+        });
+        setTimeout(function() {
+          window.location.reload();
+        }, 3000);
 
         // setTimeout(function() {
         //   window.location.reload();

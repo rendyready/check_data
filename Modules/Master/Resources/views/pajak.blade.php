@@ -58,12 +58,19 @@
     restoreButton:false,
     onSuccess:function(data, textStatus, jqXHR)
     {
+      Codebase.helpers('jq-notify', {
+          align: 'right', // 'right', 'left', 'center'
+          from: 'top', // 'top', 'bottom'
+          type: data.type, // 'info', 'success', 'warning', 'danger'
+          icon: 'fa fa-info me-5', // Icon class
+          message: data.messages
+        });
       if (data.action == 'add') {
         window.location.reload();
       }
-      if(data.action == 'delete')
+      if(data.request.action == 'delete')
       {
-        $('#'+data.id).remove();
+        $('#'+data.request.id).remove();
       }
     }
   });

@@ -64,7 +64,7 @@ Route::group(['prefix' => 'master', 'controller' => WJenisController::class, 'mi
 //Master Waroeng
 Route::group(['prefix' => 'master', 'controller' => MWaroengController::class, 'middleware' => ['auth', 'web']], function () {
     Route::get('m_waroeng', 'index')->name('m_waroeng.index');
-    Route::get('m_waroeng/list', 'list')->name('m_waroeng.list');
+    Route::get('m_waroeng/edit/{id}', 'edit')->name('m_waroeng.edit');
     Route::post('m_waroeng/action', 'action')->name('action.m_waroeng');
 });
 //Master Jenis Nota

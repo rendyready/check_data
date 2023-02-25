@@ -14,10 +14,11 @@ return new class extends Migration
     public function up()
     {
         Schema::create('rekap_hapus_transaksi_detail', function (Blueprint $table) {
-            $table->id('r_h_t_detail_id');
-            $table->bigInteger('r_h_t_detail_sync_id')->nullable();
-            $table->bigInteger('r_h_t_detail_r_h_t_id');
-            $table->bigInteger('r_h_t_detail_m_produk_id');
+            $table->id('id');
+            $table->string('r_h_t_detail_id')->unique();
+            // $table->bigInteger('r_h_t_detail_sync_id')->nullable();
+            $table->string('r_h_t_detail_r_h_t_id');
+            $table->unsignedBigInteger('r_h_t_detail_m_produk_id');
             $table->string('r_h_t_detail_m_produk_nama')->nullable();
             $table->integer('r_h_t_detail_qty');
             $table->decimal('r_h_t_detail_price', 8,2)->default(0);

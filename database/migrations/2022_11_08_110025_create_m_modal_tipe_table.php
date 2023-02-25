@@ -14,9 +14,10 @@ return new class extends Migration
     public function up()
     {
         Schema::create('m_modal_tipe', function (Blueprint $table) {
-            $table->id('m_modal_tipe_id');
+            $table->id('id');
+            $table->unsignedBigInteger('m_modal_tipe_id');
             $table->string('m_modal_tipe_nama');
-            $table->bigInteger('m_modal_tipe_parent_id')->nullable();
+            $table->unsignedBigInteger('m_modal_tipe_parent_id')->nullable();
             $table->decimal('m_modal_tipe_nominal',15,2)->nullable();
             $table->decimal('m_modal_tipe_urut',15,2)->nullable();
             $table->bigInteger('m_modal_tipe_created_by');

@@ -14,16 +14,17 @@ return new class extends Migration
     public function up()
     {
         Schema::create('rekap_buka_laci', function (Blueprint $table) {
-            $table->id('r_b_l_id'); 
-            $table->bigInteger('r_b_l_sync_id')->nullable();
-            $table->bigInteger('r_b_l_rekap_modal_id');
+            $table->id('id'); 
+            $table->string('r_b_l_id')->unique(); 
+            // $table->bigInteger('r_b_l_sync_id')->nullable();
+            $table->string('r_b_l_rekap_modal_id');
             $table->date('r_b_l_tanggal');
             $table->integer('r_b_l_qty');
             $table->string('r_b_l_keterangan');
-            $table->bigInteger('r_b_l_m_w_id');
-            // $table->string('r_b_l_m_w_nama');
-            $table->bigInteger('r_b_l_m_area_id');
-            // $table->string('r_b_l_m_area_nama');
+            $table->unsignedBigInteger('r_b_l_m_w_id');
+            $table->string('r_b_l_m_w_nama');
+            $table->unsignedBigInteger('r_b_l_m_area_id');
+            $table->string('r_b_l_m_area_nama');
             $table->char('r_b_l_status_sync', 10)->default('0');
             $table->bigInteger('r_b_l_created_by');
             $table->bigInteger('r_b_l_deleted_by')->nullable();

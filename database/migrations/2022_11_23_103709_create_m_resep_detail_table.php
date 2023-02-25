@@ -14,11 +14,12 @@ return new class extends Migration
     public function up()
     {
         Schema::create('m_resep_detail', function (Blueprint $table) {
-            $table->id('m_resep_detail_id');
-            $table->bigInteger('m_resep_detail_m_resep_id');
-            $table->bigInteger('m_resep_detail_bb_id'); //id from m_produk
+            $table->id('id');
+            $table->unsignedBigInteger('m_resep_detail_id');
+            $table->unsignedBigInteger('m_resep_detail_m_resep_id');
+            $table->unsignedBigInteger('m_resep_detail_bb_id'); //id from m_produk
             $table->decimal('m_resep_detail_bb_qty',8,2);
-            $table->bigInteger('m_resep_detail_m_satuan_id');
+            $table->unsignedBigInteger('m_resep_detail_m_satuan_id');
             $table->string('m_resep_detail_ket')->nullable();
             $table->bigInteger('m_resep_detail_created_by');
             $table->bigInteger('m_resep_detail_updated_by')->nullable();

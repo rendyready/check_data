@@ -14,7 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::create('m_pajak', function (Blueprint $table) {
-            $table->id('m_pajak_id');
+            $table->id('id');
+            $table->unsignedBigInteger('m_pajak_id');
             $table->decimal('m_pajak_value',5,2);
             $table->bigInteger('m_pajak_created_by');
             $table->bigInteger('m_pajak_updated_by')->nullable();

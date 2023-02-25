@@ -22,7 +22,7 @@
               @foreach ($data as $item)
               <tr class="row1">
                 <td>{{$item->m_w_jenis_id}}</td>
-                <td>{{$item->m_w_jenis_nama}}</td>
+                <td>{{ucwords($item->m_w_jenis_nama)}}</td>
               </tr>
               @endforeach
             </tbody>

@@ -1,14 +1,15 @@
 <?php
 
 namespace Modules\Master\Http\Controllers;
-
+use App\Http\Controllers\Controller;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Validator;
+use illuminate\Support\Str;
 
 class RelasiKatMenuController extends Controller
 {
@@ -33,13 +34,15 @@ class RelasiKatMenuController extends Controller
      * @return Renderable
      */
     public function simpan(Request $request)
-    {
+    {   $dt = array( "config_sub_jenis_produk_id" => $this->getMasterId('config_sub_jenis_produk'),
+        "config_sub_jenis_produk_m_produk_id" => $request->config_sub_jenis_produk_m_produk_id,
+        "config_sub_jenis_produk_m_sub_jenis_produk_id" => $request->config_sub_jenis_produk_m_kategori_id,
+        "config_sub_jenis_produk_created_by" => Auth::id(),
+        "config_sub_jenis_produk_created_at" => Carbon::now()
+        );
         //don't need validate
         $data = DB::table('config_sub_jenis_produk')->insert([
-            "config_sub_jenis_produk_m_produk_id" => $request->config_sub_jenis_produk_m_produk_id,
-            "config_sub_jenis_produk_m_sub_jenis_produk_id" => $request->config_sub_jenis_produk_m_kategori_id,
-            "config_sub_jenis_produk_created_by" => Auth::id(),
-            "config_sub_jenis_produk_created_at" => Carbon::now(),
+           $dt
         ]);
         return Redirect::route('m_produk_relasi.index');
     }

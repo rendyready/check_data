@@ -15,12 +15,14 @@ class PlotProduksiTableSeeder extends Seeder
     {
         DB::table('m_plot_produksi')->truncate();
         $plotprod = ['Goreng','Tepung','Sambal Bawang','Sambal Non Bawang','Sambal Masak + Telur','Ca/Tumis','Bakaran','Buah','Minum','Sayur','Nasi'];
-
+        $i = 1;
         foreach ($plotprod as $key => $value) {
             DB::table('m_plot_produksi')->insert([
+                'm_plot_produksi_id' => $i,
                 'm_plot_produksi_nama' => $value,
                 'm_plot_produksi_created_by'=> 1,
             ]);
+            $i++;
         }
     }
 }

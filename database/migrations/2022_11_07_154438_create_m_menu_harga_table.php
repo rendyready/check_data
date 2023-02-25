@@ -14,10 +14,11 @@ return new class extends Migration
     public function up()
     {
         Schema::create('m_menu_harga', function (Blueprint $table) {
-            $table->id('m_menu_harga_id');
+            $table->id('id');
+            $table->unsignedBigInteger('m_menu_harga_id');
             $table->decimal('m_menu_harga_nominal', 15, 2);
-            $table->bigInteger('m_menu_harga_m_jenis_nota_id');
-            $table->bigInteger('m_menu_harga_m_produk_id');
+            $table->unsignedBigInteger('m_menu_harga_m_jenis_nota_id');
+            $table->unsignedBigInteger('m_menu_harga_m_produk_id');
             $table->char('m_menu_harga_status')->default('0');
             $table->char('m_menu_harga_tax_status')->default('0');
             $table->char('m_menu_harga_sc_status')->default('0');

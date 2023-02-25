@@ -14,8 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::create('m_footer', function (Blueprint $table) {
-            $table->id('m_footer_id');
-            $table->bigInteger('m_footer_m_w_id');
+            $table->id('id');
+            $table->unsignedBigInteger('m_footer_id');
+            $table->unsignedBigInteger('m_footer_m_w_id');
             $table->string('m_footer_value');
             $table->integer('m_footer_priority');
             $table->bigInteger('m_footer_created_by');

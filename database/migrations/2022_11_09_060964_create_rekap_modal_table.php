@@ -14,11 +14,12 @@ return new class extends Migration
     public function up()
     {
         Schema::create('rekap_modal', function (Blueprint $table) {
-            $table->id('rekap_modal_id');
-            $table->bigInteger('rekap_modal_sync_id')->nullable();
-            $table->bigInteger('rekap_modal_m_w_id');
+            $table->id('id');
+            $table->string('rekap_modal_id')->unique();
+            // $table->bigInteger('rekap_modal_sync_id')->nullable();
+            $table->unsignedBigInteger('rekap_modal_m_w_id');
             $table->string('rekap_modal_m_w_nama')->nullable();
-            $table->bigInteger('rekap_modal_m_area_id')->nullable();
+            $table->unsignedBigInteger('rekap_modal_m_area_id')->nullable();
             $table->string('rekap_modal_m_area_nama')->nullable();
             $table->integer('rekap_modal_sesi')->default(1);
             $table->dateTime('rekap_modal_tanggal')->useCurrent();
@@ -27,6 +28,7 @@ return new class extends Migration
             $table->decimal('rekap_modal_cash', 15,2)->default(0);
             $table->decimal('rekap_modal_cash_real', 15,2)->default(0);
             $table->char('rekap_modal_status',5)->default('open');
+            $table->char('rekap_modal_status_sync', 10)->default('0');
             $table->bigInteger('rekap_modal_created_by');
             $table->bigInteger('rekap_modal_updated_by')->nullable();
             $table->bigInteger('rekap_modal_deleted_by')->nullable();

@@ -14,7 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::create('m_jenis_produk', function (Blueprint $table) {
-            $table->id('m_jenis_produk_id');
+            $table->id('id');
+            $table->bigInteger('m_jenis_produk_id')->unsigned();
             $table->string('m_jenis_produk_nama');
             $table->string('m_jenis_produk_urut');
             $table->string('m_jenis_produk_odcr55')->default('makan')->nullable();

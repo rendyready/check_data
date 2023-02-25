@@ -41,6 +41,7 @@ class MejaController extends Controller
             }
             
             $data = DB::table('m_meja')->insert([
+                "m_meja_id" => $this->getMasterId('m_meja'),
                 "m_meja_nama" => $nama,
                 "m_meja_m_meja_jenis_id" => $request->jenis_meja,
                 "m_meja_m_w_id" => $request->waroeng,

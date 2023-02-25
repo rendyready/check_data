@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
+    /** 
      * Run the migrations.
      *
      * @return void
@@ -14,7 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::create('m_satuan', function (Blueprint $table) {
-            $table->id('m_satuan_id');
+            $table->id('id');
+            $table->unsignedBigInteger('m_satuan_id');
             $table->string('m_satuan_kode');
             $table->string('m_satuan_keterangan')->nullable()->default(NULL);
             $table->bigInteger('m_satuan_created_by');

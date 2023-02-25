@@ -33,6 +33,7 @@ class SubJenisMController extends Controller
                     return response(['Messages' => 'Data Duplicate !']);
                 } else {
                     $data = array(
+                        'm_sub_jenis_produk_id' => $this->getMasterId('m_sub_jenis_produk'),
                         'm_sub_jenis_produk_nama'    =>  Str::lower($request->m_sub_jenis_produk_nama),
                         'm_sub_jenis_produk_m_jenis_produk_id' => $request->m_jenis_produk_id,
                         'm_sub_jenis_produk_created_by' => Auth::id(),

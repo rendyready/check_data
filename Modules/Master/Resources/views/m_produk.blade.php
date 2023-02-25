@@ -34,7 +34,7 @@
               <tr class="row1">
                 <td>{{$no++;}}</td>
                 <td>{{strtoupper($item->m_produk_code)}}</td>
-                <td>{{$item->m_produk_nama}}</td>
+                <td>{{ucwords($item->m_produk_nama)}}</td>
                 <td>{{$item->m_produk_urut}}</td>
                 <td>@if ($item->m_produk_status ==1)
                   <span class="badge rounded-pill bg-success">Aktif</span>
@@ -42,8 +42,8 @@
                   <span class="badge rounded-pill bg-danger">Non Aktif</span>
                   @endif
                 </td>
-                <td>{{$item->m_jenis_produk_nama}}</td>
-                <td>{{$item->m_satuan_kode}}</td>
+                <td>{{ucwords($item->m_jenis_produk_nama)}}</td>
+                <td>{{ucwords($item->m_satuan_kode)}}</td>
                 <td>{{ucwords($item->m_produk_jual)}}</td>
                 <td><a class="btn btn-sm btn-warning buttonEdit" value="{{$item->m_produk_id}}" title="Edit"><i class="fa fa-pencil"></i></a></td>
               </tr>
@@ -155,8 +155,8 @@
                   <label for="m_produk_status">Produk SCP</label>
                   <div>
                     <select id="m_produk_scp" name="m_produk_scp" style="width: 100%;">
-                      <option value="Ya">Ya</option>
-                      <option value="Tidak">Tidak</option>
+                      <option value="ya">Ya</option>
+                      <option value="tidak">Tidak</option>
                     </select>
                   </div>
                 </div>
