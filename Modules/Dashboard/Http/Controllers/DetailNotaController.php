@@ -68,7 +68,7 @@ class DetailNotaController extends Controller
         $dates = explode('to' ,$request->tanggal);
         $data = new \stdClass();
         $data->transaksi_rekap = DB::table('rekap_transaksi')
-            ->join('users', 'id', 'r_t_created_by')
+            ->join('users', 'users_id', 'r_t_created_by')
             ->join('m_transaksi_tipe', 'm_t_t_id', 'r_t_m_t_t_id')
             ->join('rekap_payment_transaksi', 'r_p_t_r_t_id', 'r_t_id')
             ->join('m_payment_method', 'm_payment_method_id', 'r_p_t_m_payment_method_id')

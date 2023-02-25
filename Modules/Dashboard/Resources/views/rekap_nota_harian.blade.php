@@ -61,13 +61,16 @@
                 
             <table id="tampil_rekap" class="table table-sm table-bordered table-hover table-striped table-vcenter js-dataTable-full nowrap">
               <thead>
+                <tr>
+                    <th rowspan="2">Tanggal</th>
+                    <th rowspan="2">Total Penjualan</th>
+                    <th colspan="6">Reguler</th>
+                </tr>
                 <tr class="justify-content-center">
-                  <th>Tanggal</th>
-                  <th>Total Penjualan</th>
 
-                    {{-- @foreach ($data->payment as $payment)
+                    @foreach ($data->payment as $payment)
                     <th>{{ $payment->m_payment_method_name }}</th>
-                    @endforeach --}}
+                    @endforeach
 
                 </tr>
               </thead>

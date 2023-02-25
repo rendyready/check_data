@@ -75,16 +75,22 @@
                         </div>
                     </form>      
                 
-            <table id="tampil_rekap" class="table table-sm table-bordered table-striped table-vcenter js-dataTable-full nowrap table-hover row-border order-column" style="width:100%">
+            <table id="tampil_rekap" class="table table-sm table-bordered table-striped table-vcenter nowrap table-hover js-dataTable-full">
               <thead>
                 <tr>
                   <th>Tanggal</th>
                   <th>Operator</th>
                   <th>No. Nota</th>
-                  <th>Total</th>
                   <th>Tax</th>
-                  <th>Bayar</th>
-                  <th>Payment</th>
+                  <th>Total</th>
+                  <th>SC</th>
+                  <th>Diskon</th>
+                  <th>Voucher</th>
+                  <th>Tarik Tunai</th>
+                  <th>Pembulatan</th>
+                  <th>Free Kembalian</th>
+                  <th>Total Bayar</th>
+                  <th>Metode</th>
                   <th>Jenis Payment</th>
                   <th></th>
                 </tr>
@@ -131,8 +137,40 @@
                               <td id="pajak">
                               </td>
                             </tr>
+
                             <tr style="background-color: white;" class="text-end fw-semibold">
-                              <td>Bayar (<small id="pembayaran"></small>)</td>
+                              <td>Service Charge</td>
+                              <td id="sc">
+                              </td>
+                            </tr>
+                            <tr style="background-color: white;" class="text-end fw-semibold">
+                              <td>Diskon</td>
+                              <td id="diskon">
+                              </td>
+                            </tr>
+                            <tr style="background-color: white;" class="text-end fw-semibold">
+                              <td>Voucher</td>
+                              <td id="voucher">
+                              </td>
+                            </tr>
+                            <tr style="background-color: white;" class="text-end fw-semibold">
+                              <td>Tarik Tunai</td>
+                              <td id="tarik">
+                              </td>
+                            </tr>
+                            <tr style="background-color: white;" class="text-end fw-semibold">
+                              <td>Pembulatan</td>
+                              <td id="pembulatan">
+                              </td>
+                            </tr>
+                            <tr style="background-color: white;" class="text-end fw-semibold">
+                              <td>Free Kembalian</td>
+                              <td id="free">
+                              </td>
+                            </tr>
+                            
+                            <tr style="background-color: white;" class="text-end fw-semibold">
+                              <td>Total Bayar (<small id="pembayaran"></small>)</td>
                               <td id="bayar">
                               </td>
                             </tr>
@@ -167,10 +205,7 @@ $(document).ready(function() {
         orderCellsTop: true,
         processing: true,
         scrollX: true,
-        autoWidth: true,
-        // "columnDefs": [
-        //     {"className": "dt-center", "targets": "_all"}
-        // ],
+        scrollY: '300px',
         lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
         pageLength: 10,
         ajax: {
@@ -241,7 +276,13 @@ $(document).ready(function() {
                         $('#pajak').html(data.transaksi_rekap.r_t_nominal_pajak);
                         $('#bayar').html(data.transaksi_rekap.r_t_nominal_total_bayar);
                         $('#pembayaran').html(data.transaksi_rekap.m_payment_method_name);
-
+                        $('#sc').html(data.transaksi_rekap.r_t_nominal_sc);
+                        $('#diskon').html(data.transaksi_rekap.r_t_nominal_diskon);
+                        $('#voucher').html(data.transaksi_rekap.r_t_nominal_voucher);
+                        $('#tarik').html(data.transaksi_rekap.r_t_nominal_tarik_tunai);
+                        $('#pembulatan').html(data.transaksi_rekap.r_t_nominal_pembulatan);
+                        $('#free').html(data.transaksi_rekap.r_t_nominal_free_kembalian);
+                             
                     $('.sub_sub_nota').remove();
                     $.each(data.detail_nota, function (key, item) {
                         console.log(item.r_t_detail_m_produk_nama);
