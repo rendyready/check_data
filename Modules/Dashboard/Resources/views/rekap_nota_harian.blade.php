@@ -63,9 +63,12 @@
               <thead>
                 <tr class="justify-content-center">
                   <th>Tanggal</th>
-                  <th>Payment</th>
-                  <th>Jenis Payment</th>
-                  <th class="text_end">Total Penjualan</th>
+                  <th>Total Penjualan</th>
+
+                    {{-- @foreach ($data->payment as $payment)
+                    <th>{{ $payment->m_payment_method_name }}</th>
+                    @endforeach --}}
+
                 </tr>
               </thead>
               <tbody id="show_data">
@@ -94,6 +97,9 @@ $(document).ready(function() {
         orderCellsTop: true,
         processing: true,
         autoWidth: true,
+        scrollY: "300px",
+        scrollX: true,
+        scrollCollapse: true,
         "columnDefs": [
             {"className": "dt-right", "targets": "[-2]"}
         ],

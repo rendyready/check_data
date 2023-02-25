@@ -54,10 +54,13 @@ class RekapNotaController extends Controller
                 ->join('users', 'id', 'r_t_created_by')
                 ->join('rekap_payment_transaksi', 'r_p_t_r_t_id', 'r_t_id')
                 ->join('m_payment_method', 'm_payment_method_id', 'r_p_t_m_payment_method_id')
+                ->select('r_t_tanggal', 'name', 'r_t_nota_code', 'r_t_nominal', 'r_t_nominal_pajak', 'r_t_nominal_total_bayar', 'r_t_id', 'm_payment_method_name', 'm_payment_method_type')
                 ->where('r_t_m_w_id', $request->waroeng)
                 ->where('r_t_created_by', $request->operator)
                 ->whereBetween('r_t_tanggal', $dates)
-                ->orderBy('r_t_id', 'ASC')
+                ->groupBy('r_t_id', 'name', 'r_t_tanggal', 'm_payment_method_name', 'm_payment_method_type')
+                ->orderBy('r_t_tanggal', 'ASC')
+                ->orderBy('r_t_nota_code', 'ASC')
                 ->get();
         $data = array();
         foreach ($get as $value) {
@@ -70,7 +73,7 @@ class RekapNotaController extends Controller
             $row[] = rupiah($value->r_t_nominal_total_bayar, 0);
             $row[] = $value->m_payment_method_type;
             $row[] = $value->m_payment_method_name;
-            $row[] ='<a id="button_detail" class="btn btn-sm buttonEdit btn-info" value="'.$value->r_t_id.'" title="Detail Nota"><i class="fa-sharp fa-solid fa-file"></i></a>';
+            $row[] ='<a id="button_detail" class="btn btn-sm button_detail btn-info" value="'.$value->r_t_id.'" title="Detail Nota"><i class="fa-sharp fa-solid fa-file"></i></a>';
             $data[] = $row;
         }
         $output = array("data" => $data);

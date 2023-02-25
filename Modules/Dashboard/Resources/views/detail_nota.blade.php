@@ -87,6 +87,9 @@ $(document).ready(function() {
             type:"GET",
             url: '{{route("detail.show")}}',
             dataType: 'JSON',
+            scrollY: "300px",
+            scrollX: true,
+            scrollCollapse: true,
             data : 
             {
               waroeng: waroeng,

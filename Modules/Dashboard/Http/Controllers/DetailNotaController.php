@@ -75,7 +75,8 @@ class DetailNotaController extends Controller
             ->where('r_t_m_w_id', $request->waroeng)
             ->where('r_t_created_by', $request->operator)
             ->whereBetween('r_t_tanggal', $dates)
-            ->orderby('r_t_id', 'ASC')
+            ->orderby('r_t_tanggal', 'ASC')
+            ->orderby('r_t_nota_code', 'ASC')
             ->get();
         $data->detail_nota = DB::table('rekap_transaksi_detail')
             ->get();
