@@ -15,6 +15,7 @@
                             class="table table-sm table-bordered table-striped table-vcenter js-dataTable-full">
                             <thead>
                                 <th>No</th>
+                                <th>Code</th>
                                 <th>Nama Gudang</th>
                                 <th>Waroeng</th>
                             </thead>
@@ -22,6 +23,7 @@
                             </tbody>
                             <tfoot>
                                 <th>No</th>
+                                <th>Code</th>
                                 <th>Nama Gudang</th>
                                 <th>Waroeng</th>
                             </tfoot>

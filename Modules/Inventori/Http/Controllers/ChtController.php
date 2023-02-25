@@ -38,8 +38,8 @@ class ChtController extends Controller
             if (!empty($request->rekap_beli_detail_terima_qty[$key])) {
                  $last_mutasi = DB::table('m_stok_detail')
                 ->select('m_stok_detail_hpp','m_stok_detail_saldo')
-                ->where('m_stok_detail_gudang_id',$request->rekap_beli_gudang_id)
-                ->where('m_stok_detail_m_produk_id',$request->rekap_beli_detail_m_produk_id[$key])
+                ->where('m_stok_detail_gudang_code',$request->rekap_beli_gudang_code)
+                ->where('m_stok_detail_m_produk_code',$request->rekap_beli_detail_m_produk_code[$key])
                 ->orderBy('m_stok_detail_id','desc')
                 ->first();
 
@@ -97,16 +97,15 @@ class ChtController extends Controller
         $waroeng_id = Auth::user()->waroeng_id;
         $cht = DB::table('rekap_beli_detail')
         ->select('rekap_beli_detail_id','rekap_beli_detail_rekap_beli_code',
-                'rekap_beli_detail_m_produk_id','rekap_beli_detail_subtot','rekap_beli_supplier_nama','rekap_beli_detail_m_produk_nama',
+                'rekap_beli_detail_m_produk_code','rekap_beli_detail_subtot','rekap_beli_supplier_nama','rekap_beli_detail_m_produk_nama',
                  'rekap_beli_detail_catatan','rekap_beli_detail_qty',
                  'rekap_beli_detail_satuan_terima')
         ->leftjoin('rekap_beli','rekap_beli_code','rekap_beli_detail_rekap_beli_code')
-        ->leftjoin('m_produk','rekap_beli_detail_m_produk_id','m_produk_id')
         ->where('rekap_beli_tgl',$data->tgl_now)
         ->where('rekap_beli_m_w_id',$waroeng_id)
-        ->where('rekap_beli_gudang_id',$request->id)
+        ->where('rekap_beli_gudang_code',$request->id)
         ->whereNull('rekap_beli_detail_terima_qty')
-        ->orderBy('rekap_beli_supplier_id','asc')
+        ->orderBy('rekap_beli_supplier_code','asc')
         ->get();
         $no = 0;
         $data = array();
@@ -116,7 +115,7 @@ class ChtController extends Controller
             $row[] = $no;
             $row[] = '<input type="text" class="form-control hide form-control-sm" name="rekap_beli_detail_id[]" id="rekap_beli_detail_id" value="'.$item->rekap_beli_detail_id.'" ></td>';
             $row[] = '<input type="text" hide class="form-control form-control-sm" name="rekap_beli_detail_rekap_beli_code[]" id="rekap_beli_detail_rekap_beli_code" value="'.$item->rekap_beli_detail_rekap_beli_code.'" >';
-            $row[] = '<input type="text" hide class="form-control form-control-sm" name="rekap_beli_detail_m_produk_id[]" id="rekap_beli_detail_m_produk_id" value="'.$item->rekap_beli_detail_m_produk_id.'" >';
+            $row[] = '<input type="text" hide class="form-control form-control-sm" name="rekap_beli_detail_m_produk_code[]" id="rekap_beli_detail_m_produk_code" value="'.$item->rekap_beli_detail_m_produk_code.'" >';
             $row[] = '<input type="text" hide class="form-control form-control-sm" name="rekap_beli_detail_subtot[]" id="rekap_beli_detail_subtot" value="'.$item->rekap_beli_detail_subtot.'" >';
             $row[] = $item->rekap_beli_supplier_nama;
             $row[] = '<input type="text" class="form-control form-control-sm" name="rekap_beli_detail_m_produk_nama[]" id="rekap_beli_detail_m_produk_nama" value="'.$item->rekap_beli_detail_m_produk_nama.'" readonly>';

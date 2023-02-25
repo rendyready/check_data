@@ -66,7 +66,7 @@ class MSatuanController extends Controller
     public function satuan_kode_produk($id)
     {
         $satuan = DB::table('m_produk')->join('m_satuan','m_satuan_id','m_produk_utama_m_satuan_id')
-        ->where('m_produk_id',$id)->select('m_satuan_kode')->first();
+        ->where('m_produk_code',$id)->select('m_satuan_kode')->first();
         return response()->json($satuan);
     }
 }

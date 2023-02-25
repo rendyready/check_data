@@ -14,12 +14,14 @@ return new class extends Migration
     public function up()
     {
         Schema::create('m_stok_detail', function (Blueprint $table) {
-            $table->id('m_stok_detail_id');
+            $table->id('id');
+            $table->string('m_stok_detail_id');
+            $table->string('m_stok_detail_code');
             $table->date('m_stok_detail_tgl');
-            $table->bigInteger('m_stok_detail_m_produk_id');
+            $table->bigInteger('m_stok_detail_m_produk_code');
             $table->string('m_stok_detail_m_produk_nama');
             $table->bigInteger('m_stok_detail_satuan_id');
-            $table->string('m_stok_detail_gudang_id');
+            $table->string('m_stok_detail_gudang_code');
             $table->string('m_stok_detail_satuan')->nullable();
             $table->decimal('m_stok_detail_masuk',15,2)->nullable();
             $table->decimal('m_stok_detail_keluar',15,2)->nullable();

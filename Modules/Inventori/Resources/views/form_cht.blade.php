@@ -23,7 +23,7 @@
                             <select class="js-select2 form-control-sm" style="width: 100%;" name="rekap_beli_gudang_id" id="rekap_beli_gudang_id" data-placeholder="Pilih Gudang" required>
                             <option></option>
                             @foreach ($data->gudang as $item)
-                                <option value="{{$item->m_gudang_id}}">{{ucwords($item->m_gudang_nama)}}</option>
+                                <option value="{{$item->m_gudang_code}}">{{ucwords($item->m_gudang_nama)}}</option>
                             @endforeach
                             </select>
                           </div>

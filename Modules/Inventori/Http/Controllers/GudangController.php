@@ -5,10 +5,9 @@ namespace Modules\Inventori\Http\Controllers;
 use Carbon\Carbon;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-
+use App\Http\Controllers\Controller;
 class GudangController extends Controller
 {
     /**
@@ -27,14 +26,14 @@ class GudangController extends Controller
      * @return Renderable
      */
     function list() {$no = 0;
-        $gudang = DB::table('m_gudang')->
-            join('m_w', 'm_w_id', 'm_gudang_m_w_id')->get();
+        $gudang = DB::table('m_gudang')->get();
         foreach ($gudang as $key) {
             $row = array();
             $no++;
             $row[] = $no;
+            $row[] = $key->m_gudang_code;
             $row[] = ucwords($key->m_gudang_nama);
-            $row[] = $key->m_w_nama;
+            $row[] = $key->m_gudang_m_w_nama;
             // $row[] = '<a id="buttonEdit" class="btn btn-sm buttonEdit btn-success" value="'.$key->m_gudang_id.'" title="Edit"><i class="fa fa-pencil"></i></a>';
             $data[] = $row;
         }
@@ -54,28 +53,38 @@ class GudangController extends Controller
                 $validate = DB::table('m_gudang')
                     ->where('m_gudang_m_w_id', $request->m_gudang_m_w_id)
                     ->where('m_gudang_nama', strtolower($request->m_gudang_nama))->first();
+                $no_gd = $this->getlast('m_gudang','m_gudang_code');
+                $waroeng = DB::table('m_w')->where('m_w_id',$request->m_gudang_m_w_id)->first();
+                $code = str_pad($no_gd,5,'6000',STR_PAD_LEFT);
+
                 $data = array(
+                    'm_gudang_id' => $no_gd ,
+                    'm_gudang_code' => $code,
                     'm_gudang_m_w_id' => $request->m_gudang_m_w_id,
                     'm_gudang_nama' => strtolower($request->m_gudang_nama),
+                    'm_gudang_m_w_nama' => $waroeng->m_w_nama,
                     'm_gudang_created_by' => Auth::id(),
                     'm_gudang_created_at' => Carbon::now(),
                 );
                 if (empty($validate)) {
                     DB::table('m_gudang')->insert($data);
                     $masterbb = DB::table('m_produk')
-                        ->select('m_produk_id', 'm_produk_isi_m_satuan_id', 'm_produk_utama_m_satuan_id')
                         ->whereNotIn('m_produk_m_klasifikasi_produk_id', [4])->get();
-                    $gudang_id = DB::table('m_gudang')->max('m_gudang_id');
+                    $gudang = DB::table('m_gudang')->orderBy('m_gudang_id','desc')->first();
                     foreach ($masterbb as $key) {
                         $satuan_id = ($request->m_gudang_nama == 'gudang produksi waroeng') ?
                         $key->m_produk_isi_m_satuan_id : $key->m_produk_utama_m_satuan_id;
                         $satuan_kode = DB::table('m_satuan')->where('m_satuan_id', $satuan_id)->first()->m_satuan_kode;
                         $data_bb = array(
-                            'm_stok_m_produk_id' => $key->m_produk_id,
-                            'm_stok_gudang_id' => $gudang_id,
+                            'm_stok_id' => $this->getlast('m_stok','m_stok_id'),
+                            'm_stok_m_produk_code' => $key->m_produk_code,
+                            'm_stok_produk_nama' => $key->m_produk_nama,
+                            'm_stok_gudang_code' => $gudang->m_gudang_code,
+                            'm_stok_waroeng' =>  $waroeng->m_w_nama,
                             'm_stok_satuan_id' => $satuan_id,
                             'm_stok_satuan' => $satuan_kode,
                             'm_stok_awal' => 0,
+                            'm_stok_isi' => $key->m_produk_qty_isi,
                             'm_stok_created_by' => Auth::id(),
                             'm_stok_created_at' => Carbon::now(),
                         );

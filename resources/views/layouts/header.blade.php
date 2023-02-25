@@ -37,6 +37,7 @@
   'resources/sass/codebase/themes/pulse.scss',
   'resources/js/pages/jquery.tabledit.js',
   'resources/js/pages/datatables.js',
+  'resources/js/pages/custom.js'
   ])
 
   <!-- Alternatively, you can also include a specific color theme after the main stylesheet to alter the default color theme of the template -->
