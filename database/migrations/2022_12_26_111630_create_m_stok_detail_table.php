@@ -16,9 +16,8 @@ return new class extends Migration
         Schema::create('m_stok_detail', function (Blueprint $table) {
             $table->id('id');
             $table->string('m_stok_detail_id');
-            $table->string('m_stok_detail_code');
             $table->date('m_stok_detail_tgl');
-            $table->bigInteger('m_stok_detail_m_produk_code');
+            $table->string('m_stok_detail_m_produk_code');
             $table->string('m_stok_detail_m_produk_nama');
             $table->bigInteger('m_stok_detail_satuan_id');
             $table->string('m_stok_detail_gudang_code');

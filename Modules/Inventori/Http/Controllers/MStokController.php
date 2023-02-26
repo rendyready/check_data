@@ -89,19 +89,17 @@ class MStokController extends Controller
      */
     public function master_stok($id)
     {
-       $data = DB::table('m_stok')->where('m_stok_gudang_id',$id)
-        ->select('m_produk_id','m_produk_nama')
-        ->join('m_produk','m_produk_id','m_stok_m_produk_code')
+       $data = DB::table('m_stok')->where('m_stok_gudang_code',$id)
         ->get();
         foreach ($data as $key => $v) {
-            $list[$v->m_produk_id]=$v->m_produk_nama;
+            $list[$v->m_stok_m_produk_code]=$v->m_stok_produk_nama;
         }
         return response()->json($list);
     }
     public function get_harga($id_g,$id_p)
     {
         $data = DB::table('m_stok')
-                ->where('m_stok_gudang_id',$id_g)
+                ->where('m_stok_gudang_code',$id_g)
                 ->where('m_stok_m_produk_code',$id_p)
         ->first();
         return response()->json($data);

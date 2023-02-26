@@ -23,15 +23,15 @@
                                         </div>
                                     </div>
                                     <div class="row mb-1">
-                                        <label class="col-sm-4 col-form-label-sm" for="rekap_pcb_gudang_asal_id">Asal
+                                        <label class="col-sm-4 col-form-label-sm" for="rekap_pcb_gudang_asal_code">Asal
                                             Gudang</label>
                                         <div class="col-sm-8">
                                             <select class="js-select2 form-control-sm" style="width: 100%;"
-                                                name="rekap_pcb_gudang_asal_id" id="rekap_pcb_gudang_asal_id"
+                                                name="rekap_pcb_gudang_asal_code" id="rekap_pcb_gudang_asal_code"
                                                 data-placeholder="Pilih Gudang" required>
                                                 <option></option>
                                                 @foreach ($data->gudang as $item)
-                                                    <option value="{{ $item->m_gudang_id }}">
+                                                    <option value="{{ $item->m_gudang_code }}">
                                                         {{ ucwords($item->m_gudang_nama) }}</option>
                                                 @endforeach
                                             </select>
@@ -41,8 +41,8 @@
                                         <label class="col-sm-4 col-form-label-sm" for="rekap_pcb_aksi">Aksi
                                         </label>
                                         <div class="col-sm-8">
-                                            <select class="js-select2 form-control-sm" style="width: 100%;" name="rekap_pcb_aksi"
-                                                id="rekap_pcb_aksi" data-placeholder="Pilih" required>
+                                            <select class="js-select2 form-control-sm" style="width: 100%;"
+                                                name="rekap_pcb_aksi" id="rekap_pcb_aksi" data-placeholder="Pilih" required>
                                                 <option></option>
                                                 <option value="pecah">Pecah Barang</option>
                                                 <option value="gabung">Gabung Barang</option>
@@ -81,97 +81,109 @@
                                 <div class="col-md-6">
                                     <label for="proses">BARANG YANG AKAN DIPROSES</label>
                                     <div class="row mb-1">
-                                        <label class="col-sm-4 col-form-label-sm" for="rekap_pcb_brg_asal_id">Nama Barang</label>
+                                        <label class="col-sm-4 col-form-label-sm" for="rekap_pcb_brg_asal_code1">Nama
+                                            Barang</label>
                                         <div class="col-sm-8">
                                             <select class="js-select2 nama_barang form-control-sm" style="width: 100%;"
-                                                name="rekap_pcb_brg_asal_id" id="rekap_pcb_brg_asal_id"
-                                                data-placeholder="Pilih Barang" required>
+                                                id="rekap_pcb_brg_asal_code1" data-placeholder="Pilih Barang" required>
                                                 <option></option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="row mb-1">
-                                        <label class="col-sm-4 col-form-label-sm" for="rekap_pcb_brg_asal_satuan_id">Satuan</label>
+                                        <label class="col-sm-4 col-form-label-sm"
+                                            for="rekap_pcb_brg_asal_satuan1">Satuan</label>
                                         <div class="col-sm-4">
-                                            <input type="text" class="form-control form-control-sm" id="rekap_pcb_brg_asal_satuan_id"
-                                                name="rekap_pcb_brg_asal_satuan_id" readonly>
+                                            <input type="text" class="form-control form-control-sm"
+                                                id="rekap_pcb_brg_asal_satuan1" readonly>
                                         </div>
                                     </div>
                                     <div class="row mb-1">
-                                        <label class="col-sm-4 col-form-label-sm" for="rekap_pcb_brg_asal_isi">Isi</label>
+                                        <label class="col-sm-4 col-form-label-sm" for="rekap_pcb_brg_asal_isi1">Isi</label>
                                         <div class="col-sm-4">
-                                            <input type="text" class="form-control form-control-sm" id="rekap_pcb_brg_asal_isi"
-                                                name="rekap_pcb_brg_asal_isi" readonly>
+                                            <input type="text" class="form-control form-control-sm"
+                                                id="rekap_pcb_brg_asal_isi1" readonly>
                                         </div>
                                     </div>
                                     <div class="row mb-1">
-                                        <label class="col-sm-4 col-form-label-sm" for="diambil">Diambil</label>
+                                        <label class="col-sm-4 col-form-label-sm"
+                                            for="rekap_pcb_brg_asal_qty1">Diambil</label>
                                         <div class="col-sm-4">
-                                            <input type="text" class="form-control form-control-sm" id="diambil"
-                                                name="diambil">
+                                            <input type="text" class="form-control number form-control-sm"
+                                                id="rekap_pcb_brg_asal_qty1">
+                                            <input type="hidden" class="form-control" id="rekap_pcb_brg_asal_hppisi1">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <label for="proses">BARANG HASIL PROSES</label>
                                     <div class="row mb-1">
-                                            <label class="col-sm-4 col-form-label-sm" for="nama_waroeng">Nama
-                                                Barang</label>
-                                            <div class="col-sm-8">
-                                                <select class="js-select2 nama_barang form-control-sm"
-                                                    style="width: 100%;" name="rekap_pcb_produk_proses_id"
-                                                    id="rekap_pcb_produk_proses_id" data-placeholder="Pilih Barang"
-                                                    required>
-                                                    <option></option>
-                                                </select>
-                                            </div>
-                                    </div>
-                                    <div class="row mb-1">
-                                        <label class="col-sm-4 col-form-label-sm" for="nama_waroeng">Satuan</label>
-                                        <div class="col-sm-4">
-                                            <input type="text" class="form-control form-control-sm" id="nama_waroeng"
-                                                name="nama_waroeng" readonly>
+                                        <label class="col-sm-4 col-form-label-sm" for="nama_waroeng">Nama
+                                            Barang</label>
+                                        <div class="col-sm-8">
+                                            <select class="js-select2 nama_barang form-control-sm" style="width: 100%;"
+                                                id="rekap_pcb_brg_hasil_code1" data-placeholder="Pilih Barang" required>
+                                                <option></option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="row mb-1">
-                                        <label class="col-sm-4 col-form-label-sm" for="nama_waroeng">Isi</label>
+                                        <label class="col-sm-4 col-form-label-sm"
+                                            for="rekap_pcb_brg_hasil_satuan1">Satuan</label>
                                         <div class="col-sm-4">
-                                            <input type="text" class="form-control form-control-sm" id="nama_waroeng"
-                                                name="nama_waroeng" readonly>
+                                            <input type="text" class="form-control form-control-sm"
+                                                id="rekap_pcb_brg_hasil_satuan1" readonly>
                                         </div>
                                     </div>
                                     <div class="row mb-1">
-                                        <label class="col-sm-4 col-form-label-sm" for="diambil">Sisa</label>
+                                        <label class="col-sm-4 col-form-label-sm"
+                                            for="rekap_pcb_brg_hasil_isi1">Isi</label>
                                         <div class="col-sm-4">
-                                            <input type="text" class="form-control form-control-sm" id="diambil"
-                                                name="diambil" readonly>
+                                            <input type="text" class="form-control form-control-sm"
+                                                id="rekap_pcb_brg_hasil_isi1" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-1">
+                                        <label class="col-sm-4 col-form-label-sm" for="hasil">Hasil Jadi</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control number form-control-sm"
+                                                id="rekap_pcb_brg_hasil_qty1">
                                         </div>
                                         <div class="col-sm-4">
-                                            <a class="btn btn-sm btn-success"><i class="fa fa-plus"></i>Tambah</a>
+                                            <a class="btn btn-sm btn-success" id="tambah"><i
+                                                    class="fa fa-plus"></i>Tambah</a>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-1">
+                                        <label class="col-sm-4 col-form-label-sm" for="sisa">Masih Sisa</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control form-control-sm" id="sisa"
+                                                readonly>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <br>
                             <div class="table-responsive">
-                                <table id="tb-cht" class="table table-sm table-bordered table-striped table-vcenter">
+                                <table id="tb_pcb" class="table table-sm table-bordered table-striped table-vcenter">
                                     <thead>
                                         <th>Barang Proses</th>
                                         <th>Satuan</th>
                                         <th>Isi</th>
-                                        <th>Qty Diambil</th>
-                                        <th>-----</th>
+                                        <th>Qty</th>
+                                        <th>--</th>
                                         <th>Barang Hasil</th>
                                         <th>Satuan</th>
                                         <th>Isi</th>
-                                        <th>Qty Hasil</th>
+                                        <th>Qty</th>
                                     </thead>
                                     <tbody>
                                     </tbody>
                                 </table>
                             </div>
                             <div class="block-content block-content-full text-end bg-transparent">
-                                <input type="submit" class="btn btn-sm btn-success btn-save">
+                                <a class="btn btn-sm btn-success btn-save" id="save"><i
+                                    class="fa fa-save"></i> Simpan</a>
                             </div>
                         </form>
                     </div>
@@ -192,7 +204,7 @@
         evt.preventDefault();
     }
     });
-  $('#rekap_pcb_gudang_asal_id').on('change',function() {
+  $('#rekap_pcb_gudang_asal_code').on('change',function() {
     var g_id = $(this).val();
     $.get("/inventori/stok/"+g_id, function(data){
             dt = data;
@@ -203,29 +215,87 @@
             });
     });
   });
-  $('#rekap_pcb_brg_asal_id').on('change',function() {
+  $('#rekap_pcb_brg_asal_code1').on('change',function() {
     var id = $(this).val();
-    var g_id = $('#rekap_pcb_brg_asal_id').val()
+    var g_id = $('#rekap_pcb_gudang_asal_code').val();
+    console.log(id,g_id);
     $.get("/inventori/stok_harga/"+g_id+"/"+id, function(data){
-           $('#rekap_pcb_brg_asal_satuan_id').val(data.m_stok_satuan)
-        //    $('#').val()
+           $('#rekap_pcb_brg_asal_satuan1').val(data.m_stok_satuan);
+           $('#rekap_pcb_brg_asal_isi1').val(data.m_stok_isi);
+           $('#rekap_pcb_brg_asal_hppisi1').val(data.m_stok_hpp);
     });
-  });  
-  $('#formAction').submit( function(e){
-                if(!e.isDefaultPrevented()){
-                  table.columns([1,2,3,4]).visible(true);
+  });
+  $('#rekap_pcb_brg_hasil_code1').on('change',function() {
+    var id = $(this).val();
+    var g_id = $('#rekap_pcb_gudang_asal_code').val();
+    console.log(id,g_id);
+    $.get("/inventori/stok_harga/"+g_id+"/"+id, function(data){
+           $('#rekap_pcb_brg_hasil_satuan1').val(data.m_stok_satuan);
+           $('#rekap_pcb_brg_hasil_isi1').val(data.m_stok_isi);
+    });
+  });
+  $(document).on('input','#rekap_pcb_brg_asal_qty1',function() {
+    var asal_isi = $('#rekap_pcb_brg_asal_isi1').val();
+    var asal_diambil = $('#rekap_pcb_brg_asal_qty1').val().replace(/\./g, '')
+    $('#sisa').val(asal_diambil*asal_isi)
+  });
+  $(document).on('click','#tambah',function () {
+    var brg_asal_code = $('#rekap_pcb_brg_asal_code1').val();
+    var brg_asal_nama = $('#rekap_pcb_brg_asal_code1 option:selected').text();
+    var brg_asal_isi = $('#rekap_pcb_brg_asal_isi1').val();
+    var brg_asal_satuan = $('#rekap_pcb_brg_asal_satuan1').val();
+    var brg_asal_qty = $('#rekap_pcb_brg_asal_qty1').val().replace(/\./g, '');
+    var brg_asal_hpp= $('#rekap_pcb_brg_asal_hppisi1').val();
+    var brg_hasil_code = $('#rekap_pcb_brg_hasil_code1').val();
+    var brg_hasil_nama =  $('#rekap_pcb_brg_hasil_code1 option:selected').text();
+    var brg_hasil_isi =   $('#rekap_pcb_brg_hasil_isi1').val();
+    var brg_hasil_satuan = $('#rekap_pcb_brg_hasil_satuan1').val();
+    var brg_hasil_qty = $('#rekap_pcb_brg_hasil_qty1').val().replace(/\./g, '');
+    console.log(brg_asal_nama);
+    $('#tb_pcb').append(
+                        '<tr>'+
+                        '<td hidden><input type="hidden" class="form-control" name="rekap_pcb_brg_asal_code[]" value="'+brg_asal_code+'"></td>'+
+                        '<td><input type="text" style="width: auto;" class="form-control form-control-sm" name="rekap_pcb_brg_asal_nama[]" value="'+brg_asal_nama+'" readonly></td>'+
+                        '<td><input type="text" class="form-control form-control-sm" name="rekap_pcb_brg_asal_satuan[]" value="'+brg_asal_satuan+'" readonly></td>'+
+                        '<td><input type="text" class="form-control form-control-sm" name="rekap_pcb_brg_asal_isi[]" value="'+brg_asal_isi+'" readonly></td>'+
+                        '<td><input type="text" class="form-control form-control-sm" name="rekap_pcb_brg_asal_qty[]" value="'+brg_asal_qty+'" readonly></td>'+
+                        '<td hidden><input type="hidden" class="form-control form-control-sm" name="rekap_pcb_brg_asal_hppisi[]" value="'+brg_asal_hpp+'"></td>'+
+                        '<td> -- </td>'+
+                        '<td hidden><input type="text" class="form-control" name="rekap_pcb_brg_hasil_code[]" value="'+brg_hasil_code+'"></td>'+
+                        '<td><input type="text" style="width: auto;" class="form-control form-control-sm" name="rekap_pcb_brg_hasil_nama[]" value="'+brg_hasil_nama+'" readonly></td>'+
+                        '<td><input type="text" class="form-control form-control-sm" name="rekap_pcb_brg_hasil_satuan[]" value="'+brg_hasil_satuan+'" readonly></td>'+
+                        '<td><input type="text" class="form-control form-control-sm" name="rekap_pcb_brg_hasil_isi[]" value="'+brg_hasil_isi+'" readonly></td>'+
+                        '<td><input type="text" class="form-control form-control-sm" name="rekap_pcb_brg_hasil_qty[]" value="'+brg_hasil_qty+'" readonly></td>'+
+                        '</tr>'
+    );
+    var sisa = $('#sisa').val();
+    $('#sisa').val(sisa-brg_hasil_qty);
+
+  })
+  $(document).on('click','.btn-save', function(e){
+    if ($('#sisa').val() != 0) {
+        Codebase.helpers('jq-notify', {
+            align: 'right', // 'right', 'left', 'center'
+            from: 'top', // 'top', 'bottom'
+            type: 'danger', // 'info', 'success', 'warning', 'danger'
+            icon: 'fa fa-warning', // Icon class
+            message: "Tidak Bisa Simpan Masih Ada Sisa !"
+        });
+        $('#sisa').focus();
+    } else {
+        if(!e.isDefaultPrevented()){
                   var dataf = $('#formAction').serialize();
                     $.ajax({
-                        url : "{{ route('cht.simpan') }}",
+                        url : "{{route('simpan.pcb')}}",
                         type : "POST",
                         data : dataf,
                         success : function(data){
-                            $.notify({
-                              align: 'right',       
-                              from: 'top',                
-                              type: 'success',               
-                              icon: 'fa fa-success me-5',    
-                              message: 'Berhasil Simpan'
+                            Codebase.helpers('jq-notify', {
+                                align: 'right', // 'right', 'left', 'center'
+                                from: 'top', // 'top', 'bottom'
+                                type: 'danger', // 'info', 'success', 'warning', 'danger'
+                                icon: 'fa fa-warning', // Icon class
+                                message: "Tidak Bisa Simpan Masih Ada Sisa !"
                             });
                            window.location.reload();
                         },
@@ -235,7 +305,8 @@
                     });
                     return false;
                 }
-            });
+    }
+    });
 });
 </script>
 @endsection

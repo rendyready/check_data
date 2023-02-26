@@ -14,19 +14,20 @@ return new class extends Migration
     public function up()
     {
         Schema::create('rekap_pcb', function (Blueprint $table) {
-            $table->id('rekap_pcb');
+            $table->id('id');
             $table->string('rekap_pcb_code');
-            $table->bigInteger('rekap_pcb_gudang_asal_id');
+            $table->date('rekap_pcb_tgl');
+            $table->bigInteger('rekap_pcb_gudang_asal_code');
             $table->string('rekap_pcb_waroeng');
             $table->string('rekap_pcb_aksi');
-            $table->bigInteger('rekap_pcb_brg_asal_id');
+            $table->bigInteger('rekap_pcb_brg_asal_code');
             $table->string('rekap_pcb_brg_asal_nama');
             $table->bigInteger('rekap_pcb_brg_asal_satuan_id');
             $table->string('rekap_pcb_brg_asal_satuan');
             $table->string('rekap_pcb_brg_asal_isi');
             $table->string('rekap_pcb_brg_asal_qty',15,2);
             $table->decimal('rekap_pcb_brg_asal_hppisi');
-            $table->bigInteger('rekap_pcb_brg_hasil_id');
+            $table->bigInteger('rekap_pcb_brg_hasil_code');
             $table->string('rekap_pcb_brg_hasil_nama');
             $table->bigInteger('rekap_pcb_brg_hasil_satuan_id');
             $table->string('rekap_pcb_brg_hasil_satuan');

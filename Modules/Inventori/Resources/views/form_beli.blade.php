@@ -126,7 +126,7 @@
                                         <th>Catatan</th>
                                         <th>Qty</th>
                                         <th>Harga</th>
-                                        <th>Disc</th>
+                                        <th>Disc %</th>
                                         <th>Disc Rp</th>
                                         <th>Sub Harga</th>
                                         <th><button type="button" class="btn tambah btn-success"><i
@@ -168,7 +168,7 @@
                                         <th>Catatan</th>
                                         <th>Qty</th>
                                         <th>Harga</th>
-                                        <th>Disc</th>
+                                        <th>Disc %</th>
                                         <th>Disc Rp</th>
                                         <th>Sub Harga</th>
                                         <th><button type="button" class="btn tambah btn-success"><i
