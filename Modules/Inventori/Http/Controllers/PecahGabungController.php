@@ -15,7 +15,7 @@ class PecahGabungController extends Controller
      * @return Renderable
      */
     public function index()
-    {
+    {   $get_max_id = DB::table('rekap_pcb')->orderBy('rekap_pcb_code','desc')->first();
         $waroeng_id = Auth::user()->waroeng_id;
         $gudang_default = DB::table('m_gudang')->select('m_gudang_id')
             ->where('m_gudang_m_w_id', $waroeng_id)->where('m_gudang_nama', 'gudang utama waroeng')->first()->m_gudang_id;
@@ -28,7 +28,7 @@ class PecahGabungController extends Controller
         $data->tgl_now = Carbon::now()->format('Y-m-d');
         $data->nama_waroeng = DB::table('m_w')->select('m_w_nama')->where('m_w_id', $waroeng_id)->first();
         $data->satuan = DB::table('m_satuan')->get();
-        $data->code = (empty($get_max_id->rekap_beli_id)) ? $urut = "8000001" . $user : $urut = substr($get_max_id->rekap_beli_code, 0, -1)+'1' . $user;
+        $data->code = (empty($get_max_id->rekap_pcb_code)) ? $urut = "8000001" . $user : $urut = substr($get_max_id->rekap_pcb_code, 0, -1)+'1' . $user;
         return view('inventori::form_pcb', compact('data'));
     }
 
@@ -51,18 +51,20 @@ class PecahGabungController extends Controller
                 'rekap_pcb_brg_asal_code' => $request->rekap_pcb_brg_asal_code[$key],
                 'rekap_pcb_brg_asal_nama' => $request->rekap_pcb_brg_asal_nama[$key],
                 'rekap_pcb_brg_asal_satuan' => $request->rekap_pcb_brg_asal_satuan[$key],
-                'rekap_pcb_brg_asal_isi' => $request->rekap_pcb_brg_asal_isi[$key],
+                // 'rekap_pcb_brg_asal_isi' => $request->rekap_pcb_brg_asal_isi[$key],
                 'rekap_pcb_brg_asal_qty' => $request->rekap_pcb_brg_asal_qty[$key],
                 'rekap_pcb_brg_asal_hppisi' => $hpp_perbrg_asal,
                 'rekap_pcb_brg_hasil_code' => $request->rekap_pcb_brg_hasil_code[$key],
                 'rekap_pcb_brg_hasil_nama' => $request->rekap_pcb_brg_hasil_nama[$key],
                 'rekap_pcb_brg_hasil_satuan' => $request->rekap_pcb_brg_hasil_satuan[$key],
-                'rekap_pcb_brg_hasil_isi' => $request->rekap_pcb_brg_hasil_isi[$key],
+                // 'rekap_pcb_brg_hasil_isi' => $request->rekap_pcb_brg_hasil_isi[$key],
                 'rekap_pcb_brg_hasil_qty' => $request->rekap_pcb_brg_hasil_qty[$key],
                 'rekap_pcb_brg_hasil_hpp' => $hpp_hasil,
                 'rekap_pcb_created_by' => Auth::id(),
                 'rekap_pcb_created_by_name' => $request->rekap_pcb_created_by_name,
             );
+            DB::table('rekap_pcb')->insert($data);
+
         }
 
     }

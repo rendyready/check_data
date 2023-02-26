@@ -98,13 +98,13 @@
                                                 id="rekap_pcb_brg_asal_satuan1" readonly>
                                         </div>
                                     </div>
-                                    <div class="row mb-1">
+                                    {{-- <div class="row mb-1">
                                         <label class="col-sm-4 col-form-label-sm" for="rekap_pcb_brg_asal_isi1">Isi</label>
                                         <div class="col-sm-4">
                                             <input type="text" class="form-control form-control-sm"
                                                 id="rekap_pcb_brg_asal_isi1" readonly>
                                         </div>
-                                    </div>
+                                    </div> --}}
                                     <div class="row mb-1">
                                         <label class="col-sm-4 col-form-label-sm"
                                             for="rekap_pcb_brg_asal_qty1">Diambil</label>
@@ -135,14 +135,14 @@
                                                 id="rekap_pcb_brg_hasil_satuan1" readonly>
                                         </div>
                                     </div>
-                                    <div class="row mb-1">
+                                    {{-- <div class="row mb-1">
                                         <label class="col-sm-4 col-form-label-sm"
                                             for="rekap_pcb_brg_hasil_isi1">Isi</label>
                                         <div class="col-sm-4">
                                             <input type="text" class="form-control form-control-sm"
                                                 id="rekap_pcb_brg_hasil_isi1" readonly>
                                         </div>
-                                    </div>
+                                    </div> --}}
                                     <div class="row mb-1">
                                         <label class="col-sm-4 col-form-label-sm" for="hasil">Hasil Jadi</label>
                                         <div class="col-sm-4">
@@ -154,13 +154,13 @@
                                                     class="fa fa-plus"></i>Tambah</a>
                                         </div>
                                     </div>
-                                    <div class="row mb-1">
+                                    {{-- <div class="row mb-1">
                                         <label class="col-sm-4 col-form-label-sm" for="sisa">Masih Sisa</label>
                                         <div class="col-sm-4">
                                             <input type="text" class="form-control form-control-sm" id="sisa"
                                                 readonly>
                                         </div>
-                                    </div>
+                                    </div> --}}
                                 </div>
                             </div>
                             <br>
@@ -169,12 +169,12 @@
                                     <thead>
                                         <th>Barang Proses</th>
                                         <th>Satuan</th>
-                                        <th>Isi</th>
+                                        {{-- <th>Isi</th> --}}
                                         <th>Qty</th>
                                         <th>--</th>
                                         <th>Barang Hasil</th>
                                         <th>Satuan</th>
-                                        <th>Isi</th>
+                                        {{-- <th>Isi</th> --}}
                                         <th>Qty</th>
                                     </thead>
                                     <tbody>
@@ -221,7 +221,7 @@
     console.log(id,g_id);
     $.get("/inventori/stok_harga/"+g_id+"/"+id, function(data){
            $('#rekap_pcb_brg_asal_satuan1').val(data.m_stok_satuan);
-           $('#rekap_pcb_brg_asal_isi1').val(data.m_stok_isi);
+        //    $('#rekap_pcb_brg_asal_isi1').val(data.m_stok_isi);
            $('#rekap_pcb_brg_asal_hppisi1').val(data.m_stok_hpp);
     });
   });
@@ -231,24 +231,24 @@
     console.log(id,g_id);
     $.get("/inventori/stok_harga/"+g_id+"/"+id, function(data){
            $('#rekap_pcb_brg_hasil_satuan1').val(data.m_stok_satuan);
-           $('#rekap_pcb_brg_hasil_isi1').val(data.m_stok_isi);
+        //    $('#rekap_pcb_brg_hasil_isi1').val(data.m_stok_isi);
     });
   });
-  $(document).on('input','#rekap_pcb_brg_asal_qty1',function() {
-    var asal_isi = $('#rekap_pcb_brg_asal_isi1').val();
-    var asal_diambil = $('#rekap_pcb_brg_asal_qty1').val().replace(/\./g, '')
-    $('#sisa').val(asal_diambil*asal_isi)
-  });
+//   $(document).on('input','#rekap_pcb_brg_asal_qty1',function() {
+//     var asal_isi = $('#rekap_pcb_brg_asal_isi1').val();
+//     var asal_diambil = $('#rekap_pcb_brg_asal_qty1').val().replace(/\./g, '')
+//     $('#sisa').val(asal_diambil*asal_isi)
+//   });
   $(document).on('click','#tambah',function () {
     var brg_asal_code = $('#rekap_pcb_brg_asal_code1').val();
     var brg_asal_nama = $('#rekap_pcb_brg_asal_code1 option:selected').text();
-    var brg_asal_isi = $('#rekap_pcb_brg_asal_isi1').val();
+    // var brg_asal_isi = $('#rekap_pcb_brg_asal_isi1').val();
     var brg_asal_satuan = $('#rekap_pcb_brg_asal_satuan1').val();
     var brg_asal_qty = $('#rekap_pcb_brg_asal_qty1').val().replace(/\./g, '');
     var brg_asal_hpp= $('#rekap_pcb_brg_asal_hppisi1').val();
     var brg_hasil_code = $('#rekap_pcb_brg_hasil_code1').val();
     var brg_hasil_nama =  $('#rekap_pcb_brg_hasil_code1 option:selected').text();
-    var brg_hasil_isi =   $('#rekap_pcb_brg_hasil_isi1').val();
+    // var brg_hasil_isi =   $('#rekap_pcb_brg_hasil_isi1').val();
     var brg_hasil_satuan = $('#rekap_pcb_brg_hasil_satuan1').val();
     var brg_hasil_qty = $('#rekap_pcb_brg_hasil_qty1').val().replace(/\./g, '');
     console.log(brg_asal_nama);
@@ -257,14 +257,14 @@
                         '<td hidden><input type="hidden" class="form-control" name="rekap_pcb_brg_asal_code[]" value="'+brg_asal_code+'"></td>'+
                         '<td><input type="text" style="width: auto;" class="form-control form-control-sm" name="rekap_pcb_brg_asal_nama[]" value="'+brg_asal_nama+'" readonly></td>'+
                         '<td><input type="text" class="form-control form-control-sm" name="rekap_pcb_brg_asal_satuan[]" value="'+brg_asal_satuan+'" readonly></td>'+
-                        '<td><input type="text" class="form-control form-control-sm" name="rekap_pcb_brg_asal_isi[]" value="'+brg_asal_isi+'" readonly></td>'+
+                        // '<td><input type="text" class="form-control form-control-sm" name="rekap_pcb_brg_asal_isi[]" value="'+brg_asal_isi+'" readonly></td>'+
                         '<td><input type="text" class="form-control form-control-sm" name="rekap_pcb_brg_asal_qty[]" value="'+brg_asal_qty+'" readonly></td>'+
                         '<td hidden><input type="hidden" class="form-control form-control-sm" name="rekap_pcb_brg_asal_hppisi[]" value="'+brg_asal_hpp+'"></td>'+
                         '<td> -- </td>'+
                         '<td hidden><input type="text" class="form-control" name="rekap_pcb_brg_hasil_code[]" value="'+brg_hasil_code+'"></td>'+
                         '<td><input type="text" style="width: auto;" class="form-control form-control-sm" name="rekap_pcb_brg_hasil_nama[]" value="'+brg_hasil_nama+'" readonly></td>'+
                         '<td><input type="text" class="form-control form-control-sm" name="rekap_pcb_brg_hasil_satuan[]" value="'+brg_hasil_satuan+'" readonly></td>'+
-                        '<td><input type="text" class="form-control form-control-sm" name="rekap_pcb_brg_hasil_isi[]" value="'+brg_hasil_isi+'" readonly></td>'+
+                        // '<td><input type="text" class="form-control form-control-sm" name="rekap_pcb_brg_hasil_isi[]" value="'+brg_hasil_isi+'" readonly></td>'+
                         '<td><input type="text" class="form-control form-control-sm" name="rekap_pcb_brg_hasil_qty[]" value="'+brg_hasil_qty+'" readonly></td>'+
                         '</tr>'
     );
@@ -273,16 +273,16 @@
 
   })
   $(document).on('click','.btn-save', function(e){
-    if ($('#sisa').val() != 0) {
-        Codebase.helpers('jq-notify', {
-            align: 'right', // 'right', 'left', 'center'
-            from: 'top', // 'top', 'bottom'
-            type: 'danger', // 'info', 'success', 'warning', 'danger'
-            icon: 'fa fa-warning', // Icon class
-            message: "Tidak Bisa Simpan Masih Ada Sisa !"
-        });
-        $('#sisa').focus();
-    } else {
+    // if ($('#sisa').val() != 0) {
+    //     Codebase.helpers('jq-notify', {
+    //         align: 'right', // 'right', 'left', 'center'
+    //         from: 'top', // 'top', 'bottom'
+    //         type: 'danger', // 'info', 'success', 'warning', 'danger'
+    //         icon: 'fa fa-warning', // Icon class
+    //         message: "Tidak Bisa Simpan Masih Ada Sisa !"
+    //     });
+    //     $('#sisa').focus();
+    // } else {
         if(!e.isDefaultPrevented()){
                   var dataf = $('#formAction').serialize();
                     $.ajax({
@@ -305,7 +305,7 @@
                     });
                     return false;
                 }
-    }
+    // }
     });
 });
 </script>
