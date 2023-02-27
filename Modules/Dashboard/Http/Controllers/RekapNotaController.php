@@ -59,7 +59,7 @@ class RekapNotaController extends Controller
                 ->where('r_t_m_w_id', $request->waroeng)
                 ->where('r_t_created_by', $request->operator)
                 ->whereBetween('r_t_tanggal', $dates)
-                ->groupBy('r_t_id', 'name', 'r_t_tanggal', 'm_payment_method_name', 'm_payment_method_type', 'r_t_nota_code', 'r_t_nominal', 'r_t_nominal_pajak', 'm_t_t_group', 'r_t_nominal_total_bayar', 'r_t_nominal_pajak', 'r_t_nominal_sc', 'r_t_nominal_diskon', 'r_t_nominal_voucher', 'r_t_nominal_tarik_tunai', 'r_t_nominal_pembulatan', 'r_t_nominal', 'r_t_nominal_free_kembalian')
+                ->groupBy('r_t_nota_code', 'r_t_id', 'name', 'r_t_tanggal', 'm_payment_method_name', 'm_payment_method_type', 'r_t_nominal', 'r_t_nominal_pajak', 'm_t_t_group', 'r_t_nominal_total_bayar', 'r_t_nominal_pajak', 'r_t_nominal_sc', 'r_t_nominal_diskon', 'r_t_nominal_voucher', 'r_t_nominal_tarik_tunai', 'r_t_nominal_pembulatan', 'r_t_nominal', 'r_t_nominal_free_kembalian')
                 ->orderBy('r_t_tanggal', 'ASC')
                 ->orderBy('r_t_nota_code', 'ASC')
                 ->get();

@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Modules\Dashboard\Http\Controllers\RekapMenuController;
 use Modules\Dashboard\Http\Controllers\RekapNotaController;
 use Modules\Dashboard\Http\Controllers\DetailNotaController;
 use Modules\Dashboard\Http\Controllers\RekapNotaHarianController;
@@ -43,6 +44,12 @@ Route::prefix('dashboard')->middleware('auth', 'web')
             Route::get('harian', 'index')->name('harian.index');
             Route::get('harian/show', 'show')->name('harian.show');
             Route::get('harian/select_waroeng', 'select_waroeng')->name('harian.select_waroeng');
+        });
+
+        Route::controller(RekapMenuController::class)->group(function () {
+            Route::get('rekap_menu', 'index')->name('rekap_menu.index');
+            Route::get('rekap_menu/show', 'show')->name('rekap_menu.show');
+            Route::get('rekap_menu/select_waroeng', 'select_waroeng')->name('rekap_menu.select_waroeng');
         });
 
 });

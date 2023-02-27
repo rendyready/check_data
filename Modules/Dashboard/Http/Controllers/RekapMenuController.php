@@ -7,7 +7,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Contracts\Support\Renderable;
 
-class RekapNotaHarianController extends Controller
+class RekapMenuController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -25,10 +25,7 @@ class RekapNotaHarianController extends Controller
         $data->user = DB::table('users')
             ->orderby('id', 'ASC')
             ->get();
-        $data->payment = DB::table('m_payment_method')
-            ->orderby('m_payment_method_id', 'ASC')
-            ->get();
-        return view('dashboard::rekap_nota_harian', compact('data'));
+        return view('dashboard::rekap_menu', compact('data'));
     }
 
     public function select_waroeng(Request $request)
@@ -52,52 +49,46 @@ class RekapNotaHarianController extends Controller
         return view('dashboard::create');
     }
 
+    /**
+     * Store a newly created resource in storage.
+     * @param Request $request
+     * @return Renderable
+     */
+    public function store(Request $request)
+    {
+        //
+    }
+
     public function show(Request $request)
     {
         $dates = explode('to' ,$request->tanggal);
-        $methodPay = DB::table('m_payment_method')
-                ->orderBy('m_payment_method_id', 'ASC')
-                ->get();
-        $trans = DB::table('rekap_payment_transaksi')
-                ->join('rekap_transaksi', 'r_t_id', 'r_p_t_r_t_id')
-                ->selectRaw('r_p_t_m_payment_method_id, r_t_tanggal, SUM(r_t_nominal) as nominal');
+        $get = DB::table('rekap_transaksi_detail')
+                ->join('rekap_transaksi', 'r_t_id', 'r_t_detail_r_t_id')
+                ->selectRaw('r_t_tanggal, r_t_detail_m_produk_id, r_t_detail_m_produk_nama, sum(r_t_detail_qty) as qty, sum(r_t_detail_nominal) as nominal');
                 if($request->area != 0) {
                     $get->where('r_t_m_area_id', $request->area);
                     if($request->waroeng != 'all') {
                         $get->where('r_t_m_w_id', $request->waroeng);
                     }
                 }
-        $trans2 = $trans->whereBetween('r_t_tanggal', $dates)
-                        ->groupBy('r_t_tanggal', 'r_p_t_m_payment_method_id')
-                        ->orderBy('r_p_t_m_payment_method_id', 'ASC')
-                        ->get();
-
-    $data = array();
-        foreach ($trans2 as $key => $valTrans){
-            foreach ($methodPay as $key => $valPay) {
-                $data[$valTrans->r_t_tanggal]['tanggal'] = $valTrans->r_t_tanggal;
-                if($valPay->m_payment_method_id == $valTrans->r_p_t_m_payment_method_id){
-                    $data[$valTrans->r_t_tanggal][$valPay->m_payment_method_name] = $valTrans->nominal;
-                } else {
-                    $data[$valTrans->r_t_tanggal][$valPay->m_payment_method_name] = 0;
-                }
-            }
+                $get2= $get->whereBetween('r_t_tanggal', $dates)
+                            ->groupBy('r_t_tanggal', 'r_t_detail_m_produk_id', 'r_t_detail_m_produk_nama')
+                            ->orderBy('r_t_tanggal', 'ASC')
+                            ->orderBy('r_t_detail_m_produk_id', 'ASC')
+                            ->get();
+        $data = array();
+        foreach ($get2 as $value) {
+            $row = array();
+            $row[] = $value->r_t_tanggal;
+            $row[] = $value->r_t_detail_m_produk_nama;
+            $row[] = $value->qty;
+            $row[] = rupiah($value->nominal, 0);
+            $data[] = $row;
         }
-
-        // for ($i=1; $i < $methodPay+1; $i++) { 
-        //     foreach ($trans as $key => $valTrans){
-        //                 $data[$valTrans->r_t_tanggal]['tanggal'] = $valTrans->r_t_tanggal;
-                        // if($valTrans->r_p_t_m_payment_method_id == $i){
-                            // $data[$valTrans->r_t_tanggal][$i] = $valTrans->nominal;
-                        // } else {
-                        //     $data[$valTrans->r_t_tanggal][$i] = 0;
-                        // }
-            //     }
-            // }
-
         $output = array("data" => $data);
         return response()->json($output);
     }
+    
 
     /**
      * Show the form for editing the specified resource.
