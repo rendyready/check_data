@@ -68,7 +68,6 @@ class ChtController extends Controller
                 );
                 DB::table('m_stok_detail')->insert($data);
                 $get_detail = DB::table('m_stok_detail')
-                ->select('m_stok_detail_hpp','m_stok_detail_masuk')
                 ->where('m_stok_detail_gudang_code',$request->rekap_beli_gudang_code)
                 ->where('m_stok_detail_m_produk_code',$request->rekap_beli_detail_m_produk_code[$key])
                 ->orderBy('m_stok_detail_id','desc')

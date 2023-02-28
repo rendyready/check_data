@@ -149,10 +149,6 @@
                                             <input type="text" class="form-control number form-control-sm"
                                                 id="rekap_pcb_brg_hasil_qty1">
                                         </div>
-                                        <div class="col-sm-4">
-                                            <a class="btn btn-sm btn-success" id="tambah"><i
-                                                    class="fa fa-plus"></i>Tambah</a>
-                                        </div>
                                     </div>
                                     {{-- <div class="row mb-1">
                                         <label class="col-sm-4 col-form-label-sm" for="sisa">Masih Sisa</label>
@@ -161,6 +157,12 @@
                                                 readonly>
                                         </div>
                                     </div> --}}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <center><br>
+                                    <a style="text-align:center" class="btn btn-sm btn-success" id="tambah">Proses</a></center>
                                 </div>
                             </div>
                             <br>
