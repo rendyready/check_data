@@ -5,10 +5,9 @@ namespace Modules\Inventori\Http\Controllers;
 use Carbon\Carbon;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-
+use App\Http\Controllers\Controller;
 class GudangController extends Controller
 {
     /**
@@ -27,14 +26,14 @@ class GudangController extends Controller
      * @return Renderable
      */
     function list() {$no = 0;
-        $gudang = DB::table('m_gudang')->
-            join('m_w', 'm_w_id', 'm_gudang_m_w_id')->get();
+        $gudang = DB::table('m_gudang')->get();
         foreach ($gudang as $key) {
             $row = array();
             $no++;
             $row[] = $no;
+            $row[] = $key->m_gudang_code;
             $row[] = ucwords($key->m_gudang_nama);
-            $row[] = $key->m_w_nama;
+            $row[] = $key->m_gudang_m_w_nama;
             // $row[] = '<a id="buttonEdit" class="btn btn-sm buttonEdit btn-success" value="'.$key->m_gudang_id.'" title="Edit"><i class="fa fa-pencil"></i></a>';
             $data[] = $row;
         }
@@ -54,28 +53,38 @@ class GudangController extends Controller
                 $validate = DB::table('m_gudang')
                     ->where('m_gudang_m_w_id', $request->m_gudang_m_w_id)
                     ->where('m_gudang_nama', strtolower($request->m_gudang_nama))->first();
+                $no_gd = $this->getlast('m_gudang','m_gudang_code');
+                $waroeng = DB::table('m_w')->where('m_w_id',$request->m_gudang_m_w_id)->first();
+                $code = str_pad($no_gd,5,'6000',STR_PAD_LEFT);
+
                 $data = array(
+                    'm_gudang_id' => $no_gd ,
+                    'm_gudang_code' => $code,
                     'm_gudang_m_w_id' => $request->m_gudang_m_w_id,
                     'm_gudang_nama' => strtolower($request->m_gudang_nama),
+                    'm_gudang_m_w_nama' => $waroeng->m_w_nama,
                     'm_gudang_created_by' => Auth::id(),
                     'm_gudang_created_at' => Carbon::now(),
                 );
                 if (empty($validate)) {
                     DB::table('m_gudang')->insert($data);
                     $masterbb = DB::table('m_produk')
-                        ->select('m_produk_id', 'm_produk_isi_m_satuan_id', 'm_produk_utama_m_satuan_id')
                         ->whereNotIn('m_produk_m_klasifikasi_produk_id', [4])->get();
-                    $gudang_id = DB::table('m_gudang')->max('m_gudang_id');
+                    $gudang = DB::table('m_gudang')->orderBy('m_gudang_id','desc')->first();
                     foreach ($masterbb as $key) {
                         $satuan_id = ($request->m_gudang_nama == 'gudang produksi waroeng') ?
                         $key->m_produk_isi_m_satuan_id : $key->m_produk_utama_m_satuan_id;
                         $satuan_kode = DB::table('m_satuan')->where('m_satuan_id', $satuan_id)->first()->m_satuan_kode;
                         $data_bb = array(
-                            'm_stok_m_produk_id' => $key->m_produk_id,
-                            'm_stok_gudang_id' => $gudang_id,
+                            'm_stok_id' => $this->getlast('m_stok','m_stok_id'),
+                            'm_stok_m_produk_code' => $key->m_produk_code,
+                            'm_stok_produk_nama' => $key->m_produk_nama,
+                            'm_stok_gudang_code' => $gudang->m_gudang_code,
+                            'm_stok_waroeng' =>  $waroeng->m_w_nama,
                             'm_stok_satuan_id' => $satuan_id,
                             'm_stok_satuan' => $satuan_kode,
                             'm_stok_awal' => 0,
+                            'm_stok_isi' => $key->m_produk_qty_isi,
                             'm_stok_created_by' => Auth::id(),
                             'm_stok_created_at' => Carbon::now(),
                         );
@@ -134,7 +143,7 @@ class GudangController extends Controller
         $waroeng_nama = DB::table('m_w')->select('m_w_nama')->where('m_w_id', $w_id)->first();
         $data->code = (empty($get_max_id->rekap_tf_gudang_id)) ? $urut = "600001" . $user : $urut = substr($get_max_id->rekap_tf_gudang_code, 0, -1)+'1' . $user;
         $data->tgl_now = Carbon::now()->format('Y-m-d');
-        $data->gudang = DB::table('m_gudang')->select('m_gudang_id', 'm_gudang_nama')
+        $data->gudang = DB::table('m_gudang')->select('m_gudang_code', 'm_gudang_nama')
             ->where('m_gudang_m_w_id', $w_id)
             ->get();
         return view('inventori::form_keluar_g', compact('data', 'waroeng_nama'));
@@ -143,9 +152,10 @@ class GudangController extends Controller
     public function gudang_out_save(Request $request)
     {
         $tf_nota = array(
-            'rekap_tf_gudang_code' => $request->rekap_tf_code,
-            'rekap_tf_gudang_asal_id' => $request->rekap_tf_gudang_asal_id,
-            'rekap_tf_gudang_tujuan_id' => $request->rekap_tf_gudang_tujuan_id,
+            'rekap_tf_gudang_id' => $this->getlast('rekap_tf_gudang','rekap_tf_gudang_id'),
+            'rekap_tf_gudang_code' => $request->rekap_tf_g_detail_code,
+            'rekap_tf_gudang_asal_code' => $request->rekap_tf_gudang_asal_code,
+            'rekap_tf_gudang_tujuan_code' => $request->rekap_tf_gudang_tujuan_code,
             'rekap_tf_gudang_tgl_kirim' => Carbon::now(),
             'rekap_tf_gudang_grand_tot' => $request->rekap_tf_gudang_grand_tot,
             'rekap_tf_gudang_created_by' => Auth::id(),
@@ -154,23 +164,18 @@ class GudangController extends Controller
         DB::table('rekap_tf_gudang')->insert($tf_nota);
         foreach ($request->rekap_tf_g_detail_m_produk_id as $key => $value) {
             $satuan_kirim = DB::table('m_stok')
-                ->where('m_stok_gudang_id', $request->rekap_tf_gudang_tujuan_id)
-                ->where('m_stok_m_produk_id', $request->rekap_tf_g_detail_m_produk_id[$key])
-                ->select('m_stok_satuan', 'm_stok_satuan_id')
+                ->where('m_stok_gudang_code', $request->rekap_tf_gudang_tujuan_code)
+                ->where('m_stok_m_produk_code', $request->rekap_tf_g_detail_m_produk_id[$key])
                 ->first();
             $satuan_asal = DB::table('m_stok')
-                ->where('m_stok_gudang_id', $request->rekap_tf_gudang_asal_id)
-                ->where('m_stok_m_produk_id', $request->rekap_tf_g_detail_m_produk_id[$key])
-                ->first();
-            $produk = DB::table('m_produk')
-                ->where('m_produk_id', $request->rekap_tf_g_detail_m_produk_id[$key])
-                ->select('m_produk_code', 'm_produk_nama')
+                ->where('m_stok_gudang_code', $request->rekap_tf_gudang_asal_code)
+                ->where('m_stok_m_produk_code', $request->rekap_tf_g_detail_m_produk_id[$key])
                 ->first();
             $tf_detail = array(
-                'rekap_tf_g_detail_code' => $request->rekap_tf_code,
-                'rekap_tf_g_detail_m_produk_code' => $produk->m_produk_code,
-                'rekap_tf_g_detail_m_produk_id' => $request->rekap_tf_g_detail_m_produk_id[$key],
-                'rekap_tf_g_detail_m_produk_nama' => $produk->m_produk_nama,
+                'rekap_tf_g_detail_id' => $this->getlast('rekap_tf_gudang_detail','rekap_tf_g_detail_id'),
+                'rekap_tf_g_detail_code' => $request->rekap_tf_g_detail_code,
+                'rekap_tf_g_detail_m_produk_code' => $request->rekap_tf_g_detail_m_produk_id[$key],
+                'rekap_tf_g_detail_m_produk_nama' => $satuan_kirim->m_stok_produk_nama,
                 'rekap_tf_g_detail_qty_kirim' => $request->rekap_tf_g_detail_qty_kirim[$key],
                 'rekap_tf_g_detail_hpp' => $request->rekap_tf_g_detail_hpp[$key],
                 'rekap_tf_g_detail_sub_total' => $request->rekap_tf_g_detail_sub_total[$key],
@@ -180,17 +185,19 @@ class GudangController extends Controller
                 'rekap_tf_g_detail_created_at' => Carbon::now(),
             );
             DB::table('rekap_tf_gudang_detail')->insert($tf_detail);
+            $m_g_tj = DB::table('m_gudang')->where('m_gudang_code',$request->rekap_tf_gudang_tujuan_code)->first();
             $mutasi_detail = array(
-                'm_stok_detail_m_produk_id' => $request->rekap_tf_g_detail_m_produk_id[$key],
+                'm_stok_detail_id' => $this->getlast('m_stok_detail','m_stok_detail_id'),
+                'm_stok_detail_m_produk_code' => $request->rekap_tf_g_detail_m_produk_id[$key],
                 'm_stok_detail_tgl' => Carbon::now(),
-                'm_stok_detail_m_produk_nama' => $produk->m_produk_nama,
+                'm_stok_detail_m_produk_nama' => $satuan_kirim->m_stok_produk_nama,
                 'm_stok_detail_satuan_id' => $satuan_kirim->m_stok_satuan_id,
                 'm_stok_detail_satuan' => $satuan_kirim->m_stok_satuan,
                 'm_stok_detail_keluar' => $request->rekap_tf_g_detail_qty_kirim[$key],
                 'm_stok_detail_saldo' => $satuan_asal->m_stok_saldo - $request->rekap_tf_g_detail_qty_kirim[$key],
                 'm_stok_detail_hpp' => $satuan_asal->m_stok_hpp,
-                'm_stok_detail_catatan' => 'Transfer' . $request->rekap_tf_code,
-                'm_stok_detail_gudang_id' => $request->rekap_tf_gudang_asal_id,
+                'm_stok_detail_catatan' => 'transfer ke '.$m_g_tj->m_gudang_nama.' '.$m_g_tj->m_gudang_m_w_nama ,
+                'm_stok_detail_gudang_code' => $request->rekap_tf_gudang_asal_code,
                 'm_stok_detail_created_by' => Auth::id(),
                 'm_stok_detail_created_at' => Carbon::now(),
             );
@@ -225,8 +232,8 @@ class GudangController extends Controller
     public function gudang_list_tf(Request $request)
     {
         $list_tf = DB::table('rekap_tf_gudang')
-            ->where('rekap_tf_gudang_tujuan_id', $request->gudang_id)
-            ->leftjoin('m_gudang', 'm_gudang_id', 'rekap_tf_gudang_asal_id')
+            ->where('rekap_tf_gudang_tujuan_code', $request->gudang_id)
+            ->leftjoin('m_gudang', 'm_gudang_id', 'rekap_tf_gudang_asal_code')
             ->leftjoin('m_w', 'm_gudang_m_w_id', 'm_w_id')
             ->orderBy('rekap_tf_gudang_id', 'desc')
             ->get();

@@ -110,7 +110,7 @@ class SupplierController extends Controller
      */
     public function edit($id)
     {
-        $data = DB::table('m_supplier')->where('m_supplier_id',$id)->first();
+        $data = DB::table('m_supplier')->where('m_supplier_code',$id)->first();
         return response()->json($data);
     }
 }

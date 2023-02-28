@@ -94,4 +94,14 @@ class Controller extends BaseController
         
         return strtoupper($prefix).$id;
     }
+
+    public function getlast($table,$row)
+    {
+        $maxId = DB::table($table)->count($row);
+        return $maxId+1;
+    }
+    public function getNamaW($id)
+    {   
+        return $waroeng = DB::table('m_w')->where('m_w_code',$id)->first()->m_w_nama;
+    }
 }

@@ -14,9 +14,12 @@ return new class extends Migration
     public function up()
     {
         Schema::create('m_gudang', function (Blueprint $table) {
-            $table->id('m_gudang_id');
-            $table->bigInteger('m_gudang_m_w_id');
+            $table->id('id');
+            $table->string('m_gudang_id');
+            $table->string('m_gudang_code');
             $table->string('m_gudang_nama');
+            $table->bigInteger('m_gudang_m_w_id');
+            $table->string('m_gudang_m_w_nama');
             $table->bigInteger('m_gudang_created_by');
             $table->bigInteger('m_gudang_updated_by')->nullable();
             $table->bigInteger('m_gudang_deleted_by')->nullable();

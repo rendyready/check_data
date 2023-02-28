@@ -12,11 +12,11 @@ return new class extends Migration
      * @return void
      */
     public function up()
-    {
+    { 
         Schema::create('rekap_beli_detail', function (Blueprint $table) {
-            $table->id('rekap_beli_detail_id');
+            $table->id('id');
+            $table->bigInteger('rekap_beli_detail_id');
             $table->string('rekap_beli_detail_rekap_beli_code');
-            $table->bigInteger('rekap_beli_detail_m_produk_id');
             $table->string('rekap_beli_detail_m_produk_code');
             $table->string('rekap_beli_detail_m_produk_nama');
             $table->string('rekap_beli_detail_catatan');

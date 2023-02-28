@@ -30,14 +30,14 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="row mb-2">
-                                    <label class="col-sm-4 col-form-label" for="m_stok_gudang_id">Gudang</label>
+                                    <label class="col-sm-4 col-form-label" for="m_stok_gudang_code">Gudang</label>
                                     <div class="col-sm-8">
                                         <select class="js-select2 form-control-sm" style="width: 100%;"
-                                            name="m_stok_gudang_id" id="m_stok_gudang_id" data-placeholder="Cari Gudang"
+                                            name="m_stok_gudang_code" id="m_stok_gudang_code" data-placeholder="Cari Gudang"
                                             required>
                                             <option value=""></option>
                                             @foreach ($gudang as $item)
-                                                <option value="{{ $item->m_gudang_id }}">{{ ucwords($item->m_gudang_nama) }}
+                                                <option value="{{ $item->m_gudang_code }}">{{ ucwords($item->m_gudang_nama) }}
                                                     - {{ $item->m_w_nama }}</option>
                                             @endforeach
                                         </select>
@@ -56,8 +56,8 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td><select class="js-select2 nama_barang reset" name="m_stok_m_produk_id[]"
-                                                    id="m_stok_m_produk_id"
+                                            <td><select class="js-select2 nama_barang reset" name="m_stok_m_produk_code[]"
+                                                    id="m_stok_m_produk_code"
                                                     style="width: 100%;"data-placeholder="Pilih Nama Barang" required>
                                                     <option value=""></option>
                                                 </select></td>
@@ -113,8 +113,8 @@
       });
     Codebase.helpersOnLoad(['jq-notify']);
     var table;
-    $('#m_stok_gudang_id').on('change',function () {
-            var g_id = $('#m_stok_gudang_id').val();
+    $('#m_stok_gudang_code').on('change',function () {
+            var g_id = $('#m_stok_gudang_code').val();
             $(function() {
             table = $('#tb_stok').DataTable({
               buttons:[],
@@ -135,7 +135,7 @@
       $('.tambah').on('click',function(){
         no++;
       $('#form_input').append('<tr id="row'+no+'" class="remove_all">'+
-                          '<td><select class="js-select2 nama_barang" name="m_stok_m_produk_id[]" id="m_stok_m_produk_id'+no+'" style="width: 100%;"data-placeholder="Pilih Nama Barang" required><option></option></select></td>'+
+                          '<td><select class="js-select2 nama_barang" name="m_stok_m_produk_code[]" id="m_stok_m_produk_code'+no+'" style="width: 100%;"data-placeholder="Pilih Nama Barang" required><option></option></select></td>'+
                           '<td><input type="number" min="0" class="form-control number form-control-sm" name="m_stok_awal[]" id="m_stok_awal" required></td>'+
                           '<td><input type="number" min="0" class="form-control number form-control-sm" name="m_stok_hpp[]" id="m_stok_hpp" required></td>'+
                           '<td><input type="text" class="form-control form-control-sm satuan" id="m_satuan'+no+'" readonly></td>'+
@@ -150,8 +150,8 @@
       $('#form_input').on('click','.tambah', function(){
           Codebase.helpersOnLoad(['jq-select2']);
               $.each(barang, function(key, value) {
-              $('#m_stok_m_produk_id'+no).append('<option></option>');  
-              $('#m_stok_m_produk_id'+no)
+              $('#m_stok_m_produk_code'+no).append('<option></option>');  
+              $('#m_stok_m_produk_code'+no)
               .append($('<option>', { value : key })
               .text(value));
               });  
@@ -171,11 +171,12 @@
           var prev = $(this).data('val');
           var current = $(this).val();
           var id = $(this).data('id');
-          var satuan_id = id.slice(18);  
+          var satuan_id = id.slice(20);
+          console.log(satuan_id);  
           $.get("/master/m_satuan/"+current, function(data){
             $('#m_satuan'+satuan_id).val(data.m_satuan_kode);
           });
-        var values = $('[name="m_stok_m_produk_id[]"]').map(function() {
+        var values = $('[name="m_stok_m_produk_code[]"]').map(function() {
         return this.value.trim();
       }).get();
       var unique =  [...new Set(values)];
@@ -193,9 +194,9 @@
         });
             $('#formAction').submit( function(e){
                 if(!e.isDefaultPrevented()){
-                  var g_id = $('#m_stok_gudang_id').val();
+                  var g_id = $('#m_stok_gudang_code').val();
                   var formData = $('form').serializeArray();
-                  formData.push({name:"m_stok_gudang_id",value:g_id});
+                  formData.push({name:"m_stok_gudang_code",value:g_id});
                     $.ajax({
                         url : "{{ route('stok_awal.simpan') }}",
                         type : "POST",
@@ -210,7 +211,7 @@
                             });
                             $('.remove_all').remove();
                             $('.reset').val('');
-                            var g_id = $('#m_stok_gudang_id').val();
+                            var g_id = $('#m_stok_gudang_code').val();
                             $(function() {
                             $('#tb_stok').DataTable({
                                 buttons:[],

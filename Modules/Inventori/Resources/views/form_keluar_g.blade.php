@@ -28,7 +28,7 @@
                                         <label class="col-sm-4 col-form-label" for="rekap_tf_g_detail_code">No Bukti</label>
                                         <div class="col-sm-8">
                                             <input type="text" class="form-control form-control-sm"
-                                                id="rekap_tf_g_detail_code" name="rekap_tf_code" value="{{ $data->code }}"
+                                                id="rekap_tf_g_detail_code" name="rekap_tf_g_detail_code" value="{{ $data->code }}"
                                                 readonly>
                                         </div>
                                     </div>
@@ -50,15 +50,15 @@
                                         </div>
                                     </div>
                                     <div class="row mb-1">
-                                        <label class="col-sm-4 col-form-label" for="rekap_tf_gudang_asal_id">Gudang
+                                        <label class="col-sm-4 col-form-label" for="rekap_tf_gudang_asal_code">Gudang
                                             Asal</label>
                                         <div class="col-sm-8">
-                                            <select class="js-select2" name="rekap_tf_gudang_asal_id"
-                                                id="rekap_tf_gudang_asal_id"
+                                            <select class="js-select2" name="rekap_tf_gudang_asal_code"
+                                                id="rekap_tf_gudang_asal_code"
                                                 style="width: 100%;"data-placeholder="Pilih Gudang" required>
                                                 <option></option>
                                                 @foreach ($data->gudang as $item)
-                                                    <option value="{{ $item->m_gudang_id }}">
+                                                    <option value="{{ $item->m_gudang_code }}">
                                                         {{ ucwords($item->m_gudang_nama) }}</option>
                                                 @endforeach
                                             </select>
@@ -68,12 +68,12 @@
                                         <label class="col-sm-4 col-form-label" for="rekap_tf_gudang_tujuan_id">Gudang
                                             Tujuan</label>
                                         <div class="col-sm-8">
-                                            <select class="js-select2" name="rekap_tf_gudang_tujuan_id"
-                                                id="rekap_tf_gudang_tujuan_id"
+                                            <select class="js-select2" name="rekap_tf_gudang_tujuan_code"
+                                                id="rekap_tf_gudang_tujuan_code"
                                                 style="width: 100%;"data-placeholder="Pilih Gudang" required>
                                                 <option></option>
                                                 @foreach ($data->gudang as $item)
-                                                    <option value="{{ $item->m_gudang_id }}">
+                                                    <option value="{{ $item->m_gudang_code }}">
                                                         {{ ucwords($item->m_gudang_nama) }}</option>
                                                 @endforeach
                                             </select>
@@ -168,12 +168,12 @@
         }
       });
       var datas;
-    $('#rekap_tf_gudang_tujuan_id, #rekap_tf_gudang_asal_id').on('change',function () {
-        var asal = $('#rekap_tf_gudang_asal_id').val();
-        var tujuan = $('#rekap_tf_gudang_tujuan_id').val();
+    $('#rekap_tf_gudang_tujuan_code, #rekap_tf_gudang_asal_code').on('change',function () {
+        var asal = $('#rekap_tf_gudang_asal_code').val();
+        var tujuan = $('#rekap_tf_gudang_tujuan_code').val();
         if (asal == tujuan) {
             alert('Tujuan dan Asal Gudang Tidak Boleh Sama !!!');
-            $('#rekap_tf_gudang_tujuan_id').val('').trigger('change');
+            $('#rekap_tf_gudang_tujuan_code').val('').trigger('change');
         }
         $.get("/inventori/stok/"+asal, function(data){
             datas = data;
@@ -231,7 +231,7 @@
     $(document).on('select2:open', '.nama_barang', function(){
           console.log("Saving value " + $(this).val());
           var index = $(this).attr('id'); 
-          var g_id = $('#rekap_tf_gudang_asal_id').val();
+          var g_id = $('#rekap_tf_gudang_asal_code').val();
           if ((g_id == '')) {
             alert('pilih gudang dahulu');
           }
@@ -240,7 +240,7 @@
       }).on('change','.nama_barang', function(e){
           var prev = $(this).data('val');
           var current = $(this).val();
-          var g_id = $('#rekap_tf_gudang_asal_id').val();
+          var g_id = $('#rekap_tf_gudang_asal_code').val();
           var id = $(this).data('id');
           var harga_id = id.slice(29);
             $.get("/inventori/stok_harga/"+g_id+"/"+current, function(data){

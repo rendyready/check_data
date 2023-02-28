@@ -19,12 +19,13 @@ return new class extends Migration
             $table->string('rekap_beli_code_nota')->nullable(); //code nota dari supplier jika ada
             $table->date('rekap_beli_tgl');
             $table->string('rekap_beli_jth_tmp');
-            $table->bigInteger('rekap_beli_supplier_id');
-            $table->bigInteger('rekap_beli_gudang_id');
+            $table->string('rekap_beli_supplier_code');
+            $table->string('rekap_beli_gudang_code');
             $table->string('rekap_beli_supplier_nama');
             $table->string('rekap_beli_supplier_telp')->nullable();
             $table->string('rekap_beli_supplier_alamat')->nullable();
             $table->bigInteger('rekap_beli_m_w_id');
+            $table->string('rekap_beli_waroeng');
             $table->decimal('rekap_beli_disc',8,2)->nullable();
             $table->decimal('rekap_beli_disc_rp')->nullable();
             $table->decimal('rekap_beli_ppn',8,2)->nullable();

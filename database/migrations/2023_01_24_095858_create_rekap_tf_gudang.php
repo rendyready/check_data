@@ -14,10 +14,11 @@ return new class extends Migration
     public function up()
     {
         Schema::create('rekap_tf_gudang', function (Blueprint $table) {
-            $table->id('rekap_tf_gudang_id');
+            $table->id('id');
+            $table->bigInteger('rekap_tf_gudang_id');
             $table->string('rekap_tf_gudang_code');
-            $table->bigInteger('rekap_tf_gudang_asal_id'); 
-            $table->bigInteger('rekap_tf_gudang_tujuan_id');
+            $table->string('rekap_tf_gudang_asal_code'); 
+            $table->string('rekap_tf_gudang_tujuan_code');
             $table->datetime('rekap_tf_gudang_tgl_kirim');
             $table->date('rekap_tf_gudang_tgl_terima')->nullable();
             $table->decimal('rekap_tf_gudang_grand_tot',16,2);

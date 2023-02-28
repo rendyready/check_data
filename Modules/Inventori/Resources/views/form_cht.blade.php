@@ -18,12 +18,12 @@
                             <div class="col-sm-8">
                               <input type="text" class="form-control form-control-sm" id="rekap_beli_created_by" name="rekap_beli_created_by" value="{{Auth::user()->name}}" readonly>
                             </div>
-                            <label class="col-sm-4 col-form-label-sm" for="rekap_beli_gudang_id">CHT Gudang</label>
+                            <label class="col-sm-4 col-form-label-sm" for="rekap_beli_gudang_code">CHT Gudang</label>
                           <div class="col-sm-8">
-                            <select class="js-select2 form-control-sm" style="width: 100%;" name="rekap_beli_gudang_id" id="rekap_beli_gudang_id" data-placeholder="Pilih Gudang" required>
+                            <select class="js-select2 form-control-sm" style="width: 100%;" name="rekap_beli_gudang_code" id="rekap_beli_gudang_code" data-placeholder="Pilih Gudang" required>
                             <option></option>
                             @foreach ($data->gudang as $item)
-                                <option value="{{$item->m_gudang_id}}">{{ucwords($item->m_gudang_nama)}}</option>
+                                <option value="{{$item->m_gudang_code}}">{{ucwords($item->m_gudang_nama)}}</option>
                             @endforeach
                             </select>
                           </div>
@@ -55,6 +55,7 @@
                         <th hidden>code</th>
                         <th hidden>detail</th>
                         <th hidden>produk_id</th>
+                        <th>Tanggal</th>
                         <th>Supplier</th>
                         <th>Nama Barang</th>
                         <th>Keterangan</th>
@@ -89,7 +90,7 @@
         evt.preventDefault();
     }
     });
-  $('#rekap_beli_gudang_id').on('change',function() {
+  $('#rekap_beli_gudang_code').on('change',function() {
     var id = $(this).val()
     $(function() {
            table = $('#tb-cht').DataTable({
