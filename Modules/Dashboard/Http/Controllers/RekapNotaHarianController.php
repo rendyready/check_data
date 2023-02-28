@@ -25,6 +25,9 @@ class RekapNotaHarianController extends Controller
         $data->user = DB::table('users')
             ->orderby('id', 'ASC')
             ->get();
+        $data->payment = DB::table('m_payment_method')
+            ->orderby('m_payment_method_id', 'ASC')
+            ->get();
         return view('dashboard::rekap_nota_harian', compact('data'));
     }
 
@@ -39,6 +42,7 @@ class RekapNotaHarianController extends Controller
         $data = array();
         foreach ($waroeng as $val) {
             $data[$val->m_w_id] = [$val->m_w_nama];
+            $data['all'] = ['all waroeng'];
         }
         return response()->json($data);
     }
@@ -51,25 +55,46 @@ class RekapNotaHarianController extends Controller
     public function show(Request $request)
     {
         $dates = explode('to' ,$request->tanggal);
-        $get = DB::table('rekap_transaksi')
-                ->join('rekap_transaksi_detail', 'r_t_detail_r_t_id', 'r_t_id')
-                ->join('rekap_payment_transaksi', 'r_p_t_r_t_id', 'r_t_id')
-                ->join('m_payment_method', 'm_payment_method_id', 'r_p_t_m_payment_method_id')
-                ->select(DB::raw("SUM(r_t_nominal) as total"), 'r_t_tanggal', 'm_payment_method_type', 'm_payment_method_name')
-                ->where('r_t_m_w_id', $request->waroeng)
-                ->whereBetween('r_t_tanggal', $dates)
-                ->groupBy('r_t_tanggal', 'm_payment_method_type', 'm_payment_method_name')
-                ->orderBy('r_t_tanggal', 'ASC')
+        $methodPay = DB::table('m_payment_method')
+                ->orderBy('m_payment_method_id', 'ASC')
                 ->get();
-        $data = array();
-        foreach ($get as $value) {
-            $row = array();
-            $row[] = date('d-m-Y', strtotime($value->r_t_tanggal));
-            $row[] = $value->m_payment_method_type;
-            $row[] = $value->m_payment_method_name;
-            $row[] = rupiah($value->total);
-            $data[] = $row;
+        $trans = DB::table('rekap_payment_transaksi')
+                ->join('rekap_transaksi', 'r_t_id', 'r_p_t_r_t_id')
+                ->selectRaw('r_p_t_m_payment_method_id, r_t_tanggal, SUM(r_t_nominal) as nominal');
+                if($request->area != 0) {
+                    $get->where('r_t_m_area_id', $request->area);
+                    if($request->waroeng != 'all') {
+                        $get->where('r_t_m_w_id', $request->waroeng);
+                    }
+                }
+        $trans2 = $trans->whereBetween('r_t_tanggal', $dates)
+                        ->groupBy('r_t_tanggal', 'r_p_t_m_payment_method_id')
+                        ->orderBy('r_p_t_m_payment_method_id', 'ASC')
+                        ->get();
+
+    $data = array();
+        foreach ($trans2 as $key => $valTrans){
+            foreach ($methodPay as $key => $valPay) {
+                $data[$valTrans->r_t_tanggal]['tanggal'] = $valTrans->r_t_tanggal;
+                if($valPay->m_payment_method_id == $valTrans->r_p_t_m_payment_method_id){
+                    $data[$valTrans->r_t_tanggal][$valPay->m_payment_method_name] = $valTrans->nominal;
+                } else {
+                    $data[$valTrans->r_t_tanggal][$valPay->m_payment_method_name] = 0;
+                }
+            }
         }
+
+        // for ($i=1; $i < $methodPay+1; $i++) { 
+        //     foreach ($trans as $key => $valTrans){
+        //                 $data[$valTrans->r_t_tanggal]['tanggal'] = $valTrans->r_t_tanggal;
+                        // if($valTrans->r_p_t_m_payment_method_id == $i){
+                            // $data[$valTrans->r_t_tanggal][$i] = $valTrans->nominal;
+                        // } else {
+                        //     $data[$valTrans->r_t_tanggal][$i] = 0;
+                        // }
+            //     }
+            // }
+
         $output = array("data" => $data);
         return response()->json($output);
     }

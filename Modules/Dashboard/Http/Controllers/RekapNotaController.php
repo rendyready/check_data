@@ -51,13 +51,17 @@ class RekapNotaController extends Controller
         $dates = explode('to' ,$request->tanggal);
         $get = DB::table('rekap_transaksi')
                 ->join('rekap_transaksi_detail', 'r_t_detail_r_t_id', 'r_t_id')
-                ->join('users', 'id', 'r_t_created_by')
+                ->join('users', 'users_id', 'r_t_created_by')
                 ->join('rekap_payment_transaksi', 'r_p_t_r_t_id', 'r_t_id')
                 ->join('m_payment_method', 'm_payment_method_id', 'r_p_t_m_payment_method_id')
+                ->join('m_transaksi_tipe', 'm_t_t_id', 'r_t_m_t_t_id')
+                ->select('r_t_tanggal', 'name', 'r_t_nota_code', 'r_t_nominal', 'r_t_nominal_pajak', 'r_t_id', 'm_payment_method_name', 'm_payment_method_type', 'm_t_t_group', 'r_t_nominal_total_bayar', 'r_t_nominal_pajak', 'r_t_nominal_sc', 'r_t_nominal_diskon', 'r_t_nominal_voucher', 'r_t_nominal_tarik_tunai', 'r_t_nominal_pembulatan', 'r_t_nominal', 'r_t_nominal_free_kembalian')
                 ->where('r_t_m_w_id', $request->waroeng)
                 ->where('r_t_created_by', $request->operator)
                 ->whereBetween('r_t_tanggal', $dates)
-                ->orderBy('r_t_id', 'ASC')
+                ->groupBy('r_t_nota_code', 'r_t_id', 'name', 'r_t_tanggal', 'm_payment_method_name', 'm_payment_method_type', 'r_t_nominal', 'r_t_nominal_pajak', 'm_t_t_group', 'r_t_nominal_total_bayar', 'r_t_nominal_pajak', 'r_t_nominal_sc', 'r_t_nominal_diskon', 'r_t_nominal_voucher', 'r_t_nominal_tarik_tunai', 'r_t_nominal_pembulatan', 'r_t_nominal', 'r_t_nominal_free_kembalian')
+                ->orderBy('r_t_tanggal', 'ASC')
+                ->orderBy('r_t_nota_code', 'ASC')
                 ->get();
         $data = array();
         foreach ($get as $value) {
@@ -65,12 +69,18 @@ class RekapNotaController extends Controller
             $row[] = date('d-m-Y', strtotime($value->r_t_tanggal));
             $row[] = $value->name;
             $row[] = $value->r_t_nota_code;
-            $row[] = rupiah($value->r_t_nominal, 0);
             $row[] = rupiah($value->r_t_nominal_pajak, 0);
+            $row[] = rupiah($value->r_t_nominal, 0);
+            $row[] = rupiah($value->r_t_nominal_sc, 0);
+            $row[] = rupiah($value->r_t_nominal_diskon, 0);
+            $row[] = rupiah($value->r_t_nominal_voucher, 0);
+            $row[] = rupiah($value->r_t_nominal_tarik_tunai, 0);
+            $row[] = rupiah($value->r_t_nominal_pembulatan, 0);
+            $row[] = rupiah($value->r_t_nominal_free_kembalian, 0);
             $row[] = rupiah($value->r_t_nominal_total_bayar, 0);
-            $row[] = $value->m_payment_method_type;
+            $row[] = ($value->m_t_t_group == 'ojol') ? $value->m_t_t_group : $value->m_payment_method_type;
             $row[] = $value->m_payment_method_name;
-            $row[] ='<a id="button_detail" class="btn btn-sm buttonEdit btn-info" value="'.$value->r_t_id.'" title="Detail Nota"><i class="fa-sharp fa-solid fa-file"></i></a>';
+            $row[] ='<a id="button_detail" class="btn btn-sm button_detail btn-info" value="'.$value->r_t_id.'" title="Detail Nota"><i class="fa-sharp fa-solid fa-file"></i></a>';
             $data[] = $row;
         }
         $output = array("data" => $data);
@@ -82,7 +92,7 @@ class RekapNotaController extends Controller
     {
         $data = new \stdClass();
         $data->transaksi_rekap = DB::table('rekap_transaksi')
-                ->join('users', 'id', 'r_t_created_by')
+                ->join('users', 'users_id', 'r_t_created_by')
                 ->join('rekap_payment_transaksi', 'r_p_t_r_t_id', 'r_t_id')
                 ->join('m_payment_method', 'm_payment_method_id', 'r_p_t_m_payment_method_id')
                 ->join('m_transaksi_tipe', 'm_t_t_id', 'r_t_m_t_t_id')

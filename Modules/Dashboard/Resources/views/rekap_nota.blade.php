@@ -75,16 +75,22 @@
                         </div>
                     </form>      
                 
-            <table id="tampil_rekap" class="table table-sm table-bordered table-striped table-vcenter js-dataTable-full nowrap table-hover row-border order-column" style="width:100%">
+            <table id="tampil_rekap" class="table table-sm table-bordered table-striped table-vcenter nowrap table-hover js-dataTable-full">
               <thead>
                 <tr>
                   <th>Tanggal</th>
                   <th>Operator</th>
                   <th>No. Nota</th>
-                  <th>Total</th>
                   <th>Tax</th>
-                  <th>Bayar</th>
-                  <th>Payment</th>
+                  <th>Total</th>
+                  <th>SC</th>
+                  <th>Diskon</th>
+                  <th>Voucher</th>
+                  <th>Tarik Tunai</th>
+                  <th>Pembulatan</th>
+                  <th>Free Kembalian</th>
+                  <th>Total Bayar</th>
+                  <th>Metode</th>
                   <th>Jenis Payment</th>
                   <th></th>
                 </tr>
@@ -116,10 +122,10 @@
                       </div>
                       <div class="block-content mb-4" style="background-color: rgba(224, 224, 224, 0.5)">
                         <table class="table table-border" style="font-size: 13px;">
-                            @foreach ($data->transaksi_rekap as $rekap)
-                          <thead id="sub_nota{{ $rekap->r_t_id }}">
-                          </thead>
-                            @endforeach
+                          @foreach ($data->transaksi_rekap as $rekap)
+                          <thead class="sub_nota" id="sub_nota{{ $rekap->r_t_id }}">
+                          </thead> 
+                          @endforeach
                             <tbody>
                             <tr style="background-color: white;" class="text-end fw-semibold">
                               <td>Total</td>
@@ -131,8 +137,40 @@
                               <td id="pajak">
                               </td>
                             </tr>
+
                             <tr style="background-color: white;" class="text-end fw-semibold">
-                              <td>Bayar</td>
+                              <td>Service Charge</td>
+                              <td id="sc">
+                              </td>
+                            </tr>
+                            <tr style="background-color: white;" class="text-end fw-semibold">
+                              <td>Diskon</td>
+                              <td id="diskon">
+                              </td>
+                            </tr>
+                            <tr style="background-color: white;" class="text-end fw-semibold">
+                              <td>Voucher</td>
+                              <td id="voucher">
+                              </td>
+                            </tr>
+                            <tr style="background-color: white;" class="text-end fw-semibold">
+                              <td>Tarik Tunai</td>
+                              <td id="tarik">
+                              </td>
+                            </tr>
+                            <tr style="background-color: white;" class="text-end fw-semibold">
+                              <td>Pembulatan</td>
+                              <td id="pembulatan">
+                              </td>
+                            </tr>
+                            <tr style="background-color: white;" class="text-end fw-semibold">
+                              <td>Free Kembalian</td>
+                              <td id="free">
+                              </td>
+                            </tr>
+                            
+                            <tr style="background-color: white;" class="text-end fw-semibold">
+                              <td>Total Bayar (<small id="pembayaran"></small>)</td>
                               <td id="bayar">
                               </td>
                             </tr>
@@ -144,7 +182,6 @@
                       </div>
                     </div>
                 </div>
-
               </div>
         </div>
       </div>
@@ -168,10 +205,7 @@ $(document).ready(function() {
         orderCellsTop: true,
         processing: true,
         scrollX: true,
-        autoWidth: true,
-        // "columnDefs": [
-        //     {"className": "dt-center", "targets": "_all"}
-        // ],
+        scrollY: '300px',
         lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
         pageLength: 10,
         ajax: {
@@ -190,12 +224,13 @@ $(document).ready(function() {
     });
 
     $('#filter_area').change(function(){
-        var id_area = $(this).val();    
+        var id_area = $(this).val();
         if(id_area){
             $.ajax({
             type:"GET",
             url: '{{route("rekap.select_waroeng")}}',
             dataType: 'JSON',
+            destroy: true,    
             data : {
                 id_area: id_area,
             },
@@ -225,29 +260,39 @@ $(document).ready(function() {
 
             $("#tampil_rekap").on('click','#button_detail', function() {
                 var id = $(this).attr('value');
-                console.log(id);
+                // console.log(id);
                 // $("#myModalLabel").html('Detail Nota');
                 $.ajax({
                     url: "/dashboard/rekap/detail/"+id,
                     type: "GET",
                     dataType: 'json',
+                    destroy: true,
                     success: function(data) {
+                      // console.log(data.detail_nota.r_t_detail_id);
                         $('#no_nota').html(data.transaksi_rekap.r_t_nota_code);
                         $('#tgl_nota').html(data.transaksi_rekap.r_t_tanggal);
                         $('#nama_kons').html(data.transaksi_rekap.name);
                         $('#total').html(data.transaksi_rekap.r_t_nominal);
                         $('#pajak').html(data.transaksi_rekap.r_t_nominal_pajak);
                         $('#bayar').html(data.transaksi_rekap.r_t_nominal_total_bayar);
-                        
+                        $('#pembayaran').html(data.transaksi_rekap.m_payment_method_name);
+                        $('#sc').html(data.transaksi_rekap.r_t_nominal_sc);
+                        $('#diskon').html(data.transaksi_rekap.r_t_nominal_diskon);
+                        $('#voucher').html(data.transaksi_rekap.r_t_nominal_voucher);
+                        $('#tarik').html(data.transaksi_rekap.r_t_nominal_tarik_tunai);
+                        $('#pembulatan').html(data.transaksi_rekap.r_t_nominal_pembulatan);
+                        $('#free').html(data.transaksi_rekap.r_t_nominal_free_kembalian);
+                             
+                    $('.sub_sub_nota').remove();
                     $.each(data.detail_nota, function (key, item) {
-                        console.log(item.r_t_detail_r_t_id);
-                        $('#sub_nota'+ item.r_t_detail_r_t_id).append(
-                                '<tr style="background-color: white;">'+
+                        console.log(item.r_t_detail_m_produk_nama);
+                        $('#sub_nota'+id).append(
+                                '<tr class="sub_sub_nota" style="background-color: white;">'+
                                   '<td>'+
-                                    '<small class="fw-semibold" style="font-size: 15px;">'+ item.r_t_detail_m_produk_nama +'</small> <br>'+
-                                    '<small>'+ item.r_t_detail_qty +' x '+ item.r_t_detail_price +'</small>'+
+                                    '<small class="fw-semibold" style="font-size: 15px;" id="produk">'+ item.r_t_detail_m_produk_nama +'</small> <br>'+
+                                    '<small id="qty">'+ item.r_t_detail_qty +'</small> x <small id="price">'+ item.r_t_detail_price +'</small>'+
                                   '</td>'+
-                                  '<td class="text-end fw-semibold" >'+ item.r_t_detail_nominal + ''+
+                                  '<td class="text-end fw-semibold" id+="sub_total">'+ item.r_t_detail_nominal + ''+
                                   '</td>'+
                                 '</tr>'
                           );

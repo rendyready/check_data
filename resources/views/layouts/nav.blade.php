@@ -374,6 +374,11 @@
                       <span class="nav-main-link-name">Rekap Nota Harian</span>
                     </a>
                   </li>
+                  <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('dashboard/rekap_menu') ? ' active' : '' }}" href="{{route('rekap_menu.index')}}">
+                      <span class="nav-main-link-name">Rekap Menu</span>
+                    </a>
+                  </li>
                 </ul>
             </li>     
 

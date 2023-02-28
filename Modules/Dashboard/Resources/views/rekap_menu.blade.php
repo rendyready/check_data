@@ -6,7 +6,7 @@
         <div class="block block-themed h-100 mb-0">
           <div class="block-header bg-pulse">
             <h3 class="block-title">
-              Rekap Nota Penjualan Harian
+              Rekap Penjualan Menu
             </h3>
               </div>
                 <div class="block-content text-muted">
@@ -53,6 +53,21 @@
                             </div>
                         </div>
 
+                        {{-- <div class="row">
+                            <div class="col-md-5">
+                                <div class="row mb-3">
+                                    <label class="col-sm-3 col-form-label" for="rekap_inv_penjualan_created_by">Tipe Laporan</label>
+                                    <div class="col-sm-9">
+                                        <select id="filter_tipe" style="width: 100%;"
+                                        class="cari f-wrg js-select2 form-control" data-placeholder="Pilih Tipe Laporan" name="">
+                                        <option value="bymenu">By Menu</option>
+                                        <option value="bytanggal">By Tanggal</option>
+                                    </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>  --}}
+
                         <div class="col-sm-8">
                             <button type="button" id="cari"
                                 class="btn btn-primary btn-sm col-1 mt-2 mb-3">Cari</button>
@@ -63,16 +78,10 @@
             <table id="tampil_rekap" class="table table-sm table-bordered table-hover table-striped table-vcenter js-dataTable-full nowrap">
               <thead>
                 <tr>
-                    <th rowspan="2">Tanggal</th>
-                    <th rowspan="2">Total Penjualan</th>
-                    <th colspan="6">Reguler</th>
-                </tr>
-                <tr class="justify-content-center">
-
-                    @foreach ($data->payment as $payment)
-                    <th>{{ $payment->m_payment_method_name }}</th>
-                    @endforeach
-
+                   <th>Tanggal</th>
+                   <th>Nama Menu</th>
+                   <th>Qty</th>
+                   <th>Nominal</th>
                 </tr>
               </thead>
               <tbody id="show_data">
@@ -101,14 +110,14 @@ $(document).ready(function() {
         destroy: true,
         orderCellsTop: true,
         processing: true,
-        autoWidth: true,
         scrollY: "300px",
         scrollX: true,
+        autoWidth: true,
         scrollCollapse: true,
         lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
         pageLength: 10,
         ajax: {
-            url: '{{route("harian.show")}}',
+            url: '{{route("rekap_menu.show")}}',
             data : {
                 area: area,
                 waroeng: waroeng,
@@ -127,7 +136,7 @@ $(document).ready(function() {
         if(id_area){
             $.ajax({
             type:"GET",
-            url: '{{route("harian.select_waroeng")}}',
+            url: '{{route("rekap_menu.select_waroeng")}}',
             dataType: 'JSON',
             data : {
                 id_area: id_area,

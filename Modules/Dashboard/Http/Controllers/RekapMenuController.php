@@ -7,9 +7,12 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Contracts\Support\Renderable;
 
-class DetailNotaController extends Controller
+class RekapMenuController extends Controller
 {
-
+    /**
+     * Display a listing of the resource.
+     * @return Renderable
+     */
     public function index()
     {
         $data = new \stdClass();
@@ -22,10 +25,7 @@ class DetailNotaController extends Controller
         $data->user = DB::table('users')
             ->orderby('id', 'ASC')
             ->get();
-        $data->transaksi_rekap = DB::table('rekap_transaksi')
-            ->orderby('r_t_id', 'ASC')
-            ->get();
-        return view('dashboard::detail_nota', compact('data'));
+        return view('dashboard::rekap_menu', compact('data'));
     }
 
     public function select_waroeng(Request $request)
@@ -39,6 +39,7 @@ class DetailNotaController extends Controller
         $data = array();
         foreach ($waroeng as $val) {
             $data[$val->m_w_id] = [$val->m_w_nama];
+            $data['all'] = ['all waroeng'];
         }
         return response()->json($data);
     }
@@ -58,30 +59,36 @@ class DetailNotaController extends Controller
         //
     }
 
-    /**
-     * Show the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
     public function show(Request $request)
     {
         $dates = explode('to' ,$request->tanggal);
-        $data = new \stdClass();
-        $data->transaksi_rekap = DB::table('rekap_transaksi')
-            ->join('users', 'users_id', 'r_t_created_by')
-            ->join('m_transaksi_tipe', 'm_t_t_id', 'r_t_m_t_t_id')
-            ->join('rekap_payment_transaksi', 'r_p_t_r_t_id', 'r_t_id')
-            ->join('m_payment_method', 'm_payment_method_id', 'r_p_t_m_payment_method_id')
-            ->where('r_t_m_w_id', $request->waroeng)
-            ->where('r_t_created_by', $request->operator)
-            ->whereBetween('r_t_tanggal', $dates)
-            ->orderby('r_t_tanggal', 'ASC')
-            ->orderby('r_t_nota_code', 'ASC')
-            ->get();
-        $data->detail_nota = DB::table('rekap_transaksi_detail')
-            ->get();
-        return response()->json($data);
+        $get = DB::table('rekap_transaksi_detail')
+                ->join('rekap_transaksi', 'r_t_id', 'r_t_detail_r_t_id')
+                ->selectRaw('r_t_tanggal, r_t_detail_m_produk_id, r_t_detail_m_produk_nama, sum(r_t_detail_qty) as qty, sum(r_t_detail_nominal) as nominal');
+                if($request->area != 0) {
+                    $get->where('r_t_m_area_id', $request->area);
+                    if($request->waroeng != 'all') {
+                        $get->where('r_t_m_w_id', $request->waroeng);
+                    }
+                }
+                $get2= $get->whereBetween('r_t_tanggal', $dates)
+                            ->groupBy('r_t_tanggal', 'r_t_detail_m_produk_id', 'r_t_detail_m_produk_nama')
+                            ->orderBy('r_t_tanggal', 'ASC')
+                            ->orderBy('r_t_detail_m_produk_id', 'ASC')
+                            ->get();
+        $data = array();
+        foreach ($get2 as $value) {
+            $row = array();
+            $row[] = $value->r_t_tanggal;
+            $row[] = $value->r_t_detail_m_produk_nama;
+            $row[] = $value->qty;
+            $row[] = rupiah($value->nominal, 0);
+            $data[] = $row;
+        }
+        $output = array("data" => $data);
+        return response()->json($output);
     }
+    
 
     /**
      * Show the form for editing the specified resource.
