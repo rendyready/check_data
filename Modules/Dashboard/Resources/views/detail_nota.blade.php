@@ -115,19 +115,19 @@ $(document).ready(function() {
                               '<tbody>'+
                                 '<tr style="background-color: white;" class="text-end fw-semibold">'+
                                   '<td>Total</td>'+
-                                  '<td>'+
+                                  '<td class="mask">'+
                                     ''+ value.r_t_nominal +''+
                                   '</td>'+
                                 '</tr>'+
                                 '<tr style="background-color: white;" class="text-end fw-semibold">'+
                                   '<td>Tax (10%)</td>'+
-                                  '<td>'+
+                                  '<td class="mask">'+
                                     ''+ value.r_t_nominal_pajak +''+
                                   '</td>'+
                                 '</tr>'+
                                 '<tr style="background-color: white;" class="text-end fw-semibold">'+
                                   '<td>Bayar ('+ value.m_payment_method_type +') </td>'+
-                                  '<td>'+
+                                  '<td class="mask">'+
                                     ''+ value.r_t_nominal_total_bayar +''+
                                   '</td>'+
                                 '</tr>'+
@@ -188,6 +188,25 @@ $(document).ready(function() {
             // noCalendar: false,
             // allowInput: true,            
     });
+
+    $("td.mask").each((i,ele)=>{
+            let clone=$(ele).clone(false)
+            clone.attr("type","text")
+            let ele1=$(ele)
+            clone.val(Number(ele1.val()).toLocaleString("id"))
+            $(ele).after(clone)
+            $(ele).hide()
+            setInterval(()=>{
+                let newv=Number(ele1.val()).toLocaleString("id")
+                if(clone.val()!=newv){
+                    clone.val(newv)
+                }
+            },10)
+            $(ele).mouseleave(()=>{
+                $(clone).show()
+                $(ele1).hide()
+            })
+        });
 
 });
 </script>
