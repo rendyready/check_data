@@ -78,10 +78,10 @@
             <table id="tampil_rekap" class="table table-sm table-bordered table-hover table-striped table-vcenter js-dataTable-full nowrap">
               <thead>
                 <tr>
-                   <th>Tanggal</th>
-                   <th>Nama Menu</th>
-                   <th>Qty</th>
-                   <th>Nominal</th>
+                   <th class="text-center">Tanggal</th>
+                   <th class="text-center">Nama Menu</th>
+                   <th class="text-center">Qty</th>
+                   <th class="text-center">Nominal</th>
                 </tr>
               </thead>
               <tbody id="show_data">
@@ -104,16 +104,25 @@ $(document).ready(function() {
         var area     = $('#filter_area1').val();
         var waroeng  = $('#filter_waroeng').val();
         var tanggal  = $('#filter_tanggal').val();
-        console.log(tanggal);
+        // console.log(tanggal);
     $('#tampil_rekap').DataTable({
         button: [],
         destroy: true,
         orderCellsTop: true,
         processing: true,
         scrollY: "300px",
-        scrollX: true,
         autoWidth: true,
         scrollCollapse: true,
+        columnDefs: [
+            {
+                targets: [0, 1, 2],
+                className: 'dt-body-center'
+            },
+            {
+                targets: [3],
+                className: 'dt-body-right'
+            }
+        ],
         lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
         pageLength: 10,
         ajax: {
