@@ -20,8 +20,8 @@ class MKasirAksesTableSeeder extends Seeder
                 'm_kasir_akses_id' => '1',
                 'm_kasir_akses_m_w_id' => 1,
                 'm_kasir_akses_fitur' => 'edit_menu',
-                'm_kasir_akses_default_role' => 'allow',
-                'm_kasir_akses_temp_role' => 'allow',
+                'm_kasir_akses_default_role' => 'deny',
+                'm_kasir_akses_temp_role' => 'deny',
                 'm_kasir_akses_created_by' => 1
             ],
             [
