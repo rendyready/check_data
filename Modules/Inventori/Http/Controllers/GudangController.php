@@ -25,8 +25,10 @@ class GudangController extends Controller
      * Show the form for creating a new resource.
      * @return Renderable
      */
-    function list() {$no = 0;
+    function list() {
+        $no = 0;
         $gudang = DB::table('m_gudang')->get();
+        $data = array();
         foreach ($gudang as $key) {
             $row = array();
             $no++;
@@ -137,11 +139,11 @@ class GudangController extends Controller
     public function gudang_out()
     {
         $data = new \stdClass();
-        $get_max_id = DB::table('rekap_tf_gudang')->orderBy('rekap_tf_gudang_id', 'desc')->first();
         $user = Auth::id();
         $w_id = Auth::user()->waroeng_id;
+        $get_max_id = $this->getNextId('rekap_tf_gudang',$w_id);
         $waroeng_nama = DB::table('m_w')->select('m_w_nama')->where('m_w_id', $w_id)->first();
-        $data->code = (empty($get_max_id->rekap_tf_gudang_id)) ? $urut = "600001" . $user : $urut = substr($get_max_id->rekap_tf_gudang_code, 0, -1)+'1' . $user;
+        $data->code = $get_max_id;
         $data->tgl_now = Carbon::now()->format('Y-m-d');
         $data->gudang = DB::table('m_gudang')->select('m_gudang_code', 'm_gudang_nama')
             ->where('m_gudang_m_w_id', $w_id)

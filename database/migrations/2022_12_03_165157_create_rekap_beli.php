@@ -14,7 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::create('rekap_beli', function (Blueprint $table) {
-            $table->id('rekap_beli_id');
+            $table->id('id');
+            $table->string('rekap_beli_id');
             $table->string('rekap_beli_code'); //id user+ urutan
             $table->string('rekap_beli_code_nota')->nullable(); //code nota dari supplier jika ada
             $table->date('rekap_beli_tgl');
@@ -29,11 +30,11 @@ return new class extends Migration
             $table->decimal('rekap_beli_disc',8,2)->nullable();
             $table->decimal('rekap_beli_disc_rp')->nullable();
             $table->decimal('rekap_beli_ppn',8,2)->nullable();
-            $table->decimal('rekap_beli_ppn_rp')->nullable();
-            $table->string('rekap_beli_ongkir')->nullable();
-            $table->string('rekap_beli_terbayar');
-            $table->string('rekap_beli_tersisa');
-            $table->string('rekap_beli_tot_nom');
+            $table->decimal('rekap_beli_ppn_rp',12,2)->nullable();
+            $table->decimal('rekap_beli_ongkir',12,2)->nullable();
+            $table->decimal('rekap_beli_terbayar',16,2);
+            $table->decimal('rekap_beli_tersisa',16,2);
+            $table->decimal('rekap_beli_tot_nom',16,2);
             $table->bigInteger('rekap_beli_created_by');
             $table->bigInteger('rekap_beli_updated_by')->nullable();
             $table->bigInteger('rekap_beli_deleted_by')->nullable();
