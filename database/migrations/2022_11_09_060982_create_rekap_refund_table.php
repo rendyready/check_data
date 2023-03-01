@@ -24,8 +24,10 @@ return new class extends Migration
             $table->date('r_r_tanggal');
             $table->time('r_r_jam');
             $table->unsignedBigInteger('r_r_m_area_id');
+            $table->string('r_r_m_area_code')->nullable();
             $table->string('r_r_m_area_nama')->nullable();
             $table->unsignedBigInteger('r_r_m_w_id');
+            $table->string('r_r_m_w_code')->nullable();
             $table->string('r_r_m_w_nama')->nullable();
             $table->decimal('r_r_nominal_refund', 15,2)->default(0);
             $table->decimal('r_r_nominal_refund_pajak', 15,2)->default(0);
@@ -36,7 +38,7 @@ return new class extends Migration
             $table->decimal('r_r_tax_percent',5,2)->default(0);
             $table->decimal('r_r_sc_percent',5,2)->default(0);
             $table->string('r_r_keterangan')->nullable();
-            $table->char('r_r_status_sync', 10)->default('0');
+            $table->string('r_r_status_sync', 20)->default('send');
             $table->unsignedBigInteger('r_r_approved_by')->nullable();
             $table->bigInteger('r_r_created_by');
             $table->bigInteger('r_r_updated_by')->nullable();

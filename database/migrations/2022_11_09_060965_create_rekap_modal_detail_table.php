@@ -20,7 +20,7 @@ return new class extends Migration
             $table->bigInteger('rekap_modal_detail_qty')->nullable()->default(0);
             $table->unsignedBigInteger('rekap_modal_detail_m_modal_tipe_id');
             $table->string('rekap_modal_detail_rekap_modal_id');
-            $table->char('rekap_modal_detail_status_sync', 10)->default('0');
+            $table->string('rekap_modal_detail_status_sync', 20)->default('send');
             $table->bigInteger('rekap_modal_detail_created_by');
             $table->bigInteger('rekap_modal_detail_deleted_by')->nullable();
             $table->bigInteger('rekap_modal_detail_updated_by')->nullable();

@@ -24,8 +24,10 @@ return new class extends Migration
             $table->string('r_h_m_nota_code');
             $table->string('r_h_m_bigboss');
             $table->unsignedBigInteger('r_h_m_m_produk_id');
+            $table->string('r_h_m_m_produk_code')->nullable();
             $table->string('r_h_m_m_produk_nama')->nullable();
             $table->integer('r_h_m_qty');
+            $table->decimal('r_h_m_reguler_price', 8,2)->default(0);
             $table->decimal('r_h_m_price', 8,2);
             $table->decimal('r_h_m_nominal', 15,2);
             $table->decimal('r_h_m_nominal_pajak', 15,2)->default(0);
@@ -34,10 +36,12 @@ return new class extends Migration
             $table->decimal('r_h_m_nominal_sharing_profit_out', 15,2)->default(0);
             $table->string('r_h_m_keterangan');
             $table->unsignedBigInteger('r_h_m_m_w_id');
+            $table->string('r_h_m_m_w_code')->nullable();
             $table->string('r_h_m_m_w_nama')->nullable();
             $table->unsignedBigInteger('r_h_m_m_area_id');
+            $table->string('r_h_m_m_area_code')->nullable();
             $table->string('r_h_m_m_area_nama')->nullable();
-            $table->char('r_h_m_status_sync', 10)->default('0');
+            $table->string('r_h_m_status_sync', 20)->default('send');
             $table->unsignedBigInteger('r_h_m_approved_by')->nullable();
             $table->bigInteger('r_h_m_created_by');
             $table->bigInteger('r_h_m_updated_by')->nullable();
