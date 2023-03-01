@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('m_jabatan_id')->unique();
             $table->string('m_jabatan_m_level_jabatan_id');
             $table->string('m_jabatan_nama');
-            $table->bigInteger('m_jabatan_parent_id')->nullable()->default(NULL);
+            $table->string('m_jabatan_parent_id')->nullable()->default(NULL);
             $table->string('m_jabatan_status_sync', 20)->default('send');
             $table->bigInteger('m_jabatan_created_by');
             $table->bigInteger('m_jabatan_updated_by')->nullable();
