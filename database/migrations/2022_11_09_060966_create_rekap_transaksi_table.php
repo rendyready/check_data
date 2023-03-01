@@ -23,12 +23,15 @@ return new class extends Migration
             // $table->string('r_t_tmp_transaction_id')->comment('Untuk cek duplikasi input');
             $table->string('r_t_nota_code');
             $table->string('r_t_bigboss');
+            $table->string('r_t_member_id')->nullable();
             // $table->smallInteger('r_t_shift');
             $table->date('r_t_tanggal');
             $table->time('r_t_jam');
             $table->unsignedBigInteger('r_t_m_area_id');
+            $table->string('r_t_m_area_code')->nullable();
             $table->string('r_t_m_area_nama')->nullable();
             $table->unsignedBigInteger('r_t_m_w_id');
+            $table->string('r_t_m_w_code')->nullable();
             $table->string('r_t_m_w_nama')->nullable();
             $table->decimal('r_t_nominal', 15,2)->default(0);
             $table->decimal('r_t_nominal_pajak', 15,2)->default(0);
@@ -60,7 +63,7 @@ return new class extends Migration
             // $table->string('r_t_m_t_t_name');
             $table->string('r_t_status');
             $table->string('r_t_catatan')->nullable();
-            $table->char('r_t_status_sync', 10)->default('0');
+            $table->string('r_t_status_sync', 20)->default('send');
             $table->bigInteger('r_t_created_by');
             $table->bigInteger('r_t_updated_by')->nullable();
             $table->bigInteger('r_t_deleted_by')->nullable();

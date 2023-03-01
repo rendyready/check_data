@@ -10,7 +10,8 @@ export default defineConfig({
                 'resources/js/codebase/app.js',
                 'resources/js/app.js',
                 'resources/js/pages/jquery.tabledit.js',
-                'resources/js/pages/datatables.js',
+                'resources/js/pages/datatables.js', 
+                'resources/js/pages/custom.js', 
             ],
             refresh: [
                 'resources/views/**', 'app/Http/Controllers/**', 'Modules/**'

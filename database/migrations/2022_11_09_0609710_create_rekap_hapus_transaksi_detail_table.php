@@ -19,15 +19,17 @@ return new class extends Migration
             // $table->bigInteger('r_h_t_detail_sync_id')->nullable();
             $table->string('r_h_t_detail_r_h_t_id');
             $table->unsignedBigInteger('r_h_t_detail_m_produk_id');
+            $table->string('r_h_t_detail_m_produk_code')->nullable();
             $table->string('r_h_t_detail_m_produk_nama')->nullable();
             $table->integer('r_h_t_detail_qty');
+            $table->decimal('r_h_t_detail_reguler_price', 8,2)->default(0);
             $table->decimal('r_h_t_detail_price', 8,2)->default(0);
             $table->decimal('r_h_t_detail_nominal', 15,2)->default(0);
             $table->decimal('r_h_t_detail_nominal_pajak', 15,2)->default(0);
             $table->decimal('r_h_t_detail_nominal_sc', 15,2)->default(0);
             $table->decimal('r_h_t_detail_nominal_sharing_profit_in', 15,2)->default(0);
             $table->decimal('r_h_t_detail_nominal_sharing_profit_out', 15,2)->default(0);
-            $table->char('r_h_t_detail_status_sync', 10)->default('0');
+            $table->string('r_h_t_detail_status_sync', 20)->default('send');
             $table->bigInteger('r_h_t_detail_created_by');
             $table->bigInteger('r_h_t_detail_updated_by')->nullable();
             $table->bigInteger('r_h_t_detail_deleted_by')->nullable();

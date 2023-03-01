@@ -30,10 +30,12 @@ return new class extends Migration
             $table->decimal('r_l_b_nominal_sharing_profit_out', 15,2)->default(0);
             $table->string('r_l_b_keterangan');
             $table->unsignedBigInteger('r_l_b_m_w_id');
+            $table->string('r_l_b_m_w_code')->nullable();
             $table->string('r_l_b_m_w_nama')->nullable();
             $table->unsignedBigInteger('r_l_b_m_area_id');
+            $table->string('r_l_b_m_area_code')->nullable();
             $table->string('r_l_b_m_area_nama')->nullable();
-            $table->char('r_l_b_status_sync', 10)->default('0');
+            $table->string('r_l_b_status_sync', 20)->default('send');
             $table->unsignedBigInteger('r_l_b_approved_by')->nullable();
             $table->bigInteger('r_l_b_created_by');
             $table->bigInteger('r_l_b_updated_by')->nullable();
