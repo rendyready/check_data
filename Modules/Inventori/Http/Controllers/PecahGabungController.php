@@ -39,7 +39,8 @@ class PecahGabungController extends Controller
      * @return Renderable
      */
     public function simpan(Request $request)
-    {$mw_id = Auth::user()->waroeng_id;
+    {
+        $mw_id = Auth::user()->waroeng_id;
         //insert hasil produk
         if ($request->rekap_pcb_aksi == 'pecah') {
             foreach ($request->rekap_pcb_brg_asal_code as $key => $value) {
@@ -125,7 +126,10 @@ class PecahGabungController extends Controller
                 ]);
         } else {
             //insert keluar produk asal
-            $jumlah_hpp = array_sum($request->rekap_pcb_brg_asal_hppisi);
+            $jumlah_hpp = 0;
+            foreach ($request->rekap_pcb_brg_asal_code as $key => $value) {
+
+            }
             foreach ($request->rekap_pcb_brg_asal_code as $key => $value) {
                 $data = array(
                     'rekap_pcb_id' => $this->getMasterId('rekap_pcb'),
@@ -202,12 +206,37 @@ class PecahGabungController extends Controller
             DB::table('m_stok')
                 ->where('m_stok_gudang_code', $request->rekap_pcb_gudang_asal_code)
                 ->where('m_stok_m_produk_code', $request->rekap_pcb_brg_hasil_code[0])
-                ->update(['m_stok_masuk' => $get_saldo_asal->m_stok_masuk + $request->rekap_pcb_brg_asal_qty[0],
+                ->update(['m_stok_masuk' => $get_saldo_asal->m_stok_masuk + $request->rekap_pcb_brg_hasil_qty[0],
                     'm_stok_saldo' => $saldo_now,
                     'm_stok_hpp' => $hpp_now,
                 ]);
         }
 
+    }
+    public function pcb_list(Request $request)
+    {
+        $tgl_now = Carbon::now();
+        $list = DB::table('rekap_pcb')
+            ->where('rekap_pcb_tgl', $tgl_now)
+            ->where('rekap_pcb_gudang_asal_code', $request->gudang_code)
+            ->where('rekap_pcb_aksi',$request->aksi)
+            ->get();
+        $data = array();
+        foreach ($list as $key) {
+            $row = array();
+            $row[] = $key->rekap_pcb_code;
+            $row[] = ucwords($key->rekap_pcb_brg_asal_nama);
+            $row[] = ucwords($key->rekap_pcb_brg_asal_qty);
+            $row[] = ucwords($key->rekap_pcb_brg_asal_satuan);
+            $row[] = 'jadi';
+            $row[] = ucwords($key->rekap_pcb_brg_hasil_nama);
+            $row[] = ucwords($key->rekap_pcb_brg_hasil_qty);
+            $row[] = ucwords($key->rekap_pcb_brg_hasil_satuan);
+            $row[] = ucwords($key->rekap_pcb_created_by_name);
+            $data[] = $row;
+        }
+        $output = array("data" => $data);
+        return response()->json($output);
     }
 
 }

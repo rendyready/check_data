@@ -188,6 +188,23 @@
                                     class="fa fa-save"></i> Simpan</a>
                             </div>
                         </form>
+                        <div class="table-responsive">
+                            <table id="tb_pcb_list" class="table table-sm table-bordered table-striped table-vcenter">
+                                <thead>
+                                    <th>No Nota</th>
+                                    <th>Barang Proses</th>
+                                    <th>Qty</th>
+                                    <th>Satuan</th>
+                                    <th>--</th>
+                                    <th>Barang Hasil</th>
+                                    <th>Qty</th>
+                                    <th>Satuan</th>
+                                    <th>Operator</th>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -199,7 +216,7 @@
     <script type="module">
  $(document).ready(function(){
   Codebase.helpersOnLoad(['jq-select2']);
-  var table,dt;
+  var table,dt,g_id;
   $(".number").on("keypress", function (evt) {
     if (evt.which != 8 && evt.which != 0 && evt.which < 48 || evt.which > 57)
     {
@@ -207,7 +224,7 @@
     }
     });
   $('#rekap_pcb_gudang_asal_code').on('change',function() {
-    var g_id = $(this).val();
+    g_id = $(this).val();
     $.get("/inventori/stok/"+g_id, function(data){
             dt = data;
             $.each(data, function(key, value) {
@@ -217,6 +234,25 @@
             });
     });
   });
+  $('#rekap_pcb_aksi').on('change',function () {
+    var aksi = $(this).val();
+    $(function() {
+        table = $('#tb_pcb_list').DataTable({
+        "destroy":true,
+        "orderCellsTop": true,
+        "processing": true,
+        "autoWidth": true,
+        "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+        "pageLength": 10,
+        "ajax": {
+            "url": "{{ route('pcb.list') }}",
+            "data" : {gudang_code:g_id,aksi:aksi},
+            "type": "GET"
+                }
+            });
+        });
+  })
+
   $('#rekap_pcb_brg_asal_code1').on('change',function() {
     var id = $(this).val();
     var g_id = $('#rekap_pcb_gudang_asal_code').val();
@@ -255,7 +291,7 @@
     var brg_hasil_qty = $('#rekap_pcb_brg_hasil_qty1').val().replace(/\./g, '');
     console.log(brg_asal_nama);
     $('#tb_pcb').append(
-                        '<tr>'+
+                        '<tr class="remove">'+
                         '<td hidden><input type="hidden" class="form-control" name="rekap_pcb_brg_asal_code[]" value="'+brg_asal_code+'"></td>'+
                         '<td><input type="text" style="width: auto;" class="form-control form-control-sm" name="rekap_pcb_brg_asal_nama[]" value="'+brg_asal_nama+'" readonly></td>'+
                         '<td><input type="text" class="form-control form-control-sm" name="rekap_pcb_brg_asal_satuan[]" value="'+brg_asal_satuan+'" readonly></td>'+
@@ -295,11 +331,12 @@
                             Codebase.helpers('jq-notify', {
                                 align: 'right', // 'right', 'left', 'center'
                                 from: 'top', // 'top', 'bottom'
-                                type: 'danger', // 'info', 'success', 'warning', 'danger'
-                                icon: 'fa fa-warning', // Icon class
-                                message: "Tidak Bisa Simpan Masih Ada Sisa !"
+                                type: 'success', // 'info', 'success', 'warning', 'danger'
+                                icon: 'fa fa-bell', // Icon class
+                                message: "Berhasil Memproses!"
                             });
-                           window.location.reload();
+                           $('.remove').remove();
+                           table.ajax.reload();
                         },
                         error : function(){
                             alert("Tidak dapat menyimpan data!");
