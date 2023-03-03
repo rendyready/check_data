@@ -46,6 +46,11 @@ class WJenisTableSeeder extends Seeder
                 'm_w_jenis_id' => '6',
                 'm_w_jenis_nama' => 'dapur area',
                 'm_w_jenis_created_by' => 1
+            ],
+            [
+                'm_w_jenis_id' => '7',
+                'm_w_jenis_nama' => 'waroeng waralaba',
+                'm_w_jenis_created_by' => 1
             ]
         ]);
     }

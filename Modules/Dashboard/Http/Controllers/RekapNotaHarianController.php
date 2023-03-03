@@ -59,43 +59,43 @@ class RekapNotaHarianController extends Controller
                 ->orderBy('m_payment_method_id', 'ASC')
                 ->get();
         $trans = DB::table('rekap_payment_transaksi')
-                ->join('rekap_transaksi', 'r_t_id', 'r_p_t_r_t_id')
-                ->selectRaw('r_p_t_m_payment_method_id, r_t_tanggal, SUM(r_t_nominal) as nominal');
-                if($request->area != 0) {
-                    $get->where('r_t_m_area_id', $request->area);
-                    if($request->waroeng != 'all') {
-                        $get->where('r_t_m_w_id', $request->waroeng);
-                    }
-                }
+                ->join('rekap_transaksi', 'r_t_id', 'r_p_t_r_t_id');
+        if($request->area != 0) {
+            $trans->where('r_t_m_area_id', $request->area);
+            if($request->waroeng != 'all') {
+                $trans->where('r_t_m_w_id', $request->waroeng);
+            }
+        }
+        $trans1 = $trans->whereBetween('r_t_tanggal', $dates)
+                ->select('r_t_tanggal')
+                ->groupBy('r_t_tanggal')
+                ->orderBy('r_t_tanggal', 'ASC')
+                ->get();     
+
         $trans2 = $trans->whereBetween('r_t_tanggal', $dates)
+        ->selectRaw('r_p_t_m_payment_method_id, r_t_tanggal, SUM(r_t_nominal) as nominal')
                         ->groupBy('r_t_tanggal', 'r_p_t_m_payment_method_id')
                         ->orderBy('r_p_t_m_payment_method_id', 'ASC')
                         ->get();
 
-    $data = array();
-        foreach ($trans2 as $key => $valTrans){
+        $data = array();
+        $i = 1;
+        foreach ($trans1 as $key => $valTrans){
+            $data[$i]['tanggal'] = $valTrans->r_t_tanggal;
             foreach ($methodPay as $key => $valPay) {
-                $data[$valTrans->r_t_tanggal]['tanggal'] = $valTrans->r_t_tanggal;
-                if($valPay->m_payment_method_id == $valTrans->r_p_t_m_payment_method_id){
-                    $data[$valTrans->r_t_tanggal][$valPay->m_payment_method_name] = $valTrans->nominal;
-                } else {
-                    $data[$valTrans->r_t_tanggal][$valPay->m_payment_method_name] = 0;
+                $data[$i][$valPay->m_payment_method_name] = 0;
+                foreach ($trans2 as $key => $valTrans2){
+                    if ($valTrans->r_t_tanggal == $valTrans2->r_t_tanggal && $valPay->m_payment_method_id ==                    $valTrans2->r_p_t_m_payment_method_id) {
+                        $data[$i][$valPay->m_payment_method_name] = $valTrans2->nominal;
+                        $row[] = $data;
+                    } 
                 }
             }
+            
+            $i++; 
         }
-
-        // for ($i=1; $i < $methodPay+1; $i++) { 
-        //     foreach ($trans as $key => $valTrans){
-        //                 $data[$valTrans->r_t_tanggal]['tanggal'] = $valTrans->r_t_tanggal;
-                        // if($valTrans->r_p_t_m_payment_method_id == $i){
-                            // $data[$valTrans->r_t_tanggal][$i] = $valTrans->nominal;
-                        // } else {
-                        //     $data[$valTrans->r_t_tanggal][$i] = 0;
-                        // }
-            //     }
-            // }
-
-        $output = array("data" => $data);
+       
+        $output = array("data" => $row);
         return response()->json($output);
     }
 

@@ -63,11 +63,9 @@
             <table id="tampil_rekap" class="table table-sm table-bordered table-hover table-striped table-vcenter js-dataTable-full nowrap">
               <thead>
                 <tr>
-                    <th rowspan="2">Tanggal</th>
-                    <th rowspan="2">Total Penjualan</th>
-                    <th colspan="6">Reguler</th>
-                </tr>
-                <tr class="justify-content-center">
+                    <th>Tanggal</th>
+                    {{-- <th rowspan="2">Total Penjualan</th> --}}
+                    {{-- <th colspan="6">Reguler</th> --}}
 
                     @foreach ($data->payment as $payment)
                     <th>{{ $payment->m_payment_method_name }}</th>
@@ -95,7 +93,7 @@ $(document).ready(function() {
         var area     = $('#filter_area1').val();
         var waroeng  = $('#filter_waroeng').val();
         var tanggal  = $('#filter_tanggal').val();
-        console.log(tanggal);
+        // console.log(tanggal);
     $('#tampil_rekap').DataTable({
         button: [],
         destroy: true,

@@ -104,4 +104,12 @@ class Controller extends BaseController
     {   
         return $waroeng = DB::table('m_w')->where('m_w_code',$id)->first()->m_w_nama;
     }
+    public function get_last_stok($g_id,$p_id)
+    {
+        $stok = DB::table('m_stok')
+                ->where('m_stok_gudang_code',$g_id)
+                ->where('m_stok_m_produk_code',$p_id)
+                ->first();
+        return $stok;
+    }
 }

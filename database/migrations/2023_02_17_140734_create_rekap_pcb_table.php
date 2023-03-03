@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('rekap_pcb', function (Blueprint $table) {
             $table->id('id');
+            $table->string('rekap_pcb_id');
             $table->string('rekap_pcb_code');
             $table->date('rekap_pcb_tgl');
             $table->string('rekap_pcb_gudang_asal_code');

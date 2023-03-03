@@ -30,58 +30,43 @@ class ChtController extends Controller
     }
     public function simpan(Request $request)
     {  
+        $waroeng_id = Auth::user()->waroeng_id;
         foreach ($request->rekap_beli_detail_id as $key => $value) {
             $save_beli = DB::table('rekap_beli_detail')
                 ->where('rekap_beli_detail_id',$request->rekap_beli_detail_id[$key])
                 ->update(['rekap_beli_detail_terima_qty'=>$request->rekap_beli_detail_terima_qty[$key]]);
                        
             if (!empty($request->rekap_beli_detail_terima_qty[$key])) {
-                 $last_mutasi = DB::table('m_stok_detail')
-                ->select('m_stok_detail_hpp','m_stok_detail_saldo')
-                ->where('m_stok_detail_gudang_code',$request->rekap_beli_gudang_code)
-                ->where('m_stok_detail_m_produk_code',$request->rekap_beli_detail_m_produk_code[$key])
-                ->orderBy('m_stok_detail_id','desc')
-                ->first();
-
-                $data_stok = DB::table('m_stok')
-                ->where('m_stok_gudang_code',$request->rekap_beli_gudang_code)
-                ->where('m_stok_m_produk_code',$request->rekap_beli_detail_m_produk_code[$key])
-                ->first();
-
-                $saldo_terakhir = (empty($last_mutasi)) ? 0 : $last_mutasi->m_stok_detail_saldo ;
-                $hpp_terakhir = (empty($last_mutasi)) ? 0 : $last_mutasi->m_stok_detail_hpp ;
+                $get_stok = $this->get_last_stok($request->rekap_beli_gudang_code,$request->rekap_beli_detail_m_produk_code[$key]);
+                $saldo_terakhir = $get_stok->m_stok_saldo ;
+                $hpp_terakhir = $get_stok->m_stok_hpp ;
                 $data_masuk = $request->rekap_beli_detail_terima_qty[$key];
+                $hpp_now = ($request->rekap_beli_detail_subtot[$key]+($saldo_terakhir*$hpp_terakhir))/($saldo_terakhir+$data_masuk);
                 $data = array(
-                    'm_stok_detail_id' => $this->getlast('m_stok_detail','m_stok_detail_id'),
+                    'm_stok_detail_id' => $this->getMasterId('m_stok_detail'),
+                    'm_stok_detail_code' => $this->getNextId('m_stok_detail',$waroeng_id),
                     'm_stok_detail_m_produk_code' => $request->rekap_beli_detail_m_produk_code[$key],
                     'm_stok_detail_tgl'=> Carbon::now(),
-                    'm_stok_detail_m_produk_nama' => $data_stok->m_stok_produk_nama,
-                    'm_stok_detail_satuan_id' => $data_stok->m_stok_satuan_id,
-                    'm_stok_detail_satuan' => $data_stok->m_stok_satuan,
+                    'm_stok_detail_m_produk_nama' => $get_stok->m_stok_produk_nama,
+                    'm_stok_detail_satuan_id' => $get_stok->m_stok_satuan_id,
+                    'm_stok_detail_satuan' => $get_stok->m_stok_satuan,
                     'm_stok_detail_masuk' => $request->rekap_beli_detail_terima_qty[$key],
                     'm_stok_detail_saldo' => $saldo_terakhir + $request->rekap_beli_detail_terima_qty[$key],
-                    'm_stok_detail_hpp' => ($request->rekap_beli_detail_subtot[$key]+($saldo_terakhir*$hpp_terakhir))/($saldo_terakhir+$data_masuk),
-                    'm_stok_detail_catatan' => 'Pembelian'.$request->rekap_beli_detail_rekap_beli_code[$key],
+                    'm_stok_detail_hpp' => $hpp_now,
+                    'm_stok_detail_catatan' => 'pembelian'.$request->rekap_beli_detail_rekap_beli_code[$key],
                     'm_stok_detail_gudang_code' => $request->rekap_beli_gudang_code,
                     'm_stok_detail_created_by' => Auth::id(),
                     'm_stok_detail_created_at' => Carbon::now()
                 );
                 DB::table('m_stok_detail')->insert($data);
-                $get_detail = DB::table('m_stok_detail')
-                ->select('m_stok_detail_hpp','m_stok_detail_masuk')
-                ->where('m_stok_detail_gudang_code',$request->rekap_beli_gudang_code)
-                ->where('m_stok_detail_m_produk_code',$request->rekap_beli_detail_m_produk_code[$key])
-                ->orderBy('m_stok_detail_id','desc')
-                ->first();
-
-                $data2 = array( 'm_stok_hpp' => $get_detail->m_stok_detail_hpp,
-                                'm_stok_masuk' => $data_stok->m_stok_masuk+ $get_detail->m_stok_detail_masuk,
-                                'm_stok_saldo' => $data_stok->m_stok_saldo+$get_detail->m_stok_detail_masuk
+                
+                $data2 = array( 'm_stok_hpp' => $hpp_now,
+                                'm_stok_masuk' => $get_stok->m_stok_masuk+$request->rekap_beli_detail_terima_qty[$key],
+                                'm_stok_saldo' => $get_stok->m_stok_saldo+$request->rekap_beli_detail_terima_qty[$key]
                             );
                 DB::table('m_stok')->where('m_stok_gudang_code',$request->rekap_beli_gudang_code)
                 ->where('m_stok_m_produk_code',$request->rekap_beli_detail_m_produk_code[$key])
                 ->update($data2);
-
             }                
         }
     }
