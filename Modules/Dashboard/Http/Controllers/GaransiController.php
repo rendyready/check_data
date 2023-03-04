@@ -7,7 +7,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Contracts\Support\Renderable;
 
-class RekapMenuController extends Controller
+class GaransiController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -25,7 +25,7 @@ class RekapMenuController extends Controller
         $data->user = DB::table('users')
             ->orderby('id', 'ASC')
             ->get();
-        return view('dashboard::rekap_menu', compact('data'));
+        return view('dashboard::rekap_garansi', compact('data'));
     }
 
     public function select_waroeng(Request $request)
@@ -39,7 +39,6 @@ class RekapMenuController extends Controller
         $data = array();
         foreach ($waroeng as $val) {
             $data[$val->m_w_id] = [$val->m_w_nama];
-            $data['all'] = ['all waroeng'];
         }
         return response()->json($data);
     }
@@ -59,36 +58,40 @@ class RekapMenuController extends Controller
         //
     }
 
+    /**
+     * Show the specified resource.
+     * @param int $id
+     * @return Renderable
+     */
     public function show(Request $request)
     {
         $dates = explode('to' ,$request->tanggal);
-        $get = DB::table('rekap_transaksi_detail')
-                ->join('rekap_transaksi', 'r_t_id', 'r_t_detail_r_t_id')
-                ->selectRaw('r_t_tanggal, r_t_detail_m_produk_id, r_t_detail_m_produk_nama, sum(r_t_detail_qty) as qty, sum(r_t_detail_reguler_price) as hrg_menu');
-                if($request->area != 0) {
-                    $get->where('r_t_m_area_id', $request->area);
-                    if($request->waroeng != 'all') {
-                        $get->where('r_t_m_w_id', $request->waroeng);
-                    }
-                }
-                $get2= $get->whereBetween('r_t_tanggal', $dates)
-                            ->groupBy('r_t_tanggal', 'r_t_detail_m_produk_id', 'r_t_detail_m_produk_nama')
-                            ->orderBy('r_t_tanggal', 'ASC')
-                            ->orderBy('r_t_detail_m_produk_id', 'ASC')
-                            ->get();
+        $get = DB::table('rekap_garansi')
+                ->join('rekap_transaksi', 'r_t_id', 'rekap_garansi_r_t_id')
+                ->join('users', 'users_id', 'rekap_garansi_created_by')
+                ->where('r_t_m_w_id', $request->waroeng)
+                ->where('rekap_garansi_created_by', $request->operator)
+                ->whereBetween('r_t_tanggal', $dates)
+                ->orderBy('r_t_tanggal', 'ASC')
+                ->orderBy('r_t_nota_code', 'ASC')
+                ->get();
         $data = array();
-        foreach ($get2 as $value) {
+        foreach ($get as $value) {
             $row = array();
-            $row[] = $value->r_t_tanggal;
-            $row[] = $value->r_t_detail_m_produk_nama;
-            $row[] = $value->qty;
-            $row[] = rupiah($value->hrg_menu*$value->qty, 0);
+            $row[] = date('d-m-Y', strtotime($value->r_t_tanggal));
+            $row[] = $value->r_t_nota_code;
+            $row[] = $value->name;
+            $row[] = $value->r_t_bigboss;
+            $row[] = $value->rekap_garansi_m_produk_nama;
+            $row[] = $value->rekap_garansi_qty;
+            $row[] = rupiah($value->rekap_garansi_price, 0);
+            $row[] = rupiah($value->rekap_garansi_nominal, 0);
+            $row[] = $value->rekap_garansi_keterangan;
             $data[] = $row;
         }
         $output = array("data" => $data);
         return response()->json($output);
     }
-    
 
     /**
      * Show the form for editing the specified resource.
