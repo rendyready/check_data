@@ -257,12 +257,6 @@
          $('#'+id).val(prev).trigger('change');
       }
       });
-    $(".number").on("keypress", function (evt) {
-    if (evt.which != 8 && evt.which != 0 && evt.which < 48 || evt.which > 57)
-    {
-        evt.preventDefault();
-    }
-    });
     $("#form, .qty, .harga, .ongkir").on('input', function () {
       var $tblrows = $("#form tbody tr");
       $tblrows.each(function (index) {

@@ -6,7 +6,7 @@
                 <div class="block block-themed h-100 mb-0">
                     <div class="block-header bg-pulse">
                         <h3 class="block-title">
-                            FORM INPUT PEMBELIAN MANDIRI
+                            FORM PENJUALAN GUDANG INTERNAL
                     </div>
                     <div class="block-content text-muted">
                         <form id="formAction" action="{{ route('beli.simpan') }}" method="post">
@@ -14,7 +14,7 @@
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="row mb-1">
-                                        <label class="col-sm-3 col-form-label-sm"
+                                        <label class="col-sm-3 col-form-labdistributorel-sm"
                                             for="rekap_beli_created_by">Operator</label>
                                         <div class="col-sm-9">
                                             <input type="text" class="form-control form-control-sm"
@@ -23,43 +23,19 @@
                                         </div>
                                     </div>
                                     <div class="row mb-1">
-                                        <label class="col-sm-3 col-form-label-sm" for="example-hf-text">Waroeng</label>
+                                        <label class="col-sm-3 col-form-label-sm" for="example-hf-text">Distibutor</label>
                                         <div class="col-sm-9">
-                                            <input type="text" class="form-control form-control-sm" id="rekap_beli_waroeng"
-                                                name="rekap_beli_waroeng" value="{{ $data->waroeng_nama->m_w_nama }}" readonly>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-2">
-                                        <label class="col-sm-3 col-form-label-sm" for="rekap_beli_gudang_code">Masuk
-                                            Gudang</label>
-                                        <div class="col-sm-9">
-                                            <select class="js-select2 form-control-sm" style="width: 100%;"
-                                                name="rekap_beli_gudang_code" id="rekap_beli_gudang_code"
-                                                data-placeholder="Pilih Gudang" required>
-                                                <option></option>
-                                                @foreach ($data->gudang as $item)
-                                                    <option value="{{ $item->m_gudang_code }}">
-                                                        {{ ucwords($item->m_gudang_nama) }}</option>
-                                                @endforeach
-                                            </select>
+                                            <input type="text" class="form-control form-control-sm" id="distributor"
+                                                name="distributor" value="{{ $data->waroeng_nama->m_w_nama }}" readonly>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="row mb-1">
                                         <label class="col-sm-5 col-form-label-sm" for="rekap_beli_code">No Nota</label>
                                         <div class="col-sm-7">
                                             <input type="text" class="form-control form-control-sm" id="rekap_beli_code"
                                                 name="rekap_beli_code" value="{{ $data->code }}" readonly>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-1">
-                                        <label class="col-sm-5 col-form-label-sm" for="rekap_beli_code_nota">Nota
-                                            Supplier</label>
-                                        <div class="col-sm-7">
-                                            <input type="text" class="form-control form-control-sm"
-                                                id="rekap_beli_code_nota" name="rekap_beli_code_nota" value=""
-                                                placeholder="Nota Supplier">
                                         </div>
                                     </div>
                                     <div class="row mb-1">
@@ -79,44 +55,43 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-5">
                                     <div class="row mb-2">
-                                        <label class="col-sm-4 col-form-label-sm" for="rekap_beli_supplier_code">Kode
-                                            Supplier</label>
+                                        <label class="col-sm-4 col-form-label-sm" for="asal_gudang">Sumber
+                                            Gudang</label>
                                         <div class="col-sm-8">
                                             <select class="js-select2 form-control-sm" style="width: 100%;"
-                                                name="rekap_beli_supplier_code" id="rekap_beli_supplier_code"
-                                                data-placeholder="pilih supplier" required>
+                                                name="asal_gudang" id="asal_gudang"
+                                                data-placeholder="Pilih Gudang" required>
                                                 <option></option>
+                                                @foreach ($data->gudang as $item)
+                                                    <option value="{{ $item->m_gudang_code }}">
+                                                        {{ ucwords($item->m_gudang_nama) }}</option>
+                                                @endforeach
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="row mb-1">
-                                        <label class="col-sm-4 col-form-label-sm"
-                                            for="rekap_beli_supplier_nama">Nama</label>
+                                    <div class="row mb-2">
+                                        <label class="col-sm-4 col-form-label-sm" for="jenis_gudang">Jenis Penjualan</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control supplier form-control-sm"
-                                                id="rekap_beli_supplier_nama" name="rekap_beli_supplier_nama" readonly
-                                                required>
+                                          <select class="js-select2 form-control-sm" style="width: 100%;" name="jenis_gudang" id="jenis_gudang" data-placeholder="Pilih Jenis Penjualan" required>
+                                          <option></option>
+                                          <option value="gudang utama waroeng">Waroeng</option>
+                                          <option value="gudang wbd waroeng">WDB</option>
+                                          </select>
                                         </div>
                                     </div>
-                                    <div class="row mb-1">
-                                        <label class="col-sm-4 col-form-label-sm" for="rekap_beli_supplier_telp">No
-                                            Telpn</label>
-                                        <div class="col-sm-8">
-                                            <input type="text" class="form-control supplier form-control-sm"
-                                                id="rekap_beli_supplier_telp" name="rekap_beli_supplier_telp" readonly
-                                                required>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-1">
-                                        <label class="col-sm-4 col-form-label-sm"
-                                            for="rekap_beli_supplier_alamat">Alamat</label>
-                                        <div class="col-sm-8">
-                                            <textarea class="supplier" name="rekap_beli_supplier_alamat" id="rekap_beli_supplier_alamat" cols="23"
-                                                rows="3" readonly required></textarea>
-                                        </div>
-                                    </div>
+                                    <div class="row mb-2">
+                                      <label class="col-sm-4 col-form-label-sm" for="waroeng_code">Tujuan</label>
+                                      <div class="col-sm-8">
+                                        <select class="js-select2 form-control-sm" style="width: 100%;" name="waroeng_code" id="waroeng_code" data-placeholder="Pilih Customer" required>
+                                        <option></option>
+                                        @foreach ($data->waroeng as $item)
+                                            <option value="{{$item->m_w_code}}">{{$item->m_w_nama}}</option>
+                                        @endforeach
+                                        </select>
+                                      </div>
+                                  </div>
                                 </div>
                             </div>
                             <div class="table-responsive">
@@ -145,13 +120,13 @@
                                                 <textarea class="form-control form-control-sm" name="rekap_beli_detail_catatan[]" id="rekap_beli_detail_catatan"
                                                     cols="50" required placeholder="catatan bb atau satuan"></textarea>
                                             </td>
-                                            <td><input type="number" min="0.01" step="0.01"
+                                            <td><input type="text"
                                                     class="form-control number form-control-sm qty"
                                                     name="rekap_beli_detail_qty[]" id="rekap_beli_detail_qty" required>
                                             </td>
                                             <td><input type="text" class="form-control number form-control-sm harga"
-                                                    name="rekap_beli_detail_harga[]" id="rekap_beli_detail_harga"
-                                                    required></td>
+                                                    name="rekap_beli_detail_harga[]" id="rekap_beli_detail_harga1"
+                                                    readonly></td>
                                             <td><input type="text"
                                                     class="form-control number form-control-sm persendisc"
                                                     name="rekap_beli_detail_disc[]" id="rekap_beli_detail_disc"></td>
@@ -265,46 +240,40 @@
       'X-CSRF-Token' : $("input[name=_token]").val()
         }
       });
+      var datas,asal;
     Codebase.helpersOnLoad(['jq-select2']);
+    $('#asal_gudang').on('change',function () {
+        var asal = $('#asal_gudang').val();
+        $.get("/inventori/stok/"+asal, function(data){
+            datas = data;
+            $.each(data, function(key, value) {
+              $('#rekap_beli_detail_m_produk_id1')
+              .append($('<option>', { value : key })
+              .text(value));
+            });
+        });  
+    });
 	  var no =1;
-    var  barang = new Array();
-    var supplier = new Array();
-    $.get('/inventori/beli/list', function(response){
-      barang = response['barang'];
-      supplier = response['supplier'];
 	  $('.tambah').on('click',function(){
 	    no++;
 		$('#form').append('<tr id="row'+no+'">'+
                         '<td><select class="js-select2 nama_barang" name="rekap_beli_detail_m_produk_id[]" id="rekap_beli_detail_m_produk_id'+no+'" style="width: 100%;" data-placeholder="Pilih Nama Barang" required > <option value="0" selected disabled hidden></option></select></td>'+
                         '<td><textarea class="form-control form-control-sm" name="rekap_beli_detail_catatan[]" id="rekap_beli_detail_catatan" cols="50" required placeholder="catatan bb atau satuan"></textarea></td>'+
-                        '<td><input type="number" min="0.01" step="0.01" class="form-control number form-control-sm qty" name="rekap_beli_detail_qty[]" id="rekap_beli_detail_qty" required></td>'+
-                        '<td><input type="text" class="form-control number form-control-sm harga" name="rekap_beli_detail_harga[]" id="rekap_beli_detail_harga" required></td>'+
+                        '<td><input type="text" class="form-control number form-control-sm qty" name="rekap_beli_detail_qty[]" id="rekap_beli_detail_qty" required></td>'+
+                        '<td><input type="text" class="form-control number form-control-sm harga" name="rekap_beli_detail_harga[]" id="rekap_beli_detail_harga'+no+'" required></td>'+
                         '<td><input type="text" class="form-control number form-control-sm persendisc" name="rekap_beli_detail_disc[]" id="rekap_beli_detail_disc"></td>'+
                         '<td><input type="text" class="form-control number form-control-sm rupiahdisc" name="rekap_beli_detail_discrp[]" id="rekap_beli_detail_discrp"></td>'+
                         '<td><input type="text" class="form-control number form-control-sm subtot" name="rekap_beli_detail_subtot[]" id="rekap_beli_detail_subtot" readonly></td>'+
                         '<td><button type="button" id="'+no+'" class="btn btn-danger btn_remove"><i class="fa fa-trash"></i></button></td></tr>');
-
-    });
-        
-    $('#form').on('click select2:open','.tambah', function(){
-          Codebase.helpersOnLoad(['jq-select2']);
-              $.each(barang, function(key, value) {
+            Codebase.helpersOnLoad(['jq-select2']);
+            $.each(datas, function(key, value) {
               $('#rekap_beli_detail_m_produk_id'+no)
               .append($('<option>', { value : key })
               .text(value));
-              });  
+         }); 
+    
         });
-   $.each(barang, function(key, value) {
-     $('.nama_barang')
-          .append($('<option>', { value : key })
-          .text(value));
-    });
-    $.each(supplier, function(key, value) {
-     $('#rekap_beli_supplier_code')
-          .append($('<option>', { value : key })
-          .text(value));
-    });
-  });
+        
 	$(document).on('click', '.btn_remove', function(){
 		var button_id = $(this).attr("id"); 
 		$('#row'+button_id+'').remove();
@@ -317,13 +286,14 @@
           var $tblrow = $(this);
           $tblrow.find(".qty, .harga, .persendisc, .rupiahdisc").on('input', function () {
               var qty = $tblrow.find("[name='rekap_beli_detail_qty[]']").val();
-              var price = $tblrow.find("[name='rekap_beli_detail_harga[]']").val().replace(/\./g, '').replace(/\,/g, '.');
+              var price = $tblrow.find("[name='rekap_beli_detail_harga[]']").val();
               var persendisc = $tblrow.find("[name='rekap_beli_detail_disc[]']").val();
               var nilaipersendisc = 100-persendisc;
               var rupiahdisc = $tblrow.find("[name='rekap_beli_detail_discrp[]']").val().replace(/\./g, '').replace(/\,/g, '.');
               if (rupiahdisc==null) {
                 rupiahdisc = 0;
               }
+            //   console.log(price);
               var subTotal = parseFloat(qty) * parseFloat(price) * (nilaipersendisc/100) - rupiahdisc;
               if (!isNaN(subTotal)) { 
                   $tblrow.find('.subtot').val(subTotal.toLocaleString("id"));
@@ -357,43 +327,29 @@
           $('.sisa').val((rekap_beli_tot_nom-bayar).toLocaleString('id'));
           $('#total_sum_value').html(': Rp '+rekap_beli_tot_nom.toLocaleString('id'));
     });
-    $('#rekap_beli_supplier_code').on('change',function() {
-      var id = $(this).val();
-      console.log(id);
-      if (id == '500001') {
-        const date = new Date('{{$data->tgl_now}}').toISOString().slice(0, 10);
-        $('.supplier').attr('readonly',false).trigger('change').val('');
-        $("#rekap_beli_jth_tmp").val(date).trigger('change');
-      } else {
-        $('.supplier').attr('readonly',true);
-        $.ajax({
-                    url: "/inventori/supplier/edit/"+id,
-                    type: "GET",
-                    dataType: 'json',
-                    success: function(respond) {
-                        $("#rekap_beli_supplier_nama").val(respond.m_supplier_nama).trigger('change');
-                        $("#rekap_beli_supplier_alamat").val(respond.m_supplier_alamat).trigger('change');
-                        $("#rekap_beli_supplier_telp").val(respond.m_supplier_telp).trigger('change');
-                        const date = new Date('{{$data->tgl_now}}');
-                        date.setDate(date.getDate() + parseInt(respond.m_supplier_jth_tempo));
-                        var jth_tmp = new Date(date).toISOString().slice(0, 10);
-                        $("#rekap_beli_jth_tmp").val(jth_tmp).trigger('change');
-                    },
-                    error: function() {
-                    }
-                });
-      }
-    });
     $(document).on('select2:open', '.nama_barang', function(){
-          console.log("Saving value " + $(this).val());
+        var g_code = $('#asal_gudang').val();
+        if ((g_code == '')) {
+            alert('Pilih Gudang Dahulu');
+          }
+          console.log(g_code);
           var index = $(this).attr('id'); 
           $(this).data('val', $(this).val());
           $(this).data('id',index);
       }).on('change','.nama_barang', function(e){
           var prev = $(this).data('val');
           var current = $(this).val();
+          var g_id = $('#asal_gudang').val();
           var id = $(this).data('id');
-      var values = $('[name="rekap_beli_detail_m_produk_id[]"]').map(function() {
+          var harga_id = id.slice(29);
+          console.log(harga_id);
+            $.get("/inventori/stok_harga/"+g_id+"/"+current, function(data){
+            $('#rekap_beli_detail_harga'+harga_id).val(data.m_stok_hpp);
+            // $('#rekap_beli_detail_harga'+harga_id).trigger('input');
+            console.log(data.m_stok_hpp.toLocaleString('id'));
+            $('#satuan'+harga_id).html(data.m_stok_satuan);
+          });
+            var values = $('[name="rekap_tf_g_detail_m_produk_id[]"]').map(function() {
         return this.value.trim();
       }).get();
       var unique =  [...new Set(values)];

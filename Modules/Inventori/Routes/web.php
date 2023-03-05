@@ -85,3 +85,9 @@ Route::group(['prefix' => 'inventori', 'controller' => PecahGabungController::cl
     Route::post('pecah_gabung/simpan', 'simpan')->name('simpan.pcb');
     Route::get('pecah_gabung/list','pcb_list')->name('pcb.list');
 });
+//Form Penjualan Internal
+Route::group(['prefix' => 'inventori', 'controller' => PenjualanInternalController::class, 'middleware' => ['auth', 'web']], function () {
+    Route::get('penj_gudang', 'index')->name('penj_gudang.index');
+    Route::post('penj_gudang/simpan', 'simpan')->name('simpan.pcb');
+    Route::get('pecah_gabung/list','pcb_list')->name('pcb.list');
+});
