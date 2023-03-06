@@ -21,7 +21,7 @@ class InvPenjualanController extends Controller
         $get_max_id = DB::table('rekap_inv_penjualan')->orderBy('rekap_inv_penjualan_id','desc')->first();
         $user = Auth::id();
         $data->code = (empty($get_max_id->rekap_inv_penjualan_id)) ? $urut = "20000001". $user : $urut = substr($get_max_id->rekap_inv_penjualan_code,0,-1)+'1'. $user; 
-        return view('inventori::form_penjualan',compact('data'));
+        return view('inventori::form_penjualan_umum',compact('data'));
     }
 
     public function simpan(Request $request)
