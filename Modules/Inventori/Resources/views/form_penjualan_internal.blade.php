@@ -9,7 +9,7 @@
                             FORM PENJUALAN GUDANG INTERNAL
                     </div>
                     <div class="block-content text-muted">
-                        <form id="formAction" action="{{ route('beli.simpan') }}" method="post">
+                        <form id="formAction" action="{{ route('simpan.penj_gudang') }}" method="post">
                             @csrf
                             <div class="row">
                                 <div class="col-md-4">
@@ -72,9 +72,9 @@
                                         </div>
                                     </div>
                                     <div class="row mb-2">
-                                        <label class="col-sm-4 col-form-label-sm" for="jenis_gudang">Jenis Penjualan</label>
+                                        <label class="col-sm-4 col-form-label-sm" for="nama_gudang">Jenis Penjualan</label>
                                         <div class="col-sm-8">
-                                          <select class="js-select2 form-control-sm" style="width: 100%;" name="jenis_gudang" id="jenis_gudang" data-placeholder="Pilih Jenis Penjualan" required>
+                                          <select class="js-select2 form-control-sm" style="width: 100%;" name="nama_gudang" id="nama_gudang" data-placeholder="Pilih Jenis Penjualan" required>
                                           <option></option>
                                           <option value="gudang utama waroeng">Waroeng</option>
                                           <option value="gudang wbd waroeng">WDB</option>
@@ -82,12 +82,12 @@
                                         </div>
                                     </div>
                                     <div class="row mb-2">
-                                      <label class="col-sm-4 col-form-label-sm" for="waroeng_code">Tujuan</label>
+                                      <label class="col-sm-4 col-form-label-sm" for="waroeng_tujuan">Tujuan</label>
                                       <div class="col-sm-8">
-                                        <select class="js-select2 form-control-sm" style="width: 100%;" name="waroeng_code" id="waroeng_code" data-placeholder="Pilih Customer" required>
+                                        <select class="js-select2 form-control-sm" style="width: 100%;" name="waroeng_tujuan" id="waroeng_tujuan" data-placeholder="Pilih Customer" required>
                                         <option></option>
                                         @foreach ($data->waroeng as $item)
-                                            <option value="{{$item->m_w_code}}">{{$item->m_w_nama}}</option>
+                                            <option value="{{$item->m_w_id}}">{{ucwords($item->m_w_nama)}}</option>
                                         @endforeach
                                         </select>
                                       </div>
@@ -293,7 +293,6 @@
               if (rupiahdisc==null) {
                 rupiahdisc = 0;
               }
-            //   console.log(price);
               var subTotal = parseFloat(qty) * parseFloat(price) * (nilaipersendisc/100) - rupiahdisc;
               if (!isNaN(subTotal)) { 
                   $tblrow.find('.subtot').val(subTotal.toLocaleString("id"));
@@ -326,6 +325,7 @@
           $('.rekap_beli_tot_nom').val(rekap_beli_tot_nom.toLocaleString('id'));
           $('.sisa').val((rekap_beli_tot_nom-bayar).toLocaleString('id'));
           $('#total_sum_value').html(': Rp '+rekap_beli_tot_nom.toLocaleString('id'));
+         
     });
     $(document).on('select2:open', '.nama_barang', function(){
         var g_code = $('#asal_gudang').val();
@@ -342,11 +342,15 @@
           var g_id = $('#asal_gudang').val();
           var id = $(this).data('id');
           var harga_id = id.slice(29);
-          console.log(harga_id);
+          var options = {
+            style: 'decimal',
+            useGrouping: true
+            };
             $.get("/inventori/stok_harga/"+g_id+"/"+current, function(data){
-            $('#rekap_beli_detail_harga'+harga_id).val(data.m_stok_hpp);
+                var harga = data.m_stok_hpp;
+            $('#rekap_beli_detail_harga'+harga_id).val(harga.toLocaleString('id-ID', options));
             // $('#rekap_beli_detail_harga'+harga_id).trigger('input');
-            console.log(data.m_stok_hpp.toLocaleString('id'));
+            console.log(harga.toLocaleString('id'));
             $('#satuan'+harga_id).html(data.m_stok_satuan);
           });
             var values = $('[name="rekap_tf_g_detail_m_produk_id[]"]').map(function() {

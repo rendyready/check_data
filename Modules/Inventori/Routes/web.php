@@ -69,8 +69,7 @@ Route::group(['prefix' => 'inventori', 'controller' => GudangController::class, 
     Route::post('gudang/out_simpan','gudang_out_save')->name('m_gudang_out.simpan');
     Route::get('gudang/terima','gudang_terima')->name('m_gudang.terima_tf');
     Route::get('gudang/listtf','gudang_list_tf')->name('gudang.tf_list');
-    Route::get('gudang/terima/transfer/{id}','gudang_terima_transfer')->name('gudang.tf_terima');
-    Route::post('gudang/terima/simpan','gudang_terima_simpan')->name('gudang.terima_simpan');
+    Route::post('gudang/terima/simpan','gudang_terima_simpan')->name('cht_keluar_gudang.simpan');
 
 });
 //Master BB
@@ -89,5 +88,5 @@ Route::group(['prefix' => 'inventori', 'controller' => PecahGabungController::cl
 Route::group(['prefix' => 'inventori', 'controller' => PenjualanInternalController::class, 'middleware' => ['auth', 'web']], function () {
     Route::get('penj_gudang', 'index')->name('penj_gudang.index');
     Route::post('penj_gudang/simpan', 'simpan')->name('simpan.penj_gudang');
-    Route::get('pecah_gabung/list','pcb_list')->name('penj_gudang.list');
+    Route::get('penj_gudang/list','penj_list')->name('penj_gudang.list');
 });

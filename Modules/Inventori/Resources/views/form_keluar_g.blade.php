@@ -25,11 +25,11 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="row mb-1">
-                                        <label class="col-sm-4 col-form-label" for="rekap_tf_g_detail_code">No Bukti</label>
+                                        <label class="col-sm-4 col-form-label" for="rekap_tf_gudang_code">No Bukti</label>
                                         <div class="col-sm-8">
                                             <input type="text" class="form-control form-control-sm"
-                                                id="rekap_tf_g_detail_code" name="rekap_tf_g_detail_code" value="{{ $data->code }}"
-                                                readonly>
+                                                id="rekap_tf_gudang_code" name="rekap_tf_gudang_code"
+                                                value="{{ $data->code }}" readonly>
                                         </div>
                                     </div>
                                     <div class="row mb-1">
@@ -100,23 +100,22 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td><select class="js-select2 nama_barang"
-                                                    name="rekap_tf_g_detail_m_produk_id[]"
-                                                    id="rekap_tf_g_detail_m_produk_id1"
+                                            <td><select class="js-select2 nama_barang" name="rekap_tf_gudang_m_produk_id[]"
+                                                    id="rekap_tf_gudang_m_produk_id1"
                                                     style="width: 100%;"data-placeholder="Pilih Nama Barang" required>
                                                     <option></option>
                                                 </select></td>
                                             <td><input type="number" step="0.01"
                                                     class="form-control number form-control-sm qty"
-                                                    name="rekap_tf_g_detail_qty_kirim[]" maxlength="9" max="100"
-                                                    id="rekap_tf_g_detail_qty_kirim1" required>
+                                                    name="rekap_tf_gudang_qty_kirim[]" maxlength="9" max="100"
+                                                    id="rekap_tf_gudang_qty_kirim1" required>
                                             </td>
                                             <td id="satuan1"></td>
                                             <td><input type="number" class="form-control number form-control-sm harga"
-                                                    name="rekap_tf_g_detail_hpp[]" id="rekap_tf_g_detail_hpp1" readonly>
+                                                    name="rekap_tf_gudang_hpp[]" id="rekap_tf_gudang_hpp1" readonly>
                                             </td>
                                             <td><input type="number" class="form-control number form-control-sm subtotal"
-                                                    name="rekap_tf_g_detail_sub_total[]" id="rekap_tf_g_detail_sub_total"
+                                                    name="rekap_tf_gudang_sub_total[]" id="rekap_tf_gudang_sub_total"
                                                     readonly></td>
                                         </tr>
                                     </tbody>
@@ -178,7 +177,7 @@
         $.get("/inventori/stok/"+asal, function(data){
             datas = data;
             $.each(data, function(key, value) {
-              $('#rekap_tf_g_detail_m_produk_id1')
+              $('#rekap_tf_gudang_m_produk_id1')
               .append($('<option>', { value : key })
               .text(value));
             });
@@ -189,15 +188,15 @@
 	  $('.tambah').on('click',function(){
 	    no++;
 		$('#form').append('<tr id="row'+no+'">'+
-                        '<td><select class="js-select2 nama_barang" name="rekap_tf_g_detail_m_produk_id[]" id="rekap_tf_g_detail_m_produk_id'+no+'" style="width: 100%;" data-placeholder="Pilih Nama Barang" required><option></option></select></td>'+
-                        '<td><input type="number" min="0.01" step="0.01" class="form-control form-control-sm qty" name="rekap_tf_g_detail_qty_kirim[]" id="rekap_tf_g_detail_qty_kirim" required></td>'+
+                        '<td><select class="js-select2 nama_barang" name="rekap_tf_gudang_m_produk_id[]" id="rekap_tf_gudang_m_produk_id'+no+'" style="width: 100%;" data-placeholder="Pilih Nama Barang" required><option></option></select></td>'+
+                        '<td><input type="number" min="0.01" step="0.01" class="form-control form-control-sm qty" name="rekap_tf_gudang_qty_kirim[]" id="rekap_tf_gudang_qty_kirim" required></td>'+
                         '<td id="satuan'+no+'"></td>'+
-                        '<td><input type="number" class="form-control number form-control-sm harga" name="rekap_tf_g_detail_hpp[]" id="rekap_tf_g_detail_hpp'+no+'" readonly></td>'+
-                        '<td><input type="number" class="form-control number form-control-sm subtotal" name="rekap_tf_g_detail_sub_total[]" id="rekap_tf_g_detail_sub_total" readonly></td>'+
+                        '<td><input type="number" class="form-control number form-control-sm harga" name="rekap_tf_gudang_hpp[]" id="rekap_tf_gudang_hpp'+no+'" readonly></td>'+
+                        '<td><input type="number" class="form-control number form-control-sm subtotal" name="rekap_tf_gudang_sub_total[]" id="rekap_tf_gudang_sub_total" readonly></td>'+
                         '<td><button type="button" id="'+no+'" class="btn btn-danger btn_remove"><i class="fa fa-trash"></i></button></td></tr>');
         Codebase.helpersOnLoad(['jq-select2']);
         $.each(datas, function(key, value) {
-              $('#rekap_tf_g_detail_m_produk_id'+no)
+              $('#rekap_tf_gudang_m_produk_id'+no)
               .append($('<option>', { value : key })
               .text(value));
          }); 
@@ -206,15 +205,15 @@
             if (e.which === 9){
 	    no++;
 		$('#form').append('<tr id="row'+no+'">'+
-                        '<td><select class="js-select2 nama_barang" name="rekap_tf_g_detail_m_produk_id[]" id="rekap_tf_g_detail_m_produk_id'+no+'" style="width: 100%;" data-placeholder="Pilih Nama Barang" required><option></option></select></td>'+
-                        '<td><input type="number" min="0.01" step="0.01" class="form-control form-control-sm qty" name="rekap_tf_g_detail_qty_kirim[]" id="rekap_tf_g_detail_qty_kirim" required></td>'+
+                        '<td><select class="js-select2 nama_barang" name="rekap_tf_gudang_m_produk_id[]" id="rekap_tf_gudang_m_produk_id'+no+'" style="width: 100%;" data-placeholder="Pilih Nama Barang" required><option></option></select></td>'+
+                        '<td><input type="number" min="0.01" step="0.01" class="form-control form-control-sm qty" name="rekap_tf_gudang_qty_kirim[]" id="rekap_tf_gudang_qty_kirim" required></td>'+
                         '<td id="satuan'+no+'"></td>'+
-                        '<td><input type="number" class="form-control number form-control-sm harga" name="rekap_tf_g_detail_hpp[]" id="rekap_tf_g_detail_hpp'+no+'" readonly></td>'+
-                        '<td><input type="number" class="form-control number form-control-sm subtotal" name="rekap_tf_g_detail_sub_total[]" id="rekap_tf_g_detail_sub_total" readonly></td>'+
+                        '<td><input type="number" class="form-control number form-control-sm harga" name="rekap_tf_gudang_hpp[]" id="rekap_tf_gudang_hpp'+no+'" readonly></td>'+
+                        '<td><input type="number" class="form-control number form-control-sm subtotal" name="rekap_tf_gudang_sub_total[]" id="rekap_tf_gudang_sub_total" readonly></td>'+
                         '<td><button type="button" id="'+no+'" class="btn btn-danger btn_remove"><i class="fa fa-trash"></i></button></td></tr>');
         Codebase.helpersOnLoad(['jq-select2']);
         $.each(datas, function(key, value) {
-              $('#rekap_tf_g_detail_m_produk_id'+no)
+              $('#rekap_tf_gudang_m_produk_id'+no)
               .append($('<option>', { value : key })
               .text(value));
          });
@@ -242,12 +241,13 @@
           var current = $(this).val();
           var g_id = $('#rekap_tf_gudang_asal_code').val();
           var id = $(this).data('id');
-          var harga_id = id.slice(29);
+          var harga_id = id.slice(27);
+          console.log(harga_id);
             $.get("/inventori/stok_harga/"+g_id+"/"+current, function(data){
-            $('#rekap_tf_g_detail_hpp'+harga_id).val(data.m_stok_hpp);
+            $('#rekap_tf_gudang_hpp'+harga_id).val(data.m_stok_hpp);
             $('#satuan'+harga_id).html(data.m_stok_satuan);
           });
-            var values = $('[name="rekap_tf_g_detail_m_produk_id[]"]').map(function() {
+            var values = $('[name="rekap_tf_gudang_m_produk_id[]"]').map(function() {
         return this.value.trim();
       }).get();
       var unique =  [...new Set(values)];
@@ -262,8 +262,8 @@
       $tblrows.each(function (index) {
           var $tblrow = $(this);
           $tblrow.find(".qty, .harga").on('input', function () {
-              var qty = $tblrow.find("[name='rekap_tf_g_detail_qty_kirim[]']").val();
-              var price = $tblrow.find("[name='rekap_tf_g_detail_hpp[]']").val();
+              var qty = $tblrow.find("[name='rekap_tf_gudang_qty_kirim[]']").val();
+              var price = $tblrow.find("[name='rekap_tf_gudang_hpp[]']").val();
               var subTotal = parseFloat(qty) * parseFloat(price);
               if (!isNaN(subTotal)) { 
                   $tblrow.find('.subtotal').val(subTotal.toFixed(2));

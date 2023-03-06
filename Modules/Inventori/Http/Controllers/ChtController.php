@@ -16,9 +16,6 @@ class ChtController extends Controller
      */
     public function index(Request $request)
     {   $waroeng_id = Auth::user()->waroeng_id;
-        $gudang_default = DB::table('m_gudang')->select('m_gudang_id')
-        ->where('m_gudang_m_w_id',$waroeng_id)->where('m_gudang_nama','gudang utama waroeng')->first()->m_gudang_id;
-        $gudang_id = (empty($request->gudang_id)) ? $gudang_default : $request->gudang_id ; 
         $data = new \stdClass();
         $data->gudang = DB::table('m_gudang')
         ->where('m_gudang_m_w_id',$waroeng_id)
@@ -53,7 +50,7 @@ class ChtController extends Controller
                     'm_stok_detail_masuk' => $request->rekap_beli_detail_terima_qty[$key],
                     'm_stok_detail_saldo' => $saldo_terakhir + $request->rekap_beli_detail_terima_qty[$key],
                     'm_stok_detail_hpp' => $hpp_now,
-                    'm_stok_detail_catatan' => 'pembelian'.$request->rekap_beli_detail_rekap_beli_code[$key],
+                    'm_stok_detail_catatan' => 'pembelian '.$request->rekap_beli_detail_rekap_beli_code[$key],
                     'm_stok_detail_gudang_code' => $request->rekap_beli_gudang_code,
                     'm_stok_detail_created_by' => Auth::id(),
                     'm_stok_detail_created_at' => Carbon::now()

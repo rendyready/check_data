@@ -81,6 +81,7 @@ class BeliController extends Controller
             'rekap_beli_terbayar' => convertfloat($terbayar),
             'rekap_beli_tersisa' => convertfloat($request->rekap_beli_tersisa),
             'rekap_beli_tot_nom' => convertfloat($request->rekap_beli_tot_nom),
+            'rekap_beli_ket' => 'pembelian mandiri',
             'rekap_beli_created_at' => Carbon::now(),
             'rekap_beli_created_by' => Auth::id()
         );

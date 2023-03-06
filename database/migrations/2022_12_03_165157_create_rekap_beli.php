@@ -35,6 +35,7 @@ return new class extends Migration
             $table->decimal('rekap_beli_terbayar',16,2);
             $table->decimal('rekap_beli_tersisa',16,2);
             $table->decimal('rekap_beli_tot_nom',16,2);
+            $table->string('rekap_beli_ket')->nullable();
             $table->bigInteger('rekap_beli_created_by');
             $table->bigInteger('rekap_beli_updated_by')->nullable();
             $table->bigInteger('rekap_beli_deleted_by')->nullable();
