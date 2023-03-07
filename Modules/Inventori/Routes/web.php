@@ -89,4 +89,5 @@ Route::group(['prefix' => 'inventori', 'controller' => PenjualanInternalControll
     Route::get('penj_gudang', 'index')->name('penj_gudang.index');
     Route::post('penj_gudang/simpan', 'simpan')->name('simpan.penj_gudang');
     Route::get('penj_gudang/list','penj_list')->name('penj_gudang.list');
+    Route::get('hist_penj_g','hist_penj_g')->name('hist_penj_g.index');
 });

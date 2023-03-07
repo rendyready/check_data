@@ -21,7 +21,7 @@ class NmgudangTableSeeder extends Seeder
                 'm_gudang_nama_created_by'=>1
             ], 
             [
-                'm_gudang_nama' =>'gudang Produksi waroeng',
+                'm_gudang_nama' =>'gudang produksi waroeng',
                 'm_gudang_nama_created_by'=>1
             ],
             [

@@ -62,7 +62,7 @@
                                                 style="width: 100%;"data-placeholder="Pilih Gudang" required>
                                                 <option></option>
                                                 @foreach ($data->gudang as $item)
-                                                    <option value="{{$item->m_gudang_id}}">{{ucwords($item->m_gudang_nama)}}</option>
+                                                    <option value="{{$item->m_gudang_code}}">{{ucwords($item->m_gudang_nama)}}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -176,11 +176,8 @@
           var g_id = $('#m_gudang_id').val();
           var id = $(this).data('id');
           var harga_id = id.slice(30);
-          console.log(id);
-          console.log(harga_id);  
           $.get("/inventori/stok_harga/"+g_id+"/"+current, function(data){
-            console.log('harga',data);
-            $('#rekap_rusak_detail_hpp'+harga_id).val(data);
+            $('#rekap_rusak_detail_hpp'+harga_id).val(data.m_stok_hpp);
           });
                 var values = $('[name="rekap_rusak_detail_m_produk_id[]"]').map(function() {
         return this.value.trim();

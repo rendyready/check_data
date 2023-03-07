@@ -71,11 +71,19 @@ class GudangController extends Controller
                 );
                 if (empty($validate)) {
                     DB::table('m_gudang')->insert($data);
-                    $masterbb = DB::table('m_produk')
+                    $gudang_nama = strtolower($request->m_gudang_nama);
+                    if ($gudang_nama == 'gudang wbd waroeng' ) {
+                        $masterbb = DB::table('m_produk')
+                        ->where('m_produk_m_klasifikasi_produk_id',4)
+                        ->where('m_produk_m_jenis_produk_id',11)
+                        ->get();
+                    } else {
+                        $masterbb = DB::table('m_produk')
                         ->whereNotIn('m_produk_m_klasifikasi_produk_id', [4])->get();
+                    }
                     $gudang = DB::table('m_gudang')->orderBy('m_gudang_id', 'desc')->first();
                     foreach ($masterbb as $key) {
-                        $satuan_id = ($request->m_gudang_nama == 'gudang produksi waroeng') ?
+                        $satuan_id = ($gudang_nama == 'gudang produksi waroeng') ?
                         $key->m_produk_isi_m_satuan_id : $key->m_produk_utama_m_satuan_id;
                         $satuan_kode = DB::table('m_satuan')->where('m_satuan_id', $satuan_id)->first()->m_satuan_kode;
                         $data_bb = array(
