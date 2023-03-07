@@ -61,10 +61,10 @@
                                                     style="width: 100%;"data-placeholder="Pilih Nama Barang" required>
                                                     <option value=""></option>
                                                 </select></td>
-                                            <td><input type="number" min="0"
+                                            <td><input type="text"
                                                     class="form-control form-control-sm number reset" name="m_stok_awal[]"
                                                     id="m_stok_awal" required></td>
-                                            <td><input type="number" min="0"
+                                            <td><input type="text"
                                                     class="form-control number reset form-control-sm"  name="m_stok_hpp[]"
                                                     id="m_stok_hpp" required></td>
                                             <td><input type="text" class="form-control form-control-sm reset"
@@ -85,6 +85,7 @@
                                 <th>Stok Awal</th>
                                 <th>Hpp</th>
                                 <th>Satuan</th>
+                                <th>Update</th>
                             </thead>
                             <tbody>
                             </tbody>
@@ -94,6 +95,7 @@
                                 <th>Stok Awal</th>
                                 <th>Hpp</th>
                                 <th>Satuan</th>
+                                <th>Update</th>
                             </tfoot>
                         </table>
                     </div>
@@ -119,6 +121,8 @@
             table = $('#tb_stok').DataTable({
               buttons:[],
               destroy:true,
+              lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+              pageLength: 10,
               ajax: {
               url: "/inventori/stok_awal/list/"+g_id,
               type: "GET",
@@ -136,8 +140,8 @@
         no++;
       $('#form_input').append('<tr id="row'+no+'" class="remove_all">'+
                           '<td><select class="js-select2 nama_barang" name="m_stok_m_produk_code[]" id="m_stok_m_produk_code'+no+'" style="width: 100%;"data-placeholder="Pilih Nama Barang" required><option></option></select></td>'+
-                          '<td><input type="number" min="0" class="form-control number form-control-sm" name="m_stok_awal[]" id="m_stok_awal" required></td>'+
-                          '<td><input type="number" min="0" class="form-control number form-control-sm" name="m_stok_hpp[]" id="m_stok_hpp" required></td>'+
+                          '<td><input type="text" class="form-control number form-control-sm" name="m_stok_awal[]" id="m_stok_awal" required></td>'+
+                          '<td><input type="text" class="form-control number form-control-sm" name="m_stok_hpp[]" id="m_stok_hpp" required></td>'+
                           '<td><input type="text" class="form-control form-control-sm satuan" id="m_satuan'+no+'" readonly></td>'+
                           '<td><button type="button" id="'+no+'" class="btn btn-danger btn_remove"><i class="fa fa-trash"></i></button></td></tr>');
 
@@ -186,12 +190,6 @@
          $('#'+id).val(prev).trigger('change');
       }
       });
-      $(".number").on("keypress", function (evt) {
-        if (evt.which != 8 && evt.which != 0 && evt.which < 48 || evt.which > 57)
-        {
-            evt.preventDefault();
-        }
-        });
             $('#formAction').submit( function(e){
                 if(!e.isDefaultPrevented()){
                   var g_id = $('#m_stok_gudang_code').val();
@@ -216,6 +214,8 @@
                             $('#tb_stok').DataTable({
                                 buttons:[],
                                 destroy:true,
+                                lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+                                pageLength: 10,
                                 ajax: {
                                 url: "/inventori/stok_awal/list/"+g_id,
                                 type: "GET",
