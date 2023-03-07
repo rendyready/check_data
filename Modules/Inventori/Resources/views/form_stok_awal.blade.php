@@ -85,7 +85,7 @@
                                 <th>Stok Awal</th>
                                 <th>Hpp</th>
                                 <th>Satuan</th>
-                                <th>Update</th>
+                                <th>Update Terakhir</th>
                             </thead>
                             <tbody>
                             </tbody>
@@ -95,7 +95,7 @@
                                 <th>Stok Awal</th>
                                 <th>Hpp</th>
                                 <th>Satuan</th>
-                                <th>Update</th>
+                                <th>Update Terakhir</th>
                             </tfoot>
                         </table>
                     </div>

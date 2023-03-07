@@ -2,12 +2,13 @@
 
 namespace Modules\Inventori\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 class SupplierController extends Controller
 {
     /**
@@ -39,8 +40,8 @@ class SupplierController extends Controller
             $row[] = $value->m_supplier_telp;
             $row[] = $value->m_supplier_ket;
             $row[] = rupiah($value->m_supplier_saldo_awal);
-            $row[] = $value->m_supplier_rek.'-'.$value->m_supplier_rek_nama.'-'.$value->m_supplier_bank_nama;
-            $row[] = '<a id="buttonEdit" class="btn btn-sm buttonEdit btn-success" value="'.$value->m_supplier_id.'" title="Edit"><i class="fa fa-pencil"></i></a>';
+            $row[] = $value->m_supplier_rek . '-' . $value->m_supplier_rek_nama . '-' . $value->m_supplier_bank_nama;
+            $row[] = '<a id="buttonEdit" class="btn btn-sm buttonEdit btn-success" value="' . $value->m_supplier_code . '" title="Edit"><i class="fa fa-pencil"></i></a>';
             $data[] = $row;
         }
         $output = array("data" => $data);
@@ -54,53 +55,72 @@ class SupplierController extends Controller
      */
     public function action(Request $request)
     {
-        $code = DB::table('m_supplier')->orderBy('m_supplier_id','desc')->first();
-        $nocode = (empty($code->m_supplier_code)) ? "500001" : $code->m_supplier_code+1;
-        if($request->ajax())
-    	{
+        $code = DB::table('m_supplier')->orderBy('m_supplier_id', 'desc')->first();
+        $nocode = (empty($code->m_supplier_code)) ? "500001" : $code->m_supplier_code + 1;
+        if ($request->ajax()) {
             if ($request->action == 'add') {
-                $data = array(
-                    'm_supplier_code'	=>	$nocode,
-                    'm_supplier_nama'	=>	$request->m_supplier_nama,
-                    'm_supplier_jth_tempo'	=>	$request->m_supplier_jth_tempo,
-                    'm_supplier_alamat'	=>	$request->m_supplier_alamat,
-                    'm_supplier_kota'	=>	$request->m_supplier_kota,
-                    'm_supplier_telp'	=>	$request->m_supplier_telp,
-                    'm_supplier_ket'	=>	$request->m_supplier_ket,
-                    'm_supplier_rek'	=>	$request->m_supplier_rek,
-                    'm_supplier_rek_nama'	=>	$request->m_supplier_rek_nama,
-                    'm_supplier_bank_nama'	=>	$request->m_supplier_bank_nama,
-                    'm_supplier_saldo_awal'	=>	$request->m_supplier_saldo_awal,
-                    'm_supplier_created_by' => Auth::id(),
-                    'm_supplier_created_at' => Carbon::now(),
+                $name = trim(strtolower(preg_replace('!\s+!', ' ', $request->m_supplier_nama)));
+                $rules = [
+                    'm_supplier_nama' => 'required|unique:m_supplier|max:255',
+                ];
+                $data_validate = array(
+                    'm_supplier_nama' => $name,
                 );
-                DB::table('m_supplier')->insert($data);
+                $validator = Validator::make($data_validate, $rules, $messages = [
+                    'm_supplier_nama.required' => 'Nama Belum Terisi',
+                    'm_supplier_nama.unique' => 'Nama Supplier Duplikat',
+                ]);
+                if ($validator->fails()) {
+                    return response()->json(['messages' => $validator->messages()->all(), 'type' => 'danger']);
+                } else {
+                    $data = array(
+                        'm_supplier_code' => $nocode,
+                        'm_supplier_nama' => $name,
+                        'm_supplier_jth_tempo' => $request->m_supplier_jth_tempo,
+                        'm_supplier_alamat' => $request->m_supplier_alamat,
+                        'm_supplier_kota' => $request->m_supplier_kota,
+                        'm_supplier_telp' => $request->m_supplier_telp,
+                        'm_supplier_ket' => $request->m_supplier_ket,
+                        'm_supplier_rek' => $request->m_supplier_rek,
+                        'm_supplier_rek_nama' => $request->m_supplier_rek_nama,
+                        'm_supplier_bank_nama' => $request->m_supplier_bank_nama,
+                        'm_supplier_saldo_awal' => $request->m_supplier_saldo_awal,
+                        'm_supplier_created_by' => Auth::id(),
+                        'm_supplier_created_at' => Carbon::now(),
+                    );
+                    DB::table('m_supplier')->insert($data);
+                    return response(['messages' => 'Berhasil Tambah Supplier !', 'type' => 'success']);
+                }
             } elseif ($request->action == 'edit') {
-                $data = array(
-                    'm_supplier_nama'	=>	$request->m_supplier_nama,
-                    'm_supplier_jth_tempo'	=>	$request->m_supplier_jth_tempo,
-                    'm_supplier_alamat'	=>	$request->m_supplier_alamat,
-                    'm_supplier_kota'	=>	$request->m_supplier_kota,
-                    'm_supplier_telp'	=>	$request->m_supplier_telp,
-                    'm_supplier_ket'	=>	$request->m_supplier_ket,
-                    'm_supplier_rek'	=>	$request->m_supplier_rek,
-                    'm_supplier_rek_nama'	=>	$request->m_supplier_rek_nama,
-                    'm_supplier_bank_nama'	=>	$request->m_supplier_bank_nama,
-                    'm_supplier_saldo_awal'	=>	$request->m_supplier_saldo_awal,
-                    'm_supplier_updated_by' => Auth::id(),
-                    'm_supplier_updated_at' => Carbon::now(),
-                );
-                DB::table('m_supplier')->where('m_supplier_id',$request->m_supplier_id)
-                ->update($data);
-            }else {
-                $softdelete = array('m_supplier_deleted_at' => Carbon::now());
-    			DB::table('m_supplier')
-    				->where('m_supplier_id', $request->m_supplier_id)
-    				->update($softdelete);
+                $name = trim(strtolower(preg_replace('!\s+!', ' ', $request->m_supplier_nama)));
+                $validate = DB::table('m_supplier')
+                ->whereNotIn('m_supplier_code',[$request->m_supplier_code])
+                ->where('m_supplier_nama',$name)
+                ->count();
+                if ($validate == 0) {
+                    $data = array(
+                        'm_supplier_nama' => $request->m_supplier_nama,
+                        'm_supplier_jth_tempo' => $request->m_supplier_jth_tempo,
+                        'm_supplier_alamat' => $request->m_supplier_alamat,
+                        'm_supplier_kota' => $request->m_supplier_kota,
+                        'm_supplier_telp' => $request->m_supplier_telp,
+                        'm_supplier_ket' => $request->m_supplier_ket,
+                        'm_supplier_rek' => $request->m_supplier_rek,
+                        'm_supplier_rek_nama' => $request->m_supplier_rek_nama,
+                        'm_supplier_bank_nama' => $request->m_supplier_bank_nama,
+                        'm_supplier_saldo_awal' => $request->m_supplier_saldo_awal,
+                        'm_supplier_updated_by' => Auth::id(),
+                        'm_supplier_updated_at' => Carbon::now(),
+                    );
+                    DB::table('m_supplier')->where('m_supplier_code', $request->m_supplier_code)
+                        ->update($data);
+                        return response(['messages' => 'Berhasil Update Supplier !', 'type' => 'success']);
+                } else {
+                    return response(['messages' => 'Nama Supplier Sudah Ada!', 'type' => 'danger']);
+                }
             }
-    		return response()->json($request);
-    	}
-        
+        }
+
     }
 
     /**
@@ -110,7 +130,7 @@ class SupplierController extends Controller
      */
     public function edit($id)
     {
-        $data = DB::table('m_supplier')->where('m_supplier_code',$id)->first();
+        $data = DB::table('m_supplier')->where('m_supplier_code', $id)->first();
         return response()->json($data);
     }
 }
