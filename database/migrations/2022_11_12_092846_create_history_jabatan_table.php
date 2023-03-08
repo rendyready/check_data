@@ -14,10 +14,13 @@ return new class extends Migration
     public function up()
     {
         Schema::create('history_jabatan', function (Blueprint $table) {
-            $table->id('history_jabatan_id');
-            $table->bigInteger('history_jabatan_m_karyawan_id');
-            $table->bigInteger('history_jabatan_m_jabatan_id');
-            $table->bigInteger('history_jabatan_m_w_id');
+            $table->id('id');
+            $table->string('history_jabatan_id')->unique();
+            $table->string('history_jabatan_m_karyawan_id');
+            $table->string('history_jabatan_m_jabatan_id');
+            $table->unsignedBigInteger('history_jabatan_m_w_id');
+            $table->string('history_jabatan_m_w_code');
+            $table->string('history_jabatan_m_w_nama');
             $table->date('history_jabatan_mulai');  
             $table->date('history_jabatan_selesai')->nullable()->default(NULL);  
             $table->bigInteger('history_jabatan_created_by');

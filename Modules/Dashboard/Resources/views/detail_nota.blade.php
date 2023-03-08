@@ -16,7 +16,7 @@
                             <div class="row mb-1">
                                 <label class="col-sm-3 col-form-label" >Tanggal</label>
                                 <div class="col-sm-9 datepicker">
-                                    <input name="r_t_tanggal" class="cari form-control form-control" type="text" placeholder="Pilih Tanggal.." id="filter_tanggal" />
+                                    <input name="r_t_tanggal" class="cari form-control form-control" type="text" placeholder="Pilih Tanggal.." id="filter_tanggal" readonly/>
                                 </div>
                             </div>
                         </div>
@@ -56,9 +56,6 @@
                                         <select id="filter_operator" style="width: 100%;"
                                         class="cari f-wrg js-select2 form-control" data-placeholder="Pilih Operator" name="r_t_created_by">
                                         <option></option>
-                                        @foreach ($data->user as $user)
-                                        <option value="{{ $user->id }}"> {{ $user->name }} </option>
-                                        @endforeach
                                     </select>
                                     </div>
                                 </div>
@@ -234,7 +231,7 @@ $(document).ready(function() {
                   $('#show_nota').append('<div class="col-xl-4 show_nota">'+
                         '<div class="block block-rounded mb-1">'+
                           '<div class="block-header block-header-default block-header-rtl bg-warning">'+
-                            '<h3 class="block-title text-light"><small class="fw-semibold">'+ value.r_l_b_nota_code +'</small><br><small>Approve by <br> '+ value.nama +'</small></h3>'+
+                            '<h3 class="block-title text-light"><small class="fw-semibold">'+ value.r_l_b_nota_code +'</small><br><small>Approve by <br> '+ value.name +'</small></h3>'+
                             '<div class="alert alert-warning py-2 mb-0">'+
                               '<h3 class="block-title text-black"><i class="fa fa-calendar opacity-50 ms-1"></i> <small>'+ value.r_l_b_tanggal +'</small>'+
                                 '<br><small class="fw-semibold">'+ value.name +'</small></h3>'+
@@ -317,30 +314,35 @@ $(document).ready(function() {
 
     $('#filter_tanggal').flatpickr({
             mode: "range",
-            dateFormat: 'Y-m-d',
-
-            // noCalendar: false,
-            // allowInput: true,            
+            dateFormat: 'Y-m-d',   
     });
 
-    $("td.mask").each((i,ele)=>{
-            let clone=$(ele).clone(false)
-            clone.attr("type","text")
-            let ele1=$(ele)
-            clone.val(Number(ele1.val()).toLocaleString("id"))
-            $(ele).after(clone)
-            $(ele).hide()
-            setInterval(()=>{
-                let newv=Number(ele1.val()).toLocaleString("id")
-                if(clone.val()!=newv){
-                    clone.val(newv)
+    $('#filter_waroeng').change(function(){
+        var id_waroeng = $(this).val();    
+        if(id_waroeng){
+            $.ajax({
+            type:"GET",
+            url: '{{route("detail.select_user")}}',
+            dataType: 'JSON',
+            data : {
+              id_waroeng: id_waroeng,
+            },
+            success:function(res){               
+                if(res){
+                    $("#filter_operator").empty();
+                    $("#filter_operator").append('<option></option>');
+                    $.each(res,function(key,value){
+                        $("#filter_operator").append('<option value="'+key+'">'+value+'</option>');
+                    });
+                }else{
+                $("#filter_operator").empty();
                 }
-            },10)
-            $(ele).mouseleave(()=>{
-                $(clone).show()
-                $(ele1).hide()
-            })
-        });
+            }
+            });
+        }else{
+            $("#filter_operator").empty();
+        }      
+    });
 
 });
 </script>

@@ -43,16 +43,21 @@ class DetailNotaController extends Controller
         return response()->json($data);
     }
 
-    public function create()
+    public function select_user(Request $request)
     {
-        return view('dashboard::create');
+
+        $user = DB::table('users')
+            ->select('users_id', 'name')
+            ->where('waroeng_id', $request->id_waroeng)
+            ->orderBy('users_id', 'asc')
+            ->get();
+        $data = array();
+        foreach ($user as $val) {
+            $data[$val->users_id] = [$val->name];
+        }
+        return response()->json($data);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     * @param Request $request
-     * @return Renderable
-     */
     public function store(Request $request)
     {
         //

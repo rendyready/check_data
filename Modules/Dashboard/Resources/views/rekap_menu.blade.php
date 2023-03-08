@@ -11,13 +11,13 @@
               </div>
                 <div class="block-content text-muted">
                     <form id="rekap_insert">
-                        
+                        @csrf
                         <div class="row">
                             <div class="col-md-5">
                                 <div class="row mb-1">
                                     <label class="col-sm-3 col-form-label" >Tanggal</label>
                                     <div class="col-sm-9 datepicker">
-                                        <input name="r_t_tanggal" class="cari form-control" type="text" placeholder="Pilih Tanggal.." id="filter_tanggal" />
+                                        <input name="tmp_tanggal_date" class="cari form-control" type="text" placeholder="Pilih Tanggal.." id="filter_tanggal" />
                                     </div>
                                 </div>
                             </div>
@@ -45,7 +45,7 @@
                                     <label class="col-sm-3 col-form-label">Waroeng</label>
                                     <div class="col-sm-9">
                                         <select id="filter_waroeng" style="width: 100%;"
-                                            class="cari f-wrg js-select2 form-control" data-placeholder="Pilih Waroeng" name="r_t_m_w_id">
+                                            class="cari f-wrg js-select2 form-control" data-placeholder="Pilih Waroeng" name="r_t_m_w_id[]">
                                             <option></option>
                                         </select>
                                     </div>
@@ -53,40 +53,13 @@
                             </div>
                         </div>
 
-                        {{-- <div class="row">
-                            <div class="col-md-5">
-                                <div class="row mb-3">
-                                    <label class="col-sm-3 col-form-label" for="rekap_inv_penjualan_created_by">Tipe Laporan</label>
-                                    <div class="col-sm-9">
-                                        <select id="filter_tipe" style="width: 100%;"
-                                        class="cari f-wrg js-select2 form-control" data-placeholder="Pilih Tipe Laporan" name="">
-                                        <option value="bymenu">By Menu</option>
-                                        <option value="bytanggal">By Tanggal</option>
-                                    </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>  --}}
-
                         <div class="col-sm-8">
                             <button type="button" id="cari"
                                 class="btn btn-primary btn-sm col-1 mt-2 mb-3">Cari</button>
-                        </div>
-
-                    </form>      
-                
+                        </div>                
             <table id="tampil_rekap" class="table table-sm table-bordered table-hover table-striped table-vcenter js-dataTable-full nowrap">
-              <thead>
-                <tr>
-                   <th class="text-center">Tanggal</th>
-                   <th class="text-center">Nama Menu</th>
-                   <th class="text-center">Qty</th>
-                   <th class="text-center">Nominal</th>
-                </tr>
-              </thead>
-              <tbody id="show_data">
-              </tbody>
             </table>
+            </form>
           </div>
         </div>
       </div>
@@ -101,43 +74,54 @@ $(document).ready(function() {
     Codebase.helpersOnLoad(['jq-select2']);
 
     $('#cari').on('click', function() {
-        var area     = $('#filter_area1').val();
-        var waroeng  = $('#filter_waroeng').val();
-        var tanggal  = $('#filter_tanggal').val();
-        // console.log(tanggal);
-    $('#tampil_rekap').DataTable({
-        button: [],
-        destroy: true,
-        orderCellsTop: true,
-        processing: true,
-        scrollY: "300px",
-        autoWidth: true,
-        scrollCollapse: true,
-        columnDefs: [
-            {
-                targets: [0, 1, 2],
-                className: 'dt-body-center'
-            },
-            {
-                targets: [3],
-                className: 'dt-body-right'
+    var area     = $('#filter_area').val();
+    var waroeng  = $('#filter_waroeng').val();
+    var tanggal  = $('#filter_tanggal').val();
+
+    $.ajax({
+        url: '{{route("rekap_menu.tanggal_rekap")}}',
+        type: 'GET',
+        dataType: 'Json',
+        data : {
+            tanggal: tanggal,
+        },
+        success: function(data) {
+            var html = '<tr>';
+            html += '<th class="text-center">Waroeng</th>';
+            html += '<th class="text-center">Nama Menu</th>';
+            for (var i = 0; i < data.length; i++) {
+                html += '<th class="text-center">Qty</th>';
+                html += '<th class="text-center">' + data[i] + '</th>';
+
             }
-        ],
-        lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
-        pageLength: 10,
-        ajax: {
-            url: '{{route("rekap_menu.show")}}',
-            data : {
-                area: area,
-                waroeng: waroeng,
-                tanggal: tanggal,
-            },
-            type : "GET",
-            },
-            success:function(data){ 
-                console.log(data);
+            html += '</tr>';
+            $('#tampil_rekap thead').html(html);
+
+            $('#tampil_rekap').DataTable({
+                destroy: true,
+                orderCellsTop: true,
+                processing: true,
+                scrollY: "300px",
+                scrollX: true,
+                autoWidth: true,
+                scrollCollapse: true,
+                lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+                pageLength: 10,
+                ajax: {
+                    url: '{{route("rekap_menu.show")}}',
+                    data : {
+                        area: area,
+                        waroeng: waroeng,
+                        tanggal: tanggal,
+                    },
+                    type : "GET",
+                    },
+                    success:function(data){ 
+                        console.log(data);
+                    }
+                });
             }
-      });
+        });
     });
 
     $('#filter_area').change(function(){

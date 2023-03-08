@@ -126,6 +126,7 @@ class RekeningController extends Controller
 
     public function simpan_edit(Request $request)
     {
+        $rekening_old = $request->m_rekening_id;
         $validasi1 = DB::table('m_jurnal_kas')
                     ->select('m_jurnal_kas_m_rekening_no_akun')
                     ->where('m_jurnal_kas_m_rekening_no_akun', $request->m_rekening_no_akun)
@@ -156,7 +157,7 @@ class RekeningController extends Controller
             'm_rekening_updated_by' => Auth::id(),
             'm_rekening_updated_at' => Carbon::now(),
         );
-        $update = DB::table('m_rekening')->where('m_rekening_no_akun', $request->m_rekening_no_akun)
+       return $update = DB::table('m_rekening')->where('m_rekening_no_akun', $rekening_old)
         ->update($data);
 
         return response()->json($update); 

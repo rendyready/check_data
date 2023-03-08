@@ -135,3 +135,12 @@ function tgl_indo($tgl, $tampil_hari=true){
 	
 	return $text;    
  }
+ function convertfloat($number) {
+    // menghapus karakter titik
+    $number = str_replace('.', '', $number);
+    // mengganti koma dengan titik
+    $number = str_replace(',', '.', $number);
+    // mengembalikan nilai dalam format numerik
+    return (float)$number;
+}
+

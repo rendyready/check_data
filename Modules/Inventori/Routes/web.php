@@ -83,4 +83,5 @@ Route::group(['prefix' => 'inventori', 'controller' => MasterBBController::class
 Route::group(['prefix' => 'inventori', 'controller' => PecahGabungController::class, 'middleware' => ['auth', 'web']], function () {
     Route::get('pecah_gabung', 'index')->name('pcb.index');
     Route::post('pecah_gabung/simpan', 'simpan')->name('simpan.pcb');
+    Route::get('pecah_gabung/list','pcb_list')->name('pcb.list');
 });

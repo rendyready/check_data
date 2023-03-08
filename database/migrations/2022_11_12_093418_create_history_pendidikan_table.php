@@ -14,13 +14,14 @@ return new class extends Migration
     public function up()
     {
         Schema::create('history_pendidikan', function (Blueprint $table) {
-            $table->id('history_pendidikan_id');
-            $table->char('history_pendidikan_m_karyawan_id');
-            $table->char('history_pendidikan_jenjang', 20);
+            $table->id('id');
+            $table->string('history_pendidikan_id')->unique();
+            $table->string('history_pendidikan_m_karyawan_id');
+            $table->string('history_pendidikan_jenjang', 20);
             $table->string('history_pendidikan_institut');
             $table->string('history_pendidikan_jurusan')->nullable();
-            $table->char('history_pendidikan_tahun_masuk', 4)->nullable();
-            $table->char('history_pendidikan_tahun_lulus', 4)->nullable();
+            $table->string('history_pendidikan_tahun_masuk', 10)->nullable();
+            $table->string('history_pendidikan_tahun_lulus', 10)->nullable();
             $table->decimal('history_pendidikan_nilai')->nullable()->default(NULL);
             $table->bigInteger('history_pendidikan_created_by');
             $table->bigInteger('history_pendidikan_updated_by')->nullable();

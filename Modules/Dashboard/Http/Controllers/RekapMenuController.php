@@ -2,9 +2,11 @@
 
 namespace Modules\Dashboard\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Contracts\Support\Renderable;
 
 class RekapMenuController extends Controller
@@ -25,9 +27,27 @@ class RekapMenuController extends Controller
         $data->user = DB::table('users')
             ->orderby('id', 'ASC')
             ->get();
+        $data->tanggal = DB::table('rekap_transaksi')
+            ->select('r_t_tanggal')
+            ->orderBy('r_t_tanggal', 'asc')
+            ->get();
         return view('dashboard::rekap_menu', compact('data'));
     }
 
+    public function tanggal_rekap(Request $request)
+    {
+        $dates = explode('to' ,$request->tanggal);
+        $tanggal = DB::table('rekap_transaksi')
+        ->select('r_t_tanggal')
+        ->whereBetween('r_t_tanggal', $dates)        
+        ->orderBy('r_t_tanggal', 'asc')
+        ->get();
+        foreach ($tanggal as $val) {
+            $data[] = date('d-m-Y', strtotime($val->r_t_tanggal));
+        }
+        return response()->json($data);
+    }
+    
     public function select_waroeng(Request $request)
     {
 
@@ -44,57 +64,82 @@ class RekapMenuController extends Controller
         return response()->json($data);
     }
 
-    public function create()
-    {
-        return view('dashboard::create');
-    }
+    function show(Request $request) {
+        $dates = explode('to', $request->tanggal);
+        $tanggal = DB::table('rekap_transaksi')
+                    ->whereBetween('r_t_tanggal', $dates)
+                    ->orderBy('r_t_tanggal', 'ASC')
+                    ->get();
 
-    /**
-     * Store a newly created resource in storage.
-     * @param Request $request
-     * @return Renderable
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    public function show(Request $request)
-    {
-        $dates = explode('to' ,$request->tanggal);
-        $get = DB::table('rekap_transaksi_detail')
+            if($request->area == '0'){
+                $get = DB::table('rekap_transaksi_detail')
                 ->join('rekap_transaksi', 'r_t_id', 'r_t_detail_r_t_id')
-                ->selectRaw('r_t_tanggal, r_t_detail_m_produk_id, r_t_detail_m_produk_nama, sum(r_t_detail_qty) as qty, sum(r_t_detail_reguler_price) as hrg_menu');
-                if($request->area != 0) {
-                    $get->where('r_t_m_area_id', $request->area);
-                    if($request->waroeng != 'all') {
+                ->join('m_w', 'm_w_id', 'r_t_m_w_id')
+                ->whereBetween('r_t_tanggal', $dates);
+            } else {
+            $get = DB::table('rekap_transaksi_detail')
+                    ->join('rekap_transaksi', 'r_t_id', 'r_t_detail_r_t_id')
+                    ->join('m_w', 'm_w_id', 'r_t_m_w_id')
+                    ->whereBetween('r_t_tanggal', $dates)
+                    ->where('r_t_m_area_id', $request->area);
+                    if ($request->waroeng != 'all') {
                         $get->where('r_t_m_w_id', $request->waroeng);
                     }
-                }
-                $get2= $get->whereBetween('r_t_tanggal', $dates)
-                            ->groupBy('r_t_tanggal', 'r_t_detail_m_produk_id', 'r_t_detail_m_produk_nama')
-                            ->orderBy('r_t_tanggal', 'ASC')
-                            ->orderBy('r_t_detail_m_produk_id', 'ASC')
-                            ->get();
-        $data = array();
-        foreach ($get2 as $value) {
-            $row = array();
-            $row[] = $value->r_t_tanggal;
-            $row[] = $value->r_t_detail_m_produk_nama;
-            $row[] = $value->qty;
-            $row[] = rupiah($value->hrg_menu*$value->qty, 0);
-            $data[] = $row;
+            }
+         
+        $get1 = $get->select('r_t_detail_m_produk_nama', 'm_w_nama')
+                    ->groupBy('r_t_detail_m_produk_nama', 'm_w_nama')
+                    ->get();
+        $get2 = $get->selectRaw('sum(r_t_detail_qty) as qty, sum(r_t_detail_nominal) as nominal, r_t_tanggal, r_t_detail_m_produk_nama, m_w_nama')
+                    ->groupBy('r_t_tanggal', 'r_t_detail_m_produk_nama', 'm_w_nama')
+                    ->get();
+        $data = [];
+        foreach ($get2 as $key => $val_menu) {
+            $waroeng = $val_menu->m_w_nama;
+            $menu = $val_menu->r_t_detail_m_produk_nama;
+            $date = $val_menu->r_t_tanggal;
+            $qty = $val_menu->qty;
+            $nominal = rupiah($val_menu->nominal, 0);
+            if (!isset($data[$waroeng])) {
+                $data[$waroeng] = [];
+            }
+            if (!isset($data[$waroeng][$menu])) {
+                $data[$waroeng][$menu] = [];
+            }
+            if (!isset($data[$waroeng][$menu][$date])) {
+                $data[$waroeng][$menu][$date] = [
+                    'qty' => 0,
+                    'nominal' => 0,
+                ];
+            }
+            $data[$waroeng][$menu][$date]['qty'] = $qty;
+            $data[$waroeng][$menu][$date]['nominal'] = $nominal;
         }
-        $output = array("data" => $data);
+        $output = ['data' => []];
+
+        foreach ($data as $waroeng => $menus) {
+            foreach ($menus as $menu => $dates) {
+                $row = [
+                    $waroeng,
+                    $menu,
+                ];
+                foreach ($tanggal as $date) {
+                    $date_str = $date->r_t_tanggal;
+                    if (isset($dates[$date_str])) {
+                        $row[] = $dates[$date_str]['qty'];
+                        $row[] = $dates[$date_str]['nominal'];
+                    } else {
+                        $row[] = 0;
+                        $row[] = 0;
+                    }
+                }
+                $output['data'][] = $row;
+            }
+        }
+
         return response()->json($output);
     }
     
-
-    /**
-     * Show the form for editing the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
     public function edit($id)
     {
         return view('dashboard::edit');
@@ -116,8 +161,5 @@ class RekapMenuController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function destroy($id)
-    {
-        //
-    }
+
 }

@@ -14,8 +14,11 @@ return new class extends Migration
     public function up()
     {
         Schema::create('m_level_jabatan', function (Blueprint $table) {
-            $table->id('m_level_jabatan_id');
+            $table->id('id');
+            $table->string('m_level_jabatan_id')->unique();
             $table->string('m_level_jabatan_nama');
+            $table->string('m_level_jabatan_status_sync', 20)->default('send');
+
             $table->bigInteger('m_level_jabatan_created_by');
             $table->bigInteger('m_level_jabatan_updated_by')->nullable();
             $table->bigInteger('m_level_jabatan_deleted_by')->nullable();

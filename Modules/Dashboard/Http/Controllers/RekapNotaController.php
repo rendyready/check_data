@@ -41,65 +41,69 @@ class RekapNotaController extends Controller
         return response()->json($data);
     }
 
-    public function create()
+    public function select_user(Request $request)
     {
-        return view('dashboard::create');
+        $user = DB::table('users')
+            ->select('users_id', 'name')
+            ->where('waroeng_id', $request->id_waroeng)
+            ->orderBy('users_id', 'asc')
+            ->get();
+        $data = array();
+        foreach ($user as $val) {
+            $data[$val->users_id] = [$val->name];
+        }
+        return response()->json($data);
     }
 
     public function show(Request $request)
     {
         $dates = explode('to' ,$request->tanggal);
+        $payment = DB::table('rekap_payment_transaksi')
+                ->join('m_payment_method', 'm_payment_method_id', 'r_p_t_m_payment_method_id')
+                ->get();
         $get = DB::table('rekap_transaksi')
                 ->join('users', 'users_id', 'r_t_created_by')
-                ->join('rekap_payment_transaksi', 'r_p_t_r_t_id', 'r_t_id')
-                ->join('m_payment_method', 'm_payment_method_id', 'r_p_t_m_payment_method_id')
                 ->join('m_transaksi_tipe', 'm_t_t_id', 'r_t_m_t_t_id')
-                // ->selectRaw('r_t_id, r_t_nota_code, r_t_tanggal, name, m_payment_method_name, m_payment_method_type, m_t_t_group, sum(r_t_nominal_total_bayar) as r_t_nominal_total_bayar, sum(r_t_nominal_pajak) as r_t_nominal_pajak, sum(r_t_nominal_sc) as r_t_nominal_sc, sum(r_t_nominal_diskon) r_t_nominal_diskon, sum(r_t_nominal_voucher) as r_t_nominal_voucher, sum(r_t_nominal_tarik_tunai) as r_t_nominal_tarik_tunai, sum(r_t_nominal_pembulatan) as r_t_nominal_pembulatan, sum(r_t_nominal) as r_t_nominal, sum(r_t_nominal_free_kembalian) as r_t_nominal_free_kembalian')
-                ->selectRaw('r_t_id, r_t_nota_code, r_t_tanggal, name, m_payment_method_name, m_payment_method_type, m_t_t_group, r_t_nominal_total_bayar, r_t_nominal_pajak, r_t_nominal_sc, r_t_nominal_diskon,  r_t_nominal_voucher, r_t_nominal_tarik_tunai, r_t_nominal_pembulatan, r_t_nominal, r_t_nominal_free_kembalian')
                 ->where('r_t_m_w_id', $request->waroeng)
                 ->where('r_t_created_by', $request->operator)
                 ->whereBetween('r_t_tanggal', $dates)
-                ->groupBy('r_t_nota_code', 'name', 'r_t_tanggal', 'm_payment_method_name', 'm_payment_method_type', 'm_t_t_group', 'r_t_id', 'r_t_nominal_total_bayar', 'r_t_nominal_pajak', 'r_t_nominal_sc', 'r_t_nominal_diskon', 'r_t_nominal_voucher', 'r_t_nominal_tarik_tunai', 'r_t_nominal_pembulatan', 'r_t_nominal', 'r_t_nominal_free_kembalian')
                 ->orderBy('r_t_tanggal', 'ASC')
                 ->orderBy('r_t_nota_code', 'ASC')
                 ->get();
-        // $refund = DB::table('rekap_refund')
-        //         ->get();
 
-        $data = array();
-        foreach ($get as $value) {
-            // foreach ($refund as $valrefund) {
-            $row = array();
-            $row[] = date('d-m-Y', strtotime($value->r_t_tanggal));
-            $row[] = $value->name;
-            $row[] = $value->r_t_nota_code;
-            $row[] = rupiah($value->r_t_nominal_pajak, 0);
-            $row[] = rupiah($value->r_t_nominal, 0);
-            $row[] = rupiah($value->r_t_nominal_sc, 0);
-            $row[] = rupiah($value->r_t_nominal_diskon, 0);
-            $row[] = rupiah($value->r_t_nominal_voucher, 0);
-            $row[] = rupiah($value->r_t_nominal_tarik_tunai, 0);
-            $row[] = rupiah($value->r_t_nominal_pembulatan, 0);
-            $row[] = rupiah($value->r_t_nominal_free_kembalian, 0);
-            // $row[] = rupiah($value->r_t_nominal_free_kembalian, 0);
-                
-                    // if($valrefund->r_r_nota_code == $value->r_t_nota_code){
-                    //     $row[] = rupiah($valrefund->r_r_nominal_refund_total, 0);
-                    // } else {
-                    //     $row[] = 0;
-                    // }
-                
-            $row[] = rupiah($value->r_t_nominal_total_bayar, 0);
-            $row[] = ($value->m_t_t_group == 'ojol') ? $value->m_t_t_group : $value->m_payment_method_type;
-            $row[] = $value->m_payment_method_name;
-            $row[] ='<a id="button_detail" class="btn btn-sm button_detail btn-info" value="'.$value->r_t_id.'" title="Detail Nota"><i class="fa-sharp fa-solid fa-file"></i></a>';
-            $data[] = $row;
-                // }
-        }
+            $data = array();
+            foreach ($get as $key => $value) {
+                $row = array();
+                $row[] = date('d-m-Y', strtotime($value->r_t_tanggal));
+                $row[] = $value->name;
+                $row[] = $value->r_t_nota_code;
+                $row[] = rupiah($value->r_t_nominal_pajak, 0);
+                $row[] = rupiah($value->r_t_nominal, 0);
+                $row[] = rupiah($value->r_t_nominal_sc, 0);
+                $row[] = rupiah($value->r_t_nominal_diskon, 0);
+                $row[] = rupiah($value->r_t_nominal_voucher, 0);
+                $row[] = rupiah($value->r_t_nominal_tarik_tunai, 0);
+                $row[] = rupiah($value->r_t_nominal_pembulatan, 0);
+                $row[] = rupiah($value->r_t_nominal_free_kembalian, 0);   
+                $row[] = rupiah($value->r_t_nominal_total_bayar, 0);
+                if($value->r_t_status == "unpaid"){
+                    $row[] = 'Lostbill';
+                    $row[] = 'Lostbill';
+                } else {
+                foreach ($payment as $key => $valpay) {
+                    if($valpay->r_p_t_r_t_id == $value->r_t_id){
+                        $row[] = ($value->m_t_t_group == 'ojol') ? $value->m_t_t_group : $valpay->m_payment_method_type;
+                        $row[] = $valpay->m_payment_method_name;
+                    }
+                }
+            }
+                $row[] ='<a id="button_detail" class="btn btn-sm button_detail btn-info" value="'.$value->r_t_id.'" title="Detail Nota"><i class="fa-sharp fa-solid fa-file"></i></a>';
+                $data[] = $row;
+            }
+
         $output = array("data" => $data);
         return response()->json($output);
     }
-
 
     public function detail($id)
     {

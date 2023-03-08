@@ -62,80 +62,125 @@ class RekapNotaHarianController extends Controller
         return response()->json($data);
     }
 
-    public function create()
+    public function select_user(Request $request)
     {
-        return view('dashboard::create');
+
+        $user = DB::table('users')
+            ->select('users_id', 'name')
+            ->where('waroeng_id', $request->id_waroeng)
+            ->orderBy('users_id', 'asc')
+            ->get();
+        $data = array();
+        foreach ($user as $val) {
+            $data[$val->users_id] = [$val->name];
+        }
+        return response()->json($data);
     }
 
     public function show(Request $request)
     {
-        // $key = new \stdClass();
         $dates = explode('to' ,$request->tanggal);
+        $refund = DB::table('rekap_refund')->get();
         $methodPay = DB::table('m_payment_method')
                 ->orderBy('m_payment_method_id', 'ASC')
                 ->get();
-        $trans = DB::table('rekap_payment_transaksi')
+        if($request->show_operator == 'ya'){
+            if($request->area == '0'){
+                $trans = DB::table('rekap_payment_transaksi')
+                ->join('rekap_transaksi', 'r_t_id', 'r_p_t_r_t_id')
+                ->where('r_t_created_by', $request->operator);
+            } else {
+                $trans = DB::table('rekap_payment_transaksi')
+                        ->join('rekap_transaksi', 'r_t_id', 'r_p_t_r_t_id')
+                        ->where('r_t_m_area_id', $request->area)
+                        ->where('r_t_m_w_id', $request->waroeng)
+                        ->where('r_t_created_by', $request->operator);
+            }
+        } else {
+            if($request->area == '0'){
+                $trans = DB::table('rekap_payment_transaksi')
                 ->join('rekap_transaksi', 'r_t_id', 'r_p_t_r_t_id');
-                // ->join('rekap_refund', 'r_r_r_t_id', 'r_t_id');
-                // if($request->operator != 'all'){
-                //         $trans->where('r_t_created_by', $request->operator);
-                //     } 
-                    if($request->area != 0) {
-                        $trans->where('r_t_m_area_id', $request->area);
-                        if($request->waroeng != 'all') {
-                            $trans->where('r_t_m_w_id', $request->waroeng);
-                        }
-                    }
+            } else {
+                $trans = DB::table('rekap_payment_transaksi')
+                        ->join('rekap_transaksi', 'r_t_id', 'r_p_t_r_t_id')
+                        ->where('r_t_m_area_id', $request->area);
+                            if($request->waroeng != 'all') {
+                                $trans->where('r_t_m_w_id', $request->waroeng);
+                            }
+            }
+        }
+        
         $trans1 = $trans->whereBetween('r_t_tanggal', $dates)
                 ->join('users', 'users_id', 'r_t_created_by')
-                // ->join('rekap_refund', 'r_r_r_t_id', 'r_t_id')
                 ->selectRaw('r_t_tanggal, SUM(r_t_nominal) as total, name')
                 ->groupBy('r_t_tanggal', 'name')
                 ->orderBy('r_t_tanggal', 'ASC')
                 ->get();  
 
         $trans2 = $trans->whereBetween('r_t_tanggal', $dates)
-                ->selectRaw('r_p_t_m_payment_method_id, r_t_tanggal, SUM(r_t_nominal) as nominal')
-                        ->groupBy('r_t_tanggal', 'r_p_t_m_payment_method_id')
+                ->selectRaw('r_p_t_m_payment_method_id, r_t_tanggal, SUM(r_t_nominal) as nominal, r_t_nota_code')
+                        ->groupBy('r_t_tanggal', 'r_p_t_m_payment_method_id', 'r_t_nota_code')
                         ->orderBy('r_p_t_m_payment_method_id', 'ASC')
                         ->get();
 
         $data =[];
+        
         if($request->show_operator == 'ya'){
-        $i =1;
-        foreach ($trans1 as $key => $valTrans){
-            $data[$i]['tanggal'] = $valTrans->r_t_tanggal;
-            $data[$i]['operator'] = $valTrans->name;
-            $data[$i]['penjualan'] = rupiah($valTrans->total);
-            foreach ($methodPay as $key => $valPay) {
-                $data[$i][$valPay->m_payment_method_name] = 0;
-                foreach ($trans2 as $key => $valTrans2){
-                    if ($valTrans->r_t_tanggal == $valTrans2->r_t_tanggal && $valPay->m_payment_method_id == $valTrans2->r_p_t_m_payment_method_id) {
-                        $data[$i][$valPay->m_payment_method_name] = rupiah($valTrans2->nominal);
-                        
+            $i =1;
+            foreach ($trans1 as $key => $valTrans){
+                $data[$i]['tanggal'] = $valTrans->r_t_tanggal;
+                $data[$i]['operator'] = $valTrans->name;
+                foreach ($refund as $key => $valRefund){
+                    if ($valRefund->r_r_tanggal == $valTrans->r_t_tanggal) {
+                         $data[$i]['penjualan'] = rupiah($valTrans->total - $valRefund->r_r_nominal_refund, 0);
+                    } else {
+                        $data[$i]['penjualan'] = rupiah($valTrans->total, 0);
+                    }
+                foreach ($methodPay as $key => $valPay) {
+                    $data[$i][$valPay->m_payment_method_name] = 0;
+                    foreach ($trans2 as $key => $valTrans2){
+                        if ($valRefund->r_r_nota_code == $valTrans2->r_t_nota_code && $valRefund->r_r_tanggal == $valTrans2->r_t_tanggal) {
+                            if ($valTrans->r_t_tanggal == $valTrans2->r_t_tanggal && $valPay->m_payment_method_id == $valTrans2->r_p_t_m_payment_method_id) {
+                                $data[$i][$valPay->m_payment_method_name] = rupiah($valTrans2->nominal - $valRefund->r_r_nominal_refund, 0);
+                            } 
+                        } else {
+                            if ($valTrans->r_t_tanggal == $valTrans2->r_t_tanggal && $valPay->m_payment_method_id == $valTrans2->r_p_t_m_payment_method_id) {
+                                $data[$i][$valPay->m_payment_method_name] = rupiah($valTrans2->nominal, 0);
+                            } 
+                        }
+                    }
                     } 
-                } 
+                }
+                $i++; 
             }
-            $i++; 
-        }
-        $length = count($data);
-        $convert = array();
-        for ($i=1; $i <= $length ; $i++) { 
-            array_push($convert,array_values($data[$i]));
-        }
+            $length = count($data);
+            $convert = array();
+            for ($i=1; $i <= $length ; $i++) { 
+                array_push($convert,array_values($data[$i]));
+            }
     } else {
         $i =1;
         foreach ($trans1 as $key => $valTrans){
-            // $hasil = $valTrans->total - $valTrans->r_nominal;
             $data[$i]['tanggal'] = $valTrans->r_t_tanggal;
-            $data[$i]['penjualan'] = rupiah($valTrans->total);
+            foreach ($refund as $key => $valRefund){
+                if ($valRefund->r_r_tanggal == $valTrans->r_t_tanggal) {
+                     $data[$i]['penjualan'] = rupiah($valTrans->total - $valRefund->r_r_nominal_refund, 0);
+                } else {
+                    $data[$i]['penjualan'] = rupiah($valTrans->total, 0);
+                }
             foreach ($methodPay as $key => $valPay) {
                 $data[$i][$valPay->m_payment_method_name] = 0;
                 foreach ($trans2 as $key => $valTrans2){
-                    if ($valTrans->r_t_tanggal == $valTrans2->r_t_tanggal && $valPay->m_payment_method_id == $valTrans2->r_p_t_m_payment_method_id) {
-                        $data[$i][$valPay->m_payment_method_name] = rupiah($valTrans2->nominal);
-                        
-                    } 
+                    if ($valRefund->r_r_nota_code == $valTrans2->r_t_nota_code) {
+                        if ($valTrans->r_t_tanggal == $valTrans2->r_t_tanggal && $valPay->m_payment_method_id == $valTrans2->r_p_t_m_payment_method_id) {
+                            $data[$i][$valPay->m_payment_method_name] = rupiah($valTrans2->nominal - $valRefund->r_r_nominal_refund, 0);
+                        } 
+                    } else {
+                        if ($valTrans->r_t_tanggal == $valTrans2->r_t_tanggal && $valPay->m_payment_method_id == $valTrans2->r_p_t_m_payment_method_id) {
+                            $data[$i][$valPay->m_payment_method_name] = rupiah($valTrans2->nominal, 0);
+                        } 
+                    }
+                }
                 } 
             }
             $i++; 

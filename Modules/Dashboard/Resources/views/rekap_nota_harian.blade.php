@@ -129,12 +129,18 @@ $(document).ready(function() {
     $("#tampil2").hide();
     $("#operator").hide();
 
-    $('#operator_select').on('change', function() {
+    $('#operator_select').on('select2:select', function() {
         var cek = $(this).val();
-        if(cek == 'ya') {
-            $("#operator").show();
+        var waroeng  = $('#filter_waroeng').val();
+        if(waroeng == true){
+            if(cek == 'ya') {
+                $("#operator").show();
+            } else {
+                $("#operator").hide();
+            }
         } else {
-            $("#operator").remove();
+            alert('Silahkan pilih waroeng terlebih dahulu');
+            $("#operator_select").val("tidak").trigger('change');
         }
     });
 
@@ -250,6 +256,33 @@ $(document).ready(function() {
             });
         }else{
             $("#filter_waroeng").empty();
+        }      
+    });
+
+    $('#filter_waroeng').change(function(){
+        var id_waroeng = $(this).val();    
+        if(id_waroeng){
+            $.ajax({
+            type:"GET",
+            url: '{{route("harian.select_user")}}',
+            dataType: 'JSON',
+            data : {
+              id_waroeng: id_waroeng,
+            },
+            success:function(res){               
+                if(res){
+                    $("#filter_operator").empty();
+                    $("#filter_operator").append('<option></option>');
+                    $.each(res,function(key,value){
+                        $("#filter_operator").append('<option value="'+key+'">'+value+'</option>');
+                    });
+                }else{
+                $("#filter_operator").empty();
+                }
+            }
+            });
+        }else{
+            $("#filter_operator").empty();
         }      
     });
 

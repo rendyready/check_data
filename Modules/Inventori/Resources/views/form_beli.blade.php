@@ -317,50 +317,45 @@
           var $tblrow = $(this);
           $tblrow.find(".qty, .harga, .persendisc, .rupiahdisc").on('input', function () {
               var qty = $tblrow.find("[name='rekap_beli_detail_qty[]']").val();
-              var price = $tblrow.find("[name='rekap_beli_detail_harga[]']").val();
-              console.log(price.replace(/\./g, ''));
+              var price = $tblrow.find("[name='rekap_beli_detail_harga[]']").val().replace(/\./g, '').replace(/\,/g, '.');
               var persendisc = $tblrow.find("[name='rekap_beli_detail_disc[]']").val();
               var nilaipersendisc = 100-persendisc;
-              var rupiahdisc = $tblrow.find("[name='rekap_beli_detail_discrp[]']").val();
+              var rupiahdisc = $tblrow.find("[name='rekap_beli_detail_discrp[]']").val().replace(/\./g, '').replace(/\,/g, '.');
               if (rupiahdisc==null) {
                 rupiahdisc = 0;
               }
-              var subTotal = parseFloat(qty) * parseFloat(price.replace(/\./g, '')) * (nilaipersendisc/100) - rupiahdisc;
-          
+              var subTotal = parseFloat(qty) * parseFloat(price) * (nilaipersendisc/100) - rupiahdisc;
               if (!isNaN(subTotal)) { 
-
-                  $tblrow.find('.subtot').val(subTotal.toFixed(2));
+                  $tblrow.find('.subtot').val(subTotal.toLocaleString("id"));
                   var grandTotal = 0;
-
                   $(".subtot").each(function () {
-                      var stval = parseFloat($(this).val());
+                      var stval = parseFloat($(this).val().replace(/\./g, '').replace(/\,/g, '.'));
                       grandTotal += isNaN(stval) ? 0 : stval;
                   });
-
-                  $('.grdtot').val(grandTotal.toFixed(2)); 
+                  $('.grdtot').val(grandTotal.toLocaleString('id')); 
               }
           });
       });
        var grdtot = 0;
           $(".subtot").each(function () {
-                          var stval = parseFloat($(this).val());
+                          var stval = parseFloat($(this).val().replace(/\./g, '').replace(/\,/g, '.'));
                           grdtot += isNaN(stval) ? 0 : stval;
           });
           var disc_tot = $("[name='rekap_beli_disc']").val();
-          var disctotrp = $("[name='rekap_beli_disc_rp']").val().replace(/\./g, '');
+          var disctotrp = $("[name='rekap_beli_disc_rp']").val().replace(/\./g, '').replace(/\,/g, '.');
           var ppn = $("[name='rekap_beli_ppn']").val();
-          var bayar = $("[name='rekap_beli_terbayar']").val().replace(/\./g, '');
-          var ongkir = $("[name='rekap_beli_ongkir']").val().replace(/\./g, '');
+          var bayar = $("[name='rekap_beli_terbayar']").val().replace(/\./g, '').replace(/\,/g, '.');
+          var ongkir = $("[name='rekap_beli_ongkir']").val().replace(/\./g, '').replace(/\,/g, '.');
          if (ongkir==="") {
             var ongkir = 0;
          }
           var grandtotal = grdtot*parseFloat((100-disc_tot)/100)-disctotrp;
           var ppnrp = parseFloat(ppn/100)*grandtotal;
           var rekap_beli_tot_nom = parseFloat(grandtotal)+ parseFloat(ppnrp)+ parseFloat(ongkir);
-          $('.ppnrp').val(ppnrp.toFixed(2));
-          $('.rekap_beli_tot_nom').val(rekap_beli_tot_nom.toFixed(2));
-          $('.sisa').val((rekap_beli_tot_nom-bayar).toFixed(2));
-          $('#total_sum_value').html(': Rp '+rekap_beli_tot_nom.toFixed(2));
+          $('.ppnrp').val(ppnrp);
+          $('.rekap_beli_tot_nom').val(rekap_beli_tot_nom.toLocaleString('id'));
+          $('.sisa').val((rekap_beli_tot_nom-bayar).toLocaleString('id'));
+          $('#total_sum_value').html(': Rp '+rekap_beli_tot_nom.toLocaleString('id'));
     });
     $('#rekap_beli_supplier_code').on('change',function() {
       var id = $(this).val();

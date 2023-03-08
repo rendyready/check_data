@@ -22,6 +22,7 @@ return new class extends Migration
             $table->unsignedBigInteger('tmp_transaction_m_w_id')->nullable();
             $table->string('tmp_transaction_note_number', 18)->nullable()->comment('Note Number');
             $table->string('tmp_transaction_customer_name', 32)->nullable()->comment('Name Customer or bigboss');
+            $table->string('tmp_transaction_member_id', 50)->nullable();
             $table->time('tmp_transaction_order_time')->nullable()->comment('Order Time');
             $table->jsonb('tmp_transaction_table_list')->nullable()->comment('List Table in Here');
             $table->integer('tmp_transaction_status')->default(0)->comment('0 new transaction, 1 not yet paid, 2 get paid, 3 cancel transaction');
