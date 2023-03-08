@@ -738,14 +738,20 @@ export default class Helpers {
     // Init Select2 (with .js-select2 class)
     jQuery('.js-select2:not(.js-select2-enabled)').each((index, element) => {
       let el = jQuery(element);
-
+  
       // Add .js-select2-enabled class to tag it as activated and init it
       el.addClass('js-select2-enabled').select2({
         placeholder: el.data('placeholder') || false,
         dropdownParent: document.querySelector(el.data('container') || '#page-container'),
+        dropdownAutoWidth: true, // auto adjust dropdown width to fit the content
+        // Set focus on search input when dropdown opens
+        dropdownOpen: () => {
+          $('.select2-search__field').focus();
+        }
       });
     });
   }
+  
 
   /*
    * Bootstrap Notify, for more examples you can check out http://bootstrap-growl.remabledesigns.com/

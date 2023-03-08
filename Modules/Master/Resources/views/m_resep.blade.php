@@ -218,6 +218,18 @@
         ajax: "/master/m_resep/detail/" + id,
         destroy: true,
         order : [[1, 'asc']],
+        "footerCallback": function( row, data, start, end, display ) {
+      var api = this.api();
+      var numRows = api.rows().count();
+
+      if (numRows > 0) {
+        // Jarak antara data terakhir dengan footer
+        var spacerRow = '<tr><td colspan="' + api.columns().count() + '" style="height: 50px;"></td></tr>';
+
+        // Tambahkan baris spacer ke footer
+        $(api.column(0).footer()).closest('tfoot').append(spacerRow);
+      }
+    }
       });
 
       var url = "{{route('list_detail.m_resep')}}";

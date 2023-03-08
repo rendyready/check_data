@@ -529,7 +529,7 @@
           if (settings.editButton) {
             $tr.find('button.tabledit-edit-button').addClass('active');
             $tr.find('button.tabledit-save-button').show();
-            $tr.find('.js-select2').select2({dropdownParent: $tr});
+            $tr.find('.js-select2').select2({dropdownParent: $tr,dropdownAutoWidth: true});
           }
         },
         add: function(td) {
@@ -557,7 +557,7 @@
             $tr.find('button.tabledit-delete-button').hide();
             $tr.find('button.tabledit-save-button').show();
             $tr.find('button.tabledit-cancel-button').show();
-            $tr.find('.js-select2').select2({dropdownParent: $tr});
+            $tr.find('.js-select2').select2({dropdownParent: $tr,dropdownAutoWidth: true});
           }
         }
       };

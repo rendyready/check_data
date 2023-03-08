@@ -266,11 +266,21 @@
         }
       });
     Codebase.helpersOnLoad(['jq-select2']);
-	  var no =1;
-    var  barang = new Array();
+    var datas;
+    $('#rekap_beli_gudang_code').on('change',function () {
+        var asal = $(this).val()
+        $.get("/inventori/stok/"+asal, function(data){
+            datas = data;
+            $.each(data, function(key, value) {
+              $('#rekap_beli_detail_m_produk_id1')
+              .append($('<option>', { value : key })
+              .text(value));
+            });
+        });  
+    });
+	var no =1;
     var supplier = new Array();
     $.get('/inventori/beli/list', function(response){
-      barang = response['barang'];
       supplier = response['supplier'];
 	  $('.tambah').on('click',function(){
 	    no++;
@@ -283,21 +293,12 @@
                         '<td><input type="text" class="form-control number form-control-sm rupiahdisc" name="rekap_beli_detail_discrp[]" id="rekap_beli_detail_discrp"></td>'+
                         '<td><input type="text" class="form-control number form-control-sm subtot" name="rekap_beli_detail_subtot[]" id="rekap_beli_detail_subtot" readonly></td>'+
                         '<td><button type="button" id="'+no+'" class="btn btn-danger btn_remove"><i class="fa fa-trash"></i></button></td></tr>');
-
-    });
         
-    $('#form').on('click select2:open','.tambah', function(){
-          Codebase.helpersOnLoad(['jq-select2']);
-              $.each(barang, function(key, value) {
-              $('#rekap_beli_detail_m_produk_id'+no)
+        $.each(datas, function(key, value) {
+            $('#rekap_beli_detail_m_produk_id'+no)
               .append($('<option>', { value : key })
               .text(value));
-              });  
-        });
-   $.each(barang, function(key, value) {
-     $('.nama_barang')
-          .append($('<option>', { value : key })
-          .text(value));
+            });
     });
     $.each(supplier, function(key, value) {
      $('#rekap_beli_supplier_code')

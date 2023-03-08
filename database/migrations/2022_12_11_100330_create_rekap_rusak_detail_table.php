@@ -14,10 +14,10 @@ return new class extends Migration
     public function up()
     {
         Schema::create('rekap_rusak_detail', function (Blueprint $table) {
-            $table->id('rekap_rusak_id');
+            $table->id('id');
+            $table->string('rekap_rusak_detail_id');
             $table->string('rekap_rusak_detail_rekap_rusak_code');
-            $table->bigInteger('rekap_rusak_detail_m_produk_id');
-            $table->bigInteger('rekap_rusak_detail_gudang_id');
+            $table->string('rekap_rusak_detail_gudang_code');
             $table->string('rekap_rusak_detail_m_produk_code');
             $table->string('rekap_rusak_detail_m_produk_nama');
             $table->decimal('rekap_rusak_detail_qty',6,2);
