@@ -379,6 +379,21 @@
                       <span class="nav-main-link-name">Rekap Menu</span>
                     </a>
                   </li>
+                  <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('dashboard/rekap_refund') ? ' active' : '' }}" href="{{route('rekap_refund.index')}}">
+                      <span class="nav-main-link-name">Rekap Refund</span>
+                    </a>
+                  </li>
+                  <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('dashboard/rekap_lostbill') ? ' active' : '' }}" href="{{route('rekap_lostbill.index')}}">
+                      <span class="nav-main-link-name">Rekap Lostbill</span>
+                    </a>
+                  </li>
+                  <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('dashboard/rekap_garansi') ? ' active' : '' }}" href="{{route('rekap_garansi.index')}}">
+                      <span class="nav-main-link-name">Rekap Garansi</span>
+                    </a>
+                  </li>
                 </ul>
             </li>     
 

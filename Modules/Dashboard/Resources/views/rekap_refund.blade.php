@@ -6,7 +6,7 @@
         <div class="block block-themed h-100 mb-0">
           <div class="block-header bg-pulse">
             <h3 class="block-title">
-              Rekap Nota Penjualan
+              Rekap Refund
             </h3>
               </div>
                 <div class="block-content text-muted">
@@ -60,6 +60,9 @@
                                         <select id="filter_operator" style="width: 100%;"
                                         class="cari f-wrg js-select2 form-control" data-placeholder="Pilih Operator" name="r_t_created_by">
                                         <option></option>
+                                        @foreach ($data->user as $user)
+                                        <option value="{{ $user->id }}"> {{ $user->name }} </option>
+                                        @endforeach
                                     </select>
                                     </div>
                                 </div>
@@ -75,21 +78,37 @@
             <table id="tampil_rekap" class="table table-sm table-bordered table-striped table-vcenter nowrap table-hover js-dataTable-full">
               <thead>
                 <tr>
-                  <th>Tanggal</th>
-                  <th>Operator</th>
+                  <th colspan="2" class="text-center">Tanggal</th>
+                  <th colspan="2" class="text-center">Operator</th>
+                  <th colspan="2" class="text-center"></th>
+                  <th colspan="2" class="text-center">Sub Total</th>
+                  <th colspan="2" class="text-center">Tax</th>
+                  <th colspan="2" class="text-center">Service Charge</th>
+                  <th colspan="2" class="text-center">Pembulatan</th>
+                  <th colspan="2" class="text-center">Free Kembalian</th>
+                  <th colspan="2" class="text-center">Total</th>
+                </tr>
+                <tr>
+                  <th rowspan="1">Nota Asli</th>
+                  <th rowspan="1">Nota Refund</th>
+                  <th rowspan="1">Nota Asli</th>
+                  <th rowspan="1">Nota Refund</th>
+                  <th>Big Bos</th>
                   <th>No. Nota</th>
-                  <th>Tax</th>
-                  <th>Total</th>
-                  <th>SC</th>
-                  <th>Diskon</th>
-                  <th>Voucher</th>
-                  <th>Tarik Tunai</th>
-                  <th>Pembulatan</th>
-                  <th>Free Kembalian</th>
-                  <th>Total Bayar</th>
-                  <th>Metode</th>
-                  <th>Jenis Payment</th>
-                  <th></th>
+                  <th rowspan="1">Nota Asli</th>
+                  <th rowspan="1">Nota Refund</th>
+                  <th rowspan="1">Nota Asli</th>
+                  <th rowspan="1">Nota Refund</th>
+                  <th rowspan="1">Nota Asli</th>
+                  <th rowspan="1">Nota Refund</th>
+                  <th rowspan="1">Nota Asli</th>
+                  <th rowspan="1">Nota Refund</th>
+                  <th rowspan="1">Nota Asli</th>
+                  <th rowspan="1">Nota Refund</th>
+                  <th rowspan="1">Nota Asli</th>
+                  <th rowspan="1">Nota Refund</th>
+                  <th rowspan="1">Selisih</th>
+                  <th rowspan="1"></th>
                 </tr>
               </thead>
               <tbody id="show_data">
@@ -102,8 +121,8 @@
     </div>
 </div>
 
- <!-- Select2 in a modal -->
- <div class="modal" id="detail_nota" tabindex="-1" role="dialog" aria-labelledby="form-rekening" aria-hidden="true">
+<!-- Select2 in a modal -->
+<div class="modal" id="detail_nota" tabindex="-1" role="dialog" aria-labelledby="form-rekening" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
           <div class="block-content">
@@ -111,7 +130,7 @@
               <div class="mb-4">
                     <div class="block block-rounded mb-1">
                       <div class="block-header block-header-default block-header-rtl bg-pulse">
-                        <h3 class="block-title text-light"><small class="fw-semibold" id="no_nota"></small><br><small id="ket_trans">Dine-In</small></h3>
+                        <h3 class="block-title text-light"><small class="fw-semibold" id="no_nota"></small><br><small id="ket_trans"></small></h3>
                         <div class="alert alert-warning py-2 mb-0">
                           <h3 class="block-title text-black"><i class="fa fa-calendar opacity-50 ms-1"></i> <small id="tgl_nota"></small>
                             <br><small class="fw-semibold" id="nama_kons"></small></h3>
@@ -120,7 +139,7 @@
                       <div class="block-content mb-4" style="background-color: rgba(224, 224, 224, 0.5)">
                         <table class="table table-border" style="font-size: 13px;">
                           @foreach ($data->transaksi_rekap as $rekap)
-                          <thead class="sub_nota" id="sub_nota{{ $rekap->r_t_id }}">
+                          <thead class="sub_nota" id="sub_nota{{ $rekap->r_r_id }}">
                           </thead> 
                           @endforeach
                             <tbody>
@@ -138,21 +157,6 @@
                             <tr style="background-color: white;" class="text-end fw-semibold">
                               <td>Service Charge</td>
                               <td id="sc">
-                              </td>
-                            </tr>
-                            <tr style="background-color: white;" class="text-end fw-semibold">
-                              <td>Diskon</td>
-                              <td id="diskon">
-                              </td>
-                            </tr>
-                            <tr style="background-color: white;" class="text-end fw-semibold">
-                              <td>Voucher</td>
-                              <td id="voucher">
-                              </td>
-                            </tr>
-                            <tr style="background-color: white;" class="text-end fw-semibold">
-                              <td>Tarik Tunai</td>
-                              <td id="tarik">
                               </td>
                             </tr>
                             <tr style="background-color: white;" class="text-end fw-semibold">
@@ -209,7 +213,7 @@ $(document).ready(function() {
         lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
         pageLength: 10,
         ajax: {
-            url: '{{route("rekap.show")}}',
+            url: '{{route("rekap_refund.show")}}',
             data : {
                 waroeng: waroeng,
                 tanggal: tanggal,
@@ -228,7 +232,7 @@ $(document).ready(function() {
         if(id_area){
             $.ajax({
             type:"GET",
-            url: '{{route("rekap.select_waroeng")}}',
+            url: '{{route("rekap_refund.select_waroeng")}}',
             dataType: 'JSON',
             destroy: true,    
             data : {
@@ -251,72 +255,45 @@ $(document).ready(function() {
         }      
     });
 
-    $('#filter_waroeng').change(function(){
-        var id_waroeng = $(this).val();    
-        if(id_waroeng){
-            $.ajax({
-            type:"GET",
-            url: '{{route("rekap.select_user")}}',
-            dataType: 'JSON',
-            data : {
-              id_waroeng: id_waroeng,
-            },
-            success:function(res){               
-                if(res){
-                    $("#filter_operator").empty();
-                    $("#filter_operator").append('<option></option>');
-                    $.each(res,function(key,value){
-                        $("#filter_operator").append('<option value="'+key+'">'+value+'</option>');
-                    });
-                }else{
-                $("#filter_operator").empty();
-                }
-            }
-            });
-        }else{
-            $("#filter_operator").empty();
-        }      
-    });
-
     $('#filter_tanggal').flatpickr({
             mode: "range",
             dateFormat: 'Y-m-d',
-            
+            // noCalendar: false,
+            // allowInput: true,            
     });
 
-            $("#tampil_rekap").on('click','#button_detail', function() {
+    $("#tampil_rekap").on('click','#button_detail', function() {
                 var id = $(this).attr('value');
+                // console.log(id);
+                // $("#myModalLabel").html('Detail Nota');
                 $.ajax({
-                    url: "/dashboard/rekap/detail/"+id,
+                    url: "/dashboard/rekap_refund/detail/"+id,
                     type: "GET",
                     dataType: 'json',
                     destroy: true,
                     success: function(data) {
                       // console.log(data.detail_nota.r_t_detail_id);
-                        $('#no_nota').html(data.transaksi_rekap.r_t_nota_code);
-                        $('#tgl_nota').html(data.transaksi_rekap.r_t_tanggal);
+                        $('#no_nota').html(data.transaksi_rekap.r_r_nota_code);
+                        $('#tgl_nota').html(data.transaksi_rekap.r_r_tanggal);
                         $('#nama_kons').html(data.transaksi_rekap.name);
-                        $('#total').html(formatNumber(Number(data.transaksi_rekap.r_t_nominal)));
-                        $('#pajak').html(formatNumber(Number(data.transaksi_rekap.r_t_nominal_pajak)));
-                        $('#bayar').html(formatNumber(Number(data.transaksi_rekap.r_t_nominal_total_bayar)));
-                        $('#pembayaran').html(data.transaksi_rekap.m_payment_method_name);
-                        $('#sc').html(formatNumber(Number(data.transaksi_rekap.r_t_nominal_sc)));
-                        $('#diskon').html(formatNumber(Number(data.transaksi_rekap.r_t_nominal_diskon)));
-                        $('#voucher').html(formatNumber(Number(data.transaksi_rekap.r_t_nominal_voucher)));
-                        $('#tarik').html(formatNumber(Number(data.transaksi_rekap.r_t_nominal_tarik_tunai)));
-                        $('#pembulatan').html(formatNumber(Number(data.transaksi_rekap.r_t_nominal_pembulatan)));
-                        $('#free').html(formatNumber(Number(data.transaksi_rekap.r_t_nominal_free_kembalian)));
+                        $('#total').html(formatNumber(Number(data.transaksi_rekap.r_r_nominal_refund)));
+                        $('#pajak').html(formatNumber(Number(data.transaksi_rekap.r_r_nominal_refund_pajak)));
+                        $('#bayar').html(formatNumber(Number(data.transaksi_rekap.r_r_nominal_refund_total)));
+                        // $('#pembayaran').html(data.transaksi_rekap.m_payment_method_name);
+                        $('#sc').html(formatNumber(Number(data.transaksi_rekap.r_r_nominal_refund_sc)));
+                        $('#pembulatan').html(formatNumber(Number(data.transaksi_rekap.r_r_nominal_pembulatan_refund)));
+                        $('#free').html(formatNumber(Number(data.transaksi_rekap.r_r_nominal_free_kembalian_refund)));
                              
                     $('.sub_sub_nota').remove();
                     $.each(data.detail_nota, function (key, item) {
-                        console.log(item.r_t_detail_m_produk_nama);
+                        console.log(item.r_r_detail_m_produk_nama);
                         $('#sub_nota'+id).append(
                                 '<tr class="sub_sub_nota" style="background-color: white;">'+
                                   '<td>'+
-                                    '<small class="fw-semibold" style="font-size: 15px;" id="produk">'+ item.r_t_detail_m_produk_nama +'</small> <br>'+
-                                    '<small id="qty">'+ item.r_t_detail_qty +'</small> x <small id="price">'+ formatNumber(Number(item.r_t_detail_price)) +'</small>'+
+                                    '<small class="fw-semibold" style="font-size: 15px;" id="produk">'+ item.r_r_detail_m_produk_nama +'</small> <br>'+
+                                    '<small id="qty">'+ item.r_r_detail_qty +'</small> x <small id="price">'+ formatNumber(Number(item.r_r_detail_price)) +'</small>'+
                                   '</td>'+
-                                  '<td class="text-end fw-semibold" id+="sub_total">'+ formatNumber(Number(item.r_t_detail_nominal)) + ''+
+                                  '<td class="text-end fw-semibold" id+="sub_total">'+ formatNumber(Number(item.r_r_detail_nominal)) + ''+
                                   '</td>'+
                                 '</tr>'
                           );

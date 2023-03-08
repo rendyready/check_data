@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Modules\Dashboard\Http\Controllers\RefundController;
+use Modules\Dashboard\Http\Controllers\GaransiController;
+use Modules\Dashboard\Http\Controllers\LostBillController;
 use Modules\Dashboard\Http\Controllers\RekapMenuController;
 use Modules\Dashboard\Http\Controllers\RekapNotaController;
 use Modules\Dashboard\Http\Controllers\DetailNotaController;
@@ -30,6 +33,7 @@ Route::prefix('dashboard')->middleware('auth', 'web')
             Route::get('detail', 'index')->name('detail.index');
             Route::get('detail/show', 'show')->name('detail.show');
             Route::get('detail/select_waroeng', 'select_waroeng')->name('detail.select_waroeng');
+            Route::get('detail/select_user', 'select_user')->name('detail.select_user');
         });
 
         Route::controller(RekapNotaController::class)->group(function () {
@@ -37,19 +41,46 @@ Route::prefix('dashboard')->middleware('auth', 'web')
             Route::get('rekap/show', 'show')->name('rekap.show');
             Route::get('rekap/select_waroeng', 'select_waroeng')->name('rekap.select_waroeng');
             Route::get('rekap/detail/{id}', 'detail')->name('rekap.detail');
-
+            Route::get('rekap/select_user', 'select_user')->name('rekap.select_user');
         });
 
         Route::controller(RekapNotaHarianController::class)->group(function () {
             Route::get('harian', 'index')->name('harian.index');
             Route::get('harian/show', 'show')->name('harian.show');
             Route::get('harian/select_waroeng', 'select_waroeng')->name('harian.select_waroeng');
+            Route::get('harian/select_operator', 'select_operator')->name('harian.select_operator');
+            Route::get('harian/select_user', 'select_user')->name('harian.select_user');
         });
 
         Route::controller(RekapMenuController::class)->group(function () {
             Route::get('rekap_menu', 'index')->name('rekap_menu.index');
             Route::get('rekap_menu/show', 'show')->name('rekap_menu.show');
             Route::get('rekap_menu/select_waroeng', 'select_waroeng')->name('rekap_menu.select_waroeng');
+            Route::get('rekap_menu/select_tanggal', 'select_tanggal')->name('rekap_menu.select_tanggal');
+            Route::get('rekap_menu/tanggal_rekap', 'tanggal_rekap')->name('rekap_menu.tanggal_rekap');
+            Route::post('rekap_menu/delete_tgl', 'delete_tgl')->name('rekap_menu.delete_tgl');
+            Route::post('rekap_menu/simpan_tgl', 'simpan_tgl')->name('rekap_menu.simpan_tgl');
+
+        });
+        
+        Route::controller(RefundController::class)->group(function () {
+            Route::get('rekap_refund', 'index')->name('rekap_refund.index');
+            Route::get('rekap_refund/show', 'show')->name('rekap_refund.show');
+            Route::get('rekap_refund/select_waroeng', 'select_waroeng')->name('rekap_refund.select_waroeng');
+            Route::get('rekap_refund/detail/{id}', 'detail')->name('rekap_refund.detail');
+        });
+
+        Route::controller(LostBillController::class)->group(function () {
+            Route::get('rekap_lostbill', 'index')->name('rekap_lostbill.index');
+            Route::get('rekap_lostbill/show', 'show')->name('rekap_lostbill.show');
+            Route::get('rekap_lostbill/select_waroeng', 'select_waroeng')->name('rekap_lostbill.select_waroeng');
+            Route::get('rekap_lostbill/detail/{id}', 'detail')->name('rekap_lostbill.detail');
+        });
+
+        Route::controller(GaransiController::class)->group(function () {
+            Route::get('rekap_garansi', 'index')->name('rekap_garansi.index');
+            Route::get('rekap_garansi/show', 'show')->name('rekap_garansi.show');
+            Route::get('rekap_garansi/select_waroeng', 'select_waroeng')->name('rekap_garansi.select_waroeng');
         });
 
 });

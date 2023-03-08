@@ -1,3 +1,14 @@
+    // function formatRupiah(angka) {
+    //   var rupiah = '';    
+    //   var angkarev = angka.toString().split('').reverse().join('');
+    //   for(var i = 0; i < angkarev.length; i++) {
+    //     if(i%3 == 0) {
+    //       rupiah += angkarev.substr(i,3)+'.';        
+    //     }
+    //   }
+    //   return 'Rp. '+rupiah.split('',rupiah.length-1).reverse().join('');
+    // }
+
 (function ($) {
   'use strict';
   $(document).on('input', '.number', function () {
@@ -15,6 +26,15 @@
 
     $(this).val(angka_hasil = split[1] != undefined ? angka_hasil + ',' + split[1] : angka_hasil);
   });
+// <<<<<<< HEAD
+
+  // $(".number").on("keypress", function (evt) {
+  //   if (evt.which != 8 && evt.which != 0 && evt.which < 48 || evt.which > 57)
+  //   {
+  //       evt.preventDefault();
+  //   }
+  //   });
+// =======
   $(".number").on("keypress", function (evt) {
     $(this).val($(this).val().replace(/[^0-9\.|\,]/g,''));
         if(evt.which == 44)
@@ -46,4 +66,5 @@
   //           })
   //       })
   // });
+// >>>>>>> 378d239677e036415cd93cebeeed017a29f4161c
 })(jQuery);
