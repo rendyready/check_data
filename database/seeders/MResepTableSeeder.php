@@ -16,41 +16,46 @@ class MResepTableSeeder extends Seeder
         DB::table('m_resep')->truncate();
 
         DB::table('m_resep')->insert([
-            [   'm_resep_id' => 1,
-                'm_resep_m_produk_id' => 383,
-                'm_resep_keterangan' =>'Bawang merah,bawah putih,trasi udang,dan cabe pilihan',
+            [   'm_resep_code' => 1,
+                'm_resep_m_produk_code' => "mn-400011",
+                'm_resep_m_produk_nama' => "juice semangka",
+                'm_resep_keterangan' =>'Semangka diblender dengan es',
                 'm_resep_status'=>'Aktif',
                 'm_resep_created_by'=>1
             ],  
             [
-                'm_resep_id' => 1,
-                'm_resep_m_produk_id' =>385,
-                'm_resep_keterangan' =>'Sambal Trasi ditambahkan belut goreng krispy',
+                'm_resep_code' => 1,
+                'm_resep_m_produk_code' =>"mn-400023",
+                'm_resep_m_produk_nama' => "coklat es",
+                'm_resep_keterangan' =>'Cokles original',
                 'm_resep_status'=>'Aktif',
                 'm_resep_created_by'=>1
             ],
             [
-                'm_resep_id' => 1,
-                'm_resep_m_produk_id' =>490,
-                'm_resep_keterangan' =>'Ayam fresh dipotong dan dimasak dengan bumbu sangat pedas',
+                'm_resep_code' => 1,
+                'm_resep_m_produk_code' =>"mn-400044",
+                'm_resep_m_produk_nama' => "wedang pedas gobal gabul",
+                'm_resep_keterangan' =>'Wedang gobal gabul sangat pedas',
                 'm_resep_status'=>'Aktif',
                 'm_resep_created_by'=>1
             ],
             [
-                'm_resep_id' => 1,
-                'm_resep_m_produk_id' =>500,
-                'm_resep_keterangan' =>'Ayam kampung fresh yang telah dimarinasi dengan bumbu rahasia',
+                'm_resep_code' => 1,
+                'm_resep_m_produk_code' =>"mn-400046",
+                'm_resep_m_produk_nama' => "kopi hitam panas",
+                'm_resep_keterangan' =>'Dengan biji kopi pilihan selera rakyat',
                 'm_resep_status'=>'Aktif',
                 'm_resep_created_by'=>1
             ],
             [
-                'm_resep_id' => 1,
-                'm_resep_m_produk_id' =>525,
-                'm_resep_keterangan' =>'Ikan bandeng fresh yang telah dimarinasi dengan bumbu rahasia',
+                'm_resep_code' => 1,
+                'm_resep_m_produk_code' =>"mn-400051",
+                'm_resep_m_produk_nama' => "lemon tea tawar es",
+                'm_resep_keterangan' =>'lemon kualitas tingkat atas',
                 'm_resep_status'=>'Aktif',
                 'm_resep_created_by'=>1
             ],
         ]);
-        DB::select("update m_resep set m_resep_id = id;");
+        DB::select("update m_resep set m_resep_code = id;");
     }
 }

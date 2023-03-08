@@ -21,9 +21,9 @@ class ResepController extends Controller
     {
         $data = new \stdClass();
         $data->resep = DB::table('m_resep')
-            ->leftjoin('m_produk', 'm_resep_m_produk_id', 'm_produk_id')
             ->get();
         $data->produk = DB::table('m_produk')->where('m_produk_m_klasifikasi_produk_id',4)->get();
+        $data->bb = DB::table('m_produk')->whereNotIn('m_produk_m_klasifikasi_produk_id',[4])->get();
         return view('master::m_resep', compact('data'));
         // return $data;
     }
@@ -34,10 +34,13 @@ class ResepController extends Controller
      * @return Renderable
      */
     public function simpan(Request $request)
-    {
+    {   
+        $waroeng_id = Auth::user()->waroeng_id;
+        $produk = DB::table('m_produk')->where('m_produk_code',$request->m_resep_m_produk_code)->first();
         $data = DB::table('m_resep')->insert([
-            "m_resep_id" => $this->getMasterId('m_resep'),
-            "m_resep_m_produk_id" => $request->m_resep_m_produk_id,
+            "m_resep_code" => $this->getNextId('m_resep',$waroeng_id),
+            "m_resep_m_produk_code" => $request->m_resep_m_produk_code,
+            "m_resep_m_produk_nama" => $produk->m_produk_nama,
             "m_resep_keterangan" => $request->m_resep_keterangan,
             "m_resep_status" => $request->m_resep_status,
             "m_resep_created_by" => Auth::id(),
@@ -53,7 +56,7 @@ class ResepController extends Controller
      */
     public function list($id)
     {
-        $data = DB::table('m_resep')->where('m_resep_id', $id)->first();
+        $data = DB::table('m_resep')->where('m_resep_code', $id)->first();
         return response()->json($data, 200);
     }
 
@@ -64,9 +67,11 @@ class ResepController extends Controller
      */
     public function edit(Request $request)
     {
-        DB::table('m_resep')->where('m_resep_id', $request->id)
+        $produk = DB::table('m_produk')->where('m_produk_code',$request->m_resep_m_produk_code)->first();
+        DB::table('m_resep')->where('m_resep_code', $request->id)
             ->update([
-                "m_resep_m_produk_id" => $request->m_resep_m_produk_id,
+                "m_resep_m_produk_code" => $request->m_resep_m_produk_code,
+                "m_resep_m_produk_nama" => $produk->m_produk_nama,
                 "m_resep_keterangan" => $request->m_resep_keterangan,
                 "m_resep_status" => $request->m_resep_status,
                 "m_resep_updated_by" => Auth::id(),
@@ -76,8 +81,8 @@ class ResepController extends Controller
     }
     public function detail($id)
     {
-        $detail = DB::table('m_resep_detail')->where('m_resep_detail_m_resep_id', $id)
-            ->leftjoin('m_produk', 'm_resep_detail_bb_id', 'm_produk_id')
+        $detail = DB::table('m_resep_detail')->where('m_resep_detail_m_resep_code', $id)
+            ->leftjoin('m_produk', 'm_resep_detail_bb_code', 'm_produk_code')
             ->leftjoin('m_satuan', 'm_resep_detail_m_satuan_id', 'm_satuan_id')
             ->select('m_resep_detail.*', 'm_produk_nama', 'm_satuan_kode','m_resep_detail_ket')
             ->get();
@@ -101,12 +106,16 @@ class ResepController extends Controller
     {
         if ($request->ajax()) {
             if ($request->action == 'add') {
+                $produk = DB::table('m_produk')->where('m_produk_code',$request->m_resep_detail_bb_code)->first();
+                $kode_satuan = DB::table('m_satuan')->where('m_satuan_id',$request->m_resep_detail_m_satuan_id)->first();
                 $data = array(
                     'm_resep_detail_id' => $this->getMasterId('m_resep_detail'),
-                    'm_resep_detail_m_resep_id'    =>    $request->id,
-                    'm_resep_detail_bb_id'    =>    $request->m_resep_detail_bb_id,
+                    'm_resep_detail_m_resep_code'    =>    $request->id,
+                    'm_resep_detail_bb_code'    =>    $request->m_resep_detail_bb_code,
+                    'm_resep_detail_m_produk_nama' => $produk->m_produk_nama,
                     'm_resep_detail_bb_qty'    =>    $request->m_resep_detail_bb_qty,
                     'm_resep_detail_m_satuan_id' =>    $request->m_resep_detail_m_satuan_id,
+                    'm_resep_detail_satuan' => $kode_satuan->m_satuan_kode,
                     'm_resep_detail_ket' => $request->m_resep_detail_ket,
                     'm_resep_detail_created_by' => Auth::id(),
                     'm_resep_detail_created_at' => Carbon::now(),
@@ -114,7 +123,7 @@ class ResepController extends Controller
                 DB::table('m_resep_detail')->insert($data);
             } elseif ($request->action == 'edit') {
                 $data = array(
-                    'm_resep_detail_bb_id'    =>    $request->m_resep_detail_bb_id,
+                    'm_resep_detail_bb_code'    =>    $request->m_resep_detail_bb_code,
                     'm_resep_detail_bb_qty'    =>    $request->m_resep_detail_bb_qty,
                     'm_resep_detail_m_satuan_id' =>    $request->m_resep_detail_m_satuan_id,
                     'm_resep_detail_ket' => $request->m_resep_detail_ket,
@@ -136,7 +145,7 @@ class ResepController extends Controller
             $data->satuan[$v->m_satuan_id] = $v->m_satuan_kode;
         }
         foreach ($bb as $key => $v) {
-            $data->bb[$v->m_produk_id] = $v->m_produk_nama;
+            $data->bb[$v->m_produk_code] = $v->m_produk_nama;
         }
         return response()->json($data);
     }

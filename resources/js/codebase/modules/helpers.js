@@ -744,10 +744,6 @@ export default class Helpers {
         placeholder: el.data('placeholder') || false,
         dropdownParent: document.querySelector(el.data('container') || '#page-container'),
         dropdownAutoWidth: true, // auto adjust dropdown width to fit the content
-        // Set focus on search input when dropdown opens
-        dropdownOpen: () => {
-          $('.select2-search__field').focus();
-        }
       });
     });
   }
