@@ -164,6 +164,7 @@ class GudangController extends Controller
     public function gudang_out_save(Request $request)
     {
         foreach ($request->rekap_tf_gudang_m_produk_id as $key => $value) {
+            $qty_kirim = convertfloat($request->rekap_tf_gudang_qty_kirim[$key]);
             $satuan_kirim = $this->get_last_stok($request->rekap_tf_gudang_tujuan_code, $request->rekap_tf_gudang_m_produk_id[$key]);
             $satuan_asal = $this->get_last_stok($request->rekap_tf_gudang_asal_code, $request->rekap_tf_gudang_m_produk_id[$key]);
             $rekap_tf = array(
@@ -174,7 +175,7 @@ class GudangController extends Controller
                 'rekap_tf_gudang_tgl_keluar' => Carbon::now(),
                 'rekap_tf_gudang_m_produk_code' => $request->rekap_tf_gudang_m_produk_id[$key],
                 'rekap_tf_gudang_m_produk_nama' => $satuan_kirim->m_stok_produk_nama,
-                'rekap_tf_gudang_qty_keluar' => $request->rekap_tf_gudang_qty_kirim[$key],
+                'rekap_tf_gudang_qty_keluar' => $qty_kirim,
                 'rekap_tf_gudang_hpp' => $request->rekap_tf_gudang_hpp[$key],
                 'rekap_tf_gudang_sub_total' => $request->rekap_tf_gudang_sub_total[$key],
                 'rekap_tf_gudang_satuan_keluar' => $satuan_kirim->m_stok_satuan,
@@ -194,8 +195,8 @@ class GudangController extends Controller
                 'm_stok_detail_m_produk_nama' => $satuan_asal->m_stok_produk_nama,
                 'm_stok_detail_satuan_id' => $satuan_asal->m_stok_satuan_id,
                 'm_stok_detail_satuan' => $satuan_asal->m_stok_satuan,
-                'm_stok_detail_keluar' => $request->rekap_tf_gudang_qty_kirim[$key],
-                'm_stok_detail_saldo' => $satuan_asal->m_stok_saldo - $request->rekap_tf_gudang_qty_kirim[$key],
+                'm_stok_detail_keluar' => $qty_kirim,
+                'm_stok_detail_saldo' => $satuan_asal->m_stok_saldo - $qty_kirim,
                 'm_stok_detail_hpp' => $satuan_asal->m_stok_hpp,
                 'm_stok_detail_catatan' => 'keluar ' . $m_g_tj->m_gudang_nama . ' ' . $m_g_tj->m_gudang_m_w_nama,
                 'm_stok_detail_gudang_code' => $request->rekap_tf_gudang_asal_code,
@@ -204,8 +205,8 @@ class GudangController extends Controller
             );
             DB::table('m_stok_detail')->insert($mutasi_detail);
             $m_stok = array(
-                'm_stok_keluar' => $satuan_asal->m_stok_keluar + $request->rekap_tf_gudang_qty_kirim[$key],
-                'm_stok_saldo' => $satuan_asal->m_stok_saldo - $request->rekap_tf_gudang_qty_kirim[$key],
+                'm_stok_keluar' => $satuan_asal->m_stok_keluar + $qty_kirim,
+                'm_stok_saldo' => $satuan_asal->m_stok_saldo - $qty_kirim,
             );
             DB::table('m_stok')
                 ->where('m_stok_gudang_code', $request->rekap_tf_gudang_asal_code)

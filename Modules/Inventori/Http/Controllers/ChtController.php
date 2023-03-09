@@ -29,15 +29,16 @@ class ChtController extends Controller
     {  
         $waroeng_id = Auth::user()->waroeng_id;
         foreach ($request->rekap_beli_detail_id as $key => $value) {
+            $cht_qty = convertfloat($request->rekap_beli_detail_terima_qty[$key]);
             $save_beli = DB::table('rekap_beli_detail')
                 ->where('rekap_beli_detail_id',$request->rekap_beli_detail_id[$key])
-                ->update(['rekap_beli_detail_terima_qty'=>$request->rekap_beli_detail_terima_qty[$key]]);
+                ->update(['rekap_beli_detail_terima_qty'=>$cht_qty]);
                        
-            if (!empty($request->rekap_beli_detail_terima_qty[$key])) {
+            if (!empty($cht_qty)) {
                 $get_stok = $this->get_last_stok($request->rekap_beli_gudang_code,$request->rekap_beli_detail_m_produk_code[$key]);
                 $saldo_terakhir = $get_stok->m_stok_saldo ;
                 $hpp_terakhir = $get_stok->m_stok_hpp ;
-                $data_masuk = convertfloat($request->rekap_beli_detail_terima_qty[$key]);
+                $data_masuk = $cht_qty;
                 $hpp_now = ($request->rekap_beli_detail_subtot[$key]+($saldo_terakhir*$hpp_terakhir))/($saldo_terakhir+$data_masuk);
                 $data = array(
                     'm_stok_detail_id' => $this->getMasterId('m_stok_detail'),
@@ -58,8 +59,8 @@ class ChtController extends Controller
                 DB::table('m_stok_detail')->insert($data);
                 
                 $data2 = array( 'm_stok_hpp' => $hpp_now,
-                                'm_stok_masuk' => $get_stok->m_stok_masuk+$request->rekap_beli_detail_terima_qty[$key],
-                                'm_stok_saldo' => $get_stok->m_stok_saldo+$request->rekap_beli_detail_terima_qty[$key]
+                                'm_stok_masuk' => $get_stok->m_stok_masuk+$cht_qty,
+                                'm_stok_saldo' => $get_stok->m_stok_saldo+$cht_qty
                             );
                 DB::table('m_stok')->where('m_stok_gudang_code',$request->rekap_beli_gudang_code)
                 ->where('m_stok_m_produk_code',$request->rekap_beli_detail_m_produk_code[$key])
@@ -103,7 +104,7 @@ class ChtController extends Controller
             $row[] = $item->rekap_beli_supplier_nama;
             $row[] = $item->rekap_beli_detail_m_produk_nama;
             $row[] = $item->rekap_beli_detail_catatan;
-            $row[] = $item->rekap_beli_detail_qty;
+            $row[] = convertindo($item->rekap_beli_detail_qty);
             $row[] = '<input type="text" class="form-control number form-control-sm" name="rekap_beli_detail_terima_qty[]" id="rekap_beli_detail_terima_qty">';
             $row[] = ucwords($item->rekap_beli_detail_satuan_terima);
             $data[] = $row;
