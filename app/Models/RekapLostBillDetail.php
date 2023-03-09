@@ -12,11 +12,13 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class RekapLostBillDetail
  * 
- * @property int $r_l_b_detail_id
- * @property int|null $r_l_b_detail_sync_id
- * @property int $r_l_b_detail_r_l_b_id
+ * @property int $id
+ * @property string $r_l_b_detail_id
+ * @property string $r_l_b_detail_r_l_b_id
  * @property int $r_l_b_detail_m_produk_id
+ * @property string|null $r_l_b_detail_m_produk_code
  * @property string|null $r_l_b_detail_m_produk_nama
+ * @property float $r_l_b_detail_reguler_price
  * @property float $r_l_b_detail_price
  * @property int $r_l_b_detail_qty
  * @property float $r_l_b_detail_nominal
@@ -37,13 +39,11 @@ use Illuminate\Database\Eloquent\Model;
 class RekapLostBillDetail extends Model
 {
 	protected $table = 'rekap_lost_bill_detail';
-	protected $primaryKey = 'r_l_b_detail_id';
 	public $timestamps = false;
 
 	protected $casts = [
-		'r_l_b_detail_sync_id' => 'int',
-		'r_l_b_detail_r_l_b_id' => 'int',
 		'r_l_b_detail_m_produk_id' => 'int',
+		'r_l_b_detail_reguler_price' => 'float',
 		'r_l_b_detail_price' => 'float',
 		'r_l_b_detail_qty' => 'int',
 		'r_l_b_detail_nominal' => 'float',
@@ -63,10 +63,12 @@ class RekapLostBillDetail extends Model
 	];
 
 	protected $fillable = [
-		'r_l_b_detail_sync_id',
+		'r_l_b_detail_id',
 		'r_l_b_detail_r_l_b_id',
 		'r_l_b_detail_m_produk_id',
+		'r_l_b_detail_m_produk_code',
 		'r_l_b_detail_m_produk_nama',
+		'r_l_b_detail_reguler_price',
 		'r_l_b_detail_price',
 		'r_l_b_detail_qty',
 		'r_l_b_detail_nominal',

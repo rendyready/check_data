@@ -12,7 +12,8 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class MKaryawan
  * 
- * @property int $m_karyawan
+ * @property int $id
+ * @property string $m_karyawan_id
  * @property string $m_karyawan_nama
  * @property string $m_karyawan_panggilan
  * @property string $m_karyawan_nik
@@ -23,15 +24,15 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $m_karyawan_agama
  * @property string|null $m_karyawan_status_nikah
  * @property Carbon|null $m_karyawan_tgl_nikah
- * @property string $m_karyawan_kota_asal
- * @property string $m_karyawan_provinsi_asal
- * @property string $m_karyawan_alamat_asal
- * @property string $m_karyawan_kota_tinggal
- * @property string $m_karyawan_provinsi_tinggal
- * @property string $m_karyawan_alamat_tinggal
+ * @property string|null $m_karyawan_kota_asal
+ * @property string|null $m_karyawan_provinsi_asal
+ * @property string|null $m_karyawan_alamat_asal
+ * @property string|null $m_karyawan_kota_tinggal
+ * @property string|null $m_karyawan_provinsi_tinggal
+ * @property string|null $m_karyawan_alamat_tinggal
  * @property string $m_karyawan_handphone
- * @property string $m_karyawan_email
- * @property string $m_karyawan_kontak_keluarga
+ * @property string|null $m_karyawan_email
+ * @property string|null $m_karyawan_kontak_keluarga
  * @property string|null $m_karyawan_doc_profil
  * @property string|null $m_karyawan_doc_ktp
  * @property string|null $m_karyawan_doc_kk
@@ -45,6 +46,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $m_karyawan_penyakit_bawaan
  * @property string|null $m_karyawan_bpjs
  * @property string|null $m_karyawan_bpjstk
+ * @property string|null $m_karyawan_indek_kebugaran
  * @property Carbon|null $m_karyawan_tgl_diterima
  * @property Carbon|null $m_karyawan_tgl_penetapan
  * @property string|null $m_karyawan_npwp
@@ -57,8 +59,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $m_karyawan_wilayah_kerja
  * @property string|null $m_karyawan_status
  * @property int|null $m_karyawan_user
+ * @property string $m_karyawan_status_sync
  * @property int $m_karyawan_created_by
  * @property int|null $m_karyawan_updated_by
+ * @property int|null $m_karyawan_deleted_by
  * @property Carbon $m_karyawan_created_at
  * @property Carbon|null $m_karyawan_updated_at
  * @property Carbon|null $m_karyawan_deleted_at
@@ -68,7 +72,6 @@ use Illuminate\Database\Eloquent\Model;
 class MKaryawan extends Model
 {
 	protected $table = 'm_karyawan';
-	protected $primaryKey = 'm_karyawan';
 	public $timestamps = false;
 
 	protected $casts = [
@@ -77,7 +80,8 @@ class MKaryawan extends Model
 		'm_karyawan_ukuran_sepatu' => 'float',
 		'm_karyawan_user' => 'int',
 		'm_karyawan_created_by' => 'int',
-		'm_karyawan_updated_by' => 'int'
+		'm_karyawan_updated_by' => 'int',
+		'm_karyawan_deleted_by' => 'int'
 	];
 
 	protected $dates = [
@@ -91,6 +95,7 @@ class MKaryawan extends Model
 	];
 
 	protected $fillable = [
+		'm_karyawan_id',
 		'm_karyawan_nama',
 		'm_karyawan_panggilan',
 		'm_karyawan_nik',
@@ -123,6 +128,7 @@ class MKaryawan extends Model
 		'm_karyawan_penyakit_bawaan',
 		'm_karyawan_bpjs',
 		'm_karyawan_bpjstk',
+		'm_karyawan_indek_kebugaran',
 		'm_karyawan_tgl_diterima',
 		'm_karyawan_tgl_penetapan',
 		'm_karyawan_npwp',
@@ -135,8 +141,10 @@ class MKaryawan extends Model
 		'm_karyawan_wilayah_kerja',
 		'm_karyawan_status',
 		'm_karyawan_user',
+		'm_karyawan_status_sync',
 		'm_karyawan_created_by',
 		'm_karyawan_updated_by',
+		'm_karyawan_deleted_by',
 		'm_karyawan_created_at',
 		'm_karyawan_updated_at',
 		'm_karyawan_deleted_at'

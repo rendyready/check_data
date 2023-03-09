@@ -12,9 +12,9 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class RekapLostBill
  * 
- * @property int $r_l_b_id
- * @property int|null $r_l_b_sync_id
- * @property int $r_l_b_rekap_modal_id
+ * @property int $id
+ * @property string $r_l_b_id
+ * @property string $r_l_b_rekap_modal_id
  * @property Carbon $r_l_b_tanggal
  * @property time without time zone $r_l_b_jam
  * @property string $r_l_b_nota_code
@@ -26,8 +26,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property float $r_l_b_nominal_sharing_profit_out
  * @property string $r_l_b_keterangan
  * @property int $r_l_b_m_w_id
+ * @property string|null $r_l_b_m_w_code
  * @property string|null $r_l_b_m_w_nama
  * @property int $r_l_b_m_area_id
+ * @property string|null $r_l_b_m_area_code
  * @property string|null $r_l_b_m_area_nama
  * @property string $r_l_b_status_sync
  * @property int|null $r_l_b_approved_by
@@ -43,12 +45,9 @@ use Illuminate\Database\Eloquent\Model;
 class RekapLostBill extends Model
 {
 	protected $table = 'rekap_lost_bill';
-	protected $primaryKey = 'r_l_b_id';
 	public $timestamps = false;
 
 	protected $casts = [
-		'r_l_b_sync_id' => 'int',
-		'r_l_b_rekap_modal_id' => 'int',
 		'r_l_b_jam' => 'time without time zone',
 		'r_l_b_nominal' => 'float',
 		'r_l_b_nominal_pajak' => 'float',
@@ -71,7 +70,7 @@ class RekapLostBill extends Model
 	];
 
 	protected $fillable = [
-		'r_l_b_sync_id',
+		'r_l_b_id',
 		'r_l_b_rekap_modal_id',
 		'r_l_b_tanggal',
 		'r_l_b_jam',
@@ -84,8 +83,10 @@ class RekapLostBill extends Model
 		'r_l_b_nominal_sharing_profit_out',
 		'r_l_b_keterangan',
 		'r_l_b_m_w_id',
+		'r_l_b_m_w_code',
 		'r_l_b_m_w_nama',
 		'r_l_b_m_area_id',
+		'r_l_b_m_area_code',
 		'r_l_b_m_area_nama',
 		'r_l_b_status_sync',
 		'r_l_b_approved_by',

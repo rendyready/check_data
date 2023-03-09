@@ -12,11 +12,13 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class MPajak
  * 
+ * @property int $id
  * @property int $m_pajak_id
  * @property float $m_pajak_value
  * @property int $m_pajak_created_by
- * @property Carbon $m_pajak_created_at
  * @property int|null $m_pajak_updated_by
+ * @property int|null $m_pajak_deleted_by
+ * @property Carbon $m_pajak_created_at
  * @property Carbon|null $m_pajak_updated_at
  * @property Carbon|null $m_pajak_deleted_at
  *
@@ -25,13 +27,14 @@ use Illuminate\Database\Eloquent\Model;
 class MPajak extends Model
 {
 	protected $table = 'm_pajak';
-	protected $primaryKey = 'm_pajak_id';
 	public $timestamps = false;
 
 	protected $casts = [
+		'm_pajak_id' => 'int',
 		'm_pajak_value' => 'float',
 		'm_pajak_created_by' => 'int',
-		'm_pajak_updated_by' => 'int'
+		'm_pajak_updated_by' => 'int',
+		'm_pajak_deleted_by' => 'int'
 	];
 
 	protected $dates = [
@@ -41,10 +44,12 @@ class MPajak extends Model
 	];
 
 	protected $fillable = [
+		'm_pajak_id',
 		'm_pajak_value',
 		'm_pajak_created_by',
-		'm_pajak_created_at',
 		'm_pajak_updated_by',
+		'm_pajak_deleted_by',
+		'm_pajak_created_at',
 		'm_pajak_updated_at',
 		'm_pajak_deleted_at'
 	];
