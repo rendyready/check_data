@@ -114,4 +114,11 @@ class ProdukController extends Controller
         $data = DB::table('m_produk')->where('m_produk_id', $id)->first();
         return response()->json($data, 200);
     } 
+    public function get_prod_sat($id)
+    {
+        $satuan_bb = DB::table('m_produk')->where('m_produk_code',$id)
+        ->join('m_satuan','m_satuan_id','m_produk_utama_m_satuan_id')
+        ->first();
+        return $satuan_bb;
+    }
 }

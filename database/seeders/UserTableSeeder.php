@@ -73,12 +73,21 @@ class UserTableSeeder extends Seeder
                     'name' => 'admin',
                     'email' => 'admin@email.com',
                     'password' => Hash::make('password'),
-                    'waroeng_id' => 1,
-                    'waroeng_akses' => "[1,2,3]"
+                    'waroeng_id' => 35,
+                    'waroeng_akses' => "[1,2,3,35]"
+                ],
+                [
+                    'users_id' => 3,
+                    'name' => 'awan',
+                    'email' => 'awan@waroengss.com',
+                    'password' => Hash::make('supply'),
+                    'waroeng_id' => 3,
+                    'waroeng_akses' => "[1,3,4]"
                 ],
                ]
         );
         User::where('name', 'administrator')->first()->assignRole('administrator');
         User::where('name', 'admin')->first()->assignRole('admin');
+        User::where('name', 'awan')->first()->assignRole('pgd');
     }
 }

@@ -33,6 +33,8 @@ class MStokController extends Controller
     function list($id) {
         $stok = DB::table('m_stok')
             ->where('m_stok_gudang_code', $id)
+            ->orderByRaw('m_stok_updated_at is NULL')
+            ->orderByDesc('m_stok_updated_at')
             ->get();
         $no = 0;
         $data = array();
@@ -44,6 +46,7 @@ class MStokController extends Controller
             $row[] = $value->m_stok_awal;
             $row[] = $value->m_stok_hpp;
             $row[] = $value->m_stok_satuan;
+            $row[] = $retVal = (empty($value->m_stok_updated_at)) ? tgl_waktuid($value->m_stok_created_at) : tgl_waktuid($value->m_stok_updated_at);
             $data[] = $row;
         }
         $output = array('data' => $data);
@@ -66,12 +69,13 @@ class MStokController extends Controller
                 ->where('m_stok_m_produk_code', $request->m_stok_m_produk_code[$key])->first();
             $hpp = $cek->m_stok_hpp;
             $saldo = $cek->m_stok_saldo;
-            $hpp_new = (($hpp*$saldo)+($request->m_stok_awal[$key]*$request->m_stok_hpp[$key]))/($saldo+$request->m_stok_awal[$key]);
+            $hpp_new = (($hpp*$saldo)+(convertfloat($request->m_stok_awal[$key])*convertfloat($request->m_stok_hpp[$key])))/($saldo+convertfloat($request->m_stok_awal[$key]));
                 
             $data = array(
-                    'm_stok_awal' => $request->m_stok_awal[$key],
+                    'm_stok_awal' => convertfloat($request->m_stok_awal[$key]),
                     'm_stok_hpp' => $hpp_new,
-                    'm_stok_saldo' => $saldo+$request->m_stok_awal[$key],
+                    'm_stok_saldo' => $saldo+convertfloat($request->m_stok_awal[$key]),
+                    'm_stok_updated_at' => Carbon::now(),
                 );
             
             DB::table('m_stok')->where('m_stok_gudang_code', $request->m_stok_gudang_code)

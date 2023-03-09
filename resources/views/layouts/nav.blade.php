@@ -463,6 +463,11 @@
                 </a>
               </li>
               <li class="nav-main-item">
+                <a class="nav-main-link{{ request()->is('invetori/penj_gudang') ? ' active' : '' }}" href="{{route('penj_gudang.index')}}">
+                  <span class="nav-main-link-name">Penjualan BB Internal</span>
+                </a>
+              </li>
+              <li class="nav-main-item">
                 <a class="nav-main-link{{ request()->is('invetori/penjualan_inv') ? ' active' : '' }}" href="{{route('penjualan_inv.index')}}">
                   <span class="nav-main-link-name">Penjualan BB Umum</span>
                 </a>

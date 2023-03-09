@@ -6,7 +6,7 @@
                 <div class="block block-themed h-100 mb-0">
                     <div class="block-header bg-pulse">
                         <h3 class="block-title">
-                            Form Input Stok Awal
+                            Rekap Penjualan Internal
                     </div>
                     <div class="block-content text-muted">
                         <div class="row">
@@ -21,10 +21,10 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="row mb-1">
-                                    <label class="col-sm-4 col-form-label" for="tgl_now">Tanggal</label>
+                                    <label class="col-sm-4 col-form-label" for="waroeng_nama">Waroeng</label>
                                     <div class="col-sm-8">
-                                        <input type="date" class="form-control form-control-sm" id="tgl_now"
-                                            name="tgl_now" value="{{ $tgl_now }}" readonly>
+                                        <input type="text" class="form-control form-control-sm" id="waroeng_nama"
+                                            name="waroeng_nama" value="{{ $data->waroeng_nama }}" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -36,47 +36,15 @@
                                             name="m_stok_gudang_code" id="m_stok_gudang_code" data-placeholder="Cari Gudang"
                                             required>
                                             <option value=""></option>
-                                            @foreach ($gudang as $item)
-                                                <option value="{{ $item->m_gudang_code }}">{{ ucwords($item->m_gudang_nama) }}
-                                                    - {{ $item->m_w_nama }}</option>
+                                            @foreach ($data->gudang as $item)
+                                                <option value="{{ $item->m_gudang_code }}">
+                                                    {{ ucwords($item->m_gudang_nama) }}
+                                                </option>
                                             @endforeach
                                         </select>
                                     </div>
                                 </div>
                             </div>
-                            <form id="formAction">
-                                <table id="form_input" class="table table-sm table-bordered table-striped table-vcenter">
-                                    <thead>
-                                        <th>Nama Barang</th>
-                                        <th>Stok Awal</th>
-                                        <th>Hpp</th>
-                                        <th>Satuan</th>
-                                        <th><button type="button" class="btn tambah btn-success"><i
-                                                    class="fa fa-plus"></i></button></th>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td><select class="js-select2 nama_barang reset" name="m_stok_m_produk_code[]"
-                                                    id="m_stok_m_produk_code"
-                                                    style="width: 100%;"data-placeholder="Pilih Nama Barang" required>
-                                                    <option value=""></option>
-                                                </select></td>
-                                            <td><input type="text"
-                                                    class="form-control form-control-sm number reset" name="m_stok_awal[]"
-                                                    id="m_stok_awal" required></td>
-                                            <td><input type="text"
-                                                    class="form-control number reset form-control-sm"  name="m_stok_hpp[]"
-                                                    id="m_stok_hpp" required></td>
-                                            <td><input type="text" class="form-control form-control-sm reset"
-                                                    id="m_satuan" readonly></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <div class="block-content block-content-full text-end bg-transparent">
-                                    <button type="submit" class="btn btn-sm btn-success">Simpan</button>
-                                </div>
-                        </div>
-                        </form>
                         <table id="tb_stok"
                             class="table table-sm table-bordered table-striped table-vcenter js-dataTable-full">
                             <thead>

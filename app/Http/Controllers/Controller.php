@@ -112,4 +112,11 @@ class Controller extends BaseController
                 ->first();
         return $stok;
     }
+    public function get_m_w_nama()
+    {
+        $waroeng_aktif = Auth::user()->waroeng_id;
+        $waroeng_nama = DB::table('m_w')->where('m_w_id',$waroeng_aktif)
+        ->first()->m_w_nama;
+        return $waroeng_nama;
+    }
 }

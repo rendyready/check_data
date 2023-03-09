@@ -57,12 +57,12 @@
                                     <div class="row mb-1">
                                         <label class="col-sm-5 col-form-label" for="rekap_rusak">Gudang</label>
                                         <div class="col-sm-7">
-                                            <select class="js-select2" name="m_gudang_id"
-                                                id="m_gudang_id"
+                                            <select class="js-select2" name="m_gudang_code"
+                                                id="m_gudang_code"
                                                 style="width: 100%;"data-placeholder="Pilih Gudang" required>
                                                 <option></option>
                                                 @foreach ($data->gudang as $item)
-                                                    <option value="{{$item->m_gudang_id}}">{{ucwords($item->m_gudang_nama)}}</option>
+                                                    <option value="{{$item->m_gudang_code}}">{{ucwords($item->m_gudang_nama)}}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -92,7 +92,7 @@
                                                 <textarea class="form-control form-control-sm" name="rekap_rusak_detail_catatan[]" id="rekap_rusak_detail_catatan"
                                                     cols="50" required placeholder="keterangan rusak"></textarea>
                                             </td>
-                                            <td><input type="number" step="0.01"
+                                            <td><input type="text"
                                                     class="form-control number form-control-sm qty"
                                                     name="rekap_rusak_detail_qty[]" id="rekap_rusak_detail_qty1" required>
                                             </td>
@@ -136,16 +136,34 @@
       });
     Codebase.helpersOnLoad(['jq-select2']);
 	  var no =2;
+      var datas;
+    $('#m_gudang_code').on('change',function () {
+        var asal = $(this).val()
+        $.get("/inventori/stok/"+asal, function(data){
+            datas = data;
+            $.each(data, function(key, value) {
+              $('#rekap_rusak_detail_m_produk_id1')
+              .append($('<option>', { value : key })
+              .text(value));
+            });
+        });  
+    });
 	  $('.tambah').on('click',function(){
 	    no++;
 		$('#form').append('<tr id="row'+no+'">'+
                         '<td><select class="js-select2 nama_barang" name="rekap_rusak_detail_m_produk_id[]" id="rekap_rusak_detail_m_produk_id'+no+'" style="width: 100%;" data-placeholder="Pilih Nama Barang" required><option></option></select></td>'+
                         '<td><textarea class="form-control form-control-sm" name="rekap_rusak_detail_catatan[]" id="rekap_rusak_detail_catatan" cols="50" required placeholder="keterangan rusak"></textarea></td>'+
-                        '<td><input type="number" min="0.01" step="0.01" class="form-control form-control-sm qty" name="rekap_rusak_detail_qty[]" id="rekap_rusak_detail_qty" required></td>'+
-                        '<td><input type="number" class="form-control number form-control-sm harga" name="rekap_rusak_detail_hpp[]" id="rekap_rusak_detail_hpp'+no+'" readonly></td>'+
-                        '<td><input type="number" class="form-control number form-control-sm subtotal" name="rekap_rusak_detail_sub_total[]" id="rekap_rusak_detail_sub_total" readonly></td>'+
+                        '<td><input type="text" class="form-control number form-control-sm qty" name="rekap_rusak_detail_qty[]" id="rekap_rusak_detail_qty" required></td>'+
+                        '<td><input type="text" class="form-control number form-control-sm harga" name="rekap_rusak_detail_hpp[]" id="rekap_rusak_detail_hpp'+no+'" readonly></td>'+
+                        '<td><input type="text" class="form-control number form-control-sm subtotal" name="rekap_rusak_detail_sub_total[]" id="rekap_rusak_detail_sub_total" readonly></td>'+
                         '<td><button type="button" id="'+no+'" class="btn btn-danger btn_remove"><i class="fa fa-trash"></i></button></td></tr>');
         Codebase.helpersOnLoad(['jq-select2']);
+            $.each(datas, function(key, value) {
+              $('#rekap_rusak_detail_m_produk_id'+no)
+              .append($('<option>', { value : key })
+              .text(value));
+            });
+    
         });
 
 	$(document).on('click', '.btn_remove', function(){
@@ -157,30 +175,20 @@
     $(document).on('select2:open', '.nama_barang', function(){
           console.log("Saving value " + $(this).val());
           var index = $(this).attr('id'); 
-          var g_id = $('#m_gudang_id').val();
+          var g_id = $('#m_gudang_code').val();
           if ((g_id == '')) {
             alert('pilih gudang dahulu');
           }
-          $.get("/inventori/stok/"+g_id, function(data){
-            $.each(data, function(key, value) {
-              $('#'+index)
-              .append($('<option>', { value : key })
-              .text(value));
-              }); 
-          });
           $(this).data('val', $(this).val());
           $(this).data('id',index);
       }).on('change','.nama_barang', function(e){
           var prev = $(this).data('val');
           var current = $(this).val();
-          var g_id = $('#m_gudang_id').val();
+          var g_id = $('#m_gudang_code').val();
           var id = $(this).data('id');
           var harga_id = id.slice(30);
-          console.log(id);
-          console.log(harga_id);  
           $.get("/inventori/stok_harga/"+g_id+"/"+current, function(data){
-            console.log('harga',data);
-            $('#rekap_rusak_detail_hpp'+harga_id).val(data);
+            $('#rekap_rusak_detail_hpp'+harga_id).val(data.m_stok_hpp);
           });
                 var values = $('[name="rekap_rusak_detail_m_produk_id[]"]').map(function() {
         return this.value.trim();
@@ -192,18 +200,12 @@
          $('#'+id).val(prev).trigger('change');
       }
       });
-    $(".number").on("keypress", function (evt) {
-    if (evt.which != 8 && evt.which != 0 && evt.which < 48 || evt.which > 57)
-    {
-        evt.preventDefault();
-    }
-    });
     $("#form, .qty, .harga").on('input', function () {
       var $tblrows = $("#form tbody tr");
       $tblrows.each(function (index) {
           var $tblrow = $(this);
           $tblrow.find(".qty, .harga").on('input', function () {
-              var qty = $tblrow.find("[name='rekap_rusak_detail_qty[]']").val();
+              var qty = $tblrow.find("[name='rekap_rusak_detail_qty[]']").val().replace(/\./g, '').replace(/\,/g, '.');
               var price = $tblrow.find("[name='rekap_rusak_detail_hpp[]']").val();
               var subTotal = parseFloat(qty) * parseFloat(price);
               if (!isNaN(subTotal)) { 

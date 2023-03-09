@@ -58,7 +58,7 @@
             <form id="formAction" name="form_action" method="post">
               <div class="mb-4">
                 <input name="action" type="hidden" id="action">
-                <input name="m_supplier_id" type="hidden" id="m_supplier_id">
+                <input name="m_supplier_code" type="hidden" id="m_supplier_code">
                 <div class="form-group">
                     <label for="m_supplier_nama">Nama Supplier</label>
                       <div>
@@ -180,7 +180,7 @@
                     type: "GET",
                     dataType: 'json',
                     success: function(respond) {
-                        $("#m_supplier_id").val(respond.m_supplier_id).trigger('change');
+                        $("#m_supplier_code").val(respond.m_supplier_code).trigger('change');
                         $("#m_supplier_nama").val(respond.m_supplier_nama).trigger('change');
                         $("#m_supplier_alamat").val(respond.m_supplier_alamat).trigger('change');
                         $("#m_supplier_kota").val(respond.m_supplier_kota).trigger('change');
@@ -190,6 +190,7 @@
                         $("#m_supplier_rek_nama").val(respond.m_supplier_rek_nama).trigger('change');
                         $("#m_supplier_bank_nama").val(respond.m_supplier_bank_nama).trigger('change');
                         $("#m_supplier_saldo_awal").val(respond.m_supplier_saldo_awal).trigger('change');
+                        $("#m_supplier_jth_tempo").val(respond.m_supplier_jth_tempo).trigger('change');
                     },
                     error: function() {
                     }
@@ -204,13 +205,14 @@
                         data : $('#form-supplier form').serialize(),
                         success : function(data){
                             $('#form-supplier').modal('hide');
-                            $.notify({
-                              align: 'right',       
-                              from: 'top',                
-                              type: 'success',               
-                              icon: 'fa fa-success me-5',    
-                              message: 'Berhasil Menambahkan Data'
+                            Codebase.helpers('jq-notify', {
+                              align: 'right', // 'right', 'left', 'center'
+                              from: 'top', // 'top', 'bottom'
+                              type: data.type, // 'info', 'success', 'warning', 'danger'
+                              icon: 'fa fa-info me-5', // Icon class
+                              message: data.messages
                             });
+                            console.log(data);
                             table.ajax.reload();
                         },
                         error : function(){

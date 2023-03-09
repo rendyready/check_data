@@ -14,10 +14,12 @@ return new class extends Migration
     public function up()
     {
         Schema::create('rekap_rusak', function (Blueprint $table) {
-            $table->id('rekap_rusak_id');
+            $table->id('id');
+            $table->string('rekap_rusak_id');
             $table->string('rekap_rusak_code'); //id user+ urutan
             $table->date('rekap_rusak_tgl');
             $table->bigInteger('rekap_rusak_m_w_id');
+            $table->string('rekap_rusak_m_w_nama');
             $table->bigInteger('rekap_rusak_created_by');
             $table->bigInteger('rekap_rusak_updated_by')->nullable();
             $table->bigInteger('rekap_rusak_deleted_by')->nullable();

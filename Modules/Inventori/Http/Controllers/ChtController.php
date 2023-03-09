@@ -16,9 +16,6 @@ class ChtController extends Controller
      */
     public function index(Request $request)
     {   $waroeng_id = Auth::user()->waroeng_id;
-        $gudang_default = DB::table('m_gudang')->select('m_gudang_id')
-        ->where('m_gudang_m_w_id',$waroeng_id)->where('m_gudang_nama','gudang utama waroeng')->first()->m_gudang_id;
-        $gudang_id = (empty($request->gudang_id)) ? $gudang_default : $request->gudang_id ; 
         $data = new \stdClass();
         $data->gudang = DB::table('m_gudang')
         ->where('m_gudang_m_w_id',$waroeng_id)
@@ -40,7 +37,7 @@ class ChtController extends Controller
                 $get_stok = $this->get_last_stok($request->rekap_beli_gudang_code,$request->rekap_beli_detail_m_produk_code[$key]);
                 $saldo_terakhir = $get_stok->m_stok_saldo ;
                 $hpp_terakhir = $get_stok->m_stok_hpp ;
-                $data_masuk = $request->rekap_beli_detail_terima_qty[$key];
+                $data_masuk = convertfloat($request->rekap_beli_detail_terima_qty[$key]);
                 $hpp_now = ($request->rekap_beli_detail_subtot[$key]+($saldo_terakhir*$hpp_terakhir))/($saldo_terakhir+$data_masuk);
                 $data = array(
                     'm_stok_detail_id' => $this->getMasterId('m_stok_detail'),
@@ -50,10 +47,10 @@ class ChtController extends Controller
                     'm_stok_detail_m_produk_nama' => $get_stok->m_stok_produk_nama,
                     'm_stok_detail_satuan_id' => $get_stok->m_stok_satuan_id,
                     'm_stok_detail_satuan' => $get_stok->m_stok_satuan,
-                    'm_stok_detail_masuk' => $request->rekap_beli_detail_terima_qty[$key],
-                    'm_stok_detail_saldo' => $saldo_terakhir + $request->rekap_beli_detail_terima_qty[$key],
+                    'm_stok_detail_masuk' => $data_masuk,
+                    'm_stok_detail_saldo' => $saldo_terakhir + $data_masuk,
                     'm_stok_detail_hpp' => $hpp_now,
-                    'm_stok_detail_catatan' => 'pembelian'.$request->rekap_beli_detail_rekap_beli_code[$key],
+                    'm_stok_detail_catatan' => 'pembelian '.$request->rekap_beli_detail_rekap_beli_code[$key],
                     'm_stok_detail_gudang_code' => $request->rekap_beli_gudang_code,
                     'm_stok_detail_created_by' => Auth::id(),
                     'm_stok_detail_created_at' => Carbon::now()
@@ -107,7 +104,7 @@ class ChtController extends Controller
             $row[] = $item->rekap_beli_detail_m_produk_nama;
             $row[] = $item->rekap_beli_detail_catatan;
             $row[] = $item->rekap_beli_detail_qty;
-            $row[] = '<input type="number" class="form-control number form-control-sm" name="rekap_beli_detail_terima_qty[]" id="rekap_beli_detail_terima_qty">';
+            $row[] = '<input type="text" class="form-control number form-control-sm" name="rekap_beli_detail_terima_qty[]" id="rekap_beli_detail_terima_qty">';
             $row[] = ucwords($item->rekap_beli_detail_satuan_terima);
             $data[] = $row;
         }

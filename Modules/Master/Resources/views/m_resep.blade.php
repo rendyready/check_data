@@ -25,8 +25,8 @@
                             <tbody id="tablecontents">
                                 @foreach ($data->resep as $item)
                                     <tr>
-                                        <td>{{ $item->m_resep_id }}</td>
-                                        <td>{{ $item->m_produk_nama }}</td>
+                                        <td>{{ $item->m_resep_code }}</td>
+                                        <td>{{ ucwords($item->m_resep_m_produk_nama) }}</td>
                                         <td>
                                             @if ($item->m_resep_status == '0')
                                                 <span class="badge rounded-pill bg-danger">Non Aktif</span>
@@ -36,9 +36,9 @@
                                         </td>
                                         <td>{{ $item->m_resep_keterangan }}</td>
                                         <td>{{ $item->m_resep_created_at }}</td>
-                                        <td> <a class="btn btn-info btn-sm buttonEdit" value="{{ $item->m_resep_id }}"
+                                        <td> <a class="btn btn-info btn-sm buttonEdit" value="{{ $item->m_resep_code }}"
                                                 title="Edit"><i class="fa fa-edit"></i></a>
-                                            <a class="btn btn-warning btn-sm buttonDetail" value="{{ $item->m_resep_id }}"
+                                            <a class="btn btn-warning btn-sm buttonDetail" value="{{ $item->m_resep_code }}"
                                                 title="Detail"><i class="fa fa-eye"></i></a>
                                         </td>
                                     </tr>
@@ -72,12 +72,12 @@
                                     <div class="form-group">
                                         <label for="m_resep_m_produk_id">Produk Menu</label>
                                         <div>
-                                            <select class="js-select2" id="m_resep_m_produk_id" name="m_resep_m_produk_id"
-                                                style="width: 100%;" data-container="#modal-block-select2"
-                                                data-placeholder="Choose one..">
+                                            <select class="js-select2" id="m_resep_m_produk_code"
+                                                name="m_resep_m_produk_code" style="width: 100%;"
+                                                data-container="#modal-block-select2" data-placeholder="Choose one..">
                                                 <option></option>
                                                 @foreach ($data->produk as $item)
-                                                    <option value="{{ $item->m_produk_id }}">
+                                                    <option value="{{ $item->m_produk_code }}">
                                                         {{ ucwords($item->m_produk_nama) }}</option>
                                                 @endforeach
                                             </select>
@@ -122,9 +122,9 @@
         </div>
         <!-- END Modal Resep -->
         <!-- Modal Detail Resep -->
-        <div class="modal modal-large" id="modal-block-select2-detail" tabindex="-1" role="dialog"
+        <div class="modal modal-xl" id="modal-block-select2-detail" tabindex="-1" role="dialog"
             aria-labelledby="modal-block-select2-detail" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content">
                     <div class="block block-themed shadow-none mb-0">
                         <div class="block-header block-header-default bg-pulse">
@@ -137,7 +137,59 @@
                             </div>
                         </div>
                         <div class="block-content">
-                            @csrf
+                            <form action="formResep" id="formResep">
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <div class="mb-4">
+                                            <div class="form-group">
+                                                <label for="m_resep_detail_bb_code">Pilih Bahan Baku</label>
+                                                <input type="hidden" name="action" id="action">
+                                                <select class="js-select2" id="m_resep_detail_bb_code"
+                                                    name="m_resep_detail_bb_code" style="width: 100%;"
+                                                    data-placeholder="Pilih Bahan Baku" required>
+                                                    <option></option>
+                                                    @foreach ($data->bb as $item)
+                                                        <option value="{{ $item->m_produk_code }}">
+                                                            {{ ucwords($item->m_produk_nama) }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="mb-4">
+                                            <div class="form-group">
+                                                <label for="m_resep_detail_bb_qty">Qty</label>
+                                                <input class="form-group number form-control" style="width: 100%;"
+                                                    type="text" name="m_resep_detail_bb_qty"
+                                                    id="m_resep_detail_bb_qty" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="mb-4">
+                                            <div class="form-group">
+                                                <input type="hidden" name="m_resep_detail_m_satuan_id"
+                                                    id="m_resep_detail_m_satuan_id">
+                                                <label for="m_resep_detail_satuan">Satuan</label>
+                                                <input class="form-group form-control" style="width: 100%;"
+                                                    type="text" name="m_resep_detail_satuan"
+                                                    id="m_resep_detail_satuan" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="mb-4">
+                                            <div class="form-group">
+                                                <label for="m_resep_detail_ket">Keterangan</label>
+                                                <textarea name="m_resep_detail_ket" id="m_resep_detail_ket" cols="30" rows="3"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-sm btn-success btn-tambah">Tambah</button>
+                            </form>
                             <div class="table-responsive">
                                 <table id="m_resep_detail_tb"
                                     class="table table-sm m_resep_detail_tb table-bordered table-striped table-vcenter js-dataTable-full">
@@ -181,11 +233,8 @@
     $("#m_resep").append(
       $('<tfoot/>').append($("#m_resep thead tr").clone())
     );
-    $(".close").on('click', function() {
-      window.location.reload();
-    })
 
-    Codebase.helpersOnLoad(['jq-select2']);
+    $('.js-select2').select2({dropdownParent:'#modal-block-select2-detail',dropdownAutoWidth: true})
     $(".buttonInsert").on('click', function() {
       var id = $(this.m_resep_id).attr('value');
       $("#myModalLabel").html('Tambah Resep');
@@ -201,9 +250,8 @@
         type: "GET",
         dataType: 'json',
         success: function(respond) {
-          console.log(respond)
-          $("#id").val(respond.m_resep_id).trigger('change');
-          $("#m_resep_m_produk_id").val(respond.m_resep_m_produk_id).trigger('change');
+          $("#id").val(respond.m_resep_code).trigger('change');
+          $("#m_resep_m_produk_code").val(respond.m_resep_m_produk_code).trigger('change');
           $("#m_resep_keterangan").val(respond.m_resep_keterangan).trigger('change');
           $("input[name='m_resep_status']").val(respond.m_resep_status).prop("checked", true);
         },
@@ -211,79 +259,88 @@
       });
       $("#modal-block-select2").modal('show');
     });
+    var table,detail_id;
     $(".buttonDetail").on('click', function() {
-      var id = $(this).attr('value');
+        detail_id = $(this).attr('value');
       $("#myModalLabel2").html('Detail Resep');
-     var dt = $('.m_resep_detail_tb').dataTable({
-        ajax: "/master/m_resep/detail/" + id,
-        destroy: true,
-        order : [[1, 'asc']],
-      });
-
-      var url = "{{route('list_detail.m_resep')}}";
-      var satuan = new Array();
-      var bb = new Array();
-      var tb_edit;
-      $.get(url, function(response) {
-        satuan = response['satuan'];
-        bb = response['bb'];
-        var data = [
-          [2, 'm_resep_detail_bb_id', 'select', JSON.stringify(bb)],
-          [3, 'm_resep_detail_bb_qty', 'number','{"min":"0.01","step":"0.01"}'],
-          [4, 'm_resep_detail_m_satuan_id', 'select', JSON.stringify(satuan)],
-          [5, 'm_resep_detail_ket','textarea', '{"rows": "2", "cols": "2", "maxlength": "200", "wrap": "hard"}']
-        ];
-        setTimeout(function() {
-         
-       
-     var tab =  $('.m_resep_detail_tb').Tabledit({
-          url: '/master/m_resep/action/' + id,
-          dataType: "json",
-          cache: false,
-          hideIdentifier:true,
-          columns: {
-            identifier: [0, 'm_resep_detail_id'],
-            editable: data
-          },
-          restoreButton: false,
-          onSuccess: function(data, textStatus, jqXHR) {
-            if (data.action == 'add') {
-             window.location.reload();
-            }
-            if (data.action == 'delete') {
-              $('#' + data.id).remove();
-            }
-          }
+     $(function() {
+            table = $('#m_resep_detail_tb').DataTable({
+            "destroy":true,
+            "orderCellsTop": true,
+            "processing": true,
+            "autoWidth": true,
+            "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+            "pageLength": 10,
+            "ajax": {
+                "url": "/master/m_resep/detail/" + detail_id,
+                "type": "GET"
+                    }
+                });
         });
-      }, 150);
-    
-      });
       $("#modal-block-select2-detail").modal('show');
       $(document).on('select2:open', '.js-select2', function(){
           console.log("Saving value " + $(this).val());
-          var index = $(this).attr('id'); 
+          var index = $(this).attr('detail_id'); 
           console.log(index);
           $(this).data('val', $(this).val());
-          $(this).data('id',index);
+          $(this).data('detail_id',index);
       }).on('change','.js-select2', function(e){
           var prev = $(this).data('val');
           var current = $(this).val();
-          var id = $(this).data('id');
+          var id = $(this).data('detail_id');
           console.log(id);
-      var values = $('[name="m_resep_detail_bb_id"]').map(function() {
+      var values = $('[name="m_resep_detail_bb_code"]').map(function() {
         return this.value.trim();
       }).get();
-      console.log(values);
       var unique =  [...new Set(values)];
       if (values.length != unique.length) {
         e.preventDefault();
         alert('Nama Barang Sudah Digunakan Pilih Yang Lain');
-        console.log('ini id'+id);
-         $('#m_resep_detail_bb_id').val(prev).trigger('change');
+         $('#m_resep_detail_bb_code').val(prev).trigger('change');
       }
       });
     });
-    
+    $('#m_resep_detail_bb_code').on('change',function () {
+        var id = $(this).val();
+        $.get("/master/m_produk_satuan/"+id, function(data){
+            $('#m_resep_detail_satuan').val(data.m_satuan_kode);
+            $('#m_resep_detail_m_satuan_id').val(data.m_satuan_id);
+        });
+      });
+      $(".btn-tambah").on('click', function() {
+            $('[name="action"]').val('add');
+
+      });
+    $('#formResep').submit(function(e){
+                if(!e.isDefaultPrevented()){
+                    $.ajax({
+                        url : '/master/m_resep/action/' + detail_id,
+                        type : "POST",
+                        data : $('#modal-block-select2-detail form').serialize(),
+                        success : function(data){
+                            Codebase.helpers('jq-notify', {
+                              align: 'right', // 'right', 'left', 'center'
+                              from: 'top', // 'top', 'bottom'
+                              type: data.type, // 'info', 'success', 'warning', 'danger'
+                              icon: 'fa fa-info me-5', // Icon class
+                              message: data.messages,
+                              onShow: function() {
+                                var modal = $('#formResep');
+                                var notify = $('.jq-notification');
+                                notify.css('top', modal.offset().top - notify.outerHeight() - 10);
+                            }
+                            });
+                            table.ajax.reload();
+                            $('.js-select2').val(null).trigger('change');
+                            $('#formResep')[0].reset();
+                        },
+                        error : function(){
+                            alert("Tidak dapat menyimpan data!");
+                        }
+                    });
+                    return false;
+                }
+    });
 
   });
 </script>
