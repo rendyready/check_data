@@ -293,7 +293,7 @@
                         '<td><input type="text" class="form-control number form-control-sm rupiahdisc" name="rekap_beli_detail_discrp[]" id="rekap_beli_detail_discrp"></td>'+
                         '<td><input type="text" class="form-control number form-control-sm subtot" name="rekap_beli_detail_subtot[]" id="rekap_beli_detail_subtot" readonly></td>'+
                         '<td><button type="button" id="'+no+'" class="btn btn-danger btn_remove"><i class="fa fa-trash"></i></button></td></tr>');
-        
+        Codebase.helpersOnLoad(['jq-select2']);
         $.each(datas, function(key, value) {
             $('#rekap_beli_detail_m_produk_id'+no)
               .append($('<option>', { value : key })
