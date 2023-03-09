@@ -137,52 +137,59 @@
                             </div>
                         </div>
                         <div class="block-content">
-                            <div class="row">
-                                <div class="col-md-5">
-                                    <div class="mb-4">
-                                        <div class="form-group">
-                                            <label for="m_resep_detail_bb_code">Pilih Bahan Baku</label>
-                                            <select class="js-select2" id="m_resep_detail_bb_code"
-                                                name="m_resep_detail_bb_code" style="width: 100%;"
-                                                data-placeholder="Pilih Bahan Baku" required>
-                                                <option></option>
-                                                @foreach ($data->bb as $item)
-                                                    <option value="{{ $item->m_produk_code }}">
-                                                        {{ ucwords($item->m_produk_nama) }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
+                            <form action="formResep" id="formResep">
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <div class="mb-4">
+                                            <div class="form-group">
+                                                <label for="m_resep_detail_bb_code">Pilih Bahan Baku</label>
+                                                <input type="hidden" name="action" id="action">
+                                                <select class="js-select2" id="m_resep_detail_bb_code"
+                                                    name="m_resep_detail_bb_code" style="width: 100%;"
+                                                    data-placeholder="Pilih Bahan Baku" required>
+                                                    <option></option>
+                                                    @foreach ($data->bb as $item)
+                                                        <option value="{{ $item->m_produk_code }}">
+                                                            {{ ucwords($item->m_produk_nama) }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="mb-4">
+                                            <div class="form-group">
+                                                <label for="m_resep_detail_bb_qty">Qty</label>
+                                                <input class="form-group number form-control" style="width: 100%;"
+                                                    type="text" name="m_resep_detail_bb_qty"
+                                                    id="m_resep_detail_bb_qty" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="mb-4">
+                                            <div class="form-group">
+                                                <input type="hidden" name="m_resep_detail_m_satuan_id"
+                                                    id="m_resep_detail_m_satuan_id">
+                                                <label for="m_resep_detail_satuan">Satuan</label>
+                                                <input class="form-group form-control" style="width: 100%;"
+                                                    type="text" name="m_resep_detail_satuan"
+                                                    id="m_resep_detail_satuan" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="mb-4">
+                                            <div class="form-group">
+                                                <label for="m_resep_detail_ket">Keterangan</label>
+                                                <textarea name="m_resep_detail_ket" id="m_resep_detail_ket" cols="30" rows="3"></textarea>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-2">
-                                    <div class="mb-4">
-                                        <div class="form-group">
-                                            <label for="m_resep_detail_bb_qty">Qty</label>
-                                            <input class="form-group number form-control" style="width: 100%;" type="text"
-                                                name="m_resep_detail_bb_qty" id="m_resep_detail_bb_qty" required>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <div class="mb-4">
-                                        <div class="form-group">
-                                            <label for="m_resep_detail_satuan">Satuan</label>
-                                            <input class="form-group form-control" style="width: 100%;" type="text"
-                                                name="m_resep_detail_satuan" id="m_resep_detail_satuan" readonly>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="mb-4">
-                                        <div class="form-group">
-                                            <label for="m_resep_detail_ket">Keterangan</label>
-                                            <textarea name="m_resep_detail_ket" id="m_resep_detail_ket" cols="30" rows="3"></textarea>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
+                                <button type="submit" class="btn btn-sm btn-success btn-tambah">Tambah</button>
+                            </form>
                             <div class="table-responsive">
                                 <table id="m_resep_detail_tb"
                                     class="table table-sm m_resep_detail_tb table-bordered table-striped table-vcenter js-dataTable-full">
@@ -252,25 +259,35 @@
       });
       $("#modal-block-select2").modal('show');
     });
+    var table,detail_id;
     $(".buttonDetail").on('click', function() {
-      var id = $(this).attr('value');
+        detail_id = $(this).attr('value');
       $("#myModalLabel2").html('Detail Resep');
-     var dt = $('.m_resep_detail_tb').dataTable({
-        ajax: "/master/m_resep/detail/" + id,
-        destroy: true,
-        order : [[1, 'asc']],
-      });
+     $(function() {
+            table = $('#m_resep_detail_tb').DataTable({
+            "destroy":true,
+            "orderCellsTop": true,
+            "processing": true,
+            "autoWidth": true,
+            "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+            "pageLength": 10,
+            "ajax": {
+                "url": "/master/m_resep/detail/" + detail_id,
+                "type": "GET"
+                    }
+                });
+        });
       $("#modal-block-select2-detail").modal('show');
       $(document).on('select2:open', '.js-select2', function(){
           console.log("Saving value " + $(this).val());
-          var index = $(this).attr('id'); 
+          var index = $(this).attr('detail_id'); 
           console.log(index);
           $(this).data('val', $(this).val());
-          $(this).data('id',index);
+          $(this).data('detail_id',index);
       }).on('change','.js-select2', function(e){
           var prev = $(this).data('val');
           var current = $(this).val();
-          var id = $(this).data('id');
+          var id = $(this).data('detail_id');
           console.log(id);
       var values = $('[name="m_resep_detail_bb_code"]').map(function() {
         return this.value.trim();
@@ -284,12 +301,46 @@
       });
     });
     $('#m_resep_detail_bb_code').on('change',function () {
-        $.get("/inventori/stok_harga/"+g_id+"/"+current, function(data){
-            $('#rekap_tf_gudang_hpp'+harga_id).val(data.m_stok_hpp);
-            $('#satuan'+harga_id).html(data.m_stok_satuan);
-          });
+        var id = $(this).val();
+        $.get("/master/m_produk_satuan/"+id, function(data){
+            $('#m_resep_detail_satuan').val(data.m_satuan_kode);
+            $('#m_resep_detail_m_satuan_id').val(data.m_satuan_id);
+        });
+      });
+      $(".btn-tambah").on('click', function() {
+            $('[name="action"]').val('add');
+
+      });
+    $('#formResep').submit(function(e){
+                if(!e.isDefaultPrevented()){
+                    $.ajax({
+                        url : '/master/m_resep/action/' + detail_id,
+                        type : "POST",
+                        data : $('#modal-block-select2-detail form').serialize(),
+                        success : function(data){
+                            Codebase.helpers('jq-notify', {
+                              align: 'right', // 'right', 'left', 'center'
+                              from: 'top', // 'top', 'bottom'
+                              type: data.type, // 'info', 'success', 'warning', 'danger'
+                              icon: 'fa fa-info me-5', // Icon class
+                              message: data.messages,
+                              onShow: function() {
+                                var modal = $('#formResep');
+                                var notify = $('.jq-notification');
+                                notify.css('top', modal.offset().top - notify.outerHeight() - 10);
+                            }
+                            });
+                            table.ajax.reload();
+                            $('.js-select2').val(null).trigger('change');
+                            $('#formResep')[0].reset();
+                        },
+                        error : function(){
+                            alert("Tidak dapat menyimpan data!");
+                        }
+                    });
+                    return false;
+                }
     });
-    
 
   });
 </script>

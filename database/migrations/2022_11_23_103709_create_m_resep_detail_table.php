@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('m_resep_detail_m_resep_code');
             $table->string('m_resep_detail_bb_code'); //id from m_produk
             $table->string('m_resep_detail_m_produk_nama');
-            $table->decimal('m_resep_detail_bb_qty',8,2);
+            $table->decimal('m_resep_detail_bb_qty',8,3);
             $table->string('m_resep_detail_satuan');
             $table->bigInteger('m_resep_detail_m_satuan_id');
             $table->string('m_resep_detail_ket')->nullable();

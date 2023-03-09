@@ -145,7 +145,7 @@
                                                 <textarea class="form-control form-control-sm" name="rekap_beli_detail_catatan[]" id="rekap_beli_detail_catatan"
                                                     cols="50" required placeholder="catatan bb atau satuan"></textarea>
                                             </td>
-                                            <td><input type="number" min="0.01" step="0.01"
+                                            <td><input type="text"
                                                     class="form-control number form-control-sm qty"
                                                     name="rekap_beli_detail_qty[]" id="rekap_beli_detail_qty" required>
                                             </td>
@@ -287,7 +287,7 @@
 		$('#form').append('<tr id="row'+no+'">'+
                         '<td><select class="js-select2 nama_barang" name="rekap_beli_detail_m_produk_id[]" id="rekap_beli_detail_m_produk_id'+no+'" style="width: 100%;" data-placeholder="Pilih Nama Barang" required > <option value="0" selected disabled hidden></option></select></td>'+
                         '<td><textarea class="form-control form-control-sm" name="rekap_beli_detail_catatan[]" id="rekap_beli_detail_catatan" cols="50" required placeholder="catatan bb atau satuan"></textarea></td>'+
-                        '<td><input type="number" min="0.01" step="0.01" class="form-control number form-control-sm qty" name="rekap_beli_detail_qty[]" id="rekap_beli_detail_qty" required></td>'+
+                        '<td><input type="text" class="form-control number form-control-sm qty" name="rekap_beli_detail_qty[]" id="rekap_beli_detail_qty" required></td>'+
                         '<td><input type="text" class="form-control number form-control-sm harga" name="rekap_beli_detail_harga[]" id="rekap_beli_detail_harga" required></td>'+
                         '<td><input type="text" class="form-control number form-control-sm persendisc" name="rekap_beli_detail_disc[]" id="rekap_beli_detail_disc"></td>'+
                         '<td><input type="text" class="form-control number form-control-sm rupiahdisc" name="rekap_beli_detail_discrp[]" id="rekap_beli_detail_discrp"></td>'+
@@ -317,7 +317,7 @@
       $tblrows.each(function (index) {
           var $tblrow = $(this);
           $tblrow.find(".qty, .harga, .persendisc, .rupiahdisc").on('input', function () {
-              var qty = $tblrow.find("[name='rekap_beli_detail_qty[]']").val();
+              var qty = $tblrow.find("[name='rekap_beli_detail_qty[]']").val().replace(/\./g, '').replace(/\,/g, '.');
               var price = $tblrow.find("[name='rekap_beli_detail_harga[]']").val().replace(/\./g, '').replace(/\,/g, '.');
               var persendisc = $tblrow.find("[name='rekap_beli_detail_disc[]']").val();
               var nilaipersendisc = 100-persendisc;

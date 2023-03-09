@@ -113,7 +113,7 @@ class ResepController extends Controller
                     'm_resep_detail_m_resep_code'    =>    $request->id,
                     'm_resep_detail_bb_code'    =>    $request->m_resep_detail_bb_code,
                     'm_resep_detail_m_produk_nama' => $produk->m_produk_nama,
-                    'm_resep_detail_bb_qty'    =>    $request->m_resep_detail_bb_qty,
+                    'm_resep_detail_bb_qty'    =>    convertfloat($request->m_resep_detail_bb_qty),
                     'm_resep_detail_m_satuan_id' =>    $request->m_resep_detail_m_satuan_id,
                     'm_resep_detail_satuan' => $kode_satuan->m_satuan_kode,
                     'm_resep_detail_ket' => $request->m_resep_detail_ket,
@@ -124,7 +124,7 @@ class ResepController extends Controller
             } elseif ($request->action == 'edit') {
                 $data = array(
                     'm_resep_detail_bb_code'    =>    $request->m_resep_detail_bb_code,
-                    'm_resep_detail_bb_qty'    =>    $request->m_resep_detail_bb_qty,
+                    'm_resep_detail_bb_qty'    =>    convertfloat($request->m_resep_detail_bb_qty),
                     'm_resep_detail_m_satuan_id' =>    $request->m_resep_detail_m_satuan_id,
                     'm_resep_detail_ket' => $request->m_resep_detail_ket,
                     'm_resep_detail_updated_by' => Auth::id(),

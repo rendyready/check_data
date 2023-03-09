@@ -104,6 +104,8 @@ Route::group(['prefix' => 'master', 'controller' => ProdukController::class, 'mi
     Route::get('m_produk', 'index')->name('m_produk.index');
     Route::post('produk/simpan', 'simpan')->name('simpan.m_produk');
     Route::get('produk/list/{id}', 'list')->name('m_produk.list');
+    Route::get('m_produk_satuan/{id}','get_prod_sat');
+
 });
 //Master Produk Relasi
 Route::group(['prefix' => 'master', 'controller' => RelasiKatMenuController::class, 'middleware' => ['auth', 'web']], function () {
