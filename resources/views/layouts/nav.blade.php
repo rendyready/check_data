@@ -356,7 +356,7 @@
 
               <li class="nav-main-item{{ request()->is('dashboard/*') ? ' open' : '' }}">
                 <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
-                  <span class="nav-main-link-name">Laporan Penjualan</span>
+                  <span class="nav-main-link-name">Laporan CR55</span>
                 </a>
                 <ul class="nav-main-submenu">
                   <li class="nav-main-item">
@@ -472,8 +472,34 @@
                   <span class="nav-main-link-name">Barang Rusak</span>
                 </a>
               </li>
+              <li class="nav-main-item">
+                <a class="nav-main-link{{ request()->is('invetori/rusak') ? ' active' : '' }}" href="{{route('rusak.index')}}">
+                  <span class="nav-main-link-name">Kartu Stock</span>
+                </a>
+              </li>
+              <li class="nav-main-item">
+                <a class="nav-main-link{{ request()->is('invetori/rusak') ? ' active' : '' }}" href="{{route('rusak.index')}}">
+                  <span class="nav-main-link-name">Rekap Stock</span>
+                </a>
+              </li>
+              <li class="nav-main-item">
+                <a class="nav-main-link{{ request()->is('invetori/rusak') ? ' active' : '' }}" href="{{route('rusak.index')}}">
+                  <span class="nav-main-link-name">Laporan Pembelian</span>
+                </a>
+              </li>
+              <li class="nav-main-item">
+                <a class="nav-main-link{{ request()->is('invetori/rusak') ? ' active' : '' }}" href="{{route('rusak.index')}}">
+                  <span class="nav-main-link-name">Laporan Pengiriman</span>
+                </a>
+              </li>
+              <li class="nav-main-item">
+                <a class="nav-main-link{{ request()->is('invetori/rusak') ? ' active' : '' }}" href="{{route('rusak.index')}}">
+                  <span class="nav-main-link-name">laporan Keluar Gudang</span>
+                </a>
+              </li>
             </ul>
           </li>
+
           <li class="nav-main-item{{ request()->is('akuntansi/*') ? ' open' : '' }}">
             <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
               <i class="nav-main-link-icon fa fa-money-bill-1"></i>

@@ -116,7 +116,7 @@ $(document).ready(function() {
               status: status,
             },
             success:function(data){  
-              $.each(data.transaksi_rekap, function (key, value) {
+              $.each(data.transaksi_rekap2, function (key, value) {
                 // console.log(item.r_t_id);
                   $('#show_nota').append('<div class="col-xl-4 show_nota">'+
                         '<div class="block block-rounded mb-1">'+
@@ -226,7 +226,7 @@ $(document).ready(function() {
               status: status,
             },
             success:function(data){  
-              $.each(data.transaksi_rekap, function (key, value) {
+              $.each(data.transaksi_rekap2, function (key, value) {
                 // console.log(item.r_t_id);
                   $('#show_nota').append('<div class="col-xl-4 show_nota">'+
                         '<div class="block block-rounded mb-1">'+

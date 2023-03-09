@@ -43,9 +43,19 @@ class GaransiController extends Controller
         return response()->json($data);
     }
 
-    public function create()
+    public function select_user(Request $request)
     {
-        return view('dashboard::create');
+        $user = DB::table('users')
+            ->select('users_id', 'name')
+            ->where('waroeng_id', $request->id_waroeng)
+            ->orderBy('users_id', 'asc')
+            ->get();
+        $data = array();
+        foreach ($user as $val) {
+            $data[$val->users_id] = [$val->name];
+            $data['all'] = 'All Operator';
+        }
+        return response()->json($data);
     }
 
     /**
@@ -66,13 +76,15 @@ class GaransiController extends Controller
     public function show(Request $request)
     {
         $dates = explode('to' ,$request->tanggal);
-        $get = DB::table('rekap_garansi')
+        $get2 = DB::table('rekap_garansi')
                 ->join('rekap_transaksi', 'r_t_id', 'rekap_garansi_r_t_id')
                 ->join('users', 'users_id', 'rekap_garansi_created_by')
                 ->where('r_t_m_w_id', $request->waroeng)
-                ->where('rekap_garansi_created_by', $request->operator)
-                ->whereBetween('r_t_tanggal', $dates)
-                ->orderBy('r_t_tanggal', 'ASC')
+                ->whereBetween('r_t_tanggal', $dates);
+                if($request->operator != 'all'){
+                    $get2->where('rekap_garansi_created_by', $request->operator);
+                }
+                $get = $get2->orderBy('r_t_tanggal', 'ASC')
                 ->orderBy('r_t_nota_code', 'ASC')
                 ->get();
         $data = array();

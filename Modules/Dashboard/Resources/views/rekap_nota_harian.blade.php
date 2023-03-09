@@ -84,6 +84,8 @@
             <table id="tampil_rekap" class="table table-sm table-bordered table-hover table-striped table-vcenter js-dataTable-full nowrap">
               <thead>
                 <tr>
+                    <th class="text-center">Area</th>
+                    <th class="text-center">Waroeng</th>
                     <th class="text-center">Tanggal</th>
                     <th class="text-center">Total Penjualan</th>
                     @foreach ($data->payment as $payment)
@@ -100,6 +102,8 @@
             <table id="tampil_rekap2" class="table table-sm table-bordered table-hover table-striped table-vcenter js-dataTable-full nowrap">
                 <thead>
                   <tr>
+                      <th class="text-center">Area</th>
+                      <th class="text-center">Waroeng</th>
                       <th class="text-center">Tanggal</th>
                       <th class="text-center">Operator</th>
                       <th class="text-center">Total Penjualan</th>
