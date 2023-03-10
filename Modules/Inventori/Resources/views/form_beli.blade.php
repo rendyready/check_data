@@ -25,15 +25,16 @@
                                     <div class="row mb-1">
                                         <label class="col-sm-3 col-form-label-sm" for="example-hf-text">Waroeng</label>
                                         <div class="col-sm-9">
-                                            <input type="text" class="form-control form-control-sm" id="rekap_beli_waroeng"
-                                                name="rekap_beli_waroeng" value="{{ $data->waroeng_nama->m_w_nama }}" readonly>
+                                            <input type="text" class="form-control form-control-sm"
+                                                id="rekap_beli_waroeng" name="rekap_beli_waroeng"
+                                                value="{{ $data->waroeng_nama->m_w_nama }}" readonly>
                                         </div>
                                     </div>
                                     <div class="row mb-2">
                                         <label class="col-sm-3 col-form-label-sm" for="rekap_beli_gudang_code">Masuk
                                             Gudang</label>
                                         <div class="col-sm-9">
-                                            <select class="js-select2 form-control-sm" style="width: 100%;"
+                                            <select class="js-select2 gudang_code form-control-sm" style="width: 100%;"
                                                 name="rekap_beli_gudang_code" id="rekap_beli_gudang_code"
                                                 data-placeholder="Pilih Gudang" required>
                                                 <option></option>
@@ -138,15 +139,14 @@
                                                     name="rekap_beli_detail_m_produk_id[]"
                                                     id="rekap_beli_detail_m_produk_id1" style="width: 100%;"
                                                     data-placeholder="Pilih Nama Barang" required>
-                                                    <option value="0" selected disabled hidden>Pilih Nama Produk
+                                                    <option>
                                                     </option>
                                                 </select></td>
                                             <td>
                                                 <textarea class="form-control form-control-sm" name="rekap_beli_detail_catatan[]" id="rekap_beli_detail_catatan"
                                                     cols="50" required placeholder="catatan bb atau satuan"></textarea>
                                             </td>
-                                            <td><input type="text"
-                                                    class="form-control number form-control-sm qty"
+                                            <td><input type="text" class="form-control number form-control-sm qty"
                                                     name="rekap_beli_detail_qty[]" id="rekap_beli_detail_qty" required>
                                             </td>
                                             <td><input type="text" class="form-control number form-control-sm harga"
@@ -195,7 +195,8 @@
                                                     id="rekap_beli_disc" name="rekap_beli_disc" placeholder="%">
                                             </div>
                                             <div class="col-sm-5">
-                                                <input type="text" class="form-control number form-control-sm disc_tot_rp"
+                                                <input type="text"
+                                                    class="form-control number form-control-sm disc_tot_rp"
                                                     id="rekap_beli_disc_rp" name="rekap_beli_disc_rp" placeholder="Rp">
                                             </div>
                                         </div>
@@ -268,6 +269,23 @@
     Codebase.helpersOnLoad(['jq-select2']);
     var datas;
     $('#rekap_beli_gudang_code').on('change',function () {
+    if ($('#rekap_beli_detail_catatan').val().length > 0) {
+        var confirmation = confirm("Apakah Anda yakin ingin mengganti gudang? Data yang telah dimasukkan akan dihapus.");
+        if (confirmation == true) {
+            $('#rekap_beli_detail_m_produk_id1').trigger('reset');
+            var asal = $(this).val()
+            $.get("/inventori/stok/"+asal, function(data){
+                datas = data;
+                $.each(data, function(key, value) {
+                  $('#rekap_beli_detail_m_produk_id1')
+                  .append($('<option>', { value : key })
+                  .text(value));
+                });
+            });
+        } else {
+            $(this).val($('#rekap_beli_gudang_code option:selected').text());
+        }
+    } else {
         var asal = $(this).val()
         $.get("/inventori/stok/"+asal, function(data){
             datas = data;
@@ -276,30 +294,33 @@
               .append($('<option>', { value : key })
               .text(value));
             });
-        });  
-    });
-	var no =1;
+        });
+    }
+});
+
+	var no =2;
     var supplier = new Array();
-    $.get('/inventori/beli/list', function(response){
-      supplier = response['supplier'];
-	  $('.tambah').on('click',function(){
-	    no++;
-		$('#form').append('<tr id="row'+no+'">'+
-                        '<td><select class="js-select2 nama_barang" name="rekap_beli_detail_m_produk_id[]" id="rekap_beli_detail_m_produk_id'+no+'" style="width: 100%;" data-placeholder="Pilih Nama Barang" required > <option value="0" selected disabled hidden></option></select></td>'+
-                        '<td><textarea class="form-control form-control-sm" name="rekap_beli_detail_catatan[]" id="rekap_beli_detail_catatan" cols="50" required placeholder="catatan bb atau satuan"></textarea></td>'+
-                        '<td><input type="text" class="form-control number form-control-sm qty" name="rekap_beli_detail_qty[]" id="rekap_beli_detail_qty" required></td>'+
-                        '<td><input type="text" class="form-control number form-control-sm harga" name="rekap_beli_detail_harga[]" id="rekap_beli_detail_harga" required></td>'+
-                        '<td><input type="text" class="form-control number form-control-sm persendisc" name="rekap_beli_detail_disc[]" id="rekap_beli_detail_disc"></td>'+
-                        '<td><input type="text" class="form-control number form-control-sm rupiahdisc" name="rekap_beli_detail_discrp[]" id="rekap_beli_detail_discrp"></td>'+
-                        '<td><input type="text" class="form-control number form-control-sm subtot" name="rekap_beli_detail_subtot[]" id="rekap_beli_detail_subtot" readonly></td>'+
-                        '<td><button type="button" id="'+no+'" class="btn btn-danger btn_remove"><i class="fa fa-trash"></i></button></td></tr>');
+    function addRow() {
+        $('#form').append('<tr id="row'+no+'">'+
+            '<td><select class="js-select2 nama_barang" name="rekap_beli_detail_m_produk_id[]" id="rekap_beli_detail_m_produk_id'+no+'" style="width: 100%;" data-placeholder="Pilih Nama Barang" required > <option></option></select></td>'+
+            '<td><textarea class="form-control form-control-sm" name="rekap_beli_detail_catatan[]" id="rekap_beli_detail_catatan" cols="50" required placeholder="catatan bb atau satuan"></textarea></td>'+
+            '<td><input type="text" class="form-control number form-control-sm qty" name="rekap_beli_detail_qty[]" id="rekap_beli_detail_qty" required></td>'+
+            '<td><input type="text" class="form-control number form-control-sm harga" name="rekap_beli_detail_harga[]" id="rekap_beli_detail_harga" required></td>'+
+            '<td><input type="text" class="form-control number form-control-sm persendisc" name="rekap_beli_detail_disc[]" id="rekap_beli_detail_disc"></td>'+
+            '<td><input type="text" class="form-control number form-control-sm rupiahdisc" name="rekap_beli_detail_discrp[]" id="rekap_beli_detail_discrp"></td>'+
+            '<td><input type="text" class="form-control number form-control-sm subtot" name="rekap_beli_detail_subtot[]" id="rekap_beli_detail_subtot" readonly></td>'+
+            '<td><button type="button" id="'+no+'" class="btn btn-danger btn_remove"><i class="fa fa-trash"></i></button></td></tr>');
         Codebase.helpersOnLoad(['jq-select2']);
         $.each(datas, function(key, value) {
             $('#rekap_beli_detail_m_produk_id'+no)
               .append($('<option>', { value : key })
               .text(value));
-            });
-    });
+        });
+        no++;
+        $('#formAction tr:last-child td:nth-child(1) select').focus();
+    }
+    $.get('/inventori/beli/list', function(response){
+      supplier = response['supplier'];
     $.each(supplier, function(key, value) {
      $('#rekap_beli_supplier_code')
           .append($('<option>', { value : key })
@@ -355,12 +376,23 @@
           var rekap_beli_tot_nom = parseFloat(grandtotal)+ parseFloat(ppnrp)+ parseFloat(ongkir);
           $('.ppnrp').val(ppnrp);
           $('.rekap_beli_tot_nom').val(rekap_beli_tot_nom.toLocaleString('id'));
-          $('.sisa').val((rekap_beli_tot_nom-bayar).toLocaleString('id'));
+          if (rekap_beli_tot_nom-bayar < 0) {
+            Codebase.helpers('jq-notify', {
+              align: 'right', // 'right', 'left', 'center'
+              from: 'top', // 'top', 'bottom'
+              type: 'danger', // 'info', 'success', 'warning', 'danger'
+              icon: 'fa fa-info me-5', // Icon class
+              message: 'Nominal Bayar Tidak Boleh Lebih Dari Tagihan'
+          });
+            $('.bayar').val(0);
+            $tblrows.find('.persendisc').trigger('input');
+          } else {
+            $('.sisa').val((rekap_beli_tot_nom-bayar).toLocaleString('id'));
+          }
           $('#total_sum_value').html(': Rp '+rekap_beli_tot_nom.toLocaleString('id'));
     });
     $('#rekap_beli_supplier_code').on('change',function() {
       var id = $(this).val();
-      console.log(id);
       if (id == '500001') {
         const date = new Date('{{$data->tgl_now}}').toISOString().slice(0, 10);
         $('.supplier').attr('readonly',false).trigger('change').val('');
@@ -385,25 +417,16 @@
                 });
       }
     });
-    $(document).on('select2:open', '.nama_barang', function(){
-          console.log("Saving value " + $(this).val());
-          var index = $(this).attr('id'); 
-          $(this).data('val', $(this).val());
-          $(this).data('id',index);
-      }).on('change','.nama_barang', function(e){
-          var prev = $(this).data('val');
-          var current = $(this).val();
-          var id = $(this).data('id');
-      var values = $('[name="rekap_beli_detail_m_produk_id[]"]').map(function() {
-        return this.value.trim();
-      }).get();
-      var unique =  [...new Set(values)];
-      if (values.length != unique.length) {
-        e.preventDefault();
-        alert('Nama Barang Sudah Digunakan Pilih Yang Lain');
-         $('#'+id).val(prev).trigger('change');
-      }
-      });
+    $('.tambah').on('click', function() {
+        addRow();
+    });
+    $('#formAction').on('keydown', 'input[name="rekap_beli_detail_subtot[]"]:last', function(e) {
+				if (e.which == 9) { // 9 is the code for the "Tab" key
+					e.preventDefault(); // prevent default "Tab" behavior
+					addRow(); // simulate a click on the "Add Field" button
+				}
+			});
+
 });
 </script>
 @endsection
