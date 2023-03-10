@@ -251,6 +251,27 @@
                                 </div>
                             </div>
                         </form>
+                        <table>
+                            <table id="tb_beli"
+                            class="table table-sm table-bordered table-striped table-vcenter js-dataTable-full">
+                            <thead>
+                                <th>No</th>
+                                <th>Nama Supplier</th>
+                                <th>Jumlah </th>
+                                <th>Operator</th>
+                                <th>Jam Input</th>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                            <tfoot>
+                                <th>No</th>
+                                <th>Nama Supplier</th>
+                                <th>Jumlah </th>
+                                <th>Operator</th>
+                                <th>Jam Input</th>
+                            </tfoot>
+                        </table>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -269,10 +290,24 @@
     Codebase.helpersOnLoad(['jq-select2']);
     var datas;
     $('#rekap_beli_gudang_code').on('change',function () {
-    if ($('#rekap_beli_detail_catatan').val().length > 0) {
-        var confirmation = confirm("Apakah Anda yakin ingin mengganti gudang? Data yang telah dimasukkan akan dihapus.");
-        if (confirmation == true) {
-            $('#rekap_beli_detail_m_produk_id1').trigger('reset');
+    if ($('#rekap_beli_detail_m_produk_id1').val() !=0) {
+        Swal.fire({
+        title: 'Apakah Anda Yakin',
+        text: "Hasil Input Akan Hilang Jika Anda Berganti Gudang dan Belum Menyimpanya",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Ya'
+        }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire(
+            'Berhasil',
+            'Gudang Telah Berganti.',
+            'success'
+            )
+            $('#rekap_beli_detail_m_produk_id1').empty();
+            $('#rekap_beli_detail_m_produk_id1').append('<option></option>');
             var asal = $(this).val()
             $.get("/inventori/stok/"+asal, function(data){
                 datas = data;
@@ -282,9 +317,8 @@
                   .text(value));
                 });
             });
-        } else {
-            $(this).val($('#rekap_beli_gudang_code option:selected').text());
         }
+        });
     } else {
         var asal = $(this).val()
         $.get("/inventori/stok/"+asal, function(data){
@@ -425,7 +459,7 @@
 					e.preventDefault(); // prevent default "Tab" behavior
 					addRow(); // simulate a click on the "Add Field" button
 				}
-			});
+	});
 
 });
 </script>

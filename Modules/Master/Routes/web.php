@@ -123,5 +123,5 @@ Route::group(['prefix' => 'master', 'controller' => ResepController::class, 'mid
     Route::get('m_resep/list/{id}', 'list')->name('m_resep.list');
     Route::get('m_resep/detail/{id}', 'detail')->name('detail.m_resep');
     Route::post('m_resep/action/{id}', 'action')->name('action.m_resep');
-    Route::get('m_resep_detail', 'list_detail')->name('list_detail.m_resep');
+    Route::get('m_resep_detail_edit/{id}', 'list_detail')->name('resep_detail_edit.m_resep');
 });

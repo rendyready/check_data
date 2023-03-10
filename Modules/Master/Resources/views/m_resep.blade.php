@@ -144,6 +144,7 @@
                                             <div class="form-group">
                                                 <label for="m_resep_detail_bb_code">Pilih Bahan Baku</label>
                                                 <input type="hidden" name="action" id="action">
+                                                <input type="hidden" name="m_resep_detail_id" id="m_resep_detail_id">
                                                 <select class="js-select2" id="m_resep_detail_bb_code"
                                                     name="m_resep_detail_bb_code" style="width: 100%;"
                                                     data-placeholder="Pilih Bahan Baku" required>
@@ -194,12 +195,12 @@
                                 <table id="m_resep_detail_tb"
                                     class="table table-sm m_resep_detail_tb table-bordered table-striped table-vcenter js-dataTable-full">
                                     <thead>
-                                        <th>ID</th>
                                         <th>No</th>
                                         <th>NAMA BAHAN BAKU</th>
                                         <th>JUMLAH</th>
                                         <th>SATUAN</th>
                                         <th>KETERANGAN</th>
+                                        <th>AKSI</th>
                                     </thead>
                                     <tbody id="detail_resep">
                                     </tbody>
@@ -220,25 +221,42 @@
     <!-- END Page Content -->
 @endsection
 @section('js')
-    <script type="module">
-  var table;
+    <script>
+  var table,dt_id;
+  function editdetail(id) {
+    $('[name="action"]').val('edit');
+    $.ajax({
+        url: "/master/m_resep_detail_edit/" + id,
+        type: "GET",
+        dataType: 'json',
+        success: function(respond) {
+          $("#m_resep_detail_id").val(id).trigger('change');
+          $("#m_resep_detail_bb_code").val(respond.m_resep_detail_bb_code).trigger('change');
+          $("#m_resep_detail_bb_qty").val(respond.m_resep_detail_bb_qty).trigger('change');
+          $("#m_resep_detail_ket").val(respond.m_resep_detail_ket).trigger('change');
+          $('.btn-tambah').text('Edit').removeClass("btn-success").addClass("btn-warning");
+        },
+        error: function() {}
+      });  
+        
+    }
   $(document).ready(function() {
     $.ajaxSetup({
       headers: {
         'X-CSRF-Token': $("input[name=_token]").val()
       }
     });
+   
     var t = $('#m_resep').DataTable();
 
     $("#m_resep").append(
       $('<tfoot/>').append($("#m_resep thead tr").clone())
     );
-
-    $('.js-select2').select2({dropdownParent:'#modal-block-select2-detail',dropdownAutoWidth: true})
     $(".buttonInsert").on('click', function() {
       var id = $(this.m_resep_id).attr('value');
       $("#myModalLabel").html('Tambah Resep');
       $("#formAction").attr('action', "/master/m_resep/simpan");
+      $('.js-select2').select2({dropdownParent:'#modal-block-select2',dropdownAutoWidth: true})
       $("#modal-block-select2").modal('show');
     });
     $(".buttonEdit").on('click', function() {
@@ -261,8 +279,10 @@
     });
     var table,detail_id;
     $(".buttonDetail").on('click', function() {
-        detail_id = $(this).attr('value');
+    detail_id = $(this).attr('value');
+      $('.btn-tambah').text('Tambah').removeClass("btn-warning").addClass("btn-success");
       $("#myModalLabel2").html('Detail Resep');
+      $('[name="action"]').val('add');
      $(function() {
             table = $('#m_resep_detail_tb').DataTable({
             "destroy":true,
@@ -278,27 +298,7 @@
                 });
         });
       $("#modal-block-select2-detail").modal('show');
-      $(document).on('select2:open', '.js-select2', function(){
-          console.log("Saving value " + $(this).val());
-          var index = $(this).attr('detail_id'); 
-          console.log(index);
-          $(this).data('val', $(this).val());
-          $(this).data('detail_id',index);
-      }).on('change','.js-select2', function(e){
-          var prev = $(this).data('val');
-          var current = $(this).val();
-          var id = $(this).data('detail_id');
-          console.log(id);
-      var values = $('[name="m_resep_detail_bb_code"]').map(function() {
-        return this.value.trim();
-      }).get();
-      var unique =  [...new Set(values)];
-      if (values.length != unique.length) {
-        e.preventDefault();
-        alert('Nama Barang Sudah Digunakan Pilih Yang Lain');
-         $('#m_resep_detail_bb_code').val(prev).trigger('change');
-      }
-      });
+      $('.js-select2').select2({dropdownParent:'#modal-block-select2-detail',dropdownAutoWidth: true})
     });
     $('#m_resep_detail_bb_code').on('change',function () {
         var id = $(this).val();
@@ -307,10 +307,6 @@
             $('#m_resep_detail_m_satuan_id').val(data.m_satuan_id);
         });
       });
-      $(".btn-tambah").on('click', function() {
-            $('[name="action"]').val('add');
-
-      });
     $('#formResep').submit(function(e){
                 if(!e.isDefaultPrevented()){
                     $.ajax({
@@ -318,6 +314,8 @@
                         type : "POST",
                         data : $('#modal-block-select2-detail form').serialize(),
                         success : function(data){
+                            $('[name="action"]').val('add');
+                            $('.btn-tambah').text('Tambah').removeClass("btn-warning").addClass("btn-success");
                             Codebase.helpers('jq-notify', {
                               align: 'right', // 'right', 'left', 'center'
                               from: 'top', // 'top', 'bottom'
@@ -325,9 +323,9 @@
                               icon: 'fa fa-info me-5', // Icon class
                               message: data.messages,
                               onShow: function() {
-                                var modal = $('#formResep');
-                                var notify = $('.jq-notification');
-                                notify.css('top', modal.offset().top - notify.outerHeight() - 10);
+                                var modal = $('#modal-block-select2-detail');
+                                var notify = $('.js-notify');
+                                notify.css('top', modal.offset().top - notify.outerHeight() - 10).css('z-index', 9999);
                             }
                             });
                             table.ajax.reload();
