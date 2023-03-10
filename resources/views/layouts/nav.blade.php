@@ -477,31 +477,101 @@
                   <span class="nav-main-link-name">Barang Rusak</span>
                 </a>
               </li>
-              <li class="nav-main-item">
-                <a class="nav-main-link{{ request()->is('invetori/rusak') ? ' active' : '' }}" href="{{route('rusak.index')}}">
+
+              <li class="nav-main-item{{ request()->is('inventori/*') ? ' open' : '' }}">
+                <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
+                  <span class="nav-main-link-name">Laporan</span>
+                </a>
+                <ul class="nav-main-submenu">
+              <li class="nav-main-item{{ request()->is('inventori/*') ? ' open' : '' }}">
+                <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
                   <span class="nav-main-link-name">Kartu Stock</span>
                 </a>
+                <ul class="nav-main-submenu">
+                  <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('inventori/kartu_stock') ? ' active' : '' }}" href="{{route('kartu_stock.index')}}">
+                      <span class="nav-main-link-name">Kartu Stock</span>
+                    </a>
+                  </li>
+                  <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('inventori/rekap_stock') ? ' active' : '' }}" href="{{route('rekap_stock.index')}}">
+                      <span class="nav-main-link-name">Rekap Stock</span>
+                    </a>
+                  </li>
+                </ul>
               </li>
-              <li class="nav-main-item">
-                <a class="nav-main-link{{ request()->is('invetori/rusak') ? ' active' : '' }}" href="{{route('rusak.index')}}">
-                  <span class="nav-main-link-name">Rekap Stock</span>
-                </a>
-              </li>
-              <li class="nav-main-item">
-                <a class="nav-main-link{{ request()->is('invetori/rusak') ? ' active' : '' }}" href="{{route('rusak.index')}}">
+
+              <li class="nav-main-item{{ request()->is('inventori/*') ? ' open' : '' }}">
+                <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
                   <span class="nav-main-link-name">Laporan Pembelian</span>
                 </a>
+                <ul class="nav-main-submenu">
+                  <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('inventori/lap_pem_detail') ? ' active' : '' }}" href="{{route('lap_pem_detail.lap_detail')}}">
+                      <span class="nav-main-link-name">Detail Pembelian</span>
+                    </a>
+                  </li>
+                  <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('inventori/lap_pem_rekap') ? ' active' : '' }}" href="{{route('lap_pem_rekap.lap_rekap')}}">
+                      <span class="nav-main-link-name">Rekap Pembelian</span>
+                    </a>
+                  </li>
+                  <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('inventori/lap_pem_harian') ? ' active' : '' }}" href="{{route('lap_pem_harian.lap_harian')}}">
+                      <span class="nav-main-link-name">Rekap Pembelian Harian</span>
+                    </a>
+                  </li>
+                </ul>
               </li>
-              <li class="nav-main-item">
-                <a class="nav-main-link{{ request()->is('invetori/rusak') ? ' active' : '' }}" href="{{route('rusak.index')}}">
+
+              <li class="nav-main-item{{ request()->is('inventori/*') ? ' open' : '' }}">
+                <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
                   <span class="nav-main-link-name">Laporan Pengiriman</span>
                 </a>
+                <ul class="nav-main-submenu">
+                  <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('inventori/m_bb') ? ' active' : '' }}" href="{{route('m_bb.index')}}">
+                      <span class="nav-main-link-name">Detail Pengiriman</span>
+                    </a>
+                  </li>
+                  <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('inventori/m_bb') ? ' active' : '' }}" href="{{route('m_bb.index')}}">
+                      <span class="nav-main-link-name">Rekap Pengiriman</span>
+                    </a>
+                  </li>
+                  <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('inventori/m_bb') ? ' active' : '' }}" href="{{route('m_bb.index')}}">
+                      <span class="nav-main-link-name">Rekap Pengiriman Harian</span>
+                    </a>
+                  </li>
+                </ul>
               </li>
-              <li class="nav-main-item">
-                <a class="nav-main-link{{ request()->is('invetori/rusak') ? ' active' : '' }}" href="{{route('rusak.index')}}">
+
+              <li class="nav-main-item{{ request()->is('inventori/*') ? ' open' : '' }}">
+                <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
                   <span class="nav-main-link-name">laporan Keluar Gudang</span>
                 </a>
+                <ul class="nav-main-submenu">
+                  <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('inventori/m_bb') ? ' active' : '' }}" href="{{route('m_bb.index')}}">
+                      <span class="nav-main-link-name">Detail Keluar Gudang</span>
+                    </a>
+                  </li>
+                  <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('inventori/m_bb') ? ' active' : '' }}" href="{{route('m_bb.index')}}">
+                      <span class="nav-main-link-name">Rekap Keluar Gudang</span>
+                    </a>
+                  </li>
+                  <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('inventori/m_bb') ? ' active' : '' }}" href="{{route('m_bb.index')}}">
+                      <span class="nav-main-link-name">Rekap Keluar Gudang Harian</span>
+                    </a>
+                  </li>
+                </ul>
               </li>
+                </ul>
+              </li>
+
             </ul>
           </li>
 

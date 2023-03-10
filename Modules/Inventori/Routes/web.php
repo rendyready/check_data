@@ -91,3 +91,28 @@ Route::group(['prefix' => 'inventori', 'controller' => PenjualanInternalControll
     Route::get('penj_gudang/list','penj_list')->name('penj_gudang.list');
     Route::get('hist_penj_g','hist_penj_g')->name('hist_penj_g.index');
 });
+
+//Laporan Kartu Stock
+Route::group(['prefix' => 'inventori', 'controller' => KartuStockController::class, 'middleware' => ['auth', 'web']], function () {
+    Route::get('kartu_stock', 'index')->name('kartu_stock.index');
+    Route::get('rekap_stock', 'index')->name('rekap_stock.index');
+
+});
+//Laporan Pembelian
+Route::group(['prefix' => 'inventori', 'controller' => LaporanPembelianController::class, 'middleware' => ['auth', 'web']], function () {
+    Route::get('lap_pem_detail', 'lap_detail')->name('lap_pem_detail.lap_detail');
+    Route::get('lap_pem_rekap', 'lap_rekap')->name('lap_pem_rekap.lap_rekap');
+    Route::get('lap_pem_harian', 'lap_harian')->name('lap_pem_harian.lap_harian');
+});
+//Laporan Pengiriman
+Route::group(['prefix' => 'inventori', 'controller' => LaporanPengirimanController::class, 'middleware' => ['auth', 'web']], function () {
+    Route::get('lap_kirim', 'index')->name('lap_kirim.index');
+    Route::get('lap_kirim', 'index')->name('lap_kirim.index');
+    Route::get('lap_kirim', 'index')->name('lap_kirim.index');
+});
+//Laporan Keluar Gudang
+Route::group(['prefix' => 'inventori', 'controller' => LaporanKeluarGudangController::class, 'middleware' => ['auth', 'web']], function () {
+    Route::get('lap_gudang_detail', 'index')->name('lap_gudang_detail.index');
+    Route::get('lap_gudang_rekap', 'index')->name('lap_gudang_rekap.index');
+    Route::get('lap_gudang_harian', 'index')->name('lap_gudang_harian.index');
+});
