@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('m_resep_detail_m_produk_nama');
             $table->string('m_resep_detail_bb_qty');
             $table->string('m_resep_detail_satuan');
+            $table->string('m_resep_detail_standar_porsi')->nullable();
             $table->bigInteger('m_resep_detail_m_satuan_id');
             $table->string('m_resep_detail_ket')->nullable();
             $table->bigInteger('m_resep_detail_created_by');

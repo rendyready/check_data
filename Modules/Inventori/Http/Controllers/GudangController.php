@@ -176,8 +176,8 @@ class GudangController extends Controller
                 'rekap_tf_gudang_m_produk_code' => $request->rekap_tf_gudang_m_produk_id[$key],
                 'rekap_tf_gudang_m_produk_nama' => $satuan_kirim->m_stok_produk_nama,
                 'rekap_tf_gudang_qty_keluar' => $qty_kirim,
-                'rekap_tf_gudang_hpp' => $request->rekap_tf_gudang_hpp[$key],
-                'rekap_tf_gudang_sub_total' => $request->rekap_tf_gudang_sub_total[$key],
+                'rekap_tf_gudang_hpp' => convertfloat($request->rekap_tf_gudang_hpp[$key]),
+                'rekap_tf_gudang_sub_total' => convertfloat($request->rekap_tf_gudang_sub_total[$key]),
                 'rekap_tf_gudang_satuan_keluar' => $satuan_kirim->m_stok_satuan,
                 'rekap_tf_gudang_satuan_terima' => $satuan_asal->m_stok_satuan,
                 'rekap_tf_gudang_m_w_id' => Auth::user()->waroeng_id,
@@ -213,7 +213,6 @@ class GudangController extends Controller
                 ->where('m_stok_m_produk_code', $request->rekap_tf_gudang_m_produk_id[$key])
                 ->update($m_stok);
         }
-        return redirect()->route('m_gudang_out.index')->with(['sukses' => 'Berhasil Transfer']);
     }
     //Keluar Gudang - End
 

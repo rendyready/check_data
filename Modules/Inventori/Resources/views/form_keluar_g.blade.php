@@ -105,16 +105,17 @@
                                                     style="width: 100%;"data-placeholder="Pilih Nama Barang" required>
                                                     <option></option>
                                                 </select></td>
-                                            <td><input type="text"
-                                                    class="form-control number form-control-sm qty"
-                                                    name="rekap_tf_gudang_qty_kirim[]" maxlength="9" max="100"
+                                            <td><input type="text" class="form-control number form-control-sm qty"
+                                                    name="rekap_tf_gudang_qty_kirim[]"
                                                     id="rekap_tf_gudang_qty_kirim1" required>
+                                                <span class="stok" id="stok1"></span>
                                             </td>
-                                            <td><input type="text" class="form-control form-control-sm satuan" id="satuan1"  readonly></td>
-                                            <td><input type="number" class="form-control number hpp form-control-sm harga"
+                                            <td><input type="text" class="form-control form-control-sm satuan"
+                                                    id="satuan1" readonly></td>
+                                            <td><input type="text" class="form-control number hpp form-control-sm harga"
                                                     name="rekap_tf_gudang_hpp[]" id="rekap_tf_gudang_hpp1" readonly>
                                             </td>
-                                            <td><input type="number" class="form-control number form-control-sm subtotal"
+                                            <td><input type="text" class="form-control number form-control-sm subtotal"
                                                     name="rekap_tf_gudang_sub_total[]" id="rekap_tf_gudang_sub_total"
                                                     readonly></td>
                                         </tr>
@@ -189,10 +190,10 @@
 	    no++;
 		$('#form').append('<tr id="row'+no+'">'+
                         '<td><select class="js-select2 nama_barang" name="rekap_tf_gudang_m_produk_id[]" id="rekap_tf_gudang_m_produk_id'+no+'" style="width: 100%;" data-placeholder="Pilih Nama Barang" required><option></option></select></td>'+
-                        '<td><input type="text" class="form-control form-control-sm qty" name="rekap_tf_gudang_qty_kirim[]" id="rekap_tf_gudang_qty_kirim" required></td>'+
+                        '<td><input type="text" class="form-control number form-control-sm qty" name="rekap_tf_gudang_qty_kirim[]" id="rekap_tf_gudang_qty_kirim" required><span class="stok" id="stok'+no+'"></span></td>'+
                         '<td><input type="text" class="form-control form-control-sm satuan" id="satuan'+no+'" readonly></td>'+
-                        '<td><input type="number" class="form-control number form-control-sm hpp harga" name="rekap_tf_gudang_hpp[]" id="rekap_tf_gudang_hpp'+no+'" readonly></td>'+
-                        '<td><input type="number" class="form-control number form-control-sm subtotal" name="rekap_tf_gudang_sub_total[]" id="rekap_tf_gudang_sub_total" readonly></td>'+
+                        '<td><input type="text" class="form-control number form-control-sm hpp harga" name="rekap_tf_gudang_hpp[]" id="rekap_tf_gudang_hpp'+no+'" readonly></td>'+
+                        '<td><input type="text" class="form-control number form-control-sm subtotal" name="rekap_tf_gudang_sub_total[]" id="rekap_tf_gudang_sub_total" readonly></td>'+
                         '<td><button type="button" id="'+no+'" class="btn btn-danger btn_remove"><i class="fa fa-trash"></i></button></td></tr>');
         Codebase.helpersOnLoad(['jq-select2']);
         $.each(datas, function(key, value) {
@@ -200,24 +201,6 @@
               .append($('<option>', { value : key })
               .text(value));
          }); 
-        });
-        $('table').on('keyup',function(e){
-            if (e.which === 9){
-	    no++;
-		$('#form').append('<tr id="row'+no+'">'+
-                        '<td><select class="js-select2 nama_barang" name="rekap_tf_gudang_m_produk_id[]" id="rekap_tf_gudang_m_produk_id'+no+'" style="width: 100%;" data-placeholder="Pilih Nama Barang" required><option></option></select></td>'+
-                        '<td><input type="number" min="0.01" step="0.01" class="form-control form-control-sm qty" name="rekap_tf_gudang_qty_kirim[]" id="rekap_tf_gudang_qty_kirim" required></td>'+
-                        '<td id="satuan'+no+'"></td>'+
-                        '<td><input type="number" class="form-control number form-control-sm harga" name="rekap_tf_gudang_hpp[]" id="rekap_tf_gudang_hpp'+no+'" readonly></td>'+
-                        '<td><input type="number" class="form-control number form-control-sm subtotal" name="rekap_tf_gudang_sub_total[]" id="rekap_tf_gudang_sub_total" readonly></td>'+
-                        '<td><button type="button" id="'+no+'" class="btn btn-danger btn_remove"><i class="fa fa-trash"></i></button></td></tr>');
-        Codebase.helpersOnLoad(['jq-select2']);
-        $.each(datas, function(key, value) {
-              $('#rekap_tf_gudang_m_produk_id'+no)
-              .append($('<option>', { value : key })
-              .text(value));
-         });
-        } 
         });
 	$(document).on('click', '.btn_remove', function(){
 		var button_id = $(this).attr("id"); 
@@ -232,26 +215,26 @@
           var $tblrow = $(this);
           $tblrow.find(".qty, .harga").on('input', function () {
               var qty = $tblrow.find("[name='rekap_tf_gudang_qty_kirim[]']").val().replace(/\./g, '').replace(/\,/g, '.');
-              var price = $tblrow.find("[name='rekap_tf_gudang_hpp[]']").val();
+              var price = $tblrow.find("[name='rekap_tf_gudang_hpp[]']").val().replace(/\./g, '').replace(/\,/g, '.');
               var subTotal = parseFloat(qty) * parseFloat(price);
               if (!isNaN(subTotal)) { 
-                  $tblrow.find('.subtotal').val(subTotal.toFixed(2));
+                  $tblrow.find('.subtotal').val(subTotal.toLocaleString("id"));
                   var grandTotal = 0;
                   $(".subtotal").each(function () {
-                      var stval = parseFloat($(this).val());
+                      var stval = parseFloat($(this).val().replace(/\./g, '').replace(/\,/g, '.'));
                       grandTotal += isNaN(stval) ? 0 : stval;
                   });
-                  $('.grdtot').val(grandTotal.toFixed(2)); 
+                  $('.grdtot').val(grandTotal.toLocaleString("id")); 
               }
           });
       });
       var grdtot = 0;
           $(".subtotal").each(function () {
-                          var stval = parseFloat($(this).val());
+                          var stval = parseFloat($(this).val().replace(/\./g, '').replace(/\,/g, '.'));
                           grdtot += isNaN(stval) ? 0 : stval;
           });
-          $('#rekap_tf_gudang_grand_tot').val(grdtot.toFixed(2));
-          $('#total_sum_value').html(': Rp '+grdtot.toFixed(2));
+          $('#rekap_tf_gudang_grand_tot').val(grdtot.toLocaleString("id"));
+          $('#total_sum_value').html(': Rp '+grdtot.toLocaleString("id"));
     });
     $('.close').on('click',function () {
         $('.alert').remove();

@@ -180,16 +180,27 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="col-md-2">
+                                        <div class="mb-4">
+                                            <div class="form-group">
+                                                <label for="m_resep_detail_standar_porsi">Standar Porsi</label>
+                                                <input class="form-group form-control" style="width: 100%;"
+                                                    type="text" name="m_resep_detail_standar_porsi"
+                                                    id="m_resep_detail_standar_porsi">
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="col-md-3">
                                         <div class="mb-4">
                                             <div class="form-group">
                                                 <label for="m_resep_detail_ket">Keterangan</label>
                                                 <textarea name="m_resep_detail_ket" id="m_resep_detail_ket" cols="30" rows="3"></textarea>
+                                                <button type="submit" class="btn btn-sm btn-success btn-tambah">Tambah</button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <button type="submit" class="btn btn-sm btn-success btn-tambah">Tambah</button>
+                                
                             </form>
                             <div class="table-responsive">
                                 <table id="m_resep_detail_tb"
@@ -199,6 +210,7 @@
                                         <th>NAMA BAHAN BAKU</th>
                                         <th>JUMLAH</th>
                                         <th>SATUAN</th>
+                                        <th>STANDAR PORSI</th>
                                         <th>KETERANGAN</th>
                                         <th>AKSI</th>
                                     </thead>
@@ -234,6 +246,7 @@
           $("#m_resep_detail_bb_code").val(respond.m_resep_detail_bb_code).trigger('change');
           $("#m_resep_detail_bb_qty").val(respond.m_resep_detail_bb_qty).trigger('change');
           $("#m_resep_detail_ket").val(respond.m_resep_detail_ket).trigger('change');
+          $("#m_resep_detail_standar_porsi").val(respond.m_resep_detail_standar_porsi).trigger('change');
           $('.btn-tambah').text('Edit').removeClass("btn-success").addClass("btn-warning");
         },
         error: function() {}

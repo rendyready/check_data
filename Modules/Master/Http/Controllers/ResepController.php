@@ -81,19 +81,16 @@ class ResepController extends Controller
     }
     public function detail($id)
     {
-        $detail = DB::table('m_resep_detail')->where('m_resep_detail_m_resep_code', $id)
-            ->leftjoin('m_produk', 'm_resep_detail_bb_code', 'm_produk_code')
-            ->leftjoin('m_satuan', 'm_resep_detail_m_satuan_id', 'm_satuan_id')
-            ->select('m_resep_detail.*', 'm_produk_nama', 'm_satuan_kode','m_resep_detail_ket')
-            ->get();
+        $detail = DB::table('m_resep_detail')->where('m_resep_detail_m_resep_code', $id)->get();
         $data = array();
         $no = 1;
         foreach ($detail as $key) {
             $row = array();
             $row[] = $no++;
-            $row[] = $key->m_produk_nama;
+            $row[] = $key->m_resep_detail_m_produk_nama;
             $row[] = $key->m_resep_detail_bb_qty;
-            $row[] = $key->m_satuan_kode;
+            $row[] = $key->m_resep_detail_satuan;
+            $row[] = $key->m_resep_detail_standar_porsi;
             $row[] = $key->m_resep_detail_ket;
             $row[] = '<a class="btn btn-info btn-sm" onclick="editdetail('.$key->m_resep_detail_id.')"><i class="fa fa-edit"></i></a>';
             $data[] = $row;
@@ -115,6 +112,7 @@ class ResepController extends Controller
                     'm_resep_detail_m_produk_nama' => $produk->m_produk_nama,
                     'm_resep_detail_bb_qty'    =>    $request->m_resep_detail_bb_qty,
                     'm_resep_detail_m_satuan_id' =>    $request->m_resep_detail_m_satuan_id,
+                    'm_resep_detail_standar_porsi' => $request->m_resep_detail_standar_porsi,
                     'm_resep_detail_satuan' => $kode_satuan->m_satuan_kode,
                     'm_resep_detail_ket' => $request->m_resep_detail_ket,
                     'm_resep_detail_created_by' => Auth::id(),
@@ -129,6 +127,7 @@ class ResepController extends Controller
                     'm_resep_detail_bb_qty'    =>    $request->m_resep_detail_bb_qty,
                     'm_resep_detail_m_satuan_id' =>    $request->m_resep_detail_m_satuan_id,
                     'm_resep_detail_satuan' => $request->m_resep_detail_satuan,
+                    'm_resep_detail_standar_porsi' => $request->m_resep_detail_standar_porsi,
                     'm_resep_detail_ket' => $request->m_resep_detail_ket,
                     'm_resep_detail_updated_by' => Auth::id(),
                     'm_resep_detail_updated_at' => Carbon::now(),

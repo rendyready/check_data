@@ -1,4 +1,10 @@
-//Select2 
+//java rubah numeric ke indo
+function dec_indo(number) {
+    var saldo = number.toString().replace(".", ",");
+    var saldo_formatted = saldo.replace(/(\d)(?=(\d{3})+(?!\d))/g,"$1.");
+    return saldo_formatted;
+}
+//Select2
 $(document).ready(function () {
     // Mencari elemen select2
     var select2_elem = $(".js-select2");
@@ -11,8 +17,8 @@ $(document).ready(function () {
         }
     });
 });
-$(document).on('select2:open', () => {
-  document.querySelector('.select2-search__field').focus();
+$(document).on("select2:open", () => {
+    document.querySelector(".select2-search__field").focus();
 });
 //end select2
 (function ($) {
@@ -76,13 +82,19 @@ $(document).on('select2:open', () => {
             var current = $(this).val();
             var id = $(this).data("id");
             var satuanId = $(this).closest("tr").find(".satuan").attr("id");
+            var stoksisa = $(this).closest("tr").find(".stok").attr("id");
             var gudangId = $(".gudang_code").val();
             var hppId = $(this).closest("tr").find(".hpp").attr("id");
+            console.log('hppid'+hppId);
+            console.log('satuanid'+satuanId);
+            console.log('stoksisa'+stoksisa);
             $.get(
                 "/inventori/stok_harga/" + gudangId + "/" + current,
                 function (data) {
-                    $("#" + hppId).val(data.m_stok_hpp);
+                    console.log(data);
+                    $("#" + hppId).val(dec_indo(data.m_stok_hpp));
                     $("#" + satuanId).val(data.m_stok_satuan);
+                    $("#" + stoksisa).html("stok : " + dec_indo(data.m_stok_saldo));
                 }
             );
             if (!current) {
