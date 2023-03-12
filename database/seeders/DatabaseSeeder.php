@@ -46,7 +46,8 @@ class DatabaseSeeder extends Seeder
             NmGudangTableSeeder::class,
             MKasirAksesTableSeeder::class,
             MPaymentMethodeTable::class,
-            MDivisiTableSeeder::class
+            MDivisiTableSeeder::class,
+            AppSettingSeeder::class
        ]);
     }
 }
