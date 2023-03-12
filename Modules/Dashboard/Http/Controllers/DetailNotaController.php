@@ -43,16 +43,21 @@ class DetailNotaController extends Controller
         return response()->json($data);
     }
 
-    public function create()
+    public function select_user(Request $request)
     {
-        return view('dashboard::create');
+
+        $user = DB::table('users')
+            ->select('users_id', 'name')
+            ->where('waroeng_id', $request->id_waroeng)
+            ->orderBy('users_id', 'asc')
+            ->get();
+        $data = array();
+        foreach ($user as $val) {
+            $data[$val->users_id] = [$val->name];
+        }
+        return response()->json($data);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     * @param Request $request
-     * @return Renderable
-     */
     public function store(Request $request)
     {
         //
@@ -67,6 +72,7 @@ class DetailNotaController extends Controller
     {
         $dates = explode('to' ,$request->tanggal);
         $data = new \stdClass();
+        if($request->status == 'paid'){
         $data->transaksi_rekap = DB::table('rekap_transaksi')
             ->join('users', 'users_id', 'r_t_created_by')
             ->join('m_transaksi_tipe', 'm_t_t_id', 'r_t_m_t_t_id')
@@ -74,12 +80,25 @@ class DetailNotaController extends Controller
             ->join('m_payment_method', 'm_payment_method_id', 'r_p_t_m_payment_method_id')
             ->where('r_t_m_w_id', $request->waroeng)
             ->where('r_t_created_by', $request->operator)
+            ->where('r_t_status', 'paid')
             ->whereBetween('r_t_tanggal', $dates)
             ->orderby('r_t_tanggal', 'ASC')
             ->orderby('r_t_nota_code', 'ASC')
             ->get();
         $data->detail_nota = DB::table('rekap_transaksi_detail')
+            ->where('r_t_detail_status', 'paid')
             ->get();
+        } else {
+        $data->transaksi_rekap = DB::table('rekap_lost_bill')
+            ->join('users', 'users_id', 'r_l_b_created_by')
+            ->whereBetween('r_l_b_tanggal', $dates)
+            ->where('r_l_b_m_w_id', $request->waroeng)
+            ->where('r_l_b_created_by', $request->operator)
+            ->get();
+
+        $data->detail_nota = DB::table('rekap_lost_bill_detail')
+            ->get();
+        }
         return response()->json($data);
     }
 

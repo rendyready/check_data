@@ -37,7 +37,7 @@ class DatabaseSeeder extends Seeder
             MMenuHargaTableSeeder::class,
             ConfigFooterTableSeeder::class,
             MResepTableSeeder::class,
-            MResepDetailTableSeeder::class,
+            // MResepDetailTableSeeder::class,
             ConfigMejaTableSeeder::class,
             MFaqTableSeeder::class,
             List_AktTableSeeder::class,

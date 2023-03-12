@@ -32,7 +32,7 @@
                                 <div class="row mb-2">
                                     <label class="col-sm-4 col-form-label" for="m_stok_gudang_code">Gudang</label>
                                     <div class="col-sm-8">
-                                        <select class="js-select2 form-control-sm" style="width: 100%;"
+                                        <select class="js-select2 gudang_code form-control-sm" style="width: 100%;"
                                             name="m_stok_gudang_code" id="m_stok_gudang_code" data-placeholder="Cari Gudang"
                                             required>
                                             <option value=""></option>
@@ -57,9 +57,9 @@
                                     <tbody>
                                         <tr>
                                             <td><select class="js-select2 nama_barang reset" name="m_stok_m_produk_code[]"
-                                                    id="m_stok_m_produk_code"
+                                                    id="m_stok_m_produk_code1"
                                                     style="width: 100%;"data-placeholder="Pilih Nama Barang" required>
-                                                    <option value=""></option>
+                                                    <option value="0"></option>
                                                 </select></td>
                                             <td><input type="text"
                                                     class="form-control form-control-sm number reset" name="m_stok_awal[]"
@@ -67,7 +67,7 @@
                                             <td><input type="text"
                                                     class="form-control number reset form-control-sm"  name="m_stok_hpp[]"
                                                     id="m_stok_hpp" required></td>
-                                            <td><input type="text" class="form-control form-control-sm reset"
+                                            <td><input type="text" class="form-control form-control-sm satuan reset"
                                                     id="m_satuan" readonly></td>
                                         </tr>
                                     </tbody>
@@ -113,7 +113,7 @@
       'X-CSRF-Token' : $("input[name=_token]").val()
         }
       });
-    Codebase.helpersOnLoad(['jq-notify']);
+    Codebase.helpersOnLoad(['jq-notify','jq-select2']);
     var table;
     $('#m_stok_gudang_code').on('change',function () {
             var g_id = $('#m_stok_gudang_code').val();
@@ -130,66 +130,43 @@
             });
         });
     });
-    var  barang = new Array();
+    var datas;
+    $('.gudang_code').on('change',function () {
+        var asal = $(this).val()
+        $.get("/inventori/stok/"+asal, function(data){
+            datas = data;
+            $.each(data, function(key, value) {
+              $('#m_stok_m_produk_code1')
+              .append($('<option>', { value : key })
+              .text(value));
+            });
+        });  
+    });
     var satuan = new Array();
     $.get('/inventori/beli/list', function(response){
-      barang = response['barang'];
       satuan = response['satuan'];
       var no=1;
       $('.tambah').on('click',function(){
         no++;
       $('#form_input').append('<tr id="row'+no+'" class="remove_all">'+
-                          '<td><select class="js-select2 nama_barang" name="m_stok_m_produk_code[]" id="m_stok_m_produk_code'+no+'" style="width: 100%;"data-placeholder="Pilih Nama Barang" required><option></option></select></td>'+
+                          '<td><select class="js-select2 nama_barang" name="m_stok_m_produk_code[]" id="m_stok_m_produk_code'+no+'" style="width: 100%;"data-placeholder="Pilih Nama Barang" required><option value="0" selected disabled hidden></option></select></td>'+
                           '<td><input type="text" class="form-control number form-control-sm" name="m_stok_awal[]" id="m_stok_awal" required></td>'+
                           '<td><input type="text" class="form-control number form-control-sm" name="m_stok_hpp[]" id="m_stok_hpp" required></td>'+
                           '<td><input type="text" class="form-control form-control-sm satuan" id="m_satuan'+no+'" readonly></td>'+
                           '<td><button type="button" id="'+no+'" class="btn btn-danger btn_remove"><i class="fa fa-trash"></i></button></td></tr>');
-
+            Codebase.helpersOnLoad(['jq-select2']);
+            $.each(datas, function(key, value) {
+              $('#m_stok_m_produk_code'+no)
+              .append($('<option>', { value : key })
+              .text(value));
+            });
+            
       });
-      Codebase.helpersOnLoad(['jq-select2']);
       $(document).on('click', '.btn_remove', function(){
         var button_id = $(this).attr("id"); 
         $('#row'+button_id+'').remove();
       });
-      $('#form_input').on('click','.tambah', function(){
-          Codebase.helpersOnLoad(['jq-select2']);
-              $.each(barang, function(key, value) {
-              $('#m_stok_m_produk_code'+no).append('<option></option>');  
-              $('#m_stok_m_produk_code'+no)
-              .append($('<option>', { value : key })
-              .text(value));
-              });  
-        });
-      $.each(barang, function(key, value) {
-        $('.nama_barang')
-              .append($('<option>', { value : key })
-              .text(value));
-        });
     });
-    $(document).on('select2:open', '.nama_barang', function(){
-          console.log("Saving value " + $(this).val());
-          var index = $(this).attr('id'); 
-          $(this).data('val', $(this).val());
-          $(this).data('id',index);
-      }).on('change','.nama_barang', function(e){
-          var prev = $(this).data('val');
-          var current = $(this).val();
-          var id = $(this).data('id');
-          var satuan_id = id.slice(20);
-          console.log(satuan_id);  
-          $.get("/master/m_satuan/"+current, function(data){
-            $('#m_satuan'+satuan_id).val(data.m_satuan_kode);
-          });
-        var values = $('[name="m_stok_m_produk_code[]"]').map(function() {
-        return this.value.trim();
-      }).get();
-      var unique =  [...new Set(values)];
-      if (values.length != unique.length) {
-        e.preventDefault();
-        alert('Nama Barang Sudah Digunakan Pilih Yang Lain');
-         $('#'+id).val(prev).trigger('change');
-      }
-      });
             $('#formAction').submit( function(e){
                 if(!e.isDefaultPrevented()){
                   var g_id = $('#m_stok_gudang_code').val();

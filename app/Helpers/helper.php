@@ -144,3 +144,18 @@ function tgl_indo($tgl, $tampil_hari=true){
     return (float)$number;
 }
 
+function convertindo($number) {
+	// Set pemisah ribuan dan desimal sesuai dengan format yang diinginkan
+	$thousands_separator = '.';
+	$decimal_separator = ',';
+  
+	// Format angka menjadi string dengan pemisah ribuan dan desimal yang ditentukan
+	$formatted_number = number_format($number, 2, $decimal_separator, $thousands_separator);
+  
+	// Mengganti pemisah ribuan dan desimal yang digunakan oleh number_format() dengan yang diinginkan
+	$formatted_number = str_replace($decimal_separator, '.', $formatted_number);
+	$formatted_number = str_replace($thousands_separator, ',', $formatted_number);
+  
+	return $formatted_number;
+  }
+  

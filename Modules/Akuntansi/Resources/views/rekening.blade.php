@@ -178,11 +178,11 @@
             <form id="formAction" name="form_action" method="post">
                 @csrf
               <div class="mb-4">
-                <input name="m_rekening_id" type="hidden" id="m_rekening_no_akun">
+                <input name="m_rekening_id" type="hidden" class="m_rekening_no_akun1">
                 <div class="form-group">
                     <label for="m_rekening_no_akun">Nomor Akun</label>
                       <div>
-                        <input class="form-control m_rekening_no_akun" type="text" name="m_rekening_no_akun" id="m_rekening_no_akun1" style="width: 100%;" required>
+                        <input class="form-control m_rekening_no_akun1" type="text" name="m_rekening_no_akun" id="m_rekening_no_akun1" style="width: 100%;" required>
                       </div>
                 </div>
                 <div class="form-group">
@@ -293,7 +293,7 @@
                     dataType: 'json',
                     success: function(respond) {
                         // console.log(respond);
-                        $("#m_rekening_no_akun1").val(respond.m_rekening_no_akun).trigger('change');
+                        $(".m_rekening_no_akun1").val(respond.m_rekening_no_akun).trigger('change');
                         $("#m_rekening_nama1").val(respond.m_rekening_nama).trigger('change');
                         $("#m_rekening_saldo1").val(respond.m_rekening_saldo).trigger('change');
                     },
@@ -359,19 +359,6 @@
                 });
                 return false;
             });
-
-    // $('#m_rekening_no_akun').on('input', function() {
-    //     var id = $(this).closest("tr").index()+no++;
-    //     var input1 = $(this).val();
-    //     var input2 = $('#m_rekening_no_akunjq'+id).val();
-    //     console.log(input2);
-
-    //     if(input1 == input2 || input2 == input2){
-    //         alert('data sama');
-    //         $('#m_rekening_no_akun').val('');
-    //     }
-
-    // });
 
     $('#rekening-insert').submit(function(e) {
       if (!e.isDefaultPrevented()) {
@@ -647,6 +634,19 @@
       }
     });
 
+    // $('#my-input-field').on('input', function() {
+    // var inputVal = $(this).val();
+    // var isDuplicate = checkForDuplicate(inputVal);
+    // if (isDuplicate) {
+    //     alert('Duplicate data!');
+    //     $(this).val(''); 
+    // }
+    // });
+
+    // function checkForDuplicate(value) {
+    // var isDuplicate = false;
+    // return isDuplicate;
+    // }
 
 });
 </script>

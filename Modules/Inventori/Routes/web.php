@@ -21,6 +21,8 @@ Route::group(['prefix' => 'inventori', 'controller' => BeliController::class, 'm
     Route::get('beli/select', 'select')->name('beli.select');
     Route::get('beli/list', 'list')->name('beli.list');
     Route::post('beli/simpan', 'simpan')->name('beli.simpan');
+    Route::get('beli/history/{id}','hist_pemb')->name('beli.hist');
+    Route::get('beli/history_detail/{id}','hist_pemb_detail')->name('beli.hist_detail');
 });
 //Master Supplier
 Route::group(['prefix' => 'inventori', 'controller' => SupplierController::class, 'middleware' => ['auth', 'web']], function () {
@@ -70,6 +72,7 @@ Route::group(['prefix' => 'inventori', 'controller' => GudangController::class, 
     Route::get('gudang/terima','gudang_terima')->name('m_gudang.terima_tf');
     Route::get('gudang/listtf','gudang_list_tf')->name('gudang.tf_list');
     Route::post('gudang/terima/simpan','gudang_terima_simpan')->name('cht_keluar_gudang.simpan');
+    Route::get('gudang/out_hist/{id}','gudang_out_hist')->name('gudang.histori');
 
 });
 //Master BB

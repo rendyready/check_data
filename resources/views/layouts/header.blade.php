@@ -32,6 +32,8 @@
   <link rel="stylesheet" href="{{ asset('js/plugins/select2/css/select2.min.css') }}">
   <link rel="stylesheet" href="{{ asset('js/plugins/ion-rangeslider/css/ion.rangeSlider.css') }}">
   <link rel="stylesheet" href="{{ asset('js/plugins/flatpickr/flatpickr.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('js/plugins/sweetalert2/sweetalert2.min.css') }}">
+
   @vite(['resources/sass/main.scss',
   'resources/js/codebase/app.js',
   'resources/sass/codebase/themes/pulse.scss',
@@ -63,6 +65,7 @@
     <script src="{{ asset('js/plugins/jquery-validation/jquery.validate.min.js')}}"></script>
     <script src="{{ asset('js/plugins/jquery-validation/additional-methods.min.js')}}"></script>
     <script src="{{ asset('js/plugins/flatpickr/flatpickr.min.js')}}"></script>
+    <script src="{{ asset('js/plugins/sweetalert2/sweetalert2.min.js')}}"></script>
     {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> --}}
   @yield('js')
 </head>

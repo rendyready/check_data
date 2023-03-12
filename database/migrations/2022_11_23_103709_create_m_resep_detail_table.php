@@ -15,11 +15,14 @@ return new class extends Migration
     {
         Schema::create('m_resep_detail', function (Blueprint $table) {
             $table->id('id');
-            $table->unsignedBigInteger('m_resep_detail_id');
-            $table->unsignedBigInteger('m_resep_detail_m_resep_id');
-            $table->unsignedBigInteger('m_resep_detail_bb_id'); //id from m_produk
-            $table->decimal('m_resep_detail_bb_qty',8,2);
-            $table->unsignedBigInteger('m_resep_detail_m_satuan_id');
+            $table->string('m_resep_detail_id');
+            $table->string('m_resep_detail_m_resep_code');
+            $table->string('m_resep_detail_bb_code'); //id from m_produk
+            $table->string('m_resep_detail_m_produk_nama');
+            $table->string('m_resep_detail_bb_qty');
+            $table->string('m_resep_detail_satuan');
+            $table->string('m_resep_detail_standar_porsi')->nullable();
+            $table->bigInteger('m_resep_detail_m_satuan_id');
             $table->string('m_resep_detail_ket')->nullable();
             $table->bigInteger('m_resep_detail_created_by');
             $table->bigInteger('m_resep_detail_updated_by')->nullable();
