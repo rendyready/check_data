@@ -9,7 +9,7 @@
                             FORM KELUAR DARI GUDANG
                     </div>
                     <div class="block-content text-muted">
-                        <form action="{{ route('m_gudang_out.simpan') }}" method="post">
+                        <form id="formAction">
                             @csrf
                             <div class="row">
                                 <div class="col-md-3">
@@ -100,22 +100,22 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td><select class="js-select2 nama_barang" name="rekap_tf_gudang_m_produk_id[]"
+                                            <td><select class="js-select2 fc nama_barang" name="rekap_tf_gudang_m_produk_id[]"
                                                     id="rekap_tf_gudang_m_produk_id1"
                                                     style="width: 100%;"data-placeholder="Pilih Nama Barang" required>
                                                     <option></option>
                                                 </select></td>
-                                            <td><input type="text" class="form-control number form-control-sm qty"
-                                                    name="rekap_tf_gudang_qty_kirim[]"
-                                                    id="rekap_tf_gudang_qty_kirim1" required>
+                                            <td><input type="text" class="form-control reset fc number form-control-sm qty"
+                                                    name="rekap_tf_gudang_qty_kirim[]" id="rekap_tf_gudang_qty_kirim1"
+                                                    required>
                                                 <span class="stok" id="stok1"></span>
                                             </td>
-                                            <td><input type="text" class="form-control form-control-sm satuan"
+                                            <td><input type="text" class="form-control reset form-control-sm satuan"
                                                     id="satuan1" readonly></td>
-                                            <td><input type="text" class="form-control number hpp form-control-sm harga"
+                                            <td><input type="text" class="form-control reset number hpp form-control-sm harga"
                                                     name="rekap_tf_gudang_hpp[]" id="rekap_tf_gudang_hpp1" readonly>
                                             </td>
-                                            <td><input type="text" class="form-control number form-control-sm subtotal"
+                                            <td><input type="text" class="form-control reset number form-control-sm subtotal"
                                                     name="rekap_tf_gudang_sub_total[]" id="rekap_tf_gudang_sub_total"
                                                     readonly></td>
                                         </tr>
@@ -152,6 +152,29 @@
                                 </div>
                             </div>
                         </form>
+                        <div class="table-responsive">
+                            <table id="tb_keluar"
+                                class="table table-sm table-bordered table-striped table-vcenter js-dataTable-full">
+                                <thead>
+                                    <th>No</th>
+                                    <th>No Bukti</th>
+                                    <th>Total</th>
+                                    <th>Tujuan</th>
+                                    <th>Operator</th>
+                                    <th>Jam Input</th>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                                <tfoot>
+                                    <th>No</th>
+                                    <th>No Bukti</th>
+                                    <th>Total</th>
+                                    <th>Tujuan</th>
+                                    <th>Operator</th>
+                                    <th>Jam Input</th>
+                                </tfoot>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -167,14 +190,65 @@
       'X-CSRF-Token' : $("input[name=_token]").val()
         }
       });
-      var datas;
+      var datas,table;
     $('#rekap_tf_gudang_tujuan_code, #rekap_tf_gudang_asal_code').on('change',function () {
         var asal = $('#rekap_tf_gudang_asal_code').val();
         var tujuan = $('#rekap_tf_gudang_tujuan_code').val();
         if (asal == tujuan) {
-            alert('Tujuan dan Asal Gudang Tidak Boleh Sama !!!');
+            Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Tujuan dan Asal Gudang Tidak Boleh Sama !!!',
+            });
             $('#rekap_tf_gudang_tujuan_code').val('').trigger('change');
         }
+        if ($('.fc').serialize().length > 67) {
+        Swal.fire({
+        title: 'Apakah Anda Yakin ?',
+        text: "Hasil Input Akan Hilang Jika Anda Berganti Gudang Tanpa Menyimpanya",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Ya'
+        }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire(
+            'Berhasil',
+            'Gudang Telah Berganti.',
+            'success'
+            )
+            $('#rekap_tf_gudang_m_produk_id1').empty();
+            $('#rekap_tf_gudang_m_produk_id1').append('<option></option>');
+            $.get("/inventori/stok/"+asal, function(data){
+                datas = data;
+                $.each(data, function(key, value) {
+                  $('#rekap_tf_gudang_m_produk_id1')
+                  .append($('<option>', { value : key })
+                  .text(value));
+                });
+            });
+            $(function() {
+                table = $('#tb_keluar').DataTable({
+                    "destroy":true,
+                    "orderCellsTop": true,
+                    "processing": true,
+                    "autoWidth": true,
+                    "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+                    "pageLength": 10,
+                    "ajax": {
+                        "url": "out_hist/"+asal,
+                        "type": "GET"
+                            }
+                });
+            });
+            $('.remove').remove();
+            $('.reset').trigger('changer').val('');
+        }
+        });
+    } else {
+        $('#rekap_tf_gudang_m_produk_id1').empty();
+            $('#rekap_tf_gudang_m_produk_id1').append('<option></option>');
         $.get("/inventori/stok/"+asal, function(data){
             datas = data;
             $.each(data, function(key, value) {
@@ -182,7 +256,22 @@
               .append($('<option>', { value : key })
               .text(value));
             });
-        });  
+        });
+        $(function() {
+                table = $('#tb_keluar').DataTable({
+                    "destroy":true,
+                    "orderCellsTop": true,
+                    "processing": true,
+                    "autoWidth": true,
+                    "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+                    "pageLength": 10,
+                    "ajax": {
+                        "url": "out_hist/"+asal,
+                        "type": "GET"
+                            }
+                });
+        });
+    }
     });
     Codebase.helpersOnLoad(['jq-select2']);
 	  var no =2;
@@ -239,7 +328,32 @@
     $('.close').on('click',function () {
         $('.alert').remove();
     })  
-
+    $('#formAction').submit( function(e){
+                if(!e.isDefaultPrevented()){
+                    $.ajax({
+                        url : "{{ route('m_gudang_out.simpan') }}",
+                        type : "POST",
+                        data : $('form').serialize(),
+                        success : function(data){
+                            Codebase.helpers('jq-notify', {
+                              align: 'right', // 'right', 'left', 'center'
+                              from: 'top', // 'top', 'bottom'
+                              type: 'success', // 'info', 'success', 'warning', 'danger'
+                              icon: 'fa fa-info me-5', // Icon class
+                              message: 'Input Keluar Gudang Berhasil'
+                            });
+                            table.ajax.reload();
+                            $('.remove').remove();
+                            $('#rekap_beli_detail_m_produk_id1,.reset').trigger('changer').val('');
+                            $tblrows.find('.persendisc').trigger('input');
+                        },
+                        error : function(){
+                            alert("Tidak dapat menyimpan data!");
+                        }
+                    });
+                    return false;
+                }
+    });
        
 });
 </script>

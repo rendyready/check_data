@@ -131,12 +131,30 @@ class PenjualanInternalController extends Controller
     }
     public function hist_penj_g()
     {
-        $data = new \stdClass();
-        $data->gudang = DB::table('m_gudang')
-            ->where('m_gudang_m_w_id', Auth::user()->waroeng_id)
-            ->whereNotIn('m_gudang_nama', ['gudang produksi waroeng'])
+        $tgl_now = Carbon::now();
+        $waroeng_id = Auth::user()->waroeng_id;
+        $rekap_beli = DB::table('rekap_beli')
+            ->join('users','rekap_beli_created_by','users_id')
+            ->where('rekap_beli_tgl', $tgl_now)
+            ->where('rekap_beli_supplier_code', sprintf("%03d", $waroeng_id))
+            ->orderBy('rekap_beli_created_at','desc')
             ->get();
-        $data->waroeng_nama = $this->get_m_w_nama();
-        return view('inventori::history_penj_bb', compact('data'));
+
+        $data = array();
+        $no = 1;
+        foreach ($rekap_beli as $value) {
+            $row = array();
+            $row[] = $no;
+            $row[] = $value->rekap_beli_code;
+            $row[] = rupiah($value->rekap_beli_tot_nom);
+            $row[] = ucwords($value->rekap_beli_waroeng);
+            $row[] = ucwords($value->name);
+            $row[] = tgl_waktuid($value->rekap_beli_created_at);
+            $row[] = '<a id="detail" class="btn btn-sm detail btn-warning" value="' . $value->rekap_beli_code . '" title="Edit"><i class="fa fa-eye"></i></a>';
+            $data[] = $row;
+            $no++;
+        }
+        $output = array("data" => $data);
+        return response()->json($output);
     }
 }

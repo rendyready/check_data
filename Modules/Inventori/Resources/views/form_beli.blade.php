@@ -253,7 +253,7 @@
                                 </div>
                             </div>
                         </form>
-                        <table>
+                        <table class="table-responsive">
                             <table id="tb_beli"
                                 class="table table-sm table-bordered table-striped table-vcenter js-dataTable-full">
                                 <thead>

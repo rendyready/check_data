@@ -214,6 +214,34 @@ class GudangController extends Controller
                 ->update($m_stok);
         }
     }
+    public function gudang_out_hist($id)
+    {
+        $data_histori = DB::table('rekap_tf_gudang')
+        ->select('rekap_tf_gudang_code','rekap_tf_gudang_tgl_keluar','name',DB::raw("SUM(rekap_tf_gudang_sub_total) as total"),'m_gudang_nama')
+        ->join('users','users_id','rekap_tf_gudang_created_by')
+        ->join('m_gudang','m_gudang_code','rekap_tf_gudang_tujuan_code')
+        ->where('rekap_tf_gudang_asal_code',$id)
+        ->whereDate('rekap_tf_gudang_tgl_keluar',Carbon::now())
+        ->groupBy('rekap_tf_gudang_code','name','rekap_tf_gudang_tgl_keluar','m_gudang_nama')
+        ->orderBy('rekap_tf_gudang_tgl_keluar','desc')
+        ->get();
+        $data = array();
+        $no = 1;
+        foreach ($data_histori as $key) {
+            $row = array();
+            $row[] = $no;
+            $row[] = $key->rekap_tf_gudang_code;
+            $row[] = rupiah($key->total);
+            $row[] = ucwords($key->m_gudang_nama);
+            $row[] = ucwords($key->name);
+            $row[] = tgl_waktuid($key->rekap_tf_gudang_tgl_keluar);
+            $data[] = $row;
+            $no++;
+        }
+        $output = array("data" => $data);
+        return response()->json($output);
+
+    }
     //Keluar Gudang - End
 
     // Terima dari Gudang - Begin
