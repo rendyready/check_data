@@ -63,7 +63,7 @@ class JurnalKasController extends Controller
         $tanggal = $request->m_jurnal_kas_tanggal;
         $tanggal = date('Y-m-d', strtotime($tanggal));
         $data = DB::table('m_jurnal_kas')
-            ->join('m_w', 'm_w_id', 'm_jurnal_kas_m_waroeng_id')
+            ->join('m_w', 'm_w_code', 'm_jurnal_kas_m_waroeng_id')
             ->select('m_jurnal_kas_m_rekening_no_akun', 'm_jurnal_kas_m_rekening_nama', 'm_jurnal_kas_particul', 'm_jurnal_kas_saldo', 'm_jurnal_kas_user', 'm_jurnal_kas_no_bukti')
             ->where('m_jurnal_kas_m_waroeng_id', $request->m_jurnal_kas_m_waroeng_id)
             ->where('m_jurnal_kas', $request->m_jurnal_kas)
@@ -79,7 +79,7 @@ class JurnalKasController extends Controller
         $tanggal = date('Y-m-d', strtotime($prefix2));
         $code2 = date('Y/m/d');
         $cek_data = DB::table('m_jurnal_kas')
-            ->join('m_w', 'm_w_id', 'm_jurnal_kas_m_waroeng_id')
+            ->join('m_w', 'm_w_code', 'm_jurnal_kas_m_waroeng_id')
             ->select('m_jurnal_kas_no_bukti')
             ->where('m_jurnal_kas', $prefix1)
             ->where('m_jurnal_kas_m_waroeng_id', $prefix3)

@@ -87,12 +87,12 @@ $(document).ready(function() {
         },
         success: function(data) {
             var html = '<tr>';
+            html += '<th class="text-center">Area</th>';
             html += '<th class="text-center">Waroeng</th>';
             html += '<th class="text-center">Nama Menu</th>';
             for (var i = 0; i < data.length; i++) {
                 html += '<th class="text-center">Qty</th>';
                 html += '<th class="text-center">' + data[i] + '</th>';
-
             }
             html += '</tr>';
             $('#tampil_rekap thead').html(html);
@@ -105,6 +105,12 @@ $(document).ready(function() {
                 scrollX: true,
                 autoWidth: true,
                 scrollCollapse: true,
+                columnDefs: [ 
+                    {
+                        targets: '_all',
+                        className: 'dt-body-right'
+                    },
+                ],
                 lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
                 pageLength: 10,
                 ajax: {

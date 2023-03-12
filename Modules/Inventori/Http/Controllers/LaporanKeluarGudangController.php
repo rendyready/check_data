@@ -1,12 +1,12 @@
 <?php
 
-namespace Modules\Akuntansi\Http\Controllers;
+namespace Modules\Inventori\Http\Controllers;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
-class JurnalAkuntansiController extends Controller
+class LaporanKeluarGudangController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +14,7 @@ class JurnalAkuntansiController extends Controller
      */
     public function index()
     {
-        return view('akuntansi::master.jurnal');
+        return view('inventori::index');
     }
 
     /**
@@ -23,7 +23,7 @@ class JurnalAkuntansiController extends Controller
      */
     public function create()
     {
-        return view('akuntansi::create');
+        return view('inventori::create');
     }
 
     /**
@@ -43,7 +43,7 @@ class JurnalAkuntansiController extends Controller
      */
     public function show($id)
     {
-        return view('akuntansi::show');
+        return view('inventori::show');
     }
 
     /**
@@ -53,7 +53,7 @@ class JurnalAkuntansiController extends Controller
      */
     public function edit($id)
     {
-        return view('akuntansi::edit');
+        return view('inventori::edit');
     }
 
     /**

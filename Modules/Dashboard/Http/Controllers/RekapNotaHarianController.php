@@ -73,6 +73,7 @@ class RekapNotaHarianController extends Controller
         $data = array();
         foreach ($user as $val) {
             $data[$val->users_id] = [$val->name];
+            $data['all'] = 'All Operator';
         }
         return response()->json($data);
     }
@@ -87,14 +88,18 @@ class RekapNotaHarianController extends Controller
         if($request->show_operator == 'ya'){
             if($request->area == '0'){
                 $trans = DB::table('rekap_payment_transaksi')
-                ->join('rekap_transaksi', 'r_t_id', 'r_p_t_r_t_id')
-                ->where('r_t_created_by', $request->operator);
+                ->join('rekap_transaksi', 'r_t_id', 'r_p_t_r_t_id');
+                if($request->operator != 'all'){
+                    $trans->where('r_t_created_by', $request->operator);
+                }
             } else {
-                $trans = DB::table('rekap_payment_transaksi')
-                        ->join('rekap_transaksi', 'r_t_id', 'r_p_t_r_t_id')
-                        ->where('r_t_m_area_id', $request->area)
-                        ->where('r_t_m_w_id', $request->waroeng)
-                        ->where('r_t_created_by', $request->operator);
+                $trans2 = DB::table('rekap_payment_transaksi')
+                        ->join('rekap_transaksi', 'r_t_id', 'r_p_t_r_t_id');
+                        if($request->operator != 'all'){
+                            $trans2->where('r_t_created_by', $request->operator);
+                        }
+                        $trans = $trans2->where('r_t_m_area_id', $request->area)
+                        ->where('r_t_m_w_id', $request->waroeng);
             }
         } else {
             if($request->area == '0'){
@@ -112,8 +117,10 @@ class RekapNotaHarianController extends Controller
         
         $trans1 = $trans->whereBetween('r_t_tanggal', $dates)
                 ->join('users', 'users_id', 'r_t_created_by')
-                ->selectRaw('r_t_tanggal, SUM(r_t_nominal) as total, name')
-                ->groupBy('r_t_tanggal', 'name')
+                ->join('m_area', 'm_area_code', 'r_t_m_area_code')
+                ->join('m_w', 'm_w_code', 'r_t_m_w_code')
+                ->selectRaw('r_t_tanggal, SUM(r_t_nominal) as total, name, m_area_nama, m_w_nama')
+                ->groupBy('r_t_tanggal', 'name', 'm_area_nama', 'm_w_nama')
                 ->orderBy('r_t_tanggal', 'ASC')
                 ->get();  
 
@@ -128,6 +135,8 @@ class RekapNotaHarianController extends Controller
         if($request->show_operator == 'ya'){
             $i =1;
             foreach ($trans1 as $key => $valTrans){
+                $data[$i]['area'] = $valTrans->m_area_nama;
+                $data[$i]['waroeng'] = $valTrans->m_w_nama;
                 $data[$i]['tanggal'] = $valTrans->r_t_tanggal;
                 $data[$i]['operator'] = $valTrans->name;
                 foreach ($refund as $key => $valRefund){
@@ -161,6 +170,8 @@ class RekapNotaHarianController extends Controller
     } else {
         $i =1;
         foreach ($trans1 as $key => $valTrans){
+            $data[$i]['area'] = $valTrans->m_area_nama;
+            $data[$i]['waroeng'] = $valTrans->m_w_nama;
             $data[$i]['tanggal'] = $valTrans->r_t_tanggal;
             foreach ($refund as $key => $valRefund){
                 if ($valRefund->r_r_tanggal == $valTrans->r_t_tanggal) {
@@ -191,7 +202,6 @@ class RekapNotaHarianController extends Controller
             array_push($convert,array_values($data[$i]));
         }
     }
-
         $output = array("data" => $convert);
         return response()->json($output);
     }
