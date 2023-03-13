@@ -198,7 +198,7 @@ class GudangController extends Controller
                 'm_stok_detail_keluar' => $qty_kirim,
                 'm_stok_detail_saldo' => $satuan_asal->m_stok_saldo - $qty_kirim,
                 'm_stok_detail_hpp' => $satuan_asal->m_stok_hpp,
-                'm_stok_detail_catatan' => 'keluar ' . $m_g_tj->m_gudang_nama . ' ' . $m_g_tj->m_gudang_m_w_nama,
+                'm_stok_detail_catatan' => 'keluar ' . $m_g_tj->m_gudang_nama . ' ' . $request->rekap_tf_gudang_code,
                 'm_stok_detail_gudang_code' => $request->rekap_tf_gudang_asal_code,
                 'm_stok_detail_created_by' => Auth::id(),
                 'm_stok_detail_created_at' => Carbon::now(),

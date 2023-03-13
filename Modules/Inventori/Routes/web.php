@@ -119,3 +119,11 @@ Route::group(['prefix' => 'inventori', 'controller' => LaporanKeluarGudangContro
     Route::get('lap_gudang_rekap', 'index')->name('lap_gudang_rekap.index');
     Route::get('lap_gudang_harian', 'index')->name('lap_gudang_harian.index');
 });
+//FORM RPH
+Route::group(['prefix' => 'inventori', 'controller' => RphController::class, 'middleware' => ['auth', 'web']], function () {
+    Route::get('rph', 'index')->name('rph.index');
+    Route::get('rph/create', 'create')->name('rph.create');
+    Route::get('rph/detail', 'index')->name('rph.detail');
+    Route::post('rph/simpan', 'simpan')->name('rph.simpan');
+   
+});

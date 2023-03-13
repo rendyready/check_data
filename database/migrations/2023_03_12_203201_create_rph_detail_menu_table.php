@@ -13,9 +13,18 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('rekap_rph_detail', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+        Schema::create('rph_detail_menu', function (Blueprint $table) {
+            $table->string('rph_detail_menu_id');
+            $table->string('rph_detail_menu_rph_code');
+            $table->string('rph_detail_menu_m_produk_code');
+            $table->string('rph_detail_menu_m_produk_nama');
+            $table->string('rph_detail_menu_qty');
+            $table->bigInteger('rph_detail_menu_created_by');
+            $table->bigInteger('rph_detail_menu_updated_by')->nullable();
+            $table->bigInteger('rph_detail_menu_deleted_by')->nullable();
+            $table->timestampTz('rph_detail_menu_created_at')->useCurrent();
+            $table->timestampTz('rph_detail_menu_updated_at')->nullable()->useCurrentOnUpdate()->default(NULL);
+            $table->timestampTz('rph_detail_menu_deleted_at')->nullable()->default(NULL);
         });
     }
 
@@ -26,6 +35,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('rekap_rph_detail');
+        Schema::dropIfExists('rph_detail_menu');
     }
 };
