@@ -12,11 +12,13 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class MKasirAkse
  * 
- * @property int $m_kasir_akses_id
+ * @property int $id
+ * @property string $m_kasir_akses_id
  * @property int $m_kasir_akses_m_w_id
  * @property string $m_kasir_akses_fitur
  * @property string $m_kasir_akses_default_role
  * @property string $m_kasir_akses_temp_role
+ * @property int|null $m_kasir_akses_approvel
  * @property int $m_kasir_akses_created_by
  * @property int|null $m_kasir_akses_updated_by
  * @property int|null $m_kasir_akses_deleted_by
@@ -29,7 +31,6 @@ use Illuminate\Database\Eloquent\Model;
 class MKasirAkse extends Model
 {
 	protected $table = 'm_kasir_akses';
-	protected $primaryKey = 'm_kasir_akses_id';
 	public $timestamps = false;
 
 	protected $casts = [
@@ -47,6 +48,7 @@ class MKasirAkse extends Model
 	];
 
 	protected $fillable = [
+		'm_kasir_akses_id',
 		'm_kasir_akses_m_w_id',
 		'm_kasir_akses_fitur',
 		'm_kasir_akses_default_role',

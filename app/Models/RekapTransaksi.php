@@ -12,16 +12,19 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class RekapTransaksi
  * 
- * @property int $r_t_id
- * @property int|null $r_t_sync_id
- * @property int $r_t_rekap_modal_id
+ * @property int $id
+ * @property string $r_t_id
+ * @property string $r_t_rekap_modal_id
  * @property string $r_t_nota_code
  * @property string $r_t_bigboss
+ * @property string|null $r_t_member_id
  * @property Carbon $r_t_tanggal
  * @property time without time zone $r_t_jam
  * @property int $r_t_m_area_id
+ * @property string|null $r_t_m_area_code
  * @property string|null $r_t_m_area_nama
  * @property int $r_t_m_w_id
+ * @property string|null $r_t_m_w_code
  * @property string|null $r_t_m_w_nama
  * @property float $r_t_nominal
  * @property float $r_t_nominal_pajak
@@ -55,12 +58,9 @@ use Illuminate\Database\Eloquent\Model;
 class RekapTransaksi extends Model
 {
 	protected $table = 'rekap_transaksi';
-	protected $primaryKey = 'r_t_id';
 	public $timestamps = false;
 
 	protected $casts = [
-		'r_t_sync_id' => 'int',
-		'r_t_rekap_modal_id' => 'int',
 		'r_t_jam' => 'time without time zone',
 		'r_t_m_area_id' => 'int',
 		'r_t_m_w_id' => 'int',
@@ -94,15 +94,18 @@ class RekapTransaksi extends Model
 	];
 
 	protected $fillable = [
-		'r_t_sync_id',
+		'r_t_id',
 		'r_t_rekap_modal_id',
 		'r_t_nota_code',
 		'r_t_bigboss',
+		'r_t_member_id',
 		'r_t_tanggal',
 		'r_t_jam',
 		'r_t_m_area_id',
+		'r_t_m_area_code',
 		'r_t_m_area_nama',
 		'r_t_m_w_id',
+		'r_t_m_w_code',
 		'r_t_m_w_nama',
 		'r_t_nominal',
 		'r_t_nominal_pajak',

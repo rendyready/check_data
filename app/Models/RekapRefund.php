@@ -12,17 +12,19 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class RekapRefund
  * 
- * @property int $r_r_id
- * @property int|null $r_r_sync_id
- * @property int $r_r_rekap_modal_id
- * @property int $r_r_r_t_id
+ * @property int $id
+ * @property string $r_r_id
+ * @property string $r_r_rekap_modal_id
+ * @property string $r_r_r_t_id
  * @property string $r_r_nota_code
  * @property string $r_r_bigboss
  * @property Carbon $r_r_tanggal
  * @property time without time zone $r_r_jam
  * @property int $r_r_m_area_id
+ * @property string|null $r_r_m_area_code
  * @property string|null $r_r_m_area_nama
  * @property int $r_r_m_w_id
+ * @property string|null $r_r_m_w_code
  * @property string|null $r_r_m_w_nama
  * @property float $r_r_nominal_refund
  * @property float $r_r_nominal_refund_pajak
@@ -47,13 +49,9 @@ use Illuminate\Database\Eloquent\Model;
 class RekapRefund extends Model
 {
 	protected $table = 'rekap_refund';
-	protected $primaryKey = 'r_r_id';
 	public $timestamps = false;
 
 	protected $casts = [
-		'r_r_sync_id' => 'int',
-		'r_r_rekap_modal_id' => 'int',
-		'r_r_r_t_id' => 'int',
 		'r_r_jam' => 'time without time zone',
 		'r_r_m_area_id' => 'int',
 		'r_r_m_w_id' => 'int',
@@ -79,7 +77,7 @@ class RekapRefund extends Model
 	];
 
 	protected $fillable = [
-		'r_r_sync_id',
+		'r_r_id',
 		'r_r_rekap_modal_id',
 		'r_r_r_t_id',
 		'r_r_nota_code',
@@ -87,8 +85,10 @@ class RekapRefund extends Model
 		'r_r_tanggal',
 		'r_r_jam',
 		'r_r_m_area_id',
+		'r_r_m_area_code',
 		'r_r_m_area_nama',
 		'r_r_m_w_id',
+		'r_r_m_w_code',
 		'r_r_m_w_nama',
 		'r_r_nominal_refund',
 		'r_r_nominal_refund_pajak',

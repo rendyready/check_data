@@ -45,16 +45,21 @@ class RefundController extends Controller
         return response()->json($data);
     }
 
-    public function create()
+    public function select_user(Request $request)
     {
-        return view('dashboard::create');
+        $user = DB::table('users')
+            ->select('users_id', 'name')
+            ->where('waroeng_id', $request->id_waroeng)
+            ->orderBy('users_id', 'asc')
+            ->get();
+        $data = array();
+        foreach ($user as $val) {
+            $data[$val->users_id] = [$val->name];
+            $data['all'] = 'All Operator';
+        }
+        return response()->json($data);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     * @param Request $request
-     * @return Renderable
-     */
     public function store(Request $request)
     {
         //
@@ -68,13 +73,15 @@ class RefundController extends Controller
     public function show(Request $request)
     {
         $dates = explode('to' ,$request->tanggal);
-        $get = DB::table('rekap_refund')
+        $get2 = DB::table('rekap_refund')
                 ->join('users', 'users_id', 'r_r_created_by')
                 ->join('rekap_transaksi', 'r_t_id', 'r_r_r_t_id')
                 ->where('r_r_m_w_id', $request->waroeng)
-                ->where('r_r_created_by', $request->operator)
-                ->whereBetween('r_r_tanggal', $dates)
-                ->orderBy('r_r_tanggal', 'ASC')
+                ->whereBetween('r_r_tanggal', $dates);
+                    if($request->operator != 'all'){
+                        $get2->where('r_r_created_by', $request->operator);
+                    }
+                $get = $get2->orderBy('r_r_tanggal', 'ASC')
                 ->orderBy('r_r_nota_code', 'ASC')
                 ->get();
         $data = array();

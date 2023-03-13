@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class MMeja
  * 
+ * @property int $id
  * @property int $m_meja_id
  * @property string $m_meja_nama
  * @property int $m_meja_m_meja_jenis_id
@@ -29,10 +30,10 @@ use Illuminate\Database\Eloquent\Model;
 class MMeja extends Model
 {
 	protected $table = 'm_meja';
-	protected $primaryKey = 'm_meja_id';
 	public $timestamps = false;
 
 	protected $casts = [
+		'm_meja_id' => 'int',
 		'm_meja_m_meja_jenis_id' => 'int',
 		'm_meja_m_w_id' => 'int',
 		'm_meja_created_by' => 'int',
@@ -47,6 +48,7 @@ class MMeja extends Model
 	];
 
 	protected $fillable = [
+		'm_meja_id',
 		'm_meja_nama',
 		'm_meja_m_meja_jenis_id',
 		'm_meja_m_w_id',

@@ -60,7 +60,6 @@ Route::prefix('dashboard')->middleware('auth', 'web')
             Route::get('rekap_menu/tanggal_rekap', 'tanggal_rekap')->name('rekap_menu.tanggal_rekap');
             Route::post('rekap_menu/delete_tgl', 'delete_tgl')->name('rekap_menu.delete_tgl');
             Route::post('rekap_menu/simpan_tgl', 'simpan_tgl')->name('rekap_menu.simpan_tgl');
-
         });
         
         Route::controller(RefundController::class)->group(function () {
@@ -68,6 +67,7 @@ Route::prefix('dashboard')->middleware('auth', 'web')
             Route::get('rekap_refund/show', 'show')->name('rekap_refund.show');
             Route::get('rekap_refund/select_waroeng', 'select_waroeng')->name('rekap_refund.select_waroeng');
             Route::get('rekap_refund/detail/{id}', 'detail')->name('rekap_refund.detail');
+            Route::get('rekap_refund/select_user', 'select_user')->name('rekap_refund.select_user');
         });
 
         Route::controller(LostBillController::class)->group(function () {
@@ -75,12 +75,14 @@ Route::prefix('dashboard')->middleware('auth', 'web')
             Route::get('rekap_lostbill/show', 'show')->name('rekap_lostbill.show');
             Route::get('rekap_lostbill/select_waroeng', 'select_waroeng')->name('rekap_lostbill.select_waroeng');
             Route::get('rekap_lostbill/detail/{id}', 'detail')->name('rekap_lostbill.detail');
+            Route::get('rekap_lostbill/select_user', 'select_user')->name('rekap_lostbill.select_user');
         });
 
         Route::controller(GaransiController::class)->group(function () {
             Route::get('rekap_garansi', 'index')->name('rekap_garansi.index');
             Route::get('rekap_garansi/show', 'show')->name('rekap_garansi.show');
             Route::get('rekap_garansi/select_waroeng', 'select_waroeng')->name('rekap_garansi.select_waroeng');
+            Route::get('rekap_garansi/select_user', 'select_user')->name('rekap_garansi.select_user');
         });
 
 });

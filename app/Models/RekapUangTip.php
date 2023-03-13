@@ -12,14 +12,16 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class RekapUangTip
  * 
- * @property int $r_u_t_id
- * @property int|null $r_u_t_sync_id
- * @property int $r_u_t_rekap_modal_id
+ * @property int $id
+ * @property string $r_u_t_id
+ * @property string $r_u_t_rekap_modal_id
  * @property Carbon $r_u_t_tanggal
  * @property float $r_u_t_nominal
  * @property int $r_u_t_m_w_id
+ * @property string|null $r_u_t_m_w_code
  * @property string|null $r_u_t_m_w_nama
  * @property int $r_u_t_m_area_id
+ * @property string|null $r_u_t_m_area_code
  * @property string|null $r_u_t_m_area_nama
  * @property string $r_u_t_keterangan
  * @property string $r_u_t_status_sync
@@ -35,12 +37,9 @@ use Illuminate\Database\Eloquent\Model;
 class RekapUangTip extends Model
 {
 	protected $table = 'rekap_uang_tips';
-	protected $primaryKey = 'r_u_t_id';
 	public $timestamps = false;
 
 	protected $casts = [
-		'r_u_t_sync_id' => 'int',
-		'r_u_t_rekap_modal_id' => 'int',
 		'r_u_t_nominal' => 'float',
 		'r_u_t_m_w_id' => 'int',
 		'r_u_t_m_area_id' => 'int',
@@ -57,13 +56,15 @@ class RekapUangTip extends Model
 	];
 
 	protected $fillable = [
-		'r_u_t_sync_id',
+		'r_u_t_id',
 		'r_u_t_rekap_modal_id',
 		'r_u_t_tanggal',
 		'r_u_t_nominal',
 		'r_u_t_m_w_id',
+		'r_u_t_m_w_code',
 		'r_u_t_m_w_nama',
 		'r_u_t_m_area_id',
+		'r_u_t_m_area_code',
 		'r_u_t_m_area_nama',
 		'r_u_t_keterangan',
 		'r_u_t_status_sync',

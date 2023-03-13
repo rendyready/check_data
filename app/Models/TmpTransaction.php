@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int|null $tmp_transaction_m_w_id
  * @property string|null $tmp_transaction_note_number
  * @property string|null $tmp_transaction_customer_name
+ * @property string|null $tmp_transaction_member_id
  * @property time without time zone|null $tmp_transaction_order_time
  * @property string|null $tmp_transaction_table_list
  * @property int $tmp_transaction_status
@@ -54,6 +55,7 @@ class TmpTransaction extends Model
 		'tmp_transaction_m_w_id',
 		'tmp_transaction_note_number',
 		'tmp_transaction_customer_name',
+		'tmp_transaction_member_id',
 		'tmp_transaction_order_time',
 		'tmp_transaction_table_list',
 		'tmp_transaction_status',

@@ -20,7 +20,7 @@
                                             <select id="filter-waroeng" style="width: 100%;"
                                                 class="cari f-wrg js-select2 form-control" name="m_rekening_m_waroeng_id">
                                                 @foreach ($data->waroeng as $wrg)
-                                                    <option value="{{ $wrg->m_w_id }}"> {{ $wrg->m_w_nama }} </option>
+                                                    <option value="{{ $wrg->m_w_code }}"> {{ $wrg->m_w_nama }} </option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -113,7 +113,7 @@
                         <div class="block-content text-mute">
                             <div class="table-responsive">
                                 <table id="rekening-tampil" class="table table-bordered table-striped table-vcenter mb-4">
-                                    <thead class="justify-content-center">
+                                    <thead>
                                         <tr>
                                             <th>Kategori</th>
                                             <th>No Akun</th>
@@ -126,26 +126,26 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="row mb-2 col-md-6">
+                            <div class="row mb-2 col-md-8">
                                 <label class="col-sm-4 col-form-label" for="example-hf-text">Copy Ke Waroeng
                                     Lain</label>
-                                <div class="col-sm-8">
-                                    <select style="width: 100%;" id="m_rekening_m_waroeng_id2"
-                                        class="js-select2 form-control text-center m_rekening_m_waroeng_id2"
+                                <div class="col-sm-6">
+                                    <select style="width: 90%;" id="m_rekening_m_waroeng_id2"
+                                        class="js-select2 form-control m_rekening_m_waroeng_id2"
                                         name="m_rekening_m_waroeng_id">
-                                        <option>-- Pilih Waroeng --</option>
+                                        <option class="text-center">-- Pilih Waroeng --</option>
                                         @foreach ($data->waroeng as $wrg)
-                                            <option value="{{ $wrg->m_w_id }}"> {{ $wrg->m_w_nama }} </option>
+                                            <option class="text-center" value="{{ $wrg->m_w_code }}"> {{ $wrg->m_w_nama }} </option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <label class="col-sm-4 col-form-label" for="example-hf-text">Dengan Saldo</label>
-                                <div class="col-sm-8">
-                                  <select style="width: 100%;" id="m_rekening_copy_saldo"
-                                      class="js-select2 form-control text-center m_rekening_copy_saldo"
+                                <div class="col-sm-6">
+                                  <select style="width: 90%;" id="m_rekening_copy_saldo"
+                                      class="js-select2 form-control m_rekening_copy_saldo"
                                       name="m_rekening_copy_saldo">
-                                      <option value="tidak">Tidak</option>
-                                      <option value="ya">Ya</option>
+                                      <option class="text-center" value="tidak">Tidak</option>
+                                      <option class="text-center" value="ya">Ya</option>
                                   </select>
                               </div>
                                 <div class="col-sm-8">
@@ -182,7 +182,7 @@
                 <div class="form-group">
                     <label for="m_rekening_no_akun">Nomor Akun</label>
                       <div>
-                        <input class="form-control m_rekening_no_akun1" type="text" name="m_rekening_no_akun" id="m_rekening_no_akun1" style="width: 100%;" required>
+                        <input class="form-control m_rekening_no_akun1 no_rekening" type="text" name="m_rekening_no_akun" id="m_rekening_no_akun1" style="width: 100%;" required>
                       </div>
                 </div>
                 <div class="form-group">
@@ -230,7 +230,6 @@
               <div class="mb-4">
                 <input name="m_rekening_no_akun" type="hidden" id="m_rekening_no_akun2">
                 <div class="alert"><p>Apakah Anda yakin mau memhapus rekening ini?</p></div>
-                
               </div>
               </div>
               <div class="block-content block-content-full text-end bg-body">
@@ -238,7 +237,6 @@
                 <button type="submit" class="btn btn-success btn_hapus" id="btn_hapus">Hapus</button>
               </div>
             </form>
-          </div>
         </div>
       </div>
     </div>
@@ -253,7 +251,7 @@
     $('.tambah').on('click', function() {
       no++;
       $('#form').append('<tr class="hapus" id="row' + no + '">' +
-        '<td><input type="text" class="form-control form-control-sm m_rekening_no_akunjq text-center" name="m_rekening_no_akun[]" id="m_rekening_no_akunjq' + no + '" placeholder="Input Nama Akun" required></td>' +
+        '<td><input type="text" class="form-control form-control-sm m_rekening_no_akunjq text-center no_rekening" name="m_rekening_no_akun[]" id="m_rekening_no_akunjq' + no + '" placeholder="Input Nama Akun" required></td>' +
         '<td><input type="text" class="form-control form-control-sm m_rekening_namajq text-center" name="m_rekening_nama[]" id="m_rekening_namajq' + no + '" placeholder="Input Nama Rekening" required></td>' +
         '<td><input type="text" class="form-control saldo form-control-sm text-end number" name="m_rekening_saldo[]" id="m_rekening_saldo" placeholder="Input Saldo Rekening" required></td>' +
         '<td><button type="button" id="' + no + '" class="btn btn-danger btn_remove"> - </button></td> </tr> ');
@@ -594,7 +592,6 @@
      $('.saldo').trigger("input");
     });
 
-
     //copyrecord
     $(document).on('click', '#copyrecord', function() {
         var waroengasal      = $('#filter-waroeng').val();
@@ -603,7 +600,6 @@
         var waroengtj1       = $('#m_rekening_m_waroeng_id2').val();
         var saldo            = $('#m_rekening_copy_saldo').val();
     if(waroengasal1 != waroengtj1){
-
         $.ajax({
             url: "{{ route('rekening.copyrecord') }}",
             data : { 
@@ -624,29 +620,41 @@
         });
       }else{
         Codebase.helpers('jq-notify', {
+                                align: 'right', // 'right', 'left', 'center'
+                                from: 'top', // 'top', 'bottom'
+                                type: 'danger', // 'info', 'success', 'warning', 'danger'
+                                icon: 'fa fa-info me-5', // Icon class
+                                message: 'waroeng yang anda pilih sama dengan yang di halaman !'
+                                });
+        $('#m_rekening_m_waroeng_id2').val('-- Pilih Waroeng --').trigger('change');
+        }
+    });
+
+    $(document).on('input', '.no_rekening', function(){
+          console.log("Saving value " + $(this).val());
+          var index = $(this).attr('id'); 
+          $(this).data('val', $(this).val());
+          $(this).data('id',index);
+      }).on('change','.no_rekening', function(e){
+          var prev = $(this).data('val');
+          var current = $(this).val();
+          var id = $(this).data('id');
+      var values = $('[name="m_rekening_no_akun[]"]').map(function() {
+        return this.value.trim();
+      }).get();
+      var unique =  [...new Set(values)];
+      if (values.length != unique.length) {
+        e.preventDefault();
+        Codebase.helpers('jq-notify', {
                               align: 'right', // 'right', 'left', 'center'
                               from: 'top', // 'top', 'bottom'
                               type: 'danger', // 'info', 'success', 'warning', 'danger'
                               icon: 'fa fa-info me-5', // Icon class
-                              message: 'waroeng yang anda pilih sama dengan yang di halaman !'
+                              message: 'Nomor akun sudah digunakan, silahkan input nomor lain'
                             });
-      $('#m_rekening_m_waroeng_id2').val('-- Pilih Waroeng --').trigger('change');
+         $('#'+id).val('');
       }
-    });
-
-    // $('#my-input-field').on('input', function() {
-    // var inputVal = $(this).val();
-    // var isDuplicate = checkForDuplicate(inputVal);
-    // if (isDuplicate) {
-    //     alert('Duplicate data!');
-    //     $(this).val(''); 
-    // }
-    // });
-
-    // function checkForDuplicate(value) {
-    // var isDuplicate = false;
-    // return isDuplicate;
-    // }
+      });
 
 });
 </script>

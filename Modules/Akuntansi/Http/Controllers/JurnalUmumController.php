@@ -65,7 +65,7 @@ class JurnalUmumController extends Controller
         $tanggal = $request->m_jurnal_umum_tanggal;
         $tanggal = date('Y-m-d', strtotime($tanggal));
         $data = DB::table('m_jurnal_umum')
-            ->join('m_w', 'm_w_id', 'm_jurnal_umum_m_waroeng_id')
+            ->join('m_w', 'm_w_code', 'm_jurnal_umum_m_waroeng_id')
             ->select('m_jurnal_umum_m_rekening_no_akun', 'm_jurnal_umum_m_rekening_nama', 'm_jurnal_umum_particul', 'm_jurnal_umum_debit', 'm_jurnal_umum_kredit', 'm_jurnal_umum_user', 'm_jurnal_umum_no_bukti')
             ->where('m_jurnal_umum_m_waroeng_id', $request->m_jurnal_umum_m_waroeng_id)
             ->whereDate('m_jurnal_umum_tanggal', $tanggal)
@@ -81,7 +81,7 @@ class JurnalUmumController extends Controller
         $tanggal = date('Y-m-d', strtotime($prefix1));
         $code2 = date('Y/m/d');
         $cek_data = DB::table('m_jurnal_umum')
-            ->join('m_w', 'm_w_id', 'm_jurnal_umum_m_waroeng_id')
+            ->join('m_w', 'm_w_code', 'm_jurnal_umum_m_waroeng_id')
             ->select('m_jurnal_umum_no_bukti')
             ->where('m_jurnal_umum_m_waroeng_id', $prefix2)
             ->whereDate('m_jurnal_umum_tanggal', $tanggal)

@@ -60,9 +60,6 @@
                                         <select id="filter_operator" style="width: 100%;"
                                         class="cari f-wrg js-select2 form-control" data-placeholder="Pilih Operator" name="r_t_created_by">
                                         <option></option>
-                                        @foreach ($data->user as $user)
-                                        <option value="{{ $user->id }}"> {{ $user->name }} </option>
-                                        @endforeach
                                     </select>
                                     </div>
                                 </div>
@@ -169,6 +166,7 @@ $(document).ready(function() {
       return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     }
 
+    //eksekusi filter
     $('#cari').on('click', function() {
         var waroeng  = $('#filter_waroeng').val();
         var tanggal  = $('#filter_tanggal').val();
@@ -197,6 +195,7 @@ $(document).ready(function() {
       });
     });
 
+    //filter waroeng
     $('#filter_area').change(function(){
         var id_area = $(this).val();
         if(id_area){
@@ -225,6 +224,35 @@ $(document).ready(function() {
         }      
     });
 
+    //filter operator
+    $('#filter_waroeng').change(function(){
+        var id_waroeng = $(this).val();    
+        if(id_waroeng){
+            $.ajax({
+            type:"GET",
+            url: '{{route("rekap_lostbill.select_user")}}',
+            dataType: 'JSON',
+            data : {
+              id_waroeng: id_waroeng,
+            },
+            success:function(res){               
+                if(res){
+                    $("#filter_operator").empty();
+                    $("#filter_operator").append('<option></option>');
+                    $.each(res,function(key,value){
+                        $("#filter_operator").append('<option value="'+key+'">'+value+'</option>');
+                    });
+                }else{
+                $("#filter_operator").empty();
+                }
+            }
+            });
+        }else{
+            $("#filter_operator").empty();
+        }      
+    });
+
+    //filter tanggal
     $('#filter_tanggal').flatpickr({
             mode: "range",
             dateFormat: 'Y-m-d',
@@ -232,6 +260,7 @@ $(document).ready(function() {
             // allowInput: true,            
     });
 
+    //detail rekap lostbill
     $("#tampil_rekap").on('click','#button_detail', function() {
                 var id = $(this).attr('value');
                 // console.log(id);

@@ -12,11 +12,13 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class RekapRefundDetail
  * 
- * @property int $r_r_detail_id
- * @property int|null $r_r_detail_sync_id
- * @property int $r_r_detail_r_r_id
+ * @property int $id
+ * @property string $r_r_detail_id
+ * @property string $r_r_detail_r_r_id
  * @property int $r_r_detail_m_produk_id
+ * @property string|null $r_r_detail_m_produk_code
  * @property string|null $r_r_detail_m_produk_nama
+ * @property float $r_r_detail_reguler_price
  * @property float $r_r_detail_price
  * @property int $r_r_detail_qty
  * @property float $r_r_detail_nominal
@@ -38,13 +40,11 @@ use Illuminate\Database\Eloquent\Model;
 class RekapRefundDetail extends Model
 {
 	protected $table = 'rekap_refund_detail';
-	protected $primaryKey = 'r_r_detail_id';
 	public $timestamps = false;
 
 	protected $casts = [
-		'r_r_detail_sync_id' => 'int',
-		'r_r_detail_r_r_id' => 'int',
 		'r_r_detail_m_produk_id' => 'int',
+		'r_r_detail_reguler_price' => 'float',
 		'r_r_detail_price' => 'float',
 		'r_r_detail_qty' => 'int',
 		'r_r_detail_nominal' => 'float',
@@ -65,10 +65,12 @@ class RekapRefundDetail extends Model
 	];
 
 	protected $fillable = [
-		'r_r_detail_sync_id',
+		'r_r_detail_id',
 		'r_r_detail_r_r_id',
 		'r_r_detail_m_produk_id',
+		'r_r_detail_m_produk_code',
 		'r_r_detail_m_produk_nama',
+		'r_r_detail_reguler_price',
 		'r_r_detail_price',
 		'r_r_detail_qty',
 		'r_r_detail_nominal',

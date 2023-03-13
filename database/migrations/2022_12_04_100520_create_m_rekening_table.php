@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('m_rekening', function (Blueprint $table) {
             $table->id('m_rekening_id');
-            $table->bigInteger('m_rekening_m_waroeng_id');
+            $table->string('m_rekening_m_waroeng_id');
             $table->string('m_rekening_kategori');
             $table->string('m_rekening_no_akun');
             $table->string('m_rekening_nama');

@@ -45,9 +45,19 @@ class LostBillController extends Controller
         return response()->json($data);
     }
 
-    public function create()
+    public function select_user(Request $request)
     {
-        return view('dashboard::create');
+        $user = DB::table('users')
+            ->select('users_id', 'name')
+            ->where('waroeng_id', $request->id_waroeng)
+            ->orderBy('users_id', 'asc')
+            ->get();
+        $data = array();
+        foreach ($user as $val) {
+            $data[$val->users_id] = [$val->name];
+            $data['all'] = 'All Operator';
+        }
+        return response()->json($data);
     }
 
     /**
@@ -68,12 +78,14 @@ class LostBillController extends Controller
     public function show(Request $request)
     {
         $dates = explode('to' ,$request->tanggal);
-        $get = DB::table('rekap_lost_bill')
+        $get2 = DB::table('rekap_lost_bill')
                 ->join('users', 'users_id', 'r_l_b_created_by')
                 ->where('r_l_b_m_w_id', $request->waroeng)
-                ->where('r_l_b_created_by', $request->operator)
-                ->whereBetween('r_l_b_tanggal', $dates)
-                ->orderBy('r_l_b_tanggal', 'ASC')
+                ->whereBetween('r_l_b_tanggal', $dates);
+                    if($request->operator != 'all'){
+                        $get2->where('r_l_b_created_by', $request->operator);
+                    }
+                $get = $get2->orderBy('r_l_b_tanggal', 'ASC')
                 ->orderBy('r_l_b_nota_code', 'ASC')
                 ->get();
         $data = array();

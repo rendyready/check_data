@@ -51,6 +51,7 @@ class RekapNotaController extends Controller
         $data = array();
         foreach ($user as $val) {
             $data[$val->users_id] = [$val->name];
+            $data['all'] = 'All Operator';
         }
         return response()->json($data);
     }
@@ -64,15 +65,17 @@ class RekapNotaController extends Controller
         $get = DB::table('rekap_transaksi')
                 ->join('users', 'users_id', 'r_t_created_by')
                 ->join('m_transaksi_tipe', 'm_t_t_id', 'r_t_m_t_t_id')
-                ->where('r_t_m_w_id', $request->waroeng)
-                ->where('r_t_created_by', $request->operator)
-                ->whereBetween('r_t_tanggal', $dates)
+                ->where('r_t_m_w_id', $request->waroeng);
+                if($request->operator != 'all'){
+                    $get->where('r_t_created_by', $request->operator);
+                }
+                $get2 = $get->whereBetween('r_t_tanggal', $dates)
                 ->orderBy('r_t_tanggal', 'ASC')
                 ->orderBy('r_t_nota_code', 'ASC')
                 ->get();
 
             $data = array();
-            foreach ($get as $key => $value) {
+            foreach ($get2 as $key => $value) {
                 $row = array();
                 $row[] = date('d-m-Y', strtotime($value->r_t_tanggal));
                 $row[] = $value->name;

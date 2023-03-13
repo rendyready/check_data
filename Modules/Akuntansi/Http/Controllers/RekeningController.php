@@ -21,7 +21,7 @@ class RekeningController extends Controller
             ->orderby('m_w_id', 'ASC')
             ->get();
         $data->rekening = DB::table('m_rekening')
-            ->join('m_w', 'm_w_id', 'm_rekening_m_waroeng_id')
+            ->join('m_w', 'm_w_code', 'm_rekening_m_waroeng_id')
             ->select('m_rekening_kategori', 'm_rekening_no_akun', 'm_rekening_nama', 'm_rekening_saldo')
             ->orderBy('m_rekening_id', 'DESC')
             ->get();
@@ -31,7 +31,7 @@ class RekeningController extends Controller
     public function tampil(Request $request)
     {
         $get = DB::table('m_rekening')
-                ->join('m_w', 'm_w_id', 'm_rekening_m_waroeng_id')
+                ->join('m_w', 'm_w_code', 'm_rekening_m_waroeng_id')
                 ->where('m_rekening_kategori', $request->m_rekening_kategori)
                 ->where('m_rekening_m_waroeng_id', $request->m_rekening_m_waroeng_id)
                 ->orderBy('m_rekening_no_akun', 'ASC')
@@ -57,8 +57,8 @@ class RekeningController extends Controller
             ->where('m_rekening_m_waroeng_id', $request->m_rekening_m_waroeng_id)
             ->count();
         return response()->json($validasi);
-        
     }
+
     public function validasino(Request $request)
     {
         $validasi = DB::table('m_rekening')
@@ -66,7 +66,6 @@ class RekeningController extends Controller
             ->where('m_rekening_m_waroeng_id', $request->m_rekening_m_waroeng_id)
             ->count();
         return response()->json($validasi);
-
     }
 
     public function simpan(Request $request)
@@ -81,7 +80,6 @@ class RekeningController extends Controller
                 'm_rekening_saldo' => str_replace(',', '.', $str1),
                 'm_rekening_created_by' => Auth::id(),
                 'm_rekening_created_at' => Carbon::now()
-
             );
             DB::table('m_rekening')->insert($data);
         }
