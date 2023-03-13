@@ -17,33 +17,49 @@ class LaporanKeluarGudangController extends Controller
         return view('inventori::index');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     * @return Renderable
-     */
-    public function create()
+    public function lap_detail()
     {
-        return view('inventori::create');
+        $data = new \stdClass();
+        $data->waroeng = DB::table('m_w')
+            ->orderby('m_w_id', 'ASC')
+            ->get();
+        $data->area = DB::table('m_area')
+            ->orderby('m_area_id', 'ASC')
+            ->get();
+        $data->user = DB::table('users')
+            ->orderby('id', 'ASC')
+            ->get();
+        return view('inventori::lap_keluar_gudang_detai', compact('data'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     * @param Request $request
-     * @return Renderable
-     */
-    public function store(Request $request)
+    public function lap_rekap()
     {
-        //
+        $data = new \stdClass();
+        $data->waroeng = DB::table('m_w')
+            ->orderby('m_w_id', 'ASC')
+            ->get();
+        $data->area = DB::table('m_area')
+            ->orderby('m_area_id', 'ASC')
+            ->get();
+        $data->user = DB::table('users')
+            ->orderby('id', 'ASC')
+            ->get();
+        return view('inventori::lap_keluar_gudang_rekap', compact('data'));
     }
 
-    /**
-     * Show the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
-    public function show($id)
+    public function lap_harian()
     {
-        return view('inventori::show');
+        $data = new \stdClass();
+        $data->waroeng = DB::table('m_w')
+            ->orderby('m_w_id', 'ASC')
+            ->get();
+        $data->area = DB::table('m_area')
+            ->orderby('m_area_id', 'ASC')
+            ->get();
+        $data->user = DB::table('users')
+            ->orderby('id', 'ASC')
+            ->get();
+        return view('inventori::lap_keluar_gudang_harian', compact('data'));
     }
 
     /**
