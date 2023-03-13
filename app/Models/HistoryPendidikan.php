@@ -12,7 +12,8 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class HistoryPendidikan
  * 
- * @property int $history_pendidikan_id
+ * @property int $id
+ * @property string $history_pendidikan_id
  * @property string $history_pendidikan_m_karyawan_id
  * @property string $history_pendidikan_jenjang
  * @property string $history_pendidikan_institut
@@ -22,6 +23,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property float|null $history_pendidikan_nilai
  * @property int $history_pendidikan_created_by
  * @property int|null $history_pendidikan_updated_by
+ * @property int|null $history_pendidikan_deleted_by
  * @property Carbon $history_pendidikan_created_at
  * @property Carbon|null $history_pendidikan_updated_at
  * @property Carbon|null $history_pendidikan_deleted_at
@@ -31,13 +33,13 @@ use Illuminate\Database\Eloquent\Model;
 class HistoryPendidikan extends Model
 {
 	protected $table = 'history_pendidikan';
-	protected $primaryKey = 'history_pendidikan_id';
 	public $timestamps = false;
 
 	protected $casts = [
 		'history_pendidikan_nilai' => 'float',
 		'history_pendidikan_created_by' => 'int',
-		'history_pendidikan_updated_by' => 'int'
+		'history_pendidikan_updated_by' => 'int',
+		'history_pendidikan_deleted_by' => 'int'
 	];
 
 	protected $dates = [
@@ -47,6 +49,7 @@ class HistoryPendidikan extends Model
 	];
 
 	protected $fillable = [
+		'history_pendidikan_id',
 		'history_pendidikan_m_karyawan_id',
 		'history_pendidikan_jenjang',
 		'history_pendidikan_institut',
@@ -56,6 +59,7 @@ class HistoryPendidikan extends Model
 		'history_pendidikan_nilai',
 		'history_pendidikan_created_by',
 		'history_pendidikan_updated_by',
+		'history_pendidikan_deleted_by',
 		'history_pendidikan_created_at',
 		'history_pendidikan_updated_at',
 		'history_pendidikan_deleted_at'

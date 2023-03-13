@@ -12,12 +12,14 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class RekapHapusTransaksiDetail
  * 
- * @property int $r_h_t_detail_id
- * @property int|null $r_h_t_detail_sync_id
- * @property int $r_h_t_detail_r_h_t_id
+ * @property int $id
+ * @property string $r_h_t_detail_id
+ * @property string $r_h_t_detail_r_h_t_id
  * @property int $r_h_t_detail_m_produk_id
+ * @property string|null $r_h_t_detail_m_produk_code
  * @property string|null $r_h_t_detail_m_produk_nama
  * @property int $r_h_t_detail_qty
+ * @property float $r_h_t_detail_reguler_price
  * @property float $r_h_t_detail_price
  * @property float $r_h_t_detail_nominal
  * @property float $r_h_t_detail_nominal_pajak
@@ -37,14 +39,12 @@ use Illuminate\Database\Eloquent\Model;
 class RekapHapusTransaksiDetail extends Model
 {
 	protected $table = 'rekap_hapus_transaksi_detail';
-	protected $primaryKey = 'r_h_t_detail_id';
 	public $timestamps = false;
 
 	protected $casts = [
-		'r_h_t_detail_sync_id' => 'int',
-		'r_h_t_detail_r_h_t_id' => 'int',
 		'r_h_t_detail_m_produk_id' => 'int',
 		'r_h_t_detail_qty' => 'int',
+		'r_h_t_detail_reguler_price' => 'float',
 		'r_h_t_detail_price' => 'float',
 		'r_h_t_detail_nominal' => 'float',
 		'r_h_t_detail_nominal_pajak' => 'float',
@@ -63,11 +63,13 @@ class RekapHapusTransaksiDetail extends Model
 	];
 
 	protected $fillable = [
-		'r_h_t_detail_sync_id',
+		'r_h_t_detail_id',
 		'r_h_t_detail_r_h_t_id',
 		'r_h_t_detail_m_produk_id',
+		'r_h_t_detail_m_produk_code',
 		'r_h_t_detail_m_produk_nama',
 		'r_h_t_detail_qty',
+		'r_h_t_detail_reguler_price',
 		'r_h_t_detail_price',
 		'r_h_t_detail_nominal',
 		'r_h_t_detail_nominal_pajak',

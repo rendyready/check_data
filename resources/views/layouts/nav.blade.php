@@ -608,6 +608,26 @@
                   </li>
                 </ul>
               </li>
+          <li class="nav-main-item{{ request()->is('hrd/*') ? ' open' : '' }}">
+            <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
+              <i class="nav-main-link-icon fa fa-money-bill-1"></i>
+              <span class="nav-main-link-name">HRD</span>
+            </a>
+            <ul class="nav-main-submenu">
+              <li class="nav-main-item{{ request()->is('hrd/master/*') ? ' open' : '' }}">
+                <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
+                  <span class="nav-main-link-name">Master</span>
+                </a>
+                <ul class="nav-main-submenu">
+                  <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('hrd/master/divisi*') ? ' active' : '' }}" href="{{route('divisi.index')}}">
+                      <span class="nav-main-link-name">Divisi</span>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
           <li class="nav-main-heading">Pengaturan</li>
           <li class="nav-main-item{{ request()->is('users/*') ? ' open' : '' }}">
             <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">

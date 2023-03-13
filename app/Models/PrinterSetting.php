@@ -13,9 +13,11 @@ use Illuminate\Database\Eloquent\Model;
  * Class PrinterSetting
  * 
  * @property int $printer_setting_id
+ * @property int $printer_setting_m_w_id
  * @property string $printer_setting_type
  * @property string|null $printer_setting_address
  * @property string $printer_setting_location
+ * @property int $printer_setting_width
  * @property string $printer_setting_status
  * @property int $printer_setting_created_by
  * @property int|null $printer_setting_deleted_by
@@ -33,6 +35,8 @@ class PrinterSetting extends Model
 	public $timestamps = false;
 
 	protected $casts = [
+		'printer_setting_m_w_id' => 'int',
+		'printer_setting_width' => 'int',
 		'printer_setting_created_by' => 'int',
 		'printer_setting_deleted_by' => 'int',
 		'printer_setting_updated_by' => 'int'
@@ -49,6 +53,7 @@ class PrinterSetting extends Model
 		'printer_setting_type',
 		'printer_setting_address',
 		'printer_setting_location',
+		'printer_setting_width',
 		'printer_setting_status',
 		'printer_setting_created_by',
 		'printer_setting_deleted_by',

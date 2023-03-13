@@ -176,8 +176,8 @@ class GudangController extends Controller
                 'rekap_tf_gudang_m_produk_code' => $request->rekap_tf_gudang_m_produk_id[$key],
                 'rekap_tf_gudang_m_produk_nama' => $satuan_kirim->m_stok_produk_nama,
                 'rekap_tf_gudang_qty_keluar' => $qty_kirim,
-                'rekap_tf_gudang_hpp' => $request->rekap_tf_gudang_hpp[$key],
-                'rekap_tf_gudang_sub_total' => $request->rekap_tf_gudang_sub_total[$key],
+                'rekap_tf_gudang_hpp' => convertfloat($request->rekap_tf_gudang_hpp[$key]),
+                'rekap_tf_gudang_sub_total' => convertfloat($request->rekap_tf_gudang_sub_total[$key]),
                 'rekap_tf_gudang_satuan_keluar' => $satuan_kirim->m_stok_satuan,
                 'rekap_tf_gudang_satuan_terima' => $satuan_asal->m_stok_satuan,
                 'rekap_tf_gudang_m_w_id' => Auth::user()->waroeng_id,
@@ -213,7 +213,34 @@ class GudangController extends Controller
                 ->where('m_stok_m_produk_code', $request->rekap_tf_gudang_m_produk_id[$key])
                 ->update($m_stok);
         }
-        return redirect()->route('m_gudang_out.index')->with(['sukses' => 'Berhasil Transfer']);
+    }
+    public function gudang_out_hist($id)
+    {
+        $data_histori = DB::table('rekap_tf_gudang')
+        ->select('rekap_tf_gudang_code','rekap_tf_gudang_tgl_keluar','name',DB::raw("SUM(rekap_tf_gudang_sub_total) as total"),'m_gudang_nama')
+        ->join('users','users_id','rekap_tf_gudang_created_by')
+        ->join('m_gudang','m_gudang_code','rekap_tf_gudang_tujuan_code')
+        ->where('rekap_tf_gudang_asal_code',$id)
+        ->whereDate('rekap_tf_gudang_tgl_keluar',Carbon::now())
+        ->groupBy('rekap_tf_gudang_code','name','rekap_tf_gudang_tgl_keluar','m_gudang_nama')
+        ->orderBy('rekap_tf_gudang_tgl_keluar','desc')
+        ->get();
+        $data = array();
+        $no = 1;
+        foreach ($data_histori as $key) {
+            $row = array();
+            $row[] = $no;
+            $row[] = $key->rekap_tf_gudang_code;
+            $row[] = rupiah($key->total);
+            $row[] = ucwords($key->m_gudang_nama);
+            $row[] = ucwords($key->name);
+            $row[] = tgl_waktuid($key->rekap_tf_gudang_tgl_keluar);
+            $data[] = $row;
+            $no++;
+        }
+        $output = array("data" => $data);
+        return response()->json($output);
+
     }
     //Keluar Gudang - End
 

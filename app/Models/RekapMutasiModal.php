@@ -12,17 +12,19 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class RekapMutasiModal
  * 
- * @property int $r_m_m_id
- * @property int|null $r_m_m_sync_id
- * @property int $r_m_m_rekap_modal_id
+ * @property int $id
+ * @property string $r_m_m_id
+ * @property string $r_m_m_rekap_modal_id
  * @property Carbon $r_m_m_tanggal
  * @property time without time zone $r_m_m_jam
  * @property float $r_m_m_debit
  * @property float $r_m_m_kredit
  * @property string $r_m_m_keterangan
  * @property int $r_m_m_m_w_id
+ * @property string|null $r_m_m_m_w_code
  * @property string|null $r_m_m_m_w_nama
  * @property int $r_m_m_m_area_id
+ * @property string|null $r_m_m_m_area_code
  * @property string|null $r_m_m_m_area_nama
  * @property string $r_m_m_status_sync
  * @property int $r_m_m_created_by
@@ -37,12 +39,9 @@ use Illuminate\Database\Eloquent\Model;
 class RekapMutasiModal extends Model
 {
 	protected $table = 'rekap_mutasi_modal';
-	protected $primaryKey = 'r_m_m_id';
 	public $timestamps = false;
 
 	protected $casts = [
-		'r_m_m_sync_id' => 'int',
-		'r_m_m_rekap_modal_id' => 'int',
 		'r_m_m_jam' => 'time without time zone',
 		'r_m_m_debit' => 'float',
 		'r_m_m_kredit' => 'float',
@@ -61,7 +60,7 @@ class RekapMutasiModal extends Model
 	];
 
 	protected $fillable = [
-		'r_m_m_sync_id',
+		'r_m_m_id',
 		'r_m_m_rekap_modal_id',
 		'r_m_m_tanggal',
 		'r_m_m_jam',
@@ -69,8 +68,10 @@ class RekapMutasiModal extends Model
 		'r_m_m_kredit',
 		'r_m_m_keterangan',
 		'r_m_m_m_w_id',
+		'r_m_m_m_w_code',
 		'r_m_m_m_w_nama',
 		'r_m_m_m_area_id',
+		'r_m_m_m_area_code',
 		'r_m_m_m_area_nama',
 		'r_m_m_status_sync',
 		'r_m_m_created_by',

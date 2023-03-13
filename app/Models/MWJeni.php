@@ -12,11 +12,13 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class MWJeni
  * 
+ * @property int $id
  * @property int $m_w_jenis_id
  * @property string $m_w_jenis_nama
  * @property int $m_w_jenis_created_by
- * @property Carbon $m_w_jenis_created_at
  * @property int|null $m_w_jenis_updated_by
+ * @property int|null $m_w_jenis_deleted_by
+ * @property Carbon $m_w_jenis_created_at
  * @property Carbon|null $m_w_jenis_updated_at
  * @property Carbon|null $m_w_jenis_deleted_at
  *
@@ -25,12 +27,13 @@ use Illuminate\Database\Eloquent\Model;
 class MWJeni extends Model
 {
 	protected $table = 'm_w_jenis';
-	protected $primaryKey = 'm_w_jenis_id';
 	public $timestamps = false;
 
 	protected $casts = [
+		'm_w_jenis_id' => 'int',
 		'm_w_jenis_created_by' => 'int',
-		'm_w_jenis_updated_by' => 'int'
+		'm_w_jenis_updated_by' => 'int',
+		'm_w_jenis_deleted_by' => 'int'
 	];
 
 	protected $dates = [
@@ -40,10 +43,12 @@ class MWJeni extends Model
 	];
 
 	protected $fillable = [
+		'm_w_jenis_id',
 		'm_w_jenis_nama',
 		'm_w_jenis_created_by',
-		'm_w_jenis_created_at',
 		'm_w_jenis_updated_by',
+		'm_w_jenis_deleted_by',
+		'm_w_jenis_created_at',
 		'm_w_jenis_updated_at',
 		'm_w_jenis_deleted_at'
 	];

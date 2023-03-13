@@ -12,11 +12,14 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class MJenisNotum
  * 
+ * @property int $id
  * @property int $m_jenis_nota_id
- * @property string $m_jenis_nota_nama
+ * @property int $m_jenis_nota_m_w_id
+ * @property int $m_jenis_nota_m_t_t_id
  * @property int $m_jenis_nota_created_by
- * @property Carbon $m_jenis_nota_created_at
  * @property int|null $m_jenis_nota_updated_by
+ * @property int|null $m_jenis_nota_deleted_by
+ * @property Carbon $m_jenis_nota_created_at
  * @property Carbon|null $m_jenis_nota_updated_at
  * @property Carbon|null $m_jenis_nota_deleted_at
  *
@@ -25,12 +28,15 @@ use Illuminate\Database\Eloquent\Model;
 class MJenisNotum extends Model
 {
 	protected $table = 'm_jenis_nota';
-	protected $primaryKey = 'm_jenis_nota_id';
 	public $timestamps = false;
 
 	protected $casts = [
+		'm_jenis_nota_id' => 'int',
+		'm_jenis_nota_m_w_id' => 'int',
+		'm_jenis_nota_m_t_t_id' => 'int',
 		'm_jenis_nota_created_by' => 'int',
-		'm_jenis_nota_updated_by' => 'int'
+		'm_jenis_nota_updated_by' => 'int',
+		'm_jenis_nota_deleted_by' => 'int'
 	];
 
 	protected $dates = [
@@ -40,11 +46,12 @@ class MJenisNotum extends Model
 	];
 
 	protected $fillable = [
+		'm_jenis_nota_id',
 		'm_jenis_nota_m_w_id',
 		'm_jenis_nota_m_t_t_id',
 		'm_jenis_nota_created_by',
-		'm_jenis_nota_deleted_by',
 		'm_jenis_nota_updated_by',
+		'm_jenis_nota_deleted_by',
 		'm_jenis_nota_created_at',
 		'm_jenis_nota_updated_at',
 		'm_jenis_nota_deleted_at'

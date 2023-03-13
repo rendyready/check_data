@@ -12,11 +12,13 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class RekapGaransi
  * 
- * @property int $rekap_garansi_id
- * @property int|null $rekap_garansi_sync_id
- * @property int $rekap_garansi_r_t_id
+ * @property int $id
+ * @property string $rekap_garansi_id
+ * @property string $rekap_garansi_r_t_id
  * @property int $rekap_garansi_m_produk_id
+ * @property string|null $rekap_garansi_m_produk_code
  * @property string|null $rekap_garansi_m_produk_nama
+ * @property float $rekap_garansi_reguler_price
  * @property float $rekap_garansi_price
  * @property int $rekap_garansi_qty
  * @property float $rekap_garansi_nominal
@@ -35,13 +37,11 @@ use Illuminate\Database\Eloquent\Model;
 class RekapGaransi extends Model
 {
 	protected $table = 'rekap_garansi';
-	protected $primaryKey = 'rekap_garansi_id';
 	public $timestamps = false;
 
 	protected $casts = [
-		'rekap_garansi_sync_id' => 'int',
-		'rekap_garansi_r_t_id' => 'int',
 		'rekap_garansi_m_produk_id' => 'int',
+		'rekap_garansi_reguler_price' => 'float',
 		'rekap_garansi_price' => 'float',
 		'rekap_garansi_qty' => 'int',
 		'rekap_garansi_nominal' => 'float',
@@ -57,10 +57,12 @@ class RekapGaransi extends Model
 	];
 
 	protected $fillable = [
-		'rekap_garansi_sync_id',
+		'rekap_garansi_id',
 		'rekap_garansi_r_t_id',
 		'rekap_garansi_m_produk_id',
+		'rekap_garansi_m_produk_code',
 		'rekap_garansi_m_produk_nama',
+		'rekap_garansi_reguler_price',
 		'rekap_garansi_price',
 		'rekap_garansi_qty',
 		'rekap_garansi_nominal',

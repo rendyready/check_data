@@ -12,16 +12,18 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class RekapHapusMenu
  * 
- * @property int $r_h_m_id
- * @property int|null $r_h_m_sync_id
- * @property int $r_h_m_rekap_modal_id
+ * @property int $id
+ * @property string $r_h_m_id
+ * @property string $r_h_m_rekap_modal_id
  * @property Carbon $r_h_m_tanggal
  * @property time without time zone $r_h_m_jam
  * @property string $r_h_m_nota_code
  * @property string $r_h_m_bigboss
  * @property int $r_h_m_m_produk_id
+ * @property string|null $r_h_m_m_produk_code
  * @property string|null $r_h_m_m_produk_nama
  * @property int $r_h_m_qty
+ * @property float $r_h_m_reguler_price
  * @property float $r_h_m_price
  * @property float $r_h_m_nominal
  * @property float $r_h_m_nominal_pajak
@@ -30,8 +32,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property float $r_h_m_nominal_sharing_profit_out
  * @property string $r_h_m_keterangan
  * @property int $r_h_m_m_w_id
+ * @property string|null $r_h_m_m_w_code
  * @property string|null $r_h_m_m_w_nama
  * @property int $r_h_m_m_area_id
+ * @property string|null $r_h_m_m_area_code
  * @property string|null $r_h_m_m_area_nama
  * @property string $r_h_m_status_sync
  * @property int|null $r_h_m_approved_by
@@ -47,15 +51,13 @@ use Illuminate\Database\Eloquent\Model;
 class RekapHapusMenu extends Model
 {
 	protected $table = 'rekap_hapus_menu';
-	protected $primaryKey = 'r_h_m_id';
 	public $timestamps = false;
 
 	protected $casts = [
-		'r_h_m_sync_id' => 'int',
-		'r_h_m_rekap_modal_id' => 'int',
 		'r_h_m_jam' => 'time without time zone',
 		'r_h_m_m_produk_id' => 'int',
 		'r_h_m_qty' => 'int',
+		'r_h_m_reguler_price' => 'float',
 		'r_h_m_price' => 'float',
 		'r_h_m_nominal' => 'float',
 		'r_h_m_nominal_pajak' => 'float',
@@ -78,15 +80,17 @@ class RekapHapusMenu extends Model
 	];
 
 	protected $fillable = [
-		'r_h_m_sync_id',
+		'r_h_m_id',
 		'r_h_m_rekap_modal_id',
 		'r_h_m_tanggal',
 		'r_h_m_jam',
 		'r_h_m_nota_code',
 		'r_h_m_bigboss',
 		'r_h_m_m_produk_id',
+		'r_h_m_m_produk_code',
 		'r_h_m_m_produk_nama',
 		'r_h_m_qty',
+		'r_h_m_reguler_price',
 		'r_h_m_price',
 		'r_h_m_nominal',
 		'r_h_m_nominal_pajak',
@@ -95,8 +99,10 @@ class RekapHapusMenu extends Model
 		'r_h_m_nominal_sharing_profit_out',
 		'r_h_m_keterangan',
 		'r_h_m_m_w_id',
+		'r_h_m_m_w_code',
 		'r_h_m_m_w_nama',
 		'r_h_m_m_area_id',
+		'r_h_m_m_area_code',
 		'r_h_m_m_area_nama',
 		'r_h_m_status_sync',
 		'r_h_m_approved_by',
