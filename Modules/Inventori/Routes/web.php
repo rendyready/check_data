@@ -123,7 +123,9 @@ Route::group(['prefix' => 'inventori', 'controller' => LaporanKeluarGudangContro
 Route::group(['prefix' => 'inventori', 'controller' => RphController::class, 'middleware' => ['auth', 'web']], function () {
     Route::get('rph', 'index')->name('rph.index');
     Route::get('rph/create', 'create')->name('rph.create');
-    Route::get('rph/detail', 'index')->name('rph.detail');
+    Route::get('rph/detail/{id}', 'detail')->name('rph.detail');
     Route::post('rph/simpan', 'simpan')->name('rph.simpan');
+    Route::get('rph/edit/{id}','edit')->name('rph.edit');
+    Route::put('rph/update','update')->name('rph.update');
    
 });

@@ -10,7 +10,7 @@
                             FORM INPUT RPH
                     </div>
                     <div class="block-content text-muted">
-                        <form id="form">
+                        <div id="form">
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="row mb-1">
@@ -23,14 +23,17 @@
                                     <div class="row mb-1">
                                         <label class="col-sm-3 col-form-label" for="example-hf-text">Waroeng</label>
                                         <div class="col-sm-9">
-                                            <input type="text" class="form-control" id="rph_m_w_nama" name="rph_m_w_nama"
-                                                value="{{ ucwords($data->waroeng_nama->m_w_nama) }}" readonly>
+                                            <input type="hidden" class="nota" name="rph_code"
+                                                value="{{ $data->rph_code }}">
+                                            <input type="text" class="form-control nota" id="rph_m_w_nama"
+                                                name="rph_m_w_nama" value="{{ ucwords($data->waroeng_nama->m_w_nama) }}"
+                                                readonly>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="row mb-1">
-                                        <label class="col-sm-5 col-form-label" for="rph_tgl">Tanggal Now</label>
+                                        <label class="col-sm-5 col-form-label" for="tgl_now">Tanggal Now</label>
                                         <div class="col-sm-7">
                                             <input type="date" class="form-control" id="tgl_now" name="tgl_now"
                                                 value="{{ date('Y-m-d') }}" readonly="readonly">
@@ -40,9 +43,8 @@
                                         <label class="col-sm-5 col-form-label" for="rph_tgl">Tanggal</label>
                                         <div class="col-sm-7">
                                             <input type="text"
-                                                class="js-flatpickr form-control js-flatpickr-enabled flatpickr-input active"
-                                                id="example-flatpickr-default" name="example-flatpickr-default"
-                                                placeholder="Y-m-d" readonly="readonly">
+                                                class="js-flatpickr form-control nota js-flatpickr-enabled flatpickr-input active"
+                                                id="rph_tgl" name="rph_tgl" placeholder="Y-m-d" readonly="readonly">
                                         </div>
                                     </div>
                                 </div>
@@ -82,22 +84,24 @@
                                                                             class="form-control" type="text"
                                                                             name="rph_detail_menu_m_produk_code[]"
                                                                             id="rph_detail_menu_m_produk_code{{ $j->m_produk_code }}"
-                                                                            value="{{ $j->m_produk_code }}" readonly></td>
-                                                                    <td>{{ ucwords($j->m_produk_nama) }}</td>
+                                                                            value="{{ $j->m_produk_code }}" readonly>
+                                                                    </td>
+                                                                    <td>{{ $j->m_produk_nama }}</td>
+                                                                    </td>
                                                                     <td><input type="text" class="number form-control"
-                                                                            name="qty[]"></td>
+                                                                            name="rph_detail_menu_qty[]"></td>
                                                                 </tr>
                                                             @endif
                                                         @endforeach
                                                     </tbody>
                                                 </table>
                                             </div>
-                                            <button type="submit" class="btn btn-primary jbuton">Save</button>
                                         </div>
                                     @endforeach
                                 </div>
                             </div>
-                        </form>
+                        </div>
+                        <button id="simpan" type="submit" class="btn btn-sm btn-success">Simpan</button>
                     </div>
                 </div>
             </div>
@@ -108,46 +112,52 @@
 @section('js')
     <script>
         $(function() {
-
             var table = [];
             $('ul.nav-tabs').children().first().children().addClass('active');
             $('div.tab-pane').first().addClass('active');
             @foreach ($data->jenis as $k)
-                table['{{ $data->s }}'] = $('#table{{ $data->s++ }}').dataTable();
+                table['{{ $data->s }}'] = $('#table{{ $data->s++ }}').dataTable({
+                    destroy: true,
+                    paging: false
+                });
             @endforeach
-            $('#form').on('submit', function(e) {
-                var tData = [];
-                var tRes = [];
-                var n = 1;
-                e.preventDefault();
-                $.each($('.table'), function(i, v) {
-                    tData.push(table[i + 1].$('input').serialize());
-                }).promise().done(function() {
-                    tRes = JSON.stringify(tRes);
-                    console.log(tRes);
+            $('#simpan').click(function(e) {
+                var tgl = $('#rph_tgl').val();
+                if (tgl == '') {
+                    Codebase.helpers('jq-notify', {
+                        align: 'right', // 'right', 'left', 'center'
+                        from: 'top', // 'top', 'bottom'
+                        type: 'danger', // 'info', 'success', 'warning', 'danger'
+                        icon: 'fa fa-info me-5', // Icon class
+                        message: 'Tanggal RPH Belum Terisi'
+                    });
+                    e.preventDefault();
+                } else {
                     $.ajax({
                         type: "post",
-                        url: "{{route('rph.simpan')}}",
-                        data: {
-                            tData,
-                            _token: "{{ csrf_token() }}"
+                        url: "{{ route('rph.simpan') }}",
+                        data: $('input').serialize(),
+                        success: function(data) {
+                            Codebase.helpers('jq-notify', {
+                              align: 'right', // 'right', 'left', 'center'
+                              from: 'top', // 'top', 'bottom'
+                              type: data.type, // 'info', 'success', 'warning', 'danger'
+                              icon: 'fa fa-info me-5', // Icon class
+                              message: data.messages
+                            });
+                            setTimeout(function() {
+                                window.location.href = "{{route('rph.index')}}";
+                            }, 2000);
                         }
-                    }).done(function(data) {
-                        console.log(data);
-                    }).fail(function(data) {
-                        console.log(data);
                     });
-                });
-                return false;
+                }
             });
         })
         $(document).ready(function() {
             Codebase.helpersOnLoad(['jq-select2']);
             $('.js-flatpickr').flatpickr({
-                minDate: "today", // set minimum date to today
-                defaultDate: "nextDay", // set default date to next day
+                minDate: new Date().fp_incr(1) // This sets the minimum date to tomorrow
             });
-
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-Token': $("input[name=_token]").val()
