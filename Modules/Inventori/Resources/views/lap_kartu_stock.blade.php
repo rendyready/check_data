@@ -81,25 +81,26 @@
                             <button type="button" id="cari"
                                 class="btn btn-primary btn-sm col-1 mt-2 mb-3">Cari</button>
                         </div>
-                    </form>      
+                    </form>    
                 
             <table id="tampil_rekap" class="table table-sm table-bordered table-striped table-vcenter nowrap table-hover js-dataTable-full">
               <thead>
                 <tr>
-                  <th>Tanggal</th>
+                  <th class="text-center">Tanggal</th>
                   <th>Area</th>
-                  <th>Waroeng</th>
-                  <th>Bahan Baku</th>
-                  <th>Barang Masuk</th>
-                  <th>Barang Keluar</th>
-                  <th>Barang Sisa</th>
-                  <th>Selisih</th>
-                  <th>Satuan</th>
-                  <th>HPP Barang</th>
-                  <th>Catatan</th>
-                </tr>
+                  <th class="text-center">Waroeng</th>
+                  <th class="text-center">Bahan Baku</th>
+                  <th class="text-center">Barang Masuk</th>
+                  <th class="text-center">Barang Keluar</th>
+                  <th class="text-center">SO</th>
+                  <th class="text-center">Stok Akhir</th>
+                  <th class="text-center">Satuan</th>
+                  <th class="text-center">HPP Barang</th>
+                  <th class="text-center">Catatan</th>
+                </tr>                
               </thead>
               <tbody id="show_data">
+                
               </tbody>
             </table>
           </div>
@@ -108,6 +109,12 @@
     </div>
     </div>
 </div>
+<style>
+    .green-row {
+    background-color: green;
+    color: white;
+}
+</style>
 
 @endsection
 @section('js')
@@ -120,12 +127,14 @@ $(document).ready(function() {
     }
 
     $('#cari').on('click', function() {
-        var waroeng  = $('#filter_waroeng').val();
-        var tanggal  = $('#filter_tanggal').val();
-        var gudang   = $('#filter_gudang').val();
-        var bb       = $('#filter_bb').val();
-    $('#tampil_rekap').DataTable({
-        button: [],
+    var area = $('#filter_area').val();
+    var waroeng = $('#filter_waroeng').val();
+    var tanggal = $('#filter_tanggal').val();
+    var gudang = $('#filter_gudang').val();
+    var bb = $('#filter_bb').val();
+
+    var table = $('#tampil_rekap').DataTable({
+        buttons: [],
         destroy: true,
         orderCellsTop: true,
         processing: true,
@@ -133,9 +142,19 @@ $(document).ready(function() {
         scrollY: '300px',
         lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
         pageLength: 10,
+        "createdRow": function( row, data, dataIndex ) {
+            if (dataIndex === 0) {
+                $(row).addClass('bg-primary');
+                $(row).find('td').css('color', 'white');
+            }
+        },
+        columnDefs: [ 
+            { className: 'dt-center', targets: [0,1,2,3,4,5,6,7,8,9] },
+        ],
         ajax: {
             url: '{{route("kartu_stock.show")}}',
             data : {
+                area: area,
                 waroeng: waroeng,
                 tanggal: tanggal,
                 gudang: gudang,
@@ -145,9 +164,23 @@ $(document).ready(function() {
             },
             success:function(data){ 
                 console.log(data);
-            }
-      });
+                        var row = [
+                            '-',
+                            data.m_area_nama,
+                            data.m_w_nama,
+                            data.m_stok_detail_m_produk_nama,
+                            data.masuk,
+                            data.keluar,
+                            data.so,
+                            data.stok_awal,
+                            data.m_stok_detail_satuan,
+                            data.hpp,
+                            ''
+                        ];
+                        table.row.add(row).draw(false);
+            },
     });
+});
 
     //filter waroeng
     $('#filter_area').change(function(){
@@ -236,8 +269,7 @@ $(document).ready(function() {
 
     $('#filter_tanggal').flatpickr({
             mode: "range",
-            dateFormat: 'Y-m-d',
-            
+            dateFormat: 'Y-m-d',  
     });
 
 });

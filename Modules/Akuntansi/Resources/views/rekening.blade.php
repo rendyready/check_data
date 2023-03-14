@@ -630,31 +630,38 @@
         }
     });
 
-    $(document).on('input', '.no_rekening', function(){
-          console.log("Saving value " + $(this).val());
-          var index = $(this).attr('id'); 
-          $(this).data('val', $(this).val());
-          $(this).data('id',index);
-      }).on('change','.no_rekening', function(e){
-          var prev = $(this).data('val');
-          var current = $(this).val();
-          var id = $(this).data('id');
-      var values = $('[name="m_rekening_no_akun[]"]').map(function() {
-        return this.value.trim();
-      }).get();
-      var unique =  [...new Set(values)];
-      if (values.length != unique.length) {
-        e.preventDefault();
-        Codebase.helpers('jq-notify', {
-                              align: 'right', // 'right', 'left', 'center'
-                              from: 'top', // 'top', 'bottom'
-                              type: 'danger', // 'info', 'success', 'warning', 'danger'
-                              icon: 'fa fa-info me-5', // Icon class
-                              message: 'Nomor akun sudah digunakan, silahkan input nomor lain'
-                            });
-         $('#'+id).val('');
-      }
-      });
+    $(document).on("input", ".no_rekening", function () {
+        var prev = $(this).data("val");
+            var current = $(this).val();
+            var id = $(this).data("id");
+            var no_rekening = $(".no_rekening").val();
+            if (!current) {
+                // If the selected value is empty, skip the duplicate value check
+                return;
+            }
+            var values = $(".no_rekening")
+                .map(function () {
+                    return this.value.trim();
+                })
+                .get();
+            var filteredValues = values.filter(function (value) {
+                return value !== "";
+            });
+            var unique = [...new Set(filteredValues)];
+            if (filteredValues.length !== unique.length) {
+                e.preventDefault();
+                Codebase.helpers("jq-notify", {
+                    align: "right", // 'right', 'left', 'center'
+                    from: "top", // 'top', 'bottom'
+                    type: "danger", // 'info', 'success', 'warning', 'danger'
+                    icon: "fa fa-info me-5", // Icon class
+                    message: "Nama Barang Telah Ada",
+                });
+                $("#" + id)
+                    .val('')
+            }
+        })
+
 
 });
 </script>

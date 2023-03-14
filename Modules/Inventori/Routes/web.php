@@ -122,4 +122,4 @@ Route::group(['prefix' => 'inventori', 'controller' => LaporanKeluarGudangContro
     Route::get('lap_gudang_detail', 'lap_detail')->name('lap_gudang_detail.lap_detail');
     Route::get('lap_gudang_rekap', 'lap_rekap')->name('lap_gudang_rekap.lap_rekap');
     Route::get('lap_gudang_harian', 'lap_harian')->name('lap_gudang_harian.lap_harian');
-});
+}); //mulai 150
