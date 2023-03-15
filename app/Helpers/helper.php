@@ -135,6 +135,18 @@ function tgl_indo($tgl, $tampil_hari=true){
 	
 	return $text;    
  }
+ function tgl_indo_to_en($dateString)
+ {
+	$date = date("Y-m-d", 
+	strtotime(
+		str_replace(
+			array("Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"), 
+			array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"), 
+			str_replace(",", "", substr($dateString, strpos($dateString, " ") + 1))
+		)
+	));
+	return $date;
+ }
  function convertfloat($number) {
     // menghapus karakter titik
     $number = str_replace('.', '', $number);
@@ -158,4 +170,7 @@ function convertindo($number) {
   
 	return $formatted_number;
   }
-  
+ function num_format($num)
+{
+	return $angka_format = number_format($num, 2, ',', '.');
+}  

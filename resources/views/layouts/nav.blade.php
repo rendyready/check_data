@@ -433,6 +433,11 @@
                 </ul>
               </li>
               <li class="nav-main-item">
+                <a class="nav-main-link{{ request()->is('invetori/rph') ? ' active' : '' }}" href="{{route('rph.index')}}">
+                  <span class="nav-main-link-name">RPH</span>
+                </a>
+              </li>
+              <li class="nav-main-item">
                 <a class="nav-main-link{{ request()->is('invetori/po') ? ' active' : '' }}" href="{{route('po.index')}}">
                   <span class="nav-main-link-name">Purchase Order (PO)</span>
                 </a>
