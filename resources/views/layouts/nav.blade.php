@@ -394,6 +394,11 @@
                       <span class="nav-main-link-name">Rekap Garansi</span>
                     </a>
                   </li>
+                  <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('dashboard/kas_kasir') ? ' active' : '' }}" href="{{route('kas_kasir.index')}}">
+                      <span class="nav-main-link-name">Laporan Kas Harian Kasir</span>
+                    </a>
+                  </li>
                 </ul>
             </li>     
 

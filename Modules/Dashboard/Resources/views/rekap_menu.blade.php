@@ -87,7 +87,6 @@ $(document).ready(function() {
         },
         success: function(data) {
             var html = '<tr>';
-            html += '<th class="text-center">Area</th>';
             html += '<th class="text-center">Waroeng</th>';
             html += '<th class="text-center">Nama Menu</th>';
             for (var i = 0; i < data.length; i++) {

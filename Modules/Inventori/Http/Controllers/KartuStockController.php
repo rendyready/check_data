@@ -72,8 +72,7 @@ class KartuStockController extends Controller
             $bb2->where('m_stok_gudang_code', $request->gudang);
         } else {
             $bb2->where(function($query) {
-                $query->where('m_stok_gudang_code', '60001')
-                      ->where('m_stok_gudang_code', '60002');
+                $query->where('m_stok_gudang_code', '60001')->where('m_stok_gudang_code', '60002');
             });
         }
         $bb = $bb2->orderBy('m_stok_id', 'asc')
