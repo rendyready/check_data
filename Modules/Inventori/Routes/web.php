@@ -103,6 +103,7 @@ Route::group(['prefix' => 'inventori', 'controller' => KartuStockController::cla
     Route::get('kartu_stock/select_bb', 'select_bb')->name('kartu_stock.select_bb');
     Route::get('kartu_stock/show', 'show')->name('kartu_stock.show');
     Route::get('rekap_stock', 'rekap_stk')->name('rekap_stock.rekap_stk');
+    Route::get('rekap_stock/tampil_rekap', 'tampil_rekap')->name('rekap_stock.tampil_rekap');
 
 });
 //Laporan Pembelian

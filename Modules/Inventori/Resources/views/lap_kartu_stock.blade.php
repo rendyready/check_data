@@ -14,7 +14,7 @@
 
                         <div class="row">
                             <div class="col-md-5">
-                                <div class="row mb-1">
+                                <div class="row mb-3">
                                     <label class="col-sm-3 col-form-label" >Tanggal</label>
                                     <div class="col-sm-9 datepicker">
                                         <input name="r_t_tanggal" class="cari form-control" type="text" placeholder="Pilih Tanggal.." id="filter_tanggal" />
@@ -87,11 +87,9 @@
               <thead>
                 <tr>
                   <th class="text-center">Tanggal</th>
-                  <th>Area</th>
-                  <th class="text-center">Waroeng</th>
                   <th class="text-center">Bahan Baku</th>
-                  <th class="text-center">Barang Masuk</th>
-                  <th class="text-center">Barang Keluar</th>
+                  <th class="text-center">Masuk</th>
+                  <th class="text-center">Keluar</th>
                   <th class="text-center">SO</th>
                   <th class="text-center">Stok Akhir</th>
                   <th class="text-center">Satuan</th>
@@ -100,7 +98,6 @@
                 </tr>                
               </thead>
               <tbody id="show_data">
-                
               </tbody>
             </table>
           </div>
@@ -109,12 +106,6 @@
     </div>
     </div>
 </div>
-<style>
-    .green-row {
-    background-color: green;
-    color: white;
-}
-</style>
 
 @endsection
 @section('js')
@@ -149,7 +140,7 @@ $(document).ready(function() {
             }
         },
         columnDefs: [ 
-            { className: 'dt-center', targets: [0,1,2,3,4,5,6,7,8,9] },
+            { className: 'dt-center', targets: [0,1,2,3,4,5,6,7] },
         ],
         ajax: {
             url: '{{route("kartu_stock.show")}}',
@@ -164,20 +155,8 @@ $(document).ready(function() {
             },
             success:function(data){ 
                 console.log(data);
-                        var row = [
-                            '-',
-                            data.m_area_nama,
-                            data.m_w_nama,
-                            data.m_stok_detail_m_produk_nama,
-                            data.masuk,
-                            data.keluar,
-                            data.so,
-                            data.stok_awal,
-                            data.m_stok_detail_satuan,
-                            data.hpp,
-                            ''
-                        ];
-                        table.row.add(row).draw(false);
+                var row = [];
+                table.row.add(row).draw(false);
             },
     });
 });
