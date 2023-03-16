@@ -18,7 +18,7 @@
                 <th>ID</th>
                 <th>NAMA WAROENG</th>
                 <th>TIPE TRANSAKSI</th>
-                <th>JUMLAH MENU</th>
+                {{-- <th>JUMLAH MENU</th> --}}
                 <th>ACTION</th>
               </thead>
               <tbody id="tablecontents">
@@ -27,7 +27,7 @@
                       <td>{{$item->m_jenis_nota_id}}</td>
                       <td>{{$item->m_w_nama}}</td>
                       <td>{{$item->m_t_t_name}}</td>
-                      <td>{{$item->total}}</td>
+                      {{-- <td>{{$item->total}}</td> --}}
                       <td>
                         <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modal-fadein"><i class="fa fa-edit"></i></button>        
                         </button>
