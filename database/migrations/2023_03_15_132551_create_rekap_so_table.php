@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id('id');
             $table->string('rekap_so_code');
             $table->string('rekap_so_tgl');
-            $table->string('rekap_so_detail_m_gudang_code');
+            $table->string('rekap_so_m_gudang_code');
             $table->string('rekap_so_m_w_code');
             $table->string('rekap_so_m_w_nama');
             $table->bigInteger('rekap_so_created_by');

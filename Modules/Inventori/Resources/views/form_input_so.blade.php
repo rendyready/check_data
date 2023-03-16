@@ -44,7 +44,7 @@
                             </div>
                         </div>
                         <a class="btn btn-success btn-tambah-so"><i class="fa fa-plus"></i>Tambah Stok Opname</a>
-                        <table class="table table-sm table-bordered table-striped table-vcenter js-dataTable-full">
+                        <table id="tb-so" class="table table-sm table-bordered table-striped table-vcenter js-dataTable-full">
                             <thead>
                                 <tr>
                                     <th>No</th>
@@ -77,7 +77,20 @@
       $('.btn-tambah-so').on('click',function () {
         var id = $('#rekap_so_detail_m_gudang_code').val();
         window.open("/inventori/stok_so/create/"+id, "_blank");
-      })
+      });
+      $('#rekap_so_detail_m_gudang_code').on('change',function() {
+    var id = $(this).val()
+    var table;
+    $(function() {
+          table =  $('#tb-so').DataTable({
+              ajax: {
+              url: "{{route('stok_so.list')}}",
+              data: {id:id}, 
+              type: "GET",
+                }
+            });
+    });
+  }) 
   });
 </script>
 @endsection

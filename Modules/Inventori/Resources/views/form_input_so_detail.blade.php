@@ -25,17 +25,18 @@
                                         <div class="col-sm-9">
                                             <input type="hidden" class="nota" name="rekap_so_code"
                                                 value="{{ $data->so_code }}">
-                                            <input type="text" class="form-control nota" id="rph_m_w_nama"
-                                                name="rph_m_w_nama" value="{{ ucwords($data->waroeng_nama->m_w_nama) }}"
+                                            <input type="text" class="form-control nota" id="rekap_so_m_w_nama"
+                                                name="rekap_so_m_w_nama" value="{{ ucwords($data->waroeng->m_w_nama) }}"
                                                 readonly>
+                                            <input type="hidden" name="rekap_so_m_w_code" value="{{ $data->waroeng->m_w_code }}">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="row mb-1">
-                                        <label class="col-sm-4 col-form-label" for="tgl_now">Tanggal</label>
+                                        <label class="col-sm-4 col-form-label" for="rekap_so_tgl">Tanggal</label>
                                         <div class="col-sm-7">
-                                            <input type="text" class="form-control" id="tgl_now" name="tgl_now"
+                                            <input type="text" class="form-control" id="rekap_so_tgl" name="rekap_so_tgl"
                                                 value="{{ $data->tgl_now }}" readonly="readonly">
                                         </div>
                                     </div>
@@ -44,6 +45,8 @@
                                         <div class="col-sm-7">
                                             <input type="text" class="form-control nota" id="gudang_nama"
                                                 name="gudang_nama" value="{{ ucwords($data->gudang_nama) }}" readonly>
+                                            <input type="hidden" name="rekap_so_m_gudang_code"
+                                                value="{{ $data->gudang_code }}">
                                         </div>
                                     </div>
                                 </div>
@@ -101,58 +104,31 @@
     <script>
         $(function() {
             $('#simpan').click(function(e) {
-                var tgl = $('#rph_tgl').val();
-                if (tgl == '') {
-                    Codebase.helpers('jq-notify', {
-                        align: 'right', // 'right', 'left', 'center'
-                        from: 'top', // 'top', 'bottom'
-                        type: 'danger', // 'info', 'success', 'warning', 'danger'
-                        icon: 'fa fa-info me-5', // Icon class
-                        message: 'Tanggal RPH Belum Terisi'
-                    });
-                    e.preventDefault();
-                } else {
-                    // Mendapatkan semua data dalam sebuah DataTable
-                    var table = $('#tb-so').DataTable();
-                    var data = table.rows().data();
-                    // Membuat objek FormData dari seluruh data dalam DataTable dan form
-                    var formData = new FormData($('#myform')[0]);
-                    console.log(formData);
-                    data.each(function(rowData) {
-                        $.each(rowData, function(key, value) {
-                            formData.append(key, value);
+                // Mengirim data ke server melalui AJAX
+                $.ajax({
+                    type: "post",
+                    url: "{{ route('stok_so.simpan') }}",
+                    data: $('input').serialize(),
+                    success: function(data) {
+                        Codebase.helpers('jq-notify', {
+                            align: 'right', // 'right', 'left', 'center'
+                            from: 'top', // 'top', 'bottom'
+                            type: 'success', // 'info', 'success', 'warning', 'danger'
+                            icon: 'fa fa-info me-5', // Icon class
+                            message: 'Input SO Berhasil Anda Akan Dialihkan Ke Halaman Utama'
                         });
-                    });
-                    // Mengirim data ke server melalui AJAX
-                    // $.ajax({
-                    //     type: "post",
-                    //     url: "{{ route('stok_so.simpan') }}",
-                    //     data: formData,
-                    //     processData: false,
-                    //     contentType: false,
-                    //     success: function(data) {
-                    //         Codebase.helpers('jq-notify', {
-                    //             align: 'right', // 'right', 'left', 'center'
-                    //             from: 'top', // 'top', 'bottom'
-                    //             type: data
-                    //             .type, // 'info', 'success', 'warning', 'danger'
-                    //             icon: 'fa fa-info me-5', // Icon class
-                    //             message: data.messages
-                    //         });
-                    //         setTimeout(function() {
-                    //             window.location.href = "{{ route('rph.index') }}";
-                    //         }, 2000);
-                    //     }
-                    // });
-
-                }
+                        setTimeout(function() {
+                            window.location.href = "{{ route('stok_so.index') }}";
+                        }, 2000);
+                    }
+                });
             });
         })
         $(document).ready(function() {
             Codebase.helpersOnLoad(['jq-select2']);
             var table = $('#tb-so').DataTable({
                 destroy: true,
-                pageLength: 10,
+                paging: false,
             });
             $.ajaxSetup({
                 headers: {
