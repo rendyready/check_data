@@ -140,11 +140,7 @@ class RekapNotaHarianController extends Controller
                 $data[$i]['tanggal'] = $valTrans->r_t_tanggal;
                 $data[$i]['operator'] = $valTrans->name;
                 foreach ($refund as $key => $valRefund){
-                    if ($valRefund->r_r_tanggal == $valTrans->r_t_tanggal) {
-                         $data[$i]['penjualan'] = rupiah($valTrans->total - $valRefund->r_r_nominal_refund, 0);
-                    } else {
                         $data[$i]['penjualan'] = rupiah($valTrans->total, 0);
-                    }
                 foreach ($methodPay as $key => $valPay) {
                     $data[$i][$valPay->m_payment_method_name] = 0;
                     foreach ($trans2 as $key => $valTrans2){
@@ -168,11 +164,7 @@ class RekapNotaHarianController extends Controller
             $data[$i]['waroeng'] = $valTrans->m_w_nama;
             $data[$i]['tanggal'] = $valTrans->r_t_tanggal;
             foreach ($refund as $key => $valRefund){
-                if ($valRefund->r_r_tanggal == $valTrans->r_t_tanggal) {
-                     $data[$i]['penjualan'] = rupiah($valTrans->total - $valRefund->r_r_nominal_refund, 0);
-                } else {
                     $data[$i]['penjualan'] = rupiah($valTrans->total, 0);
-                }
             foreach ($methodPay as $key => $valPay) {
                 $data[$i][$valPay->m_payment_method_name] = 0;
                 foreach ($trans2 as $key => $valTrans2){

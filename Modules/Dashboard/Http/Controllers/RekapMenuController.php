@@ -36,13 +36,14 @@ class RekapMenuController extends Controller
 
     public function tanggal_rekap(Request $request)
     {
-        $dates = explode('to' ,$request->tanggal);
+        $dates = explode('to', $request->tanggal);
         $tanggal = DB::table('rekap_transaksi')
-        ->select('r_t_tanggal')
-        ->whereBetween('r_t_tanggal', $dates)        
-        ->orderBy('r_t_tanggal', 'asc')
-        ->groupby('r_t_tanggal')
-        ->get();
+                // ->select(DB::raw('DATE(r_t_tanggal) as tanggal'))
+                ->whereBetween('r_t_tanggal', $dates)
+                ->orderBy('r_t_tanggal', 'asc')
+                // ->groupBy('tanggal')
+                ->get();
+        $data = [];
         foreach ($tanggal as $val) {
             $data[] = date('d-m-Y', strtotime($val->r_t_tanggal));
         }
@@ -71,13 +72,13 @@ class RekapMenuController extends Controller
                     ->whereBetween('r_t_tanggal', $dates)
                     ->orderBy('r_t_tanggal', 'ASC')
                     ->get();
-    
-        if($request->area == '0'){
-            $get = DB::table('rekap_transaksi_detail')
-            ->join('rekap_transaksi', 'r_t_id', 'r_t_detail_r_t_id')
-            ->join('m_w', 'm_w_id', 'r_t_m_w_id')
-            ->whereBetween('r_t_tanggal', $dates);
-        } else {
+
+            if($request->area == '0'){
+                $get = DB::table('rekap_transaksi_detail')
+                ->join('rekap_transaksi', 'r_t_id', 'r_t_detail_r_t_id')
+                ->join('m_w', 'm_w_id', 'r_t_m_w_id')
+                ->whereBetween('r_t_tanggal', $dates);
+            } else {
             $get = DB::table('rekap_transaksi_detail')
                     ->join('rekap_transaksi', 'r_t_id', 'r_t_detail_r_t_id')
                     ->join('m_w', 'm_w_id', 'r_t_m_w_id')
@@ -86,8 +87,8 @@ class RekapMenuController extends Controller
                     if ($request->waroeng != 'all') {
                         $get->where('r_t_m_w_id', $request->waroeng);
                     }
-        }
-    
+            }
+         
         $get1 = $get->select('r_t_detail_m_produk_nama', 'm_w_nama')
                     ->groupBy('r_t_detail_m_produk_nama', 'm_w_nama')
                     ->get();
@@ -113,12 +114,11 @@ class RekapMenuController extends Controller
                     'nominal' => 0,
                 ];
             }
-            $data[$waroeng][$menu][$date]['qty'] += $qty;
+            $data[$waroeng][$menu][$date]['qty'] = $qty;
             $data[$waroeng][$menu][$date]['nominal'] = $nominal;
         }
-    
         $output = ['data' => []];
-    
+
         foreach ($data as $waroeng => $menus) {
             foreach ($menus as $menu => $dates) {
                 $row = [
