@@ -8,17 +8,8 @@ use Modules\Dashboard\Http\Controllers\RekapMenuController;
 use Modules\Dashboard\Http\Controllers\RekapNotaController;
 use Modules\Dashboard\Http\Controllers\DetailNotaController;
 use Modules\Dashboard\Http\Controllers\RekapNotaHarianController;
+use Modules\Dashboard\Http\Controllers\LaporanKasHarianKasirController;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
 // Dashboard Route   
 
 Route::prefix('dashboard')->middleware('auth', 'web')
@@ -85,4 +76,10 @@ Route::prefix('dashboard')->middleware('auth', 'web')
             Route::get('rekap_garansi/select_user', 'select_user')->name('rekap_garansi.select_user');
         });
 
+        Route::controller(LaporanKasHarianKasirController::class)->group(function () {
+            Route::get('kas_kasir', 'index')->name('kas_kasir.index');
+            Route::get('kas_kasir/show', 'show')->name('kas_kasir.show');
+            Route::get('kas_kasir/select_waroeng', 'select_waroeng')->name('kas_kasir.select_waroeng');
+            Route::get('kas_kasir/select_user', 'select_user')->name('kas_kasir.select_user');
+        });
 });

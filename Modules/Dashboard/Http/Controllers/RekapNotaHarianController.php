@@ -125,8 +125,8 @@ class RekapNotaHarianController extends Controller
                 ->get();  
 
         $trans2 = $trans->whereBetween('r_t_tanggal', $dates)
-                ->selectRaw('r_p_t_m_payment_method_id, r_t_tanggal, SUM(r_t_nominal) as nominal, r_t_nota_code')
-                        ->groupBy('r_t_tanggal', 'r_p_t_m_payment_method_id', 'r_t_nota_code')
+                ->selectRaw('r_p_t_m_payment_method_id, r_t_tanggal, SUM(r_t_nominal) as nominal')
+                        ->groupBy('r_t_tanggal', 'r_p_t_m_payment_method_id')
                         ->orderBy('r_p_t_m_payment_method_id', 'ASC')
                         ->get();
 
@@ -140,23 +140,13 @@ class RekapNotaHarianController extends Controller
                 $data[$i]['tanggal'] = $valTrans->r_t_tanggal;
                 $data[$i]['operator'] = $valTrans->name;
                 foreach ($refund as $key => $valRefund){
-                    if ($valRefund->r_r_tanggal == $valTrans->r_t_tanggal) {
-                         $data[$i]['penjualan'] = rupiah($valTrans->total - $valRefund->r_r_nominal_refund, 0);
-                    } else {
                         $data[$i]['penjualan'] = rupiah($valTrans->total, 0);
-                    }
                 foreach ($methodPay as $key => $valPay) {
                     $data[$i][$valPay->m_payment_method_name] = 0;
                     foreach ($trans2 as $key => $valTrans2){
-                        if ($valRefund->r_r_nota_code == $valTrans2->r_t_nota_code && $valRefund->r_r_tanggal == $valTrans2->r_t_tanggal) {
-                            if ($valTrans->r_t_tanggal == $valTrans2->r_t_tanggal && $valPay->m_payment_method_id == $valTrans2->r_p_t_m_payment_method_id) {
-                                $data[$i][$valPay->m_payment_method_name] = rupiah($valTrans2->nominal - $valRefund->r_r_nominal_refund, 0);
-                            } 
-                        } else {
                             if ($valTrans->r_t_tanggal == $valTrans2->r_t_tanggal && $valPay->m_payment_method_id == $valTrans2->r_p_t_m_payment_method_id) {
                                 $data[$i][$valPay->m_payment_method_name] = rupiah($valTrans2->nominal, 0);
                             } 
-                        }
                     }
                     } 
                 }
@@ -174,23 +164,13 @@ class RekapNotaHarianController extends Controller
             $data[$i]['waroeng'] = $valTrans->m_w_nama;
             $data[$i]['tanggal'] = $valTrans->r_t_tanggal;
             foreach ($refund as $key => $valRefund){
-                if ($valRefund->r_r_tanggal == $valTrans->r_t_tanggal) {
-                     $data[$i]['penjualan'] = rupiah($valTrans->total - $valRefund->r_r_nominal_refund, 0);
-                } else {
                     $data[$i]['penjualan'] = rupiah($valTrans->total, 0);
-                }
             foreach ($methodPay as $key => $valPay) {
                 $data[$i][$valPay->m_payment_method_name] = 0;
                 foreach ($trans2 as $key => $valTrans2){
-                    if ($valRefund->r_r_nota_code == $valTrans2->r_t_nota_code) {
-                        if ($valTrans->r_t_tanggal == $valTrans2->r_t_tanggal && $valPay->m_payment_method_id == $valTrans2->r_p_t_m_payment_method_id) {
-                            $data[$i][$valPay->m_payment_method_name] = rupiah($valTrans2->nominal - $valRefund->r_r_nominal_refund, 0);
-                        } 
-                    } else {
                         if ($valTrans->r_t_tanggal == $valTrans2->r_t_tanggal && $valPay->m_payment_method_id == $valTrans2->r_p_t_m_payment_method_id) {
                             $data[$i][$valPay->m_payment_method_name] = rupiah($valTrans2->nominal, 0);
                         } 
-                    }
                 }
                 } 
             }

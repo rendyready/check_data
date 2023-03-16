@@ -30,10 +30,7 @@ class LaporanPembelianController extends Controller
         $data->user = DB::table('users')
             ->orderby('id', 'ASC')
             ->get();
-        $data->transaksi_rekap = DB::table('rekap_transaksi')
-            ->orderby('r_t_id', 'ASC')
-            ->get();
-        return view('inventori::lap_pembelian_detail', compact('data'));
+        return view('inventori::lap_pembelian_detai', compact('data'));
     }
 
     public function lap_rekap()
@@ -47,9 +44,6 @@ class LaporanPembelianController extends Controller
             ->get();
         $data->user = DB::table('users')
             ->orderby('id', 'ASC')
-            ->get();
-        $data->transaksi_rekap = DB::table('rekap_transaksi')
-            ->orderby('r_t_id', 'ASC')
             ->get();
         return view('inventori::lap_pembelian_rekap', compact('data'));
     }
@@ -65,9 +59,6 @@ class LaporanPembelianController extends Controller
             ->get();
         $data->user = DB::table('users')
             ->orderby('id', 'ASC')
-            ->get();
-        $data->transaksi_rekap = DB::table('rekap_transaksi')
-            ->orderby('r_t_id', 'ASC')
             ->get();
         return view('inventori::lap_pembelian_harian', compact('data'));
     }

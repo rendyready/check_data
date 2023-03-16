@@ -101,8 +101,13 @@ Route::group(['prefix' => 'inventori', 'controller' => PenjualanInternalControll
 
 //Laporan Kartu Stock
 Route::group(['prefix' => 'inventori', 'controller' => KartuStockController::class, 'middleware' => ['auth', 'web']], function () {
-    Route::get('kartu_stock', 'index')->name('kartu_stock.index');
-    Route::get('rekap_stock', 'index')->name('rekap_stock.index');
+    Route::get('kartu_stock', 'kartu_stk')->name('kartu_stock.kartu_stk');
+    Route::get('kartu_stock/select_waroeng', 'select_waroeng')->name('kartu_stock.select_waroeng');
+    Route::get('kartu_stock/select_gudang', 'select_gudang')->name('kartu_stock.select_gudang');
+    Route::get('kartu_stock/select_bb', 'select_bb')->name('kartu_stock.select_bb');
+    Route::get('kartu_stock/show', 'show')->name('kartu_stock.show');
+    Route::get('rekap_stock', 'rekap_stk')->name('rekap_stock.rekap_stk');
+    Route::get('rekap_stock/tampil_rekap', 'tampil_rekap')->name('rekap_stock.tampil_rekap');
 
 });
 //Laporan Pembelian
@@ -113,16 +118,17 @@ Route::group(['prefix' => 'inventori', 'controller' => LaporanPembelianControlle
 });
 //Laporan Pengiriman
 Route::group(['prefix' => 'inventori', 'controller' => LaporanPengirimanController::class, 'middleware' => ['auth', 'web']], function () {
-    Route::get('lap_kirim', 'index')->name('lap_kirim.index');
-    Route::get('lap_kirim', 'index')->name('lap_kirim.index');
-    Route::get('lap_kirim', 'index')->name('lap_kirim.index');
+    Route::get('lap_kirim_detail', 'lap_detail')->name('lap_kirim.lap_detail');
+    Route::get('lap_kirim_rekap', 'lap_rekap')->name('lap_kirim.lap_rekap');
+    Route::get('lap_kirim_harian', 'lap_harian')->name('lap_kirim.lap_harian');
 });
 //Laporan Keluar Gudang
 Route::group(['prefix' => 'inventori', 'controller' => LaporanKeluarGudangController::class, 'middleware' => ['auth', 'web']], function () {
-    Route::get('lap_gudang_detail', 'index')->name('lap_gudang_detail.index');
-    Route::get('lap_gudang_rekap', 'index')->name('lap_gudang_rekap.index');
-    Route::get('lap_gudang_harian', 'index')->name('lap_gudang_harian.index');
+    Route::get('lap_gudang_detail', 'lap_detail')->name('lap_gudang_detail.lap_detail');
+    Route::get('lap_gudang_rekap', 'lap_rekap')->name('lap_gudang_rekap.lap_rekap');
+    Route::get('lap_gudang_harian', 'lap_harian')->name('lap_gudang_harian.lap_harian');
 });
+
 //FORM RPH
 Route::group(['prefix' => 'inventori', 'controller' => RphController::class, 'middleware' => ['auth', 'web']], function () {
     Route::get('rph', 'index')->name('rph.index');

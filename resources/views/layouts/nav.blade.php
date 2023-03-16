@@ -415,6 +415,11 @@
                       <span class="nav-main-link-name">Rekap Garansi</span>
                     </a>
                   </li>
+                  <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('dashboard/kas_kasir') ? ' active' : '' }}" href="{{route('kas_kasir.index')}}">
+                      <span class="nav-main-link-name">Laporan Kas Harian Kasir</span>
+                    </a>
+                  </li>
                 </ul>
             </li>     
 
@@ -515,12 +520,12 @@
                 </a>
                 <ul class="nav-main-submenu">
                   <li class="nav-main-item">
-                    <a class="nav-main-link{{ request()->is('inventori/kartu_stock') ? ' active' : '' }}" href="{{route('kartu_stock.index')}}">
+                    <a class="nav-main-link{{ request()->is('inventori/kartu_stock') ? ' active' : '' }}" href="{{route('kartu_stock.kartu_stk')}}">
                       <span class="nav-main-link-name">Kartu Stock</span>
                     </a>
                   </li>
                   <li class="nav-main-item">
-                    <a class="nav-main-link{{ request()->is('inventori/rekap_stock') ? ' active' : '' }}" href="{{route('rekap_stock.index')}}">
+                    <a class="nav-main-link{{ request()->is('inventori/rekap_stock') ? ' active' : '' }}" href="{{route('rekap_stock.rekap_stk')}}">
                       <span class="nav-main-link-name">Rekap Stock</span>
                     </a>
                   </li>
