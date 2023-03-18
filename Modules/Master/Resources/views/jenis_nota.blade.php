@@ -64,26 +64,26 @@
           <div class="block-content fs-sm">
             <form id="f_jenis_nota">
               <input type="hidden" name="m_jenis_nota_id">
+              <div></div>
               <div class="mb-4">
-                <label class="form-label" for="m_jenis_nota_m_w_id">Nama Waroeng</label>
-                <select class="form-select" id="m_jenis_nota_m_w_id" name="m_jenis_nota_m_w_id">
-                  <option selected="">Pilih Waroeng</option>
-                    @foreach ($data as $list)
-                        <option value="{{$list->m_jenis_nota_m_w_id}}">{{$list->m_w_nama}}</option>
-                    @endforeach
-                </select>
+                <div class="form-group">
+                  <label for="m_jenis_nota_m_w_id">Nama Waroeng</label>
+                  <select class="js-select2" id="m_jenis_nota_m_w_id" name="m_jenis_nota_m_w_id" style="width: 100%;" data-container="#f_jenis_nota" data-placeholder="Choose one..">
+                      @foreach ($listWaroeng as $wr)
+                          <option value="{{$wr->m_w_id}}">{{ucwords($wr->m_w_nama)}}</option>
+                      @endforeach
+                  </select>
+                </div>
               </div>
               <div class="mb-4">
-                <label class="form-label" for="m_jenis_nota_m_t_t_id">Jenis Transaksi </label>
-                <select class="form-select" id="m_jenis_nota_m_t_t_id" name="m_jenis_nota_m_t_t_id">
-                  <option selected="">Search</option>
-                  <option value="Grab">Grab</option>
-                  <option value="Gojek">Gojek</option>  
-                  <option value="Takeaway">Takeaway</option>  
-                  <option value="Dine In">Dine In</option>  
-                  <option value="ShoppeFood">ShoppeFood</option>
-                  <option value="Maxim">Maxim</option>    
-                </select>
+                <div class="form-group">
+                  <label  for="m_jenis_nota_m_t_t_id">Jenis Transaksi </label>
+                  <select class="js-select2" id="m_jenis_nota_m_t_t_id" name="m_jenis_nota_m_t_t_id" style="width: 100%;" data-container="#f_jenis_nota" data-placeholder="Choose one..">
+                    @foreach ($listTipeTransaksi as $tipe)
+                          <option value="{{$tipe->m_t_t_id}}">{{ucwords($tipe->m_t_t_name)}}</option>
+                    @endforeach  
+                  </select>
+                </div>
               </div>
             </form>
           </div>
@@ -105,6 +105,8 @@
 @section('js')
 <script type="module">
   $(document).ready(function(){
+    $('.js-select2').select2({dropdownParent: $('#f_jenis_nota')})
+
     var action;
     $.ajaxSetup({
     headers:{
@@ -126,6 +128,8 @@
       $('#addnota').click(function () {
         $('#saveBtn').val("create-product");
         $('#m_jenis_nota_id').val('');
+        $('#m_jenis_nota_m_w_id').val('').trigger('change');
+        $('#m_jenis_nota_m_t_t_id').val('').trigger('change');
         $('#f_jenis_nota').trigger("reset");
         $('.block-title').html("Buat Nota");
         $('#modal-fadein').modal('show');

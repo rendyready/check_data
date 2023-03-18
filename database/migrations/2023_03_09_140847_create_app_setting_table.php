@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('app_setting', function (Blueprint $table) {
             $table->id('app_setting_id');
-            $table->unsignedBigInteger('app_setting_m_w_id');
-            $table->string('app_setting_key_wa')->nullable();
-            $table->string('app_setting_device_wa')->nullable();
+            // $table->unsignedBigInteger('app_setting_m_w_id');
+            // $table->string('app_setting_key_wa')->nullable();
+            // $table->string('app_setting_device_wa')->nullable();
             $table->string('app_setting_url_server_struk')->nullable();
             $table->string('app_setting_key_server_struk')->nullable();
             $table->bigInteger('app_setting_created_by');
