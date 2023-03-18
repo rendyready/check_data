@@ -31,7 +31,8 @@
                                 </div>
                             </div>
                             <div class="col-md-4">
-                                <label class="col-sm-4 col-form-label-sm" for="rekap_so_detail_m_gudang_code">SO Gudang</label>
+                                <label class="col-sm-4 col-form-label-sm" for="rekap_so_detail_m_gudang_code">SO
+                                    Gudang</label>
                                 <select class="js-select2 form-control-sm" style="width: 100%;"
                                     name="rekap_so_detail_m_gudang_code" id="rekap_so_detail_m_gudang_code"
                                     data-placeholder="Pilih Gudang" required>
@@ -44,7 +45,8 @@
                             </div>
                         </div>
                         <a class="btn btn-success btn-tambah-so"><i class="fa fa-plus"></i>Tambah Stok Opname</a>
-                        <table id="tb-so" class="table table-sm table-bordered table-striped table-vcenter js-dataTable-full">
+                        <table id="tb-so"
+                            class="table table-sm table-bordered table-striped table-vcenter js-dataTable-full">
                             <thead>
                                 <tr>
                                     <th>No</th>
@@ -79,18 +81,23 @@
         window.open("/inventori/stok_so/create/"+id, "_blank");
       });
       $('#rekap_so_detail_m_gudang_code').on('change',function() {
-    var id = $(this).val()
-    var table;
-    $(function() {
-          table =  $('#tb-so').DataTable({
-              ajax: {
-              url: "{{route('stok_so.list')}}",
-              data: {id:id}, 
-              type: "GET",
-                }
+        var id = $(this).val()
+        var table;
+        $(function() {
+                table = $('#tb-so').DataTable({
+                    "destroy":true,
+                    "processing": true,
+                    "autoWidth": true,
+                    "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+                    "pageLength": 10,
+                    "ajax": {
+                        "url": "{{route('stok_so.list')}}",
+                        "data": {g_id:id},
+                        "type": "GET"
+                            }
+                });
             });
-    });
-  }) 
+    }) 
   });
 </script>
 @endsection

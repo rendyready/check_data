@@ -51,8 +51,6 @@
                             <div class="table-responsive">
                                 <table id="tb-cht" class="table table-sm table-bordered table-striped table-vcenter">
                                     <thead>
-                                        <th hidden>id</th>
-                                        <th hidden>code</th>
                                         <th>Tgl Keluar</th>
                                         <th>Operator</th>
                                         <th>Gudang Asal</th>
@@ -68,8 +66,25 @@
                             </div>
                             <div class="block-content block-content-full text-end bg-transparent">
                                 <input type="submit" class="btn btn-sm btn-success btn-save">
-                              </div>
+                            </div>
                         </form>
+                        <div class="table-responsive">
+                            <h4>Rekap Terima</h4>
+                            <table id="tb-hist" class="table table-sm table-bordered table-striped table-vcenter">
+                                <thead>
+                                    <th>Tgl Keluar</th>
+                                    <th>Operator</th>
+                                    <th>Gudang Asal</th>
+                                    <th>Nama Barang</th>
+                                    <th>Qty Keluar</th>
+                                    <th>Satuan</th>
+                                    <th>Qty Terima</th>
+                                    <th>Satuan</th>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -81,34 +96,28 @@
     <script type="module">
  $(document).ready(function(){
   Codebase.helpersOnLoad(['jq-select2','js-flatpickr']);
-  var table;
-  $(".number").on("keypress", function (evt) {
-    if (evt.which != 8 && evt.which != 0 && evt.which < 48 || evt.which > 57)
-    {
-        evt.preventDefault();
-    }
-    });
+  var table,table2;
     $('#rekap_tf_gudang_tujuan_code').on('change',function() {
-    var id = $(this).val()
-        $(function() {
+    var id = $('#rekap_tf_gudang_tujuan_code').val()
+     $(function() {
             table = $('#tb-cht').DataTable({
                 buttons:[],
                 destroy:true,
                 paging:false,
                 serverside:true,
-                columnDefs: [
-            {
-                target: 0,
-                visible: false,
-                searchable: false,
-            },
-            {
-                target: 1,
-                visible: false,
-            }
-          ],
                 ajax: {
                 url: "/inventori/gudang/listtf",
+                data: {gudang_id:id}, 
+                type: "GET",
+                    }
+                });
+                
+                table2 = $('#tb-hist').DataTable({
+                destroy:true,
+                paging:false,
+                serverside:true,
+                ajax: {
+                url: "/inventori/gudang/terima/history/",
                 data: {gudang_id:id}, 
                 type: "GET",
                     }
@@ -131,7 +140,7 @@
                               icon: 'fa fa-success me-5',    
                               message: 'Berhasil Simpan'
                             });
-                           window.location.reload();
+                           table.ajax.reload();
                         },
                         error : function(){
                             alert("Tidak dapat menyimpan data!");

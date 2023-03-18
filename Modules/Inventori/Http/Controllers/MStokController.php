@@ -112,14 +112,28 @@ class MStokController extends Controller
         return view('inventori::form_input_so', compact('data'));
     }
 
-    public function so_list($id)
+    public function so_list(Request $request)
     {
         $so = DB::table('rekap_so')
             ->join('users', 'users_id', 'rekap_so_created_by')
-            ->where('rekap_so_detail_m_gudang_code', $id)
+            ->where('rekap_so_m_gudang_code', $request->g_id)
             ->orderBy('rekap_so_created_at', 'desc')
             ->get();
-        return response()->json($so);
+        
+            $no = 0;
+            $data = array();
+            foreach ($so as $value) {
+                $row = array();
+                $no++;
+                $row[] = $no;
+                $row[] = tgl_indo($value->rekap_so_tgl);
+                $row[] = ucwords($value->name);
+                $row[] = tgl_waktuid($value->rekap_so_created_at);
+                $row[] = '<button class="btn btn-warning"><i class="fa fa-eye">Detail</i></button>';
+                $data[] = $row;
+            }
+            $output = array('data' => $data);
+            return response()->json($output);
     }
 
     public function so_create($g_id)
@@ -141,8 +155,8 @@ class MStokController extends Controller
     {
         $waroeng_id = Auth::user()->waroeng_id;
         $so_nota = array(
-            'rekap_so_code' => $request->rekap_so_code,
-            'rekap_so_tgl' => $request->rekap_so_tgl,
+            'rekap_so_code' => $request->rekap_so_m_gudang_code,
+            'rekap_so_tgl' => tgl_indo_to_en($request->rekap_so_tgl),
             'rekap_so_detail_m_gudang_code' => $request->rekap_so_m_gudang_code,
             'rekap_so_m_w_code'=> $request->rekap_so_m_w_code,
             'rekap_so_m_w_nama' => strtolower($request->rekap_so_m_w_nama),

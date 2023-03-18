@@ -152,26 +152,28 @@
                                 </div>
                             </div>
                         </form>
+                        <br>
+                        <h4>Rekap Keluar</h4>
                         <div class="table-responsive">
                             <table id="tb_keluar"
                                 class="table table-sm table-bordered table-striped table-vcenter js-dataTable-full">
                                 <thead>
-                                    <th>No</th>
-                                    <th>No Bukti</th>
-                                    <th>Total</th>
-                                    <th>Tujuan</th>
-                                    <th>Operator</th>
                                     <th>Jam Input</th>
+                                    <th>No Bukti</th>
+                                    <th>Asal Gudang</th>
+                                    <th>Qty</th>
+                                    <th>Satuan</th>
+                                    <th>Operator</th>
                                 </thead>
                                 <tbody>
                                 </tbody>
                                 <tfoot>
-                                    <th>No</th>
-                                    <th>No Bukti</th>
-                                    <th>Total</th>
-                                    <th>Tujuan</th>
-                                    <th>Operator</th>
                                     <th>Jam Input</th>
+                                    <th>No Bukti</th>
+                                    <th>Asal Gudang</th>
+                                    <th>Qty</th>
+                                    <th>Satuan</th>
+                                    <th>Operator</th>
                                 </tfoot>
                             </table>
                         </div>

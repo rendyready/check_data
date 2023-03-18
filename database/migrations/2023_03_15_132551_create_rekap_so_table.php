@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('rekap_so', function (Blueprint $table) {
             $table->id('id');
             $table->string('rekap_so_code');
-            $table->string('rekap_so_tgl');
+            $table->date('rekap_so_tgl');
             $table->string('rekap_so_m_gudang_code');
             $table->string('rekap_so_m_w_code');
             $table->string('rekap_so_m_w_nama');

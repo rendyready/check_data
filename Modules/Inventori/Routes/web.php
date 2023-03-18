@@ -74,7 +74,7 @@ Route::group(['prefix' => 'inventori', 'controller' => GudangController::class, 
     Route::get('gudang/out','gudang_out')->name('m_gudang_out.index');
     Route::post('gudang/out_simpan','gudang_out_save')->name('m_gudang_out.simpan');
     Route::get('gudang/terima','gudang_terima')->name('m_gudang.terima_tf');
-    Route::get('gudang/listtf','gudang_list_tf')->name('gudang.tf_list');
+    Route::get('gudang/listtf','gudang_list_tf')->name('gudang.tf_list'); Route::get('gudang/terima/history','gudang_terima_hist')->name('gudang_terima.hist');
     Route::post('gudang/terima/simpan','gudang_terima_simpan')->name('cht_keluar_gudang.simpan');
     Route::get('gudang/out_hist/{id}','gudang_out_hist')->name('gudang.histori');
 
