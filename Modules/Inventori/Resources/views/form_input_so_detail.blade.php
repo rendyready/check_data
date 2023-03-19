@@ -106,7 +106,7 @@
             $('#simpan').click(function(e) {
                 // Mengirim data ke server melalui AJAX
                 $.ajax({
-                    type: "post",
+                    type: "post", 
                     url: "{{ route('stok_so.simpan') }}",
                     data: $('input').serialize(),
                     success: function(data) {

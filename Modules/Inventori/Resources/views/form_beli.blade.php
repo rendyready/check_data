@@ -50,7 +50,7 @@
                                         <label class="col-sm-5 col-form-label-sm" for="rekap_beli_code">No Nota</label>
                                         <div class="col-sm-7">
                                             <input type="text" class="form-control form-control-sm" id="rekap_beli_code"
-                                                name="rekap_beli_code" value="{{ $data->code }}" readonly>
+                                                name="rekap_beli_code" readonly>
                                         </div>
                                     </div>
                                     <div class="row mb-1">
@@ -337,262 +337,303 @@
     <!-- END Page Content -->
 @endsection
 @section('js')
-    <script type="module">
- $(document).ready(function(){
-  $.ajaxSetup({
-    headers:{
-      'X-CSRF-Token' : $("input[name=_token]").val()
+    <script>
+        function get_code() {
+            $.get("/inventori/beli/code/", function(data) {
+                $('#rekap_beli_code').val(data);
+            });
         }
-      });
-    Codebase.helpersOnLoad(['jq-select2']);
-    var datas,table;
-    $('#rekap_beli_gudang_code').on('change',function () {
-    if ($('.fc').serialize().length > 191) {
-        Swal.fire({
-        title: 'Apakah Anda Yakin ?',
-        text: "Hasil Input Akan Hilang Jika Anda Berganti Gudang Tanpa Menyimpanya",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Ya'
-        }).then((result) => {
-        if (result.isConfirmed) {
-            Swal.fire(
-            'Berhasil',
-            'Gudang Telah Berganti.',
-            'success'
-            )
-            $('#rekap_beli_detail_m_produk_id1').empty();
-            $('#rekap_beli_detail_m_produk_id1').append('<option></option>');
-            var asal = $(this).val()
-            $.get("/inventori/stok/"+asal, function(data){
-                datas = data;
-                $.each(data, function(key, value) {
-                  $('#rekap_beli_detail_m_produk_id1')
-                  .append($('<option>', { value : key })
-                  .text(value));
-                });
+        $(document).ready(function() {
+            get_code();
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-Token': $("input[name=_token]").val()
+                }
             });
-            $(function() {
-                table = $('#tb_beli').DataTable({
-                    "destroy":true,
-                    "orderCellsTop": true,
-                    "processing": true,
-                    "autoWidth": true,
-                    "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
-                    "pageLength": 10,
-                    "ajax": {
-                        "url": "beli/history/"+asal,
-                        "type": "GET"
+            Codebase.helpersOnLoad(['jq-select2']);
+            var datas, table;
+            $('#rekap_beli_gudang_code').on('change', function() {
+                if ($('.fc').serialize().length > 191) {
+                    Swal.fire({
+                        title: 'Apakah Anda Yakin ?',
+                        text: "Hasil Input Akan Hilang Jika Anda Berganti Gudang Tanpa Menyimpanya",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Ya'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            Swal.fire(
+                                'Berhasil',
+                                'Gudang Telah Berganti.',
+                                'success'
+                            )
+                            $('#rekap_beli_detail_m_produk_id1').empty();
+                            $('#rekap_beli_detail_m_produk_id1').append('<option></option>');
+                            var asal = $(this).val()
+                            $.get("/inventori/stok/" + asal, function(data) {
+                                datas = data;
+                                $.each(data, function(key, value) {
+                                    $('#rekap_beli_detail_m_produk_id1')
+                                        .append($('<option>', {
+                                                value: key
+                                            })
+                                            .text(value));
+                                });
+                            });
+                            $(function() {
+                                table = $('#tb_beli').DataTable({
+                                    "destroy": true,
+                                    "orderCellsTop": true,
+                                    "processing": true,
+                                    "autoWidth": true,
+                                    "lengthMenu": [
+                                        [10, 25, 50, 100, -1],
+                                        [10, 25, 50, 100, "All"]
+                                    ],
+                                    "pageLength": 10,
+                                    "ajax": {
+                                        "url": "beli/history/" + asal,
+                                        "type": "GET"
+                                    }
+                                });
+                            });
+                            $('.remove').remove();
+                            $('.reset').trigger('changer').val('');
+                        }
+                    });
+                } else {
+                    var asal = $(this).val()
+                    $('#rekap_beli_detail_m_produk_id1').empty();
+                    $('#rekap_beli_detail_m_produk_id1').append('<option></option>');
+                    $.get("/inventori/stok/" + asal, function(data) {
+                        datas = data;
+                        $.each(data, function(key, value) {
+                            $('#rekap_beli_detail_m_produk_id1')
+                                .append($('<option>', {
+                                        value: key
+                                    })
+                                    .text(value));
+                        });
+                    });
+                    $(function() {
+                        table = $('#tb_beli').DataTable({
+                            "destroy": true,
+                            "orderCellsTop": true,
+                            "processing": true,
+                            "autoWidth": true,
+                            "lengthMenu": [
+                                [10, 25, 50, 100, -1],
+                                [10, 25, 50, 100, "All"]
+                            ],
+                            "pageLength": 10,
+                            "ajax": {
+                                "url": "beli/history/" + asal,
+                                "type": "GET"
                             }
-                });
+                        });
+                    });
+                }
             });
-            $('.remove').remove();
-            $('.reset').trigger('changer').val('');
-        }
-        });
-    } else {
-        var asal = $(this).val()
-        $('#rekap_beli_detail_m_produk_id1').empty();
-            $('#rekap_beli_detail_m_produk_id1').append('<option></option>');
-        $.get("/inventori/stok/"+asal, function(data){
-            datas = data;
-            $.each(data, function(key, value) {
-              $('#rekap_beli_detail_m_produk_id1')
-              .append($('<option>', { value : key })
-              .text(value));
-            });
-        });
-        $(function() {
-                table = $('#tb_beli').DataTable({
-                    "destroy":true,
-                    "orderCellsTop": true,
-                    "processing": true,
-                    "autoWidth": true,
-                    "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
-                    "pageLength": 10,
-                    "ajax": {
-                        "url": "beli/history/"+asal,
-                        "type": "GET"
-                            }
-                });
-            });
-    }
-});
 
-	var no =2;
-    var supplier = new Array();
-    function addRow() {
-        $('#form').append('<tr class="remove" id="row'+no+'">'+
-            '<td><select class="js-select2 nama_barang" name="rekap_beli_detail_m_produk_id[]" id="rekap_beli_detail_m_produk_id'+no+'" style="width: 100%;" data-placeholder="Pilih Nama Barang" required > <option></option></select></td>'+
-            '<td><textarea class="form-control form-control-sm" name="rekap_beli_detail_catatan[]" id="rekap_beli_detail_catatan" cols="50" required placeholder="catatan bb atau satuan"></textarea></td>'+
-            '<td><input type="text" class="form-control number form-control-sm qty" name="rekap_beli_detail_qty[]" id="rekap_beli_detail_qty" required></td>'+
-            '<td><input type="text" class="form-control number form-control-sm harga" name="rekap_beli_detail_harga[]" id="rekap_beli_detail_harga" required></td>'+
-            '<td><input type="text" class="form-control number form-control-sm persendisc" name="rekap_beli_detail_disc[]" id="rekap_beli_detail_disc"></td>'+
-            '<td><input type="text" class="form-control number form-control-sm rupiahdisc" name="rekap_beli_detail_discrp[]" id="rekap_beli_detail_discrp"></td>'+
-            '<td><input type="text" class="form-control number form-control-sm subtot" name="rekap_beli_detail_subtot[]" id="rekap_beli_detail_subtot" readonly></td>'+
-            '<td><button type="button" id="'+no+'" class="btn btn-danger btn_remove"><i class="fa fa-trash"></i></button></td></tr>');
-        Codebase.helpersOnLoad(['jq-select2']);
-        $.each(datas, function(key, value) {
-            $('#rekap_beli_detail_m_produk_id'+no)
-              .append($('<option>', { value : key })
-              .text(value));
-        });
-        no++;
-        $('#formAction tr:last-child td:nth-child(1) select').focus();
-    }
-    $.get('/inventori/beli/list', function(response){
-      supplier = response['supplier'];
-    $.each(supplier, function(key, value) {
-     $('#rekap_beli_supplier_code')
-          .append($('<option>', { value : key })
-          .text(value));
-    });
-  });
-	$(document).on('click', '.btn_remove', function(){
-		var button_id = $(this).attr("id"); 
-		$('#row'+button_id+'').remove();
-      var $tblrows = $("#form");
-      $tblrows.find('.persendisc').trigger('input');
-	});
-    $("#form, .qty, .harga, .persendisc, .rupiahdisc, .disc_tot, .disc_tot_rp, .ppn, .ongkir, .bayar").on('input', function () {
-      var $tblrows = $("#form tbody tr");
-      $tblrows.each(function (index) {
-          var $tblrow = $(this);
-          $tblrow.find(".qty, .harga, .persendisc, .rupiahdisc").on('input', function () {
-              var qty = $tblrow.find("[name='rekap_beli_detail_qty[]']").val().replace(/\./g, '').replace(/\,/g, '.');
-              var price = $tblrow.find("[name='rekap_beli_detail_harga[]']").val().replace(/\./g, '').replace(/\,/g, '.');
-              var persendisc = $tblrow.find("[name='rekap_beli_detail_disc[]']").val();
-              var nilaipersendisc = 100-persendisc;
-              var rupiahdisc = $tblrow.find("[name='rekap_beli_detail_discrp[]']").val().replace(/\./g, '').replace(/\,/g, '.');
-              if (rupiahdisc==null) {
-                rupiahdisc = 0;
-              }
-              var subTotal = parseFloat(qty) * parseFloat(price) * (nilaipersendisc/100) - rupiahdisc;
-              if (!isNaN(subTotal)) { 
-                  $tblrow.find('.subtot').val(subTotal.toLocaleString("id"));
-                  var grandTotal = 0;
-                  $(".subtot").each(function () {
-                      var stval = parseFloat($(this).val().replace(/\./g, '').replace(/\,/g, '.'));
-                      grandTotal += isNaN(stval) ? 0 : stval;
-                  });
-                  $('.grdtot').val(grandTotal.toLocaleString('id')); 
-              }
-          });
-      });
-       var grdtot = 0;
-          $(".subtot").each(function () {
-                          var stval = parseFloat($(this).val().replace(/\./g, '').replace(/\,/g, '.'));
-                          grdtot += isNaN(stval) ? 0 : stval;
-          });
-          var disc_tot = $("[name='rekap_beli_disc']").val();
-          var disctotrp = $("[name='rekap_beli_disc_rp']").val().replace(/\./g, '').replace(/\,/g, '.');
-          var ppn = $("[name='rekap_beli_ppn']").val();
-          var bayar = $("[name='rekap_beli_terbayar']").val().replace(/\./g, '').replace(/\,/g, '.');
-          var ongkir = $("[name='rekap_beli_ongkir']").val().replace(/\./g, '').replace(/\,/g, '.');
-         if (ongkir==="") {
-            var ongkir = 0;
-         }
-          var grandtotal = grdtot*parseFloat((100-disc_tot)/100)-disctotrp;
-          var ppnrp = parseFloat(ppn/100)*grandtotal;
-          var rekap_beli_tot_nom = parseFloat(grandtotal)+ parseFloat(ppnrp)+ parseFloat(ongkir);
-          $('.ppnrp').val(ppnrp);
-          $('.rekap_beli_tot_nom').val(rekap_beli_tot_nom.toLocaleString('id'));
-          if (rekap_beli_tot_nom-bayar < 0) {
-            Codebase.helpers('jq-notify', {
-              align: 'right', // 'right', 'left', 'center'
-              from: 'top', // 'top', 'bottom'
-              type: 'danger', // 'info', 'success', 'warning', 'danger'
-              icon: 'fa fa-info me-5', // Icon class
-              message: 'Nominal Bayar Tidak Boleh Lebih Dari Tagihan'
-          });
-            $('.bayar').val(0);
-            $tblrows.find('.persendisc').trigger('input');
-          } else {
-            $('.sisa').val((rekap_beli_tot_nom-bayar).toLocaleString('id'));
-          }
-          $('#total_sum_value').html(': Rp '+rekap_beli_tot_nom.toLocaleString('id'));
-    });
-    $('#rekap_beli_supplier_code').on('change',function() {
-      var id = $(this).val();
-      if (id == '500001') {
-        const date = new Date('{{$data->tgl_now}}').toISOString().slice(0, 10);
-        $('.supplier').attr('readonly',false).trigger('change').val('');
-        $("#rekap_beli_jth_tmp").val(date).trigger('change');
-      } else {
-        $('.supplier').attr('readonly',true);
-        $.ajax({
-                    url: "/inventori/supplier/edit/"+id,
-                    type: "GET",
-                    dataType: 'json',
-                    success: function(respond) {
-                        $("#rekap_beli_supplier_nama").val(respond.m_supplier_nama).trigger('change');
-                        $("#rekap_beli_supplier_alamat").val(respond.m_supplier_alamat).trigger('change');
-                        $("#rekap_beli_supplier_telp").val(respond.m_supplier_telp).trigger('change');
-                        const date = new Date('{{$data->tgl_now}}');
-                        date.setDate(date.getDate() + parseInt(respond.m_supplier_jth_tempo));
-                        var jth_tmp = new Date(date).toISOString().slice(0, 10);
-                        $("#rekap_beli_jth_tmp").val(jth_tmp).trigger('change');
-                    },
-                    error: function() {
-                    }
+            var no = 2;
+            var supplier = new Array();
+
+            function addRow() {
+                $('#form').append('<tr class="remove" id="row' + no + '">' +
+                    '<td><select class="js-select2 nama_barang" name="rekap_beli_detail_m_produk_id[]" id="rekap_beli_detail_m_produk_id' +
+                    no +
+                    '" style="width: 100%;" data-placeholder="Pilih Nama Barang" required > <option></option></select></td>' +
+                    '<td><textarea class="form-control form-control-sm" name="rekap_beli_detail_catatan[]" id="rekap_beli_detail_catatan" cols="50" required placeholder="catatan bb atau satuan"></textarea></td>' +
+                    '<td><input type="text" class="form-control number form-control-sm qty" name="rekap_beli_detail_qty[]" id="rekap_beli_detail_qty" required></td>' +
+                    '<td><input type="text" class="form-control number form-control-sm harga" name="rekap_beli_detail_harga[]" id="rekap_beli_detail_harga" required></td>' +
+                    '<td><input type="text" class="form-control number form-control-sm persendisc" name="rekap_beli_detail_disc[]" id="rekap_beli_detail_disc"></td>' +
+                    '<td><input type="text" class="form-control number form-control-sm rupiahdisc" name="rekap_beli_detail_discrp[]" id="rekap_beli_detail_discrp"></td>' +
+                    '<td><input type="text" class="form-control number form-control-sm subtot" name="rekap_beli_detail_subtot[]" id="rekap_beli_detail_subtot" readonly></td>' +
+                    '<td><button type="button" id="' + no +
+                    '" class="btn btn-danger btn_remove"><i class="fa fa-trash"></i></button></td></tr>');
+                Codebase.helpersOnLoad(['jq-select2']);
+                $.each(datas, function(key, value) {
+                    $('#rekap_beli_detail_m_produk_id' + no)
+                        .append($('<option>', {
+                                value: key
+                            })
+                            .text(value));
                 });
-      }
-    });
-    $('.tambah').on('click', function() {
-        addRow();
-    });
-    $('#formAction').on('keydown', 'input[name="rekap_beli_detail_subtot[]"]:last', function(e) {
-				if (e.which == 9) { // 9 is the code for the "Tab" key
-					e.preventDefault(); // prevent default "Tab" behavior
-					addRow(); // simulate a click on the "Add Field" button
-				}
-	});
-    $('#formAction').submit( function(e){
-                if(!e.isDefaultPrevented()){
+                no++;
+                $('#formAction tr:last-child td:nth-child(1) select').focus();
+            }
+            $.get('/inventori/beli/list', function(response) {
+                supplier = response['supplier'];
+                $.each(supplier, function(key, value) {
+                    $('#rekap_beli_supplier_code')
+                        .append($('<option>', {
+                                value: key
+                            })
+                            .text(value));
+                });
+            });
+            $(document).on('click', '.btn_remove', function() {
+                var button_id = $(this).attr("id");
+                $('#row' + button_id + '').remove();
+                var $tblrows = $("#form");
+                $tblrows.find('.persendisc').trigger('input');
+            });
+            $("#form, .qty, .harga, .persendisc, .rupiahdisc, .disc_tot, .disc_tot_rp, .ppn, .ongkir, .bayar").on(
+                'input',
+                function() {
+                    var $tblrows = $("#form tbody tr");
+                    $tblrows.each(function(index) {
+                        var $tblrow = $(this);
+                        $tblrow.find(".qty, .harga, .persendisc, .rupiahdisc").on('input', function() {
+                            var qty = $tblrow.find("[name='rekap_beli_detail_qty[]']").val()
+                                .replace(/\./g, '').replace(/\,/g, '.');
+                            var price = $tblrow.find("[name='rekap_beli_detail_harga[]']").val()
+                                .replace(/\./g, '').replace(/\,/g, '.');
+                            var persendisc = $tblrow.find("[name='rekap_beli_detail_disc[]']")
+                                .val();
+                            var nilaipersendisc = 100 - persendisc;
+                            var rupiahdisc = $tblrow.find("[name='rekap_beli_detail_discrp[]']")
+                                .val().replace(/\./g, '').replace(/\,/g, '.');
+                            if (rupiahdisc == null) {
+                                rupiahdisc = 0;
+                            }
+                            var subTotal = parseFloat(qty) * parseFloat(price) * (
+                                nilaipersendisc / 100) - rupiahdisc;
+                            if (!isNaN(subTotal)) {
+                                $tblrow.find('.subtot').val(subTotal.toLocaleString("id"));
+                                var grandTotal = 0;
+                                $(".subtot").each(function() {
+                                    var stval = parseFloat($(this).val().replace(/\./g,
+                                        '').replace(/\,/g, '.'));
+                                    grandTotal += isNaN(stval) ? 0 : stval;
+                                });
+                                $('.grdtot').val(grandTotal.toLocaleString('id'));
+                            }
+                        });
+                    });
+                    var grdtot = 0;
+                    $(".subtot").each(function() {
+                        var stval = parseFloat($(this).val().replace(/\./g, '').replace(/\,/g, '.'));
+                        grdtot += isNaN(stval) ? 0 : stval;
+                    });
+                    var disc_tot = $("[name='rekap_beli_disc']").val();
+                    var disctotrp = $("[name='rekap_beli_disc_rp']").val().replace(/\./g, '').replace(/\,/g,
+                        '.');
+                    var ppn = $("[name='rekap_beli_ppn']").val();
+                    var bayar = $("[name='rekap_beli_terbayar']").val().replace(/\./g, '').replace(/\,/g, '.');
+                    var ongkir = $("[name='rekap_beli_ongkir']").val().replace(/\./g, '').replace(/\,/g, '.');
+                    if (ongkir === "") {
+                        var ongkir = 0;
+                    }
+                    var grandtotal = grdtot * parseFloat((100 - disc_tot) / 100) - disctotrp;
+                    var ppnrp = parseFloat(ppn / 100) * grandtotal;
+                    var rekap_beli_tot_nom = parseFloat(grandtotal) + parseFloat(ppnrp) + parseFloat(ongkir);
+                    $('.ppnrp').val(ppnrp);
+                    $('.rekap_beli_tot_nom').val(rekap_beli_tot_nom.toLocaleString('id'));
+                    if (rekap_beli_tot_nom - bayar < 0) {
+                        Codebase.helpers('jq-notify', {
+                            align: 'right', // 'right', 'left', 'center'
+                            from: 'top', // 'top', 'bottom'
+                            type: 'danger', // 'info', 'success', 'warning', 'danger'
+                            icon: 'fa fa-info me-5', // Icon class
+                            message: 'Nominal Bayar Tidak Boleh Lebih Dari Tagihan'
+                        });
+                        $('.bayar').val(0);
+                        $tblrows.find('.persendisc').trigger('input');
+                    } else {
+                        $('.sisa').val((rekap_beli_tot_nom - bayar).toLocaleString('id'));
+                    }
+                    $('#total_sum_value').html(': Rp ' + rekap_beli_tot_nom.toLocaleString('id'));
+                });
+            $('#rekap_beli_supplier_code').on('change', function() {
+                var id = $(this).val();
+                if (id == '500001') {
+                    const date = new Date('{{ $data->tgl_now }}').toISOString().slice(0, 10);
+                    $('.supplier').attr('readonly', false).trigger('change').val('');
+                    $("#rekap_beli_jth_tmp").val(date).trigger('change');
+                } else {
+                    $('.supplier').attr('readonly', true);
                     $.ajax({
-                        url : "{{ route('beli.simpan') }}",
-                        type : "POST",
-                        data : $('form').serialize(),
-                        success : function(data){
+                        url: "/inventori/supplier/edit/" + id,
+                        type: "GET",
+                        dataType: 'json',
+                        success: function(respond) {
+                            $("#rekap_beli_supplier_nama").val(respond.m_supplier_nama).trigger(
+                                'change');
+                            $("#rekap_beli_supplier_alamat").val(respond.m_supplier_alamat)
+                                .trigger('change');
+                            $("#rekap_beli_supplier_telp").val(respond.m_supplier_telp).trigger(
+                                'change');
+                            const date = new Date('{{ $data->tgl_now }}');
+                            date.setDate(date.getDate() + parseInt(respond
+                                .m_supplier_jth_tempo));
+                            var jth_tmp = new Date(date).toISOString().slice(0, 10);
+                            $("#rekap_beli_jth_tmp").val(jth_tmp).trigger('change');
+                        },
+                        error: function() {}
+                    });
+                }
+            });
+            $('.tambah').on('click', function() {
+                addRow();
+            });
+            $('#formAction').on('keydown', 'input[name="rekap_beli_detail_subtot[]"]:last', function(e) {
+                if (e.which == 9) { // 9 is the code for the "Tab" key
+                    e.preventDefault(); // prevent default "Tab" behavior
+                    addRow(); // simulate a click on the "Add Field" button
+                }
+            });
+            $('#formAction').submit(function(e) {
+                if (!e.isDefaultPrevented()) {
+                    $.ajax({
+                        url: "{{ route('beli.simpan') }}",
+                        type: "POST",
+                        data: $('form').serialize(),
+                        success: function(data) {
                             Codebase.helpers('jq-notify', {
-                              align: 'right', // 'right', 'left', 'center'
-                              from: 'top', // 'top', 'bottom'
-                              type: 'success', // 'info', 'success', 'warning', 'danger'
-                              icon: 'fa fa-info me-5', // Icon class
-                              message: 'Input Pembelian Berhasil'
+                                align: 'right', // 'right', 'left', 'center'
+                                from: 'top', // 'top', 'bottom'
+                                type: 'success', // 'info', 'success', 'warning', 'danger'
+                                icon: 'fa fa-info me-5', // Icon class
+                                message: 'Input Pembelian Berhasil'
                             });
                             table.ajax.reload();
                             $('.remove').remove();
-                            $('#rekap_beli_detail_m_produk_id1,.reset,.supplier').trigger('changer').val('');
-                            $tblrows.find('.persendisc').trigger('input');
+                            $('#rekap_beli_detail_m_produk_id1,.reset,.supplier').trigger(
+                                'change').val('');
+                            $('#form').find('.persendisc').trigger('input');
+                            get_code();
                         },
-                        error : function(){
+                        error: function() {
                             alert("Tidak dapat menyimpan data!");
                         }
                     });
                     return false;
                 }
-    });
-    $(document).on('click','.detail',function () {
-        $("#form-hist").modal('show');
-        var id = $(this).attr('value');
-        $("#myModalLabel").html('No Nota '+id);
-        $('#tb_beli_histori').DataTable({
-                    "destroy":true,
+            });
+            $(document).on('click', '.detail', function() {
+                $("#form-hist").modal('show');
+                var id = $(this).attr('value');
+                $("#myModalLabel").html('No Nota ' + id);
+                $('#tb_beli_histori').DataTable({
+                    "destroy": true,
                     "orderCellsTop": true,
                     "processing": true,
                     "autoWidth": true,
-                    "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+                    "lengthMenu": [
+                        [10, 25, 50, 100, -1],
+                        [10, 25, 50, 100, "All"]
+                    ],
                     "pageLength": 10,
                     "ajax": {
-                        "url": "beli/history_detail/"+id,
+                        "url": "beli/history_detail/" + id,
                         "type": "GET"
-                            }
+                    }
                 });
-    })
+            })
 
-});
-</script>
+        });
+    </script>
 @endsection

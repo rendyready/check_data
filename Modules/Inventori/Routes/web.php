@@ -21,7 +21,7 @@ Route::group(['prefix' => 'inventori', 'controller' => BeliController::class, 'm
     Route::get('beli/select', 'select')->name('beli.select');
     Route::get('beli/list', 'list')->name('beli.list');
     Route::post('beli/simpan', 'simpan')->name('beli.simpan');
-    Route::get('beli/history/{id}','hist_pemb')->name('beli.hist');
+    Route::get('beli/history/{id}','hist_pemb')->name('beli.hist'); Route::get('beli/code','get_code')->name('beli.code');
     Route::get('beli/history_detail/{id}','hist_pemb_detail')->name('beli.hist_detail');
 });
 //Master Supplier
@@ -75,7 +75,7 @@ Route::group(['prefix' => 'inventori', 'controller' => GudangController::class, 
     Route::post('gudang/out_simpan','gudang_out_save')->name('m_gudang_out.simpan');
     Route::get('gudang/terima','gudang_terima')->name('m_gudang.terima_tf');
     Route::get('gudang/listtf','gudang_list_tf')->name('gudang.tf_list'); Route::get('gudang/terima/history','gudang_terima_hist')->name('gudang_terima.hist');
-    Route::post('gudang/terima/simpan','gudang_terima_simpan')->name('cht_keluar_gudang.simpan');
+    Route::post('gudang/terima/simpan','gudang_terima_simpan')->name('cht_keluar_gudang.simpan'); Route::get('gudang_tf/code','get_code');
     Route::get('gudang/out_hist/{id}','gudang_out_hist')->name('gudang.histori');
 
 });
@@ -89,7 +89,7 @@ Route::group(['prefix' => 'inventori', 'controller' => MasterBBController::class
 Route::group(['prefix' => 'inventori', 'controller' => PecahGabungController::class, 'middleware' => ['auth', 'web']], function () {
     Route::get('pecah_gabung', 'index')->name('pcb.index');
     Route::post('pecah_gabung/simpan', 'simpan')->name('simpan.pcb');
-    Route::get('pecah_gabung/list','pcb_list')->name('pcb.list');
+    Route::get('pecah_gabung/list','pcb_list')->name('pcb.list'); Route::get('pecah_gabung/code','get_code');
 });
 //Form Penjualan Internal
 Route::group(['prefix' => 'inventori', 'controller' => PenjualanInternalController::class, 'middleware' => ['auth', 'web']], function () {

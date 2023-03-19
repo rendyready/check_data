@@ -56,7 +56,7 @@ class GudangController extends Controller
                 $validate = DB::table('m_gudang')
                     ->where('m_gudang_m_w_id', $request->m_gudang_m_w_id)
                     ->where('m_gudang_nama', strtolower($request->m_gudang_nama))->first();
-                $no_gd = $this->getlast('m_gudang', 'm_gudang_code');
+                $no_gd = $this->getMasterId('m_gudang');
                 $waroeng = DB::table('m_w')->where('m_w_id', $request->m_gudang_m_w_id)->first();
                 $code = str_pad($no_gd, 5, '6000', STR_PAD_LEFT);
 
@@ -87,7 +87,7 @@ class GudangController extends Controller
                         $key->m_produk_isi_m_satuan_id : $key->m_produk_utama_m_satuan_id;
                         $satuan_kode = DB::table('m_satuan')->where('m_satuan_id', $satuan_id)->first()->m_satuan_kode;
                         $data_bb = array(
-                            'm_stok_id' => $this->getlast('m_stok', 'm_stok_id'),
+                            'm_stok_id' => $this->getMasterId('m_stok'),
                             'm_stok_m_produk_code' => $key->m_produk_code,
                             'm_stok_produk_nama' => $key->m_produk_nama,
                             'm_stok_gudang_code' => $gudang->m_gudang_code,
@@ -151,9 +151,7 @@ class GudangController extends Controller
         $data = new \stdClass();
         $user = Auth::id();
         $w_id = Auth::user()->waroeng_id;
-        $get_max_id = $this->getNextId('rekap_tf_gudang', $w_id);
         $waroeng_nama = DB::table('m_w')->select('m_w_nama')->where('m_w_id', $w_id)->first();
-        $data->code = $get_max_id;
         $data->tgl_now = Carbon::now()->format('Y-m-d');
         $data->gudang = DB::table('m_gudang')->select('m_gudang_code', 'm_gudang_nama')
             ->where('m_gudang_m_w_id', $w_id)
@@ -169,7 +167,7 @@ class GudangController extends Controller
             $satuan_kirim = $this->get_last_stok($request->rekap_tf_gudang_tujuan_code, $request->rekap_tf_gudang_m_produk_id[$key]);
             $satuan_asal = $this->get_last_stok($request->rekap_tf_gudang_asal_code, $request->rekap_tf_gudang_m_produk_id[$key]);
             $rekap_tf = array(
-                'rekap_tf_gudang_id' => $this->getlast('rekap_tf_gudang', 'rekap_tf_gudang_id'),
+                'rekap_tf_gudang_id' => $this->getMasterId('rekap_tf_gudang'),
                 'rekap_tf_gudang_code' => $request->rekap_tf_gudang_code,
                 'rekap_tf_gudang_asal_code' => $request->rekap_tf_gudang_asal_code,
                 'rekap_tf_gudang_tujuan_code' => $request->rekap_tf_gudang_tujuan_code,
@@ -358,5 +356,10 @@ class GudangController extends Controller
 
     }
     // Terima dari Gudang - End
+    public function get_code()
+    {
+        $code = $this->getNextId('rekap_tf_gudang',Auth::user()->waroeng_id);
+        return response()->json($code);
+    }
 
 }

@@ -26,7 +26,6 @@ class PenjualanInternalController extends Controller
             ->where('m_gudang_m_w_id', Auth::user()->waroeng_id)
             ->whereNotIn('m_gudang_nama', ['gudang produksi waroeng'])
             ->get();
-        $data->code = $this->getNextId('rekap_beli', $waroeng_id);
         $data->waroeng = DB::table('m_w')->select('m_w_id', 'm_w_nama')->get();
         $data->supplier = DB::table('m_supplier')->get();
         return view('inventori::form_penjualan_internal', compact('data'));

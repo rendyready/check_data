@@ -28,8 +28,7 @@
                                         <label class="col-sm-4 col-form-label" for="rekap_tf_gudang_code">No Bukti</label>
                                         <div class="col-sm-8">
                                             <input type="text" class="form-control form-control-sm"
-                                                id="rekap_tf_gudang_code" name="rekap_tf_gudang_code"
-                                                value="{{ $data->code }}" readonly>
+                                                id="rekap_tf_gudang_code" name="rekap_tf_gudang_code" readonly>
                                         </div>
                                     </div>
                                     <div class="row mb-1">
@@ -185,8 +184,14 @@
     <!-- END Page Content -->
 @endsection
 @section('js')
-    <script type="module">
+    <script>
+function get_code() {
+            $.get("/inventori/gudang_tf/code/", function(data) {
+                $('#rekap_tf_gudang_code').val(data);
+            });
+        }
  $(document).ready(function(){
+    get_code();
   $.ajaxSetup({
     headers:{
       'X-CSRF-Token' : $("input[name=_token]").val()
@@ -346,8 +351,9 @@
                             });
                             table.ajax.reload();
                             $('.remove').remove();
-                            $('#rekap_beli_detail_m_produk_id1,.reset').trigger('changer').val('');
-                            $tblrows.find('.persendisc').trigger('input');
+                            $('#rekap_beli_detail_m_produk_id1,.reset').trigger('change').val('');
+                            $('#formAction').find('.persendisc').trigger('input');
+                            get_code();
                         },
                         error : function(){
                             alert("Tidak dapat menyimpan data!");
