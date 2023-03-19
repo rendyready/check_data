@@ -243,7 +243,7 @@
           <li class="nav-main-item{{ request()->is('master/*') ? ' open' : '' }}">
             <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
               <i class="nav-main-link-icon fa fa-lightbulb"></i>
-              <span class="nav-main-link-name">Sipedas</span>
+              <span class="nav-main-link-name">CR55</span>
             </a>
             <ul class="nav-main-submenu">
               <li class="nav-main-item">
@@ -258,52 +258,49 @@
               </li>
               <li class="nav-main-item{{ request()->is('master/*') ? ' open' : '' }}">
                 <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
-                  <span class="nav-main-link-name">CR55</span>
+                  <span class="nav-main-link-name">Setting CR</span>
                 </a>
                 <ul class="nav-main-submenu">
                   <li class="nav-main-item">
-                    <a class="nav-main-link{{ request()->is('master/m_w_jenis') ? ' active' : '' }}" href="{{route('m_w_jenis.index')}}">
-                      <span class="nav-main-link-name">Jenis Waroeng</span>
-                    </a>
-                  </li>
-                  <li class="nav-main-item">
                     <a class="nav-main-link{{ request()->is('master/m_produk') ? ' active' : '' }}" href="{{route('m_produk.index')}}">
-                      <span class="nav-main-link-name">Produk</span>
-                    </a>
-                  </li>
-                  <li class="nav-main-item">
-                    <a class="nav-main-link{{ request()->is('master/m_klasifikasi') ? ' active' : '' }}" href="{{route('m_klasifikasi.index')}}">
-                      <span class="nav-main-link-name">Produk Klasifikasi</span>
+                      <span class="nav-main-link-name">Daftar Produk</span>
                     </a>
                   </li>
                   <li class="nav-main-item">
                     <a class="nav-main-link{{ request()->is('master/m_produk_relasi') ? ' active' : '' }}" href="{{route('m_produk_relasi.index')}}">
-                      <span class="nav-main-link-name">Produk Relasi Katergori</span>
-                    </a>
-                  </li>
-                  <li class="nav-main-item">
-                    <a class="nav-main-link{{ request()->is('master/m_resep') ? ' active' : '' }}" href="{{route('m_resep.index')}}">
-                      <span class="nav-main-link-name">Resep</span>
-                    </a>
-                  </li>
-                  <li class="nav-main-item">
-                    <a class="nav-main-link{{ request()->is('master/jenis_menu') ? ' active' : '' }}" href="{{route('jenis_menu.index')}}">
-                      <span class="nav-main-link-name">Jenis Menu</span>
-                    </a>
-                  </li>
-                  <li class="nav-main-item">
-                    <a class="nav-main-link{{ request()->is('master/sub_jenis_menu') ? ' active' : '' }}" href="{{route('sub_jenis_menu.index')}}">
-                      <span class="nav-main-link-name">Sub Jenis Menu</span>
+                      <span class="nav-main-link-name">Set. Sub Jenis Produk</span>
                     </a>
                   </li>
                   <li class="nav-main-item">
                     <a class="nav-main-link{{ request()->is('master/m_jenis_nota') ? ' active' : '' }}" href="{{route('m_jenis_nota.index')}}">
-                      <span class="nav-main-link-name">Jenis Nota</span>
+                      <span class="nav-main-link-name">Setting Harga</span>
                     </a>
                   </li>
                   <li class="nav-main-item">
-                    <a class="nav-main-link{{ request()->is('master/modal_tipe') ? ' active' : '' }}" href="{{route('modal_tipe.index')}}">
-                      <span class="nav-main-link-name">Modal Tipe</span>
+                    <a class="nav-main-link{{ request()->is('master/meja') ? ' active' : '' }}" href="{{route('meja.index')}}">
+                      <span class="nav-main-link-name">Setting Meja</span>
+                    </a>
+                  </li>
+                  <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('master/conf_footer') ? ' active' : '' }}" href="{{route('conf_footer.index')}}">
+                      <span class="nav-main-link-name">Footer Waroeng</span>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li class="nav-main-item{{ request()->is('master/*') ? ' open' : '' }}">
+                <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
+                  <span class="nav-main-link-name">Master</span>
+                </a>
+                <ul class="nav-main-submenu">
+                  <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('master/area') ? ' active' : '' }}" href="{{route('area.index')}}">
+                      <span class="nav-main-link-name">Area</span>
+                    </a>
+                  </li>
+                  <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('master/m_w_jenis') ? ' active' : '' }}" href="{{route('m_w_jenis.index')}}">
+                      <span class="nav-main-link-name">Tipe Waroeng</span>
                     </a>
                   </li>
                   <li class="nav-main-item">
@@ -317,6 +314,39 @@
                     </a>
                   </li>
                   <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('master/m_waroeng') ? ' active' : '' }}" href="{{route('m_waroeng.index')}}">
+                      <span class="nav-main-link-name">Waroeng</span>
+                    </a>
+                  </li>
+                  <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('master/jenis_menu') ? ' active' : '' }}" href="{{route('jenis_menu.index')}}">
+                      <span class="nav-main-link-name">Jenis Produk</span>
+                    </a>
+                  </li>
+                  <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('master/m_klasifikasi') ? ' active' : '' }}" href="{{route('m_klasifikasi.index')}}">
+                      <span class="nav-main-link-name">Klasifikasi Produk</span>
+                    </a>
+                  </li>
+                  
+                  <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('master/sub_jenis_menu') ? ' active' : '' }}" href="{{route('sub_jenis_menu.index')}}">
+                      <span class="nav-main-link-name">Sub Jenis Produk</span>
+                    </a>
+                  </li>
+                  
+                  <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('master/m_resep') ? ' active' : '' }}" href="{{route('m_resep.index')}}">
+                      <span class="nav-main-link-name">Resep</span>
+                    </a>
+                  </li>
+                  <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('master/modal_tipe') ? ' active' : '' }}" href="{{route('modal_tipe.index')}}">
+                      <span class="nav-main-link-name">Modal Tipe</span>
+                    </a>
+                  </li>
+                  
+                  <li class="nav-main-item">
                     <a class="nav-main-link{{ request()->is('master/m_jenis_meja') ? ' active' : '' }}" href="{{route('m_jenis_meja.index')}}">
                       <span class="nav-main-link-name">Jenis Meja</span>
                     </a>
@@ -326,16 +356,7 @@
                       <span class="nav-main-link-name">Transaksi Tipe</span>
                     </a>
                   </li>
-                  <li class="nav-main-item">
-                    <a class="nav-main-link{{ request()->is('master/meja') ? ' active' : '' }}" href="{{route('meja.index')}}">
-                      <span class="nav-main-link-name">Meja</span>
-                    </a>
-                  </li>
-                  <li class="nav-main-item">
-                    <a class="nav-main-link{{ request()->is('master/conf_footer') ? ' active' : '' }}" href="{{route('conf_footer.index')}}">
-                      <span class="nav-main-link-name">Footer Waroeng</span>
-                    </a>
-                  </li>
+                  
                   <li class="nav-main-item">
                     <a class="nav-main-link{{ request()->is('master/m_satuan') ? ' active' : '' }}" href="{{route('m_satuan.index')}}">
                       <span class="nav-main-link-name">Satuan</span>
@@ -436,6 +457,11 @@
                     </a>
                   </li>
                 </ul>
+              </li>
+              <li class="nav-main-item">
+                <a class="nav-main-link{{ request()->is('invetori/rph') ? ' active' : '' }}" href="{{route('rph.index')}}">
+                  <span class="nav-main-link-name">RPH</span>
+                </a>
               </li>
               <li class="nav-main-item">
                 <a class="nav-main-link{{ request()->is('invetori/po') ? ' active' : '' }}" href="{{route('po.index')}}">

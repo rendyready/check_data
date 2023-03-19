@@ -54,9 +54,12 @@ class ProdukController extends Controller
                     return response()->json(['messages' => 'Data Simpan Double !', 'type' => 'danger']);
                 } else {
                     $produk_code = DB::table('m_klasifikasi_produk')->where('m_klasifikasi_produk_id',4)->first();
-                    $code = $produk_code->m_klasifikasi_produk_last_id+1 ;
+                    $kat = $request->m_produk_m_klasifikasi_produk_id;
+                    $num = $produk_code->m_klasifikasi_produk_last_id+1;
+                    $code = $produk_code->m_klasifikasi_produk_prefix.'-'.$kat. str_pad($num, 5, "0", STR_PAD_LEFT);
                     DB::table('m_produk')->insert([
-                        "m_produk_code" => "mn-".$code,
+                        "m_produk_id" => $this->getMasterId('m_produk'),
+                        "m_produk_code" => $code,
                         "m_produk_nama" => $request->m_produk_nama,
                         "m_produk_urut" => $request->m_produk_urut,
                         "m_produk_cr" => $request->m_produk_cr,
@@ -65,6 +68,7 @@ class ProdukController extends Controller
                         "m_produk_sc" => $request->m_produk_sc,
                         "m_produk_m_jenis_produk_id" => $request->m_produk_m_jenis_produk_id,
                         "m_produk_utama_m_satuan_id" => $request->m_produk_utama_m_satuan_id,
+                        "m_produk_isi_m_satuan_id" => $request->m_produk_isi_m_satuan_id,
                         "m_produk_m_plot_produksi_id" => $request->m_produk_m_plot_produksi_id,
                         "m_produk_m_klasifikasi_produk_id" => $request->m_produk_m_klasifikasi_produk_id,
                         "m_produk_jual" => $request->m_produk_jual,
@@ -73,7 +77,28 @@ class ProdukController extends Controller
                         "m_produk_created_by" => Auth::id(),
                         "m_produk_created_at" => Carbon::now(),
                     ]);
-                    DB::table('m_produk_code')->where('m_produk_code_id',1)->update(['m_produk_code_mn'=>$code]);
+                    DB::table('m_klasifikasi_produk')->where('m_klasifikasi_produk_id',$kat)->update(['m_klasifikasi_produk_last_id'=>$num]);
+                  
+                  if ($request->m_produk_m_jenis_produk_id == 11 ) {
+                    $get_gudang = DB::table('m_gudang')->whereIn('m_gudang_nama',['gudang wbd waroeng'])->get();
+                    foreach ($get_gudang as $key) {
+                        $satuan_id = $request->m_produk_utama_m_satuan_id;
+                        $satuan = DB::table('m_satuan')->where('m_satuan_id',$satuan_id)->first();
+                        $data_bb = array(
+                            'm_stok_id' => $this->getMasterId('m_stok'),
+                            'm_stok_m_produk_code' => $code,
+                            'm_stok_produk_nama' => strtolower($request->m_produk_nama),
+                            'm_stok_gudang_code' => $key->m_gudang_code,
+                            'm_stok_waroeng' => $key->m_gudang_m_w_nama,
+                            'm_stok_satuan_id' => $satuan_id,
+                            'm_stok_satuan' => $satuan->m_satuan_kode,
+                            'm_stok_awal' => 0,
+                            'm_stok_created_by' => Auth::id(),
+                            'm_stok_created_at' => Carbon::now(),
+                        );
+                        DB::table('m_stok')->insert($data_bb);
+                    }
+                  }  
                     return response(['messages' => 'Berhasil Tambah Produk !', 'type' => 'success']);
                 }
             } else {

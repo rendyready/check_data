@@ -60,6 +60,10 @@ Route::group(['prefix' => 'inventori', 'controller' => MStokController::class, '
     Route::post('stok_awal/simpan', 'simpan')->name('stok_awal.simpan');
     Route::get('stok/{id}', 'master_stok')->name('stok.list');
     Route::get('stok_harga/{id_g}/{id_p}','get_harga')->name('get_stok.harga');
+    Route::get('stok_so','so_index')->name('stok_so.index');
+    Route::get('stok_so/list','so_list')->name('stok_so.list');
+    Route::get('stok_so/create/{id}','so_create')->name('stok_so.create');
+    Route::post('stok_so/simpan','so_simpan')->name('stok_so.simpan');
 });
 //Form Master Gudang
 Route::group(['prefix' => 'inventori', 'controller' => GudangController::class, 'middleware' => ['auth', 'web']], function () {
@@ -70,7 +74,7 @@ Route::group(['prefix' => 'inventori', 'controller' => GudangController::class, 
     Route::get('gudang/out','gudang_out')->name('m_gudang_out.index');
     Route::post('gudang/out_simpan','gudang_out_save')->name('m_gudang_out.simpan');
     Route::get('gudang/terima','gudang_terima')->name('m_gudang.terima_tf');
-    Route::get('gudang/listtf','gudang_list_tf')->name('gudang.tf_list');
+    Route::get('gudang/listtf','gudang_list_tf')->name('gudang.tf_list'); Route::get('gudang/terima/history','gudang_terima_hist')->name('gudang_terima.hist');
     Route::post('gudang/terima/simpan','gudang_terima_simpan')->name('cht_keluar_gudang.simpan');
     Route::get('gudang/out_hist/{id}','gudang_out_hist')->name('gudang.histori');
 
@@ -130,4 +134,15 @@ Route::group(['prefix' => 'inventori', 'controller' => LaporanKeluarGudangContro
     Route::get('lap_gudang_detail', 'lap_detail')->name('lap_gudang_detail.lap_detail');
     Route::get('lap_gudang_rekap', 'lap_rekap')->name('lap_gudang_rekap.lap_rekap');
     Route::get('lap_gudang_harian', 'lap_harian')->name('lap_gudang_harian.lap_harian');
-}); //mulai 150
+});
+
+//FORM RPH
+Route::group(['prefix' => 'inventori', 'controller' => RphController::class, 'middleware' => ['auth', 'web']], function () {
+    Route::get('rph', 'index')->name('rph.index');
+    Route::get('rph/create', 'create')->name('rph.create');
+    Route::get('rph/detail/{id}', 'detail')->name('rph.detail');
+    Route::post('rph/simpan', 'simpan')->name('rph.simpan');
+    Route::get('rph/edit/{id}','edit')->name('rph.edit');
+    Route::put('rph/update','update')->name('rph.update');
+   
+});

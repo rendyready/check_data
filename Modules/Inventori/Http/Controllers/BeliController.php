@@ -79,6 +79,7 @@ class BeliController extends Controller
             'rekap_beli_ppn_rp' => convertfloat($request->rekap_beli_ppn_rp),
             'rekap_beli_ongkir' => convertfloat($ongkir),
             'rekap_beli_terbayar' => convertfloat($terbayar),
+            'rekap_beli_sub_tot' => convertfloat($request->rekap_beli_tot_no_ppn),
             'rekap_beli_tersisa' => convertfloat($request->rekap_beli_tersisa),
             'rekap_beli_tot_nom' => convertfloat($request->rekap_beli_tot_nom),
             'rekap_beli_ket' => 'pembelian mandiri',

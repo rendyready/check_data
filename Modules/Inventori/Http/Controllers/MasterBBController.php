@@ -4,7 +4,7 @@ namespace Modules\Inventori\Http\Controllers;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use illuminate\Support\Str;
@@ -56,24 +56,14 @@ class MasterBBController extends Controller
                 if (!empty($check)) {
                     return response()->json(['messages' => 'Data Simpan Double !', 'type' => 'danger']);
                 } else {
-                    $produk_code = DB::table('m_produk_code')->where('m_produk_code_id',1)->first();
                     $kat = $request->m_produk_m_klasifikasi_produk_id;
-                    if ($kat == 1) {
-                        $code = 'tl-'.$produk_code->m_produk_code_tl+1 ;
-                        $row = 'm_produk_code_tl';
-                        $urut = $produk_code->m_produk_code_tl+1 ;   
-                    } elseif($kat == 2) {
-                        $code = 'bo-'.$produk_code->m_produk_code_bo+1 ;
-                        $row = 'm_produk_code_bo';
-                        $urut = $produk_code->m_produk_code_bo+1 ;
-                    } else {
-                        $code = 'bb-'.$produk_code->m_produk_code_bb+1 ;
-                        $row = 'm_produk_code_bb';
-                        $urut = $produk_code->m_produk_code_bb+1 ;
-                    }
+                    $produk_code = DB::table('m_klasifikasi_produk')->where('m_klasifikasi_produk_id',$kat)->first();
+                    $num = $produk_code->m_klasifikasi_produk_last_id+1;
+                    $code = $produk_code->m_klasifikasi_produk_prefix.'-'.$kat. str_pad($num, 5, "0", STR_PAD_LEFT);
                     DB::table('m_produk')->insert([
+                        "m_produk_id" => $this->getMasterId('m_produk'),
                         "m_produk_code" => $code,
-                        "m_produk_nama" => $request->m_produk_nama,
+                        "m_produk_nama" => strtolower($request->m_produk_nama),
                         "m_produk_status" => $request->m_produk_status,
                         "m_produk_utama_m_satuan_id" => $request->m_produk_utama_m_satuan_id,
                         "m_produk_isi_m_satuan_id" => $request->m_produk_isi_m_satuan_id,
@@ -84,7 +74,30 @@ class MasterBBController extends Controller
                         "m_produk_created_by" => Auth::id(),
                         "m_produk_created_at" => Carbon::now(),
                     ]);
-                    DB::table('m_produk_code')->where('m_produk_code_id',1)->update([$row=>$urut]);
+                    DB::table('m_klasifikasi_produk')->where('m_klasifikasi_produk_id',$kat)->update(['m_klasifikasi_produk_last_id'=>$num]);
+                    $get_gudang = DB::table('m_gudang')->whereNotIn('m_gudang_nama',['gudang wbd waroeng'])->get();
+                    foreach ($get_gudang as $key) {
+                        if ($request->m_gudang_nama == 'gudang produksi waroeng') {
+                            $satuan_id = $request->m_produk_isi_m_satuan_id;
+                        } else {
+                            $satuan_id = $request->m_produk_utama_m_satuan_id;
+                        }
+                        $satuan = DB::table('m_satuan')->where('m_satuan_id',$satuan_id)->first();
+                        $data_bb = array(
+                            'm_stok_id' => $this->getMasterId('m_stok'),
+                            'm_stok_m_produk_code' => $code,
+                            'm_stok_produk_nama' => strtolower($request->m_produk_nama),
+                            'm_stok_gudang_code' => $key->m_gudang_code,
+                            'm_stok_waroeng' => $key->m_gudang_m_w_nama,
+                            'm_stok_satuan_id' => $satuan_id,
+                            'm_stok_satuan' => $satuan->m_satuan_kode,
+                            'm_stok_m_klasifikasi_produk_id' => $request->m_produk_m_klasifikasi_produk_id,
+                            'm_stok_awal' => 0,
+                            'm_stok_created_by' => Auth::id(),
+                            'm_stok_created_at' => Carbon::now(),
+                        );
+                        DB::table('m_stok')->insert($data_bb);
+                    }
                     return response(['messages' => 'Berhasil Tambah BB !', 'type' => 'success']);
                 }
             } else {
@@ -93,7 +106,7 @@ class MasterBBController extends Controller
                 } else {
                     DB::table('m_produk')->where('m_produk_id', $request->m_produk_id)
                         ->update([
-                            "m_produk_nama" => $request->m_produk_nama,
+                            "m_produk_nama" => strtolower($request->m_produk_nama),
                             "m_produk_status" => $request->m_produk_status,
                             "m_produk_utama_m_satuan_id" => $request->m_produk_utama_m_satuan_id,
                             "m_produk_isi_m_satuan_id" => $request->m_produk_isi_m_satuan_id,

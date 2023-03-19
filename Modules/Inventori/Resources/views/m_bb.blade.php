@@ -197,7 +197,7 @@
       $("#myModalLabel").html('Tambah Bahan Baku');
       $("#form_produk").modal('show');
     });
-    $(".buttonEdit").on('click', function() {
+    $(document).on('click','.buttonEdit', function() {
       var id = $(this).attr('value');
       $("#myModalLabel").html('Ubah Bahan Baku');
       $('[name="action"]').val('edit');
@@ -206,7 +206,6 @@
         type: "GET",
         dataType: 'json',
         success: function(respond) {
-          console.log(respond);
           $("#m_produk_id").val(respond.m_produk_id).trigger('change');
           $("#m_produk_cr").val(respond.m_produk_cr).trigger('change');
           $("#m_produk_code").val(respond.m_produk_code).trigger('change');
