@@ -59,8 +59,9 @@ class KartuStockController extends Controller
         $data = array();
         foreach ($gudang as $val) {
             $data[$val->m_gudang_code] = [$val->m_gudang_nama];
-            $data['all'] = 'gudang utama & produksi waroeng';
         }
+        $data['all'] = 'gudang utama & produksi waroeng';
+
         return response()->json($data);
     }
 
@@ -71,9 +72,7 @@ class KartuStockController extends Controller
         if($request->gudang != 'all'){
             $bb2->where('m_stok_gudang_code', $request->gudang);
         } else {
-            $bb2->where(function($query) {
-                $query->where('m_stok_gudang_code', '60001')->where('m_stok_gudang_code', '60002');
-            });
+            $bb2->whereIn('m_stok_gudang_code', ['60001',  '60002']);
         }
         $bb = $bb2->orderBy('m_stok_id', 'asc')
             ->get();

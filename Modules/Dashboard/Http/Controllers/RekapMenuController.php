@@ -38,21 +38,20 @@ class RekapMenuController extends Controller
     {
         $dates = explode('to', $request->tanggal);
         $tanggal = DB::table('rekap_transaksi')
-                // ->select(DB::raw('DATE(r_t_tanggal) as tanggal'))
+                ->select('r_t_tanggal')
                 ->whereBetween('r_t_tanggal', $dates)
                 ->orderBy('r_t_tanggal', 'asc')
-                // ->groupBy('tanggal')
+                ->groupby('r_t_tanggal')
                 ->get();
         $data = [];
         foreach ($tanggal as $val) {
-            $data[] = date('d-m-Y', strtotime($val->r_t_tanggal));
+            $data[] = $val->r_t_tanggal;
         }
         return response()->json($data);
     }
     
     public function select_waroeng(Request $request)
     {
-
         $waroeng = DB::table('m_w')
             ->select('m_w_id', 'm_w_nama', 'm_w_code')
             ->where('m_w_m_area_id', $request->id_area)
@@ -69,10 +68,11 @@ class RekapMenuController extends Controller
     function show(Request $request) {
         $dates = explode('to', $request->tanggal);
         $tanggal = DB::table('rekap_transaksi')
-                    ->whereBetween('r_t_tanggal', $dates)
-                    ->orderBy('r_t_tanggal', 'ASC')
-                    ->get();
-
+                ->select('r_t_tanggal')
+                ->whereBetween('r_t_tanggal', $dates)
+                ->orderBy('r_t_tanggal', 'asc')
+                ->groupby('r_t_tanggal')
+                ->get();
             if($request->area == '0'){
                 $get = DB::table('rekap_transaksi_detail')
                 ->join('rekap_transaksi', 'r_t_id', 'r_t_detail_r_t_id')
@@ -89,11 +89,9 @@ class RekapMenuController extends Controller
                     }
             }
          
-        $get1 = $get->select('r_t_detail_m_produk_nama', 'm_w_nama')
-                    ->groupBy('r_t_detail_m_produk_nama', 'm_w_nama')
-                    ->get();
         $get2 = $get->selectRaw('sum(r_t_detail_qty) as qty, sum(r_t_detail_reguler_price) as nominal, r_t_tanggal, r_t_detail_m_produk_nama, m_w_nama')
                     ->groupBy('r_t_tanggal', 'r_t_detail_m_produk_nama', 'm_w_nama')
+                    ->orderby('r_t_detail_m_produk_nama')
                     ->get();
         $data = [];
         foreach ($get2 as $key => $val_menu) {

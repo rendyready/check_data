@@ -58,6 +58,7 @@
                                 class="btn btn-primary btn-sm col-1 mt-2 mb-3">Cari</button>
                         </div>                
             <table id="tampil_rekap" class="table table-sm table-bordered table-hover table-striped table-vcenter js-dataTable-full nowrap">
+                <thead id="head_data"></thead>
             </table>
             </form>
           </div>
@@ -77,7 +78,7 @@ $(document).ready(function() {
     var area     = $('#filter_area').val();
     var waroeng  = $('#filter_waroeng').val();
     var tanggal  = $('#filter_tanggal').val();
-
+    
     $.ajax({
         url: '{{route("rekap_menu.tanggal_rekap")}}',
         type: 'GET',
@@ -86,17 +87,21 @@ $(document).ready(function() {
             tanggal: tanggal,
         },
         success: function(data) {
+            console.log(data);
+            $('#head_data').empty();
             var html = '<tr>';
             html += '<th class="text-center">Waroeng</th>';
             html += '<th class="text-center">Nama Menu</th>';
             for (var i = 0; i < data.length; i++) {
                 html += '<th class="text-center">Qty</th>';
-                html += '<th class="text-center">' + data[i] + '</th>';
+                var dateObj = new Date(Date.parse(data[i]));
+                var dateString = dateObj.toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
+                html += '<th class="text-center date">' + dateString + '</th>';
             }
             html += '</tr>';
-            $('#tampil_rekap thead').html(html);
-
-            $('#tampil_rekap').DataTable({
+                $('#head_data').append(html);
+            
+           $('#tampil_rekap').DataTable({
                 destroy: true,
                 orderCellsTop: true,
                 processing: true,
