@@ -257,7 +257,7 @@ $(document).ready(function() {
                                 '<tr style="background-color: white;" class="text-end fw-semibold">'+
                                   '<td>Total Lostbill </td>'+
                                   '<td class="mask">'+
-                                    ''+ formatNumber(Number(value.r_l_b_nominal + value.r_l_b_nominal_pajak)) +''+
+                                    ''+ formatNumber(Number(value.r_l_b_nominal) + Number(value.r_l_b_nominal_pajak)) +''+
                                   '</td>'+
                                 '</tr>'+
                               '</tbody>'+

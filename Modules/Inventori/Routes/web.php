@@ -104,13 +104,20 @@ Route::group(['prefix' => 'inventori', 'controller' => KartuStockController::cla
     Route::get('kartu_stock/show', 'show')->name('kartu_stock.show');
     Route::get('rekap_stock', 'rekap_stk')->name('rekap_stock.rekap_stk');
     Route::get('rekap_stock/tampil_rekap', 'tampil_rekap')->name('rekap_stock.tampil_rekap');
-
 });
 //Laporan Pembelian
 Route::group(['prefix' => 'inventori', 'controller' => LaporanPembelianController::class, 'middleware' => ['auth', 'web']], function () {
     Route::get('lap_pem_detail', 'lap_detail')->name('lap_pem_detail.lap_detail');
+    Route::get('lap_pem_detail/select_waroeng', 'select_waroeng')->name('lap_pem_detail.select_waroeng');
+    Route::get('lap_pem_detail/select_user', 'select_user')->name('lap_pem_detail.select_user');
+    Route::get('lap_pem_detail/tampil_detail', 'tampil_detail')->name('lap_pem_detail.tampil_detail');
     Route::get('lap_pem_rekap', 'lap_rekap')->name('lap_pem_rekap.lap_rekap');
+    Route::get('lap_pem_rekap/tampil_rekap', 'tampil_rekap')->name('lap_pem_rekap.tampil_rekap');
+    Route::get('lap_pem_rekap/detail_rekap/{id}', 'detail_rekap')->name('lap_pem_rekap.detail_rekap');
+    Route::get('lap_pem_rekap/harian_rekap', 'harian_rekap')->name('lap_pem_rekap.harian_rekap');
     Route::get('lap_pem_harian', 'lap_harian')->name('lap_pem_harian.lap_harian');
+    Route::get('lap_pem_detail/select_waroeng_harian', 'select_waroeng_harian')->name('lap_pem_detail.select_waroeng_harian');
+    Route::get('lap_pem_harian/harian_rekap', 'harian_rekap')->name('lap_pem_harian.harian_rekap');
 });
 //Laporan Pengiriman
 Route::group(['prefix' => 'inventori', 'controller' => LaporanPengirimanController::class, 'middleware' => ['auth', 'web']], function () {

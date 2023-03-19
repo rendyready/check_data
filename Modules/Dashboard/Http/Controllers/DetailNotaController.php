@@ -88,7 +88,11 @@ class DetailNotaController extends Controller
                 ->orderby('r_t_nota_code', 'ASC')
                 ->get();
         $data->detail_nota = DB::table('rekap_transaksi_detail')
+            ->join('m_produk', 'm_produk_id', 'r_t_detail_m_produk_id')
+            ->join('m_jenis_produk', 'm_jenis_produk_id', 'm_produk_m_jenis_produk_id')
             ->where('r_t_detail_status', 'paid')
+            ->orderby('m_jenis_produk_urut', 'ASC')
+            ->orderby('r_t_detail_m_produk_nama', 'ASC')
             ->get();
         } else {
         $data->transaksi_rekap = DB::table('rekap_lost_bill')
@@ -101,6 +105,8 @@ class DetailNotaController extends Controller
             $data->transaksi_rekap2 = $data->transaksi_rekap->get();
 
         $data->detail_nota = DB::table('rekap_lost_bill_detail')
+            ->join('m_produk', 'm_produk_id', 'r_l_b_detail_m_produk_id')
+            ->join('m_jenis_produk', 'm_jenis_produk_id', 'm_produk_m_jenis_produk_id')
             ->get();
         }
         return response()->json($data);
