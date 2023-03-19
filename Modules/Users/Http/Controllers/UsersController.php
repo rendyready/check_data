@@ -4,7 +4,7 @@ namespace Modules\Users\Http\Controllers;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -57,6 +57,7 @@ class UsersController extends Controller
         // }
             if ($request->action == 'add') {
                 $data = array(
+                    'users_id' => $this->getMasterId('users'),
                     'name'    =>    strtolower($request->name),
                     'email'    =>    strtolower($request->email),
                     'password'    =>    Hash::make($request->password),
