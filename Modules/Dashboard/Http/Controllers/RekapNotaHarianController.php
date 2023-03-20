@@ -47,21 +47,6 @@ class RekapNotaHarianController extends Controller
         return response()->json($data);
     }
 
-    public function select_operator(Request $request)
-    {
-        $operator = DB::table('users')
-            ->where('waroeng_id', $request->id_waroeng)
-            ->orderBy('users_id', 'asc')
-            ->get();
-        $data = array();
-        foreach ($operator as $val) {
-            $data[$val->users_id] = [$val->name];
-            // $data['all'] = ['all operator'];
-
-        }
-        return response()->json($data);
-    }
-
     public function select_user(Request $request)
     {
 

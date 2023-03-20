@@ -136,7 +136,7 @@ $(document).ready(function() {
     $('#operator_select').on('select2:select', function() {
         var cek = $(this).val();
         var waroeng  = $('#filter_waroeng').val();
-        if(waroeng == true){
+        if(waroeng > 1){
             if(cek == 'ya') {
                 $("#operator").show();
             } else {
@@ -154,7 +154,6 @@ $(document).ready(function() {
         var tanggal  = $('#filter_tanggal').val(); 
         var operator  = $('#filter_operator').val();  
         var show_operator = $("#operator_select").val();      
-        console.log(tanggal);
     if(show_operator == 'ya'){
         $("#tampil1").hide();
         $("#tampil2").show();
@@ -236,8 +235,11 @@ $(document).ready(function() {
         }
     });
 
+    //filter waroeng
     $('#filter_area').change(function(){
-        var id_area = $(this).val();    
+        var id_area = $(this).val();  
+        var show_operator = $("#operator_select").val();      
+    if(show_operator == 'tidak'){  
         if(id_area){
             $.ajax({
             type:"GET",
@@ -260,11 +262,18 @@ $(document).ready(function() {
             });
         }else{
             $("#filter_waroeng").empty();
-        }      
+        }  
+    } else {
+        $("#operator_select").val("tidak").trigger('change');
+        $("#operator").hide();
+    }    
     });
 
+    //filter pengadaan
     $('#filter_waroeng').change(function(){
-        var id_waroeng = $(this).val();    
+        var id_waroeng = $(this).val();   
+        var show_operator = $("#operator_select").val();      
+    if(show_operator == 'tidak'){   
         if(id_waroeng){
             $.ajax({
             type:"GET",
@@ -287,7 +296,11 @@ $(document).ready(function() {
             });
         }else{
             $("#filter_operator").empty();
-        }      
+        }    
+    } else {
+        $("#operator_select").val("tidak").trigger('change');
+        $("#operator").hide();
+    }     
     });
 
     $('#filter_tanggal').flatpickr({
@@ -295,33 +308,6 @@ $(document).ready(function() {
             dateFormat: 'Y-m-d',
             // noCalendar: false,
             // allowInput: true,            
-    });
-
-    $('#filter_waroeng').change(function(){
-        var id_waroeng = $(this).val();    
-        if(id_waroeng){
-            $.ajax({
-            type:"GET",
-            url: '{{route("harian.select_operator")}}',
-            dataType: 'JSON',
-            data : {
-                id_waroeng: id_waroeng,
-            },
-            success:function(res){               
-                if(res){
-                    $("#filter_operator").empty();
-                    $("#filter_operator").append('<option></option>');
-                    $.each(res,function(key,value){
-                        $("#filter_operator").append('<option value="'+key+'">'+value+'</option>');
-                    });
-                }else{
-                $("#filter_operator").empty();
-                }
-            }
-            });
-        }else{
-            $("#filter_operator").empty();
-        }      
     });
 
 });
