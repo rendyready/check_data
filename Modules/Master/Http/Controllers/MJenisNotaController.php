@@ -102,7 +102,7 @@ class MJenisNotaController extends Controller
         }else{
             if ($cek->count() == 1) {
                 MMenuHarga::where('m_menu_harga_id',$request->m_menu_harga_id)
-                ->inser($request->except('m_menu_harga_id','_token')+[
+                ->update($request->except('m_menu_harga_id','_token')+[
                     'm_menu_harga_created_by' => Auth::user()->id
                 ]);
             }
