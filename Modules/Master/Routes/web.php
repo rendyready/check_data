@@ -71,8 +71,14 @@ Route::group(['prefix' => 'master', 'controller' => MWaroengController::class, '
 Route::group(['prefix' => 'master', 'controller' => MJenisNotaController::class, 'middleware' => ['auth', 'web']], function () {
     Route::get('m_jenis_nota', 'index')->name('m_jenis_nota.index');
     Route::get('m_jenis_nota/list', 'list')->name('m_jenis_nota.list');
-    Route::post('m_jenis_nota/store', 'store')->name('store.m_jenis_nota');
+    Route::post('m_jenis_nota/store', 'store')->name('m_jenis_nota.store');
+    Route::get('m_jenis_nota/show/{id}', 'show')->name('m_jenis_nota.show');
+    Route::get('m_jenis_nota/detail_harga/{id}', 'detailHarga')->name('m_jenis_nota.detail_harga');
+    Route::get('m_jenis_nota/show_harga/{id}', 'showHarga')->name('m_jenis_nota.show_harga');
+    Route::post('m_jenis_nota/simpan_harga', 'simpanHarga')->name('m_jenis_nota.simpan_harga');
+
 });
+
 
 //Master Meja
 Route::group(['prefix' => 'master', 'controller' => MejaController::class, 'middleware' => ['auth', 'web']], function () {
