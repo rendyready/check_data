@@ -32,7 +32,7 @@
                           class="btn btn-info" title="Detail">
                            <i class="fa fa-eye"></i>
                        </a>
-                        <a href="{{route('hapus.m_produk_relasi',$item->m_jenis_nota_id)}}" class="btn btn-danger" title="Delete"><i class="fa fa-trash"></i></a>
+                        {{-- <a href="{{route('m_jenis_nota.hapus',$item->m_jenis_nota_id)}}" class="btn btn-danger" title="Delete"><i class="fa fa-trash"></i></a> --}}
                    </td>
                     </tr>
                 @endforeach

@@ -83,8 +83,8 @@ class MJenisNotaController extends Controller
         foreach ($filterProduk as $key => $value) {
             array_push($filterProdukArr,$value->m_menu_harga_m_produk_id);
         }
-        $data['listProduk'] = MProduk::where('m_produk_jual','ya')
-        ->whereNotIn('m_produk_id',$filterProdukArr)->get();
+        $data['listProduk'] = MProduk::where('m_produk_jual','ya')->get();
+        // ->whereNotIn('m_produk_id',$filterProdukArr)->get();
         return view('master::setting_harga_detail', $data);
     }
 

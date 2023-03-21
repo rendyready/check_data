@@ -48,7 +48,7 @@
                       <td>{{$statusPajak}}</td>
                       <td>{{$statusService}}</td>
                       <td> <a class="btn btn-info buttonEdit" value="{{$item->m_menu_harga_id}}" title="Edit"><i class="fa fa-edit"></i></a>
-                        <a href="{{route('hapus.m_produk_relasi',$item->m_menu_harga_id)}}" class="btn btn-danger" title="Delete"><i class="fa fa-trash"></i></a>
+                        {{-- <a href="{{route('m_jenis_nota.hapus_harga',$item->m_menu_harga_id)}}" class="btn btn-danger" title="Delete"><i class="fa fa-trash"></i></a> --}}
                    </td>
                     </tr>
                 @endforeach
