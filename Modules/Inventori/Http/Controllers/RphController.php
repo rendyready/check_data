@@ -24,6 +24,7 @@ class RphController extends Controller
         $rph = DB::table('rph')
             ->join('users', 'users_id', 'rph_created_by')
             ->where('rph_m_w_code', sprintf("%03d", $waroeng_id))
+            ->where('rph_created_at', '>=', Carbon::now()->subDays(7))
             ->orderBy('rph_created_at','desc')
             ->get();
         return view('inventori::form_input_rph', compact('rph', 'data'));

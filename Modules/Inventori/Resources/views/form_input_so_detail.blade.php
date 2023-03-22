@@ -47,6 +47,7 @@
                                                 name="gudang_nama" value="{{ ucwords($data->gudang_nama) }}" readonly>
                                             <input type="hidden" name="rekap_so_m_gudang_code"
                                                 value="{{ $data->gudang_code }}">
+                                                <input type="hidden" name="rekap_so_m_klasifikasi_produk_id" value="{{$data->kat_id}}">
                                         </div>
                                     </div>
                                 </div>
@@ -90,9 +91,8 @@
                                     </tbody>
                                 </table>
                             </div>
-
-                            <a id="simpan" class="btn btn-sm btn-success">Simpan</a>
                         </form>
+                        <a id="simpan" class="btn btn-sm simpan btn-success">Simpan</a>
                     </div>
                 </div>
             </div>
@@ -103,7 +103,7 @@
 @section('js')
     <script>
         $(function() {
-            $('#simpan').click(function(e) {
+            $('.simpan').on('click',function(e) {
                 // Mengirim data ke server melalui AJAX
                 $.ajax({
                     type: "post", 

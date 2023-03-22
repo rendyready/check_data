@@ -62,7 +62,7 @@ Route::group(['prefix' => 'inventori', 'controller' => MStokController::class, '
     Route::get('stok_harga/{id_g}/{id_p}','get_harga')->name('get_stok.harga');
     Route::get('stok_so','so_index')->name('stok_so.index');
     Route::get('stok_so/list','so_list')->name('stok_so.list');
-    Route::get('stok_so/create/{id}','so_create')->name('stok_so.create');
+    Route::get('stok_so/create/{id}/{kat_id}','so_create')->name('stok_so.create');
     Route::post('stok_so/simpan','so_simpan')->name('stok_so.simpan');
 });
 //Form Master Gudang

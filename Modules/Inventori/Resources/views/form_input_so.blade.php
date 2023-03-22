@@ -11,7 +11,7 @@
                     </div>
                     <div class="block-content text-muted">
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-5">
                                 <div class="row mb-1">
                                     <label class="col-sm-3 col-form-label-sm" for="rekap_beli_created_by">Operator</label>
                                     <div class="col-sm-9">
@@ -30,18 +30,37 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4">
-                                <label class="col-sm-4 col-form-label-sm" for="rekap_so_detail_m_gudang_code">SO
-                                    Gudang</label>
-                                <select class="js-select2 form-control-sm" style="width: 100%;"
-                                    name="rekap_so_detail_m_gudang_code" id="rekap_so_detail_m_gudang_code"
-                                    data-placeholder="Pilih Gudang" required>
-                                    <option></option>
-                                    @foreach ($data->gudang as $item)
-                                        <option value="{{ $item->m_gudang_code }}">{{ ucwords($item->m_gudang_nama) }}
-                                        </option>
-                                    @endforeach
-                                </select>
+                            <div class="col-md-6">
+                                <div class="row mb-1">
+                                    <label class="col-sm-4 col-form-label-sm" for="example-hf-text">Stok SO Gudang</label>
+                                    <div class="col-sm-8">
+                                        <select class="js-select2 form-control-sm" style="width: 100%;"
+                                            name="rekap_so_detail_m_gudang_code" id="rekap_so_detail_m_gudang_code"
+                                            data-placeholder="Pilih Gudang" required>
+                                            <option></option>
+                                            @foreach ($data->gudang as $item)
+                                                <option value="{{ $item->m_gudang_code }}">
+                                                    {{ ucwords($item->m_gudang_nama) }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row mb-1">
+                                    <label class="col-sm-4 col-form-label-sm" for="example-hf-text">Klasifikasi</label>
+                                    <div class="col-sm-8">
+                                        <select class="js-select2 form-control-sm" style="width: 100%;"
+                                            name="m_stok_m_klasifikasi_produk_nama" id="m_stok_m_klasifikasi_produk_nama"
+                                            data-placeholder="Pilih Klasifikasi" required>
+                                            <option></option>
+                                            @foreach ($data->klasifikasi as $item)
+                                                <option value="{{ $item->m_klasifikasi_produk_id }}">
+                                                    {{ ucwords($item->m_klasifikasi_produk_nama) }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <a class="btn btn-success btn-tambah-so"><i class="fa fa-plus"></i>Tambah Stok Opname</a>
@@ -51,6 +70,7 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Tanggal Stok Opname</th>
+                                    <th>Klasifikasi</th>
                                     <th>Operator</th>
                                     <th>Jam Input</th>
                                     <th>Aksi</th>
@@ -77,13 +97,16 @@
       });
       Codebase.helpersOnLoad(['jq-select2']);
       $('.btn-tambah-so').on('click',function () {
-        var id = $('#rekap_so_detail_m_gudang_code').val();
-        window.open("/inventori/stok_so/create/"+id, "_blank");
+        var g_id = $('#rekap_so_detail_m_gudang_code').val()
+        var kat_id = $('#m_stok_m_klasifikasi_produk_nama').val()
+        window.open("/inventori/stok_so/create/"+g_id+"/"+kat_id, "_blank");
       });
-      $('#rekap_so_detail_m_gudang_code').on('change',function() {
-        var id = $(this).val()
+      $('#rekap_so_detail_m_gudang_code,#m_stok_m_klasifikasi_produk_nama').on('change',function() {
+        var g_id = $('#rekap_so_detail_m_gudang_code').val()
+        var kat_id = $('#m_stok_m_klasifikasi_produk_nama').val()
         var table;
-        $(function() {
+        if (g_id != '' && kat_id != '') {
+            $(function() {
                 table = $('#tb-so').DataTable({
                     "destroy":true,
                     "processing": true,
@@ -92,11 +115,14 @@
                     "pageLength": 10,
                     "ajax": {
                         "url": "{{route('stok_so.list')}}",
-                        "data": {g_id:id},
+                        "data": {g_id:g_id,
+                                kat_id:kat_id},
                         "type": "GET"
                             }
                 });
             });
+        }
+       
     }) 
   });
 </script>
