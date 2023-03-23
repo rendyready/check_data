@@ -57,7 +57,39 @@ class MJenisNotaController extends Controller
         }
         return Redirect::route('m_jenis_nota.index');
     }
-
+    public function copy_nota(Request $request)
+    {
+        $cek_duplicate = DB::table('m_jenis_nota')
+        ->where('m_jenis_nota_m_w_id',$request->m_jenis_nota_waroeng_tujuan_id)
+        ->where('m_jenis_nota_m_t_t_id',$request->m_jenis_nota_trans_id)->first();
+        if (empty($cek_duplicate)) {
+            DB::table('m_jenis_nota')->insert([
+                'm_jenis_nota_id' => $this->getMasterId('m_jenis_nota'),
+                'm_jenis_nota_m_w_id' => $request->m_jenis_nota_waroeng_tujuan_id,
+                'm_jenis_nota_m_t_t_id' => $request->m_jenis_nota_trans_id,
+                'm_jenis_nota_created_by' => Auth::user()->id,
+            ]);
+            $last_nota_id = MJenisNotum::latest('m_jenis_nota_created_at')->first()->m_jenis_nota_id;
+            $asal_nota_id = MJenisNotum::where('m_jenis_nota_m_w_id',$request->m_jenis_nota_waroeng_sumber_id)
+            ->where('m_jenis_nota_m_t_t_id',$request->m_jenis_nota_trans_id)->first()->m_jenis_nota_id;
+            $harga = MMenuHarga::where('m_menu_harga_m_jenis_nota_id',$asal_nota_id)->get();
+            foreach ($harga as $key) {
+                $data_harga = array(
+                    'm_menu_harga_id' => $this->getMasterId('m_menu_harga'),
+                    'm_menu_harga_nominal' => $key->m_menu_harga_nominal,
+                    'm_menu_harga_m_jenis_nota_id' => $last_nota_id,
+                    'm_menu_harga_m_produk_id' => $key->m_menu_harga_m_produk_id,
+                    'm_menu_harga_status' => $key->m_menu_harga_status,
+                    'm_menu_harga_tax_status' => $key->m_menu_harga_tax_status,
+                    'm_menu_harga_sc_status' => $key->m_menu_harga_sc_status,
+                    'm_menu_harga_created_by' => Auth::user()->id,
+                );
+                MMenuHarga::insert($data_harga);
+            }
+            return Redirect::route('m_jenis_nota.index');
+        } 
+        
+    }
     public function show($id)
     {
         return response(MJenisNotum::where('m_jenis_nota_id',$id)->first(),200);
