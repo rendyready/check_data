@@ -3,6 +3,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use App\Helpers\JangkrikHelper;
 
 class MKasirAksesTableSeeder extends Seeder
 {
@@ -15,47 +16,60 @@ class MKasirAksesTableSeeder extends Seeder
     {
         DB::table('m_kasir_akses')->truncate();
 
-        DB::table('m_kasir_akses')->insert([
-            [
-                'm_kasir_akses_id' => '1',
-                'm_kasir_akses_m_w_id' => 1,
-                'm_kasir_akses_fitur' => 'edit_menu',
-                'm_kasir_akses_default_role' => 'deny',
-                'm_kasir_akses_temp_role' => 'deny',
-                'm_kasir_akses_created_by' => 1
-            ],
-            [
-                'm_kasir_akses_id' => '2',
-                'm_kasir_akses_m_w_id' => 1,
-                'm_kasir_akses_fitur' => 'cancel_menu',
-                'm_kasir_akses_default_role' => 'allow',
-                'm_kasir_akses_temp_role' => 'allow',
-                'm_kasir_akses_created_by' => 1
-            ],
-            [
-                'm_kasir_akses_id' => '3',
-                'm_kasir_akses_m_w_id' => 1,
-                'm_kasir_akses_fitur' => 'cancel_transaksi',
-                'm_kasir_akses_default_role' => 'deny',
-                'm_kasir_akses_temp_role' => 'deny',
-                'm_kasir_akses_created_by' => 1
-            ],
-            [
-                'm_kasir_akses_id' => '4',
-                'm_kasir_akses_m_w_id' => 1,
-                'm_kasir_akses_fitur' => 'lossbill_transaksi',
-                'm_kasir_akses_default_role' => 'deny',
-                'm_kasir_akses_temp_role' => 'deny',
-                'm_kasir_akses_created_by' => 1
-            ],
-            [
-                'm_kasir_akses_id' => '5',
-                'm_kasir_akses_m_w_id' => 1,
-                'm_kasir_akses_fitur' => 'refund',
-                'm_kasir_akses_default_role' => 'deny',
-                'm_kasir_akses_temp_role' => 'deny',
-                'm_kasir_akses_created_by' => 1
-            ],
-        ]);
+        $waroeng = DB::table('m_w')->get();
+
+        foreach ($waroeng as $key => $valmw) {
+            DB::table('m_kasir_akses')->insert([
+                [
+                    'm_kasir_akses_id' => JangkrikHelper::getMasterId('m_kasir_akses'),
+                    'm_kasir_akses_m_w_id' => $valmw->m_w_id,
+                    'm_kasir_akses_fitur' => 'edit_menu',
+                    'm_kasir_akses_default_role' => 'deny',
+                    'm_kasir_akses_temp_role' => 'deny',
+                    'm_kasir_akses_created_by' => 1
+                ],
+            ]);
+            DB::table('m_kasir_akses')->insert([
+                [
+                    'm_kasir_akses_id' => JangkrikHelper::getMasterId('m_kasir_akses'),
+                    'm_kasir_akses_m_w_id' => $valmw->m_w_id,
+                    'm_kasir_akses_fitur' => 'cancel_menu',
+                    'm_kasir_akses_default_role' => 'allow',
+                    'm_kasir_akses_temp_role' => 'allow',
+                    'm_kasir_akses_created_by' => 1
+                ],
+            ]);
+            DB::table('m_kasir_akses')->insert([
+                [
+                    'm_kasir_akses_id' => JangkrikHelper::getMasterId('m_kasir_akses'),
+                    'm_kasir_akses_m_w_id' => $valmw->m_w_id,
+                    'm_kasir_akses_fitur' => 'cancel_transaksi',
+                    'm_kasir_akses_default_role' => 'deny',
+                    'm_kasir_akses_temp_role' => 'deny',
+                    'm_kasir_akses_created_by' => 1
+                ],
+            ]);
+            DB::table('m_kasir_akses')->insert([
+                [
+                    'm_kasir_akses_id' => JangkrikHelper::getMasterId('m_kasir_akses'),
+                    'm_kasir_akses_m_w_id' => $valmw->m_w_id,
+                    'm_kasir_akses_fitur' => 'lossbill_transaksi',
+                    'm_kasir_akses_default_role' => 'deny',
+                    'm_kasir_akses_temp_role' => 'deny',
+                    'm_kasir_akses_created_by' => 1
+                ],
+            ]);
+            DB::table('m_kasir_akses')->insert([
+                [
+                    'm_kasir_akses_id' => JangkrikHelper::getMasterId('m_kasir_akses'),
+                    'm_kasir_akses_m_w_id' => $valmw->m_w_id,
+                    'm_kasir_akses_fitur' => 'refund',
+                    'm_kasir_akses_default_role' => 'deny',
+                    'm_kasir_akses_temp_role' => 'deny',
+                    'm_kasir_akses_created_by' => 1
+                ],
+            ]);
+        }
+        
     }
 }

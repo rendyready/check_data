@@ -29,8 +29,9 @@
                       <td>{{$item->m_t_t_name}}</td>
                       {{-- <td>{{$item->total}}</td> --}}
                       <td>
-                        <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modal-fadein"><i class="fa fa-edit"></i></button>        
-                        </button>
+                        {{-- <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modal-fadein"><i class="fa fa-edit"></i></button>        
+                        </button> --}}
+                        <a class="btn btn-warning buttonEdit" value="{{$item->m_jenis_nota_id}}" title="Edit"><i class="fa fa-edit"></i></a>
                         <a href="{{route('m_jenis_nota.index',$item->m_jenis_nota_id)}}"
                            class="btn btn-info" title="Detail">
                             <i class="fa fa-eye"></i>
@@ -104,78 +105,105 @@
 @endsection
 @section('js')
 <script type="module">
-  $(document).ready(function(){
-    $('.js-select2').select2({dropdownParent: $('#f_jenis_nota')})
+$(document).ready(function(){
+  $('.js-select2').select2({dropdownParent: $('#f_jenis_nota')})
 
-    var action;
-    $.ajaxSetup({
+  var action;
+  $.ajaxSetup({
     headers:{
-      'X-CSRF-Token' : $("input[name=_token]").val()
-        }
-      });
-      var t = $('#m_jenis_nota').DataTable({
-        processing : false,
-        serverSide : false,
-        destroy: true,
-        button :false,
-        order : [0,'asc'],
-      });
-     $("#m_jenis_nota").append(
-       $('<tfoot/>').append( $("#m_jenis_nota thead tr").clone() )
-      );
+    'X-CSRF-Token' : $("input[name=_token]").val()
+      }
+    });
+    
+    var t = $('#m_jenis_nota').DataTable({
+      processing : false,
+      serverSide : false,
+      destroy: true,
+      button :false,
+      order : [0,'asc'],
+    });
+    $("#m_jenis_nota").append(
+      $('<tfoot/>').append( $("#m_jenis_nota thead tr").clone() )
+    );
 
-      const modal = new bootstrap.Modal($('#modal-fadein'))
-      $('#addnota').click(function () {
-        $('#saveBtn').val("create-product");
-        $('#m_jenis_nota_id').val('');
-        $('#m_jenis_nota_m_w_id').val('').trigger('change');
-        $('#m_jenis_nota_m_t_t_id').val('').trigger('change');
-        $('#f_jenis_nota').trigger("reset");
-        $('.block-title').html("Buat Nota");
-        $('#modal-fadein').modal('show');
-      });
-
-      $('#saveBtn').click(function (e) {
-        e.preventDefault();
-        $(this).html('Simpan');
-      
-        $.ajax({
-          data: $('#modal-fadein form').serialize(),
-          url: "{{route('store.m_jenis_nota')}}",
-          type: "POST",
-          dataType: 'json',
-          success: function (data) {
-              $('#f_jenis_nota').trigger("reset");
-              $('#modal-fadein').modal('hide');
-              window.location.reload();
-           
-          },
-          error: function (data) {
-              console.log('Error:', data);
-              $('#saveBtn').html('Save Changes');
-          }
-      });
+    const modal = new bootstrap.Modal($('#modal-fadein'))
+    $('#addnota').click(function () {
+      $('#saveBtn').val("create-product");
+      $('#m_jenis_nota_id').val('');
+      $('#m_jenis_nota_m_w_id').val('').trigger('change');
+      $('#m_jenis_nota_m_t_t_id').val('').trigger('change');
+      $('#f_jenis_nota').trigger("reset");
+      $('.block-title').html("Buat Nota");
+      $('#modal-fadein').modal('show');
     });
 
-      // $('.btn-save').on("submit",function(){
-      //               var id = $('#id').val();
-      //               console.log(action);
-      //               $.ajax({
-      //                   url : "{{route('store.m_jenis_nota')}}",
-      //                   type : "POST",
-      //                   data : $('#modal-fadein form').serialize(),
-      //                   success : function(data){
-      //                       modal.hide();
-      //                       window.location.reload();
-      //                   },
-      //                   error : function(){
-      //                       alert("Tidak dapat menyimpan data!");
-      //                   }
-      //               });
-                  
-      //       });
+    $('#saveBtn').click(function (e) {
+      console.log('simpan')
+      e.preventDefault();
+      $(this).html('Simpan');
+    
+      $.ajax({
+        data: $('#modal-fadein form').serialize(),
+        url: "{{route('store.m_jenis_nota')}}",
+        type: "POST",
+        dataType: 'json',
+        success: function (data) {
+          console.log(data)
+            $('#f_jenis_nota').trigger("reset");
+            $('#modal-fadein').modal('hide');
+            // window.location.reload();
+          
+        },
+        error: function (data) {
+            console.log('Error:', data);
+            $('#saveBtn').html('Save Changes');
+        }
+    });
 
-      
+    $(".buttonEdit").click(function (e) {
+      console.log('edit')
+      // $("#meja_text").show();
+      // $("#meja_slider").hide()
+      // var id = $(this).attr('value');
+      // $("#myModalLabel").html('Ubah Meja');
+      // $("#formAction").attr('action','/master/meja/edit');
+      // $.ajax({
+      //     url: "/master/meja/list/"+id,
+      //     type: "GET",
+      //     dataType: 'json',
+      //     success: function(respond) {
+      //       console.log(respond)
+      //         $("#id_meja").val(respond.m_meja_id).trigger('change');
+      //         $("#nama_meja").val(respond.m_meja_nama).trigger('change');
+      //         $("#jenis_meja").val(respond.m_meja_m_meja_jenis_id).trigger('change');
+      //         $("#waroeng").val(respond.m_meja_m_w_id).trigger('change');
+      //     },
+      //     error: function() {
+      //     }
+      // });
+      // $("#modal-block-select2").modal('show');
+    }); 
   });
-  </script>
+
+    // $('.btn-save').on("submit",function(){
+    //               var id = $('#id').val();
+    //               console.log(action);
+    //               $.ajax({
+    //                   url : "{{route('store.m_jenis_nota')}}",
+    //                   type : "POST",
+    //                   data : $('#modal-fadein form').serialize(),
+    //                   success : function(data){
+    //                       modal.hide();
+    //                       window.location.reload();
+    //                   },
+    //                   error : function(){
+    //                       alert("Tidak dapat menyimpan data!");
+    //                   }
+    //               });
+                
+    //       });
+
+    
+});
+</script>
 @endsection
