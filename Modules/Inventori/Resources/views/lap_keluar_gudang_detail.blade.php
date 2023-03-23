@@ -6,7 +6,7 @@
         <div class="block block-themed h-100 mb-0">
           <div class="block-header bg-pulse">
             <h3 class="block-title">
-              Detail Keluar Gudang - Bahan Baku
+              Detail Keluar & Terima Bahan Baku
             </h3>
               </div>
                 <div class="block-content text-muted">
@@ -66,6 +66,7 @@
                                     <div class="col-sm-9">
                                         <select id="filter_status" style="width: 100%;"
                                         class="cari js-select2 form-control" data-placeholder="Pilih Status" name="rekap_beli_created_by">
+                                        <option></option>
                                         <option value="asal">Gudang Asal</option>
                                         <option value="tujuan">Gudang Tujuan</option>
                                     </select>
@@ -115,30 +116,21 @@ $(document).ready(function() {
             },
             success:function(data){  
             if(status == 'asal'){
-              $.each(data.transaksi_rekap2, function (key, value) {
-                // console.log(item.r_t_id); 
-                  $('#show_nota').append('<div class="col-xl-4 show_nota">'+
+              $.each(data.transaksi, function (key, value) {
+              $('#show_nota').append('<div class="col-xl-4 show_nota">'+
                         '<div class="block block-rounded mb-1">'+
                           '<div class="block-header block-header-default block-header-rtl bg-pulse">'+
                             '<h3 class="block-title text-light"><small class="fw-semibold">'+ value.rekap_tf_gudang_code +'</small><br><small>'+ value.m_gudang_nama +'</small></h3>'+
                             '<div class="alert alert-warning py-2 mb-0">'+
-                              '<h3 class="block-title text-black"><i class="fa fa-calendar opacity-50 ms-1"></i> <small>'+ value.rekap_tf_gudang_tgl_keluar +'</small>'+
+                              '<h3 class="block-title text-black"><i class="fa fa-calendar opacity-50 ms-1"></i> <small>'+ value.rekap_tf_gudang_tgl_keluar_formatted +'</small>'+
                                 '<br><small class="fw-semibold">'+ value.name +'</small></h3>'+
                             '</div>'+
                           '</div>'+
                           '<div class="block-content mb-4" style="background-color: rgba(224, 224, 224, 0.5)">'+
                             '<table class="table table-border table-striped table-vcenter js-dataTable-full" style="font-size: 13px;">'+
-                            //   '<thead id="sub_nota'+ value.rekap_beli_code +'">'+
-                            //     '</thead>'+
+                              '<thead id="sub_nota'+ value.rekap_tf_gudang_code +'">'+
+                                '</thead>'+
                               '<tbody>'+
-                                '<tr style="background-color: white;" class="show_nota">'+
-                                  '<td>'+
-                                    '<small class="fw-semibold" style="font-size: 15px;">'+ item.rekap_tf_gudang_m_produk_nama +'</small> <br>'+
-                                    '<small>'+ Number(item.rekap_tf_gudang_qty_keluar) +' x '+ formatNumber(Number(item.rekap_tf_gudang_hpp)) +'</small><br>'+
-                                  '</td>'+
-                                  '<td class="text-end fw-semibold" >'+ formatNumber(Number(item.rekap_beli_detail_subtot)) + ''+
-                                  '</td>'+
-                                '</tr>'
                                 '<tr style="background-color: white;" class="text-end fw-semibold">'+
                                   '<td>Total</td>'+
                                   '<td>'+
@@ -151,31 +143,35 @@ $(document).ready(function() {
                         '</div>'+
                       '</div>');
                   });
+                    $.each(data.detail, function (key, item) {
+                        // console.log(item.rekap_tf_gudang_code);
+                        $('#sub_nota'+ item.rekap_tf_gudang_code).append(
+                                '<tr style="background-color: white;" class="show_nota">'+
+                                  '<td>'+
+                                    '<small class="fw-semibold" style="font-size: 15px;">'+ item.rekap_tf_gudang_m_produk_nama +'</small> <br>'+
+                                    '<small>Qty '+ Number(item.rekap_tf_gudang_qty_keluar) +'  '+ item.rekap_tf_gudang_satuan_keluar +'</small><br>'+
+                                    '<small>Hpp '+ formatNumber(Number(item.rekap_tf_gudang_hpp)) +'</small>'+
+                                  '</td>'+
+                                  '<td class="text-end fw-semibold">'+ formatNumber(Number(item.rekap_tf_gudang_sub_total)) + ''+
+                                  '</td>'+
+                                '</tr>');
+                      });
                 } else {
-                    $.each(data.transaksi_rekap2, function (key, value) {
-                // console.log(item.r_t_id); 
-                  $('#show_nota').append('<div class="col-xl-4 show_nota">'+
+                  $.each(data.transaksi, function (key, value) {
+              $('#show_nota').append('<div class="col-xl-4 show_nota">'+
                         '<div class="block block-rounded mb-1">'+
-                          '<div class="block-header block-header-default block-header-rtl bg-pulse">'+
+                          '<div class="block-header block-header-default block-header-rtl bg-warning">'+
                             '<h3 class="block-title text-light"><small class="fw-semibold">'+ value.rekap_tf_gudang_code +'</small><br><small>'+ value.m_gudang_nama +'</small></h3>'+
                             '<div class="alert alert-warning py-2 mb-0">'+
-                              '<h3 class="block-title text-black"><i class="fa fa-calendar opacity-50 ms-1"></i> <small>'+ value.rekap_tf_gudang_tgl_terima +'</small>'+
+                              '<h3 class="block-title text-black"><i class="fa fa-calendar opacity-50 ms-1"></i> <small>'+ value.rekap_tf_gudang_tgl_terima_formatted +'</small>'+
                                 '<br><small class="fw-semibold">'+ value.name +'</small></h3>'+
                             '</div>'+
                           '</div>'+
                           '<div class="block-content mb-4" style="background-color: rgba(224, 224, 224, 0.5)">'+
                             '<table class="table table-border table-striped table-vcenter js-dataTable-full" style="font-size: 13px;">'+
-                            //   '<thead id="sub_nota'+ value.rekap_beli_code +'">'+
-                            //     '</thead>'+
+                              '<thead id="sub_nota'+ value.rekap_tf_gudang_code +'">'+
+                                '</thead>'+
                               '<tbody>'+
-                                '<tr style="background-color: white;" class="show_nota">'+
-                                  '<td>'+
-                                    '<small class="fw-semibold" style="font-size: 15px;">'+ item.rekap_tf_gudang_m_produk_nama +'</small> <br>'+
-                                    '<small>'+ Number(item.rekap_tf_gudang_qty_terima) +' x '+ formatNumber(Number(item.rekap_tf_gudang_hpp)) +'</small><br>'+
-                                  '</td>'+
-                                  '<td class="text-end fw-semibold" >'+ formatNumber(Number(item.rekap_tf_gudang_sub_total)) + ''+
-                                  '</td>'+
-                                '</tr>'
                                 '<tr style="background-color: white;" class="text-end fw-semibold">'+
                                   '<td>Total</td>'+
                                   '<td>'+
@@ -188,6 +184,19 @@ $(document).ready(function() {
                         '</div>'+
                       '</div>');
                   });
+                    $.each(data.detail, function (key, item) {
+                        // console.log(item.rekap_tf_gudang_code);
+                        $('#sub_nota'+ item.rekap_tf_gudang_code).append(
+                                '<tr style="background-color: white;" class="show_nota">'+
+                                  '<td>'+
+                                    '<small class="fw-semibold" style="font-size: 15px;">'+ item.rekap_tf_gudang_m_produk_nama +'</small> <br>'+
+                                    '<small>Qty '+ Number(item.rekap_tf_gudang_qty_terima) +'  '+ item.rekap_tf_gudang_satuan_terima +'</small><br>'+
+                                    '<small>Hpp '+ formatNumber(Number(item.rekap_tf_gudang_hpp)) +'</small>'+
+                                  '</td>'+
+                                  '<td class="text-end fw-semibold">'+ formatNumber(Number(item.rekap_tf_gudang_sub_total)) + ''+
+                                  '</td>'+
+                                '</tr>');
+                      });
                 }
             }           
           });          
