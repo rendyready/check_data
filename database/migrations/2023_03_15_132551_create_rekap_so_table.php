@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('rekap_so_code');
             $table->date('rekap_so_tgl');
             $table->string('rekap_so_m_gudang_code');
+            $table->bigInteger('rekap_so_m_klasifikasi_produk_id');
             $table->string('rekap_so_m_w_code');
             $table->string('rekap_so_m_w_nama');
             $table->bigInteger('rekap_so_created_by');

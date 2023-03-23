@@ -29,7 +29,6 @@ class PecahGabungController extends Controller
         $data->tgl_now = Carbon::now()->format('Y-m-d');
         $data->nama_waroeng = DB::table('m_w')->select('m_w_nama')->where('m_w_id', $waroeng_id)->first();
         $data->satuan = DB::table('m_satuan')->get();
-        $data->code = $this->getNextId('rekap_pcb', $waroeng_id);
         return view('inventori::form_pcb', compact('data'));
     }
 
@@ -239,6 +238,11 @@ class PecahGabungController extends Controller
         }
         $output = array("data" => $data);
         return response()->json($output);
+    }
+    public function get_code()
+    {
+        $code = $this->getNextId('rekap_pcb',Auth::user()->waroeng_id);
+        return response()->json($code);
     }
 
 }

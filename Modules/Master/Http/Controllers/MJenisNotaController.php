@@ -8,29 +8,28 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\Models\{
-    MJenisNotum
+    MJenisNotum,
+    MW,
+    MTransaksiTipe
 };  
 
 class MJenisNotaController extends Controller
 {
     public function index()
     {
-        $data = MJenisNotum::
+        $data['data'] = MJenisNotum::
             select('m_jenis_nota_id','m_w_id','m_w_nama','m_t_t_id','m_t_t_name')
             ->join('m_w', 'm_jenis_nota_m_w_id', 'm_w_id')
             ->leftJoin('m_transaksi_tipe', 'm_jenis_nota_m_t_t_id', 'm_t_t_id')
             ->orderby('m_w_id','asc')
             ->orderby('m_t_t_name','asc')
             ->get();
-
-        // $data = DB::table('m_jenis_nota')
-        //     ->selectRaw('Count(m_menu_harga_id) as total , m_jenis_nota.*, m_w_nama, m_t_t_name')
-        //     ->leftjoin('m_w', 'm_jenis_nota_m_w_id', 'm_w_id')
-        //     ->leftjoin('m_menu_harga', 'm_menu_harga_m_jenis_nota_id', 'm_jenis_nota_id')
-        //     ->leftJoin('m_transaksi_tipe', 'm_jenis_nota_m_t_t_id', 'm_t_t_id')
-        //     ->groupBy('m_jenis_nota_id', 'm_w_id', 'm_t_t_id','m_menu_harga_id')
-        //     ->whereNull('m_jenis_nota_deleted_at')->get();
-        return view('master::jenis_nota', compact('data'));
+        $data['listWaroeng'] = MW::all();
+        $data['listTipeTransaksi'] = MTransaksiTipe::orderBy('m_t_t_group','desc')
+                                    ->orderBy('m_t_t_name','asc')
+                                    ->get();
+        
+        return view('master::jenis_nota', $data);
     }
 
     public function store(Request $request)

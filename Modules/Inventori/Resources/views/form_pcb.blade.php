@@ -63,7 +63,7 @@
                                         <label class="col-sm-5 col-form-label-sm" for="rekap_pcb_code">No Nota</label>
                                         <div class="col-sm-7">
                                             <input type="text" class="form-control form-control-sm" id="rekap_pcb_code"
-                                                name="rekap_pcb_code" value="{{ $data->code }}" readonly>
+                                                name="rekap_pcb_code" readonly>
                                         </div>
                                     </div>
                                 </div>
@@ -213,16 +213,16 @@
     <!-- END Page Content -->
 @endsection
 @section('js')
-    <script type="module">
+    <script>
+        function get_code() {
+            $.get("/inventori/pecah_gabung/code/", function(data) {
+                $('#rekap_pcb_code').val(data);
+            });
+        }
  $(document).ready(function(){
+    get_code();
   Codebase.helpersOnLoad(['jq-select2']);
   var table,dt,g_id;
-  $(".number").on("keypress", function (evt) {
-    if (evt.which != 8 && evt.which != 0 && evt.which < 48 || evt.which > 57)
-    {
-        evt.preventDefault();
-    }
-    });
   $('#rekap_pcb_gudang_asal_code').on('change',function() {
     g_id = $(this).val();
     $.get("/inventori/stok/"+g_id, function(data){
@@ -337,6 +337,7 @@
                             });
                            $('.remove').remove();
                            table.ajax.reload();
+                           get_code();
                         },
                         error : function(){
                             alert("Tidak dapat menyimpan data!");

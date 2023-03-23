@@ -26,7 +26,6 @@ class BeliController extends Controller
             ->where('m_gudang_m_w_id', Auth::user()->waroeng_id)
             ->whereNotIn('m_gudang_nama', ['gudang produksi waroeng'])
             ->get();
-        $data->code = $this->getNextId('rekap_beli', $waroeng_id);
         return view('inventori::form_beli', compact('data'));
     }
 
@@ -171,5 +170,10 @@ class BeliController extends Controller
         }
         $output = array("data" => $data);
         return response()->json($output);
+    }
+    public function get_code()
+    {
+        $code = $this->getNextId('rekap_beli',Auth::user()->waroeng_id);
+        return response()->json($code);
     }
 }
