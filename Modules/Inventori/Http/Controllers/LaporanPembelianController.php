@@ -123,6 +123,7 @@ class LaporanPembelianController extends Controller
                 $row[] = $value->rekap_beli_code;
                 $row[] = $value->rekap_beli_supplier_nama;
                 $row[] = $value->rekap_beli_supplier_alamat;
+                $row[] = rupiah($value->rekap_beli_sub_tot, 0);
                 $row[] = number_format($value->rekap_beli_disc ?? 0);
                 $row[] = rupiah($value->rekap_beli_disc_rp, 0);
                 $row[] = number_format($value->rekap_beli_ppn ?? 0);
@@ -194,9 +195,9 @@ class LaporanPembelianController extends Controller
             ->join('m_area', 'm_area_id', 'm_w_m_area_id');
             if($request->area != '0'){
                 $rekap2->where('m_w_m_area_id', $request->area);
-            }
-            if($request->waroeng != 'all'){
-                $rekap2->where('rekap_beli_m_w_id', $request->waroeng);
+                if($request->waroeng != 'all'){
+                    $rekap2->where('rekap_beli_m_w_id', $request->waroeng);
+                }
             }
             if($request->pengadaan != 'all'){
                 $rekap2->where('rekap_beli_created_by', $request->pengadaan);
@@ -211,11 +212,11 @@ class LaporanPembelianController extends Controller
                         ->join('users', 'users_id', 'rekap_beli_created_by')
                         ->join('m_w', 'm_w_id', 'rekap_beli_m_w_id')
                         ->join('m_area', 'm_area_id', 'm_w_m_area_id');
-            if($request->area != 'all'){
-                $rekap2->where('m_w_m_area_id', $request->area);
-            }
-            if($request->waroeng != 'all'){
-                $rekap2->where('rekap_beli_m_w_id', $request->waroeng);
+            if($request->area != '0'){
+                $rekap2->where('m_area_id', $request->area);
+                if($request->waroeng != 'all'){
+                    $rekap2->where('rekap_beli_m_w_id', $request->waroeng);
+                }
             }
             $rekap = $rekap2->whereBetween('rekap_beli_tgl', $dates)
                 ->selectRaw('SUM(rekap_beli_tot_nom) as total, SUM(rekap_beli_tersisa) as kurang, SUM(rekap_beli_terbayar) as bayar, m_area_nama, m_w_nama, rekap_beli_tgl')
@@ -227,6 +228,7 @@ class LaporanPembelianController extends Controller
         $data =[];
         if($request->show_pengadaan == 'ya'){
             foreach ($rekap as $valRekap){
+                $row = array();
                 $row[] = $valRekap->rekap_beli_tgl;
                 $row[] = $valRekap->m_area_nama;
                 $row[] = $valRekap->m_w_nama;
@@ -238,6 +240,7 @@ class LaporanPembelianController extends Controller
             }
         } else {
             foreach ($rekap as $valRekap){
+                $row = array();
                 $row[] = $valRekap->rekap_beli_tgl;
                 $row[] = $valRekap->m_area_nama;
                 $row[] = $valRekap->m_w_nama;

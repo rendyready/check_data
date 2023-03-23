@@ -121,17 +121,17 @@ $(document).ready(function() {
                                 '<tr style="background-color: white;" class="text-end fw-semibold">'+
                                   '<td>Sub Total</td>'+
                                   '<td>'+
-                                    ' Loading '+
+                                    ''+ formatNumber(Number(value.rekap_beli_sub_tot)) +''+
                                   '</td>'+
                                 '</tr>'+
                                 '<tr style="background-color: white;" class="text-end fw-semibold">'+
-                                    '<td>PPN ' + (value.rekap_beli_disc ? '('+ formatNumber(Number(value.rekap_beli_ppn)) +')' : '') + '</td>' +
+                                    '<td>PPN ' + (value.rekap_beli_disc ? '('+ formatNumber(Number(value.rekap_beli_ppn)) +'%)' : '') + '</td>' +
                                   '<td>'+
                                     ''+ formatNumber(Number(value.rekap_beli_ppn_rp)) +''+
                                   '</td>'+
                                 '</tr>'+
                                 '<tr style="background-color: white;" class="text-end fw-semibold">'+
-                                    '<td>Diskon Nota ' + (value.rekap_beli_disc ? '('+ formatNumber(Number(value.rekap_beli_disc)) +')' : '') + '</td>' +
+                                    '<td>Diskon Nota ' + (value.rekap_beli_disc ? '('+ formatNumber(Number(value.rekap_beli_disc)) +'%)' : '') + '</td>' +
                                   '<td>'+
                                     ''+ formatNumber(Number(value.rekap_beli_disc_rp)) +''+
                                   '</td>'+
@@ -165,7 +165,7 @@ $(document).ready(function() {
                                             item.rekap_beli_detail_discrp == 0 ? 
                                             '' :
                                             item.rekap_beli_detail_disc == 1 ? 
-                                            formatNumber(Number(item.rekap_beli_detail_discrp)) : 
+                                            ' + '+ formatNumber(Number(item.rekap_beli_detail_discrp)) : 
                                             'Diskon BB '+ formatNumber(Number(item.rekap_beli_detail_discrp))
                                         ) + 
                                     '</small>'+

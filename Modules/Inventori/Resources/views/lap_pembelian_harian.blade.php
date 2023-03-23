@@ -10,26 +10,26 @@
             </h3>
               </div>
                 <div class="block-content text-muted">
-                    <form id="rekap_insert">
+                    <form id="rekap_insert" onsubmit="return validateForm()">
                         
                         <div class="row">
                             <div class="col-md-5">
                                 <div class="row mb-1">
                                     <label class="col-sm-3 col-form-label" >Tanggal</label>
                                     <div class="col-sm-9 datepicker">
-                                        <input name="r_t_tanggal" class="cari form-control" type="text" placeholder="Pilih Tanggal.." id="filter_tanggal" />
+                                        <input name="rekap_beli_tgl" class="cari form-control" type="text" placeholder="Pilih Tanggal.." id="filter_tanggal" />
                                     </div>
                                 </div>
                             </div>
                         </div> 
-
+                        
                         <div class="row">
                             <div class="col-md-5">
                                 <div class="row mb-2">
                                     <label class="col-sm-3 col-form-label">Area</label>
                                     <div class="col-sm-9">
                                         <select id="filter_area" data-placeholder="Pilih Area" style="width: 100%;"
-                                            class="cari f-area js-select2 form-control" name="r_t_m_area_id">
+                                            class="cari f-area js-select2 form-control" name="m_w_m_area_id">
                                             <option></option>
                                             @foreach ($data->area as $area)
                                                 <option value="{{ $area->m_area_id }}"> {{ $area->m_area_nama }} </option>
@@ -45,7 +45,7 @@
                                     <label class="col-sm-3 col-form-label">Waroeng</label>
                                     <div class="col-sm-9">
                                         <select id="filter_waroeng" style="width: 100%;"
-                                            class="cari f-wrg js-select2 form-control" data-placeholder="Pilih Waroeng" name="r_t_m_w_id">
+                                            class="cari f-wrg js-select2 form-control" data-placeholder="Pilih Waroeng" name="rekap_beli_m_w_id">
                                             <option></option>
                                         </select>
                                     </div>
@@ -65,7 +65,7 @@
                                 <div class="row mb-2">
                                     <div class="col-sm-9">
                                         <select id="filter_pengadaan" style="width: 100%;"
-                                            class="cari f-wrg js-select2 form-control" data-placeholder="Pilih Pengadaan" name="rekap_beli_created_by">
+                                            class="cari f-wrg js-select2 form-control" data-placeholder="Pilih Pengadaan" name="pengadaan">
                                             <option></option>
                                         </select>
                                     </div>
@@ -134,7 +134,7 @@ $(document).ready(function() {
     $('#operator_select').on('select2:select', function() {
         var cek = $(this).val();
         var waroeng  = $('#filter_waroeng').val();
-        if(waroeng == true){
+        if(waroeng > 1){
             if(cek == 'ya') {
                 $("#operator").show();
             } else {
@@ -152,7 +152,6 @@ $(document).ready(function() {
         var tanggal  = $('#filter_tanggal').val(); 
         var pengadaan  = $('#filter_pengadaan').val();  
         var show_pengadaan = $("#operator_select").val();      
-        console.log(tanggal);
     if(show_pengadaan == 'ya'){
         $("#tampil1").hide();
         $("#tampil2").show();
@@ -161,17 +160,13 @@ $(document).ready(function() {
             destroy: true,
             orderCellsTop: true,
             processing: true,
-            autoWidth: true,
+            autoWidth: false,
             scrollY: "300px",
             scrollX: true,
             scrollCollapse: true,
             columnDefs: [
                 {
-                    targets: [0],
-                    className: 'dt-body-center'
-                },
-                {
-                    targets: [1, 2, 3, 4, 5, 6, 7, 8],
+                    targets: [4, 5, 6],
                     className: 'dt-body-right'
                 }
             ],
@@ -184,7 +179,7 @@ $(document).ready(function() {
                     waroeng: waroeng,
                     tanggal: tanggal,
                     pengadaan: pengadaan,
-                    show_operator: show_pengadaan,
+                    show_pengadaan: show_pengadaan,
                 },
                 type : "GET",
                 },
@@ -201,20 +196,16 @@ $(document).ready(function() {
             destroy: true,
             orderCellsTop: true,
             processing: true,
-            autoWidth: true,
+            autoWidth: false,
             scrollY: "300px",
             scrollX: true,
             scrollCollapse: true,
-            // columnDefs: [
-            //     {
-            //         targets: [0],
-            //         className: 'dt-body-center'
-            //     },
-            //     {
-            //         targets: [1, 2, 3, 4, 5, 6, 7, 8],
-            //         className: 'dt-body-right'
-            //     }
-            // ],
+            columnDefs: [
+                {
+                    targets: [3, 4, 5],
+                    className: 'dt-body-right'
+                }
+            ],
             lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
             pageLength: 10,
             ajax: {
@@ -223,7 +214,7 @@ $(document).ready(function() {
                     area: area,
                     waroeng: waroeng,
                     tanggal: tanggal,
-                    show_operator: show_pengadaan,
+                    show_pengadaan: show_pengadaan,
                 },
                 type : "GET",
                 },
@@ -236,10 +227,12 @@ $(document).ready(function() {
 
     $('#filter_area').change(function(){
         var id_area = $(this).val();    
+        var show_pengadaan = $("#operator_select").val();      
+    if(show_pengadaan == 'tidak'){
         if(id_area){
             $.ajax({
             type:"GET",
-            url: '{{route("lap_pem_detail.select_waroeng_harian")}}',
+            url: '{{route("lap_pem_harian.select_waroeng_harian")}}',
             dataType: 'JSON',
             data : {
                 id_area: id_area,
@@ -259,10 +252,16 @@ $(document).ready(function() {
         }else{
             $("#filter_waroeng").empty();
         }      
+    } else {
+        $("#operator_select").val("tidak").trigger('change');
+        $("#operator").hide();
+    }
     });
 
     $('#filter_waroeng').change(function(){
         var id_waroeng = $(this).val();    
+        var show_pengadaan = $("#operator_select").val();      
+    if(show_pengadaan == 'tidak'){
         if(id_waroeng){
             $.ajax({
             type:"GET",
@@ -285,7 +284,11 @@ $(document).ready(function() {
             });
         }else{
             $("#filter_pengadaan").empty();
-        }      
+        }     
+    } else {
+        $("#operator_select").val("tidak").trigger('change');
+        $("#operator").hide();
+    } 
     });
 
     $('#filter_tanggal').flatpickr({
@@ -294,6 +297,17 @@ $(document).ready(function() {
             // noCalendar: false,
             // allowInput: true,            
     });
+      
+    function validateForm() {
+        var tanggal = document.forms["rekap_insert"]["rekap_beli_tgl"].value;
+        var area = document.forms["rekap_insert"]["m_w_m_area_id"].value;
+        var waroeng = document.forms["rekap_insert"]["rekap_beli_m_w_id"].value;
+
+        if (tanggal == "" || area == "" || waroeng == "") {
+            alert("Mohon mengisi semua kolom terlebih dahulu");
+            return false;
+        }
+    }
 
 });
 </script>

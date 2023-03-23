@@ -80,6 +80,7 @@
                   <th class="text-center">Kode Nota</th>
                   <th class="text-center">Supplier</th>
                   <th class="text-center">Alamat Supplier</th>
+                  <th class="text-center">Sub Total</th>
                   <th class="text-center">Diskon (%)</th>
                   <th class="text-center">Diskon (Rp.)</th>
                   <th class="text-center">PPN (%)</th>
@@ -130,12 +131,12 @@
                               </td>
                             </tr>
                             <tr style="background-color: white;" class="text-end fw-semibold">
-                              <td>PPN (<small id="ppn_persen"></small>)</td>
+                              <td>PPN (<small id="ppn_persen"></small>%)</td>
                               <td id="ppn">
                               </td>
                             </tr>
                             <tr style="background-color: white;" class="text-end fw-semibold">
-                                <td>Diskon Nota (<small id="diskon_persen"></small>)</td>
+                                <td>Diskon Nota (<small id="diskon_persen"></small>%)</td>
                                 <td id="diskon">
                                 </td>
                               </tr>
@@ -180,8 +181,8 @@ $(document).ready(function() {
         scrollX: true,
         scrollY: '300px',
         columnDefs: [ 
-            { className: 'dt-right', targets: [6, 8, 9, 10, 11, 12] },
-            { className: 'dt-center', targets: [5, 7] },
+            { className: 'dt-right', targets: [5, 7, 9, 10, 11, 12, 13] },
+            { className: 'dt-center', targets: [6, 8] },
         ],
         lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
         pageLength: 10,
@@ -274,7 +275,7 @@ $(document).ready(function() {
                         $('#suplier').html(data.rekap_beli.rekap_beli_supplier_nama);
                         $('#tgl_nota').html(data.rekap_beli.rekap_beli_tgl);
                         $('#pengadaan').html(data.rekap_beli.name);
-                        $('#sub_total').html('loading');
+                        $('#sub_total').html(formatNumber(Number(data.rekap_beli.rekap_beli_sub_tot)));
                         $('#ppn').html(formatNumber(Number(data.rekap_beli.rekap_beli_ppn_rp)));
                         $('#ppn_persen').html(formatNumber(Number(data.rekap_beli.rekap_beli_ppn)));
                         $('#diskon').html(formatNumber(Number(data.rekap_beli.rekap_beli_disc_rp)));
@@ -299,7 +300,7 @@ $(document).ready(function() {
                                             item.rekap_beli_detail_discrp == 0 ? 
                                             '' :
                                             item.rekap_beli_detail_disc == 1 ? 
-                                            formatNumber(Number(item.rekap_beli_detail_discrp)) : 
+                                            ' + '+ formatNumber(Number(item.rekap_beli_detail_discrp)) : 
                                             'Diskon BB '+ formatNumber(Number(item.rekap_beli_detail_discrp))
                                         ) +
                                     '</small>'+
