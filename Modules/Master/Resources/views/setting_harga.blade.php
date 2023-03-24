@@ -137,10 +137,10 @@
                                 @csrf
                                 <div class="mb-4">
                                     <div class="form-group">
-                                        <label for="m_jenis_nota_trans_id">Jenis Transaksi</label>
+                                        <label for="m_jenis_nota_trans_id_asal">Sumber Jenis Transaksi</label>
                                         <div>
-                                            <select class="js-select2" id="m_jenis_nota_trans_id"
-                                                name="m_jenis_nota_trans_id" style="width: 100%;"
+                                            <select class="js-select2" id="m_jenis_nota_trans_id_asal"
+                                                name="m_jenis_nota_trans_id_asal" style="width: 100%;"
                                                 data-container="#copy_nota" data-placeholder="Choose one..">
                                                 <option></option>
 
@@ -162,6 +162,22 @@
                                                 <option></option>
                                                 @foreach ($listWaroeng as $wr)
                                                     <option value="{{ $wr->m_w_id }}">{{ ucwords($wr->m_w_nama) }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-4">
+                                    <div class="form-group">
+                                        <label for="m_jenis_nota_trans_id_tujuan">Tujuan Jenis Transaksi</label>
+                                        <div>
+                                            <select class="js-select2" id="m_jenis_nota_trans_id_tujuan"
+                                                name="m_jenis_nota_trans_id_tujuan" style="width: 100%;"
+                                                data-container="#copy_nota" data-placeholder="Choose one..">
+                                                <option></option>
+                                                @foreach ($listTipeTransaksi as $tipe)
+                                                    <option value="{{ $tipe->m_t_t_id }}">{{ ucwords($tipe->m_t_t_name) }}
                                                     </option>
                                                 @endforeach
                                             </select>
