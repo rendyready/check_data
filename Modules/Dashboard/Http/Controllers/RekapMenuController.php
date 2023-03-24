@@ -89,8 +89,8 @@ class RekapMenuController extends Controller
                     }
             }
          
-        $get2 = $get->selectRaw('sum(r_t_detail_qty) as qty, sum(r_t_detail_reguler_price) as nominal, r_t_tanggal, r_t_detail_m_produk_nama, m_w_nama')
-                    ->groupBy('r_t_tanggal', 'r_t_detail_m_produk_nama', 'm_w_nama')
+        $get2 = $get->selectRaw('sum(r_t_detail_qty) as qty, r_t_detail_reguler_price, r_t_tanggal, r_t_detail_m_produk_nama, m_w_nama')
+                    ->groupBy('r_t_tanggal', 'r_t_detail_m_produk_nama', 'm_w_nama', 'r_t_detail_reguler_price')
                     ->orderby('r_t_detail_m_produk_nama')
                     ->get();
         $data = [];
@@ -99,7 +99,7 @@ class RekapMenuController extends Controller
             $menu = $val_menu->r_t_detail_m_produk_nama;
             $date = $val_menu->r_t_tanggal;
             $qty = $val_menu->qty;
-            $nominal = rupiah($val_menu->nominal * $qty, 0);
+            $nominal = rupiah($val_menu->r_t_detail_reguler_price * $qty, 0);
             if (!isset($data[$waroeng])) {
                 $data[$waroeng] = [];
             }
@@ -112,7 +112,7 @@ class RekapMenuController extends Controller
                     'nominal' => 0,
                 ];
             }
-            $data[$waroeng][$menu][$date]['qty'] = $qty;
+            $data[$waroeng][$menu][$date]['qty'] += $qty;
             $data[$waroeng][$menu][$date]['nominal'] = $nominal;
         }
         $output = ['data' => []];
