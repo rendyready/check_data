@@ -39,7 +39,6 @@ Route::prefix('dashboard')->middleware('auth', 'web')
             Route::get('harian', 'index')->name('harian.index');
             Route::get('harian/show', 'show')->name('harian.show');
             Route::get('harian/select_waroeng', 'select_waroeng')->name('harian.select_waroeng');
-            Route::get('harian/select_operator', 'select_operator')->name('harian.select_operator');
             Route::get('harian/select_user', 'select_user')->name('harian.select_user');
         });
 

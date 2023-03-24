@@ -15,7 +15,7 @@
             <table id="my_table" class="table table-bordered table-striped table-vcenter js-dataTable-full">
               <thead>
               <tr>
-                  <th>ID</th>
+                  <th>No</th>
                   <th>Produk</th>
                   <th>Harga</th>
                   <th>Status</th>
@@ -25,9 +25,12 @@
               </tr>
               </thead>
               <tbody id="tablecontents">
+                @php
+                    $no =1;
+                @endphp
                 @foreach ($data as $item)
                     <tr>
-                      <td>{{$item->m_menu_harga_id}}</td>
+                      <td>{{$no}}</td>
                       <td>{{$item->m_produk_nama}}</td>
                       <td>{{$item->m_menu_harga_nominal}}</td>
                       @php
@@ -51,6 +54,9 @@
                         {{-- <a href="{{route('m_jenis_nota.hapus_harga',$item->m_menu_harga_id)}}" class="btn btn-danger" title="Delete"><i class="fa fa-trash"></i></a> --}}
                    </td>
                     </tr>
+                    @php
+                    $no++;
+                @endphp
                 @endforeach
               </tbody>
           </table>

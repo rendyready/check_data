@@ -120,20 +120,8 @@ Route::group(['prefix' => 'inventori', 'controller' => LaporanPembelianControlle
     Route::get('lap_pem_rekap/detail_rekap/{id}', 'detail_rekap')->name('lap_pem_rekap.detail_rekap');
     Route::get('lap_pem_rekap/harian_rekap', 'harian_rekap')->name('lap_pem_rekap.harian_rekap');
     Route::get('lap_pem_harian', 'lap_harian')->name('lap_pem_harian.lap_harian');
-    Route::get('lap_pem_detail/select_waroeng_harian', 'select_waroeng_harian')->name('lap_pem_detail.select_waroeng_harian');
+    Route::get('lap_pem_harian/select_waroeng_harian', 'select_waroeng_harian')->name('lap_pem_harian.select_waroeng_harian');
     Route::get('lap_pem_harian/harian_rekap', 'harian_rekap')->name('lap_pem_harian.harian_rekap');
-});
-//Laporan Pengiriman
-Route::group(['prefix' => 'inventori', 'controller' => LaporanPengirimanController::class, 'middleware' => ['auth', 'web']], function () {
-    Route::get('lap_kirim_detail', 'lap_detail')->name('lap_kirim.lap_detail');
-    Route::get('lap_kirim_rekap', 'lap_rekap')->name('lap_kirim.lap_rekap');
-    Route::get('lap_kirim_harian', 'lap_harian')->name('lap_kirim.lap_harian');
-});
-//Laporan Keluar Gudang
-Route::group(['prefix' => 'inventori', 'controller' => LaporanKeluarGudangController::class, 'middleware' => ['auth', 'web']], function () {
-    Route::get('lap_gudang_detail', 'lap_detail')->name('lap_gudang_detail.lap_detail');
-    Route::get('lap_gudang_rekap', 'lap_rekap')->name('lap_gudang_rekap.lap_rekap');
-    Route::get('lap_gudang_harian', 'lap_harian')->name('lap_gudang_harian.lap_harian');
 });
 
 //FORM RPH
@@ -144,5 +132,36 @@ Route::group(['prefix' => 'inventori', 'controller' => RphController::class, 'mi
     Route::post('rph/simpan', 'simpan')->name('rph.simpan');
     Route::get('rph/edit/{id}','edit')->name('rph.edit');
     Route::put('rph/update','update')->name('rph.update');
-   
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//Laporan Keluar Gudang
+Route::group(['prefix' => 'inventori', 'controller' => LaporanKeluarGudangController::class, 'middleware' => ['auth', 'web']], function () {
+    Route::get('lap_gudang_detail', 'lap_detail')->name('lap_gudang_detail.lap_detail');
+    Route::get('lap_gudang_detail/select_waroeng', 'select_waroeng')->name('lap_gudang_detail.select_waroeng');
+    Route::get('lap_gudang_detail/select_user', 'select_user')->name('lap_gudang_detail.select_user');
+    Route::get('lap_gudang_detail/tampil_detail', 'tampil_detail')->name('lap_gudang_detail.tampil_detail');
+    Route::get('lap_gudang_rekap', 'lap_rekap')->name('lap_gudang_rekap.lap_rekap');
+    Route::get('lap_gudang_rekap/tampil_rekap', 'tampil_rekap')->name('lap_gudang_rekap.tampil_rekap');
+    Route::get('lap_gudang_rekap/detail_rekap/{id}', 'detail_rekap')->name('lap_gudang_rekap.detail_rekap');
+    Route::get('lap_gudang_harian', 'lap_harian')->name('lap_gudang_harian.lap_harian');
+});
+
+//Laporan Pengiriman
+Route::group(['prefix' => 'inventori', 'controller' => LaporanPengirimanController::class, 'middleware' => ['auth', 'web']], function () {
+    Route::get('lap_kirim_detail', 'lap_detail')->name('lap_kirim.lap_detail');
+    Route::get('lap_kirim_rekap', 'lap_rekap')->name('lap_kirim.lap_rekap');
+    Route::get('lap_kirim_harian', 'lap_harian')->name('lap_kirim.lap_harian');
 });

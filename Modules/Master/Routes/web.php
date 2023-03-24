@@ -76,7 +76,7 @@ Route::group(['prefix' => 'master', 'controller' => MJenisNotaController::class,
     Route::get('m_jenis_nota/detail_harga/{id}', 'detailHarga')->name('m_jenis_nota.detail_harga');
     Route::get('m_jenis_nota/show_harga/{id}', 'showHarga')->name('m_jenis_nota.show_harga');
     Route::post('m_jenis_nota/simpan_harga', 'simpanHarga')->name('m_jenis_nota.simpan_harga');
-
+    Route::post('m_jenis_nota/copy','copy_nota')->name('m_jenis_nota.copy');
 });
 
 
