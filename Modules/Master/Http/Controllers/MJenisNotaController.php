@@ -71,17 +71,17 @@ class MJenisNotaController extends Controller
     {
         $cek_duplicate = DB::table('m_jenis_nota')
             ->where('m_jenis_nota_m_w_id', $request->m_jenis_nota_waroeng_tujuan_id)
-            ->where('m_jenis_nota_m_t_t_id', $request->m_jenis_nota_trans_id)->first();
+            ->where('m_jenis_nota_m_t_t_id', $request->m_jenis_nota_trans_id_tujuan)->first();
         if (empty($cek_duplicate)) {
             DB::table('m_jenis_nota')->insert([
                 'm_jenis_nota_id' => $this->getMasterId('m_jenis_nota'),
                 'm_jenis_nota_m_w_id' => $request->m_jenis_nota_waroeng_tujuan_id,
-                'm_jenis_nota_m_t_t_id' => $request->m_jenis_nota_trans_id,
+                'm_jenis_nota_m_t_t_id' => $request->m_jenis_nota_trans_id_tujuan,
                 'm_jenis_nota_created_by' => Auth::user()->id,
             ]);
             $last_nota_id = MJenisNotum::latest('m_jenis_nota_created_at')->first()->m_jenis_nota_id;
             $asal_nota_id = MJenisNotum::where('m_jenis_nota_m_w_id', $request->m_jenis_nota_waroeng_sumber_id)
-                ->where('m_jenis_nota_m_t_t_id', $request->m_jenis_nota_trans_id)->first()->m_jenis_nota_id;
+                ->where('m_jenis_nota_m_t_t_id', $request->m_jenis_nota_trans_id_asal)->first()->m_jenis_nota_id;
             $harga = MMenuHarga::where('m_menu_harga_m_jenis_nota_id', $asal_nota_id)->get();
             foreach ($harga as $key) {
                 $data_harga = array(
@@ -154,6 +154,10 @@ class MJenisNotaController extends Controller
         }
         $data['listProduk'] = MProduk::where('m_produk_jual', 'ya')->get();
         // ->whereNotIn('m_produk_id',$filterProdukArr)->get();
+        $data['jenis_produk'] = DB::table('m_jenis_produk')->get();
+        $data['num'] = 1;
+        $data['n'] = 1;
+        $data['s'] = 1;
         return view('master::setting_harga_detail', $data);
     }
 
@@ -178,6 +182,15 @@ class MJenisNotaController extends Controller
         }
 
         return Redirect::route('m_jenis_nota.detail_harga', $request->m_menu_harga_m_jenis_nota_id);
+    }
+
+    public function simpanUpdateHarga(Request $request)
+    {
+        foreach ($request->m_menu_harga_id_edit as $key => $value) {
+            DB::table('m_menu_harga')
+            ->where('m_menu_harga_id',$request->m_menu_harga_id_edit[$key])
+            ->update(['m_menu_harga_nominal'=> convertfloat($request->m_menu_harga_nominal_edit[$key])]);
+        }
     }
 
 }
