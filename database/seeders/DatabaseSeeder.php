@@ -34,7 +34,7 @@ class DatabaseSeeder extends Seeder
             MJabatanTableSeeder::class,
             MProdukTableSeeder::class,
             // ConfigSubJenisProdukTableSeeder::class,
-            // MMenuHargaTableSeeder::class,
+            MMenuHargaTableSeeder::class,
             ConfigFooterTableSeeder::class,
             MResepTableSeeder::class,
             // MResepDetailTableSeeder::class,
