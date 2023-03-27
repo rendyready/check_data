@@ -79,7 +79,7 @@ class RekapNotaHarianController extends Controller
             ->join('users', 'users_id', 'r_t_created_by')
             ->join('m_area', 'm_area_code', 'r_t_m_area_code')
             ->join('m_w', 'm_w_code', 'r_t_m_w_code')
-            ->selectRaw('r_t_tanggal, SUM(r_t_nominal) as total, name, m_area_nama, m_w_nama')
+            ->selectRaw('r_t_tanggal, SUM(r_t_nominal_total_bayar) as total, SUM(r_t_nominal_pembulatan) as pembulatan, SUM(r_t_nominal_free_kembalian) as free, name, m_area_nama, m_w_nama')
             ->groupBy('r_t_tanggal', 'name', 'm_area_nama', 'm_w_nama')
             ->orderBy('r_t_tanggal', 'ASC')
             ->get(); 
@@ -99,14 +99,14 @@ class RekapNotaHarianController extends Controller
             ->join('users', 'users_id', 'r_t_created_by')
             ->join('m_area', 'm_area_code', 'r_t_m_area_code')
             ->join('m_w', 'm_w_code', 'r_t_m_w_code')
-            ->selectRaw('r_t_tanggal, SUM(r_t_nominal) as total, m_area_nama, m_w_nama')
+            ->selectRaw('r_t_tanggal, SUM(r_t_nominal_total_bayar) as total, SUM(r_t_nominal_pembulatan) as pembulatan, SUM(r_t_nominal_free_kembalian) as free, m_area_nama, m_w_nama')
             ->groupBy('r_t_tanggal', 'm_area_nama', 'm_w_nama')
             ->orderBy('r_t_tanggal', 'ASC')
             ->get(); 
         }
 
         $trans2 = $trans->whereBetween('r_t_tanggal', $dates)
-            ->selectRaw('r_p_t_m_payment_method_id, r_t_tanggal, SUM(r_t_nominal) as nominal')
+            ->selectRaw('r_p_t_m_payment_method_id, r_t_tanggal, SUM(r_t_nominal_total_bayar) as nominal, SUM(r_t_nominal_pembulatan) as bulat, SUM(r_t_nominal_free_kembalian) as kembali')
             ->groupBy('r_t_tanggal', 'r_p_t_m_payment_method_id')
             ->orderBy('r_p_t_m_payment_method_id', 'ASC')
             ->get();
@@ -120,12 +120,12 @@ class RekapNotaHarianController extends Controller
                 $data[$i]['waroeng'] = $valTrans->m_w_nama;
                 $data[$i]['tanggal'] = date('d-m-Y', strtotime($valTrans->r_t_tanggal));
                 $data[$i]['operator'] = $valTrans->name;
-                $data[$i]['penjualan'] = rupiah($valTrans->total, 0);
+                $data[$i]['penjualan'] = rupiah($valTrans->total - ($valTrans->pembulatan + $valTrans->free), 0);
                 foreach ($methodPay as $key => $valPay) {
                     $data[$i][$valPay->m_payment_method_name] = 0;
                     foreach ($trans2 as $key => $valTrans2){
                             if ($valTrans->r_t_tanggal == $valTrans2->r_t_tanggal && $valPay->m_payment_method_id == $valTrans2->r_p_t_m_payment_method_id) {
-                                $data[$i][$valPay->m_payment_method_name] = rupiah($valTrans2->nominal, 0);
+                                $data[$i][$valPay->m_payment_method_name] = rupiah($valTrans2->nominal - ($valTrans2->bulat + $valTrans2->kembali), 0);
                             } 
                     } 
                 }
@@ -142,12 +142,12 @@ class RekapNotaHarianController extends Controller
             $data[$i]['area'] = $valTrans->m_area_nama;
             $data[$i]['waroeng'] = $valTrans->m_w_nama;
             $data[$i]['tanggal'] = date('d-m-Y', strtotime($valTrans->r_t_tanggal));
-            $data[$i]['penjualan'] = rupiah($valTrans->total, 0);
+            $data[$i]['penjualan'] = rupiah($valTrans->total - ($valTrans->pembulatan + $valTrans->free), 0);
             foreach ($methodPay as $key => $valPay) {
                 $data[$i][$valPay->m_payment_method_name] = 0;
                 foreach ($trans2 as $key => $valTrans2){
                         if ($valTrans->r_t_tanggal == $valTrans2->r_t_tanggal && $valPay->m_payment_method_id == $valTrans2->r_p_t_m_payment_method_id) {
-                            $data[$i][$valPay->m_payment_method_name] = rupiah($valTrans2->nominal, 0);
+                            $data[$i][$valPay->m_payment_method_name] = rupiah($valTrans2->nominal - ($valTrans2->bulat + $valTrans2->kembali), 0);
                         } 
                 } 
             }

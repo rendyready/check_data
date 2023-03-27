@@ -83,6 +83,7 @@
                   <th>Saldo Real</th>
                   <th>Selisih</th>
                   <th></th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody id="show_data">
@@ -92,7 +93,7 @@
         </div>
       </div>
     </div>
-    </div>
+  </div>
 </div>
 
    <!-- Select2 in a modal -->
@@ -156,6 +157,8 @@
                     <th class="text-center">Saldo</th>
                   </tr>
                 </thead>
+                <tbody>
+                </tbody>
               </table>
             </div>
             </form>
@@ -297,39 +300,9 @@ $(document).ready(function() {
                           scrollX: true,
                           scrollY: "300px",
                           autoWidth: false,
+                          paging: false,
                           dom: 'Bfrtip',
-                          buttons: [
-                              {
-                                  extend: 'pdfHtml5',
-                                  text: 'Export to PDF',
-                                  orientation: 'potrait',
-                                  pageSize: 'A4',
-                                  exportOptions: {
-                                      columns: [0, 1, 2, 3, 4, 5],
-                                  },
-                                  customize: function(doc) {
-                                      // Customize the PDF document
-                                      // Add a title to the PDF document
-                                      doc.content.splice(0, 0, {
-                                          text: 'Title',
-                                          style: 'title'
-                                      });
-                                      // Add a footer to the PDF document
-                                      doc.footer = function(currentPage, pageCount) {
-                                          return {
-                                              columns: [
-                                                  {text: currentPage, alignment: 'left'},
-                                                  {text: pageCount, alignment: 'right'}
-                                              ],
-                                              margin: [20, 10],
-                                              fontSize: 10,
-                                              color: '#333'
-                                          }
-                                      };
-                                  },
-                                  title: 'Laporan Kas Harian Kasir'
-                              }
-                          ],
+                          buttons: [],
                           ajax: {
                               url: "/dashboard/kas_kasir/detail_show/"+id,
                               data : {
@@ -353,50 +326,58 @@ $(document).ready(function() {
                 $("#tampil_modal").modal('show');
             }); 
 
-
-            // $("#rekening-tampil").on('click','.buttonEdit', function() {
+            // $("#tampil_rekap").on('click','#button_pdf', function() {
             //     var id = $(this).attr('value');
-            //     $('#form-rekening form')[0].reset();
-            //     $("#myModalLabel").html('Ubah Data Rekening');
+            //     var waroeng  = $('#filter_waroeng').val();
+            //     var tanggal  = $('#filter_tanggal').val();
+            //     var operator = $('#filter_operator').val();
+            //     $('#tampil_modal form')[0].reset();
+            //     $("#myModalLabel").html('Laporan Kas Kasir');
             //     $.ajax({
-            //         url: "/akuntansi/rekening/edit/"+id,
+            //         url: "/dashboard/kas_kasir/detail/"+id,
             //         type: "GET",
             //         dataType: 'json',
-            //         success: function(respond) {
-            //             // console.log(respond);
-            //             $(".m_rekening_no_akun1").val(respond.m_rekening_no_akun).trigger('change');
-            //             $("#m_rekening_nama1").val(respond.m_rekening_nama).trigger('change');
-            //             $("#m_rekening_saldo1").val(respond.m_rekening_saldo).trigger('change');
-            //         },
-            //         error: function() {
-            //         }
-            //     });
-            //     $("#form-rekening").modal('show');
-            // }); 
+            //         destroy: true,
+            //         success: function(data) {
+            //           console.log(data.rekap_modal_m_w_nama);
+            //           var date = new Date(data.rekap_modal_tanggal);
+            //           var formattedDate = ("0" + date.getDate()).slice(-2) + "/" + ("0" + (date.getMonth() + 1)).slice(-2) + "/" + date.getFullYear();
 
-            // //edit
-            // $('#formAction').submit( function(e){
-            //     if(!e.isDefaultPrevented()){
-            //         $.ajax({
-            //             url : "{{ route('rekening.simpan_edit') }}",
-            //             type : "POST",
-            //             data : $('#form-rekening form').serialize(),
-            //             success : function(data){
-            //                 console.log(data);
-            //                 $('#form-rekening').modal('hide');
-            //                     Codebase.helpers('jq-notify', {
-            //                         align: 'right', // 'right', 'left', 'center'
-            //                         from: 'top', // 'top', 'bottom'
-            //                         type: 'info', // 'info', 'success', 'warning', 'danger'
-            //                         icon: 'fa fa-info me-5', // Icon class
-            //                         message: 'Berhasil update rekening.',
-            //                     });
-            //                 table.ajax.reload();
-            //             },
-            //         });
-            //         return false;
-            //     }
-            // });
+            //             $('#tanggal_pop').val(formattedDate);
+            //             $('#waroeng_pop').val(data.rekap_modal_m_w_nama);
+            //             $('#operator_pop').val(data.name);
+
+            //             $('#detail_modal').DataTable({
+            //               destroy: true,
+            //               processing: true,
+            //               scrollX: true,
+            //               scrollY: "300px",
+            //               autoWidth: false,
+            //               paging: false,
+            //               dom: 'Bfrtip',
+            //               buttons: [],
+            //               ajax: {
+            //                   url: "/dashboard/kas_kasir/export_pdf/"+id,
+            //                   data : {
+            //                       waroeng: waroeng,
+            //                       tanggal: tanggal,
+            //                       operator: operator,
+            //                   },
+            //                   type : "GET",
+            //                   },
+            //                   columns: [
+            //                   { data: 'tanggal' },
+            //                   { data: 'no nota' },
+            //                   { data: 'transaksi' },
+            //                   { data: 'masuk', class: 'text-end' },
+            //                   { data: 'keluar', class: 'text-end' },
+            //                   { data: 'saldo', class: 'text-end' },
+            //                 ],
+            //           });
+            //         },
+            //     });
+            //     $("#tampil_modal").modal('show');
+            // }); 
 
 });
 </script>

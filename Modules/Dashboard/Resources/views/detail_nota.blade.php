@@ -185,7 +185,7 @@ $(document).ready(function() {
                                 '<tr style="background-color: white;" class="text-end fw-semibold">'+
                                   '<td>Bayar ('+ value.m_payment_method_type +') </td>'+
                                   '<td class="mask">'+
-                                    ''+ formatNumber(Number(value.r_t_nominal_total_bayar)) +''+
+                                    ''+ formatNumber(Number(value.r_t_nominal_total_bayar) - Number(value.r_t_nominal_free_kembalian) - Number(value.r_t_nominal_pembulatan)) +''+
                                   '</td>'+
                                 '</tr>'+
                               '</tbody>'+
