@@ -80,5 +80,7 @@ Route::prefix('dashboard')->middleware('auth', 'web')
             Route::get('kas_kasir/show', 'show')->name('kas_kasir.show');
             Route::get('kas_kasir/select_waroeng', 'select_waroeng')->name('kas_kasir.select_waroeng');
             Route::get('kas_kasir/select_user', 'select_user')->name('kas_kasir.select_user');
+            Route::get('kas_kasir/detail/{id}', 'detail')->name('kas_kasir.detail');
+            Route::get('kas_kasir/detail_show/{id}', 'detail_show')->name('kas_kasir.detail_show');
         });
 });
