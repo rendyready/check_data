@@ -88,7 +88,7 @@ class RekapNotaController extends Controller
                 $row[] = rupiah($value->r_t_nominal_tarik_tunai, 0);
                 $row[] = rupiah($value->r_t_nominal_pembulatan, 0);
                 $row[] = rupiah($value->r_t_nominal_free_kembalian, 0);   
-                $row[] = rupiah($value->r_t_nominal_total_bayar, 0);
+                $row[] = rupiah($value->r_t_nominal_total_bayar - $value->r_t_nominal_free_kembalian - $value->r_t_nominal_pembulatan, 0);
                 if($value->r_t_status == "unpaid"){
                     $row[] = 'Lostbill';
                     $row[] = 'Lostbill';

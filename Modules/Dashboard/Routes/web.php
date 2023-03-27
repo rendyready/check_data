@@ -82,5 +82,9 @@ Route::prefix('dashboard')->middleware('auth', 'web')
             Route::get('kas_kasir/select_user', 'select_user')->name('kas_kasir.select_user');
             Route::get('kas_kasir/detail/{id}', 'detail')->name('kas_kasir.detail');
             Route::get('kas_kasir/detail_show/{id}', 'detail_show')->name('kas_kasir.detail_show');
+            Route::get('kas_kasir/export_pdf', 'export_pdf')->name('kas_kasir.export_pdf');
         });
+
+        // Route::get('kas_kasir/export_pdf', [LaporanKasHarianKasirController::class, 'export_pdf'])->name('kas_kasir.export_pdf');
+
 });

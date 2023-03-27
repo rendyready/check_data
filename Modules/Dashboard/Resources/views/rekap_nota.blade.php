@@ -298,7 +298,7 @@ $(document).ready(function() {
                         $('#nama_kons').html(data.transaksi_rekap.name);
                         $('#total').html(formatNumber(Number(data.transaksi_rekap.r_t_nominal)));
                         $('#pajak').html(formatNumber(Number(data.transaksi_rekap.r_t_nominal_pajak)));
-                        $('#bayar').html(formatNumber(Number(data.transaksi_rekap.r_t_nominal_total_bayar)));
+                        $('#bayar').html(formatNumber(Number(data.transaksi_rekap.r_t_nominal_total_bayar) - Number(data.transaksi_rekap.r_t_nominal_pembulatan) - Number(data.transaksi_rekap.r_t_nominal_free_kembalian)));
                         $('#pembayaran').html(data.transaksi_rekap.m_payment_method_name);
                         $('#sc').html(formatNumber(Number(data.transaksi_rekap.r_t_nominal_sc)));
                         $('#diskon').html(formatNumber(Number(data.transaksi_rekap.r_t_nominal_diskon)));
