@@ -197,6 +197,7 @@ return [
 
         #Custom Jangkrik404
         Spatie\Permission\PermissionServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
     ],
 
     /*

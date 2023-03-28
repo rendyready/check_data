@@ -4,6 +4,16 @@ function dec_indo(number) {
     var saldo_formatted = saldo.replace(/(\d)(?=(\d{3})+(?!\d))/g,"$1.");
     return saldo_formatted;
 }
+//notifikasi
+function displayNotification(type, message) {
+    Codebase.helpers('jq-notify', {
+        align: 'right',
+        from: 'top',
+        type: type,
+        icon: 'fa fa-info me-5',
+        message: message
+    });
+}
 //Select2
 $(document).ready(function () {
     // Mencari elemen select2
