@@ -86,5 +86,16 @@ Route::prefix('dashboard')->middleware('auth', 'web')
         });
 
         // Route::get('kas_kasir/export_pdf', [LaporanKasHarianKasirController::class, 'export_pdf'])->name('kas_kasir.export_pdf');
-
+        Route::controller(RekapNotaHarianKategoriController::class)->group(function () {
+            Route::get('rekap_kategori', 'index')->name('rekap_kategori.index');
+            Route::get('rekap_kategori/show', 'show')->name('rekap_kategori.show');
+            Route::get('rekap_kategori/select_waroeng', 'select_waroeng')->name('rekap_kategori.select_waroeng');
+            Route::get('rekap_kategori/select_user', 'select_user')->name('rekap_kategori.select_user');
+        });
+        Route::controller(RekapPenjualanKategoriMenuController::class)->group(function () {
+            Route::get('rekap_penj_kat', 'index')->name('rekap_penj_kat.index');
+            Route::get('rekap_penj_kat/show', 'show')->name('rekap_penj_kat.show');
+            Route::get('rekap_penj_kat/select_waroeng', 'select_waroeng')->name('rekap_penj_kat.select_waroeng');
+            Route::get('rekap_penj_kat/select_user', 'select_user')->name('rekap_penj_kat.select_user');
+        });
 });

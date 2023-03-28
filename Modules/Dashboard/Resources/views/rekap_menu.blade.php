@@ -91,6 +91,7 @@ $(document).ready(function() {
             $('#head_data').empty();
             var html = '<tr>';
             html += '<th class="text-center">Waroeng</th>';
+            html += '<th class="text-center">Kategori Menu</th>';
             html += '<th class="text-center">Nama Menu</th>';
             for (var i = 0; i < data.length; i++) {
                 html += '<th class="text-center">Qty</th>';
@@ -101,11 +102,11 @@ $(document).ready(function() {
             html += '</tr>';
                 $('#head_data').append(html);
             
-           $('#tampil_rekap').DataTable({
+                var table = $('#tampil_rekap').DataTable({
                 destroy: true,
                 orderCellsTop: true,
                 processing: true,
-                scrollY: "300px",
+                scrollY: "500px",
                 scrollX: true,
                 autoWidth: true,
                 scrollCollapse: true,
@@ -114,6 +115,18 @@ $(document).ready(function() {
                         targets: '_all',
                         className: 'dt-body-right'
                     },
+                ],
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: 'Export Excel',
+                        title: 'Laporan Penjualan Menu Harian',
+                        pageSize: 'A4',
+                        pageOrientation: 'potrait',
+                        exportOptions: {
+                            columns: [2, 3, 4 ]
+                        },
+                    }
                 ],
                 lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
                 pageLength: 10,
@@ -126,9 +139,6 @@ $(document).ready(function() {
                     },
                     type : "GET",
                     },
-                    success:function(data){ 
-                        console.log(data);
-                    }
                 });
             }
         });

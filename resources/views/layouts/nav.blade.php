@@ -420,6 +420,16 @@
                       <span class="nav-main-link-name">Laporan Kas Harian Kasir</span>
                     </a>
                   </li>
+                  <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('dashboard/rekap_kategori') ? ' active' : '' }}" href="{{route('rekap_kategori.index')}}">
+                      <span class="nav-main-link-name">Rekap Summary Penjualan</span>
+                    </a>
+                  </li>
+                  <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('dashboard/rekap_penj_kat') ? ' active' : '' }}" href="{{route('rekap_penj_kat.index')}}">
+                      <span class="nav-main-link-name">Rekap Penjualan Kategori Menu</span>
+                    </a>
+                  </li>
                 </ul>
             </li>     
 
