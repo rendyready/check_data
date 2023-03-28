@@ -272,20 +272,6 @@ class LaporanKasHarianKasirController extends Controller
             $prevSaldo = $trans_free;
             $totalKeluar += $row->r_t_nominal_free_kembalian;
         }
-        // if ($row->r_t_nominal_kembalian != 0) {
-        //     $keluar = rupiah($row->r_t_nominal_kembalian, 0) ;
-        //     $trans_kembali = $prevSaldo - $row->r_t_nominal_kembalian;
-        //     $data[] = array(
-        //         'tanggal' => date('d-m-Y', strtotime($row->r_t_tanggal)),
-        //         'no_nota' => $row->r_t_nota_code,
-        //         'transaksi' =>'Kembalian',
-        //         'masuk' => 0,
-        //         'keluar' => $keluar,
-        //         'saldo' => rupiah($trans_kembali, 0),
-        //     );
-        //     $prevSaldo = $trans_kembali;
-        //     $totalKeluar += $row->r_t_nominal_kembalian;
-        // }
     } 
     $prevSaldoRef = 0;
     foreach ($refund as $row) {
@@ -362,53 +348,6 @@ class LaporanKasHarianKasirController extends Controller
             $totalKeluar += $row->r_r_nominal_free_kembalian_refund;
         }
     }
-    // $prevSaldoLost = 0; 
-    // foreach ($lostbill as $row) {
-    //     if ($row->r_l_b_nominal != 0) {
-    //         $keluar = rupiah($row->r_l_b_nominal, 0) ;
-    //         $modal = $valModal->rekap_modal_nominal - $row->r_l_b_nominal;
-    //         $tnp_modal = $prevSaldoLost - $row->r_l_b_nominal;
-    //         $saldo = $prevSaldoLost == 0 ? $modal : $tnp_modal;
-    //         $data[] = array(
-    //             'tanggal' => date('d-m-Y', strtotime($row->r_t_tanggal)),
-    //             'no_nota' =>$row->r_t_nota_code,
-    //             'transaksi' =>'Lostbill Nominal',
-    //             'masuk' => 0,
-    //             'keluar' => $keluar,
-    //             'saldo' => rupiah($saldo, 0),
-    //         );
-    //         $prevSaldoLost = $saldo;
-    //         $totalKeluar += $row->r_l_b_nominal;
-    //     }
-    //     if ($row->r_l_b_nominal_pajak != 0) {
-    //         $keluar = rupiah($row->r_l_b_nominal_pajak, 0) ;
-    //         $saldo = $prevSaldoLost - $row->r_l_b_nominal_pajak;
-    //         $data[] = array(
-    //             'tanggal' => date('d-m-Y', strtotime($row->r_t_tanggal)),
-    //             'no_nota' =>$row->r_t_nota_code,
-    //             'transaksi' =>'Lostbill Pajak',
-    //             'masuk' => 0,
-    //             'keluar' => $keluar,
-    //             'saldo' => rupiah($saldo, 0),
-    //         );
-    //         $prevSaldoLost = $saldo;
-    //         $totalKeluar += $row->r_l_b_nominal_pajak;
-    //     }
-    //     if ($row->r_l_b_nominal_sc != 0) {
-    //         $keluar = rupiah($row->r_l_b_nominal_sc, 0) ;
-    //         $saldo = $prevSaldoLost - $row->r_l_b_nominal_sc;
-    //         $data[] = array(
-    //             'tanggal' => date('d-m-Y', strtotime($row->r_t_tanggal)),
-    //             'no_nota' =>$row->r_t_nota_code,
-    //             'transaksi' =>'Lostbill Service Charge',
-    //             'masuk' => 0,
-    //             'keluar' => $keluar,
-    //             'saldo' => rupiah($saldo, 0),
-    //         );
-    //         $prevSaldoLost = $saldo;
-    //         $totalKeluar += $row->r_l_b_nominal_sc;
-    //     }
-    // }
 } // saldo awal
             $saldo_terakhir = end($data)['saldo'];
             $data[] = array(
@@ -629,20 +568,6 @@ class LaporanKasHarianKasirController extends Controller
             $prevSaldo = $trans_free;
             $totalKeluar += $row->r_t_nominal_free_kembalian;
         }
-        // if ($row->r_t_nominal_kembalian != 0) {
-        //     $keluar = rupiah($row->r_t_nominal_kembalian, 0) ;
-        //     $trans_kembali = $prevSaldo - $row->r_t_nominal_kembalian;
-        //     $data[] = array(
-        //         'tanggal' => date('d-m-Y', strtotime($row->r_t_tanggal)),
-        //         'no_nota' => $row->r_t_nota_code,
-        //         'transaksi' =>'Kembalian',
-        //         'masuk' => 0,
-        //         'keluar' => $keluar,
-        //         'saldo' => rupiah($trans_kembali, 0),
-        //     );
-        //     $prevSaldo = $trans_kembali;
-        //     $totalKeluar += $row->r_t_nominal_kembalian;
-        // }
     } 
     $prevSaldoRef = 0;
     foreach ($refund as $row) {
@@ -719,53 +644,6 @@ class LaporanKasHarianKasirController extends Controller
             $totalKeluar += $row->r_r_nominal_free_kembalian_refund;
         }
     }
-    // $prevSaldoLost = 0; 
-    // foreach ($lostbill as $row) {
-    //     if ($row->r_l_b_nominal != 0) {
-    //         $keluar = rupiah($row->r_l_b_nominal, 0) ;
-    //         $modal = $valModal->rekap_modal_nominal - $row->r_l_b_nominal;
-    //         $tnp_modal = $prevSaldoLost - $row->r_l_b_nominal;
-    //         $saldo = $prevSaldoLost == 0 ? $modal : $tnp_modal;
-    //         $data[] = array(
-    //             'tanggal' => date('d-m-Y', strtotime($row->r_t_tanggal)),
-    //             'no_nota' =>$row->r_t_nota_code,
-    //             'transaksi' =>'Lostbill Nominal',
-    //             'masuk' => 0,
-    //             'keluar' => $keluar,
-    //             'saldo' => rupiah($saldo, 0),
-    //         );
-    //         $prevSaldoLost = $saldo;
-    //         $totalKeluar += $row->r_l_b_nominal;
-    //     }
-    //     if ($row->r_l_b_nominal_pajak != 0) {
-    //         $keluar = rupiah($row->r_l_b_nominal_pajak, 0) ;
-    //         $saldo = $prevSaldoLost - $row->r_l_b_nominal_pajak;
-    //         $data[] = array(
-    //             'tanggal' => date('d-m-Y', strtotime($row->r_t_tanggal)),
-    //             'no_nota' =>$row->r_t_nota_code,
-    //             'transaksi' =>'Lostbill Pajak',
-    //             'masuk' => 0,
-    //             'keluar' => $keluar,
-    //             'saldo' => rupiah($saldo, 0),
-    //         );
-    //         $prevSaldoLost = $saldo;
-    //         $totalKeluar += $row->r_l_b_nominal_pajak;
-    //     }
-    //     if ($row->r_l_b_nominal_sc != 0) {
-    //         $keluar = rupiah($row->r_l_b_nominal_sc, 0) ;
-    //         $saldo = $prevSaldoLost - $row->r_l_b_nominal_sc;
-    //         $data[] = array(
-    //             'tanggal' => date('d-m-Y', strtotime($row->r_t_tanggal)),
-    //             'no_nota' =>$row->r_t_nota_code,
-    //             'transaksi' =>'Lostbill Service Charge',
-    //             'masuk' => 0,
-    //             'keluar' => $keluar,
-    //             'saldo' => rupiah($saldo, 0),
-    //         );
-    //         $prevSaldoLost = $saldo;
-    //         $totalKeluar += $row->r_l_b_nominal_sc;
-    //     }
-    // }
 } // saldo awal
             $saldo_terakhir = end($data)['saldo'];
             $data[] = array(
@@ -778,10 +656,6 @@ class LaporanKasHarianKasirController extends Controller
             );
 
             $output = array('data' => $data);
-            
-            // $pdf = PDF::loadView('export_pdf.laporan_kas_harian_kasir_pdf', compact('output'));
-
-            // return $pdf->download('laporan_kas_harian.pdf');
             return response()->json($output);
     }
 

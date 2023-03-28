@@ -163,7 +163,7 @@ $(document).ready(function() {
             orderCellsTop: true,
             processing: true,
             autoWidth: true,
-            scrollY: "300px",
+            // scrollY: "300px",
             scrollX: true,
             scrollCollapse: true,
             columnDefs: [
@@ -203,7 +203,7 @@ $(document).ready(function() {
             orderCellsTop: true,
             processing: true,
             autoWidth: true,
-            scrollY: "300px",
+            // scrollY: "300px",
             scrollX: true,
             scrollCollapse: true,
             columnDefs: [

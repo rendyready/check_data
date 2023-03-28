@@ -16,7 +16,7 @@
                             <div class="col-md-5">
                                 <div class="row mb-1">
                                     <label class="col-sm-3 col-form-label" >Tanggal</label>
-                                    <div class="col-sm-9 datepicker">
+                                    <div class="col-sm-9">
                                         <input name="tmp_tanggal_date" class="cari form-control" type="text" placeholder="Pilih Tanggal.." id="filter_tanggal" />
                                     </div>
                                 </div>
@@ -103,10 +103,11 @@ $(document).ready(function() {
                 $('#head_data').append(html);
             
                 var table = $('#tampil_rekap').DataTable({
+                "dom": '<"datatable-top-buttons">frtip',
                 destroy: true,
                 orderCellsTop: true,
                 processing: true,
-                scrollY: "500px",
+                // scrollY: "500px",
                 scrollX: true,
                 autoWidth: true,
                 scrollCollapse: true,
@@ -143,6 +144,7 @@ $(document).ready(function() {
             }
         });
     });
+    $('.datatable-top-buttons').html('<button>Tombol Baru</button>');
 
     $('#filter_area').change(function(){
         var id_area = $(this).val();    

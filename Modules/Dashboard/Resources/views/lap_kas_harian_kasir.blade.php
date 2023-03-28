@@ -305,7 +305,7 @@ $(document).ready(function() {
                           destroy: true,
                           processing: true,
                           scrollX: true,
-                          scrollY: "300px",
+                        //   scrollY: "300px",
                           autoWidth: false,
                           paging: false,
                           dom: 'Bfrtip',

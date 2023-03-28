@@ -117,7 +117,7 @@ $(document).ready(function() {
         orderCellsTop: true,
         processing: true,
         scrollX: true,
-        scrollY: '300px',
+        // scrollY: '300px',
         lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
         pageLength: 10,
         ajax: {
