@@ -101,23 +101,15 @@ $(document).ready(function() {
             }
             html += '</tr>';
                 $('#head_data').append(html);
-            
-                var table = $('#tampil_rekap').DataTable({
-                "dom": '<"datatable-top-buttons">frtip',
+
+                $('#tampil_rekap').DataTable({
                 destroy: true,
                 orderCellsTop: true,
                 processing: true,
-                // scrollY: "500px",
                 scrollX: true,
                 autoWidth: true,
                 scrollCollapse: true,
-                columnDefs: [ 
-                    {
-                        targets: '_all',
-                        className: 'dt-body-right'
-                    },
-                ],
-                buttons: [
+                 buttons: [
                     {
                         extend: 'excelHtml5',
                         text: 'Export Excel',
@@ -129,6 +121,12 @@ $(document).ready(function() {
                         },
                     }
                 ],
+                columnDefs: [ 
+                    {
+                        targets: '_all',
+                        className: 'dt-body-right'
+                    },
+                ],
                 lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
                 pageLength: 10,
                 ajax: {
@@ -139,12 +137,12 @@ $(document).ready(function() {
                         tanggal: tanggal,
                     },
                     type : "GET",
-                    },
+                },
                 });
+
             }
         });
     });
-    $('.datatable-top-buttons').html('<button>Tombol Baru</button>');
 
     $('#filter_area').change(function(){
         var id_area = $(this).val();    

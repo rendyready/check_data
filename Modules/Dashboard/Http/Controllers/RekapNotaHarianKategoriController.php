@@ -67,8 +67,9 @@ class RekapNotaHarianKategoriController extends Controller
     {
         $dates = explode('to' ,$request->tanggal);
  
-        $methodPay = DB::table('rekap_transaksi')
-                ->join('rekap_payment_transaksi', 'r_p_t_r_t_id', 'r_t_id')
+        $methodPay = DB::table('m_payment_method')
+                ->select('m_payment_method_id', 'm_payment_method_type')
+                ->groupby('m_payment_method_id', 'm_payment_method_type')
                 ->get();
         if($request->show_operator == 'ya'){
             $trans = DB::table('rekap_transaksi')
@@ -106,8 +107,8 @@ class RekapNotaHarianKategoriController extends Controller
          
         $trans2 = $trans->whereBetween('r_t_tanggal', $dates)
             ->join('rekap_payment_transaksi', 'r_p_t_r_t_id', 'r_t_id')
-            ->selectRaw('r_t_tanggal, r_t_nominal_pajak, SUM(r_t_nominal_total_bayar) as total, SUM(r_t_nominal_pajak) as pajak')
-            ->groupBy('r_t_tanggal', 'r_t_nominal_pajak')
+            ->selectRaw('r_t_tanggal, r_p_t_m_payment_method_id, SUM(r_t_nominal_total_bayar) as total, SUM(r_t_nominal_pajak) as pajak')
+            ->groupBy('r_t_tanggal', 'r_p_t_m_payment_method_id')
             ->orderBy('r_t_tanggal', 'ASC')
             ->get();
 
@@ -144,18 +145,16 @@ class RekapNotaHarianKategoriController extends Controller
             $data[$i]['waroeng'] = $valTrans->m_w_nama;
             $data[$i]['tanggal'] = date('d-m-Y', strtotime($valTrans->r_t_tanggal));
             foreach ($methodPay as $key => $valPay) {
-                $data[$i][$valPay->r_p_t_m_payment_method_id] = 0;
-                $data[$i][$valPay->r_t_nominal_pajak] = 0;
+                $data[$i][$valPay->m_payment_method_type] = 0;
                 foreach ($trans2 as $key2 => $valTrans2) {
-                    if ($valPay->r_p_t_m_payment_method_id == '1') {
-                        $data[$i][$valPay->r_p_t_m_payment_method_id] += $valTrans2->total;
+                if($valPay->m_payment_method_id == $valTrans2->r_p_t_m_payment_method_id){
+                    if ($valPay->m_payment_method_id == '1') {
+                        $data[$i][$valPay->m_payment_method_type] = rupiah($valTrans2->total, 0);
+                    } 
+                    if ($valPay->m_payment_method_id != '1') {
+                        $data[$i][$valPay->m_payment_method_type] = rupiah($valTrans2->total, 0);
                     }
-                    if ($valPay->r_p_t_m_payment_method_id != '1') {
-                        $data[$i][$valPay->r_p_t_m_payment_method_id] += $valTrans2->total;
-                    }
-                    if ($valPay->r_t_nominal_pajak == $valTrans2->r_t_nominal_pajak) {
-                        $data[$i][$valPay->r_t_nominal_pajak] += $valTrans2->pajak;
-                    }
+                }
                 }
             }
             $i++; 
