@@ -366,8 +366,8 @@ class LaporanKasHarianKasirController extends Controller
             ->first();
             $kasir = DB::table('users')->where('users_id',$opr)->first()->name;
             $shift = $sesi;
-            //  return view('dashboard::lap_kas_harian_kasir_pdf',compact('data','tgl','w_nama','kacab','asisten'));
-            $pdf = PDF::loadview('dashboard::lap_kas_harian_kasir_pdf',compact('data','tgl','w_nama','kacab','kasir','shift'));
+            //    return view('dashboard::lap_kas_harian_kasir_pdf',compact('data','tgl','w_nama','kacab','kasir','shift'));
+            $pdf = PDF::loadview('dashboard::lap_kas_harian_kasir_pdf',compact('data','tgl','w_nama','kacab','kasir','shift'))->setPaper('a4');
             return $pdf->stream('laporan_kas_kasir_'.strtolower($w_nama).'_sesi_'.$shift.'_.pdf');
         
     }
