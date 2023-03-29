@@ -34,7 +34,7 @@
                                             @foreach ($data->area as $area)
                                                 <option value="{{ $area->m_area_id }}"> {{ $area->m_area_nama }} </option>
                                             @endforeach
-                                            <option value="0">All Area</option>
+                                            <option value="all">All Area</option>
                                         </select>
                                     </div>
                                 </div>
@@ -52,6 +52,31 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="row mb-1">
+                                    <label class="col-sm-3 col-form-label" >Shift</label>
+                                    <div class="col-sm-9">
+                                        <select id="filter_sif" style="width: 100%;"
+                                            class="cari f-wrg js-select2 form-control" data-placeholder="Pilih Shift" name="sif[]">
+                                            <option></option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="row mb-1">
+                                    <label class="col-sm-3 col-form-label" >Transaksi</label>
+                                    <div class="col-sm-9">
+                                        <select id="filter_trans" style="width: 100%;"
+                                            class="cari f-wrg js-select2 form-control" data-placeholder="Pilih Tipe Transaksi" name="tipe_trans[]">
+                                            <option></option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> 
 
                         <div class="col-sm-8">
                             <button type="button" id="cari"
@@ -78,6 +103,8 @@ $(document).ready(function() {
     var area     = $('#filter_area').val();
     var waroeng  = $('#filter_waroeng').val();
     var tanggal  = $('#filter_tanggal').val();
+    var trans    = $('#filter_trans').val();
+    var sesi     = $('#filter_sif').val();
     
     $.ajax({
         url: '{{route("rekap_menu.tanggal_rekap")}}',
@@ -135,6 +162,8 @@ $(document).ready(function() {
                         area: area,
                         waroeng: waroeng,
                         tanggal: tanggal,
+                        trans: trans,
+                        sesi: sesi,
                     },
                     type : "GET",
                 },
@@ -171,11 +200,67 @@ $(document).ready(function() {
         }      
     });
 
+    $('#filter_waroeng').on('select2:select', function() {
+        var id_waroeng = $(this).val();    
+        var id_area     = $('#filter_area').val();
+        var id_tanggal  = $('#filter_tanggal').val();
+        if(id_waroeng){
+            $.ajax({
+            type:"GET",
+            url: '{{route("rekap_menu.select_sif")}}',
+            dataType: 'JSON',
+            data : {
+                id_waroeng: id_waroeng,
+                id_area: id_area,
+                id_tanggal: id_tanggal,
+            },
+            success:function(res){               
+                if(res){
+                    $("#filter_sif").empty();
+                    $("#filter_sif").append('<option></option>');
+                    $.each(res,function(key,value){
+                        $("#filter_sif").append('<option value="'+key+'">'+value+'</option>');
+                    });
+                }else{
+                $("#filter_sif").empty();
+                }
+            }
+            });
+        }else{
+            $("#filter_sif").val('').trigger('change');
+        }      
+    });
+
+    $('#filter_sif').on('select2:select', function() {
+        var id_sif = $(this).val();    
+        if(id_sif){
+            $.ajax({
+            type:"GET",
+            url: '{{route("rekap_menu.select_trans")}}',
+            dataType: 'JSON',
+            data : {
+                id_sif: id_sif,
+            },
+            success:function(res){               
+                if(res){
+                    $("#filter_trans").empty();
+                    $("#filter_trans").append('<option></option>');
+                    $.each(res,function(key,value){
+                        $("#filter_trans").append('<option value="'+key+'">'+value+'</option>');
+                    });
+                }else{
+                $("#filter_trans").empty();
+                }
+            }
+            });
+        }else{
+            $("#filter_trans").val('').trigger('change');
+        }      
+    });
+
     $('#filter_tanggal').flatpickr({
             mode: "range",
-            dateFormat: 'Y-m-d',
-            // noCalendar: false,
-            // allowInput: true,            
+            dateFormat: 'Y-m-d',           
     });
 
 });
