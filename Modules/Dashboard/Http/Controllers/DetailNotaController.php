@@ -70,6 +70,7 @@ class DetailNotaController extends Controller
      */
     public function show(Request $request)
     {
+        if (strpos($request->tanggal, 'to') !== false) {
         $dates = explode('to' ,$request->tanggal);
         $data = new \stdClass();
         if($request->status == 'paid'){
@@ -109,6 +110,46 @@ class DetailNotaController extends Controller
             ->join('m_jenis_produk', 'm_jenis_produk_id', 'm_produk_m_jenis_produk_id')
             ->get();
         }
+    } else {
+        $data = new \stdClass();
+        if($request->status == 'paid'){
+        $data->transaksi_rekap = DB::table('rekap_transaksi')
+            ->join('users', 'users_id', 'r_t_created_by')
+            ->join('m_transaksi_tipe', 'm_t_t_id', 'r_t_m_t_t_id')
+            ->join('rekap_payment_transaksi', 'r_p_t_r_t_id', 'r_t_id')
+            ->join('m_payment_method', 'm_payment_method_id', 'r_p_t_m_payment_method_id')
+            ->where('r_t_m_w_id', $request->waroeng);
+                if($request->operator != 'all'){
+                    $data->transaksi_rekap->where('r_t_created_by', $request->operator);
+                }
+            $data->transaksi_rekap2 = $data->transaksi_rekap->where('r_t_status', 'paid')
+                ->where('r_t_tanggal', $request->tanggal)
+                ->orderby('r_t_tanggal', 'ASC')
+                ->orderby('r_t_nota_code', 'ASC')
+                ->get();
+        $data->detail_nota = DB::table('rekap_transaksi_detail')
+            ->join('m_produk', 'm_produk_id', 'r_t_detail_m_produk_id')
+            ->join('m_jenis_produk', 'm_jenis_produk_id', 'm_produk_m_jenis_produk_id')
+            ->where('r_t_detail_status', 'paid')
+            ->orderby('m_jenis_produk_urut', 'ASC')
+            ->orderby('r_t_detail_m_produk_nama', 'ASC')
+            ->get();
+        } else {
+        $data->transaksi_rekap = DB::table('rekap_lost_bill')
+            ->join('users', 'users_id', 'r_l_b_created_by')
+            ->where('r_l_b_tanggal', $request->tanggal)
+            ->where('r_l_b_m_w_id', $request->waroeng);
+                if($request->operator != 'all'){
+                    $data->transaksi_rekap->where('r_l_b_created_by', $request->operator);
+                }
+            $data->transaksi_rekap2 = $data->transaksi_rekap->get();
+
+        $data->detail_nota = DB::table('rekap_lost_bill_detail')
+            ->join('m_produk', 'm_produk_id', 'r_l_b_detail_m_produk_id')
+            ->join('m_jenis_produk', 'm_jenis_produk_id', 'm_produk_m_jenis_produk_id')
+            ->get();
+        }
+    }
         return response()->json($data);
     }
 

@@ -36,6 +36,7 @@ class RekapMenuController extends Controller
 
     public function tanggal_rekap(Request $request)
     {
+        if (strpos($request->tanggal, 'to') !== false) {
         $dates = explode('to', $request->tanggal);
         $tanggal = DB::table('rekap_transaksi')
                 ->select('r_t_tanggal')
@@ -43,6 +44,14 @@ class RekapMenuController extends Controller
                 ->orderBy('r_t_tanggal', 'asc')
                 ->groupby('r_t_tanggal')
                 ->get();
+        } else {
+            $tanggal = DB::table('rekap_transaksi')
+                ->select('r_t_tanggal')
+                ->where('r_t_tanggal', $request->tanggal)
+                ->orderBy('r_t_tanggal', 'asc')
+                ->groupby('r_t_tanggal')
+                ->get();
+        }
         $data = [];
         foreach ($tanggal as $val) {
             $data[] = $val->r_t_tanggal;
@@ -67,8 +76,8 @@ class RekapMenuController extends Controller
 
     public function select_sif(Request $request)
     {
+    if (strpos($request->id_tanggal, 'to') !== false) {
         $dates = explode('to', $request->id_tanggal);
-
         $sesi = DB::table('rekap_modal')
             ->select('rekap_modal_sesi', 'rekap_modal_id')
             ->whereBetween('rekap_modal_tanggal', $dates)
@@ -76,6 +85,15 @@ class RekapMenuController extends Controller
             ->where('rekap_modal_m_w_id', $request->id_waroeng)
             ->orderBy('rekap_modal_id', 'asc')
             ->get();
+    } else {
+        $sesi = DB::table('rekap_modal')
+            ->select('rekap_modal_sesi', 'rekap_modal_id')
+            ->where(DB::raw('DATE(rekap_modal_tanggal)'), $request->id_tanggal)
+            ->where('rekap_modal_m_area_id', $request->id_area)
+            ->where('rekap_modal_m_w_id', $request->id_waroeng)
+            ->orderBy('rekap_modal_id', 'asc')
+            ->get();
+    }
         $data = array();
         foreach ($sesi as $val) {
             $data[$val->rekap_modal_id] = [$val->rekap_modal_sesi];
@@ -101,21 +119,20 @@ class RekapMenuController extends Controller
     }
 
     function show(Request $request) {
-        $dates = explode('to', $request->tanggal);
-        $tanggal = DB::table('rekap_transaksi')
+        if (strpos($request->tanggal, 'to') !== false) {
+            [$start, $end] = explode('to', $request->tanggal);
+            $tanggal = DB::table('rekap_transaksi')
                 ->select('r_t_tanggal')
-                ->whereBetween('r_t_tanggal', $dates)
+                ->whereBetween('r_t_tanggal', [$start, $end])
                 ->orderBy('r_t_tanggal', 'asc')
                 ->groupby('r_t_tanggal')
                 ->get();
-
             $get = DB::table('rekap_transaksi_detail')
                     ->join('rekap_transaksi', 'r_t_id', 'r_t_detail_r_t_id')
                     ->join('m_w', 'm_w_id', 'r_t_m_w_id')
                     ->join('m_produk', 'm_produk_id', 'r_t_detail_m_produk_id')
                     ->join('m_jenis_produk','m_jenis_produk_id', 'm_produk_m_jenis_produk_id')
-                    // ->join('rekap_modal', 'rekap_modal_id', 'r_t_rekap_modal_id')
-                    ->whereBetween('r_t_tanggal', $dates);
+                    ->whereBetween('r_t_tanggal', [$start, $end]);
                     if($request->area != 'all'){
                         $get->where('r_t_m_area_id', $request->area);
                         if ($request->waroeng != 'all') {
@@ -128,7 +145,32 @@ class RekapMenuController extends Controller
                             }
                         }
                     }
-            
+                } else {
+                $tanggal = DB::table('rekap_transaksi')
+                    ->select('r_t_tanggal')
+                    ->where('r_t_tanggal', $request->tanggal)
+                    ->orderBy('r_t_tanggal', 'asc')
+                    ->groupby('r_t_tanggal')
+                    ->get();
+                $get = DB::table('rekap_transaksi_detail')
+                    ->join('rekap_transaksi', 'r_t_id', 'r_t_detail_r_t_id')
+                    ->join('m_w', 'm_w_id', 'r_t_m_w_id')
+                    ->join('m_produk', 'm_produk_id', 'r_t_detail_m_produk_id')
+                    ->join('m_jenis_produk','m_jenis_produk_id', 'm_produk_m_jenis_produk_id')
+                    ->where('r_t_tanggal', $request->tanggal);
+                    if($request->area != 'all'){
+                        $get->where('r_t_m_area_id', $request->area);
+                        if ($request->waroeng != 'all') {
+                            $get->where('r_t_m_w_id', $request->waroeng);
+                            if ($request->sesi != 'all') {
+                                $get->where('r_t_rekap_modal_id', $request->sesi);
+                                if ($request->trans != 'all') {
+                                    $get->where('r_t_m_t_t_id', $request->trans);
+                                }
+                            }
+                        }
+                    }   
+                }
         $get2 = $get->selectRaw('sum(r_t_detail_qty) as qty, r_t_detail_reguler_price, r_t_tanggal, r_t_detail_m_produk_nama, m_w_nama, m_jenis_produk_id, m_jenis_produk_nama')
                     ->groupBy('r_t_tanggal', 'r_t_detail_m_produk_nama', 'm_w_nama', 'r_t_detail_reguler_price', 'm_jenis_produk_nama', 'm_jenis_produk_id')
                     ->orderby('m_jenis_produk_id', 'ASC')
