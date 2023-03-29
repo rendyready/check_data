@@ -202,6 +202,8 @@ $(document).ready(function() {
 
     $('#filter_waroeng').on('select2:select', function() {
         var id_waroeng = $(this).val();    
+        var id_area     = $('#filter_area').val();
+        var id_tanggal  = $('#filter_tanggal').val();
         if(id_waroeng){
             $.ajax({
             type:"GET",
@@ -209,6 +211,8 @@ $(document).ready(function() {
             dataType: 'JSON',
             data : {
                 id_waroeng: id_waroeng,
+                id_area: id_area,
+                id_tanggal: id_tanggal,
             },
             success:function(res){               
                 if(res){

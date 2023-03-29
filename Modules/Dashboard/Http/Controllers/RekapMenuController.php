@@ -67,8 +67,12 @@ class RekapMenuController extends Controller
 
     public function select_sif(Request $request)
     {
+        $dates = explode('to', $request->id_tanggal);
+
         $sesi = DB::table('rekap_modal')
             ->select('rekap_modal_sesi', 'rekap_modal_id')
+            ->whereBetween('rekap_modal_tanggal', $dates)
+            ->where('rekap_modal_m_area_id', $request->id_area)
             ->where('rekap_modal_m_w_id', $request->id_waroeng)
             ->orderBy('rekap_modal_id', 'asc')
             ->get();
