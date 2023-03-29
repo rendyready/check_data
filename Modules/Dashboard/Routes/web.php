@@ -50,6 +50,7 @@ Route::prefix('dashboard')->middleware('auth', 'web')
             Route::get('rekap_menu/tanggal_rekap', 'tanggal_rekap')->name('rekap_menu.tanggal_rekap');
             Route::post('rekap_menu/delete_tgl', 'delete_tgl')->name('rekap_menu.delete_tgl');
             Route::post('rekap_menu/simpan_tgl', 'simpan_tgl')->name('rekap_menu.simpan_tgl');
+            Route::get('rekap_menu/select_trans', 'select_trans')->name('rekap_menu.select_trans');
         });
         
         Route::controller(RefundController::class)->group(function () {

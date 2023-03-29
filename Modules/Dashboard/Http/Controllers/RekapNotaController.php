@@ -63,9 +63,8 @@ class RekapNotaController extends Controller
                 ->join('m_payment_method', 'm_payment_method_id', 'r_p_t_m_payment_method_id')
                 ->get();
         $detail = DB::table('rekap_transaksi_detail')
-                // ->join('rekap_transaksi', 'r_t_id', 'r_t_detail_r_t_id')
-                ->selectRaw('r_t_detail_m_produk_id, (r_t_detail_reguler_price * SUM(r_t_detail_qty)) as qty, r_t_detail_r_t_id')
-                ->groupby('r_t_detail_m_produk_id','r_t_detail_r_t_id', 'r_t_detail_reguler_price')
+                ->selectRaw('(SUM(r_t_detail_reguler_price * r_t_detail_qty)) as sum_detail, r_t_detail_r_t_id')
+                ->groupby('r_t_detail_r_t_id')
                 ->get();
         $get = DB::table('rekap_transaksi')
                 ->join('users', 'users_id', 'r_t_created_by')
@@ -96,7 +95,7 @@ class RekapNotaController extends Controller
                 $row[] = rupiah($value->r_t_nominal_total_bayar - $value->r_t_nominal_free_kembalian - $value->r_t_nominal_pembulatan, 0);
                 foreach ($detail as $key => $valDetail) {
                     if($value->r_t_id == $valDetail->r_t_detail_r_t_id){
-                        $row[] = rupiah($valDetail->qty, 0);
+                        $row[] = rupiah($valDetail->sum_detail, 0);
                     }
                 }
                 if($value->r_t_status == "unpaid"){

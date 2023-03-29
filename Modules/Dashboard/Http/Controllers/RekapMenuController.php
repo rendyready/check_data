@@ -65,6 +65,22 @@ class RekapMenuController extends Controller
         return response()->json($data);
     }
 
+    public function select_trans(Request $request)
+    {
+        $trans = DB::table('m_transaksi_tipe')
+            ->join('rekap_transaksi', 'r_t_m_t_t_id', 'm_t_t_id')
+            ->select('m_t_t_id', 'm_t_t_name')
+            ->where('r_t_m_w_id', $request->id_waroeng)
+            ->orderBy('m_t_t_id', 'asc')
+            ->get();
+        $data = array();
+        foreach ($trans as $val) {
+            $data[$val->m_t_t_id] = [$val->m_t_t_name];
+            $data['all'] = ['all transaksi'];
+        }
+        return response()->json($data);
+    }
+
     function show(Request $request) {
         $dates = explode('to', $request->tanggal);
         $tanggal = DB::table('rekap_transaksi')
@@ -90,6 +106,9 @@ class RekapMenuController extends Controller
                     ->where('r_t_m_area_id', $request->area);
                     if ($request->waroeng != 'all') {
                         $get->where('r_t_m_w_id', $request->waroeng);
+                        if ($request->trans != 'all') {
+                            $get->where('r_t_m_t_t_id', $request->trans);
+                        }
                     }
             }
         $get2 = $get->selectRaw('sum(r_t_detail_qty) as qty, r_t_detail_reguler_price, r_t_tanggal, r_t_detail_m_produk_nama, m_w_nama, m_jenis_produk_id, m_jenis_produk_nama')
