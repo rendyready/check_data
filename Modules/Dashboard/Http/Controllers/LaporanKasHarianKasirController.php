@@ -131,28 +131,28 @@ class LaporanKasHarianKasirController extends Controller
             $tnp_modal = $prevSaldoMut - $row->r_m_m_debit;
             $saldo = $prevSaldoMut == 0 ? $modal : $tnp_modal;
             $data[] = array(
-                'tanggal' => tgl_indo($row->r_t_tanggal),
-                'no_nota' =>$row->r_t_nota_code,
+                'tanggal' => tgl_indo($row->r_m_m_tanggal),
+                'no_nota' =>$row->r_m_m_id,
                 'transaksi' =>$row->r_m_m_keterangan,
                 'masuk' => rupiah($masuk, 0),
                 'keluar' => 0,
                 'saldo' => rupiah($saldo, 0),
             );
-            $totalKeluar += $row->r_m_m_debit;
+            $totalMasuk += $row->r_m_m_debit;
             $prevSaldoMut = $saldo;
         }
         if ($row->r_m_m_kredit != 0) {
-            $masuk = $row->r_m_m_kredit ;
+            $keluar = $row->r_m_m_kredit ;
             $saldo = $prevSaldoMut + $row->r_m_m_kredit;
             $data[] = array(
-                'tanggal' => tgl_indo($row->r_t_tanggal),
-                'no_nota' =>$row->r_t_nota_code,
+                'tanggal' => tgl_indo($row->r_m_m_tanggal),
+                'no_nota' =>$row->r_m_m_id,
                 'transaksi' =>$row->r_m_m_keterangan,
-                'masuk' => rupiah($masuk, 0),
-                'keluar' => 0,
+                'masuk' => 0,
+                'keluar' => rupiah($keluar, 0),
                 'saldo' => rupiah($saldo, 0),
             );
-            $totalMasuk += $row->r_m_m_kredit;
+            $totalKeluar += $row->r_m_m_kredit;
             $prevSaldoMut = $saldo;
         }
     }
@@ -281,8 +281,8 @@ class LaporanKasHarianKasirController extends Controller
             $tnp_modal = $prevSaldoRef - $row->r_r_nominal_refund;
             $saldo = $prevSaldoRef == 0 ? $modal : $tnp_modal;
             $data[] = array(
-                'tanggal' => tgl_indo($row->r_t_tanggal),
-                'no_nota' =>$row->r_t_nota_code,
+                'tanggal' => tgl_indo($row->r_r_tanggal),
+                'no_nota' =>$row->r_r_nota_code,
                 'transaksi' =>'Refund Nominal',
                 'masuk' => 0,
                 'keluar' => $keluar,
@@ -295,8 +295,8 @@ class LaporanKasHarianKasirController extends Controller
             $keluar = rupiah($row->r_r_nominal_refund_pajak, 0) ;
             $saldo = $prevSaldoRef - $row->r_r_nominal_refund_pajak;
             $data[] = array(
-                'tanggal' => tgl_indo($row->r_t_tanggal),
-                'no_nota' =>$row->r_t_nota_code,
+                'tanggal' => tgl_indo($row->r_r_tanggal),
+                'no_nota' =>$row->r_r_nota_code,
                 'transaksi' =>'Refund Pajak',
                 'masuk' => 0,
                 'keluar' => $keluar,
@@ -309,8 +309,8 @@ class LaporanKasHarianKasirController extends Controller
             $keluar = rupiah($row->r_r_nominal_refund_sc, 0) ;
             $saldo = $prevSaldoRef - $row->r_r_nominal_refund_sc;
             $data[] = array(
-                'tanggal' => tgl_indo($row->r_t_tanggal),
-                'no_nota' =>$row->r_t_nota_code,
+                'tanggal' => tgl_indo($row->r_r_tanggal),
+                'no_nota' =>$row->r_r_nota_code,
                 'transaksi' =>'Refund Service Charge',
                 'masuk' => 0,
                 'keluar' => $keluar,
@@ -323,8 +323,8 @@ class LaporanKasHarianKasirController extends Controller
             $keluar = rupiah($row->r_r_nominal_pembulatan_refund, 0) ;
             $saldo = $prevSaldoRef - $row->r_r_nominal_pembulatan_refund;
             $data[] = array(
-                'tanggal' => tgl_indo($row->r_t_tanggal),
-                'no_nota' =>$row->r_t_nota_code,
+                'tanggal' => tgl_indo($row->r_r_tanggal),
+                'no_nota' =>$row->r_r_nota_code,
                 'transaksi' =>'Refund Pembulatan',
                 'masuk' => 0,
                 'keluar' => $keluar,
@@ -337,8 +337,8 @@ class LaporanKasHarianKasirController extends Controller
             $keluar = rupiah($row->r_r_nominal_free_kembalian_refund, 0) ;
             $saldo = $prevSaldoRef - $row->r_r_nominal_free_kembalian_refund;
             $data[] = array(
-                'tanggal' => tgl_indo($row->r_t_tanggal),
-                'no_nota' =>$row->r_t_nota_code,
+                'tanggal' => tgl_indo($row->r_r_tanggal),
+                'no_nota' =>$row->r_r_nota_code,
                 'transaksi' =>'Refund Free Kembalian',
                 'masuk' => 0,
                 'keluar' => $keluar,
