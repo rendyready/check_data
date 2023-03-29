@@ -56,10 +56,10 @@
                         <div class="row">
                             <div class="col-md-5">
                                 <div class="row mb-1">
-                                    <label class="col-sm-3 col-form-label" >Shift</label>
+                                    <label class="col-sm-3 col-form-label" >Sesi</label>
                                     <div class="col-sm-9">
                                         <select id="filter_sif" style="width: 100%;"
-                                            class="cari f-wrg js-select2 form-control" data-placeholder="Pilih Shift" name="sif[]">
+                                            class="cari f-wrg js-select2 form-control" data-placeholder="Pilih Sesi" name="sif[]">
                                             <option></option>
                                         </select>
                                     </div>
@@ -99,12 +99,24 @@
 $(document).ready(function() {
     Codebase.helpersOnLoad(['jq-select2']);
 
-    $('#cari').on('click', function() {
+    $('#cari').on('click', function(e) {
     var area     = $('#filter_area').val();
-    var waroeng  = $('#filter_waroeng').val();
-    var tanggal  = $('#filter_tanggal').val();
-    var trans    = $('#filter_trans').val();
-    var sesi     = $('#filter_sif').val();
+    var waroeng  = $('#filter_waroeng').val().trim();
+    var tanggal  = $('#filter_tanggal').val().trim();
+    var trans    = $('#filter_trans').val().trim();
+    var sesi     = $('#filter_sif').val().trim();
+
+    // if (waroeng === '' || tanggal === '' || trans === '' || sesi === '' ) {
+    //     Codebase.helpers('jq-notify', {
+    //                                 align: 'right', // 'right', 'left', 'center'
+    //                                 from: 'top', // 'top', 'bottom'
+    //                                 type: 'danger', // 'info', 'success', 'warning', 'danger'
+    //                                 icon: 'fa fa-info me-5', // Icon class
+    //                                 message: 'Pastikan Semua Kolom Terisi',
+    //                             });
+    //       e.preventDefault();
+    //       return; // Stop code execution
+    //   }
     
     $.ajax({
         url: '{{route("rekap_menu.tanggal_rekap")}}',

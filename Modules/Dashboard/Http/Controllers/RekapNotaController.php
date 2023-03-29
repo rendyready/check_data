@@ -58,7 +58,7 @@ class RekapNotaController extends Controller
 
     public function show(Request $request)
     {
-        $dates = explode('to' ,$request->tanggal);
+        
         $payment = DB::table('rekap_payment_transaksi')
                 ->join('m_payment_method', 'm_payment_method_id', 'r_p_t_m_payment_method_id')
                 ->get();
@@ -66,6 +66,8 @@ class RekapNotaController extends Controller
                 ->selectRaw('(SUM(r_t_detail_reguler_price * r_t_detail_qty)) as sum_detail, r_t_detail_r_t_id')
                 ->groupby('r_t_detail_r_t_id')
                 ->get();
+        if (strpos($request->tanggal, 'to') !== false) {
+        [$start, $end] = explode('to' ,$request->tanggal);
         $get = DB::table('rekap_transaksi')
                 ->join('users', 'users_id', 'r_t_created_by')
                 ->join('m_transaksi_tipe', 'm_t_t_id', 'r_t_m_t_t_id')
@@ -73,10 +75,23 @@ class RekapNotaController extends Controller
                 if($request->operator != 'all'){
                     $get->where('r_t_created_by', $request->operator);
                 }
-                $get2 = $get->whereBetween('r_t_tanggal', $dates)
+                $get2 = $get->whereBetween('r_t_tanggal', [$start, $end])
                 ->orderBy('r_t_tanggal', 'ASC')
                 ->orderBy('r_t_nota_code', 'ASC')
                 ->get();
+        } else {
+            $get = DB::table('rekap_transaksi')
+                ->join('users', 'users_id', 'r_t_created_by')
+                ->join('m_transaksi_tipe', 'm_t_t_id', 'r_t_m_t_t_id')
+                ->where('r_t_m_w_id', $request->waroeng);
+                if($request->operator != 'all'){
+                    $get->where('r_t_created_by', $request->operator);
+                }
+                $get2 = $get->where('r_t_tanggal', $request->tanggal)
+                ->orderBy('r_t_tanggal', 'ASC')
+                ->orderBy('r_t_nota_code', 'ASC')
+                ->get();
+        }
 
             $data = array();
             foreach ($get2 as $key => $value) {

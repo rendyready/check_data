@@ -77,6 +77,7 @@ class LostBillController extends Controller
      */
     public function show(Request $request)
     {
+        if (strpos($request->tanggal, 'to') !== false) {
         $dates = explode('to' ,$request->tanggal);
         $get2 = DB::table('rekap_lost_bill')
                 ->join('users', 'users_id', 'r_l_b_created_by')
@@ -88,6 +89,18 @@ class LostBillController extends Controller
                 $get = $get2->orderBy('r_l_b_tanggal', 'ASC')
                 ->orderBy('r_l_b_nota_code', 'ASC')
                 ->get();
+        } else {
+        $get2 = DB::table('rekap_lost_bill')
+                ->join('users', 'users_id', 'r_l_b_created_by')
+                ->where('r_l_b_m_w_id', $request->waroeng)
+                ->where('r_l_b_tanggal', $request->tanggal);
+                    if($request->operator != 'all'){
+                        $get2->where('r_l_b_created_by', $request->operator);
+                    }
+                $get = $get2->orderBy('r_l_b_tanggal', 'ASC')
+                ->orderBy('r_l_b_nota_code', 'ASC')
+                ->get();
+        }
         $data = array();
         foreach ($get as $value) {
             $row = array();

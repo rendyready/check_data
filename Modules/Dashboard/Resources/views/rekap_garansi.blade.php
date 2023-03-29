@@ -16,7 +16,7 @@
                             <div class="col-md-5">
                                 <div class="row mb-1">
                                     <label class="col-sm-3 col-form-label" >Tanggal</label>
-                                    <div class="col-sm-9 datepicker">
+                                    <div class="col-sm-9">
                                         <input style="z-index: 6;" name="r_t_tanggal" class="cari form-control" type="text" placeholder="Pilih Tanggal.." id="filter_tanggal" readonly/>
                                     </div>
                                 </div>

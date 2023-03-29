@@ -72,6 +72,7 @@ class RefundController extends Controller
      */
     public function show(Request $request)
     {
+        if (strpos($request->tanggal, 'to') !== false) {
         $dates = explode('to' ,$request->tanggal);
         $get2 = DB::table('rekap_refund')
                 ->join('users', 'users_id', 'r_r_created_by')
@@ -84,6 +85,19 @@ class RefundController extends Controller
                 $get = $get2->orderBy('r_r_tanggal', 'ASC')
                 ->orderBy('r_r_nota_code', 'ASC')
                 ->get();
+        } else {
+        $get2 = DB::table('rekap_refund')
+            ->join('users', 'users_id', 'r_r_created_by')
+            ->join('rekap_transaksi', 'r_t_id', 'r_r_r_t_id')
+            ->where('r_r_m_w_id', $request->waroeng)
+            ->where('r_r_tanggal', $request->tanggal);
+                if($request->operator != 'all'){
+                    $get2->where('r_r_created_by', $request->operator);
+                }
+            $get = $get2->orderBy('r_r_tanggal', 'ASC')
+            ->orderBy('r_r_nota_code', 'ASC')
+            ->get();
+        }
         $data = array();
         foreach ($get as $value) {
             $row = array();
