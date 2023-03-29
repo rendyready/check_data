@@ -10,14 +10,19 @@
     <style type="text/css">
         table tr td,
         table tr th {
-            font-size: 9pt;
+            font-size: 8pt;
+            padding: 0 !important;
+            margin: 0 !important;
         }
-
         .table {
             width: 100%;
             text-align: center;
             border: none;
             border-color: transparent;
+        }
+        .table-border th,td{
+            border: 1px solid black;
+        color: black;
         }
 
         .table td {
@@ -25,14 +30,12 @@
         }
     </style>
     <center>
-        <h4>LAPORAN KAS HARIAN KASIR</h4>
-        <h5>{{ $w_nama }}</h5>
-        <h6>{{ $tgl }}</h6>
-        <h6>Kasir : {{strtoupper($kasir)}}</h6>
-        <h6>Sesi : {{$shift}}</h6>
+        <h6 style="font-size: 12pt">LAPORAN KAS HARIAN KASIR</h6>
+        <h6 style="font-size: 10pt">{{ $w_nama }}</h6>
+        <h6 style="font-size: 10pt">{{ $tgl }}</h6>
+        <h6 style="font-size: 10pt">Kasir : {{ strtoupper($kasir) }} (Sesi : {{ $shift }})</h6>
     </center>
-
-    <table id="detail_modal" class="table table-sm table-bordered table-striped table-vcenter nowrap table-hover">
+    <table id="detail_modal" class="table table-sm table-striped table-border table-vcenter nowrap table-hover">
         <thead>
             <tr>
                 <th class="text-center">Tanggal</th>
@@ -60,9 +63,9 @@
     <div class="table-responsive">
         <table class="table table-sm table-borderless">
             <tr>
-                <td>Menyetujui,</td>
-                <td>Mengetahui,</td>
-                <td>Melaporkan,</td>
+                <td style="width: 30%">Menyetujui,</td>
+                <td style="width: 40%">Mengetahui,</td>
+                <td style="width: 30%">Melaporkan,</td>
             </tr>
             <tr>
                 <td>Kepala Cabang</td>
@@ -70,31 +73,17 @@
                 <td>Kasir</td>
             </tr>
             <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td></td>
+                <td style="padding: 2.2rem!important"></td>
                 <td></td>
                 <td></td>
             </tr>
             <tr>
                 <td>(......................)</td>
                 <td>(......................)</td>
-                <td>({{$kasir}})</td>
+                <td>({{ $kasir }})</td>
             </tr>
         </table>
     </div>
 </body>
+
 </html>
