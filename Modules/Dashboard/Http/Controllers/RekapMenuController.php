@@ -79,26 +79,24 @@ class RekapMenuController extends Controller
     if (strpos($request->id_tanggal, 'to') !== false) {
         $dates = explode('to', $request->id_tanggal);
         $sesi = DB::table('rekap_modal')
-            ->select('rekap_modal_sesi', 'rekap_modal_m_w_id')
+            ->select('rekap_modal_sesi', 'rekap_modal_id')
             ->whereBetween('rekap_modal_tanggal', $dates)
             ->where('rekap_modal_m_area_id', $request->id_area)
             ->where('rekap_modal_m_w_id', $request->id_waroeng)
             ->orderBy('rekap_modal_sesi', 'asc')
-            // ->groupby('rekap_modal_sesi', 'rekap_modal_id', 'rekap_modal_m_w_id')
             ->get();
     } else {
         $sesi = DB::table('rekap_modal')
-            ->select('rekap_modal_sesi', 'rekap_modal_m_w_id')
+            ->select('rekap_modal_sesi', 'rekap_modal_id')
             ->where(DB::raw('DATE(rekap_modal_tanggal)'), $request->id_tanggal)
             ->where('rekap_modal_m_area_id', $request->id_area)
             ->where('rekap_modal_m_w_id', $request->id_waroeng)
             ->orderBy('rekap_modal_sesi', 'asc')
-            // ->groupby('rekap_modal_sesi', 'rekap_modal_id', 'rekap_modal_m_w_id')
             ->get();
     }
         $data = array();
         foreach ($sesi as $val) {
-            $data[$val->rekap_modal_m_w_id] = [$val->rekap_modal_sesi];
+            $data[$val->rekap_modal_id] = [$val->rekap_modal_sesi];
             $data['all'] = ['all sesi'];
         }
         return response()->json($data);
