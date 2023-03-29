@@ -71,7 +71,7 @@
                                 class="btn btn-primary btn-sm col-1 mt-2 mb-3">Cari</button>
                         </div>
                     </form>      
-                
+             <div class="table-responsive">
             <table id="tampil_rekap" class="table table-sm table-bordered table-striped table-vcenter nowrap table-hover js-dataTable-full">
               <thead>
                 <tr>
@@ -87,6 +87,7 @@
                   <th>Pembulatan</th>
                   <th>Free Kembalian</th>
                   <th>Total Bayar</th>
+                  <th>Total Reguler</th>
                   <th>Metode</th>
                   <th>Jenis Payment</th>
                   <th></th>
@@ -95,6 +96,7 @@
               <tbody id="show_data">
               </tbody>
             </table>
+          </div>   
           </div>
         </div>
       </div>

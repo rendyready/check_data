@@ -103,7 +103,7 @@ class RekapMenuController extends Controller
             $menu = $val_menu->r_t_detail_m_produk_nama;
             $date = $val_menu->r_t_tanggal;
             $qty = $val_menu->qty;
-            $nominal = rupiah($val_menu->r_t_detail_reguler_price * $qty, 0);
+            $nominal = number_format($val_menu->r_t_detail_reguler_price * $qty);
             $kategori = $val_menu->m_jenis_produk_nama;
             if (!isset($data[$waroeng])) {
                 $data[$waroeng] = [];
