@@ -335,24 +335,13 @@ $(document).ready(function() {
 
             $("#tampil_rekap").on('click','#button_pdf', function() {
                 var id = $(this).attr('value');
-                var waroeng  = $('#filter_waroeng').val();
-                var tanggal  = $('#filter_tanggal').val();
+                var waroeng = $('#filter_waroeng').val();
+                var tanggal = $('#filter_tanggal').val();
                 var operator = $('#filter_operator').val();
-                $.ajax({
-                  type:"get",
-                  url: '{{route("kas_kasir.export_pdf")}}',
-                  dataType: 'JSON',
-                  data : {
-                    id: id,
-                    waroeng:waroeng,
-                    tanggal:tanggal,
-                    operator:operator
-                  },
-                  success:function(){               
-                    
-                  }
-                 });
-            }); 
+                var url = 'kas_kasir/export_pdf?id='+id+'&waroeng='+waroeng+'&tanggal='+tanggal+'&operator='+operator;
+                window.open(url,'_blank');
+            });
+
 
 });
 </script>
