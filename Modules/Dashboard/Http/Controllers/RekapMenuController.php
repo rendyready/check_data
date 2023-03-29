@@ -132,6 +132,7 @@ class RekapMenuController extends Controller
                     ->join('m_w', 'm_w_id', 'r_t_m_w_id')
                     ->join('m_produk', 'm_produk_id', 'r_t_detail_m_produk_id')
                     ->join('m_jenis_produk','m_jenis_produk_id', 'm_produk_m_jenis_produk_id')
+                    ->join('m_transaksi_tipe', 'm_t_t_id', 'r_t_m_t_t_id')
                     ->whereBetween('r_t_tanggal', [$start, $end]);
                     if($request->area != 'all'){
                         $get->where('r_t_m_area_id', $request->area);
@@ -157,6 +158,7 @@ class RekapMenuController extends Controller
                     ->join('m_w', 'm_w_id', 'r_t_m_w_id')
                     ->join('m_produk', 'm_produk_id', 'r_t_detail_m_produk_id')
                     ->join('m_jenis_produk','m_jenis_produk_id', 'm_produk_m_jenis_produk_id')
+                    ->join('m_transaksi_tipe', 'm_t_t_id', 'r_t_m_t_t_id')
                     ->where('r_t_tanggal', $request->tanggal);
                     if($request->area != 'all'){
                         $get->where('r_t_m_area_id', $request->area);
@@ -171,8 +173,8 @@ class RekapMenuController extends Controller
                         }
                     }   
                 }
-        $get2 = $get->selectRaw('sum(r_t_detail_qty) as qty, r_t_detail_reguler_price, r_t_tanggal, r_t_detail_m_produk_nama, m_w_nama, m_jenis_produk_id, m_jenis_produk_nama')
-                    ->groupBy('r_t_tanggal', 'r_t_detail_m_produk_nama', 'm_w_nama', 'r_t_detail_reguler_price', 'm_jenis_produk_nama', 'm_jenis_produk_id')
+        $get2 = $get->selectRaw('sum(r_t_detail_qty) as qty, r_t_detail_reguler_price, r_t_tanggal, r_t_detail_m_produk_nama, m_w_nama, m_jenis_produk_id, m_jenis_produk_nama, m_t_t_name')
+                    ->groupBy('r_t_tanggal', 'r_t_detail_m_produk_nama', 'm_w_nama', 'r_t_detail_reguler_price', 'm_jenis_produk_nama', 'm_jenis_produk_id', 'm_t_t_name')
                     ->orderby('m_jenis_produk_id', 'ASC')
                     ->orderby('r_t_detail_m_produk_nama', 'ASC')
                     ->get();
@@ -184,31 +186,37 @@ class RekapMenuController extends Controller
             $qty = $val_menu->qty;
             $nominal = number_format($val_menu->r_t_detail_reguler_price * $qty);
             $kategori = $val_menu->m_jenis_produk_nama;
+            $transaksi = $val_menu->m_t_t_name;
             if (!isset($data[$waroeng])) {
                 $data[$waroeng] = [];
             }
-            if (!isset($data[$waroeng][$kategori])) {
-                $data[$waroeng][$kategori] = [];
+            if (!isset($data[$waroeng][$transaksi])) {
+                $data[$waroeng][$transaksi] = [];
             }
-            if (!isset($data[$waroeng][$kategori][$menu])) {
-                $data[$waroeng][$kategori][$menu] = [];
+            if (!isset($data[$waroeng][$transaksi][$kategori])) {
+                $data[$waroeng][$transaksi][$kategori] = [];
             }
-            if (!isset($data[$waroeng][$kategori][$menu][$date])) {
-                $data[$waroeng][$kategori][$menu][$date] = [
+            if (!isset($data[$waroeng][$transaksi][$kategori][$menu])) {
+                $data[$waroeng][$transaksi][$kategori][$menu] = [];
+            }
+            if (!isset($data[$waroeng][$transaksi][$kategori][$menu][$date])) {
+                $data[$waroeng][$transaksi][$kategori][$menu][$date] = [
                     'qty' => 0,
                     'nominal' => 0,
                 ];
             }
-            $data[$waroeng][$kategori][$menu][$date]['qty'] += $qty;
-            $data[$waroeng][$kategori][$menu][$date]['nominal'] = $nominal;
+            $data[$waroeng][$transaksi][$kategori][$menu][$date]['qty'] += $qty;
+            $data[$waroeng][$transaksi][$kategori][$menu][$date]['nominal'] = $nominal;
         }
         $output = ['data' => []];
 
         foreach ($data as $waroeng => $kategoris) {
-            foreach ($kategoris as $kategori => $menus) {
-                foreach ($menus as $menu => $dates) {
+            foreach ($kategoris as $transaksi => $transaksis) {
+                foreach ($transaksis as $kategori => $menus) {
+                    foreach ($menus as $menu => $dates) {
                     $row = [
                         $waroeng,
+                        $transaksi,
                         $kategori,
                         $menu,
                     ];
@@ -223,6 +231,7 @@ class RekapMenuController extends Controller
                         }
                     }
                     $output['data'][] = $row;
+                    }
                 }
             }
         }

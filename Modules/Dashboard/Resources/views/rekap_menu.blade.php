@@ -130,6 +130,7 @@ $(document).ready(function() {
             $('#head_data').empty();
             var html = '<tr>';
             html += '<th class="text-center">Waroeng</th>';
+            html += '<th class="text-center">Transaksi</th>';
             html += '<th class="text-center">Kategori Menu</th>';
             html += '<th class="text-center">Nama Menu</th>';
             for (var i = 0; i < data.length; i++) {
@@ -156,7 +157,7 @@ $(document).ready(function() {
                         pageSize: 'A4',
                         pageOrientation: 'potrait',
                         exportOptions: {
-                            columns: [2, 3, 4 ]
+                            columns: [1,2, 3, 4, 5 ]
                         },
                     }
                 ],
