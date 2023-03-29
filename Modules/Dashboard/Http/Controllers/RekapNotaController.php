@@ -110,7 +110,7 @@ class RekapNotaController extends Controller
                 $row[] = number_format($value->r_t_nominal_total_bayar - $value->r_t_nominal_free_kembalian - $value->r_t_nominal_pembulatan);
                 foreach ($detail as $key => $valDetail) {
                     if($value->r_t_id == $valDetail->r_t_detail_r_t_id){
-                        $row[] = rupiah($valDetail->sum_detail, 0);
+                        $row[] = number_format($valDetail->sum_detail);
                     }
                 }
                 if($value->r_t_status == "unpaid"){
