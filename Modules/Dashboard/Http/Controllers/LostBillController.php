@@ -110,10 +110,10 @@ class LostBillController extends Controller
             $row[] = $value->r_l_b_bigboss;
             $row[] = $value->name;
             $row[] = $value->r_l_b_nota_code;
-            $row[] = rupiah($value->r_l_b_nominal, 0);
-            $row[] = rupiah($value->r_l_b_nominal_pajak, 0);
-            $row[] = rupiah($value->r_l_b_nominal_sc, 0);
-            $row[] = rupiah($value->r_l_b_nominal + $value->r_l_b_nominal_pajak + $value->r_l_b_nominal_sc, 0);
+            $row[] = number_format($value->r_l_b_nominal);
+            $row[] = number_format($value->r_l_b_nominal_pajak);
+            $row[] = number_format($value->r_l_b_nominal_sc);
+            $row[] = number_format($value->r_l_b_nominal + $value->r_l_b_nominal_pajak + $value->r_l_b_nominal_sc);
             $row[] ='<a id="button_detail" class="btn btn-sm button_detail btn-info" value="'.$value->r_l_b_id.'" title="Detail Lost Bill"><i class="fa-sharp fa-solid fa-file"></i></a>';
             $data[] = $row;
         }
