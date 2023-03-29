@@ -51,6 +51,7 @@ Route::prefix('dashboard')->middleware('auth', 'web')
             Route::post('rekap_menu/delete_tgl', 'delete_tgl')->name('rekap_menu.delete_tgl');
             Route::post('rekap_menu/simpan_tgl', 'simpan_tgl')->name('rekap_menu.simpan_tgl');
             Route::get('rekap_menu/select_trans', 'select_trans')->name('rekap_menu.select_trans');
+            Route::get('rekap_menu/select_sif', 'select_sif')->name('rekap_menu.select_sif');
         });
         
         Route::controller(RefundController::class)->group(function () {
