@@ -46,68 +46,37 @@ class RekapNotaHarianKategoriController extends Controller
 
     public function tanggal_rekap(Request $request)
     {
-        if($request->show_operator == 'ya'){
-            $salesByMethodPay = DB::table('m_transaksi_tipe')
-                    ->selectraw('MAX(m_t_t_name) name,
-                        m_t_t_id, m_payment_method_type,
-                        r_t_m_w_nama,r_t_m_area_nama,r_t_tanggal,
-                        COALESCE(SUM(r_t_nominal_pajak),0) as pajak,
-                        COALESCE(SUM(r_t_nominal_total_bayar),0) as tagihan,
-                        COALESCE(SUM(r_t_nominal_kembalian),0) as kembalian,
-                        COALESCE(SUM(r_p_t_nominal),0) as pay
-                    ')
-                    ->join('rekap_transaksi','r_t_m_t_t_id','=','m_t_t_id')
-                    ->join('rekap_payment_transaksi','r_p_t_r_t_id','=','r_t_id')
-                    ->join('m_payment_method','m_payment_method_id','=','r_p_t_m_payment_method_id')
-                    ->where('r_t_status','paid')
-                    ->where('r_t_created_by', $request->operator)
-                    ->where('r_t_m_w_id', $request->waroeng)
-                    ->where('r_t_tanggal', $request->tanggal)
-                    ->groupby('m_t_t_id','m_payment_method_type','r_t_m_w_nama','r_t_m_area_nama','r_t_tanggal')
-                    ->orderby('m_t_t_id','asc')
-                    ->get();
-            } else {
-                $salesByMethodPay = DB::table('m_transaksi_tipe')
-                    ->select('r_t_tanggal', 'm_t_t_id')
-                    ->join('rekap_transaksi','r_t_m_t_t_id','=','m_t_t_id')
-                    ->join('rekap_payment_transaksi','r_p_t_r_t_id','=','r_t_id')
-                    ->join('m_payment_method','m_payment_method_id','=','r_p_t_m_payment_method_id')
-                    ->where('r_t_status','paid')
-                    ->where('r_t_m_w_id', $request->waroeng)
-                    ->where('r_t_tanggal', $request->tanggal)
-                    ->groupby('r_t_tanggal', 'm_t_t_id')
-                    ->orderby('m_t_t_id','asc')
-                    ->get();
-            }
-    
-
-
-        // if (strpos($request->tanggal, 'to') !== false) {
-        // $dates = explode('to', $request->tanggal);
-        // $tanggal = DB::table('rekap_transaksi')
-        //         ->select('r_t_tanggal')
-        //         ->whereBetween('r_t_tanggal', $dates)
-        //         ->orderBy('r_t_tanggal', 'asc')
-        //         ->groupby('r_t_tanggal')
-        //         ->get();
-        // } else {
-        //     $tanggal = DB::table('rekap_transaksi')
-        //         ->select('r_t_tanggal')
-        //         ->where('r_t_tanggal', $request->tanggal)
-        //         ->orderBy('r_t_tanggal', 'asc')
-        //         ->groupby('r_t_tanggal')
-        //         ->get();
-        // }
+         if (strpos($request->tanggal, 'to') !== false) {
+        $dates = explode('to', $request->tanggal);
+            $tanggal = DB::table('m_transaksi_tipe')
+                ->join('rekap_transaksi','r_t_m_t_t_id','=','m_t_t_id')
+                ->select('r_t_tanggal', 'm_t_t_id', 'm_t_t_name')
+                ->where('r_t_status','paid')
+                ->where('r_t_m_w_id', $request->waroeng)
+                ->whereBetween('r_t_tanggal', $dates)
+                ->groupby('r_t_tanggal', 'm_t_t_id', 'm_t_t_name')
+                ->orderby('m_t_t_id','asc')
+                ->get();
+        } else {
+            $tanggal = DB::table('m_transaksi_tipe')
+                        ->select('r_t_tanggal', 'm_t_t_id', 'm_t_t_name')
+                        ->join('rekap_transaksi','r_t_m_t_t_id','=','m_t_t_id')
+                        ->where('r_t_status','paid')
+                        ->where('r_t_m_w_id', $request->waroeng)
+                        ->where('r_t_tanggal', $request->tanggal)
+                        ->groupby('r_t_tanggal', 'm_t_t_id', 'm_t_t_name')
+                        ->orderby('m_t_t_id','asc')
+                        ->get();
+        }
         $data = [];
-        foreach ($salesByMethodPay as $val) {
-            $data[] = $val->r_t_tanggal;
+        foreach ($tanggal as $val) {
+            $data[] = $val->m_t_t_name;
         }
         return response()->json($data);
     }
 
     public function select_user(Request $request)
     {
-
         $user = DB::table('users')
             ->select('users_id', 'name')
             ->where('waroeng_id', $request->id_waroeng)
@@ -122,10 +91,7 @@ class RekapNotaHarianKategoriController extends Controller
 
     public function show(Request $request)
     {
-    if (strpos($request->tanggal, 'to') !== false) {
-            if($request->show_operator == 'ya'){
-            $dates = explode('to' ,$request->tanggal);
-            $salesByMethodPay = DB::table('m_transaksi_tipe')
+        $salesByMethodPay = DB::table('m_transaksi_tipe')
                     ->selectraw('MAX(m_t_t_name) name,
                         m_t_t_id, m_payment_method_type,
                         r_t_m_w_nama,r_t_m_area_nama,r_t_tanggal,
@@ -138,107 +104,58 @@ class RekapNotaHarianKategoriController extends Controller
                     ->join('rekap_payment_transaksi','r_p_t_r_t_id','=','r_t_id')
                     ->join('m_payment_method','m_payment_method_id','=','r_p_t_m_payment_method_id')
                     ->where('r_t_status','paid')
-                    ->where('r_t_created_by', $request->operator)
-                    ->where('r_t_m_w_id', $request->waroeng)
-                    ->whereBetween('r_t_tanggal', $dates)
                     ->groupby('m_t_t_id','m_payment_method_type','r_t_m_w_nama','r_t_m_area_nama','r_t_tanggal')
                     ->orderby('m_t_t_id','asc')
-                    ->get();
-            } else {
-                $dates = explode('to' ,$request->tanggal);
-                $salesByMethodPay = DB::table('m_transaksi_tipe')
-                    ->selectraw('MAX(m_t_t_name) name,
-                        m_t_t_id, m_payment_method_type,
-                        r_t_m_w_nama,r_t_m_area_nama,r_t_tanggal,
-                        COALESCE(SUM(r_t_nominal_pajak),0) as pajak,
-                        COALESCE(SUM(r_t_nominal_total_bayar),0) as tagihan,
-                        COALESCE(SUM(r_t_nominal_kembalian),0) as kembalian,
-                        COALESCE(SUM(r_p_t_nominal),0) as pay
-                    ')
-                    ->join('rekap_transaksi','r_t_m_t_t_id','=','m_t_t_id')
-                    ->join('rekap_payment_transaksi','r_p_t_r_t_id','=','r_t_id')
-                    ->join('m_payment_method','m_payment_method_id','=','r_p_t_m_payment_method_id')
-                    ->where('r_t_status','paid')
-                    ->where('r_t_m_w_id', $request->waroeng)
-                    ->whereBetween('r_t_tanggal', $dates)
-                    ->groupby('m_t_t_id','m_payment_method_type','r_t_m_w_nama','r_t_m_area_nama','r_t_tanggal')
-                    ->orderby('m_t_t_id','asc')
-                    ->get();
-            }
-        } else {
-            if($request->show_operator == 'ya'){
-                $salesByMethodPay = DB::table('m_transaksi_tipe')
-                        ->selectraw('MAX(m_t_t_name) name,
-                            m_t_t_id, m_payment_method_type,
-                            r_t_m_w_nama,r_t_m_area_nama,r_t_tanggal,
-                            COALESCE(SUM(r_t_nominal_pajak),0) as pajak,
-                            COALESCE(SUM(r_t_nominal_total_bayar),0) as tagihan,
-                            COALESCE(SUM(r_t_nominal_kembalian),0) as kembalian,
-                            COALESCE(SUM(r_p_t_nominal),0) as pay
-                        ')
-                        ->join('rekap_transaksi','r_t_m_t_t_id','=','m_t_t_id')
-                        ->join('rekap_payment_transaksi','r_p_t_r_t_id','=','r_t_id')
-                        ->join('m_payment_method','m_payment_method_id','=','r_p_t_m_payment_method_id')
-                        ->where('r_t_status','paid')
-                        ->where('r_t_created_by', $request->operator)
-                        ->where('r_t_m_w_id', $request->waroeng)
-                        ->where('r_t_tanggal', $request->tanggal)
-                        ->groupby('m_t_t_id','m_payment_method_type','r_t_m_w_nama','r_t_m_area_nama','r_t_tanggal')
-                        ->orderby('m_t_t_id','asc')
-                        ->get();
-                } else {
-                    $salesByMethodPay = DB::table('m_transaksi_tipe')
-                        ->selectraw('MAX(m_t_t_name) name,
-                            m_t_t_id, m_payment_method_type,
-                            r_t_m_w_nama,r_t_m_area_nama,r_t_tanggal,
-                            COALESCE(SUM(r_t_nominal_pajak),0) as pajak,
-                            COALESCE(SUM(r_t_nominal_total_bayar),0) as tagihan,
-                            COALESCE(SUM(r_t_nominal_kembalian),0) as kembalian,
-                            COALESCE(SUM(r_p_t_nominal),0) as pay
-                        ')
-                        ->join('rekap_transaksi','r_t_m_t_t_id','=','m_t_t_id')
-                        ->join('rekap_payment_transaksi','r_p_t_r_t_id','=','r_t_id')
-                        ->join('m_payment_method','m_payment_method_id','=','r_p_t_m_payment_method_id')
-                        ->where('r_t_status','paid')
-                        ->where('r_t_m_w_id', $request->waroeng)
-                        ->where('r_t_tanggal', $request->tanggal)
-                        ->groupby('m_t_t_id','m_payment_method_type','r_t_m_w_nama','r_t_m_area_nama','r_t_tanggal')
-                        ->orderby('m_t_t_id','asc')
-                        ->get();
-                }
+                    ->where('r_t_m_w_id', $request->waroeng);
+
+        if (strpos($request->tanggal, 'to') !== false) {   
+            $dates = explode('to' ,$request->tanggal);  
+            $salesByMethodPay->whereBetween('r_t_tanggal', $dates);
+        }else{
+            $salesByMethodPay->where('r_t_tanggal', $request->tanggal);
         }
+
+        if($request->show_operator == 'ya'){
+            $salesByMethodPay->where('r_t_created_by', $request->operator);
+        }
+        $salesByMethodPay2 = $salesByMethodPay->get();
+          
         $tipeTransaksi = DB::table('m_transaksi_tipe')->orderBy('m_t_t_id','asc')->get();
         $groupPay = ['cash','transfer'];
 
-        $mySale = [];
+        $data = [];
         foreach ($tipeTransaksi as $key => $valTrans) {
             foreach ($groupPay as $key => $valGroup) {
-                foreach ($salesByMethodPay as $key => $valMpay) {
-                    $mySale[$valMpay->r_t_tanggal]['area'] = $valMpay->r_t_m_area_nama;
-                    $mySale[$valMpay->r_t_tanggal]['waroeng'] = $valMpay->r_t_m_w_nama;
-                    $mySale[$valMpay->r_t_tanggal]['tanggal'] = $valMpay->r_t_tanggal;
+                foreach ($salesByMethodPay2 as $key => $valMpay) {
+                    $data[$valMpay->r_t_tanggal]['area'] = $valMpay->r_t_m_area_nama;
+                    $data[$valMpay->r_t_tanggal]['waroeng'] = $valMpay->r_t_m_w_nama;
+                    $data[$valMpay->r_t_tanggal]['tanggal'] = $valMpay->r_t_tanggal;
 
                     if ($valTrans->m_t_t_id == $valMpay->m_t_t_id) {
-                        $mySale[$valMpay->r_t_tanggal][$valTrans->m_t_t_name.'-'.$valGroup] = 0;
-                        $mySale[$valMpay->r_t_tanggal][$valTrans->m_t_t_name.'-'.$valGroup.'-pajak'] = 0;
+                        $data[$valMpay->r_t_tanggal][$valTrans->m_t_t_name.'-'.$valGroup] = 0;
+                        $data[$valMpay->r_t_tanggal][$valTrans->m_t_t_name.'-'.$valGroup.'-pajak'] = 0;
 
                         $pay = $valMpay->pay;
                         if ($valMpay->m_payment_method_type == 'cash') {
                             $pay = $valMpay->pay - $valMpay->kembalian;
                         }
-                        $mySale[$valMpay->r_t_tanggal][$valTrans->m_t_t_name.'-'.$valMpay->m_payment_method_type] = $pay;
-                        $mySale[$valMpay->r_t_tanggal][$valTrans->m_t_t_name.'-'.$valMpay->m_payment_method_type.'-pajak'] = $valMpay->pajak;
+                        $data[$valMpay->r_t_tanggal][$valTrans->m_t_t_name.'-'.$valMpay->m_payment_method_type] = number_format($pay);
+                        $data[$valMpay->r_t_tanggal][$valTrans->m_t_t_name.'-'.$valMpay->m_payment_method_type.'-pajak'] = number_format($valMpay->pajak);
                     }
                 }
             }
         }
-        $length = count($mySale);
-        $convert = array();
-        for ($i=1; $i <= $length ; $i++) { 
-             array_push($convert,array_values($mySale[$valMpay->r_t_tanggal]));
+        foreach ($groupPay as $key => $valGroup) {
+            foreach ($salesByMethodPay2 as $key => $valMpay) {
+                $length = count($data);
+                $convert = array();
+                for ($i=1; $i <= $length ; $i++) { 
+                    array_push($convert,array_values($data[$valMpay->r_t_tanggal]));
+                }
+            }
         }
 
-        $output = array("mySale" => $convert);
+        $output = array("data" => $convert);
         return response()->json($output);
     }
 

@@ -53,7 +53,7 @@
                             </div>
                         </div>
 
-                        <div class="row">
+                        {{-- <div class="row">
                             <div class="col-8 mb-2">
                                 <label class="col-form-label text-dark" style="font-size: 15px"> Tampilkan Performa Operator? </label>
                                         <select id="operator_select" style="width : 15%" class="cari f-wrg js-select2 form-control" name="r_t_m_w_id">
@@ -71,7 +71,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
 
                         <div class="col-sm-8">
                             <button type="button" id="cari"
@@ -83,49 +83,15 @@
         <div id="tampil1">
             <table id="tampil_rekap" class="table table-sm table-bordered table-hover table-striped table-vcenter js-dataTable-full nowrap">
                 <thead id="head_data">
-                    <th class="text-center">Area</th>
-                    <th class="text-center">Waroeng</th>
-                    <th class="text-center">Tanggal</th>
-                    <th class="text-center">Tunai</th>
-                    <th class="text-center">Tunai Transfer</th>
-                    <th class="text-center">Transfer</th>
-                    <th class="text-center">Pajak Transfer</th>
-                    <th class="text-center">Tunai</th>
-                    <th class="text-center">Tunai Transfer</th>
-                    <th class="text-center">Transfer</th>
-                    <th class="text-center">Pajak Transfer</th>
-                    <th class="text-center">Tunai</th>
-                    <th class="text-center">Tunai Transfer</th>
-                    <th class="text-center">Transfer</th>
-                    <th class="text-center">Pajak Transfer</th>
-                    <th class="text-center">Tunai</th>
-                    <th class="text-center">Tunai Transfer</th>
-                    <th class="text-center">Transfer</th>
-                    <th class="text-center">Pajak Transfer</th>
-                    <th class="text-center">Tunai</th>
-                    <th class="text-center">Tunai Transfer</th>
-                    <th class="text-center">Transfer</th>
-                    <th class="text-center">Pajak Transfer</th>
                 </thead>
             </table>
         </div>
 
             <div id="tampil2">
-            <table id="tampil_rekap2" class="table table-sm table-bordered table-hover table-striped table-vcenter js-dataTable-full nowrap">
-                <thead>
-                  <tr>
-                      <th class="text-center">Area</th>
-                      <th class="text-center">Waroeng</th>
-                      <th class="text-center">Tanggal</th>
-                      <th class="text-center">Operator</th>
-                      @foreach ($data->payment as $payment)
-                      <th class="text-center">{{ $payment->m_t_t_name }}</th>
-                      @endforeach
-                  </tr>
+              <table id="tampil_rekap2" class="table table-sm table-bordered table-hover table-striped table-vcenter js-dataTable-full nowrap">
+                <thead id="head_data">
                 </thead>
-                <tbody id="show_data">
-                </tbody>
-              </table>
+            </table>
             </div>
 
           </div>
@@ -165,39 +131,43 @@ $(document).ready(function() {
         var tanggal  = $('#filter_tanggal').val(); 
         var operator  = $('#filter_operator').val();  
         var show_operator = $("#operator_select").val(); 
-        // $.ajax({
-        // url: '{{route("rekap_kategori.tanggal_rekap")}}',
-        // type: 'GET',
-        // dataType: 'Json',
-        // data : {
-        //     tanggal: tanggal,
-        //     operator: operator,
-        //     waroeng: waroeng,
-        // },
-        // success: function(data) {
-        //     console.log(data);
-        //     $('#head_data').empty();
-        //     var html = '<tr>';
-        //     html += '<th class="text-center">Area</th>';
-        //     html += '<th class="text-center">Waroeng</th>';
-        //     html += '<th class="text-center">Tanggal</th>';
-        //     // Dapatkan jumlah jenis transaksi
-        //     var jenis_transaksi = ['tunai', 'pajak_tunai', 'transfer', 'pajak_transfer'];
-        //     var jumlah_transaksi = jenis_transaksi.length;
-            
-        //     // Tambahkan kolom untuk setiap jenis transaksi
-        //     for (var i = 0; i < data.length; i++) {
-        //         for (var j = 0; j < jumlah_transaksi; j++) {
-        //             html += '<th class="text-center">' + jenis_transaksi[j] + '</th>';
-        //         }
-        //     }
-            
-        //     html += '</tr>';
-        //     $('#head_data').append(html);
-        
-    if(show_operator == 'ya'){
+        if(show_operator == 'ya'){
         $("#tampil1").hide();
         $("#tampil2").show();
+        $.ajax({
+        url: '{{route("rekap_kategori.tanggal_rekap")}}',
+        type: 'GET',
+        dataType: 'Json',
+        data : {
+            tanggal: tanggal,
+            operator: operator,
+            waroeng: waroeng,
+        },
+        success: function(data) {
+            console.log(data);
+            $('#head_data').empty();
+            var html = '<tr>';
+            html += '<th class="text-center" rowspan="2">Area</th>';
+            html += '<th class="text-center" rowspan="2">Waroeng</th>';
+            html += '<th class="text-center" rowspan="2">Tanggal</th>';
+            html += '<th class="text-center" rowspan="2">Operator</th>';
+            for (var i = 0; i < data.length; i++) {
+                    html += '<th class="text-center" colspan="4">' + data[i] + '</th>';
+            }
+            html += '</tr>';
+            html += '<tr>';
+            var jenis_transaksi = ['tunai', 'pajak tunai', 'transfer', 'pajak transfer'];
+            var jumlah_transaksi = jenis_transaksi.length;
+            
+            for (var i = 0; i < data.length; i++) {
+                for (var j = 0; j < jumlah_transaksi; j++) {
+                    html += '<th class="text-center">' + jenis_transaksi[j] + '</th>';
+                }
+            }
+            
+            html += '</tr>';
+            $('#head_data').append(html);
+        
         $('#tampil_rekap2').DataTable({
             destroy: true,
             orderCellsTop: true,
@@ -206,6 +176,12 @@ $(document).ready(function() {
             // scrollY: "300px",
             scrollX: true,
             scrollCollapse: true,
+            columnDefs: [ 
+                    {
+                        targets: '_all',
+                        className: 'dt-body-right'
+                    },
+                ],
             lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
             pageLength: 10,
             ajax: {
@@ -223,10 +199,44 @@ $(document).ready(function() {
                     console.log(data);
                 }
         });
-
+    }
+    });
+        
     } else {
         $("#tampil2").hide();
         $("#tampil1").show();
+        $.ajax({
+        url: '{{route("rekap_kategori.tanggal_rekap")}}',
+        type: 'GET',
+        dataType: 'Json',
+        data : {
+            tanggal: tanggal,
+            operator: operator,
+            waroeng: waroeng,
+        },
+        success: function(data) {
+            console.log(data);
+            $('#head_data').empty();
+            var html = '<tr>';
+            html += '<th class="text-center" rowspan="2">Area</th>';
+            html += '<th class="text-center" rowspan="2">Waroeng</th>';
+            html += '<th class="text-center" rowspan="2">Tanggal</th>';
+            for (var i = 0; i < data.length; i++) {
+                    html += '<th class="text-center" colspan="4">' + data[i] + '</th>';
+            }
+            html += '</tr>';
+            html += '<tr>';
+            var jenis_transaksi = ['tunai', 'pajak tunai', 'transfer', 'pajak transfer'];
+            var jumlah_transaksi = jenis_transaksi.length;
+            
+            for (var i = 0; i < data.length; i++) {
+                for (var j = 0; j < jumlah_transaksi; j++) {
+                    html += '<th class="text-center">' + jenis_transaksi[j] + '</th>';
+                }
+            }
+            html += '</tr>';
+            $('#head_data').append(html);
+
         $('#tampil_rekap').DataTable({
             button: [],
             destroy: true,
@@ -236,6 +246,12 @@ $(document).ready(function() {
             // scrollY: "300px",
             scrollX: true,
             scrollCollapse: true,
+            columnDefs: [ 
+                    {
+                        targets: '_all',
+                        className: 'dt-body-right'
+                    },
+                ],
             lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
             pageLength: 10,
             ajax: {
@@ -252,16 +268,17 @@ $(document).ready(function() {
                     console.log(data);
                 }
         });    
-        }
-    // }
-    // });
+        
+    }
+    });
+    }
     });
 
     //filter waroeng
     $('#filter_area').change(function(){
         var id_area = $(this).val();  
-        var show_operator = $("#operator_select").val();      
-    if(show_operator == 'tidak'){  
+    //     var show_operator = $("#operator_select").val();      
+    // if(show_operator == 'tidak'){  
         if(id_area){
             $.ajax({
             type:"GET",
@@ -285,17 +302,17 @@ $(document).ready(function() {
         }else{
             $("#filter_waroeng").empty();
         }  
-    } else {
-        $("#operator_select").val("tidak").trigger('change');
-        $("#operator").hide();
-    }    
+    // } else {
+    //     $("#operator_select").val("tidak").trigger('change');
+    //     $("#operator").hide();
+    // }    
     });
 
     //filter pengadaan
     $('#filter_waroeng').change(function(){
         var id_waroeng = $(this).val();   
-        var show_operator = $("#operator_select").val();      
-    if(show_operator == 'tidak'){   
+        // var show_operator = $("#operator_select").val();      
+    // if(show_operator == 'tidak'){   
         if(id_waroeng){
             $.ajax({
             type:"GET",
@@ -319,10 +336,11 @@ $(document).ready(function() {
         }else{
             $("#filter_operator").empty();
         }    
-    } else {
-        $("#operator_select").val("tidak").trigger('change');
-        $("#operator").hide();
-    }     
+    // } 
+    // else {
+    //     $("#operator_select").val("tidak").trigger('change');
+    //     $("#operator").hide();
+    // }     
     });
 
     $('#filter_tanggal').flatpickr({
