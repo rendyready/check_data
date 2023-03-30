@@ -79,24 +79,26 @@ class RekapMenuController extends Controller
     if (strpos($request->id_tanggal, 'to') !== false) {
         $dates = explode('to', $request->id_tanggal);
         $sesi = DB::table('rekap_modal')
-            ->select('rekap_modal_sesi', 'rekap_modal_id')
+            ->select('rekap_modal_sesi')
             ->whereBetween('rekap_modal_tanggal', $dates)
             ->where('rekap_modal_m_area_id', $request->id_area)
             ->where('rekap_modal_m_w_id', $request->id_waroeng)
             ->orderBy('rekap_modal_sesi', 'asc')
+            ->groupby('rekap_modal_sesi', 'rekap_modal_id')
             ->get();
     } else {
         $sesi = DB::table('rekap_modal')
-            ->select('rekap_modal_sesi', 'rekap_modal_id')
+            ->select('rekap_modal_sesi')
             ->where(DB::raw('DATE(rekap_modal_tanggal)'), $request->id_tanggal)
             ->where('rekap_modal_m_area_id', $request->id_area)
             ->where('rekap_modal_m_w_id', $request->id_waroeng)
             ->orderBy('rekap_modal_sesi', 'asc')
+            ->groupby('rekap_modal_sesi')
             ->get();
     }
         $data = array();
         foreach ($sesi as $val) {
-            $data[$val->rekap_modal_id] = [$val->rekap_modal_sesi];
+            $data[$val->rekap_modal_sesi] = [$val->rekap_modal_sesi];
             $data['all'] = ['all sesi'];
         }
         return response()->json($data);
@@ -106,8 +108,9 @@ class RekapMenuController extends Controller
     {
         $trans = DB::table('m_transaksi_tipe')
             ->join('rekap_transaksi', 'r_t_m_t_t_id', 'm_t_t_id')
-            ->select('m_t_t_id', 'm_t_t_name', 'r_t_rekap_modal_id')
-            ->where('r_t_rekap_modal_id', $request->id_sif)
+            ->join('rekap_modal', 'rekap_modal_id', 'r_t_rekap_modal_id')
+            ->select('m_t_t_id', 'm_t_t_name')
+            ->where('rekap_modal_sesi', $request->id_sif)
             ->orderBy('m_t_t_id', 'asc')
             ->get();
         $data = array();
@@ -133,13 +136,14 @@ class RekapMenuController extends Controller
                     ->join('m_produk', 'm_produk_id', 'r_t_detail_m_produk_id')
                     ->join('m_jenis_produk','m_jenis_produk_id', 'm_produk_m_jenis_produk_id')
                     ->join('m_transaksi_tipe', 'm_t_t_id', 'r_t_m_t_t_id')
+                    ->join('rekap_modal', 'rekap_modal_id', 'r_t_rekap_modal_id')
                     ->whereBetween('r_t_tanggal', [$start, $end]);
                     if($request->area != 'all'){
                         $get->where('r_t_m_area_id', $request->area);
                         if ($request->waroeng != 'all') {
                             $get->where('r_t_m_w_id', $request->waroeng);
                             if ($request->sesi != 'all') {
-                                $get->where('r_t_rekap_modal_id', $request->sesi);
+                                $get->where('rekap_modal_sesi', $request->sesi);
                                 if ($request->trans != 'all') {
                                     $get->where('r_t_m_t_t_id', $request->trans);
                                 }
@@ -159,13 +163,14 @@ class RekapMenuController extends Controller
                     ->join('m_produk', 'm_produk_id', 'r_t_detail_m_produk_id')
                     ->join('m_jenis_produk','m_jenis_produk_id', 'm_produk_m_jenis_produk_id')
                     ->join('m_transaksi_tipe', 'm_t_t_id', 'r_t_m_t_t_id')
+                    ->join('rekap_modal', 'rekap_modal_id', 'r_t_rekap_modal_id')
                     ->where('r_t_tanggal', $request->tanggal);
                     if($request->area != 'all'){
                         $get->where('r_t_m_area_id', $request->area);
                         if ($request->waroeng != 'all') {
                             $get->where('r_t_m_w_id', $request->waroeng);
                             if ($request->sesi != 'all') {
-                                $get->where('r_t_rekap_modal_id', $request->sesi);
+                                $get->where('rekap_modal_sesi', $request->sesi);
                                 if ($request->trans != 'all') {
                                     $get->where('r_t_m_t_t_id', $request->trans);
                                 }

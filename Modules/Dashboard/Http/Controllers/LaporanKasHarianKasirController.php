@@ -47,22 +47,61 @@ class LaporanKasHarianKasirController extends Controller
  
      public function select_user(Request $request)
      {
+        if (strpos($request->id_tanggal, 'to') !== false) {
+        $dates = explode('to', $request->id_tanggal);
          $user = DB::table('users')
-             ->select('users_id', 'name')
+             ->join('rekap_modal', 'rekap_modal_created_by', 'users_id')
+             ->select('users_id', 'name', 'rekap_modal_tanggal', 'rekap_modal_sesi')
              ->where('waroeng_id', $request->id_waroeng)
+             ->whereBetween('rekap_modal_tanggal', $dates)
+             ->where('rekap_modal_sesi', $request->id_sesi)
              ->orderBy('users_id', 'asc')
              ->get();
-         $modal = DB::table('rekap_modal')
-             ->select('rekap_modal_sesi')
-             ->where('rekap_modal_m_w_code', $request->id_waroeng)
-             ->get();
+        } else {
+        $user = DB::table('users')
+            ->join('rekap_modal', 'rekap_modal_created_by', 'users_id')
+            ->select('users_id', 'name', 'rekap_modal_tanggal', 'rekap_modal_sesi')
+            ->where('waroeng_id', $request->id_waroeng)
+            ->where(DB::raw('DATE(rekap_modal_tanggal)'), $request->id_tanggal)
+            ->where('rekap_modal_sesi', $request->id_sesi)
+            ->orderBy('users_id', 'asc')
+            ->get();
+        }
          $data = array();
-         foreach ($user as $valOpr) {
-            foreach ($modal as $valMdl){
-             $data[$valOpr->users_id.'and'.$valMdl->rekap_modal_sesi] = [$valOpr->name.' - sif '.$valMdl->rekap_modal_sesi];
-            }
+         foreach ($user as $val) {
+             $data[$val->users_id] = [$val->name];
          }
          return response()->json($data);
+     }
+
+     public function select_sesi(Request $request)
+     {
+        if (strpos($request->id_tanggal, 'to') !== false) {
+            $dates = explode('to', $request->id_tanggal);
+            $sesi = DB::table('rekap_modal')
+                ->select('rekap_modal_sesi')
+                ->whereBetween('rekap_modal_tanggal', $dates)
+                ->where('rekap_modal_m_area_id', $request->id_area)
+                ->where('rekap_modal_m_w_id', $request->id_waroeng)
+                ->orderBy('rekap_modal_sesi', 'asc')
+                ->groupby('rekap_modal_sesi', 'rekap_modal_id')
+                ->get();
+        } else {
+            $sesi = DB::table('rekap_modal')
+                ->select('rekap_modal_sesi')
+                ->where(DB::raw('DATE(rekap_modal_tanggal)'), $request->id_tanggal)
+                ->where('rekap_modal_m_area_id', $request->id_area)
+                ->where('rekap_modal_m_w_id', $request->id_waroeng)
+                ->orderBy('rekap_modal_sesi', 'asc')
+                ->groupby('rekap_modal_sesi')
+                ->get();
+        }
+            $data = array();
+            foreach ($sesi as $val) {
+                $data[$val->rekap_modal_sesi] = [$val->rekap_modal_sesi];
+                $data['all'] = ['all sesi'];
+            }
+            return response()->json($data);
      }
  
     public function detail($id)
@@ -78,18 +117,17 @@ class LaporanKasHarianKasirController extends Controller
 
     public function export_pdf(Request $request)
     {
-        [$opr, $sesi] = explode('and' ,$request->operator);
         
         $modal = DB::table('rekap_modal')
             ->where('rekap_modal_m_w_code', $request->waroeng)
-            ->where('rekap_modal_created_by', $opr)
-            ->where('rekap_modal_sesi', $sesi)
+            ->where('rekap_modal_created_by', $request->operator)
+            ->where('rekap_modal_sesi', $request->sesi)
             ->where('rekap_modal_id', $request->id)
             ->orderby('rekap_modal_tanggal', 'ASC')
             ->get();
         $mutasi = DB::table('rekap_mutasi_modal')
             ->where('r_m_m_m_w_code', $request->waroeng)
-            ->where('r_m_m_created_by', $opr)
+            ->where('r_m_m_created_by', $request->operator)
             ->where('r_m_m_rekap_modal_id', $request->id)
             ->orderby('r_m_m_tanggal', 'ASC')
             ->orderby('r_m_m_jam', 'ASC')
@@ -97,7 +135,7 @@ class LaporanKasHarianKasirController extends Controller
         $transaksi = DB::table('rekap_transaksi')
             ->join('rekap_payment_transaksi', 'r_p_t_r_t_id', 'r_t_id')
             ->where('r_t_m_w_code', $request->waroeng)
-            ->where('r_t_created_by', $opr)
+            ->where('r_t_created_by', $request->operator)
             ->where('r_t_rekap_modal_id', $request->id)
             ->where('r_p_t_m_payment_method_id', '1')
             ->orderby('r_t_tanggal', 'ASC')
@@ -105,7 +143,7 @@ class LaporanKasHarianKasirController extends Controller
             ->get();
         $refund = DB::table('rekap_refund')
             ->where('r_r_m_w_code', $request->waroeng)
-            ->where('r_r_created_by', $opr)
+            ->where('r_r_created_by', $request->operator)
             ->where('r_r_rekap_modal_id', $request->id)
             ->orderby('r_r_tanggal', 'ASC')
             ->orderby('r_r_jam', 'ASC')
@@ -364,8 +402,8 @@ class LaporanKasHarianKasirController extends Controller
             $kacab = DB::table('history_jabatan')
             ->where('history_jabatan_m_w_code',$request->waroeng)
             ->first();
-            $kasir = DB::table('users')->where('users_id',$opr)->first()->name;
-            $shift = $sesi;
+            $kasir = DB::table('users')->where('users_id',$request->operator)->first()->name;
+            $shift = $request->sesi;
             //    return view('dashboard::lap_kas_harian_kasir_pdf',compact('data','tgl','w_nama','kacab','kasir','shift'));
             $pdf = PDF::loadview('dashboard::lap_kas_harian_kasir_pdf',compact('data','tgl','w_nama','kacab','kasir','shift'))->setPaper('a4');
             return $pdf->stream('laporan_kas_kasir_'.strtolower($w_nama).'_sesi_'.$shift.'_.pdf');
@@ -374,18 +412,17 @@ class LaporanKasHarianKasirController extends Controller
     
     public function detail_show(Request $request, $id)
     {
-        [$opr, $sesi] = explode('and' ,$request->operator);
         
         $modal = DB::table('rekap_modal')
             ->where('rekap_modal_m_w_code', $request->waroeng)
-            ->where('rekap_modal_created_by', $opr)
-            ->where('rekap_modal_sesi', $sesi)
+            ->where('rekap_modal_created_by', $request->operator)
+            ->where('rekap_modal_sesi', $request->sesi)
             ->where('rekap_modal_id', $id)
             ->orderby('rekap_modal_tanggal', 'ASC')
             ->get();
         $mutasi = DB::table('rekap_mutasi_modal')
             ->where('r_m_m_m_w_code', $request->waroeng)
-            ->where('r_m_m_created_by', $opr)
+            ->where('r_m_m_created_by', $request->operator)
             ->where('r_m_m_rekap_modal_id', $id)
             ->orderby('r_m_m_tanggal', 'ASC')
             ->orderby('r_m_m_jam', 'ASC')
@@ -393,7 +430,7 @@ class LaporanKasHarianKasirController extends Controller
         $transaksi = DB::table('rekap_transaksi')
             ->join('rekap_payment_transaksi', 'r_p_t_r_t_id', 'r_t_id')
             ->where('r_t_m_w_code', $request->waroeng)
-            ->where('r_t_created_by', $opr)
+            ->where('r_t_created_by', $request->operator)
             ->where('r_t_rekap_modal_id', $id)
             ->where('r_p_t_m_payment_method_id', '1')
             ->orderby('r_t_tanggal', 'ASC')
@@ -401,7 +438,7 @@ class LaporanKasHarianKasirController extends Controller
             ->get();
         $refund = DB::table('rekap_refund')
             ->where('r_r_m_w_code', $request->waroeng)
-            ->where('r_r_created_by', $opr)
+            ->where('r_r_created_by', $request->operator)
             ->where('r_r_rekap_modal_id', $id)
             ->orderby('r_r_tanggal', 'ASC')
             ->orderby('r_r_jam', 'ASC')
@@ -661,13 +698,12 @@ class LaporanKasHarianKasirController extends Controller
 
      public function show(Request $request)
      {
-        [$opr, $sesi] = explode('and' ,$request->operator);
         if (strpos($request->tanggal, 'to') !== false) {
             [$start, $end] = explode('to', $request->tanggal);
             $saldoIn = DB::table('rekap_modal')
                         ->where('rekap_modal_m_w_code', $request->waroeng)
-                        ->where('rekap_modal_created_by', $opr)
-                        ->where('rekap_modal_sesi', $sesi)
+                        ->where('rekap_modal_created_by', $request->operator)
+                        ->where('rekap_modal_sesi', $request->sesi)
                         ->whereBetween('rekap_modal_tanggal', [$start, $end])
                         ->where('rekap_modal_status', 'close')
                         ->orderBy('rekap_modal_tanggal', 'ASC')
@@ -675,8 +711,8 @@ class LaporanKasHarianKasirController extends Controller
         } else {
             $saldoIn = DB::table('rekap_modal')
                         ->where('rekap_modal_m_w_code', $request->waroeng)
-                        ->where('rekap_modal_created_by', $opr)
-                        ->where('rekap_modal_sesi', $sesi)
+                        ->where('rekap_modal_created_by', $request->operator)
+                        ->where('rekap_modal_sesi', $request->sesi)
                         ->where(DB::raw('DATE(rekap_modal_tanggal)'), $request->tanggal)
                         ->where('rekap_modal_status', 'close')
                         ->orderBy('rekap_modal_tanggal', 'ASC')
