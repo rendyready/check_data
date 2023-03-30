@@ -171,7 +171,7 @@ class RekapPenjualanKategoriMenuController extends Controller
                             $total += $valTrans2->total;
                         }
                     }
-                    $data[$i][$valPay->m_jenis_produk_nama] = rupiah($total, 0);
+                    $data[$i][$valPay->m_jenis_produk_nama] = number_format($total);
                 }
                 $i++; 
             }
@@ -193,7 +193,7 @@ class RekapPenjualanKategoriMenuController extends Controller
                         $total += $valTrans2->total;
                     }
                 }
-                $data[$i][$valPay->m_jenis_produk_nama] = rupiah($total, 0);
+                $data[$i][$valPay->m_jenis_produk_nama] = number_format($total);
             }
             $i++; 
         }

@@ -110,8 +110,8 @@ class GaransiController extends Controller
             $row[] = $value->r_t_bigboss;
             $row[] = $value->rekap_garansi_m_produk_nama;
             $row[] = $value->rekap_garansi_qty;
-            $row[] = rupiah($value->rekap_garansi_price, 0);
-            $row[] = rupiah($value->rekap_garansi_nominal, 0);
+            $row[] = number_format($value->rekap_garansi_price);
+            $row[] = number_format($value->rekap_garansi_nominal);
             $row[] = $value->rekap_garansi_keterangan;
             $data[] = $row;
         }

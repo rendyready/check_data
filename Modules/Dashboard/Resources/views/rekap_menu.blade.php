@@ -130,6 +130,7 @@ $(document).ready(function() {
             $('#head_data').empty();
             var html = '<tr>';
             html += '<th class="text-center">Waroeng</th>';
+            html += '<th class="text-center">Transaksi</th>';
             html += '<th class="text-center">Kategori Menu</th>';
             html += '<th class="text-center">Nama Menu</th>';
             for (var i = 0; i < data.length; i++) {
@@ -148,16 +149,22 @@ $(document).ready(function() {
                 scrollX: true,
                 autoWidth: true,
                 scrollCollapse: true,
-                 buttons: [
+                buttons: [
                     {
                         extend: 'excelHtml5',
                         text: 'Export Excel',
-                        title: 'Laporan Penjualan Menu Harian',
+                        title: 'Laporan Penjualan Menu',
+                        exportOptions: {
+                            columns: [1, 2, 3, 4, 5]
+                        },
                         pageSize: 'A4',
                         pageOrientation: 'potrait',
-                        exportOptions: {
-                            columns: [2, 3, 4 ]
-                        },
+                        customize: function (xlsx) {
+                            var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                            var col = $('col', sheet);
+                            $(col[1]).insertAfter(col[5]); // kolom pertama (kolom 1) dipindahkan setelah kolom kelima (kolom 5)
+                            $(col[3]).insertAfter(col[5]); // kolom kedua (kolom 2) dipindahkan setelah kolom kelima (kolom 5)
+                        }
                     }
                 ],
                 columnDefs: [ 
@@ -271,7 +278,7 @@ $(document).ready(function() {
     });
 
     $('#filter_tanggal').flatpickr({
-            mode: "range",
+            // mode: "range",
             dateFormat: 'Y-m-d',           
     });
 

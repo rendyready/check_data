@@ -99,18 +99,18 @@ class RekapNotaController extends Controller
                 $row[] = date('d-m-Y', strtotime($value->r_t_tanggal));
                 $row[] = $value->name;
                 $row[] = $value->r_t_nota_code;
-                $row[] = rupiah($value->r_t_nominal_pajak, 0);
-                $row[] = rupiah($value->r_t_nominal, 0);
-                $row[] = rupiah($value->r_t_nominal_sc, 0);
-                $row[] = rupiah($value->r_t_nominal_diskon, 0);
-                $row[] = rupiah($value->r_t_nominal_voucher, 0);
-                $row[] = rupiah($value->r_t_nominal_tarik_tunai, 0);
-                $row[] = rupiah($value->r_t_nominal_pembulatan, 0);
-                $row[] = rupiah($value->r_t_nominal_free_kembalian, 0);   
-                $row[] = rupiah($value->r_t_nominal_total_bayar - $value->r_t_nominal_free_kembalian - $value->r_t_nominal_pembulatan, 0);
+                $row[] = number_format($value->r_t_nominal_pajak);
+                $row[] = number_format($value->r_t_nominal);
+                $row[] = number_format($value->r_t_nominal_sc);
+                $row[] = number_format($value->r_t_nominal_diskon);
+                $row[] = number_format($value->r_t_nominal_voucher);
+                $row[] = number_format($value->r_t_nominal_tarik_tunai);
+                $row[] = number_format($value->r_t_nominal_pembulatan);
+                $row[] = number_format($value->r_t_nominal_free_kembalian);   
+                $row[] = number_format($value->r_t_nominal_total_bayar - $value->r_t_nominal_free_kembalian - $value->r_t_nominal_pembulatan);
                 foreach ($detail as $key => $valDetail) {
                     if($value->r_t_id == $valDetail->r_t_detail_r_t_id){
-                        $row[] = rupiah($valDetail->sum_detail, 0);
+                        $row[] = number_format($valDetail->sum_detail);
                     }
                 }
                 if($value->r_t_status == "unpaid"){

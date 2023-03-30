@@ -165,12 +165,12 @@ class RekapNotaHarianController extends Controller
                 $data[$i]['waroeng'] = $valTrans->m_w_nama;
                 $data[$i]['tanggal'] = date('d-m-Y', strtotime($valTrans->r_t_tanggal));
                 $data[$i]['operator'] = $valTrans->name;
-                $data[$i]['penjualan'] = rupiah($valTrans->total - ($valTrans->pembulatan + $valTrans->free), 0);
+                $data[$i]['penjualan'] = number_format($valTrans->total - ($valTrans->pembulatan + $valTrans->free));
                 foreach ($methodPay as $key => $valPay) {
                     $data[$i][$valPay->m_payment_method_name] = 0;
                     foreach ($trans2 as $key => $valTrans2){
                             if ($valTrans->r_t_tanggal == $valTrans2->r_t_tanggal && $valPay->m_payment_method_id == $valTrans2->r_p_t_m_payment_method_id) {
-                                $data[$i][$valPay->m_payment_method_name] = rupiah($valTrans2->nominal - ($valTrans2->bulat + $valTrans2->kembali), 0);
+                                $data[$i][$valPay->m_payment_method_name] = number_format($valTrans2->nominal - ($valTrans2->bulat + $valTrans2->kembali));
                             } 
                     } 
                 }
@@ -187,12 +187,12 @@ class RekapNotaHarianController extends Controller
             $data[$i]['area'] = $valTrans->m_area_nama;
             $data[$i]['waroeng'] = $valTrans->m_w_nama;
             $data[$i]['tanggal'] = date('d-m-Y', strtotime($valTrans->r_t_tanggal));
-            $data[$i]['penjualan'] = rupiah($valTrans->total - ($valTrans->pembulatan + $valTrans->free), 0);
+            $data[$i]['penjualan'] = number_format($valTrans->total - ($valTrans->pembulatan + $valTrans->free));
             foreach ($methodPay as $key => $valPay) {
                 $data[$i][$valPay->m_payment_method_name] = 0;
                 foreach ($trans2 as $key => $valTrans2){
                         if ($valTrans->r_t_tanggal == $valTrans2->r_t_tanggal && $valPay->m_payment_method_id == $valTrans2->r_p_t_m_payment_method_id) {
-                            $data[$i][$valPay->m_payment_method_name] = rupiah($valTrans2->nominal - ($valTrans2->bulat + $valTrans2->kembali), 0);
+                            $data[$i][$valPay->m_payment_method_name] = number_format($valTrans2->nominal - ($valTrans2->bulat + $valTrans2->kembali));
                         } 
                 } 
             }

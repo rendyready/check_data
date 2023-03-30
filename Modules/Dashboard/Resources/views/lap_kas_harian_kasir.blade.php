@@ -59,6 +59,19 @@
                                 <div class="col-md-5">
                                     <div class="row mb-3">
                                         <label class="col-sm-3 col-form-label"
+                                            for="rekap_inv_penjualan_created_by">Sesi</label>
+                                        <div class="col-sm-9">
+                                            <select id="filter_sesi" style="width: 100%;"
+                                                class="cari f-wrg js-select2 form-control" data-placeholder="Pilih Sesi"
+                                                name="r_t_created_by">
+                                                <option></option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="row mb-3">
+                                        <label class="col-sm-3 col-form-label"
                                             for="rekap_inv_penjualan_created_by">Operator</label>
                                         <div class="col-sm-9">
                                             <select id="filter_operator" style="width: 100%;"
@@ -185,9 +198,10 @@ $(document).ready(function() {
     }
 
       $('#cari').on('click', function(e) {
-      var waroeng = $('#filter_waroeng').val().trim();
-      var tanggal = $('#filter_tanggal').val().trim();
-      var operator = $('#filter_operator').val().trim();
+      var waroeng   = $('#filter_waroeng').val().trim();
+      var tanggal   = $('#filter_tanggal').val().trim();
+      var sesi      = $('#filter_sesi').val().trim();
+      var operator  = $('#filter_operator').val().trim();
 
       if (waroeng === '' || tanggal === '' || operator === '') {
           displayNotification('danger', 'Pastikan Semua Kolom Terisi');
@@ -211,6 +225,7 @@ $(document).ready(function() {
                   waroeng: waroeng,
                   tanggal: tanggal,
                   operator: operator,
+                  sesi: sesi,
               },
               type: "GET",
           },
@@ -249,13 +264,48 @@ $(document).ready(function() {
 
     $('#filter_waroeng').change(function(){
         var id_waroeng = $(this).val();    
+        var id_area     = $('#filter_area').val();
+        var id_tanggal  = $('#filter_tanggal').val();
         if(id_waroeng){
+            $.ajax({
+            type:"GET",
+            url: '{{route("kas_kasir.select_sesi")}}',
+            dataType: 'JSON',
+            data : {
+              id_waroeng: id_waroeng,
+              id_area: id_area,
+              id_tanggal: id_tanggal,
+            },
+            success:function(res){               
+                if(res){
+                    $("#filter_sesi").empty();
+                    $("#filter_sesi").append('<option></option>');
+                    $.each(res,function(key,value){
+                        $("#filter_sesi").append('<option value="'+key+'">'+value+'</option>');
+                    });
+                }else{
+                $("#filter_sesi").empty();
+                }
+            }
+            });
+        }else{
+            $("#filter_sesi").empty();
+        }      
+    });
+
+    $('#filter_sesi').change(function(){
+        var id_sesi = $(this).val();    
+        var id_waroeng   = $('#filter_waroeng').val();
+        var id_tanggal   = $('#filter_tanggal').val();
+        if(id_sesi){
             $.ajax({
             type:"GET",
             url: '{{route("kas_kasir.select_user")}}',
             dataType: 'JSON',
             data : {
-              id_waroeng: id_waroeng,
+                id_sesi: id_sesi,
+                id_tanggal: id_tanggal,
+                id_waroeng: id_waroeng,
             },
             success:function(res){               
                 if(res){
@@ -285,6 +335,7 @@ $(document).ready(function() {
                 var waroeng  = $('#filter_waroeng').val();
                 var tanggal  = $('#filter_tanggal').val();
                 var operator = $('#filter_operator').val();
+                var sesi     = $('#filter_sesi').val();
                 $('#tampil_modal form')[0].reset();
                 $("#myModalLabel").html('Laporan Kas Kasir');
                 $.ajax({
@@ -316,6 +367,7 @@ $(document).ready(function() {
                                   waroeng: waroeng,
                                   tanggal: tanggal,
                                   operator: operator,
+                                  sesi: sesi,
                               },
                               type : "GET",
                               },
