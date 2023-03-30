@@ -9,8 +9,9 @@ use Modules\Dashboard\Http\Controllers\RekapNotaController;
 use Modules\Dashboard\Http\Controllers\DetailNotaController;
 use Modules\Dashboard\Http\Controllers\RekapNotaHarianController;
 use Modules\Dashboard\Http\Controllers\LaporanKasHarianKasirController;
+use Modules\Dashboard\Http\Controllers\RekapNotaHarianKategoriController;
 
-// Dashboard Route   
+// Dashboard Route
 
 Route::prefix('dashboard')->middleware('auth', 'web')
     ->group(function () {
@@ -53,7 +54,7 @@ Route::prefix('dashboard')->middleware('auth', 'web')
             Route::get('rekap_menu/select_trans', 'select_trans')->name('rekap_menu.select_trans');
             Route::get('rekap_menu/select_sif', 'select_sif')->name('rekap_menu.select_sif');
         });
-        
+
         Route::controller(RefundController::class)->group(function () {
             Route::get('rekap_refund', 'index')->name('rekap_refund.index');
             Route::get('rekap_refund/show', 'show')->name('rekap_refund.show');
@@ -89,6 +90,7 @@ Route::prefix('dashboard')->middleware('auth', 'web')
 
         // Route::get('kas_kasir/export_pdf', [LaporanKasHarianKasirController::class, 'export_pdf'])->name('kas_kasir.export_pdf');
         Route::controller(RekapNotaHarianKategoriController::class)->group(function () {
+            Route::get('get-summary-sales', 'getSummarySales')->name('rekap_kategori.getSummarySales');
             Route::get('rekap_kategori', 'index')->name('rekap_kategori.index');
             Route::get('rekap_kategori/show', 'show')->name('rekap_kategori.show');
             Route::get('rekap_kategori/select_waroeng', 'select_waroeng')->name('rekap_kategori.select_waroeng');
