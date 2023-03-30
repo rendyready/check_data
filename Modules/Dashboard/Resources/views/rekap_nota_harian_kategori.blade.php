@@ -82,45 +82,31 @@
                 
         <div id="tampil1">
             <table id="tampil_rekap" class="table table-sm table-bordered table-hover table-striped table-vcenter js-dataTable-full nowrap">
-              <thead>
-                <tr>
-                    <th class="text-center" rowspan="2">Area</th>
-                    <th class="text-center" rowspan="2">Waroeng</th>
-                    <th class="text-center" rowspan="2">Tanggal</th>
-                    <th class="text-center" colspan="3">Dine In</th>
-                    <th class="text-center" colspan="3">Take Away</th>
-                    <th class="text-center" colspan="3">Grab</th>
-                    <th class="text-center" colspan="3">Gojek</th>
-                    <th class="text-center" colspan="3">Grab Mart</th>
-                    <th class="text-center" colspan="3">Shopee Food</th>
-                    <th class="text-center" colspan="3">Maxim</th>
-                </tr>
-                <tr>
+                <thead id="head_data">
+                    <th class="text-center">Area</th>
+                    <th class="text-center">Waroeng</th>
+                    <th class="text-center">Tanggal</th>
                     <th class="text-center">Tunai</th>
-                    <th class="text-center">Non Tunai</th>
-                    <th class="text-center">Pajak</th>
+                    <th class="text-center">Tunai Transfer</th>
+                    <th class="text-center">Transfer</th>
+                    <th class="text-center">Pajak Transfer</th>
                     <th class="text-center">Tunai</th>
-                    <th class="text-center">Non Tunai</th>
-                    <th class="text-center">Pajak</th>
+                    <th class="text-center">Tunai Transfer</th>
+                    <th class="text-center">Transfer</th>
+                    <th class="text-center">Pajak Transfer</th>
                     <th class="text-center">Tunai</th>
-                    <th class="text-center">Non Tunai</th>
-                    <th class="text-center">Pajak</th>
+                    <th class="text-center">Tunai Transfer</th>
+                    <th class="text-center">Transfer</th>
+                    <th class="text-center">Pajak Transfer</th>
                     <th class="text-center">Tunai</th>
-                    <th class="text-center">Non Tunai</th>
-                    <th class="text-center">Pajak</th>
+                    <th class="text-center">Tunai Transfer</th>
+                    <th class="text-center">Transfer</th>
+                    <th class="text-center">Pajak Transfer</th>
                     <th class="text-center">Tunai</th>
-                    <th class="text-center">Non Tunai</th>
-                    <th class="text-center">Pajak</th>
-                    <th class="text-center">Tunai</th>
-                    <th class="text-center">Non Tunai</th>
-                    <th class="text-center">Pajak</th>
-                    <th class="text-center">Tunai</th>
-                    <th class="text-center">Non Tunai</th>
-                    <th class="text-center">Pajak</th>
-                </tr>
-              </thead>
-              <tbody id="show_data">
-              </tbody>
+                    <th class="text-center">Tunai Transfer</th>
+                    <th class="text-center">Transfer</th>
+                    <th class="text-center">Pajak Transfer</th>
+                </thead>
             </table>
         </div>
 
@@ -178,7 +164,37 @@ $(document).ready(function() {
         var waroeng  = $('#filter_waroeng').val();
         var tanggal  = $('#filter_tanggal').val(); 
         var operator  = $('#filter_operator').val();  
-        var show_operator = $("#operator_select").val();      
+        var show_operator = $("#operator_select").val(); 
+        // $.ajax({
+        // url: '{{route("rekap_kategori.tanggal_rekap")}}',
+        // type: 'GET',
+        // dataType: 'Json',
+        // data : {
+        //     tanggal: tanggal,
+        //     operator: operator,
+        //     waroeng: waroeng,
+        // },
+        // success: function(data) {
+        //     console.log(data);
+        //     $('#head_data').empty();
+        //     var html = '<tr>';
+        //     html += '<th class="text-center">Area</th>';
+        //     html += '<th class="text-center">Waroeng</th>';
+        //     html += '<th class="text-center">Tanggal</th>';
+        //     // Dapatkan jumlah jenis transaksi
+        //     var jenis_transaksi = ['tunai', 'pajak_tunai', 'transfer', 'pajak_transfer'];
+        //     var jumlah_transaksi = jenis_transaksi.length;
+            
+        //     // Tambahkan kolom untuk setiap jenis transaksi
+        //     for (var i = 0; i < data.length; i++) {
+        //         for (var j = 0; j < jumlah_transaksi; j++) {
+        //             html += '<th class="text-center">' + jenis_transaksi[j] + '</th>';
+        //         }
+        //     }
+            
+        //     html += '</tr>';
+        //     $('#head_data').append(html);
+        
     if(show_operator == 'ya'){
         $("#tampil1").hide();
         $("#tampil2").show();
@@ -190,16 +206,6 @@ $(document).ready(function() {
             // scrollY: "300px",
             scrollX: true,
             scrollCollapse: true,
-            columnDefs: [
-                {
-                    targets: [0],
-                    className: 'dt-body-center'
-                },
-                {
-                    targets: [1, 2, 3, 4, 5, 6, 7, 8],
-                    className: 'dt-body-right'
-                }
-            ],
             lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
             pageLength: 10,
             ajax: {
@@ -230,16 +236,6 @@ $(document).ready(function() {
             // scrollY: "300px",
             scrollX: true,
             scrollCollapse: true,
-            columnDefs: [
-                {
-                    targets: [0],
-                    className: 'dt-body-center'
-                },
-                {
-                    targets: [1, 2, 3, 4, 5, 6, 7, 8],
-                    className: 'dt-body-right'
-                }
-            ],
             lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
             pageLength: 10,
             ajax: {
@@ -257,6 +253,8 @@ $(document).ready(function() {
                 }
         });    
         }
+    // }
+    // });
     });
 
     //filter waroeng
