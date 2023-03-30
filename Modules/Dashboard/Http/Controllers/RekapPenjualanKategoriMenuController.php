@@ -65,18 +65,61 @@ class RekapPenjualanKategoriMenuController extends Controller
     
     public function show(Request $request)
     {
-        $dates = explode('to' ,$request->tanggal);
- 
         $methodPay = DB::table('m_jenis_produk')
                 ->orderBy('m_jenis_produk_id', 'ASC')
                 ->get();
+        if (strpos($request->tanggal, 'to') !== false) {
+            $dates = explode('to' ,$request->tanggal);
+            if($request->show_operator == 'ya'){
+                $trans = DB::table('rekap_transaksi')
+                    ->where('r_t_created_by', $request->operator)
+                    ->where('r_t_m_area_id', $request->area)
+                    ->where('r_t_m_w_id', $request->waroeng);
+
+                $trans1 = $trans->whereBetween('r_t_tanggal', $dates)
+                    ->join('users', 'users_id', 'r_t_created_by')
+                    ->join('m_area', 'm_area_code', 'r_t_m_area_code')
+                    ->join('m_w', 'm_w_code', 'r_t_m_w_code')
+                    ->select('r_t_tanggal', 'name', 'm_area_nama', 'm_w_nama')
+                    ->groupBy('r_t_tanggal', 'name', 'm_area_nama', 'm_w_nama')
+                    ->orderBy('r_t_tanggal', 'ASC')
+                    ->get(); 
+
+            } else {
+                if($request->area == '0'){
+                    $trans = DB::table('rekap_transaksi');
+                } else {
+                    $trans = DB::table('rekap_transaksi')
+                            ->where('r_t_m_area_id', $request->area);
+                                if($request->waroeng != 'all') {
+                                    $trans->where('r_t_m_w_id', $request->waroeng);
+                                }
+                }
+                $trans1 = $trans->whereBetween('r_t_tanggal', $dates)
+                ->join('m_area', 'm_area_code', 'r_t_m_area_code')
+                ->join('m_w', 'm_w_code', 'r_t_m_w_code')
+                ->select('r_t_tanggal',  'm_area_nama', 'm_w_nama')            
+                ->groupBy('r_t_tanggal', 'm_area_nama', 'm_w_nama')
+                ->orderBy('r_t_tanggal', 'ASC')
+                ->get(); 
+            }
+            
+        $trans2 = $trans->whereBetween('r_t_tanggal', $dates)
+                ->join('rekap_transaksi_detail', 'r_t_detail_r_t_id', 'r_t_id')
+                ->join('m_produk', 'm_produk_id', 'r_t_detail_m_produk_id')
+                ->selectRaw('m_produk_m_jenis_produk_id, r_t_tanggal, (r_t_detail_reguler_price * SUM(r_t_detail_qty)) as total')
+                ->groupBy('r_t_tanggal', 'm_produk_m_jenis_produk_id', 'r_t_detail_reguler_price')
+                ->orderBy('m_produk_m_jenis_produk_id', 'ASC')
+                ->get();
+    } else {
+        $dates = explode('to' ,$request->tanggal);
         if($request->show_operator == 'ya'){
             $trans = DB::table('rekap_transaksi')
                 ->where('r_t_created_by', $request->operator)
                 ->where('r_t_m_area_id', $request->area)
                 ->where('r_t_m_w_id', $request->waroeng);
 
-            $trans1 = $trans->whereBetween('r_t_tanggal', $dates)
+            $trans1 = $trans->where('r_t_tanggal', $request->tanggal)
                 ->join('users', 'users_id', 'r_t_created_by')
                 ->join('m_area', 'm_area_code', 'r_t_m_area_code')
                 ->join('m_w', 'm_w_code', 'r_t_m_w_code')
@@ -95,7 +138,7 @@ class RekapPenjualanKategoriMenuController extends Controller
                                 $trans->where('r_t_m_w_id', $request->waroeng);
                             }
             }
-            $trans1 = $trans->whereBetween('r_t_tanggal', $dates)
+            $trans1 = $trans->where('r_t_tanggal', $request->tanggal)
             ->join('m_area', 'm_area_code', 'r_t_m_area_code')
             ->join('m_w', 'm_w_code', 'r_t_m_w_code')
             ->select('r_t_tanggal',  'm_area_nama', 'm_w_nama')            
@@ -103,14 +146,15 @@ class RekapPenjualanKategoriMenuController extends Controller
             ->orderBy('r_t_tanggal', 'ASC')
             ->get(); 
         }
-         
-       $trans2 = $trans->whereBetween('r_t_tanggal', $dates)
-            ->join('rekap_transaksi_detail', 'r_t_detail_r_t_id', 'r_t_id')
-            ->join('m_produk', 'm_produk_id', 'r_t_detail_m_produk_id')
-            ->selectRaw('m_produk_m_jenis_produk_id, r_t_tanggal, (r_t_detail_reguler_price * SUM(r_t_detail_qty)) as total')
-            ->groupBy('r_t_tanggal', 'm_produk_m_jenis_produk_id', 'r_t_detail_reguler_price')
-            ->orderBy('m_produk_m_jenis_produk_id', 'ASC')
-            ->get();
+        
+        $trans2 = $trans->where('r_t_tanggal', $request->tanggal)
+                ->join('rekap_transaksi_detail', 'r_t_detail_r_t_id', 'r_t_id')
+                ->join('m_produk', 'm_produk_id', 'r_t_detail_m_produk_id')
+                ->selectRaw('m_produk_m_jenis_produk_id, r_t_tanggal, (r_t_detail_reguler_price * SUM(r_t_detail_qty)) as total')
+                ->groupBy('r_t_tanggal', 'm_produk_m_jenis_produk_id', 'r_t_detail_reguler_price')
+                ->orderBy('m_produk_m_jenis_produk_id', 'ASC')
+                ->get();
+    }
 
     $data =[];
     if($request->show_operator == 'ya'){

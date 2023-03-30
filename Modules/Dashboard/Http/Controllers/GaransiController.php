@@ -75,6 +75,7 @@ class GaransiController extends Controller
      */
     public function show(Request $request)
     {
+        if (strpos($request->tanggal, 'to') !== false) {
         $dates = explode('to' ,$request->tanggal);
         $get2 = DB::table('rekap_garansi')
                 ->join('rekap_transaksi', 'r_t_id', 'rekap_garansi_r_t_id')
@@ -87,6 +88,19 @@ class GaransiController extends Controller
                 $get = $get2->orderBy('r_t_tanggal', 'ASC')
                 ->orderBy('r_t_nota_code', 'ASC')
                 ->get();
+        } else {
+        $get2 = DB::table('rekap_garansi')
+            ->join('rekap_transaksi', 'r_t_id', 'rekap_garansi_r_t_id')
+            ->join('users', 'users_id', 'rekap_garansi_created_by')
+            ->where('r_t_m_w_id', $request->waroeng)
+            ->where('r_t_tanggal', $request->tanggal);
+            if($request->operator != 'all'){
+                $get2->where('rekap_garansi_created_by', $request->operator);
+            }
+            $get = $get2->orderBy('r_t_tanggal', 'ASC')
+            ->orderBy('r_t_nota_code', 'ASC')
+            ->get(); 
+        }
         $data = array();
         foreach ($get as $value) {
             $row = array();
