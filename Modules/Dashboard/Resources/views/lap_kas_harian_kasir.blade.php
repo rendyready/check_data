@@ -387,8 +387,8 @@ $(document).ready(function() {
 
             $("#tampil_rekap").on('click','#button_pdf', function() {
                 var id = $(this).attr('value');
-                var waroeng  = $('#filter_waroeng').val();
-                var tanggal  = $('#filter_tanggal').val();
+                var waroeng = $('#filter_waroeng').val();
+                var tanggal = $('#filter_tanggal').val();
                 var operator = $('#filter_operator').val();
                 var sesi     = $('#filter_sesi').val();
                 $.ajax({
@@ -407,6 +407,7 @@ $(document).ready(function() {
                   }
                  });
             }); 
+
 
 });
 </script>

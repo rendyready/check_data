@@ -2,12 +2,10 @@
 
 namespace Modules\Dashboard\Http\Controllers;
 
-use PDF;
-use Dompdf\Dompdf;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
-use Barryvdh\DomPDF\PDF as PDFexport;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Contracts\Support\Renderable;
 
 class LaporanKasHarianKasirController extends Controller
@@ -405,8 +403,8 @@ class LaporanKasHarianKasirController extends Controller
             $kasir = DB::table('users')->where('users_id',$request->operator)->first()->name;
             $shift = $request->sesi;
             //    return view('dashboard::lap_kas_harian_kasir_pdf',compact('data','tgl','w_nama','kacab','kasir','shift'));
-            $pdf = PDF::loadview('dashboard::lap_kas_harian_kasir_pdf',compact('data','tgl','w_nama','kacab','kasir','shift'))->setPaper('a4');
-            return $pdf->stream('laporan_kas_kasir_'.strtolower($w_nama).'_sesi_'.$shift.'_.pdf');
+            $pdf = pdf::loadview('dashboard::lap_kas_harian_kasir_pdf',compact('data','tgl','w_nama','kacab','kasir','shift'))->setPaper('a4');
+            return $pdf->download('laporan_kas_kasir_'.strtolower($w_nama).'_sesi_'.$shift.'_.pdf');
         
     }
     
