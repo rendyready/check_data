@@ -390,7 +390,8 @@ $(document).ready(function() {
                 var waroeng = $('#filter_waroeng').val();
                 var tanggal = $('#filter_tanggal').val();
                 var operator = $('#filter_operator').val();
-                var url = 'kas_kasir/export_pdf?id='+id+'&waroeng='+waroeng+'&tanggal='+tanggal+'&operator='+operator;
+                var sesi = $('#filter_sesi').val();
+                var url = 'kas_kasir/export_pdf?id='+id+'&waroeng='+waroeng+'&tanggal='+tanggal+'&operator='+operator+'&sesi='+sesi;
                 window.open(url,'_blank');
             });
 
