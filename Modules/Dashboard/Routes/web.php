@@ -53,7 +53,10 @@ Route::prefix('dashboard')->middleware('auth', 'web')
             Route::post('rekap_menu/simpan_tgl', 'simpan_tgl')->name('rekap_menu.simpan_tgl');
             Route::get('rekap_menu/select_trans', 'select_trans')->name('rekap_menu.select_trans');
             Route::get('rekap_menu/select_sif', 'select_sif')->name('rekap_menu.select_sif');
+            Route::get('rekap_menu/export_excel', 'export_excel')->name('rekap_menu.export_excel');
         });
+
+        // Route::get('export_excel', 'App\Http\Controllers\RekapMenuController@export_excel');
 
         Route::controller(RefundController::class)->group(function () {
             Route::get('rekap_refund', 'index')->name('rekap_refund.index');

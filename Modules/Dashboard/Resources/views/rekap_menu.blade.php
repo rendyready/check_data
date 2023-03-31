@@ -81,11 +81,16 @@
                         <div class="col-sm-8">
                             <button type="button" id="cari"
                                 class="btn btn-primary btn-sm col-1 mt-2 mb-3">Cari</button>
-                        </div>                
-            <table id="tampil_rekap" class="table table-sm table-bordered table-hover table-striped table-vcenter js-dataTable-full nowrap">
+                        </div> 
+                        {{-- <div class="text-center mt-2 mb-2">
+                            <button id="export_excel" class="btn btn-primary btn-sm">Export Excel</button> --}}
+                                    
+                    <table id="tampil_rekap" class="table table-sm table-bordered table-hover table-striped table-vcenter js-dataTable-full nowrap">
                 <thead id="head_data"></thead>
-            </table>
+              </table>
+            {{-- </div>    --}}
             </form>
+            
           </div>
         </div>
       </div>
@@ -106,18 +111,6 @@ $(document).ready(function() {
     var trans    = $('#filter_trans').val().trim();
     var sesi     = $('#filter_sif').val().trim();
 
-    // if (waroeng === '' || tanggal === '' || trans === '' || sesi === '' ) {
-    //     Codebase.helpers('jq-notify', {
-    //                                 align: 'right', // 'right', 'left', 'center'
-    //                                 from: 'top', // 'top', 'bottom'
-    //                                 type: 'danger', // 'info', 'success', 'warning', 'danger'
-    //                                 icon: 'fa fa-info me-5', // Icon class
-    //                                 message: 'Pastikan Semua Kolom Terisi',
-    //                             });
-    //       e.preventDefault();
-    //       return; // Stop code execution
-    //   }
-    
     $.ajax({
         url: '{{route("rekap_menu.tanggal_rekap")}}',
         type: 'GET',
@@ -133,12 +126,20 @@ $(document).ready(function() {
             html += '<th class="text-center">Transaksi</th>';
             html += '<th class="text-center">Kategori Menu</th>';
             html += '<th class="text-center">Nama Menu</th>';
+            var jenis_transaksi = ['Qty', 'Harga'];
+            var jumlah_transaksi = jenis_transaksi.length;
+            
             for (var i = 0; i < data.length; i++) {
-                html += '<th class="text-center">Qty</th>';
-                var dateObj = new Date(Date.parse(data[i]));
-                var dateString = dateObj.toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
-                html += '<th class="text-center date">' + dateString + '</th>';
+                for (var j = 0; j < jumlah_transaksi; j++) {
+                    html += '<th class="text-center">' + jenis_transaksi[j] + '</th>';
+                }
             }
+            // for (var i = 0; i < data.length; i++) {
+            //     html += '<th class="text-center">Qty</th>';
+            //     var dateObj = new Date(Date.parse(data[i]));
+            //     var dateString = dateObj.toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
+            //     html += '<th class="text-center date">' + dateString + '</th>';
+            // }
             html += '</tr>';
                 $('#head_data').append(html);
 
@@ -153,25 +154,13 @@ $(document).ready(function() {
                     {
                         extend: 'excelHtml5',
                         text: 'Export Excel',
-                        title: 'Laporan Penjualan Menu',
+                        title: 'Laporan Penjualan Menu - ' + trans,
                         exportOptions: {
                             columns: [1, 2, 3, 4, 5]
                         },
                         pageSize: 'A4',
                         pageOrientation: 'potrait',
-                        customize: function (xlsx) {
-                            var sheet = xlsx.xl.worksheets['sheet1.xml'];
-                            var col = $('col', sheet);
-                            $(col[1]).insertAfter(col[5]); // kolom pertama (kolom 1) dipindahkan setelah kolom kelima (kolom 5)
-                            $(col[3]).insertAfter(col[5]); // kolom kedua (kolom 2) dipindahkan setelah kolom kelima (kolom 5)
-                        }
                     }
-                ],
-                columnDefs: [ 
-                    {
-                        targets: '_all',
-                        className: 'dt-body-right'
-                    },
                 ],
                 lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
                 pageLength: 10,
@@ -281,6 +270,16 @@ $(document).ready(function() {
             // mode: "range",
             dateFormat: 'Y-m-d',           
     });
+
+    // $('#export_excel').on('click', function() {
+    //             var id = $(this).attr('value');
+    //             var waroeng = $('#filter_waroeng').val();
+    //             var tanggal = $('#filter_tanggal').val();
+    //             var operator = $('#filter_operator').val();
+    //             var sesi = $('#filter_sif').val();
+    //             var url = 'rekap_menu/export_excel?waroeng='+waroeng+'&tanggal='+tanggal+'&operator='+operator+'&sesi='+sesi;
+    //             window.open(url,'_blank');
+    //         });
 
 });
 </script>

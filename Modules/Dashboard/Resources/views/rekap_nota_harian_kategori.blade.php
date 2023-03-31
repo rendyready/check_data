@@ -222,8 +222,14 @@ $(document).ready(function() {
             html += '<th class="text-center" rowspan="2">Waroeng</th>';
             html += '<th class="text-center" rowspan="2">Tanggal</th>';
             for (var i = 0; i < data.length; i++) {
-                    html += '<th class="text-center" colspan="4">' + data[i] + '</th>';
+                    html += '<th class="text-center" rowspan="2">' + data[i] + '</th>';
             }
+            // var newData = data.slice(4, 0);
+
+            // // Loop for dengan panjang array baru (4)
+            // for (var i = 0; i < newData.length; i++) {
+            // html += '<th class="text-center" colspan="1">' + newData[i] + '</th>';
+            // }
             html += '</tr>';
             html += '<tr>';
             var jenis_transaksi = ['tunai', 'pajak tunai', 'transfer', 'pajak transfer'];

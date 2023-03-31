@@ -3,11 +3,11 @@
 namespace Modules\Dashboard\Http\Controllers;
 
 use Carbon\Carbon;
+use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Contracts\Support\Renderable;
 
 class RekapMenuController extends Controller
 {
@@ -15,7 +15,7 @@ class RekapMenuController extends Controller
      * Display a listing of the resource.
      * @return Renderable
      */
-    public function index()
+    public function index(Request $request)
     {
         $data = new \stdClass();
         $data->waroeng = DB::table('m_w')
@@ -113,31 +113,42 @@ class RekapMenuController extends Controller
             ->where('rekap_modal_sesi', $request->id_sif)
             ->orderBy('m_t_t_id', 'asc')
             ->get();
+
         $data = array();
         foreach ($trans as $val) {
-            $data[$val->m_t_t_id] = [$val->m_t_t_name];
+            $data[$val->m_t_t_name] = [$val->m_t_t_name];
             $data['all'] = ['all transaksi'];
         }
         return response()->json($data);
+
     }
 
     function show(Request $request) {
-        if (strpos($request->tanggal, 'to') !== false) {
-            [$start, $end] = explode('to', $request->tanggal);
-            $tanggal = DB::table('rekap_transaksi')
+            $tanggal1 = DB::table('rekap_transaksi')
                 ->select('r_t_tanggal')
-                ->whereBetween('r_t_tanggal', [$start, $end])
                 ->orderBy('r_t_tanggal', 'asc')
-                ->groupby('r_t_tanggal')
-                ->get();
+                ->groupby('r_t_tanggal');
+                if (strpos($request->tanggal, 'to') !== false) {
+                    [$start, $end] = explode('to', $request->tanggal);
+                    $tanggal1->whereBetween('r_t_tanggal', [$start, $end]);
+                } else {
+                    $tanggal1->where('r_t_tanggal', $request->tanggal);
+                }
+                $tanggal = $tanggal1->get();
+
             $get = DB::table('rekap_transaksi_detail')
                     ->join('rekap_transaksi', 'r_t_id', 'r_t_detail_r_t_id')
                     ->join('m_w', 'm_w_id', 'r_t_m_w_id')
                     ->join('m_produk', 'm_produk_id', 'r_t_detail_m_produk_id')
                     ->join('m_jenis_produk','m_jenis_produk_id', 'm_produk_m_jenis_produk_id')
                     ->join('m_transaksi_tipe', 'm_t_t_id', 'r_t_m_t_t_id')
-                    ->join('rekap_modal', 'rekap_modal_id', 'r_t_rekap_modal_id')
-                    ->whereBetween('r_t_tanggal', [$start, $end]);
+                    ->join('rekap_modal', 'rekap_modal_id', 'r_t_rekap_modal_id');
+                    if (strpos($request->tanggal, 'to') !== false) {
+                    [$start, $end] = explode('to', $request->tanggal);
+                    $get->whereBetween('r_t_tanggal', [$start, $end]);
+                    } else {
+                    $get->where('r_t_tanggal', $request->tanggal);
+                    }
                     if($request->area != 'all'){
                         $get->where('r_t_m_area_id', $request->area);
                         if ($request->waroeng != 'all') {
@@ -145,39 +156,12 @@ class RekapMenuController extends Controller
                             if ($request->sesi != 'all') {
                                 $get->where('rekap_modal_sesi', $request->sesi);
                                 if ($request->trans != 'all') {
-                                    $get->where('r_t_m_t_t_id', $request->trans);
+                                    $get->where('m_t_t_name', $request->trans);
                                 }
                             }
                         }
                     }
-                } else {
-                $tanggal = DB::table('rekap_transaksi')
-                    ->select('r_t_tanggal')
-                    ->where('r_t_tanggal', $request->tanggal)
-                    ->orderBy('r_t_tanggal', 'asc')
-                    ->groupby('r_t_tanggal')
-                    ->get();
-                $get = DB::table('rekap_transaksi_detail')
-                    ->join('rekap_transaksi', 'r_t_id', 'r_t_detail_r_t_id')
-                    ->join('m_w', 'm_w_id', 'r_t_m_w_id')
-                    ->join('m_produk', 'm_produk_id', 'r_t_detail_m_produk_id')
-                    ->join('m_jenis_produk','m_jenis_produk_id', 'm_produk_m_jenis_produk_id')
-                    ->join('m_transaksi_tipe', 'm_t_t_id', 'r_t_m_t_t_id')
-                    ->join('rekap_modal', 'rekap_modal_id', 'r_t_rekap_modal_id')
-                    ->where('r_t_tanggal', $request->tanggal);
-                    if($request->area != 'all'){
-                        $get->where('r_t_m_area_id', $request->area);
-                        if ($request->waroeng != 'all') {
-                            $get->where('r_t_m_w_id', $request->waroeng);
-                            if ($request->sesi != 'all') {
-                                $get->where('rekap_modal_sesi', $request->sesi);
-                                if ($request->trans != 'all') {
-                                    $get->where('r_t_m_t_t_id', $request->trans);
-                                }
-                            }
-                        }
-                    }   
-                }
+                
         $get2 = $get->selectRaw('sum(r_t_detail_qty) as qty, r_t_detail_reguler_price, r_t_tanggal, r_t_detail_m_produk_nama, m_w_nama, m_jenis_produk_id, m_jenis_produk_nama, m_t_t_name')
                     ->groupBy('r_t_tanggal', 'r_t_detail_m_produk_nama', 'm_w_nama', 'r_t_detail_reguler_price', 'm_jenis_produk_nama', 'm_jenis_produk_id', 'm_t_t_name')
                     ->orderby('m_jenis_produk_id', 'ASC')
@@ -244,26 +228,16 @@ class RekapMenuController extends Controller
         return response()->json($output);
     }
     
-    public function edit($id)
-    {
-        return view('dashboard::edit');
+    function export_excel(Request $request) {
+        // $tgl = tgl_indo($request->tanggal);
+        // $w_nama = strtoupper($this->getNamaW($request->waroeng));
+        // $nama_user = DB::table('users')->where('users_id',$request->opr)->get()->name();
+        // $kacab = DB::table('history_jabatan')
+        // ->where('history_jabatan_m_w_code',$request->waroeng)
+        // ->first();
+        // $kasir = DB::table('users')->where('users_id',$request->operator)->first()->name;
+        // $shift = $request->sesi;
+        return Excel::download(new UsersExport($request), 'Laporan Penjualan Menu.xlsx');
     }
-
-    /**
-     * Update the specified resource in storage.
-     * @param Request $request
-     * @param int $id
-     * @return Renderable
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     * @param int $id
-     * @return Renderable
-     */
 
 }
