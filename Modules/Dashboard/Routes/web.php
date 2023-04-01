@@ -53,10 +53,7 @@ Route::prefix('dashboard')->middleware('auth', 'web')
             Route::post('rekap_menu/simpan_tgl', 'simpan_tgl')->name('rekap_menu.simpan_tgl');
             Route::get('rekap_menu/select_trans', 'select_trans')->name('rekap_menu.select_trans');
             Route::get('rekap_menu/select_sif', 'select_sif')->name('rekap_menu.select_sif');
-            Route::get('rekap_menu/export_excel', 'export_excel')->name('rekap_menu.export_excel');
         });
-
-        // Route::get('export_excel', 'App\Http\Controllers\RekapMenuController@export_excel');
 
         Route::controller(RefundController::class)->group(function () {
             Route::get('rekap_refund', 'index')->name('rekap_refund.index');
@@ -98,7 +95,7 @@ Route::prefix('dashboard')->middleware('auth', 'web')
             Route::get('rekap_kategori', 'index')->name('rekap_kategori.index');
             Route::get('rekap_kategori/show', 'show')->name('rekap_kategori.show');
             Route::get('rekap_kategori/select_waroeng', 'select_waroeng')->name('rekap_kategori.select_waroeng');
-            Route::get('rekap_kategori/select_user', 'select_user')->name('rekap_kategori.select_user');
+            Route::get('rekap_kategori/select_sesi', 'select_sesi')->name('rekap_kategori.select_sesi');
             Route::get('rekap_kategori/tanggal_rekap', 'tanggal_rekap')->name('rekap_kategori.tanggal_rekap');
         });
         Route::controller(RekapPenjualanKategoriMenuController::class)->group(function () {

@@ -154,7 +154,7 @@ $(document).ready(function() {
                     {
                         extend: 'excelHtml5',
                         text: 'Export Excel',
-                        title: 'Laporan Penjualan Menu - ' + trans,
+                        title: 'Rekap Menu - ' + trans + ' - ' + tanggal,
                         exportOptions: {
                             columns: [1, 2, 3, 4, 5]
                         },

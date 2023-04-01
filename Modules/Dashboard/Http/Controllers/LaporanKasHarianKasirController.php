@@ -121,6 +121,7 @@ class LaporanKasHarianKasirController extends Controller
             ->where('rekap_modal_created_by', $request->operator)
             ->where('rekap_modal_sesi', $request->sesi)
             ->where('rekap_modal_id', $request->id)
+            ->where('rekap_modal_status', 'close')
             ->orderby('rekap_modal_tanggal', 'ASC')
             ->get();
         $mutasi = DB::table('rekap_mutasi_modal')
