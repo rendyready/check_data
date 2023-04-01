@@ -104,4 +104,15 @@ Route::prefix('dashboard')->middleware('auth', 'web')
             Route::get('rekap_penj_kat/select_waroeng', 'select_waroeng')->name('rekap_penj_kat.select_waroeng');
             Route::get('rekap_penj_kat/select_user', 'select_user')->name('rekap_penj_kat.select_user');
         });
+        Route::controller(RekapMenuHarianController::class)->group(function () {
+            Route::get('menu_harian', 'index')->name('menu_harian.index');
+            Route::get('menu_harian/show', 'show')->name('menu_harian.show');
+            Route::get('menu_harian/select_waroeng', 'select_waroeng')->name('menu_harian.select_waroeng');
+            Route::get('menu_harian/select_tanggal', 'select_tanggal')->name('menu_harian.select_tanggal');
+            Route::get('menu_harian/tanggal_rekap', 'tanggal_rekap')->name('menu_harian.tanggal_rekap');
+            Route::post('menu_harian/delete_tgl', 'delete_tgl')->name('menu_harian.delete_tgl');
+            Route::post('menu_harian/simpan_tgl', 'simpan_tgl')->name('menu_harian.simpan_tgl');
+            Route::get('menu_harian/select_trans', 'select_trans')->name('menu_harian.select_trans');
+            Route::get('menu_harian/select_sif', 'select_sif')->name('menu_harian.select_sif');
+        });
 });

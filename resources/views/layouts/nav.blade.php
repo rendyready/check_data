@@ -401,6 +401,11 @@
                     </a>
                   </li>
                   <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('dashboard/menu_harian') ? ' active' : '' }}" href="{{route('menu_harian.index')}}">
+                      <span class="nav-main-link-name">Rekap Menu Harian</span>
+                    </a>
+                  </li>
+                  <li class="nav-main-item">
                     <a class="nav-main-link{{ request()->is('dashboard/rekap_refund') ? ' active' : '' }}" href="{{route('rekap_refund.index')}}">
                       <span class="nav-main-link-name">Rekap Refund</span>
                     </a>
