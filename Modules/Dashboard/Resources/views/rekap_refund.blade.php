@@ -256,6 +256,7 @@ $(document).ready(function() {
     //filter operator
     $('#filter_waroeng').change(function(){
         var id_waroeng = $(this).val();    
+        var tanggal  = $('#filter_tanggal').val();
         if(id_waroeng){
             $.ajax({
             type:"GET",
@@ -263,6 +264,7 @@ $(document).ready(function() {
             dataType: 'JSON',
             data : {
               id_waroeng: id_waroeng,
+              tanggal: tanggal,
             },
             success:function(res){               
                 if(res){

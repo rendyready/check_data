@@ -74,43 +74,12 @@ class RekapMenuController extends Controller
         return response()->json($data);
     }
 
-    public function select_sif(Request $request)
-    {
-    if (strpos($request->id_tanggal, 'to') !== false) {
-        $dates = explode('to', $request->id_tanggal);
-        $sesi = DB::table('rekap_modal')
-            ->select('rekap_modal_sesi')
-            ->whereBetween('rekap_modal_tanggal', $dates)
-            ->where('rekap_modal_m_area_id', $request->id_area)
-            ->where('rekap_modal_m_w_id', $request->id_waroeng)
-            ->orderBy('rekap_modal_sesi', 'asc')
-            ->groupby('rekap_modal_sesi', 'rekap_modal_id')
-            ->get();
-    } else {
-        $sesi = DB::table('rekap_modal')
-            ->select('rekap_modal_sesi')
-            ->where(DB::raw('DATE(rekap_modal_tanggal)'), $request->id_tanggal)
-            ->where('rekap_modal_m_area_id', $request->id_area)
-            ->where('rekap_modal_m_w_id', $request->id_waroeng)
-            ->orderBy('rekap_modal_sesi', 'asc')
-            ->groupby('rekap_modal_sesi')
-            ->get();
-    }
-        $data = array();
-        foreach ($sesi as $val) {
-            $data[$val->rekap_modal_sesi] = [$val->rekap_modal_sesi];
-            $data['all'] = ['all sesi'];
-        }
-        return response()->json($data);
-    }
-
     public function select_trans(Request $request)
     {
         $trans = DB::table('m_transaksi_tipe')
             ->join('rekap_transaksi', 'r_t_m_t_t_id', 'm_t_t_id')
-            ->join('rekap_modal', 'rekap_modal_id', 'r_t_rekap_modal_id')
             ->select('m_t_t_id', 'm_t_t_name')
-            ->where('rekap_modal_sesi', $request->id_sif)
+            ->where('r_t_m_w_id', $request->id_waroeng)
             ->orderBy('m_t_t_id', 'asc')
             ->get();
 
@@ -153,12 +122,12 @@ class RekapMenuController extends Controller
                         $get->where('r_t_m_area_id', $request->area);
                         if ($request->waroeng != 'all') {
                             $get->where('r_t_m_w_id', $request->waroeng);
-                            if ($request->sesi != 'all') {
-                                $get->where('rekap_modal_sesi', $request->sesi);
+                            // if ($request->sesi != 'all') {
+                            //     $get->where('rekap_modal_sesi', $request->sesi);
                                 if ($request->trans != 'all') {
                                     $get->where('m_t_t_name', $request->trans);
                                 }
-                            }
+                            // }
                         }
                     }
                 
@@ -226,18 +195,6 @@ class RekapMenuController extends Controller
         }
 
         return response()->json($output);
-    }
-    
-    function export_excel(Request $request) {
-        // $tgl = tgl_indo($request->tanggal);
-        // $w_nama = strtoupper($this->getNamaW($request->waroeng));
-        // $nama_user = DB::table('users')->where('users_id',$request->opr)->get()->name();
-        // $kacab = DB::table('history_jabatan')
-        // ->where('history_jabatan_m_w_code',$request->waroeng)
-        // ->first();
-        // $kasir = DB::table('users')->where('users_id',$request->operator)->first()->name;
-        // $shift = $request->sesi;
-        return Excel::download(new UsersExport($request), 'Laporan Penjualan Menu.xlsx');
     }
 
 }

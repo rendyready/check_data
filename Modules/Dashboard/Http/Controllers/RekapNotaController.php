@@ -5,14 +5,22 @@ namespace Modules\Dashboard\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Contracts\Support\Renderable;
 
 class RekapNotaController extends Controller
 {
     public function index()
     {
+        $waroeng_id = Auth::user()->waroeng_id;
         $data = new \stdClass();
+        $data->waroeng_nama = DB::table('m_w')->select('m_w_nama', 'm_w_id')->where('m_w_id', $waroeng_id)->first();
+        $data->area_nama = DB::table('m_area')->join('m_w', 'm_w_m_area_id', 'm_area_id')->select('m_area_nama', 'm_area_id')->where('m_w_id', $waroeng_id)->first();
+        $data->waroengidm = [1, 2, 3, 4, 5, 6, 27, 36, 52, 71, 84, 102, 111, 117];
+        $data->waroengida = [1, 2, 3, 4, 5];
+
         $data->waroeng = DB::table('m_w')
+            ->where('m_w_m_area_id', $data->area_nama->m_area_id)
             ->orderby('m_w_id', 'ASC')
             ->get();
         $data->area = DB::table('m_area')
@@ -28,7 +36,6 @@ class RekapNotaController extends Controller
 
     public function select_waroeng(Request $request)
     {
-
         $waroeng = DB::table('m_w')
             ->select('m_w_id', 'm_w_nama', 'm_w_code')
             ->where('m_w_m_area_id', $request->id_area)
@@ -44,12 +51,23 @@ class RekapNotaController extends Controller
     public function select_user(Request $request)
     {
         $user = DB::table('users')
-            ->select('users_id', 'name')
-            ->where('waroeng_id', $request->id_waroeng)
-            ->orderBy('users_id', 'asc')
+            ->join('rekap_transaksi', 'r_t_created_by', 'users_id')
+            ->select('users_id', 'name');
+            if(in_array(Auth::user()->waroeng_id, [1, 2, 3, 4, 5, 6, 27, 36, 52, 71, 84, 102, 111, 117])){
+                $user->where('waroeng_id', $request->id_waroeng);
+            } else {
+                $user->where('waroeng_id', Auth::user()->waroeng_id);
+            }
+            if (strpos($request->tanggal, 'to') !== false) {
+                [$start, $end] = explode('to' ,$request->tanggal);
+                $user->whereBetween('r_t_tanggal', [$start, $end]);
+            } else {
+                $user->where('r_t_tanggal', $request->tanggal);
+            }
+            $user1 = $user->orderBy('users_id', 'asc')
             ->get();
         $data = array();
-        foreach ($user as $val) {
+        foreach ($user1 as $val) {
             $data[$val->users_id] = [$val->name];
             $data['all'] = 'All Operator';
         }
@@ -58,7 +76,6 @@ class RekapNotaController extends Controller
 
     public function show(Request $request)
     {
-        
         $payment = DB::table('rekap_payment_transaksi')
                 ->join('m_payment_method', 'm_payment_method_id', 'r_p_t_m_payment_method_id')
                 ->get();
@@ -66,8 +83,7 @@ class RekapNotaController extends Controller
                 ->selectRaw('(SUM(r_t_detail_reguler_price * r_t_detail_qty)) as sum_detail, r_t_detail_r_t_id')
                 ->groupby('r_t_detail_r_t_id')
                 ->get();
-        if (strpos($request->tanggal, 'to') !== false) {
-        [$start, $end] = explode('to' ,$request->tanggal);
+
         $get = DB::table('rekap_transaksi')
                 ->join('users', 'users_id', 'r_t_created_by')
                 ->join('m_transaksi_tipe', 'm_t_t_id', 'r_t_m_t_t_id')
@@ -75,23 +91,15 @@ class RekapNotaController extends Controller
                 if($request->operator != 'all'){
                     $get->where('r_t_created_by', $request->operator);
                 }
-                $get2 = $get->whereBetween('r_t_tanggal', [$start, $end])
-                ->orderBy('r_t_tanggal', 'ASC')
-                ->orderBy('r_t_nota_code', 'ASC')
-                ->get();
-        } else {
-            $get = DB::table('rekap_transaksi')
-                ->join('users', 'users_id', 'r_t_created_by')
-                ->join('m_transaksi_tipe', 'm_t_t_id', 'r_t_m_t_t_id')
-                ->where('r_t_m_w_id', $request->waroeng);
-                if($request->operator != 'all'){
-                    $get->where('r_t_created_by', $request->operator);
+                if (strpos($request->tanggal, 'to') !== false) {
+                    [$start, $end] = explode('to' ,$request->tanggal);
+                    $get->whereBetween('r_t_tanggal', [$start, $end]);
+                } else {
+                    $get->where('r_t_tanggal', $request->tanggal);
                 }
-                $get2 = $get->where('r_t_tanggal', $request->tanggal)
-                ->orderBy('r_t_tanggal', 'ASC')
+                $get2 = $get->orderBy('r_t_tanggal', 'ASC')
                 ->orderBy('r_t_nota_code', 'ASC')
                 ->get();
-        }
 
             $data = array();
             foreach ($get2 as $key => $value) {

@@ -272,7 +272,8 @@ $(document).ready(function() {
     //filter pengadaan
     $('#filter_waroeng').change(function(){
         var id_waroeng = $(this).val();   
-        var show_operator = $("#operator_select").val();      
+        var show_operator = $("#operator_select").val();  
+        var tanggal  = $('#filter_tanggal').val();     
     if(show_operator == 'tidak'){   
         if(id_waroeng){
             $.ajax({
@@ -281,6 +282,7 @@ $(document).ready(function() {
             dataType: 'JSON',
             data : {
               id_waroeng: id_waroeng,
+              tanggal: tanggal,
             },
             success:function(res){               
                 if(res){

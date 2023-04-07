@@ -17,54 +17,75 @@
                                 <div class="row mb-1">
                                     <label class="col-sm-3 col-form-label" >Tanggal</label>
                                     <div class="col-sm-9">
-                                        <input name="r_t_tanggal" class="cari form-control" type="text" placeholder="Pilih Tanggal.." id="filter_tanggal" />
+                                        <input name="r_t_tanggal" class="cari form-control filter_tanggal" type="text" placeholder="Pilih Tanggal.." id="filter_tanggal" />
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         <div class="row">
-                            <div class="col-md-5">
-                                <div class="row mb-2">
-                                    <label class="col-sm-3 col-form-label">Area</label>
-                                    <div class="col-sm-9">
-                                        <select id="filter_area" data-placeholder="Pilih Area" style="width: 100%;"
-                                            class="cari f-area js-select2 form-control" name="m_w_m_area_id">
+                          <div class="col-md-5">
+                              <div class="row mb-2">
+                                  <label class="col-sm-3 col-form-label">Area</label>
+                                  <div class="col-sm-9">
+                                        @if (in_array(Auth::user()->waroeng_id, [1, 2, 3, 4, 5]))
+                                            <select id="filter_area2" data-placeholder="Pilih Area" style="width: 100%;"
+                                            class="cari f-area js-select2 form-control filter_area" name="m_w_m_area_id">
                                             <option></option>
                                             @foreach ($data->area as $area)
                                                 <option value="{{ $area->m_area_id }}"> {{ $area->m_area_nama }} </option>
                                             @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
+                                            </select>
+                                        @else
+                                            <select id="filter_area" data-placeholder="Pilih Area" style="width: 100%;"
+                                            class="cari f-area js-select2 form-control filter_area" name="m_w_m_area_id" disabled>
+                                            <option value="{{ ucwords($data->area_nama->m_area_id) }}">{{ ucwords($data->area_nama->m_area_nama) }}</option>
+                                            </select>
+                                        @endif
+                                  </div>
+                              </div>
+                          </div>
 
-                            <div class="col-sm-5">
-                                <div class="row mb-2">
-                                    <label class="col-sm-3 col-form-label">Waroeng</label>
-                                    <div class="col-sm-9">
-                                        <select id="filter_waroeng" style="width: 100%;"
-                                            class="cari f-wrg js-select2 form-control" data-placeholder="Pilih Waroeng" name="m_w_id">
-                                            <option></option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                          <div class="col-sm-5">
+                              <div class="row mb-2">
+                                  <label class="col-sm-3 col-form-label">Waroeng</label>
+                                  <div class="col-sm-9">
+                                      @if (in_array(Auth::user()->waroeng_id, [1, 2, 3, 4, 5, 6, 27, 36, 52, 71, 84, 102, 111, 117]))
+                                          <select id="filter_waroeng" style="width: 100%;"
+                                              class="cari f-wrg js-select2 form-control filter_waroeng" data-placeholder="Pilih Waroeng" name="m_w_id">
+                                              <option></option>
+                                              @foreach ($data->waroeng as $waroeng)
+                                                  <option value="{{ $waroeng->m_w_id }}"> {{ $waroeng->m_w_nama }} </option>
+                                              @endforeach
+                                          </select>
+                                      @else
+                                          <select id="filter_waroeng2" style="width: 100%;"
+                                          class="cari f-area js-select2 form-control filter_waroeng" name="waroeng" disabled>
+                                          <option value="{{ ucwords($data->waroeng_nama->m_w_id) }}">{{ ucwords($data->waroeng_nama->m_w_nama) }}</option>
+                                          </select>
+                                      @endif
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
 
-                        <div class="row">
-                            <div class="col-md-5">
-                                <div class="row mb-3">
-                                    <label class="col-sm-3 col-form-label" for="rekap_inv_penjualan_created_by">Operator</label>
+                      <div class="row">
+                          <div class="col-md-5">
+                              <div class="row mb-3">
+                                  <label class="col-sm-3 col-form-label" for="rekap_inv_penjualan_created_by">Operator</label>
+                                  <div class="col-sm-9">
                                     <div class="col-sm-9">
-                                        <select id="filter_operator" style="width: 100%;"
-                                        class="cari f-wrg js-select2 form-control" data-placeholder="Pilih Operator" name="r_t_created_by">
-                                        <option></option>
-                                    </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> 
+                                      <select id="filter_operator" style="width: 100%;"
+                                      class="cari f-wrg js-select2 form-control filter_operator" data-placeholder="Pilih Operator" name="r_t_created_by">
+                                      <option></option>
+                                  </select>
+                                  </div>
+                              </div>
+                          </div>
+                      </div> 
+
+                      <div id="user-info" data-waroeng-id="{{ Auth::user()->waroeng_id }}" data-has-access="{{ in_array(Auth::user()->waroeng_id, $data->waroengidm) ? 'true' : 'false' }}"></div>
+                      <div id="user-info-pusat" data-waroeng-id="{{ Auth::user()->waroeng_id }}" data-has-access="{{ in_array(Auth::user()->waroeng_id, $data->waroengida) ? 'true' : 'false' }}"></div>
 
                         <div class="col-sm-8">
                             <button type="button" id="cari"
@@ -197,10 +218,18 @@ $(document).ready(function() {
       return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     }
 
+    var userInfo = document.getElementById('user-info');
+    var waroengId = userInfo.dataset.waroengId;
+    var hasAccess = userInfo.dataset.hasAccess === 'true';
+
+    var userInfoPusat = document.getElementById('user-info-pusat');
+    var waroengIda = userInfoPusat.dataset.waroengIda;
+    var hasAccessa = userInfoPusat.dataset.hasAccessa === 'true';
+
     $('#cari').on('click', function() {
-        var waroeng  = $('#filter_waroeng').val();
-        var tanggal  = $('#filter_tanggal').val();
-        var operator = $('#filter_operator').val();
+        var waroeng  = $('.filter_waroeng').val();
+        var tanggal  = $('.filter_tanggal').val();
+        var operator = $('.filter_operator').val();
     $('#tampil_rekap').DataTable({
         button: [],
         destroy: true,
@@ -225,7 +254,8 @@ $(document).ready(function() {
       });
     });
 
-    $('#filter_area').change(function(){
+    if(hasAccessa){
+    $('.filter_area').change(function(){
         var id_area = $(this).val();
         if(id_area){
             $.ajax({
@@ -236,25 +266,29 @@ $(document).ready(function() {
             data : {
                 id_area: id_area,
             },
-            success:function(res){               
+            success:function(res){    
+              // console.log(res);           
                 if(res){
-                    $("#filter_waroeng").empty();
-                    $("#filter_waroeng").append('<option></option>');
+                    $(".filter_waroeng").empty();
+                    $(".filter_waroeng").append('<option></option>');
                     $.each(res,function(key,value){
-                        $("#filter_waroeng").append('<option value="'+key+'">'+value+'</option>');
+                        $(".filter_waroeng").append('<option value="'+key+'">'+value+'</option>');
                     });
                 }else{
-                $("#filter_waroeng").empty();
+                $(".filter_waroeng").empty();
                 }
             }
             });
         }else{
-            $("#filter_waroeng").empty();
+            $(".filter_waroeng").empty();
         }      
     });
+  } 
 
-    $('#filter_waroeng').change(function(){
-        var id_waroeng = $(this).val();    
+    if(hasAccess){
+    $('.filter_waroeng').on('change', function(){
+        var id_waroeng = $(this).val();   
+        var tanggal  = $('.filter_tanggal').val(); 
         if(id_waroeng){
             $.ajax({
             type:"GET",
@@ -262,28 +296,61 @@ $(document).ready(function() {
             dataType: 'JSON',
             data : {
               id_waroeng: id_waroeng,
+              tanggal: tanggal,
             },
-            success:function(res){               
+            success:function(res){   
+              console.log(res);       
                 if(res){
-                    $("#filter_operator").empty();
-                    $("#filter_operator").append('<option></option>');
+                    $(".filter_operator").empty();
+                    $(".filter_operator").append('<option></option>');
                     $.each(res,function(key,value){
-                        $("#filter_operator").append('<option value="'+key+'">'+value+'</option>');
+                        $(".filter_operator").append('<option value="'+key+'">'+value+'</option>');
                     });
                 }else{
-                $("#filter_operator").empty();
+                $(".filter_operator").empty();
                 }
             }
             });
         }else{
-            $("#filter_operator").empty();
+            $(".filter_operator").empty();
         }      
     });
 
-    $('#filter_tanggal').flatpickr({
+  } else {
+
+    $('.filter_tanggal').on('change', function(){
+        // var id_waroeng = $(this).val();   
+        var tanggal  = $('.filter_tanggal').val(); 
+        if(tanggal){
+            $.ajax({
+            type:"GET",
+            url: '{{route("rekap.select_user")}}',
+            dataType: 'JSON',
+            data : {
+              // id_waroeng: id_waroeng,
+              tanggal: tanggal,
+            },
+            success:function(res){               
+                if(res){
+                    $(".filter_operator").empty();
+                    $(".filter_operator").append('<option></option>');
+                    $.each(res,function(key,value){
+                        $(".filter_operator").append('<option value="'+key+'">'+value+'</option>');
+                    });
+                }else{
+                $(".filter_operator").empty();
+                }
+            }
+            });
+        }else{
+            $(".filter_operator").empty();
+        }      
+    });
+  }
+
+    $('.filter_tanggal').flatpickr({
             mode: "range",
-            dateFormat: 'Y-m-d',
-            
+            dateFormat: 'Y-m-d',  
     });
 
             $("#tampil_rekap").on('click','#button_detail', function() {

@@ -22,9 +22,6 @@ class RekapNotaHarianController extends Controller
         $data->area = DB::table('m_area')
             ->orderby('m_area_id', 'ASC')
             ->get();
-        // $data->user = DB::table('users')
-        //     ->orderby('id', 'ASC')
-        //     ->get();
         $data->payment = DB::table('m_payment_method')
             ->orderby('m_payment_method_id', 'ASC')
             ->get();
@@ -49,15 +46,22 @@ class RekapNotaHarianController extends Controller
 
     public function select_user(Request $request)
     {
-
         $user = DB::table('users')
+            ->join('rekap_transaksi', 'r_t_created_by', 'users_id')
             ->select('users_id', 'name')
-            ->where('waroeng_id', $request->id_waroeng)
-            ->orderBy('users_id', 'asc')
+            ->where('waroeng_id', $request->id_waroeng);
+            if (strpos($request->tanggal, 'to') !== false) {
+                [$start, $end] = explode('to' ,$request->tanggal);
+                $user->whereBetween('r_t_tanggal', [$start, $end]);
+            } else {
+                $user->where('r_t_tanggal', $request->tanggal);
+            }
+            $user1 = $user->orderBy('users_id', 'asc')
             ->get();
         $data = array();
-        foreach ($user as $val) {
+        foreach ($user1 as $val) {
             $data[$val->users_id] = [$val->name];
+            $data['all'] = 'All Operator';
         }
         return response()->json($data);
     }
@@ -67,104 +71,57 @@ class RekapNotaHarianController extends Controller
         $methodPay = DB::table('m_payment_method')
             ->orderBy('m_payment_method_id', 'ASC')
             ->get();
-        if (strpos($request->tanggal, 'to') !== false) {
-            $dates = explode('to' ,$request->tanggal);
-            if($request->show_operator == 'ya'){
-                $trans = DB::table('rekap_payment_transaksi')
-                    ->join('rekap_transaksi', 'r_t_id', 'r_p_t_r_t_id')
-                    ->where('r_t_created_by', $request->operator)
-                    ->where('r_t_m_area_id', $request->area)
-                    ->where('r_t_m_w_id', $request->waroeng);
-                
-                $trans1 = $trans->whereBetween('r_t_tanggal', $dates)
-                    ->join('users', 'users_id', 'r_t_created_by')
-                    ->join('m_area', 'm_area_code', 'r_t_m_area_code')
-                    ->join('m_w', 'm_w_code', 'r_t_m_w_code')
-                    ->selectRaw('r_t_tanggal, SUM(r_t_nominal_total_bayar) as total, SUM(r_t_nominal_pembulatan) as pembulatan, SUM(r_t_nominal_free_kembalian) as free, name, m_area_nama, m_w_nama')
-                    ->groupBy('r_t_tanggal', 'name', 'm_area_nama', 'm_w_nama')
-                    ->orderBy('r_t_tanggal', 'ASC')
-                    ->get(); 
-            } else {
-                if($request->area == '0'){
-                    $trans = DB::table('rekap_payment_transaksi')
-                    ->join('rekap_transaksi', 'r_t_id', 'r_p_t_r_t_id');
-                } else {
-                    $trans = DB::table('rekap_payment_transaksi')
-                            ->join('rekap_transaksi', 'r_t_id', 'r_p_t_r_t_id')
-                            ->where('r_t_m_area_id', $request->area);
-                                if($request->waroeng != 'all') {
-                                    $trans->where('r_t_m_w_id', $request->waroeng);
-                                }
-                }
-                $trans1 = $trans->whereBetween('r_t_tanggal', $dates)
-                    ->join('users', 'users_id', 'r_t_created_by')
-                    ->join('m_area', 'm_area_code', 'r_t_m_area_code')
-                    ->join('m_w', 'm_w_code', 'r_t_m_w_code')
-                    ->selectRaw('r_t_tanggal, SUM(r_t_nominal_total_bayar) as total, SUM(r_t_nominal_pembulatan) as pembulatan, SUM(r_t_nominal_free_kembalian) as free, m_area_nama, m_w_nama')
-                    ->groupBy('r_t_tanggal', 'm_area_nama', 'm_w_nama')
-                    ->orderBy('r_t_tanggal', 'ASC')
-                    ->get(); 
-            }
-
-            $trans2 = $trans->whereBetween('r_t_tanggal', $dates)
-                ->selectRaw('r_p_t_m_payment_method_id, r_t_tanggal, SUM(r_t_nominal_total_bayar) as nominal, SUM(r_t_nominal_pembulatan) as bulat, SUM(r_t_nominal_free_kembalian) as kembali')
-                ->groupBy('r_t_tanggal', 'r_p_t_m_payment_method_id')
-                ->orderBy('r_p_t_m_payment_method_id', 'ASC')
-                ->get();
-        } else {
-            if($request->show_operator == 'ya'){
-                $trans = DB::table('rekap_payment_transaksi')
-                    ->join('rekap_transaksi', 'r_t_id', 'r_p_t_r_t_id')
-                    ->where('r_t_created_by', $request->operator)
-                    ->where('r_t_m_area_id', $request->area)
-                    ->where('r_t_m_w_id', $request->waroeng);
-                
-                $trans1 = $trans->where('r_t_tanggal', $request->tanggal)
-                    ->join('users', 'users_id', 'r_t_created_by')
-                    ->join('m_area', 'm_area_code', 'r_t_m_area_code')
-                    ->join('m_w', 'm_w_code', 'r_t_m_w_code')
-                    ->selectRaw('r_t_tanggal, SUM(r_t_nominal_total_bayar) as total, SUM(r_t_nominal_pembulatan) as pembulatan, SUM(r_t_nominal_free_kembalian) as free, name, m_area_nama, m_w_nama')
-                    ->groupBy('r_t_tanggal', 'name', 'm_area_nama', 'm_w_nama')
-                    ->orderBy('r_t_tanggal', 'ASC')
-                    ->get(); 
-            } else {
-                if($request->area == '0'){
-                    $trans = DB::table('rekap_payment_transaksi')
-                    ->join('rekap_transaksi', 'r_t_id', 'r_p_t_r_t_id');
-                } else {
-                    $trans = DB::table('rekap_payment_transaksi')
-                            ->join('rekap_transaksi', 'r_t_id', 'r_p_t_r_t_id')
-                            ->where('r_t_m_area_id', $request->area);
-                                if($request->waroeng != 'all') {
-                                    $trans->where('r_t_m_w_id', $request->waroeng);
-                                }
-                }
-                $trans1 = $trans->where('r_t_tanggal', $request->tanggal)
-                    ->join('users', 'users_id', 'r_t_created_by')
-                    ->join('m_area', 'm_area_code', 'r_t_m_area_code')
-                    ->join('m_w', 'm_w_code', 'r_t_m_w_code')
-                    ->selectRaw('r_t_tanggal, SUM(r_t_nominal_total_bayar) as total, SUM(r_t_nominal_pembulatan) as pembulatan, SUM(r_t_nominal_free_kembalian) as free, m_area_nama, m_w_nama')
-                    ->groupBy('r_t_tanggal', 'm_area_nama', 'm_w_nama')
-                    ->orderBy('r_t_tanggal', 'ASC')
-                    ->get(); 
-            }
-
-            $trans2 = $trans->where('r_t_tanggal', $request->tanggal)
-                ->selectRaw('r_p_t_m_payment_method_id, r_t_tanggal, SUM(r_t_nominal_total_bayar) as nominal, SUM(r_t_nominal_pembulatan) as bulat, SUM(r_t_nominal_free_kembalian) as kembali')
-                ->groupBy('r_t_tanggal', 'r_p_t_m_payment_method_id')
-                ->orderBy('r_p_t_m_payment_method_id', 'ASC')
-                ->get();
-        }
-
-        $data =[];
         
-        if($request->show_operator == 'ya'){
+        $trans = DB::table('rekap_payment_transaksi')
+                ->join('rekap_transaksi', 'r_t_id', 'r_p_t_r_t_id')
+                ->join('m_area', 'm_area_code', 'r_t_m_area_code')
+                ->join('m_w', 'm_w_code', 'r_t_m_w_code');
+            if($request->area != '0'){
+                $trans->where('r_t_m_area_id', $request->area);
+                if($request->waroeng != 'all') {
+                    $trans->where('r_t_m_w_id', $request->waroeng);
+                }
+            }
+            if($request->show_operator == 'ya'){
+                $trans->where('r_t_created_by', $request->operator);
+            }
+            if (strpos($request->tanggal, 'to') !== false) {
+                $dates = explode('to' ,$request->tanggal);
+                $trans->whereBetween('r_t_tanggal', $dates);
+            } else {
+                $trans->where('r_t_tanggal', $request->tanggal);
+            }
+                if($request->show_operator == 'ya'){
+                    $trans->join('users', 'users_id', 'r_t_created_by')
+                    ->selectRaw('r_t_tanggal, SUM(r_t_nominal_total_bayar) as total, SUM(r_t_nominal_pembulatan) as pembulatan, SUM(r_t_nominal_free_kembalian) as free, name, m_area_nama, m_w_nama')
+                    ->groupBy('r_t_tanggal', 'name', 'm_area_nama', 'm_w_nama');
+                } else {
+                     $trans->selectRaw('r_t_tanggal, SUM(r_t_nominal_total_bayar) as total, SUM(r_t_nominal_pembulatan) as pembulatan, SUM(r_t_nominal_free_kembalian) as free, m_area_nama, m_w_nama')
+                    ->groupBy('r_t_tanggal', 'm_area_nama', 'm_w_nama');
+                }
+                $trans1 = $trans->orderBy('r_t_tanggal', 'ASC')
+                ->get();  
+            
+            $trans->selectRaw('r_p_t_m_payment_method_id, r_t_tanggal, SUM(r_t_nominal_total_bayar) as nominal, SUM(r_t_nominal_pembulatan) as bulat, SUM(r_t_nominal_free_kembalian) as kembali');
+            if (strpos($request->tanggal, 'to') !== false) {
+                $dates = explode('to' ,$request->tanggal);
+                $trans->whereBetween('r_t_tanggal', $dates);
+            } else {
+                $trans->where('r_t_tanggal', $request->tanggal);
+            }
+            $trans2 = $trans->groupBy('r_t_tanggal', 'r_p_t_m_payment_method_id')
+                ->orderBy('r_p_t_m_payment_method_id', 'ASC')
+                ->get();
+        
+        $data =[];
             $i =1;
             foreach ($trans1 as $key => $valTrans){
                 $data[$i]['area'] = $valTrans->m_area_nama;
                 $data[$i]['waroeng'] = $valTrans->m_w_nama;
                 $data[$i]['tanggal'] = date('d-m-Y', strtotime($valTrans->r_t_tanggal));
+                if($request->show_operator == 'ya'){
                 $data[$i]['operator'] = $valTrans->name;
+                }
                 $data[$i]['penjualan'] = number_format($valTrans->total - ($valTrans->pembulatan + $valTrans->free));
                 foreach ($methodPay as $key => $valPay) {
                     $data[$i][$valPay->m_payment_method_name] = 0;
@@ -181,29 +138,7 @@ class RekapNotaHarianController extends Controller
             for ($i=1; $i <= $length ; $i++) { 
                 array_push($convert,array_values($data[$i]));
             }
-    } else {
-        $i =1;
-        foreach ($trans1 as $key => $valTrans){
-            $data[$i]['area'] = $valTrans->m_area_nama;
-            $data[$i]['waroeng'] = $valTrans->m_w_nama;
-            $data[$i]['tanggal'] = date('d-m-Y', strtotime($valTrans->r_t_tanggal));
-            $data[$i]['penjualan'] = number_format($valTrans->total - ($valTrans->pembulatan + $valTrans->free));
-            foreach ($methodPay as $key => $valPay) {
-                $data[$i][$valPay->m_payment_method_name] = 0;
-                foreach ($trans2 as $key => $valTrans2){
-                        if ($valTrans->r_t_tanggal == $valTrans2->r_t_tanggal && $valPay->m_payment_method_id == $valTrans2->r_p_t_m_payment_method_id) {
-                            $data[$i][$valPay->m_payment_method_name] = number_format($valTrans2->nominal - ($valTrans2->bulat + $valTrans2->kembali));
-                        } 
-                } 
-            }
-            $i++; 
-        }
-        $length = count($data);
-        $convert = array();
-        for ($i=1; $i <= $length ; $i++) { 
-            array_push($convert,array_values($data[$i]));
-        }
-    }
+    
         $output = array("data" => $convert);
         return response()->json($output);
     }
