@@ -334,12 +334,6 @@
                       <span class="nav-main-link-name">Sub Jenis Produk</span>
                     </a>
                   </li>
-                  
-                  <li class="nav-main-item">
-                    <a class="nav-main-link{{ request()->is('master/m_resep') ? ' active' : '' }}" href="{{route('m_resep.index')}}">
-                      <span class="nav-main-link-name">Resep</span>
-                    </a>
-                  </li>
                   <li class="nav-main-item">
                     <a class="nav-main-link{{ request()->is('master/modal_tipe') ? ' active' : '' }}" href="{{route('modal_tipe.index')}}">
                       <span class="nav-main-link-name">Modal Tipe</span>
@@ -452,6 +446,11 @@
                 </a>
                 <ul class="nav-main-submenu">
                   <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('master/m_resep') ? ' active' : '' }}" href="{{route('m_resep.index')}}">
+                      <span class="nav-main-link-name">Resep</span>
+                    </a>
+                  </li>
+                  <li class="nav-main-item">
                     <a class="nav-main-link{{ request()->is('inventori/m_bb') ? ' active' : '' }}" href="{{route('m_bb.index')}}">
                       <span class="nav-main-link-name">Data Bahan Baku</span>
                     </a>
@@ -523,7 +522,11 @@
                   <span class="nav-main-link-name">Barang Rusak</span>
                 </a>
               </li>
-
+              <li class="nav-main-item">
+                <a class="nav-main-link{{ request()->is('invetori/stok_so') ? ' active' : '' }}" href="{{route('stok_so.index')}}">
+                  <span class="nav-main-link-name">Stok Opname</span>
+                </a>
+              </li>
               <li class="nav-main-item{{ request()->is('inventori/*') ? ' open' : '' }}">
                 <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
                   <span class="nav-main-link-name">Laporan</span>
