@@ -100,7 +100,6 @@ $(document).ready(function() {
         var status   = $('#filter_status').val();  
         console.log(status);
         $('.show_nota').remove(); 
-        if(status == 'paid'){
             $.ajax({
             type:"GET",
             url: '{{route("detail.show")}}',
@@ -116,7 +115,8 @@ $(document).ready(function() {
               status: status,
             },
             success:function(data){  
-              $.each(data.transaksi_rekap2, function (key, value) {
+              if(status == 'paid'){
+              $.each(data.transaksi_rekap, function (key, value) {
                 // console.log(item.r_t_id);
                   $('#show_nota').append('<div class="col-xl-4 show_nota">'+
                         '<div class="block block-rounded mb-1">'+
@@ -206,27 +206,11 @@ $(document).ready(function() {
                                   '</td>'+
                                 '</tr>'
                           );
-                      });
-            }           
-          });  
+                      });           
+
         } else {
 
-          $.ajax({
-            type:"GET",
-            url: '{{route("detail.show")}}',
-            dataType: 'JSON',
-            scrollY: "300px",
-            scrollX: true,
-            scrollCollapse: true,
-            data : 
-            {
-              waroeng: waroeng,
-              tanggal: tanggal,
-              operator: operator,
-              status: status,
-            },
-            success:function(data){  
-              $.each(data.transaksi_rekap2, function (key, value) {
+              $.each(data.transaksi_rekap, function (key, value) {
                 // console.log(item.r_t_id);
                   $('#show_nota').append('<div class="col-xl-4 show_nota">'+
                         '<div class="block block-rounded mb-1">'+
@@ -279,11 +263,10 @@ $(document).ready(function() {
                                 '</tr>'
                           );
                       });
-            }           
-          });
-
+          }
         }         
     });
+  });
 
     $('#filter_area').change(function(){
         var id_area = $(this).val();    
@@ -319,6 +302,7 @@ $(document).ready(function() {
 
     $('#filter_waroeng').change(function(){
         var id_waroeng = $(this).val();    
+        var tanggal  = $('#filter_tanggal').val(); 
         if(id_waroeng){
             $.ajax({
             type:"GET",
@@ -326,6 +310,7 @@ $(document).ready(function() {
             dataType: 'JSON',
             data : {
               id_waroeng: id_waroeng,
+              tanggal: tanggal,
             },
             success:function(res){               
                 if(res){

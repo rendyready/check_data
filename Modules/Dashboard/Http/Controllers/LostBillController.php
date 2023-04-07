@@ -48,12 +48,19 @@ class LostBillController extends Controller
     public function select_user(Request $request)
     {
         $user = DB::table('users')
+            ->join('rekap_transaksi', 'r_t_created_by', 'users_id')
             ->select('users_id', 'name')
-            ->where('waroeng_id', $request->id_waroeng)
-            ->orderBy('users_id', 'asc')
+            ->where('waroeng_id', $request->id_waroeng);
+            if (strpos($request->tanggal, 'to') !== false) {
+                [$start, $end] = explode('to' ,$request->tanggal);
+                $user->whereBetween('r_t_tanggal', [$start, $end]);
+            } else {
+                $user->where('r_t_tanggal', $request->tanggal);
+            }
+            $user1 = $user->orderBy('users_id', 'asc')
             ->get();
         $data = array();
-        foreach ($user as $val) {
+        foreach ($user1 as $val) {
             $data[$val->users_id] = [$val->name];
             $data['all'] = 'All Operator';
         }
@@ -77,30 +84,22 @@ class LostBillController extends Controller
      */
     public function show(Request $request)
     {
-        if (strpos($request->tanggal, 'to') !== false) {
-        $dates = explode('to' ,$request->tanggal);
         $get2 = DB::table('rekap_lost_bill')
                 ->join('users', 'users_id', 'r_l_b_created_by')
-                ->where('r_l_b_m_w_id', $request->waroeng)
-                ->whereBetween('r_l_b_tanggal', $dates);
-                    if($request->operator != 'all'){
-                        $get2->where('r_l_b_created_by', $request->operator);
-                    }
+                ->where('r_l_b_m_w_id', $request->waroeng);
+                if (strpos($request->tanggal, 'to') !== false) {
+                    $dates = explode('to' ,$request->tanggal);
+                    $get2->whereBetween('r_l_b_tanggal', $dates);
+                } else {
+                    $get2->where('r_l_b_tanggal', $request->tanggal);
+                }
+                if($request->operator != 'all'){
+                    $get2->where('r_l_b_created_by', $request->operator);
+                }
                 $get = $get2->orderBy('r_l_b_tanggal', 'ASC')
                 ->orderBy('r_l_b_nota_code', 'ASC')
                 ->get();
-        } else {
-        $get2 = DB::table('rekap_lost_bill')
-                ->join('users', 'users_id', 'r_l_b_created_by')
-                ->where('r_l_b_m_w_id', $request->waroeng)
-                ->where('r_l_b_tanggal', $request->tanggal);
-                    if($request->operator != 'all'){
-                        $get2->where('r_l_b_created_by', $request->operator);
-                    }
-                $get = $get2->orderBy('r_l_b_tanggal', 'ASC')
-                ->orderBy('r_l_b_nota_code', 'ASC')
-                ->get();
-        }
+        
         $data = array();
         foreach ($get as $value) {
             $row = array();

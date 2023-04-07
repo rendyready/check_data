@@ -27,31 +27,6 @@ class RekapMenuHarianController extends Controller
             ->get();
         return view('dashboard::rekap_menu_harian', compact('data'));
     }
-
-    public function tanggal_rekap(Request $request)
-    {
-        if (strpos($request->tanggal, 'to') !== false) {
-        $dates = explode('to', $request->tanggal);
-        $tanggal = DB::table('rekap_transaksi')
-                ->select('r_t_tanggal')
-                ->whereBetween('r_t_tanggal', $dates)
-                ->orderBy('r_t_tanggal', 'asc')
-                ->groupby('r_t_tanggal')
-                ->get();
-        } else {
-            $tanggal = DB::table('rekap_transaksi')
-                ->select('r_t_tanggal')
-                ->where('r_t_tanggal', $request->tanggal)
-                ->orderBy('r_t_tanggal', 'asc')
-                ->groupby('r_t_tanggal')
-                ->get();
-        }
-        $data = [];
-        foreach ($tanggal as $val) {
-            $data[] = $val->r_t_tanggal;
-        }
-        return response()->json($data);
-    }
     
     public function select_waroeng(Request $request)
     {
@@ -70,26 +45,13 @@ class RekapMenuHarianController extends Controller
 
     public function select_sif(Request $request)
     {
-    if (strpos($request->id_tanggal, 'to') !== false) {
-        $dates = explode('to', $request->id_tanggal);
-        $sesi = DB::table('rekap_modal')
-            ->select('rekap_modal_sesi')
-            ->whereBetween('rekap_modal_tanggal', $dates)
-            ->where('rekap_modal_m_area_id', $request->id_area)
-            ->where('rekap_modal_m_w_id', $request->id_waroeng)
-            ->orderBy('rekap_modal_sesi', 'asc')
-            ->groupby('rekap_modal_sesi', 'rekap_modal_id')
-            ->get();
-    } else {
         $sesi = DB::table('rekap_modal')
             ->select('rekap_modal_sesi')
             ->where(DB::raw('DATE(rekap_modal_tanggal)'), $request->id_tanggal)
-            ->where('rekap_modal_m_area_id', $request->id_area)
             ->where('rekap_modal_m_w_id', $request->id_waroeng)
             ->orderBy('rekap_modal_sesi', 'asc')
-            ->groupby('rekap_modal_sesi')
+            // ->groupby('rekap_modal_sesi')
             ->get();
-    }
         $data = array();
         foreach ($sesi as $val) {
             $data[$val->rekap_modal_sesi] = [$val->rekap_modal_sesi];
@@ -217,16 +179,6 @@ class RekapMenuHarianController extends Controller
                                             $transaksi,
                                             $kategori,
                                         ];
-                    // foreach ($tanggal as $date) {
-                    //     $date_str = $date->r_t_tanggal;
-                    //     if (isset($dates[$date_str])) {
-                    //         $row[] = $dates[$date_str]['qty'];
-                    //         $row[] = $dates[$date_str]['nominal'];
-                    //     } else {
-                    //         $row[] = 0;
-                    //         $row[] = 0;
-                    //     }
-                    // }
                     $output['data'][] = $row;
                                 }
                             }
@@ -239,7 +191,7 @@ class RekapMenuHarianController extends Controller
         return response()->json($output);
     }
     
-    function export_excel(Request $request) {
+    // function export_excel(Request $request) {
         // $tgl = tgl_indo($request->tanggal);
         // $w_nama = strtoupper($this->getNamaW($request->waroeng));
         // $nama_user = DB::table('users')->where('users_id',$request->opr)->get()->name();
@@ -248,6 +200,6 @@ class RekapMenuHarianController extends Controller
         // ->first();
         // $kasir = DB::table('users')->where('users_id',$request->operator)->first()->name;
         // $shift = $request->sesi;
-        return Excel::download(new UsersExport($request), 'Laporan Penjualan Menu.xlsx');
-    }
+    //     return Excel::download(new UsersExport($request), 'Laporan Penjualan Menu.xlsx');
+    // }
 }

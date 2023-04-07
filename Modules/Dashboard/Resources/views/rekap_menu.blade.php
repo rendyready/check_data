@@ -54,7 +54,7 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-md-5">
+                            {{-- <div class="col-md-5">
                                 <div class="row mb-1">
                                     <label class="col-sm-3 col-form-label" >Sesi</label>
                                     <div class="col-sm-9">
@@ -64,7 +64,7 @@
                                         </select>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
                             <div class="col-md-5">
                                 <div class="row mb-1">
                                     <label class="col-sm-3 col-form-label" >Transaksi</label>
@@ -109,7 +109,6 @@ $(document).ready(function() {
     var waroeng  = $('#filter_waroeng').val().trim();
     var tanggal  = $('#filter_tanggal').val().trim();
     var trans    = $('#filter_trans').val().trim();
-    var sesi     = $('#filter_sif').val().trim();
 
     $.ajax({
         url: '{{route("rekap_menu.tanggal_rekap")}}',
@@ -122,10 +121,17 @@ $(document).ready(function() {
             console.log(data);
             $('#head_data').empty();
             var html = '<tr>';
-            html += '<th class="text-center">Waroeng</th>';
-            html += '<th class="text-center">Transaksi</th>';
-            html += '<th class="text-center">Kategori Menu</th>';
-            html += '<th class="text-center">Nama Menu</th>';
+            html += '<th class="text-center" rowspan="2">Waroeng</th>';
+            html += '<th class="text-center" rowspan="2">Transaksi</th>';
+            html += '<th class="text-center" rowspan="2">Kategori Menu</th>';
+            html += '<th class="text-center" rowspan="2">Nama Menu</th>';
+            for (var i = 0; i < data.length; i++) {
+                var dateObj = new Date(Date.parse(data[i]));
+                var dateString = dateObj.toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
+                html += '<th class="text-center" colspan="2">' + dateString + '</th>';
+            }
+            html += '</tr>';
+            html += '<tr>';
             var jenis_transaksi = ['Qty', 'Harga'];
             var jumlah_transaksi = jenis_transaksi.length;
             
@@ -134,12 +140,6 @@ $(document).ready(function() {
                     html += '<th class="text-center">' + jenis_transaksi[j] + '</th>';
                 }
             }
-            // for (var i = 0; i < data.length; i++) {
-            //     html += '<th class="text-center">Qty</th>';
-            //     var dateObj = new Date(Date.parse(data[i]));
-            //     var dateString = dateObj.toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
-            //     html += '<th class="text-center date">' + dateString + '</th>';
-            // }
             html += '</tr>';
                 $('#head_data').append(html);
 
@@ -162,6 +162,12 @@ $(document).ready(function() {
                         pageOrientation: 'potrait',
                     }
                 ],
+                columnDefs: [ 
+                    {
+                        targets: '_all',
+                        className: 'dt-body-center'
+                    },
+                ],
                 lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
                 pageLength: 10,
                 ajax: {
@@ -171,7 +177,6 @@ $(document).ready(function() {
                         waroeng: waroeng,
                         tanggal: tanggal,
                         trans: trans,
-                        sesi: sesi,
                     },
                     type : "GET",
                 },
@@ -208,46 +213,46 @@ $(document).ready(function() {
         }      
     });
 
+    // $('#filter_waroeng').on('select2:select', function() {
+    //     var id_waroeng = $(this).val();    
+    //     var id_area     = $('#filter_area').val();
+    //     var id_tanggal  = $('#filter_tanggal').val();
+    //     if(id_waroeng){
+    //         $.ajax({
+    //         type:"GET",
+    //         url: '{{route("rekap_menu.select_sif")}}',
+    //         dataType: 'JSON',
+    //         data : {
+    //             id_waroeng: id_waroeng,
+    //             id_area: id_area,
+    //             id_tanggal: id_tanggal,
+    //         },
+    //         success:function(res){               
+    //             if(res){
+    //                 $("#filter_sif").empty();
+    //                 $("#filter_sif").append('<option></option>');
+    //                 $.each(res,function(key,value){
+    //                     $("#filter_sif").append('<option value="'+key+'">'+value+'</option>');
+    //                 });
+    //             }else{
+    //             $("#filter_sif").empty();
+    //             }
+    //         }
+    //         });
+    //     }else{
+    //         $("#filter_sif").val('').trigger('change');
+    //     }      
+    // });
+
     $('#filter_waroeng').on('select2:select', function() {
         var id_waroeng = $(this).val();    
-        var id_area     = $('#filter_area').val();
-        var id_tanggal  = $('#filter_tanggal').val();
         if(id_waroeng){
-            $.ajax({
-            type:"GET",
-            url: '{{route("rekap_menu.select_sif")}}',
-            dataType: 'JSON',
-            data : {
-                id_waroeng: id_waroeng,
-                id_area: id_area,
-                id_tanggal: id_tanggal,
-            },
-            success:function(res){               
-                if(res){
-                    $("#filter_sif").empty();
-                    $("#filter_sif").append('<option></option>');
-                    $.each(res,function(key,value){
-                        $("#filter_sif").append('<option value="'+key+'">'+value+'</option>');
-                    });
-                }else{
-                $("#filter_sif").empty();
-                }
-            }
-            });
-        }else{
-            $("#filter_sif").val('').trigger('change');
-        }      
-    });
-
-    $('#filter_sif').on('select2:select', function() {
-        var id_sif = $(this).val();    
-        if(id_sif){
             $.ajax({
             type:"GET",
             url: '{{route("rekap_menu.select_trans")}}',
             dataType: 'JSON',
             data : {
-                id_sif: id_sif,
+                id_waroeng: id_waroeng,
             },
             success:function(res){               
                 if(res){
@@ -267,7 +272,7 @@ $(document).ready(function() {
     });
 
     $('#filter_tanggal').flatpickr({
-            // mode: "range",
+            mode: "range",
             dateFormat: 'Y-m-d',           
     });
 

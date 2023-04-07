@@ -55,35 +55,6 @@
                                 </div>
                             </div>
 
-                            <div class="row">
-                                <div class="col-md-5">
-                                    <div class="row mb-3">
-                                        <label class="col-sm-3 col-form-label"
-                                            for="rekap_inv_penjualan_created_by">Sesi</label>
-                                        <div class="col-sm-9">
-                                            <select id="filter_sesi" style="width: 100%;"
-                                                class="cari f-wrg js-select2 form-control" data-placeholder="Pilih Sesi"
-                                                name="r_t_created_by">
-                                                <option></option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-5">
-                                    <div class="row mb-3">
-                                        <label class="col-sm-3 col-form-label"
-                                            for="rekap_inv_penjualan_created_by">Operator</label>
-                                        <div class="col-sm-9">
-                                            <select id="filter_operator" style="width: 100%;"
-                                                class="cari f-wrg js-select2 form-control" data-placeholder="Pilih Operator"
-                                                name="r_t_created_by">
-                                                <option></option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
                             <div class="col-sm-8">
                                 <button type="button" id="cari"
                                     class="btn btn-primary btn-sm col-1 mt-2 mb-3">Cari</button>
@@ -94,6 +65,8 @@
                             <thead>
                                 <tr>
                                     <th>Tanggal</th>
+                                    <th>Sesi</th>
+                                    <th>Operator</th>
                                     <th>Saldo Awal</th>
                                     <th>Pemasukan</th>
                                     <th>Pengeluaran</th>
@@ -200,14 +173,13 @@ $(document).ready(function() {
       $('#cari').on('click', function(e) {
       var waroeng   = $('#filter_waroeng').val().trim();
       var tanggal   = $('#filter_tanggal').val().trim();
-      var sesi      = $('#filter_sesi').val().trim();
-      var operator  = $('#filter_operator').val().trim();
+    //   var operator  = $('#filter_operator').val().trim();
 
-      if (waroeng === '' || tanggal === '' || operator === '') {
-          displayNotification('danger', 'Pastikan Semua Kolom Terisi');
-          e.preventDefault();
-          return; // Stop code execution
-      }
+    //   if (waroeng === '' || tanggal === '' || operator === '') {
+    //       displayNotification('danger', 'Pastikan Semua Kolom Terisi');
+    //       e.preventDefault();
+    //       return; // Stop code execution
+    //   }
 
       $('#tampil_rekap').DataTable({
           button: [],
@@ -224,8 +196,7 @@ $(document).ready(function() {
               data: {
                   waroeng: waroeng,
                   tanggal: tanggal,
-                  operator: operator,
-                  sesi: sesi,
+                //   operator: operator,
               },
               type: "GET",
           },
@@ -259,68 +230,6 @@ $(document).ready(function() {
             });
         }else{
             $("#filter_waroeng").empty();
-        }      
-    });
-
-    $('#filter_waroeng').change(function(){
-        var id_waroeng = $(this).val();    
-        var id_area     = $('#filter_area').val();
-        var id_tanggal  = $('#filter_tanggal').val();
-        if(id_waroeng){
-            $.ajax({
-            type:"GET",
-            url: '{{route("kas_kasir.select_sesi")}}',
-            dataType: 'JSON',
-            data : {
-              id_waroeng: id_waroeng,
-              id_area: id_area,
-              id_tanggal: id_tanggal,
-            },
-            success:function(res){               
-                if(res){
-                    $("#filter_sesi").empty();
-                    $("#filter_sesi").append('<option></option>');
-                    $.each(res,function(key,value){
-                        $("#filter_sesi").append('<option value="'+key+'">'+value+'</option>');
-                    });
-                }else{
-                $("#filter_sesi").empty();
-                }
-            }
-            });
-        }else{
-            $("#filter_sesi").empty();
-        }      
-    });
-
-    $('#filter_sesi').change(function(){
-        var id_sesi = $(this).val();    
-        var id_waroeng   = $('#filter_waroeng').val();
-        var id_tanggal   = $('#filter_tanggal').val();
-        if(id_sesi){
-            $.ajax({
-            type:"GET",
-            url: '{{route("kas_kasir.select_user")}}',
-            dataType: 'JSON',
-            data : {
-                id_sesi: id_sesi,
-                id_tanggal: id_tanggal,
-                id_waroeng: id_waroeng,
-            },
-            success:function(res){               
-                if(res){
-                    $("#filter_operator").empty();
-                    $("#filter_operator").append('<option></option>');
-                    $.each(res,function(key,value){
-                        $("#filter_operator").append('<option value="'+key+'">'+value+'</option>');
-                    });
-                }else{
-                $("#filter_operator").empty();
-                }
-            }
-            });
-        }else{
-            $("#filter_operator").empty();
         }      
     });
 
@@ -389,9 +298,9 @@ $(document).ready(function() {
                 var id = $(this).attr('value');
                 var waroeng = $('#filter_waroeng').val();
                 var tanggal = $('#filter_tanggal').val();
-                var operator = $('#filter_operator').val();
-                var sesi = $('#filter_sesi').val();
-                var url = 'kas_kasir/export_pdf?id='+id+'&waroeng='+waroeng+'&tanggal='+tanggal+'&operator='+operator+'&sesi='+sesi;
+                // var operator = $('#filter_operator').val();
+                // var sesi = $('#filter_sesi').val();
+                var url = 'kas_kasir/export_pdf?id='+id+'&waroeng='+waroeng+'&tanggal='+tanggal;
                 window.open(url,'_blank');
             });
 

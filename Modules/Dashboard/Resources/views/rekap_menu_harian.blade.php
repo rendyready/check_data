@@ -134,7 +134,7 @@ $(document).ready(function() {
             {
                 extend: 'excelHtml5',
                 text: 'Export Excel',
-                title: 'Rekap Menu - ' + trans + ' - ' + tanggal,
+                title: 'Rekap Menu - ' + trans + ' Sesi - ' + sesi + ' - ' + tanggal,
                 exportOptions: {
                     columns: [1, 2, 3, 4, 5]
                 },
@@ -187,7 +187,6 @@ $(document).ready(function() {
 
     $('#filter_waroeng').on('select2:select', function() {
         var id_waroeng = $(this).val();    
-        var id_area     = $('#filter_area').val();
         var id_tanggal  = $('#filter_tanggal').val();
         if(id_waroeng){
             $.ajax({
@@ -196,7 +195,6 @@ $(document).ready(function() {
             dataType: 'JSON',
             data : {
                 id_waroeng: id_waroeng,
-                id_area: id_area,
                 id_tanggal: id_tanggal,
             },
             success:function(res){               

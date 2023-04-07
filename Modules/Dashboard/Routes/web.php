@@ -53,6 +53,7 @@ Route::prefix('dashboard')->middleware('auth', 'web')
             Route::post('rekap_menu/simpan_tgl', 'simpan_tgl')->name('rekap_menu.simpan_tgl');
             Route::get('rekap_menu/select_trans', 'select_trans')->name('rekap_menu.select_trans');
             Route::get('rekap_menu/select_sif', 'select_sif')->name('rekap_menu.select_sif');
+            Route::get('rekap_menu/menu_non_menu/{mw}/{date}', 'rekapNonMenu')->name('rekap_menu.menu_non_menu');
         });
 
         Route::controller(RefundController::class)->group(function () {

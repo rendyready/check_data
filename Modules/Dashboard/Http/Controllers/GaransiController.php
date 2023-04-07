@@ -46,12 +46,19 @@ class GaransiController extends Controller
     public function select_user(Request $request)
     {
         $user = DB::table('users')
+            ->join('rekap_transaksi', 'r_t_created_by', 'users_id')
             ->select('users_id', 'name')
-            ->where('waroeng_id', $request->id_waroeng)
-            ->orderBy('users_id', 'asc')
+            ->where('waroeng_id', $request->id_waroeng);
+            if (strpos($request->tanggal, 'to') !== false) {
+                [$start, $end] = explode('to' ,$request->tanggal);
+                $user->whereBetween('r_t_tanggal', [$start, $end]);
+            } else {
+                $user->where('r_t_tanggal', $request->tanggal);
+            }
+            $user1 = $user->orderBy('users_id', 'asc')
             ->get();
         $data = array();
-        foreach ($user as $val) {
+        foreach ($user1 as $val) {
             $data[$val->users_id] = [$val->name];
             $data['all'] = 'All Operator';
         }
