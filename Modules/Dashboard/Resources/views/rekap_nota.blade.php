@@ -50,20 +50,25 @@
                               <div class="row mb-2">
                                   <label class="col-sm-3 col-form-label">Waroeng</label>
                                   <div class="col-sm-9">
-                                      @if (in_array(Auth::user()->waroeng_id, [1, 2, 3, 4, 5, 6, 27, 36, 52, 71, 84, 102, 111, 117]))
-                                          <select id="filter_waroeng" style="width: 100%;"
-                                              class="cari f-wrg js-select2 form-control filter_waroeng" data-placeholder="Pilih Waroeng" name="m_w_id">
-                                              <option></option>
-                                              @foreach ($data->waroeng as $waroeng)
-                                                  <option value="{{ $waroeng->m_w_id }}"> {{ $waroeng->m_w_nama }} </option>
-                                              @endforeach
-                                          </select>
-                                      @else
-                                          <select id="filter_waroeng2" style="width: 100%;"
-                                          class="cari f-area js-select2 form-control filter_waroeng" name="waroeng" disabled>
-                                          <option value="{{ ucwords($data->waroeng_nama->m_w_id) }}">{{ ucwords($data->waroeng_nama->m_w_nama) }}</option>
-                                          </select>
-                                      @endif
+                                    @if (in_array(Auth::user()->waroeng_id, [1, 2, 3, 4, 5]))
+                                        <select id="filter_waroeng1" style="width: 100%;"
+                                        class="cari f-wrg js-select2 form-control filter_waroeng" data-placeholder="Pilih Waroeng" name="m_w_id">
+                                        <option></option>
+                                        </select>
+                                    @elseif (in_array(Auth::user()->waroeng_id, [6, 27, 36, 52, 71, 84, 102, 111, 117]))
+                                        <select id="filter_waroeng3" style="width: 100%;" data-placeholder="Pilih Waroeng"
+                                        class="cari f-area js-select2 form-control filter_waroeng" name="waroeng">
+                                        <option></option>
+                                          @foreach ($data->waroeng as $waroeng)
+                                              <option value="{{ $waroeng->m_w_id }}"> {{ $waroeng->m_w_nama }} </option>
+                                          @endforeach
+                                        </select>
+                                    @else
+                                        <select id="filter_waroeng2" style="width: 100%;"
+                                        class="cari f-area js-select2 form-control filter_waroeng" name="waroeng" disabled>
+                                        <option value="{{ ucwords($data->waroeng_nama->m_w_id) }}">{{ ucwords($data->waroeng_nama->m_w_nama) }}</option>
+                                        </select>
+                                    @endif
                                   </div>
                               </div>
                           </div>
@@ -219,12 +224,10 @@ $(document).ready(function() {
     }
 
     var userInfo = document.getElementById('user-info');
+    var userInfoPusat = document.getElementById('user-info-pusat');
     var waroengId = userInfo.dataset.waroengId;
     var hasAccess = userInfo.dataset.hasAccess === 'true';
-
-    var userInfoPusat = document.getElementById('user-info-pusat');
-    var waroengIda = userInfoPusat.dataset.waroengIda;
-    var hasAccessa = userInfoPusat.dataset.hasAccessa === 'true';
+    var hasAccessPusat = userInfoPusat.dataset.hasAccess === 'true';
 
     $('#cari').on('click', function() {
         var waroeng  = $('.filter_waroeng').val();
@@ -254,7 +257,7 @@ $(document).ready(function() {
       });
     });
 
-    if(hasAccessa){
+    if(hasAccessPusat){
     $('.filter_area').change(function(){
         var id_area = $(this).val();
         if(id_area){

@@ -5,6 +5,7 @@ namespace Modules\Dashboard\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Contracts\Support\Renderable;
 
 class DetailNotaController extends Controller
@@ -12,8 +13,15 @@ class DetailNotaController extends Controller
 
     public function index()
     {
+        $waroeng_id = Auth::user()->waroeng_id;
         $data = new \stdClass();
+        $data->waroeng_nama = DB::table('m_w')->select('m_w_nama', 'm_w_id')->where('m_w_id', $waroeng_id)->first();
+        $data->area_nama = DB::table('m_area')->join('m_w', 'm_w_m_area_id', 'm_area_id')->select('m_area_nama', 'm_area_id')->where('m_w_id', $waroeng_id)->first();
+        $data->waroengidm = [1, 2, 3, 4, 5, 6, 27, 36, 52, 71, 84, 102, 111, 117];
+        $data->waroengida = [1, 2, 3, 4, 5];
+
         $data->waroeng = DB::table('m_w')
+            ->where('m_w_m_area_id', $data->area_nama->m_area_id)
             ->orderby('m_w_id', 'ASC')
             ->get();
         $data->area = DB::table('m_area')
@@ -46,8 +54,12 @@ class DetailNotaController extends Controller
     {
         $user = DB::table('users')
             ->join('rekap_transaksi', 'r_t_created_by', 'users_id')
-            ->select('users_id', 'name')
-            ->where('waroeng_id', $request->id_waroeng);
+            ->select('users_id', 'name');
+            if(in_array(Auth::user()->waroeng_id, [1, 2, 3, 4, 5, 6, 27, 36, 52, 71, 84, 102, 111, 117])){
+                $user->where('waroeng_id', $request->id_waroeng);
+            } else {
+                $user->where('waroeng_id', Auth::user()->waroeng_id);
+            }
             if (strpos($request->tanggal, 'to') !== false) {
                 [$start, $end] = explode('to' ,$request->tanggal);
                 $user->whereBetween('r_t_tanggal', [$start, $end]);
