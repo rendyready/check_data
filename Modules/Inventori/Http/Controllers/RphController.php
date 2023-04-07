@@ -88,6 +88,7 @@ class RphController extends Controller
                         'rph_detail_menu_created_at' => Carbon::now(),
                     );
                     DB::table('rph_detail_menu')->insert($rph_menu);
+                    
                 }
             }
             return response()->json(['messages' => 'Berhasil Menyimpan RPH', 'type' => 'success']);
