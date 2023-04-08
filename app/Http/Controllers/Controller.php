@@ -96,7 +96,7 @@ class Controller extends BaseController
     }
     public function getNamaW($id)
     {   
-        return $waroeng = DB::table('m_w')->where('m_w_code',$id)->first()->m_w_nama;
+        return $waroeng = DB::table('m_w')->where('m_w_id',$id)->first()->m_w_nama;
     }
     public function get_last_stok($g_id,$p_id)
     {
@@ -112,5 +112,17 @@ class Controller extends BaseController
         $waroeng_nama = DB::table('m_w')->where('m_w_id',$waroeng_aktif)
         ->first()->m_w_nama;
         return $waroeng_nama;
+    }
+    public function get_akses_area()
+    {
+        return $akses_area = [1, 2, 3, 4, 5, 6, 27, 36, 52, 71, 84, 102, 111, 117];
+    }
+    public function get_akses_pusar()
+    {
+        return $akses_pusat = [6, 27, 36, 52, 71, 84, 102, 111, 117];
+    }
+    public function get_akses_pusat()
+    {
+        return $akses_pusat = [1, 2, 3, 4, 5];
     }
 }

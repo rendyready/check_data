@@ -96,7 +96,7 @@ Route::prefix('dashboard')->middleware('auth', 'web')
             Route::get('rekap_kategori', 'index')->name('rekap_kategori.index');
             Route::get('rekap_kategori/show', 'show')->name('rekap_kategori.show');
             Route::get('rekap_kategori/select_waroeng', 'select_waroeng')->name('rekap_kategori.select_waroeng');
-            Route::get('rekap_kategori/select_sesi', 'select_sesi')->name('rekap_kategori.select_sesi');
+            Route::get('rekap_kategori/select_user', 'select_user')->name('rekap_kategori.select_user');
             Route::get('rekap_kategori/tanggal_rekap', 'tanggal_rekap')->name('rekap_kategori.tanggal_rekap');
         });
         Route::controller(RekapPenjualanKategoriMenuController::class)->group(function () {

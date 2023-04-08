@@ -28,7 +28,7 @@
                               <div class="row mb-2">
                                   <label class="col-sm-3 col-form-label">Area</label>
                                   <div class="col-sm-9">
-                                        @if (in_array(Auth::user()->waroeng_id, [1, 2, 3, 4, 5]))
+                                        @if (in_array(Auth::user()->waroeng_id, $data->akses_pusat ))
                                             <select id="filter_area2" data-placeholder="Pilih Area" style="width: 100%;"
                                             class="cari f-area js-select2 form-control filter_area" name="m_w_m_area_id">
                                             <option></option>
@@ -50,12 +50,12 @@
                               <div class="row mb-2">
                                   <label class="col-sm-3 col-form-label">Waroeng</label>
                                   <div class="col-sm-9">
-                                    @if (in_array(Auth::user()->waroeng_id, [1, 2, 3, 4, 5]))
+                                    @if (in_array(Auth::user()->waroeng_id, $data->akses_pusat))
                                         <select id="filter_waroeng1" style="width: 100%;"
                                         class="cari f-wrg js-select2 form-control filter_waroeng" data-placeholder="Pilih Waroeng" name="m_w_id">
                                         <option></option>
                                         </select>
-                                    @elseif (in_array(Auth::user()->waroeng_id, [6, 27, 36, 52, 71, 84, 102, 111, 117]))
+                                    @elseif (in_array(Auth::user()->waroeng_id, $data->akses_pusar))
                                         <select id="filter_waroeng3" style="width: 100%;" data-placeholder="Pilih Waroeng"
                                         class="cari f-area js-select2 form-control filter_waroeng" name="waroeng">
                                         <option></option>
@@ -89,8 +89,8 @@
                           </div>
                       </div> 
 
-                      <div id="user-info" data-waroeng-id="{{ Auth::user()->waroeng_id }}" data-has-access="{{ in_array(Auth::user()->waroeng_id, $data->waroengidm) ? 'true' : 'false' }}"></div>
-                      <div id="user-info-pusat" data-waroeng-id="{{ Auth::user()->waroeng_id }}" data-has-access="{{ in_array(Auth::user()->waroeng_id, $data->waroengida) ? 'true' : 'false' }}"></div>
+                      <div id="user-info" data-waroeng-id="{{ Auth::user()->waroeng_id }}" data-has-access="{{ in_array(Auth::user()->waroeng_id, $data->akses_area) ? 'true' : 'false' }}"></div>
+                      <div id="user-info-pusat" data-waroeng-id="{{ Auth::user()->waroeng_id }}" data-has-access="{{ in_array(Auth::user()->waroeng_id, $data->akses_pusat) ? 'true' : 'false' }}"></div>
 
                         <div class="col-sm-8">
                             <button type="button" id="cari"
@@ -162,7 +162,6 @@
                               <td id="pajak">
                               </td>
                             </tr>
-
                             <tr style="background-color: white;" class="text-end fw-semibold">
                               <td>Service Charge</td>
                               <td id="sc">
@@ -193,7 +192,6 @@
                               <td id="free">
                               </td>
                             </tr>
-                            
                             <tr style="background-color: white;" class="text-end fw-semibold">
                               <td>Total Bayar (<small id="pembayaran"></small>)</td>
                               <td id="bayar">
@@ -226,8 +224,8 @@ $(document).ready(function() {
     var userInfo = document.getElementById('user-info');
     var userInfoPusat = document.getElementById('user-info-pusat');
     var waroengId = userInfo.dataset.waroengId;
-    var hasAccess = userInfo.dataset.hasAccess === 'true';
-    var hasAccessPusat = userInfoPusat.dataset.hasAccess === 'true';
+    var HakAksesArea = userInfo.dataset.hasAccess === 'true';
+    var HakAksesPusat = userInfoPusat.dataset.hasAccess === 'true';
 
     $('#cari').on('click', function() {
         var waroeng  = $('.filter_waroeng').val();
@@ -257,10 +255,12 @@ $(document).ready(function() {
       });
     });
 
-    if(hasAccessPusat){
-    $('.filter_area').change(function(){
+    if(HakAksesPusat){
+      $('.filter_area').on('select2:select', function(){
         var id_area = $(this).val();
-        if(id_area){
+        var tanggal  = $('.filter_tanggal').val();
+        var prev = $(this).data('previous-value');
+        if(id_area && tanggal){
             $.ajax({
             type:"GET",
             url: '{{route("rekap.select_waroeng")}}',
@@ -283,16 +283,19 @@ $(document).ready(function() {
             }
             });
         }else{
+          alert('Harap lengkapi kolom tanggal');
             $(".filter_waroeng").empty();
+            $(".filter_area").val(prev).trigger('change');
         }      
     });
   } 
 
-    if(hasAccess){
-    $('.filter_waroeng').on('change', function(){
+    if(HakAksesArea){
+    $('.filter_waroeng').on('select2:select', function(){
         var id_waroeng = $(this).val();   
         var tanggal  = $('.filter_tanggal').val(); 
-        if(id_waroeng){
+        var prev = $(this).data('previous-value');
+        if(id_waroeng && tanggal){
             $.ajax({
             type:"GET",
             url: '{{route("rekap.select_user")}}',
@@ -315,7 +318,9 @@ $(document).ready(function() {
             }
             });
         }else{
+          alert('Harap lengkapi kolom tanggal');
             $(".filter_operator").empty();
+            $(".filter_waroeng").val(prev).trigger('change');
         }      
     });
 

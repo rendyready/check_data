@@ -56,10 +56,10 @@
                         {{-- <div class="row">
                             <div class="col-md-5">
                                 <div class="row mb-2">
-                                    <label class="col-sm-3 col-form-label">Sesi</label>
+                                    <label class="col-sm-3 col-form-label">Operator</label>
                                     <div class="col-sm-9">
-                                        <select id="filter_sesi" data-placeholder="Pilih Sesi" style="width: 100%;"
-                                            class="cari f-area js-select2 form-control" name="sesi">
+                                        <select id="filter_operator" data-placeholder="Pilih Operator" style="width: 100%;"
+                                            class="cari f-area js-select2 form-control filter_operator" name="operator">
                                             <option></option>
                                         </select>
                                     </div>
@@ -112,6 +112,7 @@ $(document).ready(function() {
             var html = '<tr>';
             html += '<th class="text-center" rowspan="2">Area</th>';
             html += '<th class="text-center" rowspan="2">Waroeng</th>';
+            html += '<th class="text-center" rowspan="2">Operator</th>';
             html += '<th class="text-center" rowspan="2">Tanggal</th>';
             for (var i = 0; i < data.length; i++) {
                     html += '<th class="text-center" colspan="4">' + data[i] + '</th>';
@@ -193,7 +194,7 @@ $(document).ready(function() {
         }    
     });
 
-    //filter sesi
+    // // filter opr
     // $('#filter_waroeng').change(function(){
     //     var id_waroeng = $(this).val();    
     //     var id_area     = $('#filter_area').val();
@@ -201,7 +202,7 @@ $(document).ready(function() {
     //     if(id_waroeng){
     //         $.ajax({
     //         type:"GET",
-    //         url: '{{route("rekap_kategori.select_sesi")}}',
+    //         url: '{{route("rekap_kategori.select_user")}}',
     //         dataType: 'JSON',
     //         data : {
     //           id_waroeng: id_waroeng,
@@ -210,18 +211,18 @@ $(document).ready(function() {
     //         },
     //         success:function(res){               
     //             if(res){
-    //                 $("#filter_sesi").empty();
-    //                 $("#filter_sesi").append('<option></option>');
+    //                 $("#filter_operator").empty();
+    //                 $("#filter_operator").append('<option></option>');
     //                 $.each(res,function(key,value){
-    //                     $("#filter_sesi").append('<option value="'+key+'">'+value+'</option>');
+    //                     $("#filter_operator").append('<option value="'+key+'">'+value+'</option>');
     //                 });
     //             }else{
-    //             $("#filter_sesi").empty();
+    //             $("#filter_operator").empty();
     //             }
     //         }
     //         });
     //     }else{
-    //         $("#filter_sesi").empty();
+    //         $("#filter_operator").empty();
     //     }       
     // });
 

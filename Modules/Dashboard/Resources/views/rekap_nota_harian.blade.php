@@ -28,7 +28,7 @@
                                 <div class="row mb-2">
                                     <label class="col-sm-3 col-form-label">Area</label>
                                     <div class="col-sm-9">
-                                        @if (in_array(Auth::user()->waroeng_id, [1, 2, 3, 4, 5]))
+                                        @if (in_array(Auth::user()->waroeng_id, $data->akses_pusat ))
                                             <select id="filter_area2" data-placeholder="Pilih Area" style="width: 100%;"
                                             class="cari f-area js-select2 form-control filter_area" name="m_w_m_area_id">
                                             <option></option>
@@ -50,25 +50,25 @@
                                 <div class="row mb-2">
                                     <label class="col-sm-3 col-form-label">Waroeng</label>
                                     <div class="col-sm-9">
-                                        @if (in_array(Auth::user()->waroeng_id, [1, 2, 3, 4, 5]))
-                                            <select id="filter_waroeng1" style="width: 100%;"
-                                            class="cari f-wrg js-select2 form-control filter_waroeng" data-placeholder="Pilih Waroeng" name="m_w_id">
-                                            <option></option>
-                                            </select>
-                                        @elseif (in_array(Auth::user()->waroeng_id, [6, 27, 36, 52, 71, 84, 102, 111, 117]))
-                                            <select id="filter_waroeng3" style="width: 100%;" data-placeholder="Pilih Waroeng"
-                                            class="cari f-area js-select2 form-control filter_waroeng" name="waroeng">
-                                            <option></option>
-                                            @foreach ($data->waroeng as $waroeng)
-                                                <option value="{{ $waroeng->m_w_id }}"> {{ $waroeng->m_w_nama }} </option>
-                                            @endforeach
-                                            </select>
-                                        @else
-                                            <select id="filter_waroeng2" style="width: 100%;"
-                                            class="cari f-area js-select2 form-control filter_waroeng" name="waroeng" disabled>
-                                            <option value="{{ ucwords($data->waroeng_nama->m_w_id) }}">{{ ucwords($data->waroeng_nama->m_w_nama) }}</option>
-                                            </select>
-                                        @endif
+                                        @if (in_array(Auth::user()->waroeng_id, $data->akses_pusat))
+                                        <select id="filter_waroeng1" style="width: 100%;"
+                                        class="cari f-wrg js-select2 form-control filter_waroeng" data-placeholder="Pilih Waroeng" name="m_w_id">
+                                        <option></option>
+                                        </select>
+                                    @elseif (in_array(Auth::user()->waroeng_id, $data->akses_pusar))
+                                        <select id="filter_waroeng3" style="width: 100%;" data-placeholder="Pilih Waroeng"
+                                        class="cari f-area js-select2 form-control filter_waroeng" name="waroeng">
+                                        <option></option>
+                                          @foreach ($data->waroeng as $waroeng)
+                                              <option value="{{ $waroeng->m_w_id }}"> {{ $waroeng->m_w_nama }} </option>
+                                          @endforeach
+                                        </select>
+                                    @else
+                                        <select id="filter_waroeng2" style="width: 100%;"
+                                        class="cari f-area js-select2 form-control filter_waroeng" name="waroeng" disabled>
+                                        <option value="{{ ucwords($data->waroeng_nama->m_w_id) }}">{{ ucwords($data->waroeng_nama->m_w_nama) }}</option>
+                                        </select>
+                                    @endif
                                     </div>
                                 </div>
                             </div>
@@ -94,8 +94,8 @@
                             </div>
                         </div>
 
-                        <div id="user-info" data-waroeng-id="{{ Auth::user()->waroeng_id }}" data-has-access="{{ in_array(Auth::user()->waroeng_id, $data->waroengidm) ? 'true' : 'false' }}"></div>
-                      <div id="user-info-pusat" data-waroeng-id="{{ Auth::user()->waroeng_id }}" data-has-access="{{ in_array(Auth::user()->waroeng_id, $data->waroengida) ? 'true' : 'false' }}"></div>
+                        <div id="user-info" data-waroeng-id="{{ Auth::user()->waroeng_id }}" data-has-access="{{ in_array(Auth::user()->waroeng_id, $data->akses_area) ? 'true' : 'false' }}"></div>
+                      <div id="user-info-pusat" data-waroeng-id="{{ Auth::user()->waroeng_id }}" data-has-access="{{ in_array(Auth::user()->waroeng_id, $data->akses_pusat) ? 'true' : 'false' }}"></div>
 
                         <div class="col-sm-8">
                             <button type="button" id="cari"
@@ -160,14 +160,14 @@ $(document).ready(function() {
     var userInfo = document.getElementById('user-info');
     var userInfoPusat = document.getElementById('user-info-pusat');
     var waroengId = userInfo.dataset.waroengId;
-    var hasAccess = userInfo.dataset.hasAccess === 'true';
-    var hasAccessPusat = userInfoPusat.dataset.hasAccess === 'true';
+    var HakAksesArea = userInfo.dataset.hasAccess === 'true';
+    var HakAksesPusat = userInfoPusat.dataset.hasAccess === 'true';
 
     $('#operator_select').on('select2:select', function() {
         var cek = $(this).val();
         var waroeng  = $('.filter_waroeng').val();
         var tanggal  = $('.filter_tanggal').val(); 
-        if(hasAccess){
+        if(HakAksesArea){
             if(waroeng > 0){
                 if(cek == 'ya') {
                     $("#operator").show();
@@ -279,10 +279,12 @@ $(document).ready(function() {
         }
     });
 
-    if(hasAccessPusat){
-    $('.filter_area').change(function(){
+    if(HakAksesPusat){
+      $('.filter_area').on('select2:select', function(){
         var id_area = $(this).val();
-        if(id_area){
+        var tanggal  = $('.filter_tanggal').val();
+        var prev = $(this).data('previous-value');
+        if(id_area && tanggal){
             $.ajax({
             type:"GET",
             url: '{{route("harian.select_waroeng")}}',
@@ -305,18 +307,20 @@ $(document).ready(function() {
             }
             });
         }else{
+          alert('Harap lengkapi kolom tanggal');
             $(".filter_waroeng").empty();
+            $(".filter_area").val(prev).trigger('change');
         }      
     });
-  }
+  } 
 
-  if(hasAccess){
-    $('.filter_waroeng').on('change', function(){
+  if(HakAksesArea){
+    $('.filter_waroeng').on('select2:select', function(){
         var id_waroeng = $(this).val();   
-        var show_operator = $("#operator_select").val();  
-        var tanggal  = $('.filter_tanggal').val();     
-    if(show_operator == 'tidak'){   
-        if(id_waroeng){
+        var tanggal  = $('.filter_tanggal').val(); 
+        var waroeng  = $('.filter_waroeng').val();
+        var prev = $(this).data('previous-value');
+        if(id_waroeng && tanggal){
             $.ajax({
             type:"GET",
             url: '{{route("harian.select_user")}}',
@@ -339,26 +343,24 @@ $(document).ready(function() {
             }
             });
         }else{
+          alert('Harap lengkapi kolom tanggal');
             $(".filter_operator").empty();
-        }
-    } else {
-        $("#operator_select").val("tidak").trigger('change');
-        $("#operator").hide();
-    }        
+            $(".filter_waroeng").val(prev).trigger('change');
+        }      
     });
 
   } else {
 
     $('.filter_tanggal').on('change', function(){
-        var show_operator = $("#operator_select").val();  
-        var tanggal  = $('.filter_tanggal').val();     
-    if(show_operator == 'tidak'){   
+        // var id_waroeng = $(this).val();   
+        var tanggal  = $('.filter_tanggal').val(); 
         if(tanggal){
             $.ajax({
             type:"GET",
             url: '{{route("harian.select_user")}}',
             dataType: 'JSON',
             data : {
+              // id_waroeng: id_waroeng,
               tanggal: tanggal,
             },
             success:function(res){               
@@ -375,11 +377,7 @@ $(document).ready(function() {
             });
         }else{
             $(".filter_operator").empty();
-        }
-    } else {
-        $("#operator_select").val("tidak").trigger('change');
-        $("#operator").hide();
-    }       
+        }      
     });
   }
 
