@@ -53,20 +53,6 @@
                             </div>
                         </div>
 
-                        {{-- <div class="row">
-                            <div class="col-md-5">
-                                <div class="row mb-2">
-                                    <label class="col-sm-3 col-form-label">Operator</label>
-                                    <div class="col-sm-9">
-                                        <select id="filter_operator" data-placeholder="Pilih Operator" style="width: 100%;"
-                                            class="cari f-area js-select2 form-control filter_operator" name="operator">
-                                            <option></option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> --}}
-
                         <div class="col-sm-8">
                             <button type="button" id="cari"
                                 class="btn btn-primary btn-sm col-1 mt-2 mb-3">Cari</button>
@@ -98,19 +84,6 @@ $(document).ready(function() {
     Codebase.helpersOnLoad(['jq-select2']);
     $("#rekap_non_menu").hide();
 
-    // let isClicked = false;
-    // let counter = 0;
-
-    // if (!isClicked) {
-    //     isClicked = true;
-    //     $('#filter_tanggal').on('change', function(e) {
-    //         counter++;
-    //         if (counter > 2) {
-    //             location.reload();
-    //         }
-    //     });
-    // }
-
     $('#non_menu').on('click', function() {
         var waroeng  = $('#filter_waroeng').val();
         var tanggal  = $('#filter_tanggal').val(); 
@@ -126,7 +99,6 @@ $(document).ready(function() {
         var area     = $('#filter_area').val();
         var waroeng  = $('#filter_waroeng').val();
         var tanggal  = $('#filter_tanggal').val(); 
-        var sesi  = $('#filter_sesi').val();  
         $("#rekap_non_menu").show();
         
         $.ajax({
@@ -145,15 +117,15 @@ $(document).ready(function() {
             html += '<th class="text-center" rowspan="2">Waroeng</th>';
             html += '<th class="text-center" rowspan="2">Operator</th>';
             html += '<th class="text-center" rowspan="2">Tanggal</th>';
-            for (var i = 0; i < data.length; i++) {
-                    html += '<th class="text-center" colspan="4">' + data[i] + '</th>';
+            for (var i = 0; i < 7; i++) {
+                    html += '<th class="text-center" colspan="5">' + data[i] + '</th>';
             }
             html += '</tr>';
             html += '<tr>';
-            var jenis_transaksi = ['tunai', 'pajak tunai', 'transfer', 'pajak transfer'];
+            var jenis_transaksi = ['Jumlah Nota', 'tunai', 'pajak tunai', 'transfer', 'pajak transfer'];
             var jumlah_transaksi = jenis_transaksi.length;
             
-            for (var i = 0; i < data.length; i++) {
+            for (var i = 0; i < 7; i++) {
                 for (var j = 0; j < jumlah_transaksi; j++) {
                     html += '<th class="text-center">' + jenis_transaksi[j] + '</th>';
                 }
@@ -170,12 +142,12 @@ $(document).ready(function() {
             // scrollY: "300px",
             scrollX: true,
             scrollCollapse: true,
-            // columnDefs: [ 
-            //         {
-            //             targets: '_all',
-            //             className: 'dt-body-right'
-            //         },
-            //     ],
+            columnDefs: [ 
+                    {
+                        targets: '_all',
+                        className: 'dt-body-center'
+                    },
+                ],
             lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
             pageLength: 10,
             ajax: {
@@ -184,7 +156,6 @@ $(document).ready(function() {
                     area: area,
                     waroeng: waroeng,
                     tanggal: tanggal,
-                    sesi: sesi,
                 },
                 type : "GET",
                 },
