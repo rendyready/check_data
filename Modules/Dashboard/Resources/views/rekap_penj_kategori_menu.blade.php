@@ -90,6 +90,7 @@
                     @foreach ($data->payment as $payment)
                     <th class="text-center">{{ $payment->m_jenis_produk_nama }}</th>
                     @endforeach
+                    <th class="text-center">Total</th>
                 </tr>
               </thead>
               <tbody id="show_data">
@@ -108,6 +109,7 @@
                       @foreach ($data->payment as $payment)
                       <th class="text-center">{{ $payment->m_jenis_produk_nama }}</th>
                       @endforeach
+                      <th class="text-center">Total</th>
                   </tr>
                 </thead>
                 <tbody id="show_data">
@@ -166,13 +168,9 @@ $(document).ready(function() {
             scrollCollapse: true,
             columnDefs: [
                 {
-                    targets: [0],
+                    targets: '_all',
                     className: 'dt-body-center'
                 },
-                {
-                    targets: [1, 2, 3, 4, 5, 6, 7, 8],
-                    className: 'dt-body-right'
-                }
             ],
             lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
             pageLength: 10,

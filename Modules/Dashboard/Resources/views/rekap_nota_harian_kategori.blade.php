@@ -73,12 +73,17 @@
                         </div>
 
                     </form>      
-                
+             
+            <div id="rekap_non_menu">
             <table id="tampil_rekap" class="table table-sm table-bordered table-hover table-striped table-vcenter js-dataTable-full nowrap">
                 <thead id="head_data">
                 </thead>
             </table>
-
+            <div class="col-sm-8">
+                <button type="button" id="non_menu"
+                    class="btn btn-primary btn-sm mt-2 mb-3">Lihat Rekap Non Menu</button>
+            </div>
+            </div>
           </div>
         </div>
       </div>
@@ -91,12 +96,38 @@
     <script type="module">
 $(document).ready(function() {
     Codebase.helpersOnLoad(['jq-select2']);
+    $("#rekap_non_menu").hide();
+
+    // let isClicked = false;
+    // let counter = 0;
+
+    // if (!isClicked) {
+    //     isClicked = true;
+    //     $('#filter_tanggal').on('change', function(e) {
+    //         counter++;
+    //         if (counter > 2) {
+    //             location.reload();
+    //         }
+    //     });
+    // }
+
+    $('#non_menu').on('click', function() {
+        var waroeng  = $('#filter_waroeng').val();
+        var tanggal  = $('#filter_tanggal').val(); 
+        var url = 'rekap_kategori/rekap_non_menu?waroeng='+waroeng+'&tanggal='+tanggal;
+        window.open(url,'lap_non_menu.blade.php');
+    });
+
+    let isClicked = false;
 
     $('#cari').on('click', function() {
+        if (!isClicked) {
+            isClicked = true;
         var area     = $('#filter_area').val();
         var waroeng  = $('#filter_waroeng').val();
         var tanggal  = $('#filter_tanggal').val(); 
         var sesi  = $('#filter_sesi').val();  
+        $("#rekap_non_menu").show();
         
         $.ajax({
         url: '{{route("rekap_kategori.tanggal_rekap")}}',
@@ -139,12 +170,12 @@ $(document).ready(function() {
             // scrollY: "300px",
             scrollX: true,
             scrollCollapse: true,
-            columnDefs: [ 
-                    {
-                        targets: '_all',
-                        className: 'dt-body-right'
-                    },
-                ],
+            // columnDefs: [ 
+            //         {
+            //             targets: '_all',
+            //             className: 'dt-body-right'
+            //         },
+            //     ],
             lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
             pageLength: 10,
             ajax: {
@@ -164,7 +195,10 @@ $(document).ready(function() {
         
         }
         });
-    });
+    } else {
+        location.reload();
+    }
+});
 
     //filter waroeng
     $('#filter_area').change(function(){

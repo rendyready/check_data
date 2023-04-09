@@ -53,7 +53,7 @@ Route::prefix('dashboard')->middleware('auth', 'web')
             Route::post('rekap_menu/simpan_tgl', 'simpan_tgl')->name('rekap_menu.simpan_tgl');
             Route::get('rekap_menu/select_trans', 'select_trans')->name('rekap_menu.select_trans');
             Route::get('rekap_menu/select_sif', 'select_sif')->name('rekap_menu.select_sif');
-            Route::get('rekap_menu/menu_non_menu/{mw}/{date}', 'rekapNonMenu')->name('rekap_menu.menu_non_menu');
+            // Route::get('rekap_menu/menu_non_menu/{mw}/{date}', 'rekapNonMenu')->name('rekap_menu.menu_non_menu');
         });
 
         Route::controller(RefundController::class)->group(function () {
@@ -90,14 +90,14 @@ Route::prefix('dashboard')->middleware('auth', 'web')
             Route::get('kas_kasir/select_sesi', 'select_sesi')->name('kas_kasir.select_sesi');
         });
 
-        // Route::get('kas_kasir/export_pdf', [LaporanKasHarianKasirController::class, 'export_pdf'])->name('kas_kasir.export_pdf');
         Route::controller(RekapNotaHarianKategoriController::class)->group(function () {
-            Route::get('get-summary-sales', 'getSummarySales')->name('rekap_kategori.getSummarySales');
             Route::get('rekap_kategori', 'index')->name('rekap_kategori.index');
             Route::get('rekap_kategori/show', 'show')->name('rekap_kategori.show');
             Route::get('rekap_kategori/select_waroeng', 'select_waroeng')->name('rekap_kategori.select_waroeng');
             Route::get('rekap_kategori/select_user', 'select_user')->name('rekap_kategori.select_user');
             Route::get('rekap_kategori/tanggal_rekap', 'tanggal_rekap')->name('rekap_kategori.tanggal_rekap');
+            Route::get('rekap_kategori/rekap_non_menu', 'rekap_non_menu')->name('rekap_kategori.rekap_non_menu');
+
         });
         Route::controller(RekapPenjualanKategoriMenuController::class)->group(function () {
             Route::get('rekap_penj_kat', 'index')->name('rekap_penj_kat.index');
