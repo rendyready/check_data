@@ -88,11 +88,12 @@ class MWaroengController extends Controller
                     DB::table('m_w')->insert($data);
                     return response(['Messages' => 'Data Tambah !']);
                 }
-            } elseif ($request->action == 'edit') {
+            } else {
                 $data = array(
                     'm_w_nama' => $request->m_w_nama,
                     'm_w_alamat' => $request->m_w_alamat,
                     'm_w_m_area_id' => $request->m_w_m_area_id,
+                    'm_w_m_kode_nota' => $request->m_w_m_kode_nota,
                     'm_w_m_w_jenis_id' => $request->m_w_m_w_jenis_id,
                     'm_w_m_pajak_id' => $request->m_w_m_pajak_id,
                     'm_w_status' => $request->m_w_status,
@@ -103,13 +104,8 @@ class MWaroengController extends Controller
                 );
                 DB::table('m_w')->where('m_w_id', $request->m_w_id)
                     ->update($data);
-            } else {
-                $softdelete = array('m_w_deleted_at' => Carbon::now());
-                DB::table('m_pajak')
-                    ->where('m_w_id', $request->m_w_id)
-                    ->update($softdelete);
             }
-            return response(['Messages' => $data]);
+            return response(['type' => 'success','messages' => 'Berhasil Update']);
         }
     }
 }
