@@ -30,7 +30,6 @@ class RekapPenjualanKategoriMenuController extends Controller
 
     public function select_waroeng(Request $request)
     {
-
         $waroeng = DB::table('m_w')
             ->select('m_w_id', 'm_w_nama', 'm_w_code')
             ->where('m_w_m_area_id', $request->id_area)
@@ -109,7 +108,7 @@ class RekapPenjualanKategoriMenuController extends Controller
                 ->orderBy('m_produk_m_jenis_produk_id', 'ASC')
                 ->get();
         
-    $data =[];
+            $data =[];
             $i =1;
             foreach ($trans as $key => $valTrans) {
                 $data[$i]['area'] = $valTrans->m_area_nama;
@@ -118,6 +117,7 @@ class RekapPenjualanKategoriMenuController extends Controller
                 if($request->show_operator == 'ya'){
                 $data[$i]['operator'] = $valTrans->name;
                 }
+                $grandTotal = 0;
                 foreach ($methodPay as $key => $valPay) {
                     $total = 0;
                     foreach ($trans2 as $key2 => $valTrans2) {
@@ -126,9 +126,12 @@ class RekapPenjualanKategoriMenuController extends Controller
                         }
                     }
                     $data[$i][$valPay->m_jenis_produk_nama] = number_format($total);
+                    $grandTotal += $total;
                 }
+                $data[$i]['Total'] = number_format($grandTotal);
                 $i++; 
             }
+            
             $length = count($data);
             $convert = array();
             for ($i=1; $i <= $length ; $i++) { 
