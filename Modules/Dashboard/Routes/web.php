@@ -97,13 +97,13 @@ Route::prefix('dashboard')->middleware('auth', 'web')
             Route::get('rekap_kategori/select_user', 'select_user')->name('rekap_kategori.select_user');
             Route::get('rekap_kategori/tanggal_rekap', 'tanggal_rekap')->name('rekap_kategori.tanggal_rekap');
             Route::get('rekap_kategori/rekap_non_menu', 'rekap_non_menu')->name('rekap_kategori.rekap_non_menu');
-
         });
         Route::controller(RekapPenjualanKategoriMenuController::class)->group(function () {
             Route::get('rekap_penj_kat', 'index')->name('rekap_penj_kat.index');
             Route::get('rekap_penj_kat/show', 'show')->name('rekap_penj_kat.show');
             Route::get('rekap_penj_kat/select_waroeng', 'select_waroeng')->name('rekap_penj_kat.select_waroeng');
             Route::get('rekap_penj_kat/select_user', 'select_user')->name('rekap_penj_kat.select_user');
+            Route::get('rekap_penj_kat/rekap_non_menu', 'rekap_non_menu')->name('rekap_penj_kat.rekap_non_menu');
         });
         Route::controller(RekapMenuHarianController::class)->group(function () {
             Route::get('menu_harian', 'index')->name('menu_harian.index');

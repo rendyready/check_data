@@ -51,24 +51,24 @@
                                     <label class="col-sm-3 col-form-label">Waroeng</label>
                                     <div class="col-sm-9">
                                         @if (in_array(Auth::user()->waroeng_id, $data->akses_pusat))
-                                        <select id="filter_waroeng1" style="width: 100%;"
-                                        class="cari f-wrg js-select2 form-control filter_waroeng" data-placeholder="Pilih Waroeng" name="m_w_id">
-                                        <option></option>
-                                        </select>
-                                    @elseif (in_array(Auth::user()->waroeng_id, $data->akses_pusar))
-                                        <select id="filter_waroeng3" style="width: 100%;" data-placeholder="Pilih Waroeng"
-                                        class="cari f-area js-select2 form-control filter_waroeng" name="waroeng">
-                                        <option></option>
-                                          @foreach ($data->waroeng as $waroeng)
-                                              <option value="{{ $waroeng->m_w_id }}"> {{ $waroeng->m_w_nama }} </option>
-                                          @endforeach
-                                        </select>
-                                    @else
-                                        <select id="filter_waroeng2" style="width: 100%;"
-                                        class="cari f-area js-select2 form-control filter_waroeng" name="waroeng" disabled>
-                                        <option value="{{ ucwords($data->waroeng_nama->m_w_id) }}">{{ ucwords($data->waroeng_nama->m_w_nama) }}</option>
-                                        </select>
-                                    @endif
+                                            <select id="filter_waroeng1" style="width: 100%;"
+                                            class="cari f-wrg js-select2 form-control filter_waroeng" data-placeholder="Pilih Waroeng" name="m_w_id">
+                                            <option></option>
+                                            </select>
+                                        @elseif (in_array(Auth::user()->waroeng_id, $data->akses_pusar))
+                                            <select id="filter_waroeng3" style="width: 100%;" data-placeholder="Pilih Waroeng"
+                                            class="cari f-area js-select2 form-control filter_waroeng" name="waroeng">
+                                            <option></option>
+                                            @foreach ($data->waroeng as $waroeng)
+                                                <option value="{{ $waroeng->m_w_id }}"> {{ $waroeng->m_w_nama }} </option>
+                                            @endforeach
+                                            </select>
+                                        @else
+                                            <select id="filter_waroeng2" style="width: 100%;"
+                                            class="cari f-area js-select2 form-control filter_waroeng" name="waroeng" disabled>
+                                            <option value="{{ ucwords($data->waroeng_nama->m_w_id) }}">{{ ucwords($data->waroeng_nama->m_w_nama) }}</option>
+                                            </select>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -140,7 +140,6 @@
                 </tbody>
               </table>
             </div>
-
           </div>
         </div>
       </div>
