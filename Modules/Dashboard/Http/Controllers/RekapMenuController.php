@@ -254,7 +254,7 @@ class RekapMenuController extends Controller
                        ->groupBy('r_t_rekap_modal_id')
                        ->first();
                if (!empty($menu)) {
-                   $sales[$valSesi->name][$valType->m_t_t_id]['Menu'] = $menu->nominal;
+                   $sales[$valSesi->name][$valType->m_t_t_id]['Menu'] = number_format($menu->nominal);
                }
 
                #Non-Menu
@@ -269,7 +269,7 @@ class RekapMenuController extends Controller
                        ->groupBy('r_t_rekap_modal_id')
                        ->first();
                if (!empty($nonMenu)) {
-                   $sales[$valSesi->name][$valType->m_t_t_id]['Non Menu'] = $nonMenu->nominal;
+                   $sales[$valSesi->name][$valType->m_t_t_id]['Non Menu'] = number_format($nonMenu->nominal);
                }
 
                #Ice-Cream
@@ -284,7 +284,7 @@ class RekapMenuController extends Controller
                        ->groupBy('r_t_rekap_modal_id')
                        ->first();
                if (!empty($iceCream)) {
-                   $sales[$valSesi->name][$valType->m_t_t_id]['Ice Cream'] = $iceCream->nominal;
+                   $sales[$valSesi->name][$valType->m_t_t_id]['Ice Cream'] = number_format($iceCream->nominal);
                }
 
                #KBD
@@ -299,7 +299,7 @@ class RekapMenuController extends Controller
                        ->groupBy('r_t_rekap_modal_id')
                        ->first();
                if (!empty($kbd)) {
-                   $sales[$valSesi->name][$valType->m_t_t_id]['KBD'] = $kbd->nominal;
+                   $sales[$valSesi->name][$valType->m_t_t_id]['KBD'] = number_format($kbd->nominal);
                }
            }
        }

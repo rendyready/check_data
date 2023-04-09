@@ -75,7 +75,9 @@ class RekapPenjualanKategoriMenuController extends Controller
                         }
                     }
                     if($request->show_operator == 'ya'){
+                        if($request->operator != 'all'){
                         $trans1->where('r_t_created_by', $request->operator);
+                        }
                     }
                     if (strpos($request->tanggal, 'to') !== false) {
                         $dates = explode('to' ,$request->tanggal);
