@@ -104,27 +104,41 @@ class MJenisNotaController extends Controller
         foreach ($request->nota_kode as $key => $value) {
             $get_waroeng = DB::table('m_w')
                 ->join('m_area', 'm_area_id', 'm_w_m_area_id')
-                ->where('m_w_m_kode_nota', $request->nota_kode[$key])
-                ->where('m_area_id', $request->m_area_id)
+                ->where('m_w_m_kode_nota', $request->nota_kode[$key]);
+            $area_id = ($request->m_area_id == 0) ? $get_waroeng->get() : $get_waroeng->where('m_area_id', $request->m_area_id)
                 ->get();
-        
             $m_w_ids = $get_waroeng->pluck('m_w_id')->toArray();
-        
-            $get_list_nota = DB::table('m_jenis_nota')
-                ->whereIn('m_jenis_nota_m_w_id', $m_w_ids)
-                ->where('m_jenis_nota_m_t_t_id', $request->update_m_jenis_nota_trans_id)
-                ->get();
-        
-            if (!empty($request->nom_harga[$key])) {
+            foreach ($request->update_m_jenis_nota_trans_id as $m_t_t_id) {
+                $get_list_nota = DB::table('m_jenis_nota')
+                    ->whereIn('m_jenis_nota_m_w_id', $m_w_ids)
+                    ->where('m_jenis_nota_m_t_t_id', $m_t_t_id)
+                    ->get();
+
                 foreach ($get_list_nota as $nota) {
-                    DB::table('m_menu_harga')
+                    $harga_menu = DB::table('m_menu_harga')
                         ->where('m_menu_harga_m_jenis_nota_id', $nota->m_jenis_nota_id)
                         ->where('m_menu_harga_m_produk_id', $request->m_produk_id)
-                        ->update(['m_menu_harga_nominal' => convertfloat($request->nom_harga[$key])]);
+                        ->first();
+
+                    if ($harga_menu) {
+                        DB::table('m_menu_harga')
+                            ->where('m_menu_harga_id', $harga_menu->m_menu_harga_id)
+                            ->update(['m_menu_harga_nominal' => convertfloat($request->nom_harga[$key])]);
+                    } else {
+                        DB::table('m_menu_harga')->insert([
+                            'm_menu_harga_id' => $this->getMasterId('m_menu_harga'),
+                            'm_menu_harga_m_jenis_nota_id' => $nota->m_jenis_nota_id,
+                            'm_menu_harga_m_produk_id' => $request->m_produk_id,
+                            'm_menu_harga_nominal' => convertfloat($request->nom_harga[$key]),
+                            'm_menu_harga_status' => '1',
+                            'm_menu_harga_tax_status' => '1',
+                            'm_menu_harga_created_by' => Auth::user()->id
+                        ]);
+                    }
                 }
             }
         }
-        
+
         return Redirect::route('m_jenis_nota.index');
     }
     public function show($id)
@@ -188,8 +202,8 @@ class MJenisNotaController extends Controller
     {
         foreach ($request->m_menu_harga_id_edit as $key => $value) {
             DB::table('m_menu_harga')
-            ->where('m_menu_harga_id',$request->m_menu_harga_id_edit[$key])
-            ->update(['m_menu_harga_nominal'=> convertfloat($request->m_menu_harga_nominal_edit[$key])]);
+                ->where('m_menu_harga_id', $request->m_menu_harga_id_edit[$key])
+                ->update(['m_menu_harga_nominal' => convertfloat($request->m_menu_harga_nominal_edit[$key])]);
         }
     }
 

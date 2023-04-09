@@ -269,8 +269,8 @@
                                       <label for="update_m_jenis_nota_trans_id">Jenis Transaksi</label>
                                       <div>
                                           <select class="js-select2" id="update_m_jenis_nota_trans_id"
-                                              name="update_m_jenis_nota_trans_id" style="width: 100%;"
-                                              data-container="#update_harga" data-placeholder="Choose one..">
+                                              name="update_m_jenis_nota_trans_id[]" style="width: 100%;"
+                                              data-container="#update_harga" data-placeholder="Pilih Jenis Transaksi" multiple>
                                               <option></option>
                                               @foreach ($listTipeTransaksi as $tipe)
                                                   <option value="{{ $tipe->m_t_t_id }}">{{ ucwords($tipe->m_t_t_name) }}
