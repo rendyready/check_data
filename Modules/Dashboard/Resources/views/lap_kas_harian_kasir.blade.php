@@ -211,6 +211,12 @@ $(document).ready(function() {
           scrollX: true,
           scrollY: '300px',
           autoWidth: false,
+          columnDefs: [ 
+                    {
+                        targets: '_all',
+                        className: 'dt-body-center'
+                    },
+                ],
           lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
           pageLength: 10,
           ajax: {

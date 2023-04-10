@@ -51,7 +51,7 @@
                     <div style="font-family: Courier; font-size: 14px;">
                         <table width="100%" border="1">
                             @foreach($sales as $key => $valSales)
-                            <tr style="background: #e98b8b; text-align: center">
+                            <tr style="background: #d35252; color:#ffffff; font-weight: bold; text-align: center">
                                 <td colspan="3">{{ ucfirst($key)}}</td>
                             </tr>
                             @foreach ($valSales as $key => $valItem)
