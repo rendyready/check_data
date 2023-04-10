@@ -20,13 +20,13 @@
       <div class="dropdown d-inline-block">
         <button type="button" class="btn btn-sm btn-alt-secondary" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <i class="fa fa-user d-sm-none"></i>
-          <span class="d-none d-sm-inline-block fw-semibold">J. Smith</span>
+          <span class="d-none d-sm-inline-block fw-semibold">{{strtoupper($waroeng)}}</span>
           <i class="fa fa-angle-down opacity-50 ms-1"></i>
         </button>
         <div class="dropdown-menu dropdown-menu-md dropdown-menu-end p-0" aria-labelledby="page-header-user-dropdown">
           <div class="px-2 py-3 bg-body-light rounded-top">
             <h5 class="h6 text-center mb-0">
-              John Smith
+              {{Auth::user()->name}}
             </h5>
           </div>
           <div class="p-2">

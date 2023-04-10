@@ -23,7 +23,7 @@ class RphController extends Controller
         $data->tgl_now = Carbon::now()->format('Y-m-d');
         $rph = DB::table('rph')
             ->join('users', 'users_id', 'rph_created_by')
-            ->where('rph_m_w_code', sprintf("%03d", $waroeng_id))
+            ->where('rph_m_w_id', $waroeng_id)
             ->where('rph_created_at', '>=', Carbon::now()->subDays(7))
             ->orderBy('rph_created_at','desc')
             ->get();
@@ -38,9 +38,11 @@ class RphController extends Controller
     {
         $waroeng_id = Auth::user()->waroeng_id;
         $data = new \stdClass();
-        $data->jenis = DB::table('m_jenis_produk')->get();
+        $data->jenis = DB::table('m_jenis_produk')->whereNotIn('m_jenis_produk_id',[8,9,10,11,12,13])->get();
         $data->produk = DB::table('m_produk')
-            ->whereIn('m_produk_m_klasifikasi_produk_id', [4])->get();
+            ->whereIn('m_produk_m_klasifikasi_produk_id', [4])
+            ->whereNotIn('m_produk_m_jenis_produk_id',[8,9,10,11,12,13])
+            ->get();
         $data->num = 1;
         $data->n = 1;
         $data->s = 1;
@@ -58,7 +60,7 @@ class RphController extends Controller
     {
         $waroeng_id = Auth::user()->waroeng_id;
         $cek_rph_valid = DB::table('rph')
-        ->where('rph_m_w_code',sprintf("%03d", $waroeng_id))
+        ->where('rph_m_w_id',$waroeng_id)
         ->where('rph_tgl',$request->rph_tgl)
         ->first();
         if (empty($cek_rph_valid)) {
@@ -66,7 +68,7 @@ class RphController extends Controller
             $rph = array(
                 'rph_code' => $request->rph_code,
                 'rph_tgl' => $request->rph_tgl,
-                'rph_m_w_code' => sprintf("%03d", $waroeng_id),
+                'rph_m_w_id' => $waroeng_id,
                 'rph_m_w_nama' => strtolower($request->rph_m_w_nama),
                 'rph_created_by' => Auth::user()->users_id,
                 'rph_created_at' => Carbon::now(),
@@ -74,12 +76,13 @@ class RphController extends Controller
             DB::table('rph')->insert($rph);
             foreach ($request->rph_detail_menu_m_produk_code as $key => $value) {
                 if (!empty($request->rph_detail_menu_qty[$key])) {
+                    $rph_detail_menu_id = $this->getNextId('rph_detail_menu', $waroeng_id);
                     $menu_nama = DB::table('m_produk')
                         ->where('m_produk_code', $request->rph_detail_menu_m_produk_code[$key])
                         ->select('m_produk_nama')
                         ->first();
                     $rph_menu = array(
-                        'rph_detail_menu_id' => $this->getNextId('rph_detail_menu', $waroeng_id),
+                        'rph_detail_menu_id' => $rph_detail_menu_id,
                         'rph_detail_menu_rph_code' => $request->rph_code,
                         'rph_detail_menu_m_produk_code' => $request->rph_detail_menu_m_produk_code[$key],
                         'rph_detail_menu_m_produk_nama' => $menu_nama->m_produk_nama,
@@ -88,7 +91,24 @@ class RphController extends Controller
                         'rph_detail_menu_created_at' => Carbon::now(),
                     );
                     DB::table('rph_detail_menu')->insert($rph_menu);
-                    
+                    $get_resep = DB::table('m_resep')
+                    ->join('m_resep_detail','m_resep_code','m_resep_detail_m_resep_code')
+                    ->where('m_resep_m_produk_code',$request->rph_detail_menu_m_produk_code[$key])
+                    ->whereNotNull('m_resep_detail_standar_porsi')
+                    ->get();
+                    foreach ($get_resep as $value) {
+                        $detail_resep = array(
+                            'rph_detail_bb_id' => $this->getNextId('rph_detail_bb',$waroeng_id),
+                            'rph_detail_bb_rph_detail_menu_id' => $rph_detail_menu_id,
+                            'rph_detail_bb_rph_code' => $request->rph_code,
+                            'rph_detail_bb_m_produk_code' => $value->m_resep_detail_bb_code,
+                            'rph_detail_bb_m_produk_nama' => $value->m_resep_detail_m_produk_nama,
+                            'rph_detail_bb_qty' => $request->rph_detail_menu_qty[$key]/$value->m_resep_detail_standar_porsi,
+                            'rph_detail_bb_created_at' => Carbon::now(),
+                            'rph_detail_bb_created_by' => Auth::id()
+                        );
+                    DB::table('rph_detail_bb')->insert($detail_resep);
+                    }
                 }
             }
             return response()->json(['messages' => 'Berhasil Menyimpan RPH', 'type' => 'success']);
@@ -106,9 +126,11 @@ class RphController extends Controller
     {
         $waroeng_id = Auth::user()->waroeng_id;
         $data = new \stdClass();
-        $data->jenis = DB::table('m_jenis_produk')->get();
+        $data->jenis = DB::table('m_jenis_produk')->whereNotIn('m_jenis_produk_id',[8,9,10,11,12,13])->get();
         $data->produk = DB::table('m_produk')
-            ->whereIn('m_produk_m_klasifikasi_produk_id', [4])->get();
+            ->whereIn('m_produk_m_klasifikasi_produk_id', [4])
+            ->whereNotIn('m_produk_m_jenis_produk_id',[8,9,10,11,12,13])
+            ->get();
         $data->num = 1;
         $data->n = 1;
         $data->s = 1;
@@ -155,8 +177,9 @@ class RphController extends Controller
                     ->where('m_produk_code', $request->rph_detail_menu_m_produk_code[$key])
                     ->select('m_produk_nama')
                     ->first();
+                $id = (empty($request->rph_detail_menu_id[$key])) ? $this->getNextId('rph_detail_menu', $waroeng_id) : $request->rph_detail_menu_id[$key] ;
                 $rph_menu = array(
-                    'rph_detail_menu_id' => $this->getNextId('rph_detail_menu', $waroeng_id),
+                    'rph_detail_menu_id' => $id ,
                     'rph_detail_menu_rph_code' => $request->rph_code,
                     'rph_detail_menu_m_produk_code' => $request->rph_detail_menu_m_produk_code[$key],
                     'rph_detail_menu_m_produk_nama' => $menu_nama->m_produk_nama,
@@ -168,8 +191,80 @@ class RphController extends Controller
                     ['rph_detail_menu_rph_code' => $request->rph_code, 'rph_detail_menu_m_produk_code' => $request->rph_detail_menu_m_produk_code[$key]],
                     $rph_menu
                 );
+
+                $get_resep = DB::table('m_resep')
+                    ->join('m_resep_detail','m_resep_code','m_resep_detail_m_resep_code')
+                    ->where('m_resep_m_produk_code',$request->rph_detail_menu_m_produk_code[$key])
+                    ->whereNotNull('m_resep_detail_standar_porsi')
+                    ->get();
+                    foreach ($get_resep as $value) {
+                        $detail_resep = array(
+                            'rph_detail_bb_rph_detail_menu_id' => $id,
+                            'rph_detail_bb_rph_code' => $request->rph_code,
+                            'rph_detail_bb_m_produk_code' => $value->m_resep_detail_bb_code,
+                            'rph_detail_bb_m_produk_nama' => $value->m_resep_detail_m_produk_nama,
+                            'rph_detail_bb_qty' => $request->rph_detail_menu_qty[$key]/$value->m_resep_detail_standar_porsi,
+                            'rph_detail_bb_created_at' => Carbon::now(),
+                            'rph_detail_bb_created_by' => Auth::id()
+                        );
+                    DB::table('rph_detail_bb')->updateOrInsert(['rph_detail_bb_rph_detail_menu_id' => $id, 
+                                    'rph_detail_bb_m_produk_code' => $value->m_resep_detail_bb_code],
+                                    $detail_resep);
+                    }
             }
         }
+    }
+    public function belanja()
+    {
+        $waroeng_id = Auth::user()->waroeng_id;
+        $data = new \stdClass();
+        $data->waroeng_nama = DB::table('m_w')->select('m_w_nama')->where('m_w_id', $waroeng_id)->first();
+        $data->tgl_now = Carbon::now()->format('Y-m-d');
+        $rph = DB::table('rph')
+            ->join('users', 'users_id', 'rph_created_by')
+            ->where('rph_m_w_id', $waroeng_id)
+            ->where('rph_created_at', '>=', Carbon::now()->subDays(7))
+            ->orderBy('rph_created_at','desc')
+            ->get();
+        return view('inventori::list_belanja', compact('rph', 'data'));
+    }
+    public function belanja_detail($id)
+    {
+
+       
+        $rph_m_w_id = DB::table('rph')->where('rph_code', $id)->value('rph_m_w_id');
+
+      return  $get_list = DB::table('rph')
+            ->join('rph_detail_bb', 'rph_detail_bb_rph_code', 'rph_code')
+            ->join('m_stok as ms1', function ($join1) use ($rph_m_w_id) {
+                $join1->on('ms1.m_stok_m_produk_code', 'rph_detail_bb_m_produk_code')
+                      ->join('m_gudang as mg1', function ($join2) use ($rph_m_w_id) {
+                          $join2->on('ms1.m_stok_gudang_code', 'mg1.m_gudang_code')
+                                ->where('mg1.m_gudang_nama', '=', 'gudang produksi waroeng');
+                                // ->where('mg1.m_gudang_m_w_id', '=', $rph_m_w_id);
+                      });
+            })
+            ->join('m_stok as ms2', function ($join1) {
+                $join1->on('ms2.m_stok_m_produk_code', 'rph_detail_bb_m_produk_code')
+                      ->join('m_gudang as mg2', function ($join2) {
+                          $join2->on('ms2.m_stok_gudang_code', 'mg2.m_gudang_code')
+                                ->where('mg2.m_gudang_nama', '=', 'gudang utama waroeng');
+                      });
+            })
+            ->select(
+                'rph_detail_bb_m_produk_code',
+                'rph_detail_bb_m_produk_nama',
+                DB::raw('SUM(CAST(rph_detail_bb_qty AS FLOAT)) as qty_rph'),
+                'ms1.m_stok_saldo as qty_produksi',
+                'ms2.m_stok_saldo as qty_gudang',
+                DB::raw('ABS(SUM(CAST(rph_detail_bb_qty AS FLOAT)) - ms1.m_stok_saldo - ms2.m_stok_saldo) as qty_beli')
+            )
+            ->groupBy('rph_detail_bb_m_produk_code', 'rph_detail_bb_m_produk_nama', 'qty_produksi', 'qty_gudang')
+            ->where('rph_detail_bb_rph_code', $id)
+            ->get();
+        
+    
+
     }
 
 }
