@@ -160,8 +160,8 @@ $(document).ready(function() {
             var html = '<tr>';
             html += '<th class="text-center" rowspan="2">Area</th>';
             html += '<th class="text-center" rowspan="2">Waroeng</th>';
-            html += '<th class="text-center" rowspan="2">Operator</th>';
             html += '<th class="text-center" rowspan="2">Tanggal</th>';
+            html += '<th class="text-center" rowspan="2">Operator</th>';
             for (var i = 0; i < 7; i++) {
                     html += '<th class="text-center" colspan="5">' + data[i] + '</th>';
             }
@@ -220,7 +220,6 @@ if(HakAksesPusat){
       $('.filter_area').on('select2:select', function(){
         var id_area = $(this).val();
         var tanggal  = $('.filter_tanggal').val();
-        var prev = $(this).data('previous-value');
         if(id_area && tanggal){
             $.ajax({
             type:"GET",
@@ -246,8 +245,8 @@ if(HakAksesPusat){
         }else{
           alert('Harap lengkapi kolom tanggal');
             $(".filter_waroeng").empty();
-            $(".filter_area").val(prev).trigger('change');
         }      
+        $("#button_non_menu").hide();
     });
   } 
 

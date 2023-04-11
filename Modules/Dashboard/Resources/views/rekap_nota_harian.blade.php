@@ -308,8 +308,11 @@ $(document).ready(function() {
         }else{
           alert('Harap lengkapi kolom tanggal');
             $(".filter_waroeng").empty();
-            $(".filter_area").val(prev).trigger('change');
         }      
+        $(".filter_operator").empty();
+        $("#button_non_menu").hide();
+        $("#operator_select").val("tidak").trigger('change');
+        $("#operator").hide();
     });
   } 
 
@@ -318,7 +321,6 @@ $(document).ready(function() {
         var id_waroeng = $(this).val();   
         var tanggal  = $('.filter_tanggal').val(); 
         var waroeng  = $('.filter_waroeng').val();
-        var prev = $(this).data('previous-value');
         if(id_waroeng && tanggal){
             $.ajax({
             type:"GET",
@@ -344,14 +346,12 @@ $(document).ready(function() {
         }else{
           alert('Harap lengkapi kolom tanggal');
             $(".filter_operator").empty();
-            $(".filter_waroeng").val(prev).trigger('change');
         }      
     });
 
   } else {
 
     $('.filter_tanggal').on('change', function(){
-        // var id_waroeng = $(this).val();   
         var tanggal  = $('.filter_tanggal').val(); 
         if(tanggal){
             $.ajax({
@@ -359,7 +359,6 @@ $(document).ready(function() {
             url: '{{route("harian.select_user")}}',
             dataType: 'JSON',
             data : {
-              // id_waroeng: id_waroeng,
               tanggal: tanggal,
             },
             success:function(res){               
@@ -382,9 +381,7 @@ $(document).ready(function() {
 
     $('.filter_tanggal').flatpickr({
             mode: "range",
-            dateFormat: 'Y-m-d',
-            // noCalendar: false,
-            // allowInput: true,            
+            dateFormat: 'Y-m-d',           
     });
 
 });

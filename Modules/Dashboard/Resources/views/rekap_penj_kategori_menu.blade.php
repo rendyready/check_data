@@ -157,37 +157,72 @@
     <script type="module">
 $(document).ready(function() {
     Codebase.helpersOnLoad(['jq-select2']);
+    var userInfo = document.getElementById('user-info');
+    var userInfoPusat = document.getElementById('user-info-pusat');
+    var waroengId = userInfo.dataset.waroengId;
+    var HakAksesArea = userInfo.dataset.hasAccess === 'true';
+    var HakAksesPusat = userInfoPusat.dataset.hasAccess === 'true';
+
     $("#tampil1").hide();
     $("#tampil2").hide();
     $("#operator").hide();
 
     $("#button_non_menu").hide();
 
-    if(!HakAksesArea){
-    $('.filter_tanggal').on('change', function() {
-        var waroeng = $('.filter_waroeng').val();
-        var tanggal = $('.filter_tanggal').val();
-        var isRange = tanggal.includes('to'); 
+    if(HakAksesArea){
+        $('.filter_waroeng').on('change', function() {
+            var waroeng = $('.filter_waroeng').val();
+            var tanggal = $('.filter_tanggal').val();
+            var isRange = tanggal.includes('to'); 
 
-        if (waroeng && isRange) {    
-            $("#button_non_menu").hide();
-        } else {
-            $("#button_non_menu").show();
-        }
-    });
+            if (waroeng && isRange) {    
+                $("#button_non_menu").hide();
+            } else {
+                $("#button_non_menu").show();
+            }
+        });
+
+    } else if (HakAksesPusat) {
+        $('.filter_area').on('change', function() {
+            var area = $('.filter_area').val();
+            var tanggal = $('.filter_tanggal').val();
+            var isRange = tanggal.includes('to'); 
+
+            if (area && isRange) {    
+                $("#button_non_menu").hide();
+            } else {
+                $("#button_non_menu").show();
+            }
+        });
+
     } else {
-    $('.filter_waroeng').on('change', function() {
-        var waroeng = $('.filter_waroeng').val();
+    
+        $('.filter_tanggal').on('change', function() {
+            var waroeng = $('.filter_waroeng').val();
+            var tanggal = $('.filter_tanggal').val();
+            var isRange = tanggal.includes('to'); 
+
+            if (waroeng && isRange) {    
+                $("#button_non_menu").hide();
+            } else {
+                $("#button_non_menu").show();
+            }
+            if(isRange){
+                $("#button_non_menu").hide();
+            }
+        });
+    }
+
+    $('.filter_tanggal').on('change', function() {
         var tanggal = $('.filter_tanggal').val();
         var isRange = tanggal.includes('to'); 
-
-        if (waroeng && isRange) {    
+        var waroeng = $('.filter_waroeng').val();
+        if(isRange){
             $("#button_non_menu").hide();
-        } else {
+        } else if (!isRange && waroeng){
             $("#button_non_menu").show();
         }
     });
-    }
 
     $('#non_menu').on('click', function() {
         var waroeng  = $('.filter_waroeng').val();
@@ -195,12 +230,6 @@ $(document).ready(function() {
         var url = 'rekap_penj_kat/rekap_non_menu?waroeng='+waroeng+'&tanggal='+tanggal;
         window.open(url,'lap_non_menu.blade.php');
     });
-
-    var userInfo = document.getElementById('user-info');
-    var userInfoPusat = document.getElementById('user-info-pusat');
-    var waroengId = userInfo.dataset.waroengId;
-    var HakAksesArea = userInfo.dataset.hasAccess === 'true';
-    var HakAksesPusat = userInfoPusat.dataset.hasAccess === 'true';
 
     $('#operator_select').on('select2:select', function() {
         var cek = $(this).val();
@@ -344,8 +373,11 @@ $(document).ready(function() {
         }else{
           alert('Harap lengkapi kolom tanggal');
             $(".filter_waroeng").empty();
-            $(".filter_area").val(prev).trigger('change');
-        }      
+        }     
+        $(".filter_operator").empty();
+        $("#button_non_menu").hide();
+        $("#operator_select").val("tidak").trigger('change');
+        $("#operator").hide();
     });
   } 
 
@@ -353,7 +385,6 @@ $(document).ready(function() {
     $('.filter_waroeng').on('select2:select', function(){
         var id_waroeng = $(this).val();   
         var tanggal  = $('.filter_tanggal').val(); 
-        var waroeng  = $('.filter_waroeng').val();
         var prev = $(this).data('previous-value');
         if(id_waroeng && tanggal){
             $.ajax({
@@ -380,14 +411,12 @@ $(document).ready(function() {
         }else{
           alert('Harap lengkapi kolom tanggal');
             $(".filter_operator").empty();
-            $(".filter_waroeng").val(prev).trigger('change');
         }      
     });
 
   } else {
 
     $('.filter_tanggal').on('change', function(){
-        // var id_waroeng = $(this).val();   
         var tanggal  = $('.filter_tanggal').val(); 
         if(tanggal){
             $.ajax({
@@ -395,7 +424,6 @@ $(document).ready(function() {
             url: '{{route("rekap_penj_kat.select_user")}}',
             dataType: 'JSON',
             data : {
-              // id_waroeng: id_waroeng,
               tanggal: tanggal,
             },
             success:function(res){               
@@ -416,12 +444,10 @@ $(document).ready(function() {
     });
   }
 
-    $('#filter_tanggal').flatpickr({
-            mode: "range",
-            dateFormat: 'Y-m-d',
-            // noCalendar: false,
-            // allowInput: true,            
-    });
+  $('.filter_tanggal').flatpickr({
+        mode: "range",
+        dateFormat: 'Y-m-d',
+  });
 
 });
 </script>

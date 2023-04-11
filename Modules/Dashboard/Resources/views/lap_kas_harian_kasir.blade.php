@@ -158,7 +158,6 @@
                                     class="table table-sm table-bordered table-striped table-vcenter nowrap table-hover js-dataTable-full">
                                     <thead>
                                         <tr>
-                                            <th class="text-center">Tanggal</th>
                                             <th class="text-center">No Nota</th>
                                             <th class="text-center">Transaksi</th>
                                             <th class="text-center">Masuk</th>
@@ -327,7 +326,6 @@ $(document).ready(function() {
                               type : "GET",
                               },
                               columns: [
-                              { data: 'tanggal' },
                               { data: 'no_nota' },
                               { data: 'transaksi' },
                               { data: 'masuk', class: 'text-end' },
