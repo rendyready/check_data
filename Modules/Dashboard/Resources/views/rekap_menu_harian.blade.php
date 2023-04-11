@@ -148,10 +148,10 @@ $(document).ready(function() {
 
     $('#cari').on('click', function(e) {
     var area     = $('.filter_area').val();
-    var waroeng  = $('.filter_waroeng').val().trim();
-    var tanggal  = $('.filter_tanggal').val().trim();
-    var trans    = $('.filter_trans').val().trim();
-    var sesi     = $('.filter_sif').val().trim();
+    var waroeng  = $('.filter_waroeng').val();
+    var tanggal  = $('.filter_tanggal').val();
+    var trans    = $('.filter_trans').val();
+    var sesi     = $('.filter_sif').val();
 
     $('#tampil_rekap').DataTable({
         destroy: true,
@@ -192,7 +192,6 @@ $(document).ready(function() {
       $('.filter_area').on('select2:select', function(){
         var id_area = $(this).val();
         var tanggal  = $('.filter_tanggal').val();
-        var prev = $(this).data('previous-value');
         if(id_area && tanggal){
             $.ajax({
             type:"GET",
@@ -218,8 +217,9 @@ $(document).ready(function() {
         }else{
           alert('Harap lengkapi kolom tanggal');
             $(".filter_waroeng").empty();
-            $(".filter_area").val(prev).trigger('change');
-        }      
+        }   
+        $(".filter_sif").empty();   
+        $(".filter_trans").empty(); 
     });
   } 
 
@@ -227,7 +227,6 @@ $(document).ready(function() {
     $('.filter_waroeng').on('select2:select', function(){
         var id_waroeng = $(this).val();   
         var id_tanggal  = $('.filter_tanggal').val(); 
-        var prev = $(this).data('previous-value');
         if(id_waroeng && id_tanggal){
             $.ajax({
             type:"GET",
@@ -253,8 +252,8 @@ $(document).ready(function() {
         }else{
           alert('Harap lengkapi kolom tanggal');
             $(".filter_sif").empty();
-            $(".filter_waroeng").val(prev).trigger('change');
-        }      
+        }     
+        $(".filter_trans").empty();
     });
 
   } else {
@@ -312,8 +311,9 @@ $(document).ready(function() {
             }
             });
         }else{
-            $("#filter_trans").val('').trigger('change');
+            $("#filter_trans").empty();
         }      
+        $("#filter_trans").empty();
     });
 
     $('.filter_tanggal').flatpickr({

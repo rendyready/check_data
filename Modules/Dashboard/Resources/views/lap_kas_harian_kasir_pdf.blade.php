@@ -38,7 +38,6 @@
     <table id="detail_modal" class="table table-sm table-striped table-border table-vcenter nowrap table-hover">
         <thead>
             <tr>
-                <th class="text-center">Tanggal</th>
                 <th class="text-center">No Nota</th>
                 <th class="text-center">Transaksi</th>
                 <th class="text-center">Masuk</th>
@@ -50,7 +49,6 @@
             {{-- @dump($data) --}}
             @foreach ($data as $item)
                 <tr>
-                    <td>{{ $item['tanggal'] }}</td>
                     <td>{{ $item['no_nota'] }}</td>
                     <td>{{ $item['transaksi'] }}</td>
                     <td>{{ $item['masuk'] }}</td>
@@ -60,6 +58,9 @@
             @endforeach
         </tbody>
     </table>
+    <div style="width: 100%; height: 250px; border: 1px solid black;" class="mb-2">
+        <p class="ml-2" style="font-size: 14px">Catatan : </p>
+      </div>
     <div class="table-responsive">
         <table class="table table-sm table-borderless">
             <tr>

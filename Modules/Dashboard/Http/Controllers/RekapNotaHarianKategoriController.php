@@ -149,6 +149,7 @@ class RekapNotaHarianKategoriController extends Controller
                ->join('users','users_id','=','rekap_modal_created_by')
                ->whereRaw("to_char(rekap_modal_tanggal,'YYYY-MM-DD') = '{$request->tanggal}'")
                ->where('rekap_modal_m_w_id', $request->waroeng)
+               ->where('rekap_modal_status', 'close')
                ->get();
        $getMenu = DB::table('m_produk')
                ->select('m_produk_id')

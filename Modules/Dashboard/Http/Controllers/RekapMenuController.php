@@ -44,22 +44,18 @@ class RekapMenuController extends Controller
 
     public function tanggal_rekap(Request $request)
     {
-        if (strpos($request->tanggal, 'to') !== false) {
         $dates = explode('to', $request->tanggal);
         $tanggal = DB::table('rekap_transaksi')
-                ->select('r_t_tanggal')
-                ->whereBetween('r_t_tanggal', $dates)
-                ->orderBy('r_t_tanggal', 'asc')
+                ->select('r_t_tanggal');
+                if (strpos($request->tanggal, 'to') !== false) {
+                    $tanggal->whereBetween('r_t_tanggal', $dates);
+                } else {
+                    $tanggal->where('r_t_tanggal', $request->tanggal);
+                }
+                $tanggal = $tanggal->orderBy('r_t_tanggal', 'asc')
                 ->groupby('r_t_tanggal')
                 ->get();
-        } else {
-            $tanggal = DB::table('rekap_transaksi')
-                ->select('r_t_tanggal')
-                ->where('r_t_tanggal', $request->tanggal)
-                ->orderBy('r_t_tanggal', 'asc')
-                ->groupby('r_t_tanggal')
-                ->get();
-        }
+
         $data = [];
         foreach ($tanggal as $val) {
             $data[] = $val->r_t_tanggal;
@@ -70,9 +66,11 @@ class RekapMenuController extends Controller
     public function select_waroeng(Request $request)
     {
         $waroeng = DB::table('m_w')
-            ->select('m_w_id', 'm_w_nama', 'm_w_code')
-            ->where('m_w_m_area_id', $request->id_area)
-            ->orderBy('m_w_id', 'asc')
+            ->select('m_w_id', 'm_w_nama', 'm_w_code');
+            if($request->id_area != 'all'){
+                $waroeng->where('m_w_m_area_id', $request->id_area);
+            }
+            $waroeng = $waroeng->orderBy('m_w_id', 'asc')
             ->get();
         $data = array();
         foreach ($waroeng as $val) {
@@ -88,9 +86,13 @@ class RekapMenuController extends Controller
             ->join('rekap_transaksi', 'r_t_m_t_t_id', 'm_t_t_id')
             ->select('m_t_t_id', 'm_t_t_name');
             if(in_array(Auth::user()->waroeng_id, $this->get_akses_area())){
-                $trans->where('r_t_m_w_id', $request->id_waroeng);
+                    if($request->id_waroeng != 'all'){
+                    $trans->where('r_t_m_w_id', $request->id_waroeng);
+                    }
             } else {
-                $trans->where('r_t_m_w_id', Auth::user()->waroeng_id);
+                    if($request->id_waroeng != 'all'){
+                    $trans->where('r_t_m_w_id', Auth::user()->waroeng_id);
+                }
             }
             $trans = $trans->orderBy('m_t_t_id', 'asc')
             ->get();

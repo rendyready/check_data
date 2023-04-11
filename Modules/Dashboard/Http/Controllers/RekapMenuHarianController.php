@@ -47,7 +47,6 @@ class RekapMenuHarianController extends Controller
         $data = array();
         foreach ($waroeng as $val) {
             $data[$val->m_w_id] = [$val->m_w_nama];
-            $data['all'] = ['all waroeng'];
         }
         return response()->json($data);
     }
@@ -77,9 +76,11 @@ class RekapMenuHarianController extends Controller
         $trans = DB::table('m_transaksi_tipe')
             ->join('rekap_transaksi', 'r_t_m_t_t_id', 'm_t_t_id')
             ->join('rekap_modal', 'rekap_modal_id', 'r_t_rekap_modal_id')
-            ->select('m_t_t_id', 'm_t_t_name')
-            ->where('rekap_modal_sesi', $request->id_sif)
-            ->orderBy('m_t_t_id', 'asc')
+            ->select('m_t_t_id', 'm_t_t_name');
+            if($request->id_sif != 'all'){
+                $trans->where('rekap_modal_sesi', $request->id_sif);
+            }
+            $trans = $trans->orderBy('m_t_t_id', 'asc')
             ->get();
 
         $data = array();

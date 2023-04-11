@@ -35,6 +35,7 @@
                                             @foreach ($data->area as $area)
                                                 <option value="{{ $area->m_area_id }}"> {{ $area->m_area_nama }} </option>
                                             @endforeach
+                                            <option value="all">All Area</option>
                                             </select>
                                         @else
                                             <select id="filter_area" data-placeholder="Pilih Area" style="width: 100%;"
@@ -129,9 +130,9 @@ $(document).ready(function() {
         if (!isClicked) {
             isClicked = true;
         var area     = $('.filter_area').val();
-        var waroeng  = $('.filter_waroeng').val().trim();
-        var tanggal  = $('.filter_tanggal').val().trim();
-        var trans    = $('.filter_trans').val().trim();
+        var waroeng  = $('.filter_waroeng').val();
+        var tanggal  = $('.filter_tanggal').val();
+        var trans    = $('.filter_trans').val();
 
         $.ajax({
             url: '{{route("rekap_menu.tanggal_rekap")}}',
@@ -216,7 +217,6 @@ if(HakAksesPusat){
       $('.filter_area').on('select2:select', function(){
         var id_area = $(this).val();
         var tanggal  = $('.filter_tanggal').val();
-        var prev = $(this).data('previous-value');
         if(id_area && tanggal){
             $.ajax({
             type:"GET",
@@ -242,8 +242,8 @@ if(HakAksesPusat){
         }else{
           alert('Harap lengkapi kolom tanggal');
             $(".filter_waroeng").empty();
-            $(".filter_area").val(prev).trigger('change');
-        }      
+        }     
+        $(".filter_trans").empty();  
     });
   } 
 
@@ -284,7 +284,6 @@ if(HakAksesPusat){
   } else {
 
     $('.filter_tanggal').on('change', function(){
-        // var id_waroeng = $(this).val();   
         var id_waroeng  = $('.filter_waroeng').val();
         var tanggal  = $('.filter_tanggal').val(); 
         if(tanggal){
@@ -294,7 +293,6 @@ if(HakAksesPusat){
             dataType: 'JSON',
             data : {
               id_waroeng: id_waroeng,
-            //   tanggal: tanggal,
             },
             success:function(res){               
                 if(res){
