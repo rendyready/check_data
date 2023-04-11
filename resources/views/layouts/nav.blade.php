@@ -478,6 +478,11 @@
                 </a>
               </li>
               <li class="nav-main-item">
+                <a class="nav-main-link{{ request()->is('invetori/rph_belanja') ? ' active' : '' }}" href="{{route('belanja.index')}}">
+                  <span class="nav-main-link-name">Kebutuhan Belanja</span>
+                </a>
+              </li>
+              <li class="nav-main-item">
                 <a class="nav-main-link{{ request()->is('invetori/po') ? ' active' : '' }}" href="{{route('po.index')}}">
                   <span class="nav-main-link-name">Purchase Order (PO)</span>
                 </a>

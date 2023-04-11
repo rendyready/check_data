@@ -199,6 +199,7 @@ class RphController extends Controller
                     ->get();
                     foreach ($get_resep as $value) {
                         $detail_resep = array(
+                            'rph_detail_bb_id' => $this->getNextId('rph_detail_bb',$waroeng_id),
                             'rph_detail_bb_rph_detail_menu_id' => $id,
                             'rph_detail_bb_rph_code' => $request->rph_code,
                             'rph_detail_bb_m_produk_code' => $value->m_resep_detail_bb_code,
@@ -229,39 +230,46 @@ class RphController extends Controller
         return view('inventori::list_belanja', compact('rph', 'data'));
     }
     public function belanja_detail($id)
-    {
-
+    { 
+        $waroeng_id = Auth::user()->waroeng_id;
+        $data = new \stdClass();
+        $data->waroeng_nama = DB::table('m_w')->select('m_w_nama')->where('m_w_id', $waroeng_id)->first();
        
-        $rph_m_w_id = DB::table('rph')->where('rph_code', $id)->value('rph_m_w_id');
+        $rph = DB::table('rph')->where('rph_code', $id)->first();
 
-      return  $get_list = DB::table('rph')
+        $get_list = DB::table('rph')
             ->join('rph_detail_bb', 'rph_detail_bb_rph_code', 'rph_code')
-            ->join('m_stok as ms1', function ($join1) use ($rph_m_w_id) {
+            ->join('m_stok as ms1', function ($join1) use ($rph) {
                 $join1->on('ms1.m_stok_m_produk_code', 'rph_detail_bb_m_produk_code')
-                      ->join('m_gudang as mg1', function ($join2) use ($rph_m_w_id) {
-                          $join2->on('ms1.m_stok_gudang_code', 'mg1.m_gudang_code')
-                                ->where('mg1.m_gudang_nama', '=', 'gudang produksi waroeng');
-                                // ->where('mg1.m_gudang_m_w_id', '=', $rph_m_w_id);
-                      });
+                    ->join('m_gudang as mg1', function ($join2) use ($rph) {
+                        $join2->on('ms1.m_stok_gudang_code', 'mg1.m_gudang_code')
+                            ->where('mg1.m_gudang_nama', '=', 'gudang produksi waroeng')
+                            ->where('mg1.m_gudang_m_w_id', '=', $rph->rph_m_w_id);
+                    });
             })
-            ->join('m_stok as ms2', function ($join1) {
+            ->join('m_stok as ms2', function ($join1) use ($rph) {
                 $join1->on('ms2.m_stok_m_produk_code', 'rph_detail_bb_m_produk_code')
-                      ->join('m_gudang as mg2', function ($join2) {
-                          $join2->on('ms2.m_stok_gudang_code', 'mg2.m_gudang_code')
-                                ->where('mg2.m_gudang_nama', '=', 'gudang utama waroeng');
-                      });
+                    ->join('m_gudang as mg2', function ($join2) use ($rph) {
+                        $join2->on('ms2.m_stok_gudang_code', 'mg2.m_gudang_code')
+                            ->where('mg2.m_gudang_nama', '=', 'gudang utama waroeng')
+                            ->where('mg2.m_gudang_m_w_id', '=', $rph->rph_m_w_id);
+                    });
             })
             ->select(
                 'rph_detail_bb_m_produk_code',
                 'rph_detail_bb_m_produk_nama',
+                'ms2.m_stok_satuan as satuan',
                 DB::raw('SUM(CAST(rph_detail_bb_qty AS FLOAT)) as qty_rph'),
                 'ms1.m_stok_saldo as qty_produksi',
                 'ms2.m_stok_saldo as qty_gudang',
-                DB::raw('ABS(SUM(CAST(rph_detail_bb_qty AS FLOAT)) - ms1.m_stok_saldo - ms2.m_stok_saldo) as qty_beli')
+                DB::raw('CASE WHEN SUM(CAST(rph_detail_bb_qty AS FLOAT) - ms1.m_stok_saldo - ms2.m_stok_saldo) < 0 THEN 0 ELSE SUM(CAST(rph_detail_bb_qty AS FLOAT) - ms1.m_stok_saldo - ms2.m_stok_saldo) END as qty_beli')
             )
-            ->groupBy('rph_detail_bb_m_produk_code', 'rph_detail_bb_m_produk_nama', 'qty_produksi', 'qty_gudang')
+            ->groupBy('rph_detail_bb_m_produk_code', 'rph_detail_bb_m_produk_nama', 'qty_produksi', 'qty_gudang','satuan')
             ->where('rph_detail_bb_rph_code', $id)
             ->get();
+        $rph_tanggal = $rph->rph_tgl;
+        return view('inventori::list_belanja_detail',compact('get_list','data','rph_tanggal'));
+        
         
     
 
