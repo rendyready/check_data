@@ -108,8 +108,8 @@ class RekapPenjualanKategoriMenuController extends Controller
                     }
                     if($request->show_operator == 'ya'){
                         $trans1->join('users', 'users_id', 'r_t_created_by')
-                                ->select('r_t_tanggal', 'name', 'm_area_nama', 'm_w_nama')
-                                ->groupBy('r_t_tanggal', 'name', 'm_area_nama', 'm_w_nama');
+                                ->select('r_t_tanggal', 'name', 'm_area_nama', 'm_w_nama', 'r_t_created_by')
+                                ->groupBy('r_t_tanggal', 'name', 'm_area_nama', 'm_w_nama', 'r_t_created_by');
                     } else {
                         $trans1->select('r_t_tanggal', 'm_area_nama', 'm_w_nama')
                                 ->groupBy('r_t_tanggal', 'm_area_nama', 'm_w_nama');
@@ -125,10 +125,15 @@ class RekapPenjualanKategoriMenuController extends Controller
                 } else {
                     $trans1->where('r_t_tanggal', $request->tanggal);
                 }
-        $trans2 = $trans1->selectRaw('m_produk_m_jenis_produk_id, r_t_tanggal, r_t_detail_reguler_price, SUM(r_t_detail_qty) as total')
-                ->groupBy('r_t_tanggal', 'm_produk_m_jenis_produk_id', 'r_t_detail_reguler_price')
-                ->orderBy('m_produk_m_jenis_produk_id', 'ASC')
-                ->get();
+        $trans1->orderBy('m_produk_m_jenis_produk_id', 'ASC');
+                if($request->show_operator == 'ya'){
+                $trans1->selectRaw('m_produk_m_jenis_produk_id, r_t_tanggal, r_t_detail_reguler_price, SUM(r_t_detail_qty) as total, r_t_created_by')
+                ->groupBy('r_t_tanggal', 'm_produk_m_jenis_produk_id', 'r_t_detail_reguler_price', 'r_t_created_by');
+                } else {
+                    $trans1->selectRaw('m_produk_m_jenis_produk_id, r_t_tanggal, r_t_detail_reguler_price, SUM(r_t_detail_qty) as total')
+                    ->groupBy('r_t_tanggal', 'm_produk_m_jenis_produk_id', 'r_t_detail_reguler_price');
+                }
+                $trans2 = $trans1->get();
         
             $data =[];
             $i =1;
@@ -143,7 +148,7 @@ class RekapPenjualanKategoriMenuController extends Controller
                 foreach ($methodPay as $key => $valPay) {
                     $total = 0;
                     foreach ($trans2 as $key2 => $valTrans2) {
-                        if ($valPay->m_jenis_produk_id == $valTrans2->m_produk_m_jenis_produk_id && $valTrans2->r_t_tanggal == $valTrans->r_t_tanggal) {
+                        if ($valPay->m_jenis_produk_id == $valTrans2->m_produk_m_jenis_produk_id && $valTrans2->r_t_tanggal == $valTrans->r_t_tanggal && $valTrans2->r_t_created_by == $valTrans->r_t_created_by) {
                             $total += $valTrans2->total * $valTrans2->r_t_detail_reguler_price;
                         }
                     }

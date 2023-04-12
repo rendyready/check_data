@@ -614,9 +614,10 @@ class LaporanKasHarianKasirController extends Controller
                         } else {
                             $saldoIn->where(DB::raw('DATE(rekap_modal_tanggal)'), $request->tanggal);
                         }
-                                    
-                        $saldoIn1 = $saldoIn->where('rekap_modal_status', 'close')
-                        ->orderBy('rekap_modal_tanggal', 'ASC')
+                        if(!in_array(Auth::user()->waroeng_id, $this->get_akses_area())){
+                            $saldoIn->where('rekap_modal_status', 'close');
+                        } 
+                        $saldoIn1 = $saldoIn->orderBy('rekap_modal_tanggal', 'ASC')
                         ->get();
         
              $data = array();
