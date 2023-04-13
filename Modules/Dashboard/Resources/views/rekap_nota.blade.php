@@ -79,11 +79,10 @@
                               <div class="row mb-3">
                                   <label class="col-sm-3 col-form-label" for="rekap_inv_penjualan_created_by">Operator</label>
                                   <div class="col-sm-9">
-                                    <div class="col-sm-9">
                                       <select id="filter_operator" style="width: 100%;"
                                       class="cari f-wrg js-select2 form-control filter_operator" data-placeholder="Pilih Operator" name="r_t_created_by">
                                       <option></option>
-                                  </select>
+                                      </select>
                                   </div>
                               </div>
                           </div>
@@ -238,6 +237,12 @@ $(document).ready(function() {
         processing: true,
         scrollX: true,
         // scrollY: '300px',
+        columnDefs: [ 
+                    {
+                        targets: '_all',
+                        className: 'dt-body-center'
+                    },
+                ],
         lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
         pageLength: 10,
         ajax: {
@@ -285,8 +290,8 @@ $(document).ready(function() {
         }else{
           alert('Harap lengkapi kolom tanggal');
             $(".filter_waroeng").empty();
-            $(".filter_area").val(prev).trigger('change');
-        }      
+        }     
+        $(".filter_operator").empty(); 
     });
   } 
 
@@ -294,7 +299,6 @@ $(document).ready(function() {
     $('.filter_waroeng').on('select2:select', function(){
         var id_waroeng = $(this).val();   
         var tanggal  = $('.filter_tanggal').val(); 
-        var prev = $(this).data('previous-value');
         if(id_waroeng && tanggal){
             $.ajax({
             type:"GET",
@@ -320,14 +324,12 @@ $(document).ready(function() {
         }else{
           alert('Harap lengkapi kolom tanggal');
             $(".filter_operator").empty();
-            $(".filter_waroeng").val(prev).trigger('change');
         }      
     });
 
   } else {
 
     $('.filter_tanggal').on('change', function(){
-        // var id_waroeng = $(this).val();   
         var tanggal  = $('.filter_tanggal').val(); 
         if(tanggal){
             $.ajax({
@@ -335,7 +337,6 @@ $(document).ready(function() {
             url: '{{route("rekap.select_user")}}',
             dataType: 'JSON',
             data : {
-              // id_waroeng: id_waroeng,
               tanggal: tanggal,
             },
             success:function(res){               

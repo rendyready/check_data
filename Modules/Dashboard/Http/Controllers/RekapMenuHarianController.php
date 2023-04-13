@@ -3,16 +3,25 @@
 namespace Modules\Dashboard\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Contracts\Support\Renderable;
 
 class RekapMenuHarianController extends Controller
 {
     public function index(Request $request)
     {
+        $waroeng_id = Auth::user()->waroeng_id;
         $data = new \stdClass();
+        $data->waroeng_nama = DB::table('m_w')->select('m_w_nama', 'm_w_id')->where('m_w_id', $waroeng_id)->first();
+        $data->area_nama = DB::table('m_area')->join('m_w', 'm_w_m_area_id', 'm_area_id')->select('m_area_nama', 'm_area_id')->where('m_w_id', $waroeng_id)->first();
+        $data->akses_area = $this->get_akses_area();//mulai dari 1 - akhir
+        $data->akses_pusat = $this->get_akses_pusat();//1,2,3,4,5
+        $data->akses_pusar = $this->get_akses_pusar(); //mulai dari 6 - akhir
+
         $data->waroeng = DB::table('m_w')
+            ->where('m_w_m_area_id', $data->area_nama->m_area_id)
             ->orderby('m_w_id', 'ASC')
             ->get();
         $data->area = DB::table('m_area')
@@ -38,7 +47,6 @@ class RekapMenuHarianController extends Controller
         $data = array();
         foreach ($waroeng as $val) {
             $data[$val->m_w_id] = [$val->m_w_nama];
-            $data['all'] = ['all waroeng'];
         }
         return response()->json($data);
     }
@@ -47,10 +55,13 @@ class RekapMenuHarianController extends Controller
     {
         $sesi = DB::table('rekap_modal')
             ->select('rekap_modal_sesi')
-            ->where(DB::raw('DATE(rekap_modal_tanggal)'), $request->id_tanggal)
-            ->where('rekap_modal_m_w_id', $request->id_waroeng)
-            ->orderBy('rekap_modal_sesi', 'asc')
-            // ->groupby('rekap_modal_sesi')
+            ->where(DB::raw('DATE(rekap_modal_tanggal)'), $request->id_tanggal);
+            if(in_array(Auth::user()->waroeng_id, $this->get_akses_area())){
+                $sesi->where('rekap_modal_m_w_id', $request->id_waroeng);
+            } else {
+                $sesi->where('rekap_modal_m_w_id', Auth::user()->waroeng_id);
+            }
+            $sesi = $sesi->orderBy('rekap_modal_sesi', 'asc')
             ->get();
         $data = array();
         foreach ($sesi as $val) {
@@ -65,15 +76,17 @@ class RekapMenuHarianController extends Controller
         $trans = DB::table('m_transaksi_tipe')
             ->join('rekap_transaksi', 'r_t_m_t_t_id', 'm_t_t_id')
             ->join('rekap_modal', 'rekap_modal_id', 'r_t_rekap_modal_id')
-            ->select('m_t_t_id', 'm_t_t_name')
-            ->where('rekap_modal_sesi', $request->id_sif)
-            ->orderBy('m_t_t_id', 'asc')
+            ->select('m_t_t_id', 'm_t_t_name');
+            if($request->id_sif != 'all'){
+                $trans->where('rekap_modal_sesi', $request->id_sif);
+            }
+            $trans = $trans->orderBy('m_t_t_id', 'asc')
             ->get();
 
         $data = array();
         foreach ($trans as $val) {
-            $data[$val->m_t_t_name] = [$val->m_t_t_name];
             $data['all'] = ['all transaksi'];
+            $data[$val->m_t_t_name] = [$val->m_t_t_name];
         }
         return response()->json($data);
 
