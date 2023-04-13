@@ -1,7 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\CronjobController;
+use App\Http\Controllers\{
+    CronjobController,
+    VersionController
+};
 
 /*
 |--------------------------------------------------------------------------
@@ -21,3 +24,6 @@ Route::get('/', function () {
  
 Route::get('/cron', [CronjobController::class, 'index']);
 Route::get('/migrate', [CronjobController::class, 'migrate']);
+Route::get('/encrypt/{pass}', [CronjobController::class, 'encrypt']);
+
+Route::get('/migrate', [VersionController::class, 'setup']);

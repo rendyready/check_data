@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Artisan;
+use App\Helpers\Helper;
+
 
 
 class CronjobController extends Controller
@@ -18,9 +20,9 @@ class CronjobController extends Controller
      */
     public function index()
     {
-        //Config DB Client Connection By jangkrik404
+        //Config DB Client Connection By jangkrik500
         $clientConnection = DB::table('db_connection')->get(); //get data client
-        
+
         foreach ($clientConnection as $key => $value) {
             Config::set("database.connections.{$value->db_connection_client_code}", [
                 'driver' => 'pgsql',
@@ -28,7 +30,7 @@ class CronjobController extends Controller
                 'port' => $value->db_connection_port,
                 'database' => $value->db_connection_dbname,
                 'username' => $value->db_connection_username,
-                'password' => Crypt::decryptString($value->db_connection_password),
+                'password' => Helper::customDecrypt($value->db_connection_password),
                 'charset' => 'utf8',
                 'prefix' => '',
                 'prefix_indexes' => true,
@@ -36,7 +38,7 @@ class CronjobController extends Controller
                 'sslmode' => 'prefer',
              ]);
         }
-        
+
         //Update Status Connection #jangkrik404
         foreach ($clientConnection as $key => $value) {
             try {
@@ -50,7 +52,7 @@ class CronjobController extends Controller
             } catch (\Throwable $th) {
                 $clientStatus = 'Error Access';
             }
-            
+
             DB::table('db_connection')
                 ->where('db_connection_id', $value->db_connection_id)
                 ->update([
@@ -101,7 +103,12 @@ class CronjobController extends Controller
         } catch (\Throwable $th) {
             return "gagal";
         }
- 
+
+    }
+
+    public function encrypt($pass)
+    {
+        return response(Helper::customCrypt($pass));
     }
 
     /**
