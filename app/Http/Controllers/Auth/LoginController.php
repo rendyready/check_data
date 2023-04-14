@@ -8,6 +8,8 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
 class LoginController extends Controller
 {
@@ -64,5 +66,10 @@ class LoginController extends Controller
         $token = $request->token;
         $verified = Carbon::now();
         return view('auth.reset',compact('email','token','verified'));
+    }
+    public function update_pass_save(Request $request)
+    {
+        DB::table('users')->where('email',$request->email)->update(['password'=> Hash::make($request->password),'verified'=>$request->verified]);        
+        return redirect('/login');
     }
 }

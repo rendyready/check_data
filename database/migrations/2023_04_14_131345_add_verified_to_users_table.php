@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->date('verified')->nullable()->after('email_verified_at');
+            $table->timestampTz('verified')->nullable()->after('email_verified_at');
         });
     }
 

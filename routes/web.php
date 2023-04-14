@@ -17,6 +17,7 @@ Auth::routes();
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/coba/{table}', [App\Http\Controllers\Controller::class, 'getMasterId']);
 Route::get('/update/pass',[App\Http\Controllers\Auth\LoginController::class, 'change_pass'])->name('update.pass');
+Route::post('/users/pass/update',[App\Http\Controllers\Auth\LoginController::class, 'update_pass_save'])->name('password.changes');
 // Dashboard Route
 Route::middleware(['auth', 'web'])->group(function () {
     Route::view('/', 'home');
