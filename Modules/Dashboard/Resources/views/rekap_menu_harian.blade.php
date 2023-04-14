@@ -165,9 +165,9 @@ $(document).ready(function() {
                 extend: 'excelHtml5',
                 text: 'Export Excel',
                 title: 'Rekap Menu - ' + trans + ' Sesi - ' + sesi + ' - ' + tanggal,
-                exportOptions: {
-                    columns: [1, 2, 3, 4, 5]
-                },
+                // exportOptions: {
+                //     columns: [1, 2, 3, 4, 5]
+                // },
                 pageSize: 'A4',
                 pageOrientation: 'potrait',
             }
@@ -290,7 +290,7 @@ $(document).ready(function() {
 
     $('#filter_sif').on('select2:select', function() {
         var id_sif = $(this).val();    
-        if(id_sif){
+        if(id_sif !== 'all'){
             $.ajax({
             type:"GET",
             url: '{{route("menu_harian.select_trans")}}',

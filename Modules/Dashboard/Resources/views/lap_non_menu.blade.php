@@ -63,21 +63,21 @@
                                 <td>Menu</td>
                                 <td>{{$valItem['Menu']}}</td>
                             </tr>
-                            @if ($valItem['Non Menu'] > 0)
+                            @if ($valItem['Non Menu'] >= 0)
                             <tr>
                                 <td>2</td>
                                 <td>Non Menu</td>
                                 <td>{{$valItem['Non Menu']}}</td>
                             </tr>
                             @endif
-                            @if ($valItem['Ice Cream'] > 0)
+                            @if ($valItem['Ice Cream'] >= 0)
                             <tr>
                                 <td>3</td>
                                 <td>Ice Cream</td>
                                 <td>{{$valItem['Ice Cream']}}</td>
                             </tr>
                             @endif
-                            @if ($valItem['KBD'] > 0)
+                            @if ($valItem['KBD'] >= 0)
                             <tr>
                                 <td>4</td>
                                 <td>KBD</td>
