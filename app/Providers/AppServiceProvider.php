@@ -28,6 +28,7 @@ class AppServiceProvider extends ServiceProvider
         View::composer('layouts.app', function ($view) {
             $view->with('waroeng',$this->get_m_w_nama());
         });
+        View::addNamespace('auth', resource_path('views/auth'));
     }
     public function get_m_w_nama()
     {
