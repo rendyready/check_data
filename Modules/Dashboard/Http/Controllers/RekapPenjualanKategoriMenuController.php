@@ -175,6 +175,8 @@ class RekapPenjualanKategoriMenuController extends Controller
                ->join('users','users_id','=','rekap_modal_created_by')
                ->whereRaw("to_char(rekap_modal_tanggal,'YYYY-MM-DD') = '{$request->tanggal}'")
                ->where('rekap_modal_m_w_id', $request->waroeng)
+               ->where('rekap_modal_status', 'close')
+               ->orderBy('rekap_modal_sesi','asc')
                ->get();
        $getMenu = DB::table('m_produk')
                ->select('m_produk_id')
@@ -210,11 +212,11 @@ class RekapPenjualanKategoriMenuController extends Controller
        $sales = [];
        foreach ($sesi as $key => $valSesi) {
            foreach ($typeTransaksi as $key => $valType) {
-               $sales[$valSesi->name][$valType->m_t_t_id]['Tipe'] = $valType->m_t_t_name;
-               $sales[$valSesi->name][$valType->m_t_t_id]['Menu'] = 0;
-               $sales[$valSesi->name][$valType->m_t_t_id]['Non Menu'] = 0;
-               $sales[$valSesi->name][$valType->m_t_t_id]['Ice Cream'] = 0;
-               $sales[$valSesi->name][$valType->m_t_t_id]['KBD'] = 0;
+               $sales[$valSesi->name." - Sesi {$valSesi->rekap_modal_sesi}"][$valType->m_t_t_id]['Tipe'] = $valType->m_t_t_name;
+               $sales[$valSesi->name." - Sesi {$valSesi->rekap_modal_sesi}"][$valType->m_t_t_id]['Menu'] = 0;
+               $sales[$valSesi->name." - Sesi {$valSesi->rekap_modal_sesi}"][$valType->m_t_t_id]['Non Menu'] = 0;
+               $sales[$valSesi->name." - Sesi {$valSesi->rekap_modal_sesi}"][$valType->m_t_t_id]['Ice Cream'] = 0;
+               $sales[$valSesi->name." - Sesi {$valSesi->rekap_modal_sesi}"][$valType->m_t_t_id]['KBD'] = 0;
                #Menu
                $menu = DB::table('rekap_transaksi')
                        ->join('rekap_transaksi_detail','r_t_detail_r_t_id','r_t_id')
@@ -227,7 +229,7 @@ class RekapPenjualanKategoriMenuController extends Controller
                        ->groupBy('r_t_rekap_modal_id')
                        ->first();
                if (!empty($menu)) {
-                   $sales[$valSesi->name][$valType->m_t_t_id]['Menu'] = number_format($menu->nominal);
+                   $sales[$valSesi->name." - Sesi {$valSesi->rekap_modal_sesi}"][$valType->m_t_t_id]['Menu'] = number_format($menu->nominal);
                }
 
                #Non-Menu
@@ -239,10 +241,12 @@ class RekapPenjualanKategoriMenuController extends Controller
                            'r_t_m_t_t_id' => $valType->m_t_t_id
                        ])
                        ->whereIn('r_t_detail_m_produk_id',$listNonMenu)
+                       ->whereNotIn('r_t_detail_m_produk_id',$listKbd)
+                       ->whereNotIn('r_t_detail_m_produk_id',$listIceCream)
                        ->groupBy('r_t_rekap_modal_id')
                        ->first();
                if (!empty($nonMenu)) {
-                   $sales[$valSesi->name][$valType->m_t_t_id]['Non Menu'] = number_format($nonMenu->nominal);
+                   $sales[$valSesi->name." - Sesi {$valSesi->rekap_modal_sesi}"][$valType->m_t_t_id]['Non Menu'] = number_format($nonMenu->nominal);
                }
 
                #Ice-Cream
@@ -257,7 +261,7 @@ class RekapPenjualanKategoriMenuController extends Controller
                        ->groupBy('r_t_rekap_modal_id')
                        ->first();
                if (!empty($iceCream)) {
-                   $sales[$valSesi->name][$valType->m_t_t_id]['Ice Cream'] = number_format($iceCream->nominal);
+                   $sales[$valSesi->name." - Sesi {$valSesi->rekap_modal_sesi}"][$valType->m_t_t_id]['Ice Cream'] = number_format($iceCream->nominal);
                }
 
                #KBD
@@ -272,7 +276,7 @@ class RekapPenjualanKategoriMenuController extends Controller
                        ->groupBy('r_t_rekap_modal_id')
                        ->first();
                if (!empty($kbd)) {
-                   $sales[$valSesi->name][$valType->m_t_t_id]['KBD'] = number_format($kbd->nominal);
+                   $sales[$valSesi->name." - Sesi {$valSesi->rekap_modal_sesi}"][$valType->m_t_t_id]['KBD'] = number_format($kbd->nominal);
                }
            }
        }
@@ -287,7 +291,7 @@ class RekapPenjualanKategoriMenuController extends Controller
        //     }
        // }
        // return response($sales);
-    //    $tanggal = Carbon::parse($request->tanggal)->format('d M Y');
+       $tanggal = Carbon::parse($request->tanggal)->format('d M Y');
        $data = [
            'title' => 'Laporan Menu non Menu',
            'sales' => $sales,
