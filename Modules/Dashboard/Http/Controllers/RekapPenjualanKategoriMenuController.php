@@ -287,7 +287,7 @@ class RekapPenjualanKategoriMenuController extends Controller
        //     }
        // }
        // return response($sales);
-       $tanggal = Carbon::parse($request->tanggal)->format('d M Y');
+    //    $tanggal = Carbon::parse($request->tanggal)->format('d M Y');
        $data = [
            'title' => 'Laporan Menu non Menu',
            'sales' => $sales,

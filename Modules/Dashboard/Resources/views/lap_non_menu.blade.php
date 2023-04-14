@@ -52,7 +52,7 @@
                         <table width="100%" border="1">
                             @foreach($sales as $key => $valSales)
                             <tr style="background: #d35252; color:#ffffff; font-weight: bold; text-align: center">
-                                <td colspan="3">{{ ucfirst($key)}}</td>
+                                <td colspan="3">{{ ucwords($key) }}</td>
                             </tr>
                             @foreach ($valSales as $key => $valItem)
                             <tr>
