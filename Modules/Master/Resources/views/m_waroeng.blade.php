@@ -74,6 +74,7 @@
                                         @csrf
                                         <div class="mb-4">
                                             <input type="hidden" name="action" id="action">
+                                            <input type="hidden" name="m_w_id" id="m_w_id">
                                             <div class="form-group">
                                                 <label for="m_w_nama">Nama Waroeg</label>
                                                 <input class="form-group" style="width: 100%;" type="text" name="m_w_nama" id="m_w_nama" required>
@@ -293,8 +294,8 @@
                               type: data.type, // 'info', 'success', 'warning', 'danger'
                               icon: 'fa fa-info me-5', // Icon class
                               message: data.messages
-                            });
-                            table.ajax.reload();
+                            }); 
+                            // window.location.reload();
                         },
                         error : function(){
                             alert("Tidak dapat menyimpan data!");

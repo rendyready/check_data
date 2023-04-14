@@ -242,7 +242,7 @@
       $("#myModalLabel").html('Tambah Produk');
       $("#form_produk").modal('show');
     });
-    $(".buttonEdit").on('click', function() {
+    $(document).on('click','.buttonEdit', function() {
       var id = $(this).attr('value');
       $("#myModalLabel").html('Ubah Produk');
       $('[name="action"]').val('edit');
