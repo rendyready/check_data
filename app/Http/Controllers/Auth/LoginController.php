@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Carbon\Carbon;
 class LoginController extends Controller
 {
     /*
@@ -18,7 +22,7 @@ class LoginController extends Controller
     | redirecting them to your home screen. The controller uses a trait
     | to conveniently provide its functionality to your applications.
     |
-    */
+     */
 
     use AuthenticatesUsers;
 
@@ -42,9 +46,30 @@ class LoginController extends Controller
     public function logout()
     {
         Session::flush();
-        
+
         Auth::logout();
 
+        return redirect('/login');
+    }
+    protected function authenticated(Request $request, $user)
+    {
+        if (!$user->hasVerifiedAccount()) {
+            auth()->logout();
+            $token = Password::createToken($user);
+            return redirect()->route('update.pass', [ 'token' => $token,
+            'email' => $request->email]);
+        }
+    }
+    public function change_pass(Request $request)
+    {
+        $email = $request->email;
+        $token = $request->token;
+        $verified = Carbon::now();
+        return view('auth.reset',compact('email','token','verified'));
+    }
+    public function update_pass_save(Request $request)
+    {
+        DB::table('users')->where('email',$request->email)->update(['password'=> Hash::make($request->password),'verified'=>$request->verified]);        
         return redirect('/login');
     }
 }

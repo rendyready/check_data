@@ -104,6 +104,16 @@
                                                                     <tr>
                                                                         <td>{{ $data->num++ }}</td>
                                                                         <td>
+                                                                            @php $found = false; @endphp
+                                                                            @foreach ($data->rph_edit as $item)
+                                                                                @if ($j->m_produk_code == $item->rph_detail_menu_m_produk_code)
+                                                                                <input type="hidden" name="rph_detail_menu_id[]" value="{{$item->rph_detail_menu_id}}">
+                                                                                    @php $found = true; @endphp
+                                                                                @endif
+                                                                            @endforeach
+                                                                            @if (!$found)
+                                                                            <input type="hidden" name="rph_detail_menu_id[]">
+                                                                            @endif
                                                                             <input
                                                                                 style="background-color: transparent; border: none;"
                                                                                 class="form-control" type="text"
