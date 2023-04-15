@@ -21,7 +21,7 @@ class Controller extends BaseController
 
         #Get Last Increment Used
         $maxId = DB::select("SELECT MAX(id) FROM {$table};")[0]->max;
-        
+
         #GET Current Increment of table (Recomended method)
         $currentId = DB::select("SELECT last_value FROM {$table}_id_seq;")[0]->last_value;
         $nextId = $currentId;
@@ -32,7 +32,7 @@ class Controller extends BaseController
             }
             $nextId = $currentId+1;
         }
-        
+
         return $nextId;
     }
 
@@ -40,7 +40,7 @@ class Controller extends BaseController
     {
         #Get Last Increment Used
         $maxId = DB::select("SELECT MAX(id) FROM {$table};")[0]->max;
-        
+
         #GET Current Increment of table (Recomended method)
         $currentId = DB::select("SELECT last_value FROM {$table}_id_seq;")[0]->last_value;
 
@@ -57,28 +57,29 @@ class Controller extends BaseController
             $prefix .= mb_substr($w, 0, 1);
         }
 
-        $date = Carbon::now()->format('ymd');
+        $date = Carbon::now()->format('ymdHis');
+        $waroengInfo = DB::table('m_w')->where('m_w_id',$waroengId)->first();
         #cek Last ID
         $counter = DB::table('app_id_counter')
                 ->where([
                     'app_id_counter_m_w_id' => $waroengId,
                     'app_id_counter_table' => $table
                 ]);
-        
+
         if (!empty($counter->first())) {
             if ($counter->first()->app_id_counter_date == Carbon::now()->format('Y-m-d')) {
                 $nextCounter = $counter->first()->app_id_counter_value+1;
                 $counter->update([
                     'app_id_counter_value' => $nextCounter
                 ]);
-                $id = $waroengId.Auth::user()->users_id.$date.$nextCounter;
+                // $id = $waroengId.Auth::user()->users_id.$date.$nextCounter;
             }else{
                 $nextCounter = 1;
                 $counter->update([
                     'app_id_counter_value' => $nextCounter,
                     'app_id_counter_date' => Carbon::now()->format('Y-m-d')
                 ]);
-                $id = $waroengId.Auth::user()->users_id.$date.$nextCounter;
+                // $id = $waroengId.Auth::user()->users_id.$date.$nextCounter;
             }
         }else{
             $nextCounter = 1;
@@ -89,13 +90,13 @@ class Controller extends BaseController
                     'app_id_counter_value' => $nextCounter,
                     'app_id_counter_date' => Carbon::now()->format('Y-m-d')
                 ]);
-            $id = $waroengId.Auth::user()->users_id.$date.$nextCounter;
+            // $id = $waroengId.Auth::user()->users_id.$date.$nextCounter;
         }
-        
-        return strtoupper($prefix).$id;
+        $id = $waroengId.".".$waroengInfo->m_area_id.".".Auth::user()->users_id.".".$date.".".$nextCounter;
+        return strtoupper($prefix).".".$id;
     }
     public function getNamaW($id)
-    {   
+    {
         return $waroeng = DB::table('m_w')->where('m_w_id',$id)->first()->m_w_nama;
     }
     public function get_last_stok($g_id,$p_id)
