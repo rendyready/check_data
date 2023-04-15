@@ -61,6 +61,34 @@
             @endforeach
         </tbody>
     </table>
+
+    <h6 style="font-size: 10pt">Laporan Kas</h6>
+    <table id="detail_modal" class="table table-sm table-striped table-border table-vcenter nowrap table-hover">
+        <thead>
+            <tr>
+                <th class="text-center">Saldo Awal</th>
+                <th class="text-center">Pemasukan</th>
+                <th class="text-center">Pengeluaran</th>
+                <th class="text-center">Saldo Akhir</th>
+                <th class="text-center">Selisih</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{-- @dump($data) --}}
+            @foreach ($data as $item)
+            @if (in_array($item['payment'], [22]))
+                <tr>
+                    <td>{{ $item['no_nota'] }}</td>
+                    <td>{{ $item['transaksi'] }}</td>
+                    <td>{{ $item['masuk'] }}</td>
+                    <td>{{ $item['keluar'] }}</td>
+                    <td>{{ $item['saldo'] }}</td>
+                </tr>
+            @endif
+            @endforeach
+        </tbody>
+    </table>
+
     <div style="width: 100%; height: 250px; border: 1px solid black;" class="mb-2">
         <p class="ml-2" style="font-size: 14px">Catatan : </p>
       </div>

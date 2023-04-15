@@ -476,6 +476,19 @@ class LaporanKasHarianKasirController extends Controller
                 'saldo' => $saldo_terakhir,
                 'payment' => 2,3,4,5,6,7,8,9,
             );
+     
+            foreach ($modal as $valModal) {
+                $saldoAkhir = $valModal->rekap_modal_nominal + $valModal->rekap_modal_cash_in - $valModal->rekap_modal_cash_out;
+                $data[] = array(
+                    'no_nota' => number_format($valModal->rekap_modal_nominal),
+                    'transaksi' => number_format($valModal->rekap_modal_cash_in),
+                    'masuk' => number_format($valModal->rekap_modal_cash_out),
+                    'keluar' => number_format($saldoAkhir),
+                    'saldo' => number_format($valModal->rekap_modal_cash_real - $saldoAkhir),
+                    'payment' => 22,
+                );
+            }
+
             $tgl = tgl_indo($request->tanggal);
             $w_nama = strtoupper($this->getNamaW($request->waroeng));
             // $nama_user = DB::table('users')->where('users_id',$request->opr)->get()->name();

@@ -434,13 +434,13 @@
 
             </ul>
           </li>
-          <li class="nav-main-item{{ request()->is('inventori/*') ? ' open' : '' }}">
+          <li class="nav-main-item{{ request()->is('inventori/master') ? ' open' : '' }}">
             <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
               <i class="nav-main-link-icon fa fa-warehouse"></i>
               <span class="nav-main-link-name">Inventori</span>
             </a>
             <ul class="nav-main-submenu">
-              <li class="nav-main-item{{ request()->is('inventori/*') ? ' open' : '' }}">
+              <li class="nav-main-item{{ request()->is('inventori/master') ? ' open' : '' }}">
                 <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
                   <span class="nav-main-link-name">Master</span>
                 </a>
@@ -527,12 +527,12 @@
                   <span class="nav-main-link-name">Stok Opname</span>
                 </a>
               </li>
-              <li class="nav-main-item{{ request()->is('inventori/*') ? ' open' : '' }}">
+              <li class="nav-main-item{{ request()->is('inventori/laporan') ? ' open' : '' }}">
                 <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
                   <span class="nav-main-link-name">Laporan</span>
                 </a>
                 <ul class="nav-main-submenu">
-              <li class="nav-main-item{{ request()->is('inventori/*') ? ' open' : '' }}">
+              <li class="nav-main-item{{ request()->is('inventori/kartu_stock') ? ' open' : '' }}">
                 <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
                   <span class="nav-main-link-name">Kartu Stock</span>
                 </a>
@@ -550,7 +550,7 @@
                 </ul>
               </li>
 
-              <li class="nav-main-item{{ request()->is('inventori/*') ? ' open' : '' }}">
+              <li class="nav-main-item{{ request()->is('inventori/lap_pem_harian') ? ' open' : '' }}">
                 <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
                   <span class="nav-main-link-name">Laporan Pembelian</span>
                 </a>
@@ -573,7 +573,7 @@
                 </ul>
               </li>
 
-              <li class="nav-main-item{{ request()->is('inventori/*') ? ' open' : '' }}">
+              <li class="nav-main-item{{ request()->is('inventori/lap_gudang_rekap') ? ' open' : '' }}">
                 <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
                   <span class="nav-main-link-name">laporan Keluar Gudang</span>
                 </a>
@@ -597,7 +597,7 @@
               </li>
               
 
-              <li class="nav-main-item{{ request()->is('inventori/*') ? ' open' : '' }}">
+              <li class="nav-main-item{{ request()->is('inventori/m_bb') ? ' open' : '' }}">
                 <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
                   <span class="nav-main-link-name">Laporan Pengiriman</span>
                 </a>
