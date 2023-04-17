@@ -25,10 +25,10 @@ class UsersController extends Controller
         $data->waroeng = DB::table('m_w')->select('m_w_id','m_w_nama')->get();
         $data->roles = DB::table('roles')->get();
         $user = DB::table('model_has_roles')
-        ->rightjoin('users','users.id','model_id')
+        ->rightjoin('users','users.users_id','model_id')
         ->leftjoin('roles','role_id','roles.id')
         ->leftjoin('m_w','waroeng_id','m_w_id')
-        ->select('users.id as id','users.name as username','roles.name as rolename','email','m_w_nama');
+        ->select('users.users_id as users_id','users.name as username','roles.name as rolename','email','m_w_nama');
         
         if ($role == 'admin'||'administrator') {
             $data->users = $user->orderBy('users.name','ASC')->get();
@@ -66,8 +66,8 @@ class UsersController extends Controller
                     'created_at' => Carbon::now(),
                 );
                 DB::table('users')->insert($data);
-                $user = DB::table('users')->max('id');
-               User::where('id', $user)->first()->assignRole($request->roles);
+                $user = DB::table('users')->max('users_id');
+               User::where('users_id', $user)->first()->assignRole($request->roles);
                 
             } elseif ($request->action == 'edit') {
                if (!empty($request->password)) {
@@ -92,14 +92,14 @@ class UsersController extends Controller
                 DB::table('model_has_roles')->where('model_id',$request->id)->delete();
                 DB::table('users')->where('id', $request->id)
                     ->update($data);
-                User::where('id', $request->id)->first()->assignRole($request->roles);
+                User::where('users_id', $request->id)->first()->assignRole($request->roles);
             } else {
                 $data = array(
                     'deleted_at' => Carbon::now(),
                     'deleted_by' => Auth::id()
                 );
                 DB::table('users')
-                    ->where('id', $request->id)
+                    ->where('users_id', $request->id)
                     ->update($data);
             }
             return response()->json($request);
@@ -114,10 +114,15 @@ class UsersController extends Controller
     public function edit($id)
     {
         $edit = DB::table('model_has_roles')
-        ->rightjoin('users','users.id','model_id')
+        ->rightjoin('users','users.users_id','model_id')
         ->leftjoin('roles','role_id','roles.id')
-        ->select('users.id as id','users.name as name','roles.name as roles','email','waroeng_id')
-        ->where('users.id',$id)->first();
+        ->select('users.users_id as id','users.name as name','roles.name as roles','email','waroeng_id')
+        ->where('users.users_id',$id)->first();
          return response()->json($edit, 200);
+    }
+    public function reset_pass($id)
+    {
+        DB::table('users')->where('users_id',$id)->update(['password'=> Hash::make(123456),'verified'=>null]); 
+        return response()->json(['success'=>'success']);       
     }
 }

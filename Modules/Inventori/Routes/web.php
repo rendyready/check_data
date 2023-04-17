@@ -134,6 +134,8 @@ Route::group(['prefix' => 'inventori', 'controller' => RphController::class, 'mi
     Route::post('rph/simpan', 'simpan')->name('rph.simpan');
     Route::get('rph/edit/{id}','edit')->name('rph.edit');
     Route::put('rph/update','update')->name('rph.update');
+    Route::get('rph_belanja','belanja')->name('belanja.index');
+    Route::get('rph_belanja_detail/{id}','belanja_detail')->name('belanja.detail');
 });
 
 

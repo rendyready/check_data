@@ -7,17 +7,17 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Spatie\Permission\Traits\HasRoles;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
 
 /**
  * Class User
- * 
+ *
  * @property int $id
  * @property int $users_id
  * @property string $name
@@ -40,39 +40,45 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
     use HasRoles;
-	use SoftDeletes;
+    use SoftDeletes;
 
-	protected $table = 'users';
+    protected $table = 'users';
 
-	protected $casts = [
-		'users_id' => 'int',
-		'waroeng_id' => 'int',
-		'waroeng_akses' => 'binary',
-		'created_by' => 'int',
-		'updated_by' => 'int',
-		'deleted_by' => 'int'
-	];
+    protected $casts = [
+        'users_id' => 'int',
+        'waroeng_id' => 'int',
+        'waroeng_akses' => 'binary',
+        'created_by' => 'int',
+        'updated_by' => 'int',
+        'deleted_by' => 'int',
+    ];
 
-	protected $dates = [
-		'email_verified_at'
-	];
+    protected $dates = [
+        'email_verified_at',
+		'verified',
+    ];
 
-	protected $hidden = [
-		'password',
-		'remember_token'
-	];
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
 
-	protected $fillable = [
-		'users_id',
-		'name',
-		'email',
-		'email_verified_at',
-		'password',
-		'remember_token',
-		'waroeng_id',
-		'waroeng_akses',
-		'created_by',
-		'updated_by',
-		'deleted_by'
-	];
+    protected $fillable = [
+        'users_id',
+        'name',
+        'email',
+        'email_verified_at',
+		'verified',
+        'password',
+        'remember_token',
+        'waroeng_id',
+        'waroeng_akses',
+        'created_by',
+        'updated_by',
+        'deleted_by',
+    ];
+    public function hasVerifiedAccount()
+    {
+        return $this->verified;
+    }
 }
