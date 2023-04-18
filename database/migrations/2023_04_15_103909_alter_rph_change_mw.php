@@ -28,6 +28,9 @@ return new class extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('rph', function (Blueprint $table) {
+            $table->renameColumn('rph_m_w_id','rph_m_w_code');
+        });
+        DB::statement("ALTER TABLE rph ALTER rph_m_w_code TYPE VARCHAR USING (rph_m_w_code::varchar);");
     }
 };
