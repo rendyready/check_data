@@ -92,7 +92,7 @@ class Controller extends BaseController
                 ]);
             // $id = $waroengId.Auth::user()->users_id.$date.$nextCounter;
         }
-        $id = $waroengId.".".$waroengInfo->m_area_id.".".Auth::user()->users_id.".".$date.".".$nextCounter;
+        $id = $waroengId.".".$waroengInfo->m_w_m_area_id.".".Auth::user()->users_id.".".$date.".".$nextCounter;
         return strtoupper($prefix).".".$id;
     }
     public function getNamaW($id)

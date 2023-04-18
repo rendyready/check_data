@@ -35,10 +35,9 @@ class ResepController extends Controller
      */
     public function simpan(Request $request)
     {   
-        $waroeng_id = Auth::user()->waroeng_id;
         $produk = DB::table('m_produk')->where('m_produk_code',$request->m_resep_m_produk_code)->first();
         $data = DB::table('m_resep')->insert([
-            "m_resep_code" => $this->getNextId('m_resep',$waroeng_id),
+            "m_resep_code" => $this->getMasterId('m_resep'),
             "m_resep_m_produk_code" => $request->m_resep_m_produk_code,
             "m_resep_m_produk_nama" => $produk->m_produk_nama,
             "m_resep_keterangan" => $request->m_resep_keterangan,
@@ -110,7 +109,7 @@ class ResepController extends Controller
                     'm_resep_detail_m_resep_code'    =>    $request->id,
                     'm_resep_detail_bb_code'    =>    $request->m_resep_detail_bb_code,
                     'm_resep_detail_m_produk_nama' => $produk->m_produk_nama,
-                    'm_resep_detail_bb_qty'    =>    $request->m_resep_detail_bb_qty,
+                    'm_resep_detail_bb_qty'    =>    convertfloat($request->m_resep_detail_bb_qty),
                     'm_resep_detail_m_satuan_id' =>    $request->m_resep_detail_m_satuan_id,
                     'm_resep_detail_standar_porsi' => $request->m_resep_detail_standar_porsi,
                     'm_resep_detail_satuan' => $kode_satuan->m_satuan_kode,
@@ -124,7 +123,7 @@ class ResepController extends Controller
                     'm_resep_detail_id' => $request->m_resep_detail_id,
                     'm_resep_detail_bb_code'    =>    $request->m_resep_detail_bb_code,
                     'm_resep_detail_m_produk_nama' => $produk->m_produk_nama,
-                    'm_resep_detail_bb_qty'    =>    $request->m_resep_detail_bb_qty,
+                    'm_resep_detail_bb_qty'    =>    convertfloat($request->m_resep_detail_bb_qty),
                     'm_resep_detail_m_satuan_id' =>    $request->m_resep_detail_m_satuan_id,
                     'm_resep_detail_satuan' => $request->m_resep_detail_satuan,
                     'm_resep_detail_standar_porsi' => $request->m_resep_detail_standar_porsi,

@@ -35,31 +35,29 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>Nama BB</th>
+                                    <th>Nama Bahan Baku</th>
                                     <th>Qty Rph</th>
                                     <th>Stok Produksi</th>
+                                    <th>Satuan Produksi</th>
+                                    <th>Kebutuhan</th>
                                     <th>Stok Gudang</th>
                                     <th>Qty Belanja</th>
-                                    <th>Satuan</th>
+                                    <th>Satuan Belanja</th>
                                 </tr>
                             </thead>
                             <tbody>
-                              @php
-                                  $no = 1;
-                              @endphp
-                              @foreach ($get_list as $item)
+                              @foreach ($data2 as $item)
                                   <tr>
-                                      <td>{{ $no }}</td>
-                                      <td>{{$item->rph_detail_bb_m_produk_nama }}</td>
-                                      <td>{{$item->qty_rph }}</td>
-                                      <td>{{$item->qty_produksi }}</td>
-                                      <td>{{$item->qty_gudang}}</td>
-                                      <td>{{$item->qty_beli}}</td>
-                                      <td>{{$item->satuan}}</td>
+                                      <td>{{$item['no']}}</td>
+                                      <td>{{$item['nama'] }}</td>
+                                      <td>{{$item['qty_rph'] }}</td>
+                                      <td>{{$item['sat_produksi'] }}</td>
+                                      <td>{{$item['qty_produksi'] }}</td>
+                                      <td>{{$item['kebutuhan']}}</td>
+                                      <td>{{$item['qty_gudang']}}</td>
+                                      <td>{{$item['belanja']}}</td>
+                                      <td>{{$item['sat_belanja']}}</td>
                                   </tr>
-                                  @php
-                                      $no++;
-                                  @endphp
                               @endforeach
                           </tbody>                          
                         </table>
