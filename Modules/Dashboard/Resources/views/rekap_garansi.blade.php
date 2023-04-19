@@ -170,6 +170,7 @@ $(document).ready(function() {
       $('.filter_area').on('select2:select', function(){
         var id_area = $(this).val();
         var tanggal  = $('.filter_tanggal').val();
+        var prev = $(this).data('previous-value');
         if(id_area && tanggal){
             $.ajax({
             type:"GET",
@@ -195,6 +196,7 @@ $(document).ready(function() {
         }else{
           alert('Harap lengkapi kolom tanggal');
             $(".filter_waroeng").empty();
+            $(".filter_area").val(prev).trigger('change');
         }      
     });
     $(".filter_operator").empty();
@@ -204,6 +206,7 @@ $(document).ready(function() {
     $('.filter_waroeng').on('select2:select', function(){
         var id_waroeng = $(this).val();   
         var tanggal  = $('.filter_tanggal').val(); 
+        var prev = $(this).data('previous-value');
         if(id_waroeng && tanggal){
             $.ajax({
             type:"GET",
@@ -229,6 +232,7 @@ $(document).ready(function() {
         }else{
           alert('Harap lengkapi kolom tanggal');
             $(".filter_operator").empty();
+            $(".filter_waroeng").val(prev).trigger('change');
         }      
     });
 
@@ -248,7 +252,7 @@ $(document).ready(function() {
             },
             success:function(res){               
                 if(res){
-                    $(".filter_operator").empty();
+                    // $(".filter_operator").empty();
                     $(".filter_operator").append('<option></option>');
                     $.each(res,function(key,value){
                         $(".filter_operator").append('<option value="'+key+'">'+value+'</option>');
@@ -260,7 +264,8 @@ $(document).ready(function() {
             });
         }else{
             $(".filter_operator").empty();
-        }      
+        }    
+        $(".filter_operator").empty();  
     });
   }
 
