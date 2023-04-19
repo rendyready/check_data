@@ -7,6 +7,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Crypt;
+use App\Helpers\Helper;
 
 
 class DBConnectionSeeder extends Seeder
@@ -18,22 +19,32 @@ class DBConnectionSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('db_connection')->insert([
-            'db_connection_client_code' => '1',
-            'db_connection_host' => '127.0.0.1',
-            'db_connection_port' => '5432',
-            'db_connection_dbname' => 'sipedas_v4',
-            'db_connection_username' => 'ihsanmac',
-            'db_connection_password' => Crypt::encryptString('jankrik404'),
+        DB::table('db_con')->insert([
+            'db_con_m_w_id' => '1',
+            'db_con_m_area_id' => '9',
+            'db_con_location' => 'pusat',
+            'db_con_location_name' => 'Kantor Kinanthi',
+            'db_con_data_status' => 'destination',
+            'db_con_sync_status' => 'aktif',
+            'db_con_host' => '127.0.0.1',
+            'db_con_port' => '5432',
+            'db_con_dbname' => 'server_pusat',
+            'db_con_username' => 'ihsanmac',
+            'db_con_password' => Helper::customCrypt('jankrik404'),
         ]);
 
-        DB::table('db_connection')->insert([
-            'db_connection_client_code' => '2',
-            'db_connection_host' => '192.168.88.4',
-            'db_connection_port' => '5432',
-            'db_connection_dbname' => 'sipedas_v4',
-            'db_connection_username' => 'adminweb',
-            'db_connection_password' => Crypt::encryptString('TC@gjrk:55DB'),
+        DB::table('db_con')->insert([
+            'db_con_m_w_id' => '58',
+            'db_con_m_area_id' => '5',
+            'db_con_location' => 'waroeng',
+            'db_con_location_name' => 'wss jakal km 8',
+            'db_con_data_status' => 'source',
+            'db_con_sync_status' => 'aktif',
+            'db_con_host' => '127.0.0.1',
+            'db_con_port' => '5432',
+            'db_con_dbname' => 'sipedas_jakal8',
+            'db_con_username' => 'ihsanmac',
+            'db_con_password' => Helper::customCrypt('jankrik404'),
         ]);
     }
 }

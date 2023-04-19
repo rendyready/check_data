@@ -21,7 +21,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
- 
+
 Route::get('/cron', [CronjobController::class, 'index']);
 Route::get('/migrate', [CronjobController::class, 'migrate']);
 Route::get('/encrypt/{pass}', [CronjobController::class, 'encrypt']);
