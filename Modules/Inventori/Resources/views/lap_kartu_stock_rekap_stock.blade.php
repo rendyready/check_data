@@ -12,17 +12,6 @@
                 <div class="block-content text-muted">
                     <form id="rekap_insert">
 
-                        {{-- <div class="row">
-                            <div class="col-md-5">
-                                <div class="row mb-3">
-                                    <label class="col-sm-3 col-form-label" >Tanggal</label>
-                                    <div class="col-sm-9 datepicker">
-                                        <input name="r_t_tanggal" class="cari form-control" type="text" placeholder="Pilih Tanggal.." id="filter_tanggal" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div> --}}
-
                         <div class="row">
                             <div class="col-md-5">
                                 <div class="row mb-2">
@@ -126,6 +115,7 @@
             <table id="tampil_rekap" class="table table-sm table-bordered table-striped table-vcenter nowrap table-hover js-dataTable-full">
               <thead>
                 <tr>
+                  <th class="text-center">Gudang</th>
                   <th class="text-center">Klasifikasi</th>
                   <th class="text-center">Bahan Baku</th>
                   <th class="text-center">Stok Awal</th>

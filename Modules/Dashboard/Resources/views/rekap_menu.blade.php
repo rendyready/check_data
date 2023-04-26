@@ -298,7 +298,7 @@ if(HakAksesPusat){
             },
             success:function(res){               
                 if(res){
-                    // $(".filter_trans").empty();
+                    $(".filter_trans").empty();
                     $(".filter_trans").append('<option></option>');
                     $.each(res,function(key,value){
                         $(".filter_trans").append('<option value="'+key+'">'+value+'</option>');
