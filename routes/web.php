@@ -20,8 +20,5 @@ Route::get('/update/pass',[App\Http\Controllers\Auth\LoginController::class, 'ch
 Route::post('/users/pass/update',[App\Http\Controllers\Auth\LoginController::class, 'update_pass_save'])->name('password.changes');
 // Dashboard Route
 Route::middleware(['auth', 'web'])->group(function () {
-    Route::view('/', 'home');
-    Route::match(['get', 'post'], '/home', function () {
-        return view('home');
-    });
+    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index']);
 });
