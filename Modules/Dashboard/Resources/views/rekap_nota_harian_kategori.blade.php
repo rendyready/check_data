@@ -266,9 +266,7 @@ if(HakAksesPusat){
 
     $('#filter_tanggal').flatpickr({
             // mode: "range",
-            dateFormat: 'Y-m-d',
-            // noCalendar: false,
-            // allowInput: true,            
+            dateFormat: 'Y-m-d',         
     });
 
 });

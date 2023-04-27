@@ -344,7 +344,7 @@ $(document).ready(function() {
             },
             success:function(res){               
                 if(res){
-                    // $(".filter_operator").empty();
+                    $(".filter_operator").empty();
                     $(".filter_operator").append('<option></option>');
                     $.each(res,function(key,value){
                         $(".filter_operator").append('<option value="'+key+'">'+value+'</option>');

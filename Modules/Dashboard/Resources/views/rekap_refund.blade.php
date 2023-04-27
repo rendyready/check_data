@@ -328,7 +328,6 @@ $(document).ready(function() {
   } else {
 
     $('.filter_tanggal').on('change', function(){
-        // var id_waroeng = $(this).val();   
         var tanggal  = $('.filter_tanggal').val(); 
         if(tanggal){
             $.ajax({
@@ -336,12 +335,11 @@ $(document).ready(function() {
             url: '{{route("rekap_refund.select_user")}}',
             dataType: 'JSON',
             data : {
-              // id_waroeng: id_waroeng,
               tanggal: tanggal,
             },
             success:function(res){               
                 if(res){
-                    // $(".filter_operator").empty();
+                    $(".filter_operator").empty();
                     $(".filter_operator").append('<option></option>');
                     $.each(res,function(key,value){
                         $(".filter_operator").append('<option value="'+key+'">'+value+'</option>');
