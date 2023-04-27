@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  * Class MJurnalUmum
  * 
  * @property int $m_jurnal_umum_id
- * @property int $m_jurnal_umum_m_waroeng_id
+ * @property string $m_jurnal_umum_m_waroeng_id
  * @property string $m_jurnal_umum_m_rekening_no_akun
  * @property string $m_jurnal_umum_m_rekening_nama
  * @property Carbon $m_jurnal_umum_tanggal
@@ -38,19 +38,15 @@ class MJurnalUmum extends Model
 	public $timestamps = false;
 
 	protected $casts = [
-		'm_jurnal_umum_m_waroeng_id' => 'int',
+		'm_jurnal_umum_tanggal' => 'datetime',
 		'm_jurnal_umum_debit' => 'float',
 		'm_jurnal_umum_kredit' => 'float',
 		'm_jurnal_umum_created_by' => 'int',
 		'm_jurnal_umum_updated_by' => 'int',
-		'm_jurnal_umum_deleted_by' => 'int'
-	];
-
-	protected $dates = [
-		'm_jurnal_umum_tanggal',
-		'm_jurnal_umum_created_at',
-		'm_jurnal_umum_updated_at',
-		'm_jurnal_umum_deleted_at'
+		'm_jurnal_umum_deleted_by' => 'int',
+		'm_jurnal_umum_created_at' => 'datetime',
+		'm_jurnal_umum_updated_at' => 'datetime',
+		'm_jurnal_umum_deleted_at' => 'datetime'
 	];
 
 	protected $fillable = [

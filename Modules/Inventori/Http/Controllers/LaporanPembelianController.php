@@ -20,7 +20,6 @@ class LaporanPembelianController extends Controller
 
     public function select_waroeng(Request $request)
     {
-
         $waroeng = DB::table('m_w')
             ->select('m_w_id', 'm_w_nama', 'm_w_code')
             ->where('m_w_m_area_id', $request->id_area)

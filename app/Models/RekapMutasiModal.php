@@ -42,6 +42,7 @@ class RekapMutasiModal extends Model
 	public $timestamps = false;
 
 	protected $casts = [
+		'r_m_m_tanggal' => 'datetime',
 		'r_m_m_jam' => 'time without time zone',
 		'r_m_m_debit' => 'float',
 		'r_m_m_kredit' => 'float',
@@ -49,14 +50,10 @@ class RekapMutasiModal extends Model
 		'r_m_m_m_area_id' => 'int',
 		'r_m_m_created_by' => 'int',
 		'r_m_m_updated_by' => 'int',
-		'r_m_m_deleted_by' => 'int'
-	];
-
-	protected $dates = [
-		'r_m_m_tanggal',
-		'r_m_m_created_at',
-		'r_m_m_updated_at',
-		'r_m_m_deleted_at'
+		'r_m_m_deleted_by' => 'int',
+		'r_m_m_created_at' => 'datetime',
+		'r_m_m_updated_at' => 'datetime',
+		'r_m_m_deleted_at' => 'datetime'
 	];
 
 	protected $fillable = [

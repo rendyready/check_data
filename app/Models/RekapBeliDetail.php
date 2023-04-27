@@ -52,13 +52,10 @@ class RekapBeliDetail extends Model
 		'rekap_beli_detail_satuan_id' => 'int',
 		'rekap_beli_detail_created_by' => 'int',
 		'rekap_beli_detail_updated_by' => 'int',
-		'rekap_beli_detail_deleted_by' => 'int'
-	];
-
-	protected $dates = [
-		'rekap_beli_detail_created_at',
-		'rekap_beli_detail_updated_at',
-		'rekap_beli_detail_deleted_at'
+		'rekap_beli_detail_deleted_by' => 'int',
+		'rekap_beli_detail_created_at' => 'datetime',
+		'rekap_beli_detail_updated_at' => 'datetime',
+		'rekap_beli_detail_deleted_at' => 'datetime'
 	];
 
 	protected $fillable = [

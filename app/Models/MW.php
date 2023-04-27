@@ -33,6 +33,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int|null $m_w_deleted_by
  * @property Carbon|null $m_w_updated_at
  * @property Carbon|null $m_w_deleted_at
+ * @property string $m_w_status_sync
  *
  * @package App\Models
  */
@@ -50,14 +51,11 @@ class MW extends Model
 		'm_w_m_sc_id' => 'int',
 		'm_w_decimal' => 'int',
 		'm_w_created_by' => 'int',
+		'm_w_created_at' => 'datetime',
 		'm_w_updated_by' => 'int',
-		'm_w_deleted_by' => 'int'
-	];
-
-	protected $dates = [
-		'm_w_created_at',
-		'm_w_updated_at',
-		'm_w_deleted_at'
+		'm_w_deleted_by' => 'int',
+		'm_w_updated_at' => 'datetime',
+		'm_w_deleted_at' => 'datetime'
 	];
 
 	protected $fillable = [
@@ -80,6 +78,7 @@ class MW extends Model
 		'm_w_updated_by',
 		'm_w_deleted_by',
 		'm_w_updated_at',
-		'm_w_deleted_at'
+		'm_w_deleted_at',
+		'm_w_status_sync'
 	];
 }

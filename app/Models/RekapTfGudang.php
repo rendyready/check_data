@@ -45,21 +45,18 @@ class RekapTfGudang extends Model
 	protected $casts = [
 		'rekap_tf_gudang_id' => 'int',
 		'rekap_tf_gudang_m_w_id' => 'int',
+		'rekap_tf_gudang_tgl_keluar' => 'datetime',
+		'rekap_tf_gudang_tgl_terima' => 'datetime',
 		'rekap_tf_gudang_qty_keluar' => 'float',
 		'rekap_tf_gudang_qty_terima' => 'float',
 		'rekap_tf_gudang_hpp' => 'float',
 		'rekap_tf_gudang_sub_total' => 'float',
 		'rekap_tf_gudang_created_by' => 'int',
 		'rekap_tf_gudang_updated_by' => 'int',
-		'rekap_tf_gudang_deleted_by' => 'int'
-	];
-
-	protected $dates = [
-		'rekap_tf_gudang_tgl_keluar',
-		'rekap_tf_gudang_tgl_terima',
-		'rekap_tf_gudang_created_at',
-		'rekap_tf_gudang_updated_at',
-		'rekap_tf_gudang_deleted_at'
+		'rekap_tf_gudang_deleted_by' => 'int',
+		'rekap_tf_gudang_created_at' => 'datetime',
+		'rekap_tf_gudang_updated_at' => 'datetime',
+		'rekap_tf_gudang_deleted_at' => 'datetime'
 	];
 
 	protected $fillable = [

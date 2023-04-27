@@ -32,13 +32,10 @@ class MKelompok extends Model
 	protected $casts = [
 		'm_kelompok_created_by' => 'int',
 		'm_kelompok_updated_by' => 'int',
-		'm_kelompok_deleted_by' => 'int'
-	];
-
-	protected $dates = [
-		'm_kelompok_created_at',
-		'm_kelompok_updated_at',
-		'm_kelompok_deleted_at'
+		'm_kelompok_deleted_by' => 'int',
+		'm_kelompok_created_at' => 'datetime',
+		'm_kelompok_updated_at' => 'datetime',
+		'm_kelompok_deleted_at' => 'datetime'
 	];
 
 	protected $fillable = [

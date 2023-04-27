@@ -34,13 +34,10 @@ class MFaq extends Model
 	protected $casts = [
 		'm_faq_created_by' => 'int',
 		'm_faq_updated_by' => 'int',
-		'm_faq_deleted_by' => 'int'
-	];
-
-	protected $dates = [
-		'm_faq_created_at',
-		'm_faq_updated_at',
-		'm_faq_deleted_at'
+		'm_faq_deleted_by' => 'int',
+		'm_faq_created_at' => 'datetime',
+		'm_faq_updated_at' => 'datetime',
+		'm_faq_deleted_at' => 'datetime'
 	];
 
 	protected $fillable = [

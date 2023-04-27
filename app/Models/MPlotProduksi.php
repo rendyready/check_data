@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon $m_plot_produksi_created_at
  * @property Carbon|null $m_plot_produksi_updated_at
  * @property Carbon|null $m_plot_produksi_deleted_at
+ * @property string $m_plot_produksi_status_sync
  *
  * @package App\Models
  */
@@ -33,13 +34,10 @@ class MPlotProduksi extends Model
 		'm_plot_produksi_id' => 'int',
 		'm_plot_produksi_created_by' => 'int',
 		'm_plot_produksi_updated_by' => 'int',
-		'm_plot_produksi_deleted_by' => 'int'
-	];
-
-	protected $dates = [
-		'm_plot_produksi_created_at',
-		'm_plot_produksi_updated_at',
-		'm_plot_produksi_deleted_at'
+		'm_plot_produksi_deleted_by' => 'int',
+		'm_plot_produksi_created_at' => 'datetime',
+		'm_plot_produksi_updated_at' => 'datetime',
+		'm_plot_produksi_deleted_at' => 'datetime'
 	];
 
 	protected $fillable = [
@@ -50,6 +48,7 @@ class MPlotProduksi extends Model
 		'm_plot_produksi_deleted_by',
 		'm_plot_produksi_created_at',
 		'm_plot_produksi_updated_at',
-		'm_plot_produksi_deleted_at'
+		'm_plot_produksi_deleted_at',
+		'm_plot_produksi_status_sync'
 	];
 }

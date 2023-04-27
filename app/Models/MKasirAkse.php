@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $m_kasir_akses_fitur
  * @property string $m_kasir_akses_default_role
  * @property string $m_kasir_akses_temp_role
+ * @property string $m_kasir_akses_sync
  * @property int|null $m_kasir_akses_approvel
  * @property int $m_kasir_akses_created_by
  * @property int|null $m_kasir_akses_updated_by
@@ -25,6 +26,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon $m_kasir_akses_created_at
  * @property Carbon|null $m_kasir_akses_updated_at
  * @property Carbon|null $m_kasir_akses_deleted_at
+ * @property string $m_kasir_akses_status_sync
  *
  * @package App\Models
  */
@@ -38,13 +40,10 @@ class MKasirAkse extends Model
 		'm_kasir_akses_approvel' => 'int',
 		'm_kasir_akses_created_by' => 'int',
 		'm_kasir_akses_updated_by' => 'int',
-		'm_kasir_akses_deleted_by' => 'int'
-	];
-
-	protected $dates = [
-		'm_kasir_akses_created_at',
-		'm_kasir_akses_updated_at',
-		'm_kasir_akses_deleted_at'
+		'm_kasir_akses_deleted_by' => 'int',
+		'm_kasir_akses_created_at' => 'datetime',
+		'm_kasir_akses_updated_at' => 'datetime',
+		'm_kasir_akses_deleted_at' => 'datetime'
 	];
 
 	protected $fillable = [
@@ -53,12 +52,14 @@ class MKasirAkse extends Model
 		'm_kasir_akses_fitur',
 		'm_kasir_akses_default_role',
 		'm_kasir_akses_temp_role',
+		'm_kasir_akses_sync',
 		'm_kasir_akses_approvel',
 		'm_kasir_akses_created_by',
 		'm_kasir_akses_updated_by',
 		'm_kasir_akses_deleted_by',
 		'm_kasir_akses_created_at',
 		'm_kasir_akses_updated_at',
-		'm_kasir_akses_deleted_at'
+		'm_kasir_akses_deleted_at',
+		'm_kasir_akses_status_sync'
 	];
 }

@@ -53,13 +53,10 @@ class RekapHapusTransaksiDetail extends Model
 		'r_h_t_detail_nominal_sharing_profit_out' => 'float',
 		'r_h_t_detail_created_by' => 'int',
 		'r_h_t_detail_updated_by' => 'int',
-		'r_h_t_detail_deleted_by' => 'int'
-	];
-
-	protected $dates = [
-		'r_h_t_detail_created_at',
-		'r_h_t_detail_updated_at',
-		'r_h_t_detail_deleted_at'
+		'r_h_t_detail_deleted_by' => 'int',
+		'r_h_t_detail_created_at' => 'datetime',
+		'r_h_t_detail_updated_at' => 'datetime',
+		'r_h_t_detail_deleted_at' => 'datetime'
 	];
 
 	protected $fillable = [

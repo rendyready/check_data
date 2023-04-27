@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon $m_pajak_created_at
  * @property Carbon|null $m_pajak_updated_at
  * @property Carbon|null $m_pajak_deleted_at
+ * @property string $m_pajak_status_sync
  *
  * @package App\Models
  */
@@ -34,13 +35,10 @@ class MPajak extends Model
 		'm_pajak_value' => 'float',
 		'm_pajak_created_by' => 'int',
 		'm_pajak_updated_by' => 'int',
-		'm_pajak_deleted_by' => 'int'
-	];
-
-	protected $dates = [
-		'm_pajak_created_at',
-		'm_pajak_updated_at',
-		'm_pajak_deleted_at'
+		'm_pajak_deleted_by' => 'int',
+		'm_pajak_created_at' => 'datetime',
+		'm_pajak_updated_at' => 'datetime',
+		'm_pajak_deleted_at' => 'datetime'
 	];
 
 	protected $fillable = [
@@ -51,6 +49,7 @@ class MPajak extends Model
 		'm_pajak_deleted_by',
 		'm_pajak_created_at',
 		'm_pajak_updated_at',
-		'm_pajak_deleted_at'
+		'm_pajak_deleted_at',
+		'm_pajak_status_sync'
 	];
 }

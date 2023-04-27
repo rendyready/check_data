@@ -32,6 +32,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property float|null $rekap_beli_ongkir
  * @property float $rekap_beli_terbayar
  * @property float $rekap_beli_tersisa
+ * @property float $rekap_beli_sub_tot
  * @property float $rekap_beli_tot_nom
  * @property string|null $rekap_beli_ket
  * @property int $rekap_beli_created_by
@@ -49,6 +50,7 @@ class RekapBeli extends Model
 	public $timestamps = false;
 
 	protected $casts = [
+		'rekap_beli_tgl' => 'datetime',
 		'rekap_beli_m_w_id' => 'int',
 		'rekap_beli_disc' => 'float',
 		'rekap_beli_disc_rp' => 'float',
@@ -57,17 +59,14 @@ class RekapBeli extends Model
 		'rekap_beli_ongkir' => 'float',
 		'rekap_beli_terbayar' => 'float',
 		'rekap_beli_tersisa' => 'float',
+		'rekap_beli_sub_tot' => 'float',
 		'rekap_beli_tot_nom' => 'float',
 		'rekap_beli_created_by' => 'int',
 		'rekap_beli_updated_by' => 'int',
-		'rekap_beli_deleted_by' => 'int'
-	];
-
-	protected $dates = [
-		'rekap_beli_tgl',
-		'rekap_beli_created_at',
-		'rekap_beli_updated_at',
-		'rekap_beli_deleted_at'
+		'rekap_beli_deleted_by' => 'int',
+		'rekap_beli_created_at' => 'datetime',
+		'rekap_beli_updated_at' => 'datetime',
+		'rekap_beli_deleted_at' => 'datetime'
 	];
 
 	protected $fillable = [
@@ -90,6 +89,7 @@ class RekapBeli extends Model
 		'rekap_beli_ongkir',
 		'rekap_beli_terbayar',
 		'rekap_beli_tersisa',
+		'rekap_beli_sub_tot',
 		'rekap_beli_tot_nom',
 		'rekap_beli_ket',
 		'rekap_beli_created_by',

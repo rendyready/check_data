@@ -32,13 +32,10 @@ class MGudangNama extends Model
 	protected $casts = [
 		'm_gudang_nama_created_by' => 'int',
 		'm_gudang_nama_updated_by' => 'int',
-		'm_gudang_nama_deleted_by' => 'int'
-	];
-
-	protected $dates = [
-		'm_gudang_nama_created_at',
-		'm_gudang_nama_updated_at',
-		'm_gudang_nama_deleted_at'
+		'm_gudang_nama_deleted_by' => 'int',
+		'm_gudang_nama_created_at' => 'datetime',
+		'm_gudang_nama_updated_at' => 'datetime',
+		'm_gudang_nama_deleted_at' => 'datetime'
 	];
 
 	protected $fillable = [

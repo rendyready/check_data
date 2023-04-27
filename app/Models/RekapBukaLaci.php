@@ -40,19 +40,16 @@ class RekapBukaLaci extends Model
 	public $timestamps = false;
 
 	protected $casts = [
+		'r_b_l_tanggal' => 'datetime',
 		'r_b_l_qty' => 'int',
 		'r_b_l_m_w_id' => 'int',
 		'r_b_l_m_area_id' => 'int',
 		'r_b_l_created_by' => 'int',
 		'r_b_l_deleted_by' => 'int',
-		'r_b_l_updated_by' => 'int'
-	];
-
-	protected $dates = [
-		'r_b_l_tanggal',
-		'r_b_l_created_at',
-		'r_b_l_updated_at',
-		'r_b_l_deleted_at'
+		'r_b_l_updated_by' => 'int',
+		'r_b_l_created_at' => 'datetime',
+		'r_b_l_updated_at' => 'datetime',
+		'r_b_l_deleted_at' => 'datetime'
 	];
 
 	protected $fillable = [

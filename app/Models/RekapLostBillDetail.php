@@ -53,13 +53,10 @@ class RekapLostBillDetail extends Model
 		'r_l_b_detail_nominal_sharing_profit_out' => 'float',
 		'r_l_b_detail_created_by' => 'int',
 		'r_l_b_detail_updated_by' => 'int',
-		'r_l_b_detail_deleted_by' => 'int'
-	];
-
-	protected $dates = [
-		'r_l_b_detail_created_at',
-		'r_l_b_detail_updated_at',
-		'r_l_b_detail_deleted_at'
+		'r_l_b_detail_deleted_by' => 'int',
+		'r_l_b_detail_created_at' => 'datetime',
+		'r_l_b_detail_updated_at' => 'datetime',
+		'r_l_b_detail_deleted_at' => 'datetime'
 	];
 
 	protected $fillable = [

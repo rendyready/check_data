@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  * 
  * @property int $permission_id
  * @property int $role_id
+ * @property string $r_h_p_status_sync
  * 
  * @property Permission $permission
  * @property Role $role
@@ -28,6 +29,10 @@ class RoleHasPermission extends Model
 	protected $casts = [
 		'permission_id' => 'int',
 		'role_id' => 'int'
+	];
+
+	protected $fillable = [
+		'r_h_p_status_sync'
 	];
 
 	public function permission()

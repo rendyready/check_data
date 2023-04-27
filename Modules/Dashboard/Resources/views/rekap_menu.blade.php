@@ -217,6 +217,7 @@ if(HakAksesPusat){
       $('.filter_area').on('select2:select', function(){
         var id_area = $(this).val();
         var tanggal  = $('.filter_tanggal').val();
+        var prev = $(this).data('previous-value');
         if(id_area && tanggal){
             $.ajax({
             type:"GET",
@@ -242,6 +243,7 @@ if(HakAksesPusat){
         }else{
           alert('Harap lengkapi kolom tanggal');
             $(".filter_waroeng").empty();
+            $(".filter_area").val(prev).trigger('change');
         }     
         $(".filter_trans").empty();  
     });
@@ -296,7 +298,7 @@ if(HakAksesPusat){
             },
             success:function(res){               
                 if(res){
-                    $(".filter_trans").empty();
+                    // $(".filter_trans").empty();
                     $(".filter_trans").append('<option></option>');
                     $.each(res,function(key,value){
                         $(".filter_trans").append('<option value="'+key+'">'+value+'</option>');
@@ -308,7 +310,8 @@ if(HakAksesPusat){
             });
         }else{
             $(".filter_trans").empty();
-        }      
+        }    
+        $(".filter_trans").empty();  
     });
   }
 

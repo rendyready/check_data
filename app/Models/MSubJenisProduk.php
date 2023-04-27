@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon $m_sub_jenis_produk_created_at
  * @property Carbon|null $m_sub_jenis_produk_updated_at
  * @property Carbon|null $m_sub_jenis_produk_deleted_at
+ * @property string $m_sub_jenis_produk_status_sync
  *
  * @package App\Models
  */
@@ -35,13 +36,10 @@ class MSubJenisProduk extends Model
 		'm_sub_jenis_produk_m_jenis_produk_id' => 'int',
 		'm_sub_jenis_produk_created_by' => 'int',
 		'm_sub_jenis_produk_updated_by' => 'int',
-		'm_sub_jenis_produk_deleted_by' => 'int'
-	];
-
-	protected $dates = [
-		'm_sub_jenis_produk_created_at',
-		'm_sub_jenis_produk_updated_at',
-		'm_sub_jenis_produk_deleted_at'
+		'm_sub_jenis_produk_deleted_by' => 'int',
+		'm_sub_jenis_produk_created_at' => 'datetime',
+		'm_sub_jenis_produk_updated_at' => 'datetime',
+		'm_sub_jenis_produk_deleted_at' => 'datetime'
 	];
 
 	protected $fillable = [
@@ -53,6 +51,7 @@ class MSubJenisProduk extends Model
 		'm_sub_jenis_produk_deleted_by',
 		'm_sub_jenis_produk_created_at',
 		'm_sub_jenis_produk_updated_at',
-		'm_sub_jenis_produk_deleted_at'
+		'm_sub_jenis_produk_deleted_at',
+		'm_sub_jenis_produk_status_sync'
 	];
 }

@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $role_id
  * @property string $model_type
  * @property int $model_id
+ * @property string $m_h_r_status_sync
  * 
  * @property Role $role
  *
@@ -28,6 +29,10 @@ class ModelHasRole extends Model
 	protected $casts = [
 		'role_id' => 'int',
 		'model_id' => 'int'
+	];
+
+	protected $fillable = [
+		'm_h_r_status_sync'
 	];
 
 	public function role()

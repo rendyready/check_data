@@ -34,13 +34,10 @@ class RekapMember extends Model
 	protected $casts = [
 		'rekap_member_created_by' => 'int',
 		'rekap_member_updated_by' => 'int',
-		'rekap_member_deleted_by' => 'int'
-	];
-
-	protected $dates = [
-		'rekap_member_created_at',
-		'rekap_member_updated_at',
-		'rekap_member_deleted_at'
+		'rekap_member_deleted_by' => 'int',
+		'rekap_member_created_at' => 'datetime',
+		'rekap_member_updated_at' => 'datetime',
+		'rekap_member_deleted_at' => 'datetime'
 	];
 
 	protected $fillable = [

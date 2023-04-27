@@ -48,6 +48,7 @@ class RekapLostBill extends Model
 	public $timestamps = false;
 
 	protected $casts = [
+		'r_l_b_tanggal' => 'datetime',
 		'r_l_b_jam' => 'time without time zone',
 		'r_l_b_nominal' => 'float',
 		'r_l_b_nominal_pajak' => 'float',
@@ -59,14 +60,10 @@ class RekapLostBill extends Model
 		'r_l_b_approved_by' => 'int',
 		'r_l_b_created_by' => 'int',
 		'r_l_b_updated_by' => 'int',
-		'r_l_b_deleted_by' => 'int'
-	];
-
-	protected $dates = [
-		'r_l_b_tanggal',
-		'r_l_b_created_at',
-		'r_l_b_updated_at',
-		'r_l_b_deleted_at'
+		'r_l_b_deleted_by' => 'int',
+		'r_l_b_created_at' => 'datetime',
+		'r_l_b_updated_at' => 'datetime',
+		'r_l_b_deleted_at' => 'datetime'
 	];
 
 	protected $fillable = [

@@ -27,6 +27,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon $history_pendidikan_created_at
  * @property Carbon|null $history_pendidikan_updated_at
  * @property Carbon|null $history_pendidikan_deleted_at
+ * @property string $history_pendidikan_status_sync
  *
  * @package App\Models
  */
@@ -39,13 +40,10 @@ class HistoryPendidikan extends Model
 		'history_pendidikan_nilai' => 'float',
 		'history_pendidikan_created_by' => 'int',
 		'history_pendidikan_updated_by' => 'int',
-		'history_pendidikan_deleted_by' => 'int'
-	];
-
-	protected $dates = [
-		'history_pendidikan_created_at',
-		'history_pendidikan_updated_at',
-		'history_pendidikan_deleted_at'
+		'history_pendidikan_deleted_by' => 'int',
+		'history_pendidikan_created_at' => 'datetime',
+		'history_pendidikan_updated_at' => 'datetime',
+		'history_pendidikan_deleted_at' => 'datetime'
 	];
 
 	protected $fillable = [
@@ -62,6 +60,7 @@ class HistoryPendidikan extends Model
 		'history_pendidikan_deleted_by',
 		'history_pendidikan_created_at',
 		'history_pendidikan_updated_at',
-		'history_pendidikan_deleted_at'
+		'history_pendidikan_deleted_at',
+		'history_pendidikan_status_sync'
 	];
 }

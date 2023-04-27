@@ -48,6 +48,7 @@ class RekapHapusTransaksi extends Model
 	public $timestamps = false;
 
 	protected $casts = [
+		'r_h_t_tanggal' => 'datetime',
 		'r_h_t_jam' => 'time without time zone',
 		'r_h_t_m_area_id' => 'int',
 		'r_h_t_m_w_id' => 'int',
@@ -60,14 +61,10 @@ class RekapHapusTransaksi extends Model
 		'r_h_t_approved_by' => 'int',
 		'r_h_t_created_by' => 'int',
 		'r_h_t_updated_by' => 'int',
-		'r_h_t_deleted_by' => 'int'
-	];
-
-	protected $dates = [
-		'r_h_t_tanggal',
-		'r_h_t_created_at',
-		'r_h_t_updated_at',
-		'r_h_t_deleted_at'
+		'r_h_t_deleted_by' => 'int',
+		'r_h_t_created_at' => 'datetime',
+		'r_h_t_updated_at' => 'datetime',
+		'r_h_t_deleted_at' => 'datetime'
 	];
 
 	protected $fillable = [

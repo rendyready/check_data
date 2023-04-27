@@ -36,13 +36,10 @@ class MGudang extends Model
 		'm_gudang_m_w_id' => 'int',
 		'm_gudang_created_by' => 'int',
 		'm_gudang_updated_by' => 'int',
-		'm_gudang_deleted_by' => 'int'
-	];
-
-	protected $dates = [
-		'm_gudang_created_at',
-		'm_gudang_updated_at',
-		'm_gudang_deleted_at'
+		'm_gudang_deleted_by' => 'int',
+		'm_gudang_created_at' => 'datetime',
+		'm_gudang_updated_at' => 'datetime',
+		'm_gudang_deleted_at' => 'datetime'
 	];
 
 	protected $fillable = [

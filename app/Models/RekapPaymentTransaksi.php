@@ -37,13 +37,10 @@ class RekapPaymentTransaksi extends Model
 		'r_p_t_nominal' => 'float',
 		'r_p_t_created_by' => 'int',
 		'r_p_t_updated_by' => 'int',
-		'r_p_t_deleted_by' => 'int'
-	];
-
-	protected $dates = [
-		'r_p_t_created_at',
-		'r_p_t_updated_at',
-		'r_p_t_deleted_at'
+		'r_p_t_deleted_by' => 'int',
+		'r_p_t_created_at' => 'datetime',
+		'r_p_t_updated_at' => 'datetime',
+		'r_p_t_deleted_at' => 'datetime'
 	];
 
 	protected $fillable = [

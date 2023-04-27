@@ -47,13 +47,10 @@ class RekapGaransi extends Model
 		'rekap_garansi_nominal' => 'float',
 		'rekap_garansi_created_by' => 'int',
 		'rekap_garansi_updated_by' => 'int',
-		'rekap_garansi_deleted_by' => 'int'
-	];
-
-	protected $dates = [
-		'rekap_garansi_created_at',
-		'rekap_garansi_updated_at',
-		'rekap_garansi_deleted_at'
+		'rekap_garansi_deleted_by' => 'int',
+		'rekap_garansi_created_at' => 'datetime',
+		'rekap_garansi_updated_at' => 'datetime',
+		'rekap_garansi_deleted_at' => 'datetime'
 	];
 
 	protected $fillable = [

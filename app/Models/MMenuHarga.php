@@ -26,6 +26,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon $m_menu_harga_created_at
  * @property Carbon|null $m_menu_harga_updated_at
  * @property Carbon|null $m_menu_harga_deleted_at
+ * @property string $m_menu_harga_status_sync
  *
  * @package App\Models
  */
@@ -41,13 +42,10 @@ class MMenuHarga extends Model
 		'm_menu_harga_m_produk_id' => 'int',
 		'm_menu_harga_created_by' => 'int',
 		'm_menu_harga_updated_by' => 'int',
-		'm_menu_harga_deleted_by' => 'int'
-	];
-
-	protected $dates = [
-		'm_menu_harga_created_at',
-		'm_menu_harga_updated_at',
-		'm_menu_harga_deleted_at'
+		'm_menu_harga_deleted_by' => 'int',
+		'm_menu_harga_created_at' => 'datetime',
+		'm_menu_harga_updated_at' => 'datetime',
+		'm_menu_harga_deleted_at' => 'datetime'
 	];
 
 	protected $fillable = [
@@ -63,6 +61,7 @@ class MMenuHarga extends Model
 		'm_menu_harga_deleted_by',
 		'm_menu_harga_created_at',
 		'm_menu_harga_updated_at',
-		'm_menu_harga_deleted_at'
+		'm_menu_harga_deleted_at',
+		'm_menu_harga_status_sync'
 	];
 }

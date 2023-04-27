@@ -28,11 +28,8 @@ class AppIdCounter extends Model
 
 	protected $casts = [
 		'app_id_counter_m_w_id' => 'int',
-		'app_id_counter_value' => 'int'
-	];
-
-	protected $dates = [
-		'app_id_counter_date'
+		'app_id_counter_value' => 'int',
+		'app_id_counter_date' => 'datetime'
 	];
 
 	protected $fillable = [

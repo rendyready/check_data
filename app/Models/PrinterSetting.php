@@ -39,13 +39,10 @@ class PrinterSetting extends Model
 		'printer_setting_width' => 'int',
 		'printer_setting_created_by' => 'int',
 		'printer_setting_deleted_by' => 'int',
-		'printer_setting_updated_by' => 'int'
-	];
-
-	protected $dates = [
-		'printer_setting_created_at',
-		'printer_setting_updated_at',
-		'printer_setting_deleted_at'
+		'printer_setting_updated_by' => 'int',
+		'printer_setting_created_at' => 'datetime',
+		'printer_setting_updated_at' => 'datetime',
+		'printer_setting_deleted_at' => 'datetime'
 	];
 
 	protected $fillable = [

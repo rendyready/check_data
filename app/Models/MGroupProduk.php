@@ -38,13 +38,10 @@ class MGroupProduk extends Model
 		'm_group_produk_produk_list' => 'binary',
 		'm_group_produk_created_by' => 'int',
 		'm_group_produk_updated_by' => 'int',
-		'm_group_produk_deleted_by' => 'int'
-	];
-
-	protected $dates = [
-		'm_group_produk_created_at',
-		'm_group_produk_updated_at',
-		'm_group_produk_deleted_at'
+		'm_group_produk_deleted_by' => 'int',
+		'm_group_produk_created_at' => 'datetime',
+		'm_group_produk_updated_at' => 'datetime',
+		'm_group_produk_deleted_at' => 'datetime'
 	];
 
 	protected $fillable = [

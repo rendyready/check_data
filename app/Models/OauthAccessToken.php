@@ -32,11 +32,8 @@ class OauthAccessToken extends Model
 	protected $casts = [
 		'user_id' => 'int',
 		'client_id' => 'int',
-		'revoked' => 'bool'
-	];
-
-	protected $dates = [
-		'expires_at'
+		'revoked' => 'bool',
+		'expires_at' => 'datetime'
 	];
 
 	protected $fillable = [

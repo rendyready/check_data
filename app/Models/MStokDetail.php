@@ -18,8 +18,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon $m_stok_detail_tgl
  * @property string $m_stok_detail_m_produk_code
  * @property string $m_stok_detail_m_produk_nama
- * @property int $m_stok_detail_satuan_id
  * @property string $m_stok_detail_gudang_code
+ * @property int $m_stok_detail_satuan_id
  * @property string|null $m_stok_detail_satuan
  * @property float|null $m_stok_detail_masuk
  * @property float|null $m_stok_detail_keluar
@@ -42,6 +42,7 @@ class MStokDetail extends Model
 	public $timestamps = false;
 
 	protected $casts = [
+		'm_stok_detail_tgl' => 'datetime',
 		'm_stok_detail_satuan_id' => 'int',
 		'm_stok_detail_masuk' => 'float',
 		'm_stok_detail_keluar' => 'float',
@@ -50,14 +51,10 @@ class MStokDetail extends Model
 		'm_stok_detail_hpp' => 'float',
 		'm_stok_detail_created_by' => 'int',
 		'm_stok_detail_updated_by' => 'int',
-		'm_stok_detail_deleted_by' => 'int'
-	];
-
-	protected $dates = [
-		'm_stok_detail_tgl',
-		'm_stok_detail_created_at',
-		'm_stok_detail_updated_at',
-		'm_stok_detail_deleted_at'
+		'm_stok_detail_deleted_by' => 'int',
+		'm_stok_detail_created_at' => 'datetime',
+		'm_stok_detail_updated_at' => 'datetime',
+		'm_stok_detail_deleted_at' => 'datetime'
 	];
 
 	protected $fillable = [
@@ -66,8 +63,8 @@ class MStokDetail extends Model
 		'm_stok_detail_tgl',
 		'm_stok_detail_m_produk_code',
 		'm_stok_detail_m_produk_nama',
-		'm_stok_detail_satuan_id',
 		'm_stok_detail_gudang_code',
+		'm_stok_detail_satuan_id',
 		'm_stok_detail_satuan',
 		'm_stok_detail_masuk',
 		'm_stok_detail_keluar',

@@ -40,13 +40,10 @@ class RekapPoDetail extends Model
 		'rekap_po_detail_qty' => 'float',
 		'rekap_po_detail_created_by' => 'int',
 		'rekap_po_detail_updated_by' => 'int',
-		'rekap_po_detail_deleted_by' => 'int'
-	];
-
-	protected $dates = [
-		'rekap_po_detail_created_at',
-		'rekap_po_detail_updated_at',
-		'rekap_po_detail_deleted_at'
+		'rekap_po_detail_deleted_by' => 'int',
+		'rekap_po_detail_created_at' => 'datetime',
+		'rekap_po_detail_updated_at' => 'datetime',
+		'rekap_po_detail_deleted_at' => 'datetime'
 	];
 
 	protected $fillable = [

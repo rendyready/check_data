@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon $m_area_created_at
  * @property Carbon|null $m_area_updated_at
  * @property Carbon|null $m_area_deleted_at
+ * @property string $m_area_status_sync
  *
  * @package App\Models
  */
@@ -34,13 +35,10 @@ class MArea extends Model
 		'm_area_id' => 'int',
 		'm_area_created_by' => 'int',
 		'm_area_updated_by' => 'int',
-		'm_area_deleted_by' => 'int'
-	];
-
-	protected $dates = [
-		'm_area_created_at',
-		'm_area_updated_at',
-		'm_area_deleted_at'
+		'm_area_deleted_by' => 'int',
+		'm_area_created_at' => 'datetime',
+		'm_area_updated_at' => 'datetime',
+		'm_area_deleted_at' => 'datetime'
 	];
 
 	protected $fillable = [
@@ -52,6 +50,7 @@ class MArea extends Model
 		'm_area_deleted_by',
 		'm_area_created_at',
 		'm_area_updated_at',
-		'm_area_deleted_at'
+		'm_area_deleted_at',
+		'm_area_status_sync'
 	];
 }
