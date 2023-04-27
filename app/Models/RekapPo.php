@@ -36,18 +36,15 @@ class RekapPo extends Model
 	public $timestamps = false;
 
 	protected $casts = [
+		'rekap_po_tgl' => 'datetime',
 		'rekap_po_supplier_id' => 'int',
 		'rekap_po_m_w_id' => 'int',
 		'rekap_po_created_by' => 'int',
 		'rekap_po_updated_by' => 'int',
-		'rekap_po_deleted_by' => 'int'
-	];
-
-	protected $dates = [
-		'rekap_po_tgl',
-		'rekap_po_created_at',
-		'rekap_po_updated_at',
-		'rekap_po_deleted_at'
+		'rekap_po_deleted_by' => 'int',
+		'rekap_po_created_at' => 'datetime',
+		'rekap_po_updated_at' => 'datetime',
+		'rekap_po_deleted_at' => 'datetime'
 	];
 
 	protected $fillable = [

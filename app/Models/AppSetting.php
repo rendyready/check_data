@@ -13,9 +13,6 @@ use Illuminate\Database\Eloquent\Model;
  * Class AppSetting
  * 
  * @property int $app_setting_id
- * @property int $app_setting_m_w_id
- * @property string|null $app_setting_key_wa
- * @property string|null $app_setting_device_wa
  * @property string|null $app_setting_url_server_struk
  * @property string|null $app_setting_key_server_struk
  * @property int $app_setting_created_by
@@ -24,6 +21,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon $app_setting_created_at
  * @property Carbon|null $app_setting_updated_at
  * @property Carbon|null $app_setting_deleted_at
+ * @property string $app_setting_status_sync
  *
  * @package App\Models
  */
@@ -34,22 +32,15 @@ class AppSetting extends Model
 	public $timestamps = false;
 
 	protected $casts = [
-		'app_setting_m_w_id' => 'int',
 		'app_setting_created_by' => 'int',
 		'app_setting_updated_by' => 'int',
-		'app_setting_deleted_by' => 'int'
-	];
-
-	protected $dates = [
-		'app_setting_created_at',
-		'app_setting_updated_at',
-		'app_setting_deleted_at'
+		'app_setting_deleted_by' => 'int',
+		'app_setting_created_at' => 'datetime',
+		'app_setting_updated_at' => 'datetime',
+		'app_setting_deleted_at' => 'datetime'
 	];
 
 	protected $fillable = [
-		'app_setting_m_w_id',
-		'app_setting_key_wa',
-		'app_setting_device_wa',
 		'app_setting_url_server_struk',
 		'app_setting_key_server_struk',
 		'app_setting_created_by',
@@ -57,6 +48,7 @@ class AppSetting extends Model
 		'app_setting_deleted_by',
 		'app_setting_created_at',
 		'app_setting_updated_at',
-		'app_setting_deleted_at'
+		'app_setting_deleted_at',
+		'app_setting_status_sync'
 	];
 }

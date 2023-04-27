@@ -27,6 +27,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon $history_jabatan_created_at
  * @property Carbon|null $history_jabatan_updated_at
  * @property Carbon|null $history_jabatan_deleted_at
+ * @property string $history_jabatan_status_sync
  *
  * @package App\Models
  */
@@ -37,17 +38,14 @@ class HistoryJabatan extends Model
 
 	protected $casts = [
 		'history_jabatan_m_w_id' => 'int',
+		'history_jabatan_mulai' => 'datetime',
+		'history_jabatan_selesai' => 'datetime',
 		'history_jabatan_created_by' => 'int',
 		'history_jabatan_updated_by' => 'int',
-		'history_jabatan_deleted_by' => 'int'
-	];
-
-	protected $dates = [
-		'history_jabatan_mulai',
-		'history_jabatan_selesai',
-		'history_jabatan_created_at',
-		'history_jabatan_updated_at',
-		'history_jabatan_deleted_at'
+		'history_jabatan_deleted_by' => 'int',
+		'history_jabatan_created_at' => 'datetime',
+		'history_jabatan_updated_at' => 'datetime',
+		'history_jabatan_deleted_at' => 'datetime'
 	];
 
 	protected $fillable = [
@@ -64,6 +62,7 @@ class HistoryJabatan extends Model
 		'history_jabatan_deleted_by',
 		'history_jabatan_created_at',
 		'history_jabatan_updated_at',
-		'history_jabatan_deleted_at'
+		'history_jabatan_deleted_at',
+		'history_jabatan_status_sync'
 	];
 }

@@ -45,18 +45,15 @@ class RekapPcb extends Model
 	public $timestamps = false;
 
 	protected $casts = [
+		'rekap_pcb_tgl' => 'datetime',
 		'rekap_pcb_brg_asal_hppisi' => 'float',
 		'rekap_pcb_brg_hasil_hpp' => 'float',
 		'rekap_pcb_created_by' => 'int',
 		'rekap_pcb_updated_by' => 'int',
-		'rekap_pcb_deleted_by' => 'int'
-	];
-
-	protected $dates = [
-		'rekap_pcb_tgl',
-		'rekap_pcb_created_at',
-		'rekap_pcb_updated_at',
-		'rekap_pcb_deleted_at'
+		'rekap_pcb_deleted_by' => 'int',
+		'rekap_pcb_created_at' => 'datetime',
+		'rekap_pcb_updated_at' => 'datetime',
+		'rekap_pcb_deleted_at' => 'datetime'
 	];
 
 	protected $fillable = [

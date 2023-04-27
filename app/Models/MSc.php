@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon $m_sc_created_at
  * @property Carbon|null $m_sc_updated_at
  * @property Carbon|null $m_sc_deleted_at
+ * @property string $m_sc_status_sync
  *
  * @package App\Models
  */
@@ -34,13 +35,10 @@ class MSc extends Model
 		'm_sc_value' => 'float',
 		'm_sc_created_by' => 'int',
 		'm_sc_updated_by' => 'int',
-		'm_sc_deleted_by' => 'int'
-	];
-
-	protected $dates = [
-		'm_sc_created_at',
-		'm_sc_updated_at',
-		'm_sc_deleted_at'
+		'm_sc_deleted_by' => 'int',
+		'm_sc_created_at' => 'datetime',
+		'm_sc_updated_at' => 'datetime',
+		'm_sc_deleted_at' => 'datetime'
 	];
 
 	protected $fillable = [
@@ -51,6 +49,7 @@ class MSc extends Model
 		'm_sc_deleted_by',
 		'm_sc_created_at',
 		'm_sc_updated_at',
-		'm_sc_deleted_at'
+		'm_sc_deleted_at',
+		'm_sc_status_sync'
 	];
 }

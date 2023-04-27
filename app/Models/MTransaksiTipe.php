@@ -25,6 +25,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon $m_t_t_created_at
  * @property Carbon|null $m_t_t_updated_at
  * @property Carbon|null $m_t_t_deleted_at
+ * @property string $m_t_t_status_sync
  *
  * @package App\Models
  */
@@ -40,13 +41,10 @@ class MTransaksiTipe extends Model
 		'm_t_t_profit_out' => 'float',
 		'm_t_t_created_by' => 'int',
 		'm_t_t_updated_by' => 'int',
-		'm_t_t_deleted_by' => 'int'
-	];
-
-	protected $dates = [
-		'm_t_t_created_at',
-		'm_t_t_updated_at',
-		'm_t_t_deleted_at'
+		'm_t_t_deleted_by' => 'int',
+		'm_t_t_created_at' => 'datetime',
+		'm_t_t_updated_at' => 'datetime',
+		'm_t_t_deleted_at' => 'datetime'
 	];
 
 	protected $fillable = [
@@ -61,6 +59,7 @@ class MTransaksiTipe extends Model
 		'm_t_t_deleted_by',
 		'm_t_t_created_at',
 		'm_t_t_updated_at',
-		'm_t_t_deleted_at'
+		'm_t_t_deleted_at',
+		'm_t_t_status_sync'
 	];
 }

@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon|null $m_payment_method_created_at
  * @property Carbon|null $m_payment_method_updated_at
  * @property Carbon|null $m_payment_method_deleted_at
+ * @property string $m_payment_method_status_sync
  *
  * @package App\Models
  */
@@ -35,13 +36,10 @@ class MPaymentMethod extends Model
 		'm_payment_method_id' => 'int',
 		'm_payment_method_created_by' => 'int',
 		'm_payment_method_updated_by' => 'int',
-		'm_payment_method_deleted_by' => 'int'
-	];
-
-	protected $dates = [
-		'm_payment_method_created_at',
-		'm_payment_method_updated_at',
-		'm_payment_method_deleted_at'
+		'm_payment_method_deleted_by' => 'int',
+		'm_payment_method_created_at' => 'datetime',
+		'm_payment_method_updated_at' => 'datetime',
+		'm_payment_method_deleted_at' => 'datetime'
 	];
 
 	protected $fillable = [
@@ -54,6 +52,7 @@ class MPaymentMethod extends Model
 		'm_payment_method_deleted_by',
 		'm_payment_method_created_at',
 		'm_payment_method_updated_at',
-		'm_payment_method_deleted_at'
+		'm_payment_method_deleted_at',
+		'm_payment_method_status_sync'
 	];
 }

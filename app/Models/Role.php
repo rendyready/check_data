@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $guard_name
  * @property Carbon $created_at
  * @property Carbon|null $updated_at
+ * @property string $roles_status_sync
  * 
  * @property Collection|ModelHasRole[] $model_has_roles
  * @property Collection|Permission[] $permissions
@@ -30,7 +31,8 @@ class Role extends Model
 
 	protected $fillable = [
 		'name',
-		'guard_name'
+		'guard_name',
+		'roles_status_sync'
 	];
 
 	public function model_has_roles()
@@ -40,6 +42,7 @@ class Role extends Model
 
 	public function permissions()
 	{
-		return $this->belongsToMany(Permission::class, 'role_has_permissions');
+		return $this->belongsToMany(Permission::class, 'role_has_permissions')
+					->withPivot('r_h_p_status_sync');
 	}
 }

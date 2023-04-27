@@ -48,13 +48,10 @@ class RekapInvPenjualanDetail extends Model
 		'rekap_inv_penjualan_detail_subtot' => 'float',
 		'rekap_inv_penjualan_detail_created_by' => 'int',
 		'rekap_inv_penjualan_detail_updated_by' => 'int',
-		'rekap_inv_penjualan_detail_deleted_by' => 'int'
-	];
-
-	protected $dates = [
-		'rekap_inv_penjualan_detail_created_at',
-		'rekap_inv_penjualan_detail_updated_at',
-		'rekap_inv_penjualan_detail_deleted_at'
+		'rekap_inv_penjualan_detail_deleted_by' => 'int',
+		'rekap_inv_penjualan_detail_created_at' => 'datetime',
+		'rekap_inv_penjualan_detail_updated_at' => 'datetime',
+		'rekap_inv_penjualan_detail_deleted_at' => 'datetime'
 	];
 
 	protected $fillable = [

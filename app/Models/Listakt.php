@@ -33,13 +33,10 @@ class ListAkt extends Model
 	protected $casts = [
 		'list_akt_created_by' => 'int',
 		'list_akt_updated_by' => 'int',
-		'list_akt_deleted_by' => 'int'
-	];
-
-	protected $dates = [
-		'list_akt_created_at',
-		'list_akt_updated_at',
-		'list_akt_deleted_at'
+		'list_akt_deleted_by' => 'int',
+		'list_akt_created_at' => 'datetime',
+		'list_akt_updated_at' => 'datetime',
+		'list_akt_deleted_at' => 'datetime'
 	];
 
 	protected $fillable = [

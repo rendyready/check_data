@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon $m_klasifikasi_produk_created_at
  * @property Carbon|null $m_klasifikasi_produk_updated_at
  * @property Carbon|null $m_klasifikasi_produk_deleted_at
+ * @property string $m_klasifikasi_produk_status_sync
  *
  * @package App\Models
  */
@@ -36,13 +37,10 @@ class MKlasifikasiProduk extends Model
 		'm_klasifikasi_produk_last_id' => 'int',
 		'm_klasifikasi_produk_created_by' => 'int',
 		'm_klasifikasi_produk_updated_by' => 'int',
-		'm_klasifikasi_produk_deleted_by' => 'int'
-	];
-
-	protected $dates = [
-		'm_klasifikasi_produk_created_at',
-		'm_klasifikasi_produk_updated_at',
-		'm_klasifikasi_produk_deleted_at'
+		'm_klasifikasi_produk_deleted_by' => 'int',
+		'm_klasifikasi_produk_created_at' => 'datetime',
+		'm_klasifikasi_produk_updated_at' => 'datetime',
+		'm_klasifikasi_produk_deleted_at' => 'datetime'
 	];
 
 	protected $fillable = [
@@ -55,6 +53,7 @@ class MKlasifikasiProduk extends Model
 		'm_klasifikasi_produk_deleted_by',
 		'm_klasifikasi_produk_created_at',
 		'm_klasifikasi_produk_updated_at',
-		'm_klasifikasi_produk_deleted_at'
+		'm_klasifikasi_produk_deleted_at',
+		'm_klasifikasi_produk_status_sync'
 	];
 }

@@ -24,9 +24,12 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon $rekap_modal_tanggal
  * @property float $rekap_modal_nominal
  * @property float $rekap_modal_sales
+ * @property float $rekap_modal_cash_in
+ * @property float $rekap_modal_cash_out
  * @property float $rekap_modal_cash
  * @property float $rekap_modal_cash_real
  * @property string $rekap_modal_status
+ * @property string|null $rekap_modal_keterangan
  * @property string $rekap_modal_status_sync
  * @property int $rekap_modal_created_by
  * @property int|null $rekap_modal_updated_by
@@ -46,20 +49,19 @@ class RekapModal extends Model
 		'rekap_modal_m_w_id' => 'int',
 		'rekap_modal_m_area_id' => 'int',
 		'rekap_modal_sesi' => 'int',
+		'rekap_modal_tanggal' => 'datetime',
 		'rekap_modal_nominal' => 'float',
 		'rekap_modal_sales' => 'float',
+		'rekap_modal_cash_in' => 'float',
+		'rekap_modal_cash_out' => 'float',
 		'rekap_modal_cash' => 'float',
 		'rekap_modal_cash_real' => 'float',
 		'rekap_modal_created_by' => 'int',
 		'rekap_modal_updated_by' => 'int',
-		'rekap_modal_deleted_by' => 'int'
-	];
-
-	protected $dates = [
-		'rekap_modal_tanggal',
-		'rekap_modal_created_at',
-		'rekap_modal_updated_at',
-		'rekap_modal_deleted_at'
+		'rekap_modal_deleted_by' => 'int',
+		'rekap_modal_created_at' => 'datetime',
+		'rekap_modal_updated_at' => 'datetime',
+		'rekap_modal_deleted_at' => 'datetime'
 	];
 
 	protected $fillable = [
@@ -74,9 +76,12 @@ class RekapModal extends Model
 		'rekap_modal_tanggal',
 		'rekap_modal_nominal',
 		'rekap_modal_sales',
+		'rekap_modal_cash_in',
+		'rekap_modal_cash_out',
 		'rekap_modal_cash',
 		'rekap_modal_cash_real',
 		'rekap_modal_status',
+		'rekap_modal_keterangan',
 		'rekap_modal_status_sync',
 		'rekap_modal_created_by',
 		'rekap_modal_updated_by',

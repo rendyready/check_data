@@ -26,11 +26,8 @@ class OauthRefreshToken extends Model
 	public $timestamps = false;
 
 	protected $casts = [
-		'revoked' => 'bool'
-	];
-
-	protected $dates = [
-		'expires_at'
+		'revoked' => 'bool',
+		'expires_at' => 'datetime'
 	];
 
 	protected $fillable = [

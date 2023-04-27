@@ -40,19 +40,16 @@ class RekapUangTip extends Model
 	public $timestamps = false;
 
 	protected $casts = [
+		'r_u_t_tanggal' => 'datetime',
 		'r_u_t_nominal' => 'float',
 		'r_u_t_m_w_id' => 'int',
 		'r_u_t_m_area_id' => 'int',
 		'r_u_t_created_by' => 'int',
 		'r_u_t_updated_by' => 'int',
-		'r_u_t_deleted_by' => 'int'
-	];
-
-	protected $dates = [
-		'r_u_t_tanggal',
-		'r_u_t_created_at',
-		'r_u_t_updated_at',
-		'r_u_t_deleted_at'
+		'r_u_t_deleted_by' => 'int',
+		'r_u_t_created_at' => 'datetime',
+		'r_u_t_updated_at' => 'datetime',
+		'r_u_t_deleted_at' => 'datetime'
 	];
 
 	protected $fillable = [

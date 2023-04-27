@@ -75,23 +75,20 @@ class MKaryawan extends Model
 	public $timestamps = false;
 
 	protected $casts = [
+		'm_karyawan_tgl_lahir' => 'datetime',
+		'm_karyawan_tgl_nikah' => 'datetime',
 		'm_karyawan_tinggi_badan' => 'int',
 		'm_karyawan_berat_badan' => 'float',
+		'm_karyawan_tgl_diterima' => 'datetime',
+		'm_karyawan_tgl_penetapan' => 'datetime',
 		'm_karyawan_ukuran_sepatu' => 'float',
 		'm_karyawan_user' => 'int',
 		'm_karyawan_created_by' => 'int',
 		'm_karyawan_updated_by' => 'int',
-		'm_karyawan_deleted_by' => 'int'
-	];
-
-	protected $dates = [
-		'm_karyawan_tgl_lahir',
-		'm_karyawan_tgl_nikah',
-		'm_karyawan_tgl_diterima',
-		'm_karyawan_tgl_penetapan',
-		'm_karyawan_created_at',
-		'm_karyawan_updated_at',
-		'm_karyawan_deleted_at'
+		'm_karyawan_deleted_by' => 'int',
+		'm_karyawan_created_at' => 'datetime',
+		'm_karyawan_updated_at' => 'datetime',
+		'm_karyawan_deleted_at' => 'datetime'
 	];
 
 	protected $fillable = [

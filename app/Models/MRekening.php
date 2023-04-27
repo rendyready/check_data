@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  * Class MRekening
  * 
  * @property int $m_rekening_id
- * @property int $m_rekening_m_waroeng_id
+ * @property string $m_rekening_m_waroeng_id
  * @property string $m_rekening_kategori
  * @property string $m_rekening_no_akun
  * @property string $m_rekening_nama
@@ -34,17 +34,13 @@ class MRekening extends Model
 	public $timestamps = false;
 
 	protected $casts = [
-		'm_rekening_m_waroeng_id' => 'int',
 		'm_rekening_saldo' => 'float',
 		'm_rekening_created_by' => 'int',
 		'm_rekening_updated_by' => 'int',
-		'm_rekening_deleted_by' => 'int'
-	];
-
-	protected $dates = [
-		'm_rekening_created_at',
-		'm_rekening_updated_at',
-		'm_rekening_deleted_at'
+		'm_rekening_deleted_by' => 'int',
+		'm_rekening_created_at' => 'datetime',
+		'm_rekening_updated_at' => 'datetime',
+		'm_rekening_deleted_at' => 'datetime'
 	];
 
 	protected $fillable = [

@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $m_stok_waroeng
  * @property int|null $m_stok_satuan_id
  * @property string|null $m_stok_satuan
+ * @property int $m_stok_m_klasifikasi_produk_id
  * @property float $m_stok_awal
  * @property float $m_stok_masuk
  * @property float $m_stok_keluar
@@ -46,6 +47,7 @@ class MStok extends Model
 	protected $casts = [
 		'm_stok_id' => 'int',
 		'm_stok_satuan_id' => 'int',
+		'm_stok_m_klasifikasi_produk_id' => 'int',
 		'm_stok_awal' => 'float',
 		'm_stok_masuk' => 'float',
 		'm_stok_keluar' => 'float',
@@ -56,13 +58,10 @@ class MStok extends Model
 		'm_stok_konversi' => 'float',
 		'm_stok_created_by' => 'int',
 		'm_stok_updated_by' => 'int',
-		'm_stok_deleted_by' => 'int'
-	];
-
-	protected $dates = [
-		'm_stok_created_at',
-		'm_stok_updated_at',
-		'm_stok_deleted_at'
+		'm_stok_deleted_by' => 'int',
+		'm_stok_created_at' => 'datetime',
+		'm_stok_updated_at' => 'datetime',
+		'm_stok_deleted_at' => 'datetime'
 	];
 
 	protected $fillable = [
@@ -73,6 +72,7 @@ class MStok extends Model
 		'm_stok_waroeng',
 		'm_stok_satuan_id',
 		'm_stok_satuan',
+		'm_stok_m_klasifikasi_produk_id',
 		'm_stok_awal',
 		'm_stok_masuk',
 		'm_stok_keluar',

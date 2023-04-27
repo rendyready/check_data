@@ -52,6 +52,7 @@ class RekapRefund extends Model
 	public $timestamps = false;
 
 	protected $casts = [
+		'r_r_tanggal' => 'datetime',
 		'r_r_jam' => 'time without time zone',
 		'r_r_m_area_id' => 'int',
 		'r_r_m_w_id' => 'int',
@@ -66,14 +67,10 @@ class RekapRefund extends Model
 		'r_r_approved_by' => 'int',
 		'r_r_created_by' => 'int',
 		'r_r_updated_by' => 'int',
-		'r_r_deleted_by' => 'int'
-	];
-
-	protected $dates = [
-		'r_r_tanggal',
-		'r_r_created_at',
-		'r_r_updated_at',
-		'r_r_deleted_at'
+		'r_r_deleted_by' => 'int',
+		'r_r_created_at' => 'datetime',
+		'r_r_updated_at' => 'datetime',
+		'r_r_deleted_at' => 'datetime'
 	];
 
 	protected $fillable = [

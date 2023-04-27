@@ -55,13 +55,10 @@ class RekapRefundDetail extends Model
 		'r_r_detail_approved_by' => 'int',
 		'r_r_detail_created_by' => 'int',
 		'r_r_detail_updated_by' => 'int',
-		'r_r_detail_deleted_by' => 'int'
-	];
-
-	protected $dates = [
-		'r_r_detail_created_at',
-		'r_r_detail_updated_at',
-		'r_r_detail_deleted_at'
+		'r_r_detail_deleted_by' => 'int',
+		'r_r_detail_created_at' => 'datetime',
+		'r_r_detail_updated_at' => 'datetime',
+		'r_r_detail_deleted_at' => 'datetime'
 	];
 
 	protected $fillable = [

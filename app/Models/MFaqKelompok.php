@@ -35,13 +35,10 @@ class MFaqKelompok extends Model
 		'm_faq_kelompok_m_kelompok_id' => 'int',
 		'm_faq_kelompok_created_by' => 'int',
 		'm_faq_kelompok_updated_by' => 'int',
-		'm_faq_kelompok_deleted_by' => 'int'
-	];
-
-	protected $dates = [
-		'm_faq_kelompok_created_at',
-		'm_faq_kelompok_updated_at',
-		'm_faq_kelompok_deleted_at'
+		'm_faq_kelompok_deleted_by' => 'int',
+		'm_faq_kelompok_created_at' => 'datetime',
+		'm_faq_kelompok_updated_at' => 'datetime',
+		'm_faq_kelompok_deleted_at' => 'datetime'
 	];
 
 	protected $fillable = [

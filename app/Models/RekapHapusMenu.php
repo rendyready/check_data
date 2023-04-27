@@ -54,6 +54,7 @@ class RekapHapusMenu extends Model
 	public $timestamps = false;
 
 	protected $casts = [
+		'r_h_m_tanggal' => 'datetime',
 		'r_h_m_jam' => 'time without time zone',
 		'r_h_m_m_produk_id' => 'int',
 		'r_h_m_qty' => 'int',
@@ -69,14 +70,10 @@ class RekapHapusMenu extends Model
 		'r_h_m_approved_by' => 'int',
 		'r_h_m_created_by' => 'int',
 		'r_h_m_updated_by' => 'int',
-		'r_h_m_deleted_by' => 'int'
-	];
-
-	protected $dates = [
-		'r_h_m_tanggal',
-		'r_h_m_created_at',
-		'r_h_m_updated_at',
-		'r_h_m_deleted_at'
+		'r_h_m_deleted_by' => 'int',
+		'r_h_m_created_at' => 'datetime',
+		'r_h_m_updated_at' => 'datetime',
+		'r_h_m_deleted_at' => 'datetime'
 	];
 
 	protected $fillable = [

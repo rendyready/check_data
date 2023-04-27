@@ -24,6 +24,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon $m_meja_created_at
  * @property Carbon|null $m_meja_updated_at
  * @property Carbon|null $m_meja_deleted_at
+ * @property string $m_meja_status_sync
  *
  * @package App\Models
  */
@@ -38,13 +39,10 @@ class MMeja extends Model
 		'm_meja_m_w_id' => 'int',
 		'm_meja_created_by' => 'int',
 		'm_meja_updated_by' => 'int',
-		'm_meja_deleted_by' => 'int'
-	];
-
-	protected $dates = [
-		'm_meja_created_at',
-		'm_meja_updated_at',
-		'm_meja_deleted_at'
+		'm_meja_deleted_by' => 'int',
+		'm_meja_created_at' => 'datetime',
+		'm_meja_updated_at' => 'datetime',
+		'm_meja_deleted_at' => 'datetime'
 	];
 
 	protected $fillable = [
@@ -58,6 +56,7 @@ class MMeja extends Model
 		'm_meja_deleted_by',
 		'm_meja_created_at',
 		'm_meja_updated_at',
-		'm_meja_deleted_at'
+		'm_meja_deleted_at',
+		'm_meja_status_sync'
 	];
 }

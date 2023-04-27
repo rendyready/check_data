@@ -45,6 +45,7 @@ class RekapInvPenjualan extends Model
 	public $timestamps = false;
 
 	protected $casts = [
+		'rekap_inv_penjualan_tgl' => 'datetime',
 		'rekap_inv_penjualan_supplier_id' => 'int',
 		'rekap_inv_penjualan_m_w_id' => 'int',
 		'rekap_inv_penjualan_disc' => 'float',
@@ -57,14 +58,10 @@ class RekapInvPenjualan extends Model
 		'rekap_inv_penjualan_tersisa' => 'float',
 		'rekap_inv_penjualan_created_by' => 'int',
 		'rekap_inv_penjualan_updated_by' => 'int',
-		'rekap_inv_penjualan_deleted_by' => 'int'
-	];
-
-	protected $dates = [
-		'rekap_inv_penjualan_tgl',
-		'rekap_inv_penjualan_created_at',
-		'rekap_inv_penjualan_updated_at',
-		'rekap_inv_penjualan_deleted_at'
+		'rekap_inv_penjualan_deleted_by' => 'int',
+		'rekap_inv_penjualan_created_at' => 'datetime',
+		'rekap_inv_penjualan_updated_at' => 'datetime',
+		'rekap_inv_penjualan_deleted_at' => 'datetime'
 	];
 
 	protected $fillable = [

@@ -43,13 +43,10 @@ class MSupplier extends Model
 		'm_supplier_saldo_awal' => 'float',
 		'm_supplier_created_by' => 'int',
 		'm_supplier_updated_by' => 'int',
-		'm_supplier_deleted_by' => 'int'
-	];
-
-	protected $dates = [
-		'm_supplier_created_at',
-		'm_supplier_updated_at',
-		'm_supplier_deleted_at'
+		'm_supplier_deleted_by' => 'int',
+		'm_supplier_created_at' => 'datetime',
+		'm_supplier_updated_at' => 'datetime',
+		'm_supplier_deleted_at' => 'datetime'
 	];
 
 	protected $fillable = [

@@ -35,13 +35,10 @@ class MJabatan extends Model
 	protected $casts = [
 		'm_jabatan_created_by' => 'int',
 		'm_jabatan_updated_by' => 'int',
-		'm_jabatan_deleted_by' => 'int'
-	];
-
-	protected $dates = [
-		'm_jabatan_created_at',
-		'm_jabatan_updated_at',
-		'm_jabatan_deleted_at'
+		'm_jabatan_deleted_by' => 'int',
+		'm_jabatan_created_at' => 'datetime',
+		'm_jabatan_updated_at' => 'datetime',
+		'm_jabatan_deleted_at' => 'datetime'
 	];
 
 	protected $fillable = [
