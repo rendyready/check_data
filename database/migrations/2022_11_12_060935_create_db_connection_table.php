@@ -29,7 +29,8 @@ return new class extends Migration
             $table->string('db_con_dbname');
             $table->string('db_con_username');
             $table->string('db_con_password');
-            $table->timestamps();
+            $table->timestampTz('db_con_created_at')->useCurrent();
+            $table->timestampTz('db_con_updated_at')->nullable()->useCurrentOnUpdate();
         });
     }
 

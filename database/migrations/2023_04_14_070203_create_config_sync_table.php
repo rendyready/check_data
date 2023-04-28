@@ -25,7 +25,8 @@ return new class extends Migration
             $table->string('config_sync_field_validate2')->nullable();
             $table->string('config_sync_field_validate3')->nullable();
             $table->string('config_sync_field_validate4')->nullable();
-            $table->timestamps();
+            $table->timestampTz('config_sync_created_at')->useCurrent();
+            $table->timestampTz('config_sync_updated_at')->nullable()->useCurrentOnUpdate();
         });
     }
 
