@@ -37,6 +37,14 @@ return new class extends Migration
         $table[22] = 'users';
         $table[23] = 'history_pendidikan';
         $table[24] = 'history_jabatan';
+        $table[25] = 'm_group_produk';
+        $table[26] = 'm_resep';
+        $table[27] = 'm_resep_detail';
+        $table[28] = 'm_supplier';
+        $table[29] = 'm_stok';
+        $table[30] = 'm_stok_detail';
+        $table[31] = 'm_gudang';
+        $table[32] = 'm_gudang_nama';
 
         foreach ($table as $key => $valTable) {
             Schema::table($valTable, function (Blueprint $table) use($valTable) {
@@ -93,6 +101,14 @@ return new class extends Migration
 
         $table[23] = 'history_pendidikan';
         $table[24] = 'history_jabatan';
+        $table[25] = 'm_group_produk';
+        $table[26] = 'm_resep';
+        $table[27] = 'm_resep_detail';
+        $table[28] = 'm_supplier';
+        $table[29] = 'm_stok';
+        $table[30] = 'm_stok_detail';
+        $table[31] = 'm_gudang';
+        $table[32] = 'm_gudang_nama';
 
         foreach ($table as $key => $valTable) {
             Schema::table($valTable, function (Blueprint $table) use($valTable) {
