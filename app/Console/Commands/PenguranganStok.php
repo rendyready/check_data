@@ -43,7 +43,7 @@ class PenguranganStok extends Command
                 foreach ($get_resep as $val2) {
                     $get_std_resep = DB::table('m_std_bb_resep')->where('m_std_bb_resep_m_produk_code', $val2->m_resep_detail_bb_code)->first();
                     if (empty($get_std_resep)) {
-                        $qty = $val->r_t_detail_qty;
+                        $qty = $val->r_t_detail_qty/$val2->m_resep_detail_standar_porsi;
                     } else {
                         $qty = ($val->r_t_detail_qty * $val2->m_resep_detail_bb_qty) / $get_std_resep->m_std_bb_resep_qty;
                     }
