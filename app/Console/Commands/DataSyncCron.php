@@ -389,7 +389,7 @@ class DataSyncCron extends Command
                             ]);
 
                             #Local Log
-                            $DbDest->table('log_cronjob')
+                            DB::table('log_cronjob')
                             ->insert([
                                 'log_cronjob_name' => 'datasync:cron',
                                 'log_cronjob_from_server_id' => $getSourceConn->db_con_m_w_id,
@@ -651,7 +651,7 @@ class DataSyncCron extends Command
                             ]);
 
                             #Local Log
-                            $DbDest->table('log_cronjob')
+                            DB::table('log_cronjob')
                             ->insert([
                                 'log_cronjob_name' => 'datasync:cron',
                                 'log_cronjob_from_server_id' => $getSourceConn->db_con_m_w_id,
