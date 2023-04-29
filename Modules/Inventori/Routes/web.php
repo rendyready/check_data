@@ -159,6 +159,8 @@ Route::group(['prefix' => 'inventori', 'controller' => LaporanKeluarGudangContro
     Route::get('lap_gudang_rekap/tampil_rekap', 'tampil_rekap')->name('lap_gudang_rekap.tampil_rekap');
     Route::get('lap_gudang_rekap/detail_rekap/{id}', 'detail_rekap')->name('lap_gudang_rekap.detail_rekap');
     Route::get('lap_gudang_harian', 'lap_harian')->name('lap_gudang_harian.lap_harian');
+    Route::get('lap_gudang_harian/select_waroeng_harian', 'select_waroeng_harian')->name('lap_gudang_harian.select_waroeng_harian');
+    Route::get('lap_gudang_harian/tampil_harian', 'tampil_harian')->name('lap_gudang_harian.tampil_harian');
 });
 
 //Laporan Pengiriman
@@ -166,4 +168,20 @@ Route::group(['prefix' => 'inventori', 'controller' => LaporanPengirimanControll
     Route::get('lap_kirim_detail', 'lap_detail')->name('lap_kirim.lap_detail');
     Route::get('lap_kirim_rekap', 'lap_rekap')->name('lap_kirim.lap_rekap');
     Route::get('lap_kirim_harian', 'lap_harian')->name('lap_kirim.lap_harian');
+});
+
+//Laporan CHT
+Route::group(['prefix' => 'inventori', 'controller' => LaporanChtController::class, 'middleware' => ['auth', 'web']], function () {
+    Route::get('lap_cht', 'index')->name('lap_cht.index');
+    Route::get('lap_cht/select_waroeng', 'select_waroeng')->name('lap_cht.select_waroeng');
+    Route::get('lap_cht/select_user', 'select_user')->name('lap_cht.select_user');
+    Route::get('lap_cht/select_bb', 'select_bb')->name('lap_cht.select_bb');
+    Route::get('lap_cht/tampil_cht', 'tampil_cht')->name('lap_cht.tampil_cht');
+});
+
+//Laporan RPH
+Route::group(['prefix' => 'inventori', 'controller' => LaporanRphController::class, 'middleware' => ['auth', 'web']], function () {
+    Route::get('lap_rph', 'lap_rph')->name('index');
+    // Route::get('lap_kirim_rekap', 'lap_rekap')->name('lap_kirim.lap_rekap');
+    // Route::get('lap_kirim_harian', 'lap_harian')->name('lap_kirim.lap_harian');
 });

@@ -5,7 +5,7 @@ namespace Modules\Akuntansi\Http\Controllers;
 use Carbon\Carbon;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Validator;
@@ -64,17 +64,13 @@ class JurnalBankController extends Controller
     public function tampil(Request $request)
     {
         // return $request;
-        $tanggal = $request->m_jurnal_bank_tanggal;
-
-        $tanggal = date('Y-m-d', strtotime($tanggal));
-
-        $data = DB::table('m_jurnal_bank')
-            ->join('m_w', 'm_w_code', 'm_jurnal_bank_m_waroeng_id')
-            ->select('m_jurnal_bank_m_rekening_no_akun', 'm_jurnal_bank_m_rekening_nama', 'm_jurnal_bank_particul', 'm_jurnal_bank_saldo', 'm_jurnal_bank_user', 'm_jurnal_bank_no_bukti')
-            ->where('m_jurnal_bank_m_waroeng_id', $request->m_jurnal_bank_m_waroeng_id)
-            ->where('m_jurnal_bank_kas', $request->m_jurnal_bank_kas)
-            ->whereDate('m_jurnal_bank_tanggal', $tanggal)
-            ->orderBy('m_jurnal_bank_id', 'DESC')
+        $tanggal = $request->rekap_jurnal_bank_tanggal;
+        $data = DB::table('rekap_jurnal_bank')
+            ->select('rekap_jurnal_bank_m_rekening_no_akun', 'rekap_jurnal_bank_m_rekening_nama', 'rekap_jurnal_bank_particul', 'rekap_jurnal_bank_saldo', 'rekap_jurnal_bank_user', 'rekap_jurnal_bank_no_bukti')
+            ->where('rekap_jurnal_bank_m_waroeng_id', $request->rekap_jurnal_bank_m_waroeng_id)
+            ->where('rekap_jurnal_bank_kas', $request->rekap_jurnal_bank_kas)
+            ->whereDate('rekap_jurnal_bank_tanggal', $tanggal)
+            ->orderBy('rekap_jurnal_bank_id', 'DESC')
             ->get();
         $output = array('data' => $data);
         return response()->json($output);
@@ -85,20 +81,20 @@ class JurnalBankController extends Controller
     {
         $tanggal = date('Y-m-d', strtotime($prefix2));
         $code2 = date('Y/m/d');
-        $cek_data = DB::table('m_jurnal_bank')
-            ->join('m_w', 'm_w_code', 'm_jurnal_bank_m_waroeng_id')
-            ->select('m_jurnal_bank_no_bukti')
-            ->where('m_jurnal_bank_kas', $prefix1)
-            ->where('m_jurnal_bank_m_waroeng_id', $prefix3)
-            ->whereDate('m_jurnal_bank_tanggal', $tanggal)
-            ->orderby('m_jurnal_bank_id', 'DESC');
+        $cek_data = DB::table('rekap_jurnal_bank')
+            ->join('m_w', 'm_w_code', 'rekap_jurnal_bank_m_waroeng_id')
+            ->select('rekap_jurnal_bank_no_bukti')
+            ->where('rekap_jurnal_bank_kas', $prefix1)
+            ->where('rekap_jurnal_bank_m_waroeng_id', $prefix3)
+            ->whereDate('rekap_jurnal_bank_tanggal', $tanggal)
+            ->orderby('rekap_jurnal_bank_id', 'DESC');
 
         $urut_pertama = '100001';
         if ($cek_data->count() == 0) {
             $code3 = $urut_pertama;
         } else {
             $toconv = $cek_data->first();
-            $urut_ada = floatval(substr($toconv->m_jurnal_bank_no_bukti, 14)) + 1;
+            $urut_ada = floatval(substr($toconv->rekap_jurnal_bank_no_bukti, 14)) + 1;
             $code3 = $urut_ada;
         }
         $buildcode = $prefix1 . '-' . $code2 . '-' . $code3;
@@ -109,32 +105,34 @@ class JurnalBankController extends Controller
     {
 
         $validator = Validator::make($request->all(), [
-            'm_jurnal_bank_m_rekening_no_akun.*' => 'required',
-            'm_jurnal_bank_m_rekening_nama.*' => 'required',
-            'm_jurnal_bank_tanggal' => 'after:yesterday',
-            'm_jurnal_bank_particul.*' => 'required',
-            'm_jurnal_bank_saldo.*' => 'required',
+            'rekap_jurnal_bank_m_rekening_no_akun.*' => 'required',
+            'rekap_jurnal_bank_m_rekening_nama.*' => 'required',
+            'rekap_jurnal_bank_tanggal' => 'after:yesterday',
+            'rekap_jurnal_bank_particul.*' => 'required',
+            'rekap_jurnal_bank_saldo.*' => 'required',
         ]);
 
         if ($validator->passes()) {
-            foreach ($request->m_jurnal_bank_particul as $key => $value) {
-                $str1 = str_replace('.', '', $request->m_jurnal_bank_saldo[$key]);
-                $code = self::generatecode($request->m_jurnal_bank_kas, $request->m_jurnal_bank_tanggal, $request->m_jurnal_bank_m_waroeng_id);
+            foreach ($request->rekap_jurnal_bank_particul as $key => $value) {
+                $str1 = str_replace('.', '', $request->rekap_jurnal_bank_saldo[$key]);
+                $code = self::generatecode($request->rekap_jurnal_bank_kas, $request->rekap_jurnal_bank_tanggal, $request->rekap_jurnal_bank_m_waroeng_id);
                 $data = array(
-                    'm_jurnal_bank_m_waroeng_id' => $request->m_jurnal_bank_m_waroeng_id,
-                    'm_jurnal_bank_tanggal' => $request->m_jurnal_bank_tanggal,
-                    'm_jurnal_bank_kas' => $request->m_jurnal_bank_kas,
-                    'm_jurnal_bank_m_rekening_no_akun' => $request->m_jurnal_bank_m_rekening_no_akun[$key],
-                    'm_jurnal_bank_m_rekening_nama' => $request->m_jurnal_bank_m_rekening_nama[$key],
-                    'm_jurnal_bank_particul' => $request->m_jurnal_bank_particul[$key],
-                    'm_jurnal_bank_saldo' => str_replace(',', '.', $str1),
-                    'm_jurnal_bank_user' => Auth::user()->name,
-                    'm_jurnal_bank_no_bukti' => $code,
-                    'm_jurnal_bank_created_by' => Auth::id(),
-                    'm_jurnal_bank_created_at' => Carbon::now(),
+                    'rekap_jurnal_bank_id' => $this->getNextId('rekap_jurnal_bank', Auth::user()->waroeng_id),
+                    'rekap_jurnal_bank_m_waroeng_id' => $request->rekap_jurnal_bank_m_waroeng_id,
+                    'rekap_jurnal_bank_tanggal' => $request->rekap_jurnal_bank_tanggal,
+                    'rekap_jurnal_bank_kas' => $request->rekap_jurnal_bank_kas,
+                    'rekap_jurnal_bank_m_rekening_no_akun' => $request->rekap_jurnal_bank_m_rekening_no_akun[$key],
+                    'rekap_jurnal_bank_m_rekening_nama' => $request->rekap_jurnal_bank_m_rekening_nama[$key],
+                    'rekap_jurnal_bank_particul' => $request->rekap_jurnal_bank_particul[$key],
+                    'rekap_jurnal_bank_saldo' => str_replace(',', '.', $str1),
+                    'rekap_jurnal_bank_user' => Auth::user()->name,
+                    'rekap_jurnal_bank_status_sync' => 'send',
+                    'rekap_jurnal_bank_no_bukti' => $code,
+                    'rekap_jurnal_bank_created_by' => Auth::id(),
+                    'rekap_jurnal_bank_created_at' => Carbon::now(),
                 );
 
-                DB::table('m_jurnal_bank')->insert($data);
+                DB::table('rekap_jurnal_bank')->insert($data);
             }
 
             return response()->json(['messages' => 'Berhasil Menambakan', 'type' => 'success']);

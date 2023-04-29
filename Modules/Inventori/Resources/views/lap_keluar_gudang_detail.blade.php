@@ -16,7 +16,7 @@
                             <div class="row mb-1">
                                 <label class="col-sm-3 col-form-label" >Tanggal</label>
                                 <div class="col-sm-9">
-                                    <input name="r_t_tanggal" class="cari form-control form-control filter_tanggal" type="text" placeholder="Pilih Tanggal Masuk Bahan Baku" id="filter_tanggal" readonly/>
+                                    <input name="r_t_tanggal" class="cari form-control form-control filter_tanggal" type="text" placeholder="Pilih Tanggal.." id="filter_tanggal" readonly/>
                                 </div>
                             </div>
                         </div>
@@ -82,6 +82,19 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-md-5">
+                                <div class="row mb-3">
+                                    <label class="col-sm-3 col-form-label" for="rekap_inv_penjualan_created_by">Status</label>
+                                    <div class="col-sm-9">
+                                        <select id="filter_status" style="width: 100%;"
+                                        class="cari js-select2 form-control filter_status" data-placeholder="Pilih Status" name="rekap_beli_created_by">
+                                        <option></option>
+                                        <option value="asal">Gudang Asal</option>
+                                        <option value="tujuan">Gudang Tujuan</option>
+                                    </select>
+                                    </div>
+                                </div>
+                            </div>
                         </div> 
 
                         <div id="user-info" data-waroeng-id="{{ Auth::user()->waroeng_id }}" data-has-access="{{ in_array(Auth::user()->waroeng_id, $data->akses_area) ? 'true' : 'false' }}"></div>
@@ -116,6 +129,7 @@ $(document).ready(function() {
         var waroeng  = $('.filter_waroeng').val();
         var tanggal  = $('.filter_tanggal').val();
         var pengadaan = $('.filter_pengadaan').val(); 
+        var status   = $('.filter_status').val();  
         console.log(status);
         $('.show_nota').remove(); 
             $.ajax({
@@ -136,11 +150,11 @@ $(document).ready(function() {
               $.each(data.transaksi, function (key, value) {
               $('#show_nota').append('<div class="col-xl-4 show_nota">'+
                         '<div class="block block-rounded mb-1">'+
-                          '<div class="block-header block-header-default block-header-rtl bg-pulse">'+
-                            '<h3 class="block-title text-light"><small class="fw-semibold">'+ value.tgl_terima +'</small><br><small>'+ value.rekap_tf_gudang_code +'</small><br><small> (out)</small></h3>'+
+                          (status == 'asal' ? '<div class="block-header block-header-default block-header-rtl bg-pulse">' : '<div class="block-header block-header-default block-header-rtl bg-warning">') +
+                            '<h3 class="block-title text-light"><small class="fw-semibold">'+ value.m_gudang_nama +'</small><br></h3>'+
                             '<div class="alert alert-warning py-2 mb-0">'+
-                              '<h3 class="block-title text-black"><i class="fa fa-calendar opacity-50 ms-1"></i> <small>'+ value.tgl_keluar +'</small>'+
-                                '<br><small class="fw-semibold">'+ value.name +'</small><br><small> (in)</small></h3>'+
+                              (status == 'asal' ? '<h3 class="block-title text-black"><i class="fa fa-calendar opacity-50 ms-1"></i> <small>'+ value.rekap_tf_gudang_tgl_keluar_formatted +'</small>' : '<h3 class="block-title text-black"><i class="fa fa-calendar opacity-50 ms-1"></i> <small>'+ value.rekap_tf_gudang_tgl_terima_formatted +'</small>') +
+                                '<br><small class="fw-semibold">'+ value.name +'</small></h3>'+
                             '</div>'+
                           '</div>'+
                           '<div class="block-content mb-4" style="background-color: rgba(224, 224, 224, 0.5)">'+
@@ -150,9 +164,7 @@ $(document).ready(function() {
                               '<tbody>'+
                                 '<tr style="background-color: white;" class="text-end fw-semibold">'+
                                   '<td>Total</td>'+
-                                  '<td>'+
-                                    ''+ formatNumber(Number(value.total)) +''+
-                                  '</td>'+
+                                  '<td class="total_nota">'+ formatNumber(Number(value.total)) +'</td>'+
                                 '</tr>'+
                               '</tbody>'+
                             '</table>'+
@@ -161,14 +173,13 @@ $(document).ready(function() {
                       '</div>');
                   });
                     $.each(data.detail, function (key, item) {
-                        // console.log(item.rekap_tf_gudang_code);
                         $('#sub_nota'+ item.rekap_tf_gudang_code).append(
                           '<tr class="sub_sub_nota" style="background-color: white;">'+
                                     '<td>'+
-                                    '<small class="fw-semibold" style="font-size: 15px;">'+ item.rekap_tf_gudang_m_produk_nama +'</small><small> (hpp : Rp. '+ formatNumber(Number(item.rekap_tf_gudang_hpp)) +')</small><br>'+
-                                   '<small> <small style="font-size: 11px;" class="fw-semibold">masuk gudang : </small>'+ Number(item.rekap_tf_gudang_qty_keluar) +' '+ item.rekap_tf_gudang_satuan_keluar +'</small> <br> <small> <small style="font-size: 11px;" class="fw-semibold">keluar gudang : </small> : '+ Number(item.rekap_tf_gudang_qty_terima) +' '+ item.rekap_tf_gudang_satuan_terima +'</small></td><td class="text-end fw-semibold" id+="sub_total">'+ formatNumber(Number(item.rekap_tf_gudang_sub_total)) +'</td>'+
+                                    '<small class="fw-semibold" style="font-size: 15px;">'+ item.rekap_tf_gudang_m_produk_nama +'</small> <br>'+
+                                    (status == 'asal' ? '<small>'+ Number(item.rekap_tf_gudang_qty_keluar) +' '+ item.rekap_tf_gudang_satuan_keluar +', hpp '+ formatNumber(Number(item.rekap_tf_gudang_hpp)) +'</small><br></td><td class="text-end fw-semibold" id+="sub_total">'+ formatNumber(item.rekap_tf_gudang_qty_keluar * item.rekap_tf_gudang_hpp) +'</td>' : '<small>'+ Number(item.rekap_tf_gudang_qty_terima) +' '+ item.rekap_tf_gudang_satuan_terima +', hpp '+ formatNumber(Number(item.rekap_tf_gudang_hpp)) +'</small><br></td><td class="text-end fw-semibold" id+="sub_total">'+ formatNumber(item.rekap_tf_gudang_qty_terima * item.rekap_tf_gudang_hpp) +'</td>')+
                                 '</tr>'
-                          );
+                            );
                       });
                 }           
           });          

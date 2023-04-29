@@ -527,11 +527,13 @@
                   <span class="nav-main-link-name">Stok Opname</span>
                 </a>
               </li>
+
               <li class="nav-main-item{{ request()->is('inventori/laporan') ? ' open' : '' }}">
                 <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
                   <span class="nav-main-link-name">Laporan</span>
                 </a>
                 <ul class="nav-main-submenu">
+
               <li class="nav-main-item{{ request()->is('inventori/kartu_stock') ? ' open' : '' }}">
                 <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
                   <span class="nav-main-link-name">Kartu Stock</span>
@@ -548,6 +550,12 @@
                     </a>
                   </li>
                 </ul>
+              </li>
+
+              <li class="nav-main-item">
+                <a class="nav-main-link{{ request()->is('inventori/lap_rph') ? ' active' : '' }}" href="{{route('kartu_stock.kartu_stk')}}">
+                  <span class="nav-main-link-name">Laporan RPH</span>
+                </a>
               </li>
 
               <li class="nav-main-item{{ request()->is('inventori/lap_pem_harian') ? ' open' : '' }}">
@@ -573,30 +581,35 @@
                 </ul>
               </li>
 
+              <li class="nav-main-item">
+                <a class="nav-main-link{{ request()->is('invetori/lap_cht') ? ' active' : '' }}" href="{{route('lap_cht.index')}}">
+                  <span class="nav-main-link-name">Laporan CHT</span>
+                </a>
+              </li>
+
               <li class="nav-main-item{{ request()->is('inventori/lap_gudang_rekap') ? ' open' : '' }}">
                 <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
-                  <span class="nav-main-link-name">laporan Keluar Gudang</span>
+                  <span class="nav-main-link-name">laporan Keluar dan Masuk Gudang</span>
                 </a>
                 <ul class="nav-main-submenu">
                   <li class="nav-main-item">
                     <a class="nav-main-link{{ request()->is('inventori/lap_gudang_detail') ? ' active' : '' }}" href="{{route('lap_gudang_detail.lap_detail')}}">
-                      <span class="nav-main-link-name">Detail Keluar Gudang</span>
+                      <span class="nav-main-link-name">Detail Keluar dan Masuk Gudang</span>
                     </a>
                   </li>
                   <li class="nav-main-item">
                     <a class="nav-main-link{{ request()->is('inventori/lap_gudang_rekap') ? ' active' : '' }}" href="{{route('lap_gudang_rekap.lap_rekap')}}">
-                      <span class="nav-main-link-name">Rekap Keluar Gudang</span>
+                      <span class="nav-main-link-name">Rekap Keluar dan Masuk Gudang</span>
                     </a>
                   </li>
                   <li class="nav-main-item">
                     <a class="nav-main-link{{ request()->is('inventori/lap_gudang_harian') ? ' active' : '' }}" href="{{route('lap_gudang_harian.lap_harian')}}">
-                      <span class="nav-main-link-name">Rekap Keluar Gudang Harian</span>
+                      <span class="nav-main-link-name">Rekap Keluar dan Masuk Gudang Harian</span>
                     </a>
                   </li>
                 </ul>
               </li>
               
-
               <li class="nav-main-item{{ request()->is('inventori/m_bb') ? ' open' : '' }}">
                 <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
                   <span class="nav-main-link-name">Laporan Pengiriman</span>

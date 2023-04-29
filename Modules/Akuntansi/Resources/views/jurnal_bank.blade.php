@@ -5,7 +5,7 @@
             <div class="col-md-12 col-xl-12">
                 <div class="block block-themed h-100 mb-0">
                     <div class="block-header bg-pulse">
-                        <h3 class="block-title" style="font-size:1.5rem">
+                        <h3 class="block-title">
                         Jurnal Bank</h3> 
                     </div>
                     <div class="block-content text-muted">
@@ -16,7 +16,7 @@
                                         for="example-hf-text">Waroeng</label>
                                     <div class="col-sm-8">
                                         <select id="filter-waroeng" style="width: 100%;"
-                                            class="cari js-select2 form-control" name="m_jurnal_bank_m_waroeng_id">
+                                            class="cari js-select2 form-control" name="rekap_jurnal_bank_m_waroeng_id">
                                             @foreach ($waroeng as $wrg)
                                                 <option value="{{ $wrg->m_w_id }}"> {{ $wrg->m_w_nama }} </option>
                                             @endforeach
@@ -28,7 +28,7 @@
                                         for="example-hf-text">JenisTransaksi</label>
                                     <div class="col-md-8">
                                         <select id="filter-kas" class="cari js-select2 form-control kas-click"
-                                            style="width: 100%;" name="m_jurnal_bank_kas">
+                                            style="width: 100%;" name="rekap_jurnal_bank_kas">
                                             <option value="bm">Bank Masuk</option>
                                             <option value="bk">Bank Keluar</option>
                                         </select>
@@ -38,9 +38,9 @@
                                     <label class="col-sm-4 col-form-label" id="categoryAccount"
                                         for="example-hf-text">Tanggal</label>
                                     <div class="col-md-8">
-                                        <input type="date" value="<?= date('Y-m-d') ?>" id="filter-tanggal"
+                                        <input type="text" value="<?= date('Y-m-d') ?>" id="filter-tanggal"
                                             class="cari form-control " style="width: 100%;"
-                                            name="m_jurnal_bank_tanggal">
+                                            name="rekap_jurnal_bank_tanggal" placeholder="Pilih Tanggal.." readonly>
                                     </div>
                                 </div>
                                 <div class="row mb-2 col-5">
@@ -69,24 +69,24 @@
                                             <tr>
                                                 <td>
                                                     <input type="text" placeholder="Input Nomor Akun"
-                                                        id="m_jurnal_bank_m_rekening_no_akun"
-                                                        name="m_jurnal_bank_m_rekening_no_akun[]"
+                                                        id="rekap_jurnal_bank_m_rekening_no_akun"
+                                                        name="rekap_jurnal_bank_m_rekening_no_akun[]"
                                                         class="form-control set form-control-sm no-akun text-center" />
                                                 </td>
                                                 <td>
                                                     <select id="m_rekening_nama"
-                                                        name="m_jurnal_bank_m_rekening_nama[]"
+                                                        name="rekap_jurnal_bank_m_rekening_nama[]"
                                                         class="js-select2 set_select showrek" style="width:200px;">
                                                     </select>
                                                 </td>
                                                 <td>
                                                     <input type="text" placeholder="Input Particul"
-                                                        id="m_jurnal_particul" name="m_jurnal_bank_particul[]"
+                                                        id="m_jurnal_particul" name="rekap_jurnal_bank_particul[]"
                                                         class="form-control set form-control-sm text-center" />
                                                 </td>
                                                 <td>
                                                     <input type="text" step="any" placeholder="Input Saldo" id="m_jurnal_kredit"
-                                                        name="m_jurnal_bank_saldo[]"
+                                                        name="rekap_jurnal_bank_saldo[]"
                                                         class="form-control set form-control-sm saldo text-end number" />
                                                 </td>
                                                 <td>
@@ -126,7 +126,7 @@
               <div class="block block-rounded">
                 <div class="block-content text-mute">
                   <div class="table-responsive">
-                    <table id="jurnal-tampil" class="table table-bordered table-striped table-vcenter mb-4">
+                    <table id="jurnal-tampil" class="table table-bordered table-striped no-wrap table-vcenter mb-4">
                         <thead class="justify-content-center">
                             <tr>
                                 <th>No Akun</th>
@@ -157,10 +157,10 @@ $(document).ready(function() {
     $('.tambah').on('click', function() {
       no++;
       $('#form').append('<tr class="hapus" id="' + no + '">' +
-        '<td><input type="text" placeholder="Input Nomor Akun" id="m_jurnal_bank_m_rekening_no_akunjq'+ no +'" name="m_jurnal_bank_m_rekening_no_akun[]" class="form-control form-control-sm no-akunjq text-center"/></td>' +
-        '<td><select id="m_rekening_namajq' + no + '" class="js-select2 showrekjq" style="width:200px;" name="m_jurnal_bank_m_rekening_nama[]"></select></td>' +
-        '<td><input type="text" class="form-control form-control-sm text-center" name="m_jurnal_bank_particul[]" id="m_jurnal_particul" placeholder="Input Particul"></td>' +
-        '<td><input type="text" step="any" class="form-control form-control-sm saldo text-end number" name="m_jurnal_bank_saldo[]" id="m_jurnal_kredit" placeholder="Input Saldo"></td>' +
+        '<td><input type="text" placeholder="Input Nomor Akun" id="rekap_jurnal_bank_m_rekening_no_akunjq'+ no +'" name="rekap_jurnal_bank_m_rekening_no_akun[]" class="form-control form-control-sm no-akunjq text-center"/></td>' +
+        '<td><select id="m_rekening_namajq' + no + '" class="js-select2 showrekjq" style="width:200px;" name="rekap_jurnal_bank_m_rekening_nama[]"></select></td>' +
+        '<td><input type="text" class="form-control form-control-sm text-center" name="rekap_jurnal_bank_particul[]" id="m_jurnal_particul" placeholder="Input Particul"></td>' +
+        '<td><input type="text" step="any" class="form-control form-control-sm saldo text-end number" name="rekap_jurnal_bank_saldo[]" id="m_jurnal_kredit" placeholder="Input Saldo"></td>' +
         '<td><button type="button" class="btn btn-danger btn_remove saldo"> - </button></td> </tr> ');
     });
 
@@ -226,19 +226,19 @@ $(document).ready(function() {
         ajax: {
             url: '{{route("jurnal_bank.tampil")}}',
             data : {
-                m_jurnal_bank_m_waroeng_id: filwaroeng,
-                m_jurnal_bank_kas: filkas,
-                m_jurnal_bank_tanggal: filtanggal,
+                rekap_jurnal_bank_m_waroeng_id: filwaroeng,
+                rekap_jurnal_bank_kas: filkas,
+                rekap_jurnal_bank_tanggal: filtanggal,
             },
             type : "GET",
             },
             columns: [
-            { data: 'm_jurnal_bank_m_rekening_no_akun' },
-            { data: 'm_jurnal_bank_m_rekening_nama' },
-            { data: 'm_jurnal_bank_particul' },
-            { data: 'm_jurnal_bank_saldo' },
-            { data: 'm_jurnal_bank_user' },
-            { data: 'm_jurnal_bank_no_bukti' },
+            { data: 'rekap_jurnal_bank_m_rekening_no_akun' },
+            { data: 'rekap_jurnal_bank_m_rekening_nama' },
+            { data: 'rekap_jurnal_bank_particul' },
+            { data: 'rekap_jurnal_bank_saldo' },
+            { data: 'rekap_jurnal_bank_user' },
+            { data: 'rekap_jurnal_bank_no_bukti' },
         ],
       });
 
@@ -280,19 +280,19 @@ $(document).ready(function() {
                 ajax: {
                     url: '{{route("jurnal_bank.tampil")}}',
                     data : {
-                        m_jurnal_bank_m_waroeng_id: filwaroeng2,
-                        m_jurnal_bank_kas: filkas2,
-                        m_jurnal_bank_tanggal: filtanggal2,
+                        rekap_jurnal_bank_m_waroeng_id: filwaroeng2,
+                        rekap_jurnal_bank_kas: filkas2,
+                        rekap_jurnal_bank_tanggal: filtanggal2,
                     },
                     type : "GET",
                     },
                     columns: [
-                    { data: 'm_jurnal_bank_m_rekening_no_akun' },
-                    { data: 'm_jurnal_bank_m_rekening_nama' },
-                    { data: 'm_jurnal_bank_particul' },
-                    { data: 'm_jurnal_bank_saldo' },
-                    { data: 'm_jurnal_bank_user' },
-                    { data: 'm_jurnal_bank_no_bukti' },
+                    { data: 'rekap_jurnal_bank_m_rekening_no_akun' },
+                    { data: 'rekap_jurnal_bank_m_rekening_nama' },
+                    { data: 'rekap_jurnal_bank_particul' },
+                    { data: 'rekap_jurnal_bank_saldo' },
+                    { data: 'rekap_jurnal_bank_user' },
+                    { data: 'rekap_jurnal_bank_no_bukti' },
                 ],
             });
 
@@ -341,19 +341,19 @@ $(document).ready(function() {
         ajax: {
             url: '{{route("jurnal_bank.tampil")}}',
             data : {
-                m_jurnal_bank_m_waroeng_id: filwaroeng,
-                m_jurnal_bank_kas: filkas,
-                m_jurnal_bank_tanggal: filtanggal,
+                rekap_jurnal_bank_m_waroeng_id: filwaroeng,
+                rekap_jurnal_bank_kas: filkas,
+                rekap_jurnal_bank_tanggal: filtanggal,
             },
             type : "GET",
             },
             columns: [
-            { data: 'm_jurnal_bank_m_rekening_no_akun' },
-            { data: 'm_jurnal_bank_m_rekening_nama' },
-            { data: 'm_jurnal_bank_particul' },
-            { data: 'm_jurnal_bank_saldo' },
-            { data: 'm_jurnal_bank_user' },
-            { data: 'm_jurnal_bank_no_bukti' },
+            { data: 'rekap_jurnal_bank_m_rekening_no_akun' },
+            { data: 'rekap_jurnal_bank_m_rekening_nama' },
+            { data: 'rekap_jurnal_bank_particul' },
+            { data: 'rekap_jurnal_bank_saldo' },
+            { data: 'rekap_jurnal_bank_user' },
+            { data: 'rekap_jurnal_bank_no_bukti' },
         ],
       });
     });
@@ -401,8 +401,8 @@ $(document).ready(function() {
         });
     
      //show nama rekening
-     $('#m_jurnal_bank_m_rekening_no_akun').on('keyup', function() {
-        var filnomor    = $('#m_jurnal_bank_m_rekening_no_akun').val();
+     $('#rekap_jurnal_bank_m_rekening_no_akun').on('keyup', function() {
+        var filnomor    = $('#rekap_jurnal_bank_m_rekening_no_akun').val();
             $.ajax({
             type: "get",
             url: '{{ route("jurnal_bank.carijurnalnoakun") }}',
@@ -419,7 +419,7 @@ $(document).ready(function() {
     //show nama rekening jquery
     $(document).on('keyup', '.no-akunjq', function() {
         var id           = $(this).closest("tr").attr("id"); 
-        var filnomor2    = $('#m_jurnal_bank_m_rekening_no_akunjq'+id).val();
+        var filnomor2    = $('#rekap_jurnal_bank_m_rekening_no_akunjq'+id).val();
             $.ajax({
             type: "get",
             url: '{{ route("jurnal_bank.carijurnalnoakun") }}',
@@ -444,7 +444,7 @@ $(document).ready(function() {
                 },
                 success: function(data){
                     console.log(data);    
-                        $('#m_jurnal_bank_m_rekening_no_akun').val(data.m_rekening_no_akun);
+                        $('#rekap_jurnal_bank_m_rekening_no_akun').val(data.m_rekening_no_akun);
                 }
         });
     });
@@ -461,10 +461,15 @@ $(document).ready(function() {
                 },
                 success: function(data){
                     console.log(data);    
-                        $('#m_jurnal_bank_m_rekening_no_akunjq'+id).val(data.m_rekening_no_akun);
+                        $('#rekap_jurnal_bank_m_rekening_no_akunjq'+id).val(data.m_rekening_no_akun);
                 }
         });
     });
+
+    $('#filter-tanggal').flatpickr({
+            dateFormat: 'Y-m-d',          
+    });
+
 });
 </script>
 @endsection

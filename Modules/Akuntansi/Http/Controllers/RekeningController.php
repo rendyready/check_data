@@ -4,10 +4,10 @@ namespace Modules\Akuntansi\Http\Controllers;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use App\Http\Controllers\Controller;
 class RekeningController extends Controller
 {
     /**
@@ -73,6 +73,7 @@ class RekeningController extends Controller
         foreach ($request->m_rekening_no_akun as $key => $value) {
             $str1 = str_replace('.', '', $request->m_rekening_saldo[$key]);
             $data = array(
+                'm_rekening_id' => $this->getMasterId('m_rekening'),
                 'm_rekening_m_waroeng_id' => $request->m_rekening_m_waroeng_id,
                 'm_rekening_kategori' => $request->m_rekening_kategori,
                 'm_rekening_no_akun' => $request->m_rekening_no_akun[$key],
@@ -125,24 +126,24 @@ class RekeningController extends Controller
     public function simpan_edit(Request $request)
     {
         $rekening_old = $request->m_rekening_id;
-        $validasi1 = DB::table('m_jurnal_kas')
-                    ->select('m_jurnal_kas_m_rekening_no_akun')
-                    ->where('m_jurnal_kas_m_rekening_no_akun', $request->m_rekening_no_akun)
+        $validasi1 = DB::table('rekap_jurnal_kas')
+                    ->select('rekap_jurnal_kas_m_rekening_no_akun')
+                    ->where('rekap_jurnal_kas_m_rekening_no_akun', $request->m_rekening_no_akun)
                     ->count();
 
-        $validasi2 = DB::table('m_jurnal_bank')
-                    ->select('m_jurnal_bank_m_rekening_no_akun')
-                    ->where('m_jurnal_bank_m_rekening_no_akun', $request->m_rekening_no_akun)
+        $validasi2 = DB::table('rekap_jurnal_bank')
+                    ->select('rekap_jurnal_bank_m_rekening_no_akun')
+                    ->where('rekap_jurnal_bank_m_rekening_no_akun', $request->m_rekening_no_akun)
                     ->count();
 
-        $validasi3 = DB::table('m_jurnal_umum')
-                    ->select('m_jurnal_umum_m_rekening_no_akun')
-                    ->where('m_jurnal_umum_m_rekening_no_akun', $request->m_rekening_no_akun)
+        $validasi3 = DB::table('rekap_jurnal_umum')
+                    ->select('rekap_jurnal_umum_m_rekening_no_akun')
+                    ->where('rekap_jurnal_umum_m_rekening_no_akun', $request->m_rekening_no_akun)
                     ->count();
 
-        $validasi4 = DB::table('list_akt')
-                    ->select('list_akt_m_rekening_id')
-                    ->where('list_akt_m_rekening_id', $request->m_rekening_no_akun)
+        $validasi4 = DB::table('rekap_link_akuntansi')
+                    ->select('rekap_link_akuntansi_m_rekening_id')
+                    ->where('rekap_link_akuntansi_m_rekening_id', $request->m_rekening_no_akun)
                     ->count();
 
         $validasi = $validasi1 + $validasi2 + $validasi3 + $validasi4;
@@ -165,24 +166,24 @@ class RekeningController extends Controller
 
     public function delete(Request $request, $id)
     {
-        $validasi1 = DB::table('m_jurnal_kas')
-                    ->select('m_jurnal_kas_m_rekening_no_akun')
-                    ->where('m_jurnal_kas_m_rekening_no_akun', $request->m_rekening_no_akun)
+        $validasi1 = DB::table('rekap_jurnal_kas')
+                    ->select('rekap_jurnal_kas_m_rekening_no_akun')
+                    ->where('rekap_jurnal_kas_m_rekening_no_akun', $request->m_rekening_no_akun)
                     ->count();
 
-        $validasi2 = DB::table('m_jurnal_bank')
-                    ->select('m_jurnal_bank_m_rekening_no_akun')
-                    ->where('m_jurnal_bank_m_rekening_no_akun', $request->m_rekening_no_akun)
+        $validasi2 = DB::table('rekap_jurnal_bank')
+                    ->select('rekap_jurnal_bank_m_rekening_no_akun')
+                    ->where('rekap_jurnal_bank_m_rekening_no_akun', $request->m_rekening_no_akun)
                     ->count();
 
-        $validasi3 = DB::table('m_jurnal_umum')
-                    ->select('m_jurnal_umum_m_rekening_no_akun')
-                    ->where('m_jurnal_umum_m_rekening_no_akun', $request->m_rekening_no_akun)
+        $validasi3 = DB::table('rekap_jurnal_umum')
+                    ->select('rekap_jurnal_umum_m_rekening_no_akun')
+                    ->where('rekap_jurnal_umum_m_rekening_no_akun', $request->m_rekening_no_akun)
                     ->count();
 
-        $validasi4 = DB::table('list_akt')
-                    ->select('list_akt_m_rekening_id')
-                    ->where('list_akt_m_rekening_id', $request->m_rekening_no_akun)
+        $validasi4 = DB::table('rekap_link_akuntansi')
+                    ->select('rekap_link_akuntansi_m_rekening_id')
+                    ->where('rekap_link_akuntansi_m_rekening_id', $request->m_rekening_no_akun)
                     ->count();
         $validasi = $validasi1 + $validasi2 + $validasi3 + $validasi4;
         if($validasi === 0){
