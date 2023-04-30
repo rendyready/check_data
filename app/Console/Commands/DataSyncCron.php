@@ -38,6 +38,8 @@ class DataSyncCron extends Command
          */
 
         info("Cron Job Data Transfer START at ". Carbon::now()->format('Y-m-d H:i:s'));
+        return Command::SUCCESS;
+
         #cek Status Cronjob
         $cronStatus = DB::table('cronjob')
                     ->where('cronjob_name','datasync:cron')

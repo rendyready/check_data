@@ -8,16 +8,18 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class VersionController extends Controller
 {
-    public function setup(){
+    public function upgrade(){
         #This is Work Fine
-        // $process = Process::fromShellCommandline('php artisan migrate');
+        $path = "/usr/local/var/www/backend-cr-2023";
+        $process = Process::fromShellCommandline('php artisan config:clear');
         // $process->setWorkingDirectory(base_path());
-        // $process->run();
-        // if (!$process->isSuccessful()) {
-        //     throw new ProcessFailedException($process);
-        // }
+        $process->setWorkingDirectory($path);
+        $process->run();
+        if (!$process->isSuccessful()) {
+            throw new ProcessFailedException($process);
+        }
 
-        // echo $process->getOutput();
+        return $process->getOutput();
 
         #tes
         $migration = new Process([]);

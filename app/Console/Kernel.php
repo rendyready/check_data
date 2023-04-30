@@ -16,6 +16,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('datasync:cron')->everyMinute()->withoutOverlapping();
+        // $schedule->command('cron:log')->everyTwoMinutes()->withoutOverlapping();
+        // $schedule->command('autoshutdown:cron')->everyMinute()->withoutOverlapping();
         // $schedule->command('inspire')->hourly();
     }
 

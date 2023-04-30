@@ -4,25 +4,23 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Carbon;
 
-class CronTes extends Command
+class AutoShutdownCron extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'cron:log';
+    protected $signature = 'autoshutdown:cron';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Membuat Log';
+    protected $description = 'Command description';
 
     /**
      * Execute the console command.
@@ -31,10 +29,8 @@ class CronTes extends Command
      */
     public function handle()
     {
-        Log::alert("tes cron");
+        Log::info("Server shutdown at ".now());
+        system('shutdown -h now');
         return Command::SUCCESS;
-
-        // $data = DB::table('db_connection')->where('db_connection_id',1)->first();
-        // Log::info(Crypt::decryptString($data->db_connection_password));
     }
 }
