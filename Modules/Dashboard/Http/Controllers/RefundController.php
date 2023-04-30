@@ -94,6 +94,7 @@ class RefundController extends Controller
         $get2 = DB::table('rekap_refund')
                 ->join('users', 'users_id', 'r_r_created_by')
                 ->join('rekap_transaksi', 'r_t_id', 'r_r_r_t_id')
+                ->join('rekap_modal', 'rekap_modal_id', 'r_r_rekap_modal_id')
                 ->where('r_r_m_w_id', $request->waroeng);
                 if (strpos($request->tanggal, 'to') !== false) {
                     $dates = explode('to' ,$request->tanggal);
@@ -115,6 +116,7 @@ class RefundController extends Controller
             $row[] = date('d-m-Y', strtotime($value->r_r_tanggal));
             $row[] = $value->name;
             $row[] = $value->name;
+            $row[] = $value->rekap_modal_sesi;
             $row[] = $value->r_r_bigboss;
             $row[] = $value->r_r_nota_code;
             $row[] = number_format($value->r_t_nominal);
