@@ -97,12 +97,13 @@
                         </div>
                     </form>      
                 
+            <div class="table-responsive">
             <table id="tampil_rekap" class="table table-sm table-bordered table-striped table-vcenter nowrap table-hover js-dataTable-full">
               <thead>
                 <tr>
                   <th colspan="2" class="text-center">Tanggal</th>
                   <th colspan="2" class="text-center">Operator</th>
-                  <th colspan="2" class="text-center"></th>
+                  <th colspan="3" class="text-center"></th>
                   <th colspan="2" class="text-center">Sub Total</th>
                   <th colspan="2" class="text-center">Tax</th>
                   <th colspan="2" class="text-center">Service Charge</th>
@@ -115,6 +116,7 @@
                   <th rowspan="1">Nota Refund</th>
                   <th rowspan="1">Nota Asli</th>
                   <th rowspan="1">Nota Refund</th>
+                  <th>Sesi</th>
                   <th>Big Bos</th>
                   <th>No. Nota</th>
                   <th rowspan="1">Nota Asli</th>
@@ -161,8 +163,11 @@
                       <div class="block-content mb-4" style="background-color: rgba(224, 224, 224, 0.5)">
                         <table class="table table-border" style="font-size: 13px;">
                           @foreach ($data->transaksi_rekap as $rekap)
-                          <thead class="sub_nota" id="sub_nota{{ $rekap->r_r_id }}">
-                          </thead> 
+                            @php
+                              $rekapId = str_replace('.', '', $rekap->r_r_id);
+                            @endphp
+                            <thead class="sub_nota" id="sub_nota{{ $rekapId }}">
+                            </thead> 
                           @endforeach
                             <tbody>
                             <tr style="background-color: white;" class="text-end fw-semibold">
@@ -238,6 +243,12 @@ $(document).ready(function() {
         processing: true,
         scrollX: true,
         // scrollY: '300px',
+        columnDefs: [ 
+                    {
+                        targets: '_all',
+                        className: 'dt-body-center'
+                    },
+                ],
         lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
         pageLength: 10,
         ajax: {
@@ -388,8 +399,9 @@ $(document).ready(function() {
                              
                     $('.sub_sub_nota').remove();
                     $.each(data.detail_nota, function (key, item) {
+                      var rekap_id = item.r_r_detail_r_r_id.toString().replace(/\./g,'');
                         console.log(item.r_r_detail_m_produk_nama);
-                        $('#sub_nota'+id).append(
+                        $('#sub_nota'+rekap_id).append(
                                 '<tr class="sub_sub_nota" style="background-color: white;">'+
                                   '<td>'+
                                     '<small class="fw-semibold" style="font-size: 15px;" id="produk">'+ item.r_r_detail_m_produk_nama +'</small> <br>'+

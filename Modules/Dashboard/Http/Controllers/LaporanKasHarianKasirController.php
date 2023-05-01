@@ -112,6 +112,15 @@ class LaporanKasHarianKasirController extends Controller
     $totalKeluar = 0;
     $totalMasuk = 0;
     $prevSaldoMut = 0;
+    $saldoAkhir = $valModal->rekap_modal_nominal + $valModal->rekap_modal_cash_in - $valModal->rekap_modal_cash_out;
+                $data[] = array(
+                    'no_nota' => number_format($valModal->rekap_modal_nominal),
+                    'transaksi' => number_format($valModal->rekap_modal_cash_in),
+                    'masuk' => number_format($valModal->rekap_modal_cash_out),
+                    'keluar' => number_format($saldoAkhir),
+                    'saldo' => number_format($valModal->rekap_modal_cash_real - $saldoAkhir),
+                    'payment' => 22,
+                );
     foreach ($mutasi as $row) {
         if ($row->r_m_m_debit != 0) {
             $masuk = $row->r_m_m_debit ;
@@ -477,18 +486,6 @@ class LaporanKasHarianKasirController extends Controller
                 'payment' => 2,3,4,5,6,7,8,9,
             );
      
-            foreach ($modal as $valModal2) {
-                $saldoAkhir = $valModal2->rekap_modal_nominal + $valModal2->rekap_modal_cash_in - $valModal2->rekap_modal_cash_out;
-                $data[] = array(
-                    'no_nota' => number_format($valModal2->rekap_modal_nominal),
-                    'transaksi' => number_format($valModal2->rekap_modal_cash_in),
-                    'masuk' => number_format($valModal2->rekap_modal_cash_out),
-                    'keluar' => number_format($saldoAkhir),
-                    'saldo' => number_format($valModal2->rekap_modal_cash_real - $saldoAkhir),
-                    'payment' => 22,
-                );
-            }
-
             $tgl = tgl_indo($request->tanggal);
             $w_nama = strtoupper($this->getNamaW($request->waroeng));
             // $nama_user = DB::table('users')->where('users_id',$request->opr)->get()->name();

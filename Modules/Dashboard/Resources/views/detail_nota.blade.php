@@ -149,6 +149,7 @@ $(document).ready(function() {
             success:function(data){  
               if(status == 'paid'){
               $.each(data.transaksi_rekap, function (key, value) {
+                var id = value.r_t_id.toString().replace(/\./g,'');
                 // console.log(item.r_t_id);
                   $('#show_nota').append('<div class="col-xl-4 show_nota">'+
                         '<div class="block block-rounded mb-1">'+
@@ -161,7 +162,7 @@ $(document).ready(function() {
                           '</div>'+
                           '<div class="block-content mb-4" style="background-color: rgba(224, 224, 224, 0.5)">'+
                             '<table class="table table-border table-striped table-vcenter js-dataTable-full" style="font-size: 13px;">'+
-                              '<thead id="sub_nota'+ value.r_t_id +'">'+
+                              '<thead id="sub_nota'+ id +'">'+
                                 '</thead>'+
                               '<tbody>'+
                                 '<tr style="background-color: white;" class="text-end fw-semibold">'+
@@ -226,9 +227,11 @@ $(document).ready(function() {
                         '</div>'+
                       '</div>');
                   });
+
                     $.each(data.detail_nota, function (key, item) {
+                      var id = item.r_t_detail_r_t_id.toString().replace(/\./g,'');
                         // console.log(item.r_t_detail_r_t_id);
-                        $('#sub_nota'+ item.r_t_detail_r_t_id).append(
+                        $('#sub_nota'+ id).append(
                                 '<tr style="background-color: white;" class="show_nota">'+
                                   '<td>'+
                                     '<small class="fw-semibold" style="font-size: 15px;">'+ item.r_t_detail_m_produk_nama +'</small> <br>'+

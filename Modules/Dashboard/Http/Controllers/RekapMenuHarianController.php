@@ -79,7 +79,7 @@ class RekapMenuHarianController extends Controller
             ->select('m_t_t_id', 'm_t_t_name');
             if($request->id_sif != 'all'){
                 $trans->where('rekap_modal_sesi', $request->id_sif);
-            }
+            } 
             $trans = $trans->orderBy('m_t_t_id', 'asc')
             ->get();
 
@@ -93,17 +93,25 @@ class RekapMenuHarianController extends Controller
     }
 
     function show(Request $request) {
-            $tanggal1 = DB::table('rekap_transaksi')
-                ->select('r_t_tanggal')
-                ->orderBy('r_t_tanggal', 'asc')
-                ->groupby('r_t_tanggal');
-                if (strpos($request->tanggal, 'to') !== false) {
-                    [$start, $end] = explode('to', $request->tanggal);
-                    $tanggal1->whereBetween('r_t_tanggal', [$start, $end]);
+        $refund = DB::table('rekap_refund')
+            ->join('rekap_refund_detail', 'r_r_detail_r_r_id', 'r_r_id')
+            ->join('rekap_modal', 'rekap_modal_id', 'r_r_rekap_modal_id');
+            if (strpos($request->tanggal, 'to') !== false) {
+                [$start, $end] = explode('to', $request->tanggal);
+                $refund->whereBetween('r_r_tanggal', [$start, $end]);
                 } else {
-                    $tanggal1->where('r_t_tanggal', $request->tanggal);
+                $refund->where('r_r_tanggal', $request->tanggal);
                 }
-                $tanggal = $tanggal1->get();
+                if($request->area != 'all'){
+                    $refund->where('r_r_m_area_id', $request->area);
+                    if ($request->waroeng != 'all') {
+                        $refund->where('r_r_m_w_id', $request->waroeng);
+                        if ($request->sesi != 'all') {
+                            $refund->where('rekap_modal_sesi', $request->sesi);
+                        }
+                    }
+                }
+            $refund = $refund->get();
 
             $get = DB::table('rekap_transaksi_detail')
                     ->join('rekap_transaksi', 'r_t_id', 'r_t_detail_r_t_id')
@@ -131,76 +139,36 @@ class RekapMenuHarianController extends Controller
                         }
                     }
                 
-        $get2 = $get->selectRaw('sum(r_t_detail_qty) as qty, r_t_detail_reguler_price, r_t_tanggal, r_t_detail_m_produk_nama, m_w_nama, m_jenis_produk_id, m_jenis_produk_nama, m_t_t_name')
-                    ->groupBy('r_t_tanggal', 'r_t_detail_m_produk_nama', 'm_w_nama', 'r_t_detail_reguler_price', 'm_jenis_produk_nama', 'm_jenis_produk_id', 'm_t_t_name')
+        $get2 = $get->selectRaw('sum(r_t_detail_qty) as qty, r_t_detail_reguler_price, r_t_tanggal, r_t_detail_m_produk_nama, r_t_detail_m_produk_id, m_w_nama, m_jenis_produk_id, m_jenis_produk_nama, m_t_t_name, rekap_modal_sesi')
+                    ->groupBy('r_t_tanggal', 'r_t_detail_m_produk_nama', 'r_t_detail_m_produk_id', 'm_w_nama', 'r_t_detail_reguler_price', 'm_jenis_produk_nama', 'm_jenis_produk_id', 'm_t_t_name', 'rekap_modal_sesi')
                     ->orderby('m_jenis_produk_id', 'ASC')
                     ->orderby('r_t_detail_m_produk_nama', 'ASC')
                     ->get();
-        $data = [];
-        foreach ($get2 as $key => $val_menu) {
-            $tanggal = $val_menu->r_t_tanggal;
-            $waroeng = $val_menu->m_w_nama;
-            $menu = $val_menu->r_t_detail_m_produk_nama;
-            $date = $val_menu->r_t_tanggal;
-            $qty = $val_menu->qty;
-            $nominal = number_format($val_menu->r_t_detail_reguler_price * $qty);
-            $kategori = $val_menu->m_jenis_produk_nama;
-            $transaksi = $val_menu->m_t_t_name;
-            if (!isset($data[$tanggal])) {
-                $data[$tanggal] = [];
-            }
-            if (!isset($data[$tanggal][$waroeng])) {
-                $data[$tanggal][$waroeng] = [];
-            }
-            if (!isset($data[$tanggal][$waroeng][$menu])) {
-                $data[$tanggal][$waroeng][$menu] = [];
-            }
-            if (!isset($data[$tanggal][$waroeng][$menu][$qty])) {
-                $data[$tanggal][$waroeng][$menu][$qty] = [];
-            }
-            if (!isset($data[$tanggal][$waroeng][$menu][$qty][$nominal])) {
-                $data[$tanggal][$waroeng][$menu][$qty][$nominal] = [];
-            }
-            if (!isset($data[$tanggal][$waroeng][$menu][$qty][$nominal][$transaksi])) {
-                $data[$tanggal][$waroeng][$menu][$qty][$nominal][$transaksi] = [];
-            }
-            
-            if (!isset($data[$tanggal][$waroeng][$menu][$qty][$nominal][$transaksi][$kategori])) {
-                $data[$tanggal][$waroeng][$menu][$qty][$nominal][$transaksi][$kategori] = [
-                    'qty' => 0,
-                    'nominal' => 0,
-                ];
-            }
-            $data[$tanggal][$waroeng][$menu][$qty][$nominal][$transaksi][$kategori]['qty'] += $qty;
-            $data[$tanggal][$waroeng][$menu][$qty][$nominal][$transaksi][$kategori]['nominal'] = $nominal;
-        }
-        $output = ['data' => []];
-
-        foreach ($data as $tanggal => $tanggals) {
-            foreach ($tanggals as $waroeng => $waroengs) {
-                    foreach ($waroengs as $menu => $menus) {
-                        foreach ($menus as $qty => $qtys) {
-                            foreach ($qtys as $nominal => $nominals) {
-                                foreach ($nominals as $transaksi => $transaksis) {
-                                    foreach ($transaksis as $kategori => $kategoris) {
-                                        $row = [
-                                            $tanggal,
-                                            $waroeng,
-                                            $menu,
-                                            $qty,
-                                            $nominal,
-                                            $transaksi,
-                                            $kategori,
-                                        ];
-                    $output['data'][] = $row;
-                                }
-                            }
-                        }
-                    }
+                
+      
+            $data = array();
+            foreach ($get2 as $key => $val_menu) {
+                foreach ($refund as $key => $valRef){
+                $row = array();
+                $row[] = date('d-m-Y', strtotime($val_menu->r_t_tanggal));
+                $row[] = $val_menu->m_w_nama;
+                $row[] = $val_menu->r_t_detail_m_produk_nama;
+                if ($val_menu->r_t_detail_m_produk_id == $valRef->r_r_detail_m_produk_id && $val_menu->r_t_tanggal == $valRef->r_r_tanggal && $val_menu->rekap_modal_sesi == $valRef->rekap_modal_sesi) {
+                    $qty = $val_menu->qty - $valRef->r_r_detail_qty;
+                    $nominal = number_format($val_menu->r_t_detail_reguler_price * ($val_menu->qty - $valRef->r_r_detail_qty));
+                } else {
+                    $qty = $val_menu->qty;
+                    $nominal = number_format($val_menu->r_t_detail_reguler_price * $val_menu->qty);
+                }
+                $row[] = $qty;
+                $row[] = $nominal;
+                $row[] = $val_menu->m_jenis_produk_nama;
+                $row[] = $val_menu->m_t_t_name;
+                $data[] = $row;
                 }
             }
-        }
 
+        $output = array("data" => $data);
         return response()->json($output);
     }
     

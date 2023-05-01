@@ -6,7 +6,7 @@
         <div class="block block-themed h-100 mb-0">
           <div class="block-header bg-pulse">
             <h3 class="block-title">
-              Rekap Keluar & Terima Bahan Baku
+              Laporan CHT
             </h3>
               </div>
                 <div class="block-content text-muted">
@@ -46,7 +46,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-sm-5">
+                            <div class="col-sm-6">
                                 <div class="row mb-2">
                                     <label class="col-sm-3 col-form-label">Waroeng</label>
                                     <div class="col-sm-9">
@@ -86,15 +86,13 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-5">
+                            <div class="col-md-6">
                                 <div class="row mb-3">
-                                    <label class="col-sm-3 col-form-label" for="rekap_inv_penjualan_created_by">Status</label>
+                                    <label class="col-sm-3 col-form-label" for="rekap_inv_penjualan_created_by">Bahan Baku</label>
                                     <div class="col-sm-9">
-                                        <select id="filter_status" style="width: 100%;"
-                                        class="cari f-wrg js-select2 form-control filter_status" data-placeholder="Pilih Status" name="rekap_beli_created_by">
+                                        <select id="filter_bb" style="width: 100%;"
+                                        class="cari f-wrg js-select2 form-control filter_bb" data-placeholder="Pilih Bahan Baku" name="rekap_beli_created_by">
                                         <option></option>
-                                        <option value="asal">Gudang Asal</option>
-                                        <option value="tujuan">Gudang Tujuan</option>
                                     </select>
                                     </div>
                                 </div>
@@ -108,67 +106,32 @@
                             <button type="button" id="cari"
                                 class="btn btn-primary btn-sm col-1 mt-2 mb-3">Cari</button>
                         </div>
-                    </form>      
+                    </form> 
+            <div class="table-responsive">  
             <table id="tampil_rekap" class="table table-sm table-bordered table-striped table-vcenter nowrap table-hover js-dataTable-full">
                 <thead>
                   <tr>
+                    <th class="text-center">Area</th>
+                    <th class="text-center">Waroeng</th>
                     <th class="text-center">Tanggal</th>
                     <th class="text-center">Pengadaan</th>
-                    <th class="text-center" id="gudang"></th>
-                    <th class="text-center">Total HPP</th>
-                    <th></th>
+                    <th class="text-center">Suplier</th>
+                    <th class="text-center">Alamat Suplier</th>
+                    <th class="text-center">Bahan Baku</th>
+                    <th class="text-center">Pembelian</th>
+                    <th class="text-center">Lolos</th>
+                    <th class="text-center">Tidak Lolos</th>
                   </tr>
                 </thead>
                 <tbody>
                 </tbody>
               </table>
+            </div>   
         </div>
       </div>
     </div>
     </div>
 </div>
-
- <!-- Select2 in a modal -->
- <div class="modal" id="detail_nota" tabindex="-1" role="dialog" aria-labelledby="form-rekening" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-        <div class="block-content">
-          <!-- Select2 is initialized at the bottom of the page -->
-            <div class="mb-4">
-                  <div class="block block-rounded mb-1">
-                    <div class="block-header block-header-default block-header-rtl bg-pulse">
-                      <h3 class="block-title text-light"><small class="fw-semibold" id="gudang_detail"></small></h3>
-                      <div class="alert alert-warning py-2 mb-0">
-                        <h3 class="block-title text-black"><i class="fa fa-calendar opacity-50 ms-1"></i> <small id="tgl_nota"></small>
-                          <br><small class="fw-semibold" id="pengadaan"></small></h3>
-                      </div>
-                    </div>
-                    <div class="block-content mb-4" style="background-color: rgba(224, 224, 224, 0.5)">
-                      <table class="table table-border" style="font-size: 13px;">
-                        @foreach ($data->gudang as $gudang)
-                        <thead class="sub_nota" id="sub_nota{{ $gudang->rekap_tf_gudang_code }}">
-                        </thead> 
-                        @endforeach
-                          <tbody>
-                          <tr style="background-color: white;" class="text-end fw-semibold">
-                            <td>total</td>
-                            <td id="total">
-                            </td>
-                          </tr>
-                          </tr>
-                        </tbody>
-                      </table>
-                      <div class="mb-3 text-end">
-                      <button type="button" class="btn btn-sm btn-alt-secondary me-1" data-bs-dismiss="modal">Close</button>
-                      </div>
-                    </div>
-                  </div>
-              </div>
-            </div>
-      </div>
-    </div>
-  </div>
-<!-- END Select2 in a modal -->
 
 @endsection
 @section('js')
@@ -185,21 +148,13 @@ $(document).ready(function() {
     var waroengId = userInfo.dataset.waroengId;
     var HakAksesArea = userInfo.dataset.hasAccess === 'true';
     var HakAksesPusat = userInfoPusat.dataset.hasAccess === 'true';
-    
-    $('#asal').hide();
-    $('#tujuan').hide();
 
     $('#cari').on('click', function() {
         var waroeng     = $('.filter_waroeng').val();
         var tanggal     = $('.filter_tanggal').val();
         var pengadaan   = $('.filter_pengadaan').val();
-        var status      = $('.filter_status').val();
-        if (status == 'asal') {
-            $('#gudang').html('<th class="text-center">Gudang Asal</th>');
-        } else {
-            $('#gudang').html('<th class="text-center">Gudang Tujuan</th>');
-        }
-
+        var bb          = $('.filter_bb').val();
+       
     $('#tampil_rekap').DataTable({
         button: [],
         destroy: true,
@@ -216,12 +171,12 @@ $(document).ready(function() {
                 }
             ],
         ajax: {
-            url: '{{route("lap_gudang_rekap.tampil_rekap")}}',
+            url: '{{route("lap_cht.tampil_cht")}}',
             data : {
                 waroeng: waroeng,
                 tanggal: tanggal,
                 pengadaan: pengadaan,
-                status: status,
+                bb: bb,
             },
             type : "GET",
             },
@@ -236,7 +191,7 @@ $(document).ready(function() {
         if(id_area && tanggal){
             $.ajax({
             type:"GET",
-            url: '{{route("lap_gudang_detail.select_waroeng")}}',
+            url: '{{route("lap_cht.select_waroeng")}}',
             dataType: 'JSON',
             destroy: true,    
             data : {
@@ -261,7 +216,7 @@ $(document).ready(function() {
             $(".filter_area").val(prev).trigger('change');
         }     
         $(".filter_operator").empty(); 
-        $(".filter_status").val(prev).trigger('change');
+        $(".filter_bb").val(prev).trigger('change');
     });
   } 
 
@@ -273,7 +228,7 @@ $(document).ready(function() {
         if(id_waroeng && tanggal){
             $.ajax({
             type:"GET",
-            url: '{{route("lap_gudang_detail.select_user")}}',
+            url: '{{route("lap_cht.select_user")}}',
             dataType: 'JSON',
             data : {
               id_waroeng: id_waroeng,
@@ -297,7 +252,7 @@ $(document).ready(function() {
             $(".filter_pengadaan").empty();
             $(".filter_waroeng").val(prev).trigger('change');
         }    
-        $(".filter_status").val(prev).trigger('change');  
+        $(".filter_bb").val(prev).trigger('change');  
     });
 
   } else {
@@ -309,7 +264,7 @@ $(document).ready(function() {
         if(id_waroeng && tanggal){
             $.ajax({
             type:"GET",
-            url: '{{route("lap_gudang_detail.select_user")}}',
+            url: '{{route("lap_cht.select_user")}}',
             dataType: 'JSON',
             data : {
               id_waroeng: id_waroeng,
@@ -331,63 +286,42 @@ $(document).ready(function() {
             $(".filter_pengadaan").empty();
         }     
         $(".filter_pengadaan").empty(); 
-        $(".filter_status").val(prev).trigger('change');
+        $(".filter_bb").val(prev).trigger('change');
     });
   }
+
+   //filter bb
+   $('.filter_pengadaan').change(function(){
+        var pengadaan = $(this).val();    
+        if(pengadaan){
+            $.ajax({
+            type:"GET",
+            url: '{{route("lap_cht.select_bb")}}',
+            dataType: 'JSON',
+            data : {
+                pengadaan: pengadaan,
+            },
+            success:function(res){               
+                if(res){
+                    $("#filter_bb").empty();
+                    $("#filter_bb").append('<option></option>');
+                    $.each(res,function(key,value){
+                        $("#filter_bb").append('<option value="'+key+'">'+value+'</option>');
+                    });
+                }else{
+                $("#filter_bb").empty();
+                }
+            }
+            });
+        }else{
+            $("#filter_bb").empty();
+        }      
+    });
 
     $('.filter_tanggal').flatpickr({
             mode: "range",
             dateFormat: 'Y-m-d',
-            
     });
-    
-    $('#tampil_rekap').on('click','#button_detail', function() {
-      var id        = $(this).attr('value');
-      var status    = $('.filter_status').val();
-      $('#show_nota').empty();
-      $.ajax({
-          url: "/inventori/lap_gudang_rekap/detail_rekap/"+id,
-            type: "GET",
-            dataType: 'json',
-            data : {
-              status: status,
-            },
-            destroy: true,
-            success: function(data) {
-            console.log(data.detail1.rekap_tf_gudang_code);
-
-                    $('#no_nota').html(data.detail1.rekap_tf_gudang_code);
-                    $('#gudang_detail').html(data.detail1.m_gudang_nama);
-                    if(status == 'asal'){
-                      $('#tgl_nota').html(data.detail1.tgl_keluar);
-                    } else {
-                      $('#tgl_nota').html(data.detail1.tgl_tujuan);
-                    }
-                    $('#pengadaan').html(data.detail1.name);
-                             
-                    $('.sub_sub_nota').remove();
-                    var total = 0;
-                    $.each(data.detail2, function (key, item) {  
-                        console.log(item.rekap_tf_gudang_m_produk_nama);
-                        if(status == 'asal'){
-                        var subTotal = item.rekap_tf_gudang_qty_keluar * item.rekap_tf_gudang_hpp;
-                        } else {
-                        var subTotal = item.rekap_tf_gudang_qty_terima * item.rekap_tf_gudang_hpp;
-                        }
-                        total += subTotal;
-                        $('#sub_nota'+id).append(
-                                '<tr class="sub_sub_nota" style="background-color: white;">'+
-                                    '<td>'+
-                                    '<small class="fw-semibold" style="font-size: 15px;">'+ item.rekap_tf_gudang_m_produk_nama +'</small> <br>'+
-                                    (status == 'asal' ? '<small>'+ Number(item.rekap_tf_gudang_qty_keluar) +' '+ item.rekap_tf_gudang_satuan_keluar +', hpp '+ formatNumber(Number(item.rekap_tf_gudang_hpp)) +'</small><br></td><td class="text-end fw-semibold" id+="sub_total">'+ formatNumber(item.rekap_tf_gudang_qty_keluar * item.rekap_tf_gudang_hpp) +'</td>' : '<small>'+ Number(item.rekap_tf_gudang_qty_terima) +' '+ item.rekap_tf_gudang_satuan_terima +', hpp '+ formatNumber(Number(item.rekap_tf_gudang_hpp)) +'</small><br></td><td class="text-end fw-semibold" id+="sub_total">'+ formatNumber(item.rekap_tf_gudang_qty_terima * item.rekap_tf_gudang_hpp) +'</td>')+
-                                '</tr>'
-                          );
-                      });
-                      $('#total').text(formatNumber(total));
-                  }  
-                });
-                $("#detail_nota").modal('show');
-            }); 
 
 });
 </script>

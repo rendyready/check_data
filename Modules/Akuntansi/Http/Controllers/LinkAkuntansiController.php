@@ -17,11 +17,11 @@ class LinkAkuntansiController extends Controller
      */
     public function index()
     {
-        $list = DB::table('list_akt')
-            ->select('list_akt_nama', 'list_akt_m_rekening_id', 'm_rekening_nama', 'list_akt_id', 'm_rekening_no_akun')
-            ->leftjoin('m_rekening', 'm_rekening_no_akun', 'list_akt_m_rekening_id')
-            ->whereNull('list_akt_deleted_at')
-            ->orderBy('list_akt_id', 'asc')
+        $list = DB::table('m_link_akuntansi')
+            ->select('m_link_akuntansi_nama', 'm_link_akuntansi_m_rekening_id', 'm_rekening_nama', 'm_link_akuntansi_id', 'm_rekening_no_akun')
+            ->leftjoin('m_rekening', 'm_rekening_no_akun', 'm_link_akuntansi_m_rekening_id')
+            ->whereNull('m_link_akuntansi_deleted_at')
+            ->orderBy('m_link_akuntansi_id', 'asc')
             ->distinct()
             ->get();
 
@@ -56,10 +56,10 @@ class LinkAkuntansiController extends Controller
 
     public function update(Request $request)
     {
-        $norek = $request->list_akt_m_rekening_id;
-        $update = DB::table('list_akt')
-            ->where('list_akt_id', $request->list_akt_id)
-            ->update(['list_akt_m_rekening_id' => $norek]);
+        $norek = $request->m_link_akuntansi_m_rekening_id;
+        $update = DB::table('m_link_akuntansi')
+            ->where('m_link_akuntansi_id', $request->m_link_akuntansi_id)
+            ->update(['m_link_akuntansi_m_rekening_id' => $norek]);
 
         return response()->json([ 'messages' => 'Berhasil Update' , 'type' => 'success']);
 
