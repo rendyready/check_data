@@ -103,6 +103,10 @@ class RoleAksesSeeder extends Seeder
                 'guard_name' => 'web',
             ],
             [
+                'name' => 'kaur wbd',
+                'guard_name' => 'web',
+            ],
+            [
                 'name' => 'manajer akuntansi',
                 'guard_name' => 'web',
             ],
