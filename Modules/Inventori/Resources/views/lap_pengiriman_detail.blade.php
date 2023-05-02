@@ -6,7 +6,7 @@
         <div class="block block-themed h-100 mb-0">
           <div class="block-header bg-pulse">
             <h3 class="block-title">
-              Detail Pembelian Bahan Baku
+              Detail Pengiriman Bahan Baku
             </h3>
               </div>
                 <div class="block-content text-muted">
@@ -15,52 +15,51 @@
                         <div class="col-md-5">
                             <div class="row mb-1">
                                 <label class="col-sm-3 col-form-label" >Tanggal</label>
-                                <div class="col-sm-9 datepicker">
-                                    <input name="r_t_tanggal" class="cari form-control form-control" type="text" placeholder="Pilih Tanggal.." id="filter_tanggal" readonly/>
+                                <div class="col-sm-9">
+                                    <input name="r_t_tanggal" class="cari form-control form-control filter_tanggal" type="text" placeholder="Pilih Tanggal.." id="filter_tanggal" readonly/>
                                 </div>
                             </div>
                         </div>
                     </div>
                       <div class="row">
-                            <div class="col-md-5">
-                                <div class="row mb-2">
-                                    <label class="col-sm-3 col-form-label">Area</label>
-                                    <div class="col-sm-9">
-                                        <select id="filter_area" data-placeholder="Pilih Area" style="width: 100%;"
-                                            class="cari f-area js-select2 form-control" name="m_w_m_area_id">
-                                            <option></option>
-                                            @foreach ($data->area as $area)
-                                                <option value="{{ $area->m_area_id }}"> {{ $area->m_area_nama }} </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
                             <div class="col-sm-5">
                                 <div class="row mb-2">
-                                    <label class="col-sm-3 col-form-label">Waroeng</label>
+                                    <label class="col-sm-3 col-form-label">Cabang</label>
                                     <div class="col-sm-9">
-                                        <select id="filter_waroeng" style="width: 100%;"
-                                            class="cari f-wrg js-select2 form-control" data-placeholder="Pilih Waroeng" name="m_w_id">
-                                            <option></option>
-                                        </select>
+                                      @if (in_array(Auth::user()->waroeng_id, $data->suplay_pusat ))
+                                          <select id="filter_cabang1" style="width: 100%;"
+                                              class="cari f-wrg js-select2 form-control filter_cabang" data-placeholder="Pilih Kantor Suplay" name="m_w_id">
+                                              <option></option>
+                                              @foreach ($data->waroeng as $waroeng)
+                                                  <option value="{{ $waroeng->m_w_id }}"> {{ $waroeng->m_w_nama }} </option>
+                                              @endforeach
+                                          </select>
+                                      @else
+                                          <select id="filter_cabang2" style="width: 100%;"
+                                          class="cari f-area js-select2 form-control filter_cabang" name="m_w_m_area_id" disabled>
+                                              <option value="{{ ucwords($data->waroeng_nama->m_w_id) }}">{{ ucwords($data->waroeng_nama->m_w_nama) }}</option>
+                                          </select>
+                                      @endif
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-5">
-                                <div class="row mb-3">
-                                    <label class="col-sm-3 col-form-label" for="rekap_inv_penjualan_created_by">Pengadaan</label>
-                                    <div class="col-sm-9">
-                                        <select id="filter_pengadaan" style="width: 100%;"
-                                        class="cari f-wrg js-select2 form-control" data-placeholder="Pilih Pengadaan" name="rekap_beli_created_by">
-                                        <option></option>
-                                    </select>
-                                    </div>
+                          <div class="col-md-5">
+                            <div class="row mb-3">
+                                <label class="col-sm-3 col-form-label" for="rekap_inv_penjualan_created_by">Operator</label>
+                                <div class="col-sm-9">
+                                    <select id="filter_operator" style="width: 100%;"
+                                    class="cari f-wrg js-select2 form-control filter_operator" data-placeholder="Pilih Operator" name="rekap_beli_created_by">
+                                    <option></option>
+                                </select>
                                 </div>
                             </div>
-                        </div> 
+                        </div>
+                        </div>
+
+                      <div id="user-info-pusat" data-waroeng-id="{{ Auth::user()->waroeng_id }}" data-has-access="{{ in_array(Auth::user()->waroeng_id, $data->suplay_pusat) ? 'true' : 'false' }}"></div>
+
                         <div class="col-sm-8">
                             <button type="button" id="cari" class="btn btn-primary btn-sm col-1 mt-2 mb-5">Cari</button>
                     </div>
@@ -80,26 +79,28 @@ $(document).ready(function() {
       return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     }
 
+    var userInfoPusat = document.getElementById('user-info-pusat');
+    var waroengId = userInfo.dataset.waroengId;
+    var HakAksesPusat = userInfoPusat.dataset.hasAccess === 'true';
+
     $('#cari').click(function(){
-        var waroeng  = $('#filter_waroeng').val();
-        var tanggal  = $('#filter_tanggal').val();
-        var pengadaan = $('#filter_pengadaan').val(); 
-        var status   = $('#filter_status').val();  
+        var cabang  = $('.filter_cabang').val();
+        var tanggal  = $('.filter_tanggal').val();
+        var operator = $('.filter_operator').val(); 
         console.log(status);
         $('.show_nota').remove(); 
             $.ajax({
             type:"GET",
-            url: '{{route("lap_pem_detail.tampil_detail")}}',
+            url: '{{route("lap_kirim_detail.tampil_detail")}}',
             dataType: 'JSON',
             scrollY: "300px",
             scrollX: true,
             scrollCollapse: true,
             data : 
             {
-              waroeng: waroeng,
+              cabang: cabang,
               tanggal: tanggal,
-              pengadaan: pengadaan,
-              status: status,
+              operator: operator,
             },
             success:function(data){  
               $.each(data.transaksi_rekap2, function (key, value) {
