@@ -102,16 +102,12 @@ class RekapMenuHarianController extends Controller
                 } else {
                 $refund->where('r_r_tanggal', $request->tanggal);
                 }
-                if($request->area != 'all'){
-                    $refund->where('r_r_m_area_id', $request->area);
-                    if ($request->waroeng != 'all') {
-                        $refund->where('r_r_m_w_id', $request->waroeng);
+                $refund->where('r_r_m_area_id', $request->area)
+                        ->where('r_r_m_w_id', $request->waroeng);
                         if ($request->sesi != 'all') {
                             $refund->where('rekap_modal_sesi', $request->sesi);
                         }
-                    }
-                }
-            $refund = $refund->get();
+                $refund = $refund->get();
 
             $get = DB::table('rekap_transaksi_detail')
                     ->join('rekap_transaksi', 'r_t_id', 'r_t_detail_r_t_id')
@@ -126,46 +122,41 @@ class RekapMenuHarianController extends Controller
                     } else {
                     $get->where('r_t_tanggal', $request->tanggal);
                     }
-                    if($request->area != 'all'){
-                        $get->where('r_t_m_area_id', $request->area);
-                        if ($request->waroeng != 'all') {
-                            $get->where('r_t_m_w_id', $request->waroeng);
-                            if ($request->sesi != 'all') {
-                                $get->where('rekap_modal_sesi', $request->sesi);
-                                if ($request->trans != 'all') {
-                                    $get->where('m_t_t_name', $request->trans);
-                                }
-                            }
+                    $get->where('r_t_m_area_id', $request->area)
+                        ->where('r_t_m_w_id', $request->waroeng);
+                        if ($request->sesi != 'all') {
+                            $get->where('rekap_modal_sesi', $request->sesi);
+                            if ($request->trans != 'all') {
+                                $get->where('m_t_t_name', $request->trans);
                         }
                     }
                 
-        $get2 = $get->selectRaw('sum(r_t_detail_qty) as qty, r_t_detail_reguler_price, r_t_tanggal, r_t_detail_m_produk_nama, r_t_detail_m_produk_id, m_w_nama, m_jenis_produk_id, m_jenis_produk_nama, m_t_t_name, rekap_modal_sesi')
+        $get = $get->selectRaw('sum(r_t_detail_qty) as qty, r_t_detail_reguler_price, r_t_tanggal, r_t_detail_m_produk_nama, r_t_detail_m_produk_id, m_w_nama, m_jenis_produk_id, m_jenis_produk_nama, m_t_t_name, rekap_modal_sesi')
                     ->groupBy('r_t_tanggal', 'r_t_detail_m_produk_nama', 'r_t_detail_m_produk_id', 'm_w_nama', 'r_t_detail_reguler_price', 'm_jenis_produk_nama', 'm_jenis_produk_id', 'm_t_t_name', 'rekap_modal_sesi')
                     ->orderby('m_jenis_produk_id', 'ASC')
                     ->orderby('r_t_detail_m_produk_nama', 'ASC')
                     ->get();
                 
-      
             $data = array();
-            foreach ($get2 as $key => $val_menu) {
-                foreach ($refund as $key => $valRef){
+            foreach ($get as $key => $val_menu) {
                 $row = array();
                 $row[] = date('d-m-Y', strtotime($val_menu->r_t_tanggal));
                 $row[] = $val_menu->m_w_nama;
                 $row[] = $val_menu->r_t_detail_m_produk_nama;
-                if ($val_menu->r_t_detail_m_produk_id == $valRef->r_r_detail_m_produk_id && $val_menu->r_t_tanggal == $valRef->r_r_tanggal && $val_menu->rekap_modal_sesi == $valRef->rekap_modal_sesi) {
-                    $qty = $val_menu->qty - $valRef->r_r_detail_qty;
-                    $nominal = number_format($val_menu->r_t_detail_reguler_price * ($val_menu->qty - $valRef->r_r_detail_qty));
-                } else {
-                    $qty = $val_menu->qty;
-                    $nominal = number_format($val_menu->r_t_detail_reguler_price * $val_menu->qty);
+                $qty = $val_menu->qty;
+                $nominal = number_format($val_menu->r_t_detail_reguler_price * $val_menu->qty);
+                foreach ($refund as $key => $valRef) {
+                    if ($val_menu->r_t_detail_m_produk_id == $valRef->r_r_detail_m_produk_id && $val_menu->r_t_tanggal == $valRef->r_r_tanggal && $val_menu->rekap_modal_sesi == $valRef->rekap_modal_sesi) {
+                        $qty = $val_menu->qty - $valRef->r_r_detail_qty;
+                        $nominal = number_format($val_menu->r_t_detail_reguler_price * ($val_menu->qty - $valRef->r_r_detail_qty));
+                    }
                 }
                 $row[] = $qty;
                 $row[] = $nominal;
                 $row[] = $val_menu->m_jenis_produk_nama;
                 $row[] = $val_menu->m_t_t_name;
                 $data[] = $row;
-                }
+                
             }
 
         $output = array("data" => $data);
