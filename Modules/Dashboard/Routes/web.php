@@ -117,4 +117,13 @@ Route::prefix('dashboard')->middleware('auth', 'web')
             Route::get('menu_harian/select_trans', 'select_trans')->name('menu_harian.select_trans');
             Route::get('menu_harian/select_sif', 'select_sif')->name('menu_harian.select_sif');
         });
+
+        Route::controller(RekapAktivitasKasirController::class)->group(function () {
+            Route::get('rekap_aktiv_laci', 'rekap_laci')->name('rekap_aktiv_laci.rekap_laci');
+            Route::get('rekap_aktiv_menu', 'rekap_hps_menu')->name('rekap_aktiv_menu.rekap_hps_menu');
+            Route::get('rekap_aktiv_nota', 'rekap_hps_nota')->name('rekap_aktiv_nota.rekap_hps_nota');
+            Route::get('rekap_aktiv/show', 'show')->name('rekap_aktiv.show');
+            Route::get('rekap_aktiv/select_waroeng', 'select_waroeng')->name('rekap_aktiv.select_waroeng');
+            Route::get('rekap_aktiv/select_user', 'select_user')->name('rekap_aktiv.select_user');
+        });
 });
