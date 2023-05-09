@@ -429,6 +429,30 @@
                       <span class="nav-main-link-name">Rekap Penjualan Kategori Menu</span>
                     </a>
                   </li>
+
+                  <li class="nav-main-item{{ request()->is('dashboard/rekap_aktiv') ? ' open' : '' }}">
+                    <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
+                      <span class="nav-main-link-name">Rekap Aktivitas Kasir</span>
+                    </a>
+                    <ul class="nav-main-submenu">
+                      <li class="nav-main-item">
+                        <a class="nav-main-link{{ request()->is('dashboard/rekap_aktiv_laci') ? ' active' : '' }}" href="{{route('rekap_aktiv_laci.rekap_laci')}}">
+                          <span class="nav-main-link-name">Rekap Buka Laci</span>
+                        </a>
+                      </li>
+                      <li class="nav-main-item">
+                        <a class="nav-main-link{{ request()->is('dashboard/rekap_aktiv_menu') ? ' active' : '' }}" href="{{route('rekap_aktiv_menu.rekap_hps_menu')}}">
+                          <span class="nav-main-link-name">Rekap Hapus Menu</span>
+                        </a>
+                      </li>
+                      <li class="nav-main-item">
+                        <a class="nav-main-link{{ request()->is('dashboard/rekap_aktiv_nota') ? ' active' : '' }}" href="{{route('rekap_aktiv_nota.rekap_hps_nota')}}">
+                          <span class="nav-main-link-name">Rekap Nota</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </li>
+
                 </ul>
             </li>     
 
