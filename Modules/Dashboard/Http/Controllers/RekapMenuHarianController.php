@@ -66,7 +66,6 @@ class RekapMenuHarianController extends Controller
         $data = array();
         foreach ($sesi as $val) {
             $data[$val->rekap_modal_sesi] = [$val->rekap_modal_sesi];
-            $data['all'] = ['all sesi'];
         }
         return response()->json($data);
     }
@@ -123,12 +122,10 @@ class RekapMenuHarianController extends Controller
                     $get->where('r_t_tanggal', $request->tanggal);
                     }
                     $get->where('r_t_m_area_id', $request->area)
-                        ->where('r_t_m_w_id', $request->waroeng);
-                        if ($request->sesi != 'all') {
-                            $get->where('rekap_modal_sesi', $request->sesi);
+                        ->where('r_t_m_w_id', $request->waroeng)
+                        ->where('rekap_modal_sesi', $request->sesi);
                             if ($request->trans != 'all') {
                                 $get->where('m_t_t_name', $request->trans);
-                        }
                     }
                 
         $get = $get->selectRaw('sum(r_t_detail_qty) as qty, r_t_detail_reguler_price, r_t_tanggal, r_t_detail_m_produk_nama, r_t_detail_m_produk_id, m_w_nama, m_jenis_produk_id, m_jenis_produk_nama, m_t_t_name, rekap_modal_sesi')
@@ -148,7 +145,12 @@ class RekapMenuHarianController extends Controller
                 foreach ($refund as $key => $valRef) {
                     if ($val_menu->r_t_detail_m_produk_id == $valRef->r_r_detail_m_produk_id && $val_menu->r_t_tanggal == $valRef->r_r_tanggal && $val_menu->rekap_modal_sesi == $valRef->rekap_modal_sesi) {
                         $qty = $val_menu->qty - $valRef->r_r_detail_qty;
-                        $nominal = number_format($val_menu->r_t_detail_reguler_price * ($val_menu->qty - $valRef->r_r_detail_qty));
+                        if ($qty <= 0) {
+                            $qty = 0;
+                            $nominal = 0;
+                        } else {
+                            $nominal = number_format($val_menu->r_t_detail_reguler_price * $qty);
+                        }
                     }
                 }
                 $row[] = $qty;
@@ -156,7 +158,6 @@ class RekapMenuHarianController extends Controller
                 $row[] = $val_menu->m_jenis_produk_nama;
                 $row[] = $val_menu->m_t_t_name;
                 $data[] = $row;
-                
             }
 
         $output = array("data" => $data);

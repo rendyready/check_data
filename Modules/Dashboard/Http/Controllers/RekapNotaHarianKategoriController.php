@@ -149,7 +149,7 @@ class RekapNotaHarianKategoriController extends Controller
        $typeTransaksi = DB::table('m_transaksi_tipe')->get();
        $sesi = DB::table('rekap_modal')
                ->join('users','users_id','=','rekap_modal_created_by')
-               ->whereRaw("to_char(rekap_modal_tanggal,'YYYY-MM-DD') = '{$request->tanggal}'")
+               ->where(DB::raw('DATE(rekap_modal_tanggal)'), $request->tanggal)
                ->where('rekap_modal_m_w_id', $request->waroeng)
                ->where('rekap_modal_status', 'close')
                ->orderBy('rekap_modal_sesi','asc')

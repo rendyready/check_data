@@ -228,6 +228,7 @@ $(document).ready(function() {
         var waroeng  = $('.filter_waroeng').val();
         var tanggal  = $('.filter_tanggal').val(); 
         var url = 'rekap_penj_kat/rekap_non_menu?waroeng='+waroeng+'&tanggal='+tanggal;
+        // window.open(url, '_blank');
         window.open(url,'lap_non_menu.blade.php');
     });
 

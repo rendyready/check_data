@@ -54,4 +54,10 @@ Route::prefix('akuntansi')->middleware('auth', 'web')
             Route::get('link/list', 'list')->name('link.list');
             Route::post('link/update', 'update')->name('link.update');
         });
+
+        Route::controller(JurnalOtomatisController::class)->group(function () {
+            Route::get('otomatis', 'index')->name('otomatis.index');
+            Route::get('otomatis/tampil_jurnal', 'tampil_jurnal')->name('otomatis.tampil_jurnal');
+            Route::get('otomatis/export_pdf', 'export_pdf')->name('otomatis.export_pdf');
+        });
     });
