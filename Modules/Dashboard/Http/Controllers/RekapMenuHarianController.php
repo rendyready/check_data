@@ -135,7 +135,7 @@ class RekapMenuHarianController extends Controller
                     ->orderby('m_jenis_produk_id', 'ASC')
                     ->orderby('r_t_detail_m_produk_nama', 'ASC')
                     ->get();
-            $i = 0;
+
             $data = array();
             foreach ($get as $key => $val_menu) {
                 $row = array();
@@ -148,7 +148,6 @@ class RekapMenuHarianController extends Controller
                     if ($val_menu->r_t_detail_m_produk_id == $valRef->r_r_detail_m_produk_id && $val_menu->r_t_tanggal == $valRef->r_r_tanggal && $val_menu->rekap_modal_sesi == $valRef->rekap_modal_sesi && $val_menu->m_t_t_name == $valRef->m_t_t_name) {
                         $qty = $val_menu->qty - $valRef->r_r_detail_qty;
                         $nominal = number_format($val_menu->r_t_detail_reguler_price * $qty);
-                        $i = 1;
                     }
                 }
                 $row[] = $qty;

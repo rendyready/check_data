@@ -120,10 +120,17 @@ Route::prefix('dashboard')->middleware('auth', 'web')
 
         Route::controller(RekapAktivitasKasirController::class)->group(function () {
             Route::get('rekap_aktiv_laci', 'rekap_laci')->name('rekap_aktiv_laci.rekap_laci');
+            Route::get('rekap_aktiv_laci/select_waroeng', 'select_waroeng')->name('rekap_aktiv_laci.select_waroeng');
+            Route::get('rekap_aktiv_laci/select_user_laci', 'select_user_laci')->name('rekap_aktiv_laci.select_user_laci');
+            Route::get('rekap_aktiv_laci/tampil_laci', 'tampil_laci')->name('rekap_aktiv_laci.tampil_laci');
+            Route::get('rekap_aktiv_laci/detail_laci/{id}', 'detail_laci')->name('rekap_aktiv_laci.detail_laci');
+            Route::get('rekap_aktiv_laci/detail_show_laci/{id}', 'detail_show_laci')->name('rekap_aktiv_laci.detail_show_laci');
             Route::get('rekap_aktiv_menu', 'rekap_hps_menu')->name('rekap_aktiv_menu.rekap_hps_menu');
+            Route::get('rekap_aktiv_menu/select_user_menu', 'select_user_menu')->name('rekap_aktiv_menu.select_user_menu');
+            Route::get('rekap_aktiv_menu/tampil_hps_menu', 'tampil_hps_menu')->name('rekap_aktiv_menu.tampil_hps_menu');
             Route::get('rekap_aktiv_nota', 'rekap_hps_nota')->name('rekap_aktiv_nota.rekap_hps_nota');
-            Route::get('rekap_aktiv/show', 'show')->name('rekap_aktiv.show');
-            Route::get('rekap_aktiv/select_waroeng', 'select_waroeng')->name('rekap_aktiv.select_waroeng');
-            Route::get('rekap_aktiv/select_user', 'select_user')->name('rekap_aktiv.select_user');
+            Route::get('rekap_aktiv_nota/rekap_hps_nota', 'rekap_hps_nota')->name('rekap_aktiv_nota.rekap_hps_nota');
+            Route::get('rekap_aktiv_nota/select_user_nota', 'select_user_nota')->name('rekap_aktiv_nota.select_user_nota');
+            Route::get('rekap_aktiv_nota/tampil_hps_nota', 'tampil_hps_nota')->name('rekap_aktiv_nota.tampil_hps_nota');
         });
 });
