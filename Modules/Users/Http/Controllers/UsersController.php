@@ -118,7 +118,7 @@ class UsersController extends Controller
         $edit = DB::table('model_has_roles')
             ->rightjoin('users', 'users.users_id', 'model_id')
             ->leftjoin('roles', 'role_id', 'roles.id')
-            ->select('users.users_id as id', 'users.name as name', 'roles.name as roles', 'email', 'waroeng_id')
+            ->select('users.users_id as id', 'users.name as name', 'roles.name as roles', 'email', 'waroeng_id','waroeng_akses')
             ->where('users.users_id', $id)->first();
         return response()->json($edit, 200);
     }

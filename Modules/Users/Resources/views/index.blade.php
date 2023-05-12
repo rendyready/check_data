@@ -63,7 +63,7 @@
                                                         <div>
                                                             <select class="js-select2" id="roles" name="roles"
                                                                 style="width: 100%;" data-container="#modal-popout"
-                                                                data-placeholder="Choose one.." required>
+                                                                data-placeholder="Pilih Hak Akses" multiple required>
                                                                 <option></option>
                                                                 @foreach ($data->roles as $item)
                                                                     <option value="{{ $item->name }}">{{ $item->name }}
@@ -81,6 +81,21 @@
                                                                 style="width: 100%;" data-container="#modal-popout"
                                                                 data-placeholder="Choose one.." required>
                                                                 <option></option>
+                                                                @foreach ($data->waroeng as $item)
+                                                                    <option value="{{ $item->m_w_id }}">
+                                                                        {{ $item->m_w_nama }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-4">
+                                                    <div class="form-group">
+                                                        <label for="waroeng_id">Waroeng Akses</label>
+                                                        <div>
+                                                            <select class="js-select2" id="waroeng_akses" name="waroeng_akses[]"
+                                                                style="width: 100%;" data-container="#modal-popout"
+                                                                data-placeholder="Pilih Waroeng" multiple="multiple" required>
                                                                 @foreach ($data->waroeng as $item)
                                                                     <option value="{{ $item->m_w_id }}">
                                                                         {{ $item->m_w_nama }}</option>
@@ -174,12 +189,17 @@
                     type: "GET",
                     dataType: 'json',
                     success: function(respond) {
-                      console.log(respond)
+                        console.log(respond);
                         $("#id").val(respond.id).trigger('change');
                         $("#name").val(respond.name).trigger('change');
                         $("#email").val(respond.email).trigger('change');
                         $("#roles").val(respond.roles).trigger('change');
                         $("#waroeng_id").val(respond.waroeng_id).trigger('change');
+                        $("#waroeng_akses").val(respond.waroeng_akses).trigger('change');
+                        console.log(respond.waroeng_akses);
+                        var cek = $("#waroeng_akses").val();
+                        console.log(cek);
+                        $("#waroeng_akses").val(cek).trigger('change');
                     },
                     error: function() {
                     }
