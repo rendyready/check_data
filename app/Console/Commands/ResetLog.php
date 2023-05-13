@@ -3,26 +3,25 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
 
-class CronTes extends Command
+class ResetLog extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'cron:log';
+    protected $signature = 'resetlog:cron';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Membuat Log';
+    protected $description = 'Command description';
 
     /**
      * Execute the console command.
@@ -31,10 +30,9 @@ class CronTes extends Command
      */
     public function handle()
     {
-        Log::alert("tes cron");
+        DB::table('log_cronjob')->where('log_cronjob_datetime','<',Carbon::now()->subMonth(1))
+        ->delete();
+        Log::info("LOG deleted at ".now());
         return Command::SUCCESS;
-
-        // $data = DB::table('db_connection')->where('db_connection_id',1)->first();
-        // Log::info(Crypt::decryptString($data->db_connection_password));
     }
 }

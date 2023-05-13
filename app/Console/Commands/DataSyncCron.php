@@ -277,7 +277,7 @@ class DataSyncCron extends Command
                                     $validate = "config_sync_field_validate{$i}";
                                     $validateField = $valTab->$validate;
                                     if (!empty($validateField)) {
-                                        $valDataSource->$validateField;
+                                        // $valDataSource->$validateField;
                                         $cekReady->where($validateField,$valDataSource->$validateField);
                                     }
                                 }
@@ -333,7 +333,7 @@ class DataSyncCron extends Command
                                 $validate = "config_sync_field_validate{$i}";
                                 $validateField = $valTab->$validate;
                                 if (!empty($validateField)) {
-                                    $valDataSource->$validateField;
+                                    // $valDataSource->$validateField;
                                     $cekReady->where($validateField,$valDataSource->$validateField);
                                 }
                             }
@@ -539,7 +539,7 @@ class DataSyncCron extends Command
                                     $validate = "config_sync_field_validate{$i}";
                                     $validateField = $valTab->$validate;
                                     if (!empty($validateField)) {
-                                        $valDataSource->$validateField;
+                                        // $valDataSource->$validateField;
                                         $cekReady->where($validateField,$valDataSource->$validateField);
                                     }
                                 }
@@ -595,7 +595,7 @@ class DataSyncCron extends Command
                                 $validate = "config_sync_field_validate{$i}";
                                 $validateField = $valTab->$validate;
                                 if (!empty($validateField)) {
-                                    $valDataSource->$validateField;
+                                    // $valDataSource->$validateField;
                                     $cekReady->where($validateField,$valDataSource->$validateField);
                                 }
                             }

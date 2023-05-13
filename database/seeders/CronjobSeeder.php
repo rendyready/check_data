@@ -20,5 +20,18 @@ class CronjobSeeder extends Seeder
         DB::table('cronjob')->insert([
             'cronjob_name' => 'datasync:cron'
         ]);
+
+        DB::table('cronjob')->insert([
+            'cronjob_name' => 'getdata:cron',
+            // 'cronjob_status' => 'close'
+        ]);
+        DB::table('cronjob')->insert([
+            'cronjob_name' => 'autoshutdown:cron',
+            // 'cronjob_status' => 'close'
+        ]);
+        DB::table('cronjob')->insert([
+            'cronjob_name' => 'resetlog:cron',
+            // 'cronjob_status' => 'close'
+        ]);
     }
 }
