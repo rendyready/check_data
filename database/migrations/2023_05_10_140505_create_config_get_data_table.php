@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('config_get_data_status')->default('on')->comment('on/off');
             $table->unsignedInteger('config_get_data_limit')->default(0);
             $table->string('config_get_data_truncate')->default('off')->comment('on/off');
+            $table->string('config_get_data_sequence')->default('off')->comment('on/off');
             $table->string('config_get_data_field_status')->nullable();
             $table->string('config_get_data_field_validate1')->nullable();
             $table->string('config_get_data_field_validate2')->nullable();

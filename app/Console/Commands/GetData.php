@@ -176,8 +176,9 @@ class GetMaster extends Command
                 $DbDest->statement("TRUNCATE TABLE {$valTab->config_get_data_table_name} RESTART IDENTITY;");
             }
 
-            $except = array('app_setting','role_has_permissions','model_has_permissions','model_has_roles');
-            if (!in_array($valTab->config_get_data_table_name,$except)) {
+            // $except = array('app_setting','role_has_permissions','model_has_permissions','model_has_roles');
+            // if (!in_array($valTab->config_get_data_table_name,$except)) {
+                if ($valTab->config_get_data_sequence == 'on') {
                 #Get Last Increment Used
                 $maxId = $DbDest->select("SELECT MAX(id) FROM {$valTab->config_get_data_table_name};")[0]->max;
 
