@@ -10,7 +10,7 @@ use App\Helpers\Helper;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Log;
 
-class GetMaster extends Command
+class GetData extends Command
 {
     /**
      * The name and signature of the console command.
