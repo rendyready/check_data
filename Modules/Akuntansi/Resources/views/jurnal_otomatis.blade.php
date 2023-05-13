@@ -88,8 +88,9 @@
                                 <thead class="justify-content-center">
                                     <tr>
                                         <th>Tanggal</th>
-                                        <th>Penjualan</th>
-                                        <th>Action</th>
+                                        <th>Akun</th>
+                                        <th>Debit</th>
+                                        <th>Kredit</th>
                                     </tr>
                                 </thead>
                                 <tbody id="dataReload">

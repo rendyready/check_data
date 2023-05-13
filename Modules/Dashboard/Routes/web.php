@@ -133,4 +133,12 @@ Route::prefix('dashboard')->middleware('auth', 'web')
             Route::get('rekap_aktiv_nota/select_user_nota', 'select_user_nota')->name('rekap_aktiv_nota.select_user_nota');
             Route::get('rekap_aktiv_nota/tampil_hps_nota', 'tampil_hps_nota')->name('rekap_aktiv_nota.tampil_hps_nota');
         });
+
+        Route::controller(RekapNonMenuController::class)->group(function () {
+            Route::get('non_menu', 'index')->name('non_menu.index');
+            Route::get('non_menu/show', 'show')->name('non_menu.show');
+            Route::get('non_menu/select_waroeng', 'select_waroeng')->name('non_menu.select_waroeng');
+            Route::get('non_menu/select_user', 'select_user')->name('non_menu.select_user');
+            Route::get('non_menu/rekap_non_menu', 'rekap_non_menu')->name('non_menu.rekap_non_menu');
+        });
 });

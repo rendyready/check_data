@@ -119,9 +119,9 @@ class RekapMenuHarianController extends Controller
                     ->join('rekap_modal', 'rekap_modal_id', 'r_t_rekap_modal_id');
                     if (strpos($request->tanggal, 'to') !== false) {
                     [$start, $end] = explode('to', $request->tanggal);
-                    $get->whereBetween('r_t_tanggal', [$start, $end]);
+                    $get->whereBetween(DB::raw('DATE(rekap_modal_tanggal)'), [$start, $end]);
                     } else {
-                    $get->where('r_t_tanggal', $request->tanggal);
+                    $get->where(DB::raw('DATE(rekap_modal_tanggal)'), $request->tanggal);
                     }
                     $get->where('r_t_m_area_id', $request->area)
                         ->where('r_t_m_w_id', $request->waroeng)
@@ -130,8 +130,8 @@ class RekapMenuHarianController extends Controller
                                 $get->where('m_t_t_name', $request->trans);
                     }
                 
-        $get = $get->selectRaw('sum(r_t_detail_qty) as qty, r_t_detail_reguler_price, r_t_tanggal, r_t_detail_m_produk_nama, r_t_detail_m_produk_id, m_w_nama, m_jenis_produk_id, m_jenis_produk_nama, m_t_t_name, rekap_modal_sesi')
-                    ->groupBy('r_t_tanggal', 'r_t_detail_m_produk_nama', 'r_t_detail_m_produk_id', 'm_w_nama', 'r_t_detail_reguler_price', 'm_jenis_produk_nama', 'm_jenis_produk_id', 'm_t_t_name', 'rekap_modal_sesi')
+        $get = $get->selectRaw('sum(r_t_detail_qty) as qty, r_t_detail_reguler_price, rekap_modal_tanggal, r_t_detail_m_produk_nama, r_t_detail_m_produk_id, m_w_nama, m_jenis_produk_id, m_jenis_produk_nama, m_t_t_name, rekap_modal_sesi')
+                    ->groupBy('rekap_modal_tanggal', 'r_t_detail_m_produk_nama', 'r_t_detail_m_produk_id', 'm_w_nama', 'r_t_detail_reguler_price', 'm_jenis_produk_nama', 'm_jenis_produk_id', 'm_t_t_name', 'rekap_modal_sesi')
                     ->orderby('m_jenis_produk_id', 'ASC')
                     ->orderby('r_t_detail_m_produk_nama', 'ASC')
                     ->get();
@@ -139,7 +139,7 @@ class RekapMenuHarianController extends Controller
             $data = array();
             foreach ($get as $key => $val_menu) {
                 $row = array();
-                $row[] = date('d-m-Y', strtotime($val_menu->r_t_tanggal));
+                $row[] = date('d-m-Y', strtotime($val_menu->rekap_modal_tanggal));
                 $row[] = $val_menu->m_w_nama;
                 $row[] = $val_menu->r_t_detail_m_produk_nama;
                 $qty = $val_menu->qty;

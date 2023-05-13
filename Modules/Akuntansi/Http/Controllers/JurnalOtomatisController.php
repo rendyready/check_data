@@ -32,6 +32,8 @@ class JurnalOtomatisController extends Controller
 
     public function tampil_jurnal(Request $request)
     {
+        $link = DB::table('m_link_akuntansi')->get();
+
         $jurnal = DB::table('rekap_transaksi')
                 ->selectRaw('r_t_tanggal, SUM(r_t_nominal_total_bayar) as total');
                 if (strpos($request->tanggal, 'to') !== false) {
@@ -46,48 +48,29 @@ class JurnalOtomatisController extends Controller
                 ->get();
 
         $data = array();
-        foreach($jurnal as $valJurnal) {
-            $row = array();
-            $row[] = date('d-m-Y', strtotime($valJurnal->r_t_tanggal));
-            $row[] = number_format($valJurnal->total);
-            $row[] ='<a id="button_pdf" class="btn btn-sm button_pdf btn-info" value="'.$valJurnal->r_t_tanggal.'" title="Jurnal"><i class="fa-sharp fa-solid fa-eye"></i></a>';
-            $data[] = $row;
-        }
-
-        $output = array("data" => $data);
-        return response()->json($output);
-    }
-
-    public function export_pdf(Request $request)
-    {
-        $jurnal = DB::table('rekap_transaksi')
-                ->selectRaw('r_t_tanggal, SUM(r_t_nominal_total_bayar) as total')
-                ->where('r_t_tanggal', $request->tanggal)
-                ->where('r_t_m_w_id', Auth::user()->waroeng_id)
-                ->groupby('r_t_tanggal')
-                ->orderby('r_t_tanggal', 'ASC')
-                ->get();
-
-        foreach($jurnal as $valJurnal){
+        foreach ($modal as $valModal) {
             $data[] = array(
-                'tanggal' => number_format($valJurnal->r_t_tanggal),
-                'akun' => number_format($valJurnal->rekap_modal_cash_in),
-                'debit' => number_format($valJurnal->rekap_modal_cash_out),
-                'kredit' => number_format($valJurnal),
-                // 'payment' => 22,
+                'tanggal' => $valModal->rekap_modal_id,
+                'akun' => 'Modal awal',
+                'debit' => 0,
+                'kredit' => 0,
+                'lokasi' => 'debit',
             );
         }
 
-        $tgl = tgl_indo($request->tanggal);
-        $user = DB::table('users')
-                ->where('waroeng_id', $request->waroeng)
-                ->first();
-        $kasir = $user->name;
-        $kacab = DB::table('history_jabatan')
-            ->where('history_jabatan_m_w_code',$request->waroeng)
-            ->first();
-        $pdf = pdf::loadview('dashboard::jurnal_otomatis_pdf',compact('data','tgl','w_nama','kacab'))->setPaper('a4');
-        return $pdf->download('jurnal'.strtolower($tgl).'_.pdf');
+
+        // foreach($jurnal as $valJurnal) {
+        //     foreach ($link as $valLink){
+        //         if($valJurnal->r_t_nominal_pajak == $valLink->m_link_akuntansi_nama){
+        //         $row = array();
+        //         $row[] = $valJurnal->r_t_tanggal;
+        //         $data[] = $row;
+        //         }
+        //     }
+        // }
+
+        $output = array("data" => $data);
+        return response()->json($output);
     }
 
     /**
