@@ -108,6 +108,7 @@ class RekapNotaController extends Controller
                 $row[] = date('d-m-Y', strtotime($value->r_t_tanggal));
                 $row[] = $value->name;
                 $row[] = $value->r_t_nota_code;
+                $row[] = $value->r_t_bigboss;
                 $row[] = number_format($value->r_t_nominal_pajak);
                 $row[] = number_format($value->r_t_nominal);
                 $row[] = number_format($value->r_t_nominal_sc);

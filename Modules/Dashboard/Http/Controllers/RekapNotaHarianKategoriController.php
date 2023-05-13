@@ -276,83 +276,18 @@ class RekapNotaHarianKategoriController extends Controller
        ];
        $pdf = pdf::loadview('dashboard::lap_non_menu', $data)->setPaper('a4');
        return $pdf->download('lap_non_menu_'.tgl_indo($request->tanggal).'.pdf');
-    //    return view('dashboard::lap_non_menu', $data);
     }
 
     // public function show(Request $request)
     // {
-    //     $salesByMethodPay = DB::table('m_transaksi_tipe')
-    //                 ->selectraw('MAX(m_t_t_name) tipe_name, rekap_modal_id, name,
-    //                     m_t_t_id, m_payment_method_type,
-    //                     r_t_m_w_nama,r_t_m_area_nama,r_t_tanggal,
-    //                     COALESCE(SUM(r_t_nominal_pajak),0) as pajak,
-    //                     COALESCE(SUM(r_t_nominal_total_bayar),0) as tagihan,
-    //                     COALESCE(SUM(r_t_nominal_kembalian),0) as kembalian,
-    //                     COALESCE(SUM(r_p_t_nominal),0) as pay
-    //                 ')
-    //                 ->join('rekap_transaksi','r_t_m_t_t_id','=','m_t_t_id')
-    //                 ->join('rekap_payment_transaksi','r_p_t_r_t_id','=','r_t_id')
-    //                 ->join('m_payment_method','m_payment_method_id','=','r_p_t_m_payment_method_id')
-    //                 ->join('rekap_modal', 'rekap_modal_id', 'r_t_rekap_modal_id')
-    //                 ->join('users', 'users_id', 'rekap_modal_created_by')
-    //                 ->where('r_t_status','paid')
-    //                 ->groupby('m_t_t_id','m_payment_method_type','r_t_m_w_nama','r_t_m_area_nama','r_t_tanggal', 'rekap_modal_id', 'name')
-    //                 ->orderby('m_t_t_id','asc')
-    //                 ->where('r_t_m_w_id', $request->waroeng);
-    //     if (strpos($request->tanggal, 'to') !== false) {
-    //         $dates = explode('to' ,$request->tanggal);
-    //         $salesByMethodPay->whereBetween('r_t_tanggal', $dates);
-    //     }else{
-    //         $salesByMethodPay->where('r_t_tanggal', $request->tanggal);
-    //     }
-
-    //     $salesByMethodPay2 = $salesByMethodPay->get();
-
-    //     $tipeTransaksi = DB::table('m_transaksi_tipe')->orderBy('m_t_t_id','asc')->get();
-    //     $groupPay = ['cash','transfer'];
-
-    //     $data = [];
-    //     foreach ($tipeTransaksi as $key => $valTrans) {
-    //         foreach ($groupPay as $key => $valGroup) {
-    //             foreach ($salesByMethodPay2 as $key => $valMpay) {
-    //                 $data[$valMpay->rekap_modal_id]['area'] = $valMpay->r_t_m_area_nama;
-    //                 $data[$valMpay->rekap_modal_id]['waroeng'] = $valMpay->r_t_m_w_nama;
-    //                 $data[$valMpay->rekap_modal_id]['operator'] = $valMpay->name;
-    //                 $data[$valMpay->rekap_modal_id]['tanggal'] = $valMpay->r_t_tanggal;
-    //                 if ($valTrans->m_t_t_id == $valMpay->m_t_t_id) {
-    //                     $data[$valMpay->rekap_modal_id][$valTrans->m_t_t_name.'-'.$valGroup] = 0;
-    //                     $data[$valMpay->rekap_modal_id][$valTrans->m_t_t_name.'-'.$valGroup.'-pajak'] = 0;
-
-    //                     $pay = $valMpay->pay;
-    //                     if ($valMpay->m_payment_method_type == 'cash') {
-    //                         $pay = $valMpay->pay - $valMpay->kembalian;
-    //                     }
-    //                     $data[$valMpay->rekap_modal_id][$valTrans->m_t_t_name.'-'.$valMpay->m_payment_method_type] = number_format($pay);
-    //                     $data[$valMpay->rekap_modal_id][$valTrans->m_t_t_name.'-'.$valMpay->m_payment_method_type.'-pajak'] = number_format($valMpay->pajak);
-    //                 }
-    //                 $length = count($data);
-    //                 $convert = array();
-    //                 for ($i=1; $i <= $length ; $i++) {
-    //                     array_push($convert,array_values($data[$valMpay->rekap_modal_id]));
-    //                 }
-    //             }
-    //         }
-    //     }
-
-    //     $output = array("data" => $convert);
-    //     return response()->json($output);
-    // }
-
-    // public function getSummarySales()
-    // {
     //     $tipeTransaksi = DB::table('m_transaksi_tipe')->orderBy('m_t_t_id','asc')->get();
     //     $groupPay = ['cash','transfer'];
     //     $operator = DB::table('rekap_modal')
-    //         ->whereRaw("to_char(rekap_modal_tanggal,'YYYY-MM-DD') = '2023-04-08'")
-    //         ->where('rekap_modal_m_w_id','75')
+    //         ->whereRaw("to_char(rekap_modal_tanggal,'YYYY-MM-DD') = '{$request->tanggal}'")
+    //         ->where('rekap_modal_m_w_id', $request->waroeng)
     //         ->get();
 
-    //     $mySale = [];
+    //     $data = [];
     //     foreach ($operator as $key => $valOp) {
     //         $date = Carbon::parse($valOp->rekap_modal_tanggal)->format('Y-m-d');
     //         $salesByMethodPay = DB::table('m_transaksi_tipe')
@@ -360,6 +295,7 @@ class RekapNotaHarianKategoriController extends Controller
     //                         m_t_t_id, m_payment_method_type,
     //                         r_t_m_w_nama,r_t_m_area_nama,r_t_tanggal,
     //                         COUNT(r_t_id) jml,
+    //                         COALESCE(SUM(r_t_nominal),0) as nominal,
     //                         COALESCE(SUM(r_t_nominal_pajak),0) as pajak,
     //                         COALESCE(SUM(r_t_nominal_total_bayar),0) as tagihan,
     //                         COALESCE(SUM(r_t_nominal_kembalian),0) as kembalian,
@@ -372,7 +308,7 @@ class RekapNotaHarianKategoriController extends Controller
     //                     ->join('users','users_id','rekap_modal_created_by')
     //                     ->where('r_t_status','paid')
     //                     ->groupby('m_t_t_id','m_payment_method_type','r_t_m_w_nama','r_t_m_area_nama','r_t_tanggal')
-    //                     ->whereRaw("to_char(rekap_modal_tanggal,'YYYY-MM-DD') = '{$date}'")
+    //                     ->whereRaw("to_char(rekap_modal_tanggal,'YYYY-MM-DD') = '{$request->tanggal}'")
     //                     ->where('rekap_modal_id',$valOp->rekap_modal_id)
     //                     // ->where('m_t_t_id',$valTrans->m_t_t_id)
     //                     // ->where('m_payment_method_type',$valGroup)
@@ -381,35 +317,41 @@ class RekapNotaHarianKategoriController extends Controller
     //         foreach ($tipeTransaksi as $key => $valTrans) {
     //             $jmlNota = 0;
     //             foreach ($salesByMethodPay as $key => $valMpay) {
-    //                 $mySale[$valOp->rekap_modal_id]['area'] = $valMpay->r_t_m_area_nama;
-    //                 $mySale[$valOp->rekap_modal_id]['waroeng'] = $valMpay->r_t_m_w_nama;
-    //                 $mySale[$valOp->rekap_modal_id]['tanggal'] = $valMpay->r_t_tanggal;
-    //                 $mySale[$valOp->rekap_modal_id]['operator'] = $valMpay->username;
+    //                 $data[$valOp->rekap_modal_id]['area'] = $valMpay->r_t_m_area_nama;
+    //                 $data[$valOp->rekap_modal_id]['waroeng'] = $valMpay->r_t_m_w_nama;
+    //                 $data[$valOp->rekap_modal_id]['tanggal'] = $valMpay->r_t_tanggal;
+    //                 $data[$valOp->rekap_modal_id]['operator'] = $valMpay->username;
     //                 if ($valTrans->m_t_t_id == $valMpay->m_t_t_id) {
     //                     $jmlNota += $valMpay->jml;
     //                 }
-    //                 $mySale[$valOp->rekap_modal_id]['jml_nota-'.$valTrans->m_t_t_name] = $jmlNota;
+    //                 $data[$valOp->rekap_modal_id]['jml_nota-'.$valTrans->m_t_t_name] = $jmlNota;
     //             }
     //             foreach ($groupPay as $key => $valGroup) {
     //                 $nominal = 0;
     //                 $pajak = 0;
     //                 foreach ($salesByMethodPay as $key => $valMpay) {
     //                         if ($valTrans->m_t_t_id == $valMpay->m_t_t_id && $valMpay->m_payment_method_type == $valGroup) {
-    //                             $nominal = $valMpay->pay;
+    //                             // $nominal = $valMpay->pay;
+    //                             $nominal = $valMpay->nominal;
     //                             $pajak = $valMpay->pajak;
 
-    //                             if ($valMpay->m_payment_method_type == 'cash') {
-    //                                 $nominal = $valMpay->pay - $valMpay->kembalian;
-    //                             }
+    //                             // if ($valMpay->m_payment_method_type == 'cash') {
+    //                             //     $nominal = $valMpay->pay - $valMpay->kembalian;
+    //                             // }
     //                         }
-    //                         $mySale[$valOp->rekap_modal_id][$valTrans->m_t_t_name.'-'.$valGroup] = $nominal;
-    //                         $mySale[$valOp->rekap_modal_id][$valTrans->m_t_t_name.'-'.$valGroup.'-pajak'] = $pajak;
+    //                         $data[$valOp->rekap_modal_id][$valTrans->m_t_t_name.'-'.$valGroup] = number_format($nominal);
+    //                         $data[$valOp->rekap_modal_id][$valTrans->m_t_t_name.'-'.$valGroup.'-pajak'] = number_format($pajak);
     //                 }
     //             }
     //         }
+    //         $convert = [];
+    //         foreach ($data as $row) {
+    //             $convert[] = array_values($row);
+    //         }
+    //         $output = array("data" => $convert);
     //     }
-
-    //     return response($mySale);
+    //     return response()->json($output);
     // }
+
 }
 
