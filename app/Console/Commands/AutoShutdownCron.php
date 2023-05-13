@@ -36,7 +36,12 @@ class AutoShutdownCron extends Command
 
         if ($cronStatus->cronjob_status == 'open') {
             info("Server shutdown at ". Carbon::now()->format('Y-m-d H:i:s'));
-            system('shutdown -h now');
+            try {
+                system('shutdown -h now');
+            } catch (\Throwable $th) {
+                info("Shutdown failed.");
+                info("Error: ".$th);
+            }
         }else{
             return Command::SUCCESS;
         }
