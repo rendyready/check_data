@@ -47,20 +47,6 @@ class RekapNonMenuController extends Controller
         return response()->json($data);
     }
 
-    public function tanggal_rekap(Request $request)
-    {
-            $tanggal = DB::table('m_transaksi_tipe')
-                ->select('m_t_t_id', 'm_t_t_name')
-                ->orderby('m_t_t_id','ASC')
-                ->get();
-
-        $data = [];
-        foreach ($tanggal as $val) {
-            $data[] = $val->m_t_t_name;
-        }
-        return response()->json($data);
-    }
-
     public function show(Request $request)
     {
         $typeTransaksi = DB::table('m_transaksi_tipe')->get();
