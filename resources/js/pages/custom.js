@@ -14,6 +14,12 @@ function displayNotification(type, message) {
         message: message
     });
 }
+function texttoarray(arr1) {
+    var arr = arr1.slice(1, -1).split(", ") // Menghapus kurung siku dan memisahkan string dengan koma dan spasi
+             .map(function(item) { // Mengubah setiap elemen menjadi angka
+               return parseInt(item);
+             });
+}
 //Select2
 $(document).ready(function () {
     // Mencari elemen select2

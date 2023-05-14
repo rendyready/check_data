@@ -42,6 +42,7 @@ class ProdKlasifikasiController extends Controller
             } elseif ($request->action == 'edit') {
                 $data = array(
                     'm_klasifikasi_produk_nama'    =>    $request->m_klasifikasi_produk_nama,
+                    'm_klasifikasi_produk_status_sync' => 'send',
                     'm_klasifikasi_produk_updated_by' => Auth::id(),
                     'm_klasifikasi_produk_updated_at' => Carbon::now(),
                 );

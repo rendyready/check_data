@@ -60,6 +60,7 @@ class FooterController extends Controller
                         'm_footer_priority' =>    $request->m_footer_priority,
                         'm_footer_updated_by' => Auth::id(),
                         'm_footer_updated_at' => Carbon::now(),
+                        'm_footer_status_sync' => 'send',
                     );
                     DB::table('m_footer')->where('m_footer_id', $request->m_footer_id)
                         ->update($data);

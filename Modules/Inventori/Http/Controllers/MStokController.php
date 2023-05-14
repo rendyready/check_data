@@ -73,6 +73,7 @@ class MStokController extends Controller
             $data = array(
                 'm_stok_awal' => convertfloat($request->m_stok_awal[$key]),
                 'm_stok_hpp' => $hpp_new,
+                'm_stok_status_sync' => 'send',
                 'm_stok_saldo' => $saldo + convertfloat($request->m_stok_awal[$key]),
                 'm_stok_updated_at' => Carbon::now(),
             );
@@ -215,6 +216,7 @@ class MStokController extends Controller
                     ->update([
                         'm_stok_keluar' => $produk->m_stok_keluar + convertfloat($request->selisih[$key]),
                         'm_stok_saldo' => $produk->m_stok_saldo  + convertfloat($request->selisih[$key]),
+                        'm_stok_status_sync' => 'send',
                         'm_stok_updated_at' => Carbon::now(),
                         'm_stok_updated_by' => Auth::user()->waroeng_id
                     ]);

@@ -61,13 +61,14 @@ class TransTipeController extends Controller
                     $data = array(
                         'm_t_t_name' => $request->m_t_t_name,
                         'm_t_t_profit_price' => $request->m_t_t_profit_price,
-                        'm_menu_jenis_updated_by' => Auth::id(),
-                        'm_menu_jenis_updated_at' => Carbon::now(),
+                        'm_t_t_status_sync' => 'send',
+                        'm_t_t_updated_by' => Auth::id(),
+                        'm_t_t_updated_at' => Carbon::now(),
                     );
                     DB::table('m_transaksi_tipe')->where('m_t_t_id', $request->m_t_t_id)
                         ->update($data);
                 } else {
-                    $softdelete = array('m_t_t_deleted_at' => Carbon::now());
+                    $softdelete = array('m_t_t_deleted_at' => Carbon::now(),'m_t_t_status_sync' => 'send');
                     DB::table('m_transaksi_tipe')
                         ->where('m_t_t_id', $request->m_t_t_id)
                         ->update($softdelete);
