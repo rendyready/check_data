@@ -59,6 +59,7 @@ class MejaController extends Controller
                 "m_meja_nama" => $request->nama_meja,
                 "m_meja_m_meja_jenis_id" => $request->jenis_meja,
                 "m_meja_m_w_id" => $request->waroeng,
+                "m_meja_status_sync" =>'send',
                 "m_meja_updated_by" => Auth::id(),
                 "m_meja_updated_at" => Carbon::now(),
             ]);

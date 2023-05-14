@@ -42,6 +42,7 @@ class SCController extends Controller
                 } elseif ($request->action == 'edit') {
                     $data = array(
                         'm_sc_value'    =>    $request->m_sc_value,
+                        'm_sc_status_sync' => 'send',
                         'm_sc_updated_by' => Auth::id(),
                         'm_sc_updated_at' => Carbon::now(),
                     );

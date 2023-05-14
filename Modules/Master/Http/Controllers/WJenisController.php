@@ -58,6 +58,7 @@ class WJenisController extends Controller
                 } elseif ($chkEdit == null) {
                     $data = array(
                         'm_w_jenis_nama' => $nameDatap,
+                        'm_w_jenis_status_sync' => 'send',
                         'm_w_jenis_updated_by' => Auth::id(),
                         'm_w_jenis_updated_at' => Carbon::now(),
                     );

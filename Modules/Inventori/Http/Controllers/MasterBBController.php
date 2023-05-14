@@ -114,6 +114,7 @@ class MasterBBController extends Controller
                             "m_produk_jual" => $request->m_produk_jual,
                             "m_produk_scp" => $request->m_produk_scp,
                             "m_produk_hpp" => $request->m_produk_hpp,
+                            "m_produk_status_sync" => 'send',
                             "m_produk_updated_by" => Auth::id(),
                             "m_produk_updated_at" => Carbon::now(),
                         ]);

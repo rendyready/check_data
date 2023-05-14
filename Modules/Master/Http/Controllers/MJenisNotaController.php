@@ -61,6 +61,7 @@ class MJenisNotaController extends Controller
                 MJenisNotum::where('m_jenis_nota_id', $request->m_jenis_nota_id)
                     ->update($request->only('m_jenis_nota_m_w_id', 'm_jenis_nota_m_t_t_id') + [
                         'm_jenis_nota_updated_by' => Auth::user()->id,
+                        'm_jenis_nota_status_sync' => 'send',
                     ]);
             }
         }
@@ -123,7 +124,8 @@ class MJenisNotaController extends Controller
                     if ($harga_menu) {
                         DB::table('m_menu_harga')
                             ->where('m_menu_harga_id', $harga_menu->m_menu_harga_id)
-                            ->update(['m_menu_harga_nominal' => convertfloat($request->nom_harga[$key])]);
+                            ->update(['m_menu_harga_nominal' => convertfloat($request->nom_harga[$key]),
+                                'm_menu_harga_status_sync' => 'send']);
                     } else {
                         DB::table('m_menu_harga')->insert([
                             'm_menu_harga_id' => $this->getMasterId('m_menu_harga'),
@@ -132,7 +134,7 @@ class MJenisNotaController extends Controller
                             'm_menu_harga_nominal' => convertfloat($request->nom_harga[$key]),
                             'm_menu_harga_status' => '1',
                             'm_menu_harga_tax_status' => '1',
-                            'm_menu_harga_created_by' => Auth::user()->id
+                            'm_menu_harga_created_by' => Auth::user()->id,
                         ]);
                     }
                 }
@@ -191,6 +193,7 @@ class MJenisNotaController extends Controller
                 MMenuHarga::where('m_menu_harga_id', $request->m_menu_harga_id)
                     ->update($request->except('m_menu_harga_id', '_token') + [
                         'm_menu_harga_created_by' => Auth::user()->id,
+                        'm_menu_harga_status_sync' => 'send',
                     ]);
             }
         }
@@ -203,7 +206,8 @@ class MJenisNotaController extends Controller
         foreach ($request->m_menu_harga_id_edit as $key => $value) {
             DB::table('m_menu_harga')
                 ->where('m_menu_harga_id', $request->m_menu_harga_id_edit[$key])
-                ->update(['m_menu_harga_nominal' => convertfloat($request->m_menu_harga_nominal_edit[$key])]);
+                ->update(['m_menu_harga_nominal' => convertfloat($request->m_menu_harga_nominal_edit[$key]),
+                    'm_menu_harga_status_sync' => 'send']);
         }
     }
 
