@@ -44,17 +44,9 @@ class UsersController extends Controller
      */
     public function action(Request $request)
     {
-        // $rules = [
-        //     'email' => 'required|unique:users|max:255'
+        $data = $request->waroeng_akses; // mengambil data dari Select2 dalam format JSON dan mengubahnya menjadi array
+        $waroeng_akses = implode(',',$data); // menggabungkan data menjadi string dengan delimiter koma
 
-        // ];
-        // $data_validate = array(
-        //     'email'    =>    strtolower($request->email)
-        // );
-        // $validator = \Validator::make($data_validate,$rules);
-        // if ($validator->fails()) {
-        //     return response()->json(['error'=>true, 'message'=>$validator->messages()->get('*')]);
-        // }
         if ($request->action == 'add') {
             $data = array(
                 'users_id' => $this->getMasterId('users'),
@@ -62,6 +54,7 @@ class UsersController extends Controller
                 'email' => strtolower($request->email),
                 'password' => Hash::make($request->password),
                 'waroeng_id' => $request->waroeng_id,
+                'waroeng_akses' => '['.$waroeng_akses.']',
                 'created_by' => Auth::id(),
                 'created_at' => Carbon::now(),
             );
@@ -118,7 +111,7 @@ class UsersController extends Controller
         $edit = DB::table('model_has_roles')
             ->rightjoin('users', 'users.users_id', 'model_id')
             ->leftjoin('roles', 'role_id', 'roles.id')
-            ->select('users.users_id as id', 'users.name as name', 'roles.name as roles', 'email', 'waroeng_id','waroeng_akses')
+            ->select('users.users_id as id', 'users.name as name', 'roles.name as roles', 'email', 'waroeng_id', 'waroeng_akses')
             ->where('users.users_id', $id)->first();
         return response()->json($edit, 200);
     }

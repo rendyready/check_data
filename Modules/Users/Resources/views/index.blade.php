@@ -61,7 +61,7 @@
                                                     <div class="form-group">
                                                         <label for="roles">Hak Akses</label>
                                                         <div>
-                                                            <select class="js-select2" id="roles" name="roles"
+                                                            <select class="js-select2" id="roles" name="roles[]"
                                                                 style="width: 100%;" data-container="#modal-popout"
                                                                 data-placeholder="Pilih Hak Akses" multiple required>
                                                                 <option></option>
@@ -93,9 +93,11 @@
                                                     <div class="form-group">
                                                         <label for="waroeng_id">Waroeng Akses</label>
                                                         <div>
-                                                            <select class="js-select2" id="waroeng_akses" name="waroeng_akses[]"
-                                                                style="width: 100%;" data-container="#modal-popout"
-                                                                data-placeholder="Pilih Waroeng" multiple="multiple" required>
+                                                            <select class="js-select2" id="waroeng_akses"
+                                                                name="waroeng_akses[]" style="width: 100%;"
+                                                                data-container="#modal-popout"
+                                                                data-placeholder="Pilih Waroeng" multiple="multiple"
+                                                                required>
                                                                 @foreach ($data->waroeng as $item)
                                                                     <option value="{{ $item->m_w_id }}">
                                                                         {{ $item->m_w_nama }}</option>
@@ -108,7 +110,8 @@
                                         <div class="block-content block-content-full text-end bg-body">
                                             <button type="button" class="btn btn-sm btn-alt-secondary me-1"
                                                 data-bs-dismiss="modal">Close</button>
-                                            <button type="button" class="btn btn-sm btn-danger reset">Reset Password</button>
+                                            <button type="button" class="btn btn-sm btn-danger reset">Reset
+                                                Password</button>
                                             <input type="submit" class="btn btn-success" id="submit">
                                         </div>
                                         </form>
@@ -158,34 +161,35 @@
     <!-- END Page Content -->
 @endsection
 @section('js')
-    <script type="module">
-  $(document).ready(function() {
-    $.ajaxSetup({
-      headers: {
-        'X-CSRF-Token': $("input[name=_token]").val()
-      }
-    });
-    Codebase.helpersOnLoad(['jq-select2']);
-    var t = $('#user').DataTable();
-    $("#user").append(
-      $('<tfoot/>').append($("#user thead tr").clone())
-    );
-    var id;
-    $(".buttonInsert").on('click', function() {
-            $('#modal-popout form')[0].reset();
-            $('#action').val('add');
-            $("#myModalLabel").html('Tambah User');
-            $("#modal-popout").modal('show');
-            $("#password").attr('required',true);
-      });
-      $(".buttonEdit").on('click', function() {
+    <script>
+        $(document).ready(function() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-Token': $("input[name=_token]").val()
+                }
+            });
+            Codebase.helpersOnLoad(['jq-select2']);
+            var t = $('#user').DataTable();
+            $("#user").append(
+                $('<tfoot/>').append($("#user thead tr").clone())
+            );
+            var id;
+            $(".buttonInsert").on('click', function() {
+                $('#modal-popout form')[0].reset();
+                $('#action').val('add');
+                $("#myModalLabel").html('Tambah User');
+                $("#modal-popout").modal('show');
+                $("#password").attr('required', true);
+            });
+            $(".buttonEdit").on('click', function() {
                 id = $(this).attr('value');
                 $('#modal-popout form')[0].reset();
                 $('#action').val('edit');
                 $("#myModalLabel").html('Ubah User');
-                $('#password').attr('placeholder', 'Masukan Password Untuk Merubah').attr('required',false);
+                $('#password').attr('placeholder', 'Masukan Password Untuk Merubah').attr('required',
+                    false);
                 $.ajax({
-                    url: "/users/edit/"+id,
+                    url: "/users/edit/" + id,
                     type: "GET",
                     dataType: 'json',
                     success: function(respond) {
@@ -195,68 +199,66 @@
                         $("#email").val(respond.email).trigger('change');
                         $("#roles").val(respond.roles).trigger('change');
                         $("#waroeng_id").val(respond.waroeng_id).trigger('change');
-                        $("#waroeng_akses").val(respond.waroeng_akses).trigger('change');
-                        console.log(respond.waroeng_akses);
-                        var cek = $("#waroeng_akses").val();
-                        console.log(cek);
-                        $("#waroeng_akses").val(cek).trigger('change');
+                        var waroeng_akses = respond.waroeng_akses.slice(1, -1).split(", ")
+                            .map(function(item) {
+                                return parseInt(item);
+                            });
+                        $("#waroeng_akses").val(waroeng_akses).trigger('change');
                     },
-                    error: function() {
-                    }
+                    error: function() {}
                 });
                 $("#modal-popout").modal('show');
             });
-            $('.reset').on('click',function () {
-              $.ajax({
-                    url: "/users/reset/"+id,
+            $('.reset').on('click', function() {
+                $.ajax({
+                    url: "/users/reset/" + id,
                     type: "post",
                     dataType: 'json',
                     success: function(respond) {
-                      $("#modal-popout").modal('hide');
-                      Codebase.helpers('jq-notify', {
-                                align: 'right',             
-                                from: 'top',                
-                                type: 'success',              
-                                icon: 'fa fa-info me-5',    
-                                message: 'Berhasil Reset Password',
-                            });
+                        $("#modal-popout").modal('hide');
+                        Codebase.helpers('jq-notify', {
+                            align: 'right',
+                            from: 'top',
+                            type: 'success',
+                            icon: 'fa fa-info me-5',
+                            message: 'Berhasil Reset Password',
+                        });
                     },
-                    error: function() {
-                    }
+                    error: function() {}
                 });
             });
-            $('#formAction').submit( function(e){
-                if(!e.isDefaultPrevented()){
+            $('#formAction').submit(function(e) {
+                if (!e.isDefaultPrevented()) {
                     $.ajax({
-                        url : "{{ route('users.action') }}",
-                        type : "POST",
-                        data : $('#modal-popout form').serialize(),
-                        success : function(data){
-                          if (data.error == true) {
-                            alert(data.message.email);
-                          } else {
-                            if (data.action=='edit') {
-                            var msg = "Berhasil Mengubah User";
-                          } else {
-                            var msg = "Berhasil Menambahkan User";
-                          }
-                            $('#modal-popout').modal('hide');
-                            Codebase.helpers('jq-notify', {
-                                align: 'right',             
-                                from: 'top',                
-                                type: 'success',              
-                                icon: 'fa fa-info me-5',    
-                                message: msg
-                            });
-                            setTimeout(function() {
-                              location.reload();
-                          }, 2500);
-                          }
+                        url: "{{ route('users.action') }}",
+                        type: "POST",
+                        data: $('#modal-popout form').serialize(),
+                        success: function(data) {
+                            if (data.error == true) {
+                                alert(data.message.email);
+                            } else {
+                                if (data.action == 'edit') {
+                                    var msg = "Berhasil Mengubah User";
+                                } else {
+                                    var msg = "Berhasil Menambahkan User";
+                                }
+                                $('#modal-popout').modal('hide');
+                                Codebase.helpers('jq-notify', {
+                                    align: 'right',
+                                    from: 'top',
+                                    type: 'success',
+                                    icon: 'fa fa-info me-5',
+                                    message: msg
+                                });
+                                setTimeout(function() {
+                                    location.reload();
+                                }, 2500);
+                            }
                         },
                     });
                     return false;
                 }
-            }); 
-  });
-</script>
+            });
+        });
+    </script>
 @endsection
