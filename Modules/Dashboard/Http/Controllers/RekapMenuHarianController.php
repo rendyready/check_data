@@ -99,9 +99,9 @@ class RekapMenuHarianController extends Controller
             ->join('m_transaksi_tipe', 'm_t_t_id', 'r_t_m_t_t_id');
             if (strpos($request->tanggal, 'to') !== false) {
                 [$start, $end] = explode('to', $request->tanggal);
-                $refund->whereBetween('r_r_tanggal', [$start, $end]);
+                $refund->whereBetween('rekap_modal_tanggal', [$start, $end]);
                 } else {
-                $refund->where('r_r_tanggal', $request->tanggal);
+                $refund->where('rekap_modal_tanggal', $request->tanggal);
                 }
                 $refund->where('r_r_m_area_id', $request->area)
                         ->where('r_r_m_w_id', $request->waroeng);
@@ -145,7 +145,7 @@ class RekapMenuHarianController extends Controller
                 $qty = $val_menu->qty;
                 $nominal = number_format($val_menu->r_t_detail_reguler_price * $val_menu->qty);
                 foreach ($refund as $key => $valRef) {
-                    if ($val_menu->r_t_detail_m_produk_id == $valRef->r_r_detail_m_produk_id && $val_menu->r_t_tanggal == $valRef->r_r_tanggal && $val_menu->rekap_modal_sesi == $valRef->rekap_modal_sesi && $val_menu->m_t_t_name == $valRef->m_t_t_name) {
+                    if ($val_menu->r_t_detail_m_produk_id == $valRef->r_r_detail_m_produk_id && $val_menu->rekap_modal_tanggal == $valRef->rekap_modal_tanggal && $val_menu->rekap_modal_sesi == $valRef->rekap_modal_sesi && $val_menu->m_t_t_name == $valRef->m_t_t_name) {
                         $qty = $val_menu->qty - $valRef->r_r_detail_qty;
                         $nominal = number_format($val_menu->r_t_detail_reguler_price * $qty);
                     }

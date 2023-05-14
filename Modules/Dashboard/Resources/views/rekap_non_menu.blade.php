@@ -189,39 +189,6 @@ $(document).ready(function() {
         var area     = $('.filter_area').val();
         var waroeng  = $('.filter_waroeng').val();
         var tanggal  = $('.filter_tanggal').val(); 
-        
-        $.ajax({
-        url: '{{route("rekap_kategori.tanggal_rekap")}}',
-        type: 'GET',
-        dataType: 'Json',
-        data : {
-            tanggal: tanggal,
-            waroeng: waroeng,
-        },
-        success: function(data) {
-            console.log(data);
-            $('#head_data').empty();
-            var html = '<tr>';
-            html += '<th class="text-center" rowspan="2">Area</th>';
-            html += '<th class="text-center" rowspan="2">Waroeng</th>';
-            html += '<th class="text-center" rowspan="2">Tanggal</th>';
-            html += '<th class="text-center" rowspan="2">Sesi</th>';
-            html += '<th class="text-center" rowspan="2">Operator</th>';
-            for (var i = 0; i < 7; i++) {
-                    html += '<th class="text-center" colspan="5">' + data[i] + '</th>';
-            }
-            html += '</tr>';
-            html += '<tr>';
-            var jenis_transaksi = ['Nota', 'Menu', 'Non Menu', 'transfer', 'pajak transfer'];
-            var jumlah_transaksi = jenis_transaksi.length;
-            
-            for (var i = 0; i < 7; i++) {
-                for (var j = 0; j < jumlah_transaksi; j++) {
-                    html += '<th class="text-center">' + jenis_transaksi[j] + '</th>';
-                }
-            }
-            html += '</tr>';
-            $('#head_data').append(html);
 
         $('#tampil_rekap').DataTable({
             button: [],
@@ -241,7 +208,7 @@ $(document).ready(function() {
             lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
             pageLength: 10,
             ajax: {
-                url: '{{route("rekap_kategori.show")}}',
+                url: '{{route("non_menu.show")}}',
                 data : {
                     area: area,
                     waroeng: waroeng,
@@ -253,10 +220,7 @@ $(document).ready(function() {
                     console.log(data);
                 }
         });    
-        
-        }
-        });
-});
+    });
 
 if(HakAksesPusat){
       $('.filter_area').on('select2:select', function(){
@@ -266,7 +230,7 @@ if(HakAksesPusat){
         if(id_area && tanggal){
             $.ajax({
             type:"GET",
-            url: '{{route("rekap_kategori.select_waroeng")}}',
+            url: '{{route("non_menu.select_waroeng")}}',
             dataType: 'JSON',
             destroy: true,    
             data : {
