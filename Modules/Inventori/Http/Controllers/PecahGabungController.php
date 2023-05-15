@@ -94,6 +94,7 @@ class PecahGabungController extends Controller
                         ['m_stok_masuk' => $get_saldo_hasil->m_stok_masuk + $request->rekap_pcb_brg_hasil_qty[$key],
                             'm_stok_saldo' => $saldo_now,
                             'm_stok_hpp' => $hpp_now,
+                            'm_stok_status_sync' => 'send',
                         ]);
             }
             //insert produk asal saja
@@ -124,6 +125,7 @@ class PecahGabungController extends Controller
                 ->where('m_stok_m_produk_code', $request->rekap_pcb_brg_asal_code[0])
                 ->update(['m_stok_keluar' => $get_saldo_asal->m_stok_keluar + $request->rekap_pcb_brg_asal_qty[0],
                     'm_stok_saldo' => $saldo_now,
+                    'm_stok_status_sync' => 'send',
                 ]);
         } else {
             //insert keluar produk asal
@@ -180,6 +182,7 @@ class PecahGabungController extends Controller
                     ->update(
                         ['m_stok_keluar' => $get_stok->m_stok_keluar + $request->rekap_pcb_brg_asal_qty[$key],
                             'm_stok_saldo' => $saldo_now,
+                            'm_stok_status_sync' => 'send',
                         ]);
             }
 
@@ -210,6 +213,7 @@ class PecahGabungController extends Controller
                 ->update(['m_stok_masuk' => $get_saldo_asal->m_stok_masuk + $request->rekap_pcb_brg_hasil_qty[0],
                     'm_stok_saldo' => $saldo_now,
                     'm_stok_hpp' => $hpp_now,
+                    'm_stok_status_sync' => 'send',
                 ]);
         }
 

@@ -42,6 +42,7 @@ class PajakController extends Controller
                     } else {
                         $data = array(
                             'm_pajak_value'    =>    $request->m_pajak_value,
+                            'm_pajak_status_sync' => 'send',
                             'm_pajak_updated_by' => Auth::id(),
                             'm_pajak_updated_at' => Carbon::now(),
                         );

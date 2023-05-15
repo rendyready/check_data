@@ -68,6 +68,7 @@ class MAreaController extends Controller
                 $validate = DB::table('m_area')->selectRaw('m_area_nama')->whereRaw(' LOWER(m_area_nama) =' . "'$trim'")->get();
                 $data = array(
                     'm_area_nama'    => Str::lower($trim),
+                    'm_area_status_sync' => 'send',
                     'm_area_updated_by' => Auth::id(),
                     'm_area_updated_at' => Carbon::now(),
                 );

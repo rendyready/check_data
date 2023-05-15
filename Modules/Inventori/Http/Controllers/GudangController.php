@@ -114,6 +114,7 @@ class GudangController extends Controller
                 $data = array(
                     'm_gudang_m_w_id' => $request->m_gudang_m_w_id,
                     'm_gudang_nama' => strtolower($request->m_gudang_nama),
+                    'm_gudang_status_sync' => 'edit',
                     'm_gudang_updated_by' => Auth::id(),
                     'm_gudang_updated_at' => Carbon::now(),
                 );

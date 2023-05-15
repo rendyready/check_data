@@ -46,6 +46,7 @@ class SubJenisMController extends Controller
                 $data = array(
                     'm_sub_jenis_produk_nama'    =>    $request->m_sub_jenis_produk_nama,
                     'm_sub_jenis_produk_m_jenis_produk_id' => $request->m_sub_jenis_produk_m_jenis_produk_id,
+                    'm_sub_jenis_produk_status_sync' => 'send',
                     'm_sub_jenis_produk_updated_by' => Auth::id(),
                     'm_sub_jenis_produk_updated_at' => Carbon::now(),
                 );
@@ -53,7 +54,7 @@ class SubJenisMController extends Controller
                     ->update($data);
                 return response(['Messages' => 'Data Updated !']);
             } else {
-                $softdelete = array('m_sub_jenis_produk_deleted_at' => Carbon::now());
+                $softdelete = array('m_sub_jenis_produk_deleted_at' => Carbon::now(),'m_sub_jenis_produk_status_sync' => 'send');
                 DB::table('m_sub_jenis_produk')
                     ->where('m_sub_jenis_produk_m_jenis_produk_id', $request->id)
                     ->update($softdelete);

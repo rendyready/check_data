@@ -22,32 +22,33 @@ class AksesController extends Controller
         return view('users::akses', compact('data'));
     }
     public function action(Request $request)
-    {
-        if ($request->ajax()) {
-            $upper = Str::upper($request->name);
-            $check = DB::table('roles')->whereRaw("UPPER(name)='{$upper}'")->first();
-            if (!empty($check->name)) {
-                $request->validate(['name']);
+    { 
+    	if($request->ajax())
+    	{
+            $name = Str::lower($request->name);
+            $check = DB::table('roles')->where('name',$name)->first();
+            if (!empty($check)) {
+                return response()->json(['error'=>'Nama Telah Ada']);
+            } else {
                 if ($request->action == 'add') {
                     $data = array(
-                        'name'    =>    $request->name,
-                        'guard_name' => 'web',
+                        'name'	=>	$request->name,
+                        'guard_name' =>'web',
                         'created_at' => Carbon::now(),
                     );
                     DB::table('roles')->insert($data);
                 } elseif ($request->action == 'edit') {
                     $data = array(
-                        'name'    =>    $request->name,
-                        'guard_name' => 'web',
+                        'name'	=>	$request->name,
+                        'guard_name' =>'web',
                         'updated_at' => Carbon::now(),
                     );
-                    DB::table('roles')->where('id', $request->id)
-                        ->update($data);
-                } else {
-                    return 'Nama Duplicate';
+                    DB::table('roles')->where('id',$request->id)
+                    ->update($data);
                 }
                 return response()->json($request);
             }
-        }
+    		
+    	}
     }
 }

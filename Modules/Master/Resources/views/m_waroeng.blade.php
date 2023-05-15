@@ -11,7 +11,7 @@
                     </div>
                     <div class="block-content text-muted">
                         <a class="btn btn-success mr-2 mb-2 buttonInsert" title="Edit" style="color: #fff"><i
-                            class="fa fa-plus mr-5"></i> Waroeng</a>
+                                class="fa fa-plus mr-5"></i> Waroeng</a>
                         @csrf
                         <div class="table-responsive">
                             <table id="m_w"
@@ -32,12 +32,12 @@
                                 </thead>
                                 <tbody id="tablecontents">
                                     @php
-                                        $no=1;
+                                        $no = 1;
                                     @endphp
                                     @foreach ($data as $item)
                                         <tr class="row1">
                                             <td>{{ $no++ }}</td>
-                                            <td>{{$item->m_w_code}}</td>
+                                            <td>{{ $item->m_w_code }}</td>
                                             <td>{{ ucwords($item->m_w_nama) }}</td>
                                             <td>{{ $item->m_pajak_value }}</td>
                                             <td>{{ $item->m_sc_value }}</td>
@@ -45,7 +45,9 @@
                                             <td>{{ ucwords($item->m_w_jenis_nama) }}</td>
                                             <td>{{ ucwords($item->m_w_m_kode_nota) }}</td>
                                             <td>{{ $item->m_modal_tipe_nama }}</td>
-                                            <td><a id="buttonEdit" class="btn btn-sm buttonEdit btn-success" value="{{ $item->m_w_id }}" title="Edit"><i class="fa fa-pencil"></i></a></td>
+                                            <td><a id="buttonEdit" class="btn btn-sm buttonEdit btn-success"
+                                                    value="{{ $item->m_w_id }}" title="Edit"><i
+                                                        class="fa fa-pencil"></i></a></td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -77,7 +79,8 @@
                                             <input type="hidden" name="m_w_id" id="m_w_id">
                                             <div class="form-group">
                                                 <label for="m_w_nama">Nama Waroeg</label>
-                                                <input class="form-group" style="width: 100%;" type="text" name="m_w_nama" id="m_w_nama" required>
+                                                <input class="form-group" style="width: 100%;" type="text"
+                                                    name="m_w_nama" id="m_w_nama" required>
                                             </div>
                                         </div>
                                         <div class="mb-4">
@@ -87,7 +90,8 @@
                                                     style="width: 100%;" data-placeholder="Pilih Area" required>
                                                     <option></option>
                                                     @foreach ($area as $item)
-                                                        <option value="{{ $item->m_area_id }}">{{ ucwords($item->m_area_nama) }}
+                                                        <option value="{{ $item->m_area_id }}">
+                                                            {{ ucwords($item->m_area_nama) }}
                                                         </option>
                                                     @endforeach
                                                 </select>
@@ -178,21 +182,20 @@
                                         <div class="mb-4">
                                             <div class="form-group">
                                                 <label for="m_w_currency">Currency</label>
-                                                <select class="js-select2" id="m_w_currency"
-                                                    name="m_w_currency" style="width: 100%;"
-                                                    data-placeholder="Pilih Currency" required>
+                                                <select class="js-select2" id="m_w_currency" name="m_w_currency"
+                                                    style="width: 100%;" data-placeholder="Pilih Currency" required>
                                                     <option></option>
-                                                  <option value="Rp">Rp</option>
-                                                  <option value="RM">RM</option>
+                                                    <option value="Rp">Rp</option>
+                                                    <option value="RM">RM</option>
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="mb-4">
                                             <div class="form-group">
                                                 <label for="m_w_decimal">Decimal</label>
-                                                <select class="js-select2" id="m_w_decimal"
-                                                    name="m_w_decimal" style="width: 100%;"
-                                                    data-placeholder="Pilih Tipe Digit Decimal" required>
+                                                <select class="js-select2" id="m_w_decimal" name="m_w_decimal"
+                                                    style="width: 100%;" data-placeholder="Pilih Tipe Digit Decimal"
+                                                    required>
                                                     <option></option>
                                                     <option value="0">0</option>
                                                     <option value="2">2</option>
@@ -202,9 +205,8 @@
                                         <div class="mb-4">
                                             <div class="form-group">
                                                 <label for="m_w_pembulatan">Pembulatan</label>
-                                                <select class="js-select2" id="m_w_pembulatan"
-                                                    name="m_w_pembulatan" style="width: 100%;"
-                                                    data-placeholder="Pilih Pembulatan" required>
+                                                <select class="js-select2" id="m_w_pembulatan" name="m_w_pembulatan"
+                                                    style="width: 100%;" data-placeholder="Pilih Pembulatan" required>
                                                     <option></option>
                                                     <option value="ya">ya</option>
                                                     <option value="tidak">tidak</option>
@@ -286,16 +288,18 @@
                         url : "{{ route('action.m_waroeng') }}",
                         type : "POST",
                         data : $('#form-waroeng form').serialize(),
-                        success : function(data){
-                            $('#form-waroeng').modal('hide');
-                            Codebase.helpers('jq-notify', {
-                              align: 'right', // 'right', 'left', 'center'
-                              from: 'top', // 'top', 'bottom'
-                              type: data.type, // 'info', 'success', 'warning', 'danger'
-                              icon: 'fa fa-info me-5', // Icon class
-                              message: data.messages
-                            }); 
-                            // window.location.reload();
+                        success: function(data) {
+                        $('#form-waroeng').modal('hide');
+                        Codebase.helpers('jq-notify', {
+                            align: 'right',
+                            from: 'top',
+                            type: data.type,
+                            icon: 'fa fa-info me-5',
+                            message: data.messages
+                        }); 
+                            setTimeout(function() {
+                                window.location.reload();
+                            }, 1000);
                         },
                         error : function(){
                             alert("Tidak dapat menyimpan data!");

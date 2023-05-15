@@ -73,6 +73,7 @@ class ResepController extends Controller
                 "m_resep_m_produk_nama" => $produk->m_produk_nama,
                 "m_resep_keterangan" => $request->m_resep_keterangan,
                 "m_resep_status" => $request->m_resep_status,
+                'm_resep_status_sync' => 'send',
                 "m_resep_updated_by" => Auth::id(),
                 "m_resep_updated_at" => Carbon::now(),
             ]);
@@ -128,6 +129,7 @@ class ResepController extends Controller
                     'm_resep_detail_satuan' => $request->m_resep_detail_satuan,
                     'm_resep_detail_standar_porsi' => $request->m_resep_detail_standar_porsi,
                     'm_resep_detail_ket' => $request->m_resep_detail_ket,
+                    'm_resep_detail_status_sync' => 'send',
                     'm_resep_detail_updated_by' => Auth::id(),
                     'm_resep_detail_updated_at' => Carbon::now(),
                 );

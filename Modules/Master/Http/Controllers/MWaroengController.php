@@ -66,7 +66,7 @@ class MWaroengController extends Controller
                     ->first();
                 if ($dbMW == null) {
                     $countMW = DB::table('m_w')->count('m_w_id');
-                    $MWcode = str_pad($countMW+1, 3, '0', STR_PAD_LEFT);
+                    $MWcode = str_pad($countMW + 1, 3, '0', STR_PAD_LEFT);
                     $data = array(
                         'm_w_id' => $this->getMasterId('m_w'),
                         'm_w_nama' => Str::lower($request->m_w_nama),
@@ -99,13 +99,16 @@ class MWaroengController extends Controller
                     'm_w_status' => $request->m_w_status,
                     'm_w_m_sc_id' => $request->m_w_m_sc_id,
                     'm_w_m_modal_tipe_id' => $request->m_w_m_modal_tipe_id,
+                    'm_w_decimal' => $request->m_w_decimal,
+                    'm_w_pembulatan' => $request->m_w_pembulatan,
+                    'm_w_status_sync' => 'send',
                     'm_w_updated_by' => Auth::id(),
                     'm_w_updated_at' => Carbon::now(),
                 );
                 DB::table('m_w')->where('m_w_id', $request->m_w_id)
                     ->update($data);
             }
-            return response(['type' => 'success','messages' => 'Berhasil Update']);
+            return response(['type' => 'success', 'messages' => 'Berhasil Update']);
         }
     }
 }

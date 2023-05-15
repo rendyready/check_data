@@ -46,8 +46,9 @@ class MSatuanController extends Controller
                     DB::table('m_satuan')->insert($data);
                 } elseif ($request->action == 'edit') {
                     $data = array(
-                        'm_satuan_kode'    =>    $request->m_satuan_kode,
-                        'm_satuan_keterangan'    =>    $request->m_satuan_keterangan,
+                        'm_satuan_kode' => $request->m_satuan_kode,
+                        'm_satuan_keterangan' => $request->m_satuan_keterangan,
+                        'm_satuan_status_sync' => 'send',
                         'm_satuan_updated_by' => Auth::id(),
                         'm_satuan_updated_at' => Carbon::now(),
                     );

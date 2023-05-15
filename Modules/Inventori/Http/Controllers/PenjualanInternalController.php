@@ -17,7 +17,7 @@ class PenjualanInternalController extends Controller
      */
     public function index()
     {
-        $data = new \stdClass();
+        $data = new \stdClass ();
         $user = Auth::id();
         $waroeng_id = Auth::user()->waroeng_id;
         $data->waroeng_nama = DB::table('m_w')->select('m_w_nama')->where('m_w_id', $waroeng_id)->first();
@@ -123,6 +123,7 @@ class PenjualanInternalController extends Controller
                 ->update(
                     ['m_stok_keluar' => $stok_asal->m_stok_keluar + convertfloat($request->rekap_beli_detail_qty[$key]),
                         'm_stok_saldo' => $stok_asal->m_stok_saldo - convertfloat($request->rekap_beli_detail_qty[$key]),
+                        'm_stok_status_sync' => 'send',
                     ]);
         }
 
@@ -133,10 +134,10 @@ class PenjualanInternalController extends Controller
         $tgl_now = Carbon::now();
         $waroeng_id = Auth::user()->waroeng_id;
         $rekap_beli = DB::table('rekap_beli')
-            ->join('users','rekap_beli_created_by','users_id')
+            ->join('users', 'rekap_beli_created_by', 'users_id')
             ->where('rekap_beli_tgl', $tgl_now)
             ->where('rekap_beli_supplier_code', sprintf("%03d", $waroeng_id))
-            ->orderBy('rekap_beli_created_at','desc')
+            ->orderBy('rekap_beli_created_at', 'desc')
             ->get();
 
         $data = array();
