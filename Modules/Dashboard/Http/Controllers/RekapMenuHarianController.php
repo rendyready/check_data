@@ -94,18 +94,20 @@ class RekapMenuHarianController extends Controller
     function show(Request $request) {
         $refund = DB::table('rekap_refund')
             ->join('rekap_refund_detail', 'r_r_detail_r_r_id', 'r_r_id')
-            ->join('rekap_modal', 'rekap_modal_id', 'r_r_rekap_modal_id');
-            if (strpos($request->tanggal, 'to') !== false) {
-                [$start, $end] = explode('to', $request->tanggal);
-                $refund->whereBetween('r_r_tanggal', [$start, $end]);
-                } else {
-                $refund->where('r_r_tanggal', $request->tanggal);
-                }
-                $refund->where('r_r_m_area_id', $request->area)
-                        ->where('r_r_m_w_id', $request->waroeng);
-                        if ($request->sesi != 'all') {
-                            $refund->where('rekap_modal_sesi', $request->sesi);
-                        }
+            ->join('rekap_modal', 'rekap_modal_id', 'r_r_rekap_modal_id')
+            ->join('rekap_transaksi', 'r_t_id', 'r_r_r_t_id')
+            ->join('m_transaksi_tipe', 'm_t_t_id', 'r_t_m_t_t_id');
+            // if (strpos($request->tanggal, 'to') !== false) {
+            //     [$start, $end] = explode('to', $request->tanggal);
+            //     $refund->whereBetween('rekap_modal_tanggal', [$start, $end]);
+            //     } else {
+            //     $refund->where('rekap_modal_tanggal', $request->tanggal);
+            //     }
+            //     $refund->where('rekap_modal_m_area_id', $request->area)
+            //             ->where('rekap_modal_m_w_id', $request->waroeng);
+            //             if ($request->sesi != 'all') {
+            //                 $refund->where('rekap_modal_sesi', $request->sesi);
+            //             }
                 $refund = $refund->get();
 
             $get = DB::table('rekap_transaksi_detail')
@@ -117,12 +119,12 @@ class RekapMenuHarianController extends Controller
                     ->join('rekap_modal', 'rekap_modal_id', 'r_t_rekap_modal_id');
                     if (strpos($request->tanggal, 'to') !== false) {
                     [$start, $end] = explode('to', $request->tanggal);
-                    $get->whereBetween('r_t_tanggal', [$start, $end]);
+                    $get->whereBetween(DB::raw('DATE(rekap_modal_tanggal)'), [$start, $end]);
                     } else {
-                    $get->where('r_t_tanggal', $request->tanggal);
+                    $get->where(DB::raw('DATE(rekap_modal_tanggal)'), $request->tanggal);
                     }
-                    $get->where('r_t_m_area_id', $request->area)
-                        ->where('r_t_m_w_id', $request->waroeng)
+                    $get->where('rekap_modal_m_area_id', $request->area)
+                        ->where('rekap_modal_m_w_id', $request->waroeng)
                         ->where('rekap_modal_sesi', $request->sesi);
                             if ($request->trans != 'all') {
                                 $get->where('m_t_t_name', $request->trans);
@@ -133,7 +135,7 @@ class RekapMenuHarianController extends Controller
                     ->orderby('m_jenis_produk_id', 'ASC')
                     ->orderby('r_t_detail_m_produk_nama', 'ASC')
                     ->get();
-                
+
             $data = array();
             foreach ($get as $key => $val_menu) {
                 $row = array();
@@ -143,14 +145,9 @@ class RekapMenuHarianController extends Controller
                 $qty = $val_menu->qty;
                 $nominal = number_format($val_menu->r_t_detail_reguler_price * $val_menu->qty);
                 foreach ($refund as $key => $valRef) {
-                    if ($val_menu->r_t_detail_m_produk_id == $valRef->r_r_detail_m_produk_id && $val_menu->r_t_tanggal == $valRef->r_r_tanggal && $val_menu->rekap_modal_sesi == $valRef->rekap_modal_sesi) {
+                    if ($val_menu->r_t_detail_m_produk_id == $valRef->r_r_detail_m_produk_id && $val_menu->r_t_tanggal == $valRef->r_r_tanggal && $val_menu->rekap_modal_sesi == $valRef->rekap_modal_sesi && $val_menu->m_t_t_name == $valRef->m_t_t_name) {
                         $qty = $val_menu->qty - $valRef->r_r_detail_qty;
-                        if ($qty <= 0) {
-                            $qty = 0;
-                            $nominal = 0;
-                        } else {
-                            $nominal = number_format($val_menu->r_t_detail_reguler_price * $qty);
-                        }
+                        $nominal = number_format($val_menu->r_t_detail_reguler_price * $qty);
                     }
                 }
                 $row[] = $qty;

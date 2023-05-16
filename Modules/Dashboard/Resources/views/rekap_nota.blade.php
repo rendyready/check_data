@@ -103,6 +103,7 @@
                   <th>Tanggal</th>
                   <th>Operator</th>
                   <th>No. Nota</th>
+                  <th>Big</th>
                   <th>Tax</th>
                   <th>Total</th>
                   <th>SC</th>

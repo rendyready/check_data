@@ -97,15 +97,23 @@
                         </div>
                     </form>      
                 
+            <div class="table-responsive">
             <table id="tampil_rekap" class="table table-sm table-bordered table-striped table-vcenter nowrap table-hover js-dataTable-full" style="width:100%">
               <thead>
                 <tr>
-                  <th>Tanggal</th>
-                  <th>Kasir</th>
-                  <th>Inten. Buka Laci</th>
-                  <th>Inten. Hapus Menu</th>
-                  <th>Inten. Hapus Nota</th>
-                  <th></th>
+                  <th class="text-center">Area</th>
+                  <th class="text-center">Waroeng</th>
+                  <th class="text-center">Operator</th>
+                  <th class="text-center">Tanggal</th>
+                  <th class="text-center">Jam</th>
+                  <th class="text-center">No Nota</th>
+                  <th class="text-center">Big Boss</th>
+                  <th class="text-center">Menu</th>
+                  <th class="text-center">Qty</th>
+                  <th class="text-center">Harga</th>
+                  <th class="text-center">Pajak</th>
+                  <th class="text-center">Service Charge</th>
+                  <th class="text-center">Total</th>
                 </tr>
               </thead>
               <tbody id="show_data">
@@ -117,77 +125,6 @@
     </div>
     </div>
 </div>
-
-<!-- Select2 in a modal -->
-<div class="modal" id="detail_nota" tabindex="-1" role="dialog" aria-labelledby="form-rekening" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-          <div class="block-content">
-            <!-- Select2 is initialized at the bottom of the page -->
-              <div class="mb-4">
-                    <div class="block block-rounded mb-1">
-                      <div class="block-header block-header-default block-header-rtl bg-pulse">
-                        <h3 class="block-title text-light"><small class="fw-semibold" id="no_nota"></small><br><small id="ket_trans"></small></h3>
-                        <div class="alert alert-warning py-2 mb-0">
-                          <h3 class="block-title text-black"><i class="fa fa-calendar opacity-50 ms-1"></i> <small id="tgl_nota"></small>
-                            <br><small class="fw-semibold" id="nama_kons"></small></h3>
-                        </div>
-                      </div>
-                      <div class="block-content mb-4" style="background-color: rgba(224, 224, 224, 0.5)">
-                        <table class="table table-border" style="font-size: 13px;">
-                          @foreach ($data->transaksi_rekap as $rekap)
-                            @php
-                              $rekapId = str_replace('.', '', $rekap->r_r_id);
-                            @endphp
-                            <thead class="sub_nota" id="sub_nota{{ $rekapId }}">
-                            </thead> 
-                          @endforeach
-                            <tbody>
-                            <tr style="background-color: white;" class="text-end fw-semibold">
-                              <td>Total</td>
-                              <td id="total">
-                              </td>
-                            </tr>
-                            <tr style="background-color: white;" class="text-end fw-semibold">
-                              <td>Tax (10%)</td>
-                              <td id="pajak">
-                              </td>
-                            </tr>
-
-                            <tr style="background-color: white;" class="text-end fw-semibold">
-                              <td>Service Charge</td>
-                              <td id="sc">
-                              </td>
-                            </tr>
-                            <tr style="background-color: white;" class="text-end fw-semibold">
-                              <td>Pembulatan</td>
-                              <td id="pembulatan">
-                              </td>
-                            </tr>
-                            <tr style="background-color: white;" class="text-end fw-semibold">
-                              <td>Free Kembalian</td>
-                              <td id="free">
-                              </td>
-                            </tr>
-                            
-                            <tr style="background-color: white;" class="text-end fw-semibold">
-                              <td>Total Bayar (<small id="pembayaran"></small>)</td>
-                              <td id="bayar">
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                        <div class="mb-3 text-end">
-                        <button type="button" class="btn btn-sm btn-alt-secondary me-1" data-bs-dismiss="modal">Close</button>
-                        </div>
-                      </div>
-                    </div>
-                </div>
-              </div>
-        </div>
-      </div>
-    </div>
-  <!-- END Select2 in a modal -->
 
 @endsection
 @section('js')
@@ -207,6 +144,7 @@ $(document).ready(function() {
 
     //eksekusi filter
     $('#cari').on('click', function() {
+        var area  = $('.filter_area').val();
         var waroeng  = $('.filter_waroeng').val();
         var tanggal  = $('.filter_tanggal').val();
         var operator = $('.filter_operator').val();
@@ -217,11 +155,18 @@ $(document).ready(function() {
         processing: true,
         scrollX: true,
         // scrollY: '300px',
+        columnDefs: [ 
+                        {
+                            targets: '_all',
+                            className: 'dt-body-center'
+                        },
+                    ],
         lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
         pageLength: 10,
         ajax: {
-            url: '{{route("rekap_aktiv.show")}}',
+            url: '{{route("rekap_aktiv_menu.tampil_hps_menu")}}',
             data : {
+                area: area,
                 waroeng: waroeng,
                 tanggal: tanggal,
                 operator: operator,
@@ -242,7 +187,7 @@ $(document).ready(function() {
         if(id_area && tanggal){
             $.ajax({
             type:"GET",
-            url: '{{route("rekap_aktiv.select_waroeng")}}',
+            url: '{{route("rekap_aktiv_laci.select_waroeng")}}',
             dataType: 'JSON',
             destroy: true,    
             data : {
@@ -278,7 +223,7 @@ $(document).ready(function() {
         if(id_waroeng && tanggal){
             $.ajax({
             type:"GET",
-            url: '{{route("rekap_aktiv.select_user")}}',
+            url: '{{route("rekap_aktiv_menu.select_user_menu")}}',
             dataType: 'JSON',
             data : {
               id_waroeng: id_waroeng,
@@ -307,16 +252,17 @@ $(document).ready(function() {
   } else {
 
     $('.filter_tanggal').on('change', function(){
-        var tanggal  = $(this).val(); 
+      var tanggal  = $('.filter_tanggal').val();
         if(tanggal){
             $.ajax({
             type:"GET",
-            url: '{{route("rekap_aktiv.select_user")}}',
+            url: '{{route("rekap_aktiv_menu.select_user_menu")}}',
             dataType: 'JSON',
             data : {
               tanggal: tanggal,
             },
-            success:function(res){               
+            success:function(res){         
+              console.log(res);      
                 if(res){
                     $(".filter_operator").empty();
                     $(".filter_operator").append('<option></option>');
@@ -336,51 +282,10 @@ $(document).ready(function() {
   }
 
     //filter tanggal
-    $('#filter_tanggal').flatpickr({
+    $('.filter_tanggal').flatpickr({
             mode: "range",
             dateFormat: 'Y-m-d',
-          
     });
-
-    //detail rekap lostbill
-    $("#tampil_rekap").on('click','#button_detail', function() {
-                var id = $(this).attr('value');
-                // console.log(id);
-                $.ajax({
-                    url: "/dashboard/rekap_lostbill/detail/"+id,
-                    type: "GET",
-                    dataType: 'json',
-                    destroy: true,
-                    success: function(data) {
-                      // console.log(data.detail_nota.r_t_detail_id);
-                        $('#no_nota').html(data.transaksi_rekap.r_l_b_nota_code);
-                        $('#tgl_nota').html(data.transaksi_rekap.r_l_b_tanggal);
-                        $('#jam').html(data.transaksi_rekap.r_l_b_jam);
-                        $('#nama_kons').html(data.transaksi_rekap.r_l_b_bigboss);
-                        $('#total').html(formatNumber(Number(data.transaksi_rekap.r_l_b_nominal)));
-                        $('#pajak').html(formatNumber(Number(data.transaksi_rekap.r_l_b_nominal_pajak)));
-                        $('#bayar').html(formatNumber(Number()));
-                        $('#sc').html(formatNumber(Number(data.transaksi_rekap.r_l_b_nominal_sc)));
-                             
-                    $('.sub_sub_nota').remove();
-                    $.each(data.detail_nota, function (key, item) {
-                      var rekap_id = item.r_l_b_detail_r_l_b_id.toString().replace(/\./g,'');
-                        console.log(item.r_l_b_detail_m_produk_nama);
-                        $('#sub_nota'+rekap_id).append(
-                                '<tr class="sub_sub_nota" style="background-color: white;">'+
-                                  '<td>'+
-                                    '<small class="fw-semibold" style="font-size: 15px;" id="produk">'+ item.r_l_b_detail_m_produk_nama +'</small> <br>'+
-                                    '<small id="qty">'+ item.r_l_b_detail_qty +'</small> x <small id="price">'+ formatNumber(Number(item.r_l_b_detail_price)) +'</small>'+
-                                  '</td>'+
-                                  '<td class="text-end fw-semibold" id+="sub_total">'+ formatNumber(Number(item.r_l_b_detail_nominal)) + ''+
-                                  '</td>'+
-                                '</tr>'
-                          );
-                      });
-                    },
-                });
-                $("#detail_nota").modal('show');
-            }); 
 
 });
 </script>

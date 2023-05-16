@@ -56,7 +56,7 @@ class RekapAktivitasKasirController extends Controller
         return response()->json($data);
     }
 
-    public function select_user(Request $request)
+    public function select_user_laci(Request $request)
     {
         $user = DB::table('users')
             ->join('rekap_buka_laci', 'r_b_l_created_by', 'users_id')
@@ -68,21 +68,21 @@ class RekapAktivitasKasirController extends Controller
             }
             if (strpos($request->tanggal, 'to') !== false) {
                 [$start, $end] = explode('to' ,$request->tanggal);
-                    $user->orWhereBetween('r_b_l_tanggal', [$start, $end]);
+                $user->whereBetween('r_b_l_tanggal', [$start, $end]);
             } else {
-                    $user->orWhere('r_b_l_tanggal', $request->tanggal);
+                $user->where('r_b_l_tanggal', $request->tanggal);
             }
-            $user = $user->orderBy('users_id', 'asc')
-            ->get();
+            $user1 = $user->orderBy('users_id', 'asc')->get();
+
         $data = array();
-        foreach ($user as $val) {
+        foreach ($user1 as $val) {
             $data[$val->users_id] = [$val->name];
             $data['all'] = 'All Operator';
         }
         return response()->json($data);
     }
 
-    public function show(Request $request)
+    public function tampil_laci(Request $request)
     {
         $buka_laci = DB::table('rekap_buka_laci')
             ->join('users', 'users_id', 'r_b_l_created_by')
@@ -92,6 +92,12 @@ class RekapAktivitasKasirController extends Controller
                 $buka_laci->whereBetween('r_b_l_tanggal', [$start, $end]);
             } else {
                 $buka_laci->where('r_b_l_tanggal', $request->tanggal);
+            }
+            if($request->area != 'all'){
+                $buka_laci->where('r_b_l_m_area_id', $request->area);
+                if($request->waroeng != 'all'){
+                    $buka_laci->where('r_b_l_m_w_id', $request->waroeng);
+                }
             }
             if($request->operator != 'all'){
                 $buka_laci->where('r_b_l_created_by', $request->operator);
@@ -115,6 +121,36 @@ class RekapAktivitasKasirController extends Controller
         return response()->json($output);
     }
 
+    public function detail_laci($id)
+    {
+        $data = DB::table('rekap_buka_laci')
+            ->join('users', 'users_id', 'r_b_l_created_by')
+            ->where('r_b_l_rekap_modal_id', $id)
+            ->first();
+
+        return response()->json($data);
+    }
+
+    public function detail_show_laci(Request $request, $id)
+    {
+        $buka_laci = DB::table('rekap_buka_laci')
+            ->where('r_b_l_rekap_modal_id', $id)
+            ->where('r_b_l_m_w_id', $request->waroeng)
+            ->orderby('r_b_l_created_at', 'ASC')
+            ->get();
+
+            foreach ($buka_laci as $laci) {
+                $data[] = array(
+                    'waktu' => date('H:i', strtotime($laci->r_b_l_created_at)),
+                    'intensitas' => $laci->r_b_l_qty,
+                    'keterangan' => $laci->r_b_l_keterangan,
+                );
+            }
+
+            $output = array('data' => $data);
+            return response()->json($output);    
+    }
+
     public function rekap_hps_menu()
     {
         $waroeng_id = Auth::user()->waroeng_id;
@@ -134,6 +170,78 @@ class RekapAktivitasKasirController extends Controller
             ->get();
         return view('dashboard::rekap_aktiv_menu', compact('data'));
     }
+
+    public function select_user_menu(Request $request)
+    {
+        $user = DB::table('users')
+            ->join('rekap_hapus_menu', 'r_h_m_created_by', 'users_id')
+            ->select('users_id', 'name');
+            if(in_array(Auth::user()->waroeng_id, $this->get_akses_area())){
+                $user->where('waroeng_id', $request->id_waroeng);
+            } else {
+                $user->where('waroeng_id', Auth::user()->waroeng_id);
+            }
+            if (strpos($request->tanggal, 'to') !== false) {
+                [$start, $end] = explode('to' ,$request->tanggal);
+                $user->whereBetween('r_h_m_tanggal', [$start, $end]);
+            } else {
+                $user->where('r_h_m_tanggal', $request->tanggal);
+            }
+            $user1 = $user->orderBy('users_id', 'asc')->get();
+
+        $data = array();
+        foreach ($user1 as $val) {
+            $data[$val->users_id] = [$val->name];
+            $data['all'] = 'All Operator';
+        }
+        return response()->json($data);
+    }
+
+    public function tampil_hps_menu(Request $request)
+    {
+        $hps_menu = DB::table('rekap_hapus_menu')
+            ->join('users', 'users_id', 'r_h_m_created_by');
+            if (strpos($request->tanggal, 'to') !== false) {
+                [$start, $end] = explode('to', $request->tanggal);
+                $hps_menu->whereBetween('r_h_m_tanggal', [$start, $end]);
+            } else {
+                $hps_menu->where('r_h_m_tanggal', $request->tanggal);
+            }
+            if($request->area != 'all'){
+                $hps_menu->where('r_h_m_m_area_id', $request->area);
+                if($request->waroeng != 'all'){
+                    $hps_menu->where('r_h_m_m_w_id', $request->waroeng);
+                }
+            }
+            if($request->operator != 'all'){
+                $hps_menu->where('r_h_m_created_by', $request->operator);
+            }
+            $hps_menu = $hps_menu->orderby('r_h_m_tanggal', 'ASC')
+            ->get();
+        
+        $data = array();
+        foreach ($hps_menu as $menu){
+            $row = array();
+            $row[] = $menu->r_h_m_m_area_nama;
+            $row[] = $menu->r_h_m_m_w_nama;
+            $row[] = $menu->name;
+            $row[] = date('d-m-Y', strtotime($menu->r_h_m_tanggal));
+            $row[] = date('H:i', strtotime($menu->r_h_m_jam));
+            $row[] = $menu->r_h_m_nota_code;
+            $row[] = $menu->r_h_m_bigboss;
+            $row[] = $menu->r_h_m_m_produk_nama;
+            $row[] = $menu->r_h_m_qty;
+            $row[] = number_format($menu->r_h_m_price);
+            $row[] = number_format($menu->r_h_m_nominal_pajak);
+            $row[] = number_format($menu->r_h_m_nominal_sc);
+            $row[] = number_format(($menu->r_h_m_qty * $menu->r_h_m_price) + $menu->r_h_m_nominal_pajak + $menu->r_h_m_nominal_sc);
+            $data[] = $row;
+        }
+
+        $output = array("data" => $data);
+        return response()->json($output);
+    }
+
     public function rekap_hps_nota()
     {
         $waroeng_id = Auth::user()->waroeng_id;
@@ -152,5 +260,75 @@ class RekapAktivitasKasirController extends Controller
             ->orderby('m_area_id', 'ASC')
             ->get();
         return view('dashboard::rekap_aktiv_nota', compact('data'));
+    }
+
+    public function select_user_nota(Request $request)
+    {
+        $user = DB::table('users')
+            ->join('rekap_hapus_transaksi', 'r_h_t_created_by', 'users_id')
+            ->select('users_id', 'name');
+            if(in_array(Auth::user()->waroeng_id, $this->get_akses_area())){
+                $user->where('waroeng_id', $request->id_waroeng);
+            } else {
+                $user->where('waroeng_id', Auth::user()->waroeng_id);
+            }
+            if (strpos($request->tanggal, 'to') !== false) {
+                [$start, $end] = explode('to' ,$request->tanggal);
+                $user->whereBetween('r_h_t_tanggal', [$start, $end]);
+            } else {
+                $user->where('r_h_t_tanggal', $request->tanggal);
+            }
+            $user1 = $user->orderBy('users_id', 'asc')->get();
+
+        $data = array();
+        foreach ($user1 as $val) {
+            $data[$val->users_id] = [$val->name];
+            $data['all'] = 'All Operator';
+        }
+        return response()->json($data);
+    }
+
+    public function tampil_hps_nota(Request $request)
+    {
+        $hps_nota = DB::table('rekap_hapus_transaksi')
+            ->join('users', 'users_id', 'r_h_t_created_by');
+            if (strpos($request->tanggal, 'to') !== false) {
+                [$start, $end] = explode('to', $request->tanggal);
+                $hps_nota->whereBetween('r_h_t_tanggal', [$start, $end]);
+            } else {
+                $hps_nota->where('r_h_t_tanggal', $request->tanggal);
+            }
+            if($request->area != 'all'){
+                $hps_nota->where('r_h_t_m_area_id', $request->area);
+                if($request->waroeng != 'all'){
+                    $hps_nota->where('r_h_t_m_w_id', $request->waroeng);
+                }
+            }
+            if($request->operator != 'all'){
+                $hps_nota->where('r_h_t_created_by', $request->operator);
+            }
+            $hps_nota = $hps_nota->orderby('r_h_t_tanggal', 'ASC')
+            ->get();
+        
+        $data = array();
+        foreach ($hps_nota as $nota){
+            $row = array();
+            $row[] = $nota->r_h_t_m_area_nama;
+            $row[] = $nota->r_h_t_m_w_nama;
+            $row[] = $nota->name;
+            $row[] = date('d-m-Y', strtotime($nota->r_h_t_tanggal));
+            $row[] = date('H:i', strtotime($nota->r_h_t_jam));
+            $row[] = $nota->r_h_t_nota_code;
+            $row[] = $nota->r_h_t_bigboss;
+            $row[] = $nota->r_h_t_approved_by;
+            $row[] = number_format($nota->r_h_t_nominal);
+            $row[] = number_format($nota->r_h_t_nominal_pajak);
+            $row[] = number_format($nota->r_h_m_nominal_sc);
+            $row[] = number_format($nota->r_h_t_nominal + $nota->r_h_t_nominal_pajak + $nota->r_h_m_nominal_sc);
+            $data[] = $row;
+        }
+
+        $output = array("data" => $data);
+        return response()->json($output);
     }
 }

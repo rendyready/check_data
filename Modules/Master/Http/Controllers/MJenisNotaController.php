@@ -81,10 +81,18 @@ class MJenisNotaController extends Controller
                 'm_jenis_nota_created_by' => Auth::user()->id,
             ]);
             $last_nota_id = MJenisNotum::latest('m_jenis_nota_created_at')->first()->m_jenis_nota_id;
-            $asal_nota_id = MJenisNotum::where('m_jenis_nota_m_w_id', $request->m_jenis_nota_waroeng_sumber_id)
+
+        }else{
+            $last_nota_id = $cek_duplicate->m_jenis_nota_id;
+        }
+        $asal_nota_id = MJenisNotum::where('m_jenis_nota_m_w_id', $request->m_jenis_nota_waroeng_sumber_id)
                 ->where('m_jenis_nota_m_t_t_id', $request->m_jenis_nota_trans_id_asal)->first()->m_jenis_nota_id;
-            $harga = MMenuHarga::where('m_menu_harga_m_jenis_nota_id', $asal_nota_id)->get();
-            foreach ($harga as $key) {
+        $harga = MMenuHarga::where('m_menu_harga_m_jenis_nota_id', $asal_nota_id)->get();
+        foreach ($harga as $key) {
+            $cek = MMenuHarga::where('m_menu_harga_m_jenis_nota_id',$last_nota_id)
+                    ->where('m_menu_harga_m_produk_id',$key->m_menu_harga_m_produk_id)
+                    ->first();
+            if (empty($cek)) {
                 $data_harga = array(
                     'm_menu_harga_id' => $this->getMasterId('m_menu_harga'),
                     'm_menu_harga_nominal' => $key->m_menu_harga_nominal,
@@ -96,9 +104,21 @@ class MJenisNotaController extends Controller
                     'm_menu_harga_created_by' => Auth::user()->id,
                 );
                 MMenuHarga::insert($data_harga);
+            }else{
+                $data_harga = array(
+                    'm_menu_harga_nominal' => $key->m_menu_harga_nominal,
+                    'm_menu_harga_m_jenis_nota_id' => $last_nota_id,
+                    'm_menu_harga_m_produk_id' => $key->m_menu_harga_m_produk_id,
+                    'm_menu_harga_status' => $key->m_menu_harga_status,
+                    'm_menu_harga_tax_status' => $key->m_menu_harga_tax_status,
+                    'm_menu_harga_sc_status' => $key->m_menu_harga_sc_status,
+                    'm_menu_harga_created_by' => Auth::user()->id,
+                );
+                MMenuHarga::where('m_menu_harga_id',$cek->m_menu_harga_id)->update($data_harga);
             }
-            return Redirect::route('m_jenis_nota.index');
         }
+        return Redirect::route('m_jenis_nota.index');
+
     }
     public function update_harga(Request $request)
     {
