@@ -833,8 +833,6 @@ class CronjobController extends Controller
 
     public function getdata()
     {
-        return DB::table('log_cronjob')->where('log_cronjob_datetime','<=',Carbon::now())
-        ->delete();
         #Cek cronjob status
         $cronStatus = DB::table('cronjob')
                     ->where('cronjob_name','getdata:cron')
@@ -978,8 +976,9 @@ class CronjobController extends Controller
                 $DbDest->statement("TRUNCATE TABLE {$valTab->config_get_data_table_name} RESTART IDENTITY;");
             }
 
-            $except = array('app_setting','role_has_permissions','model_has_permissions','model_has_roles');
-            if (!in_array($valTab->config_get_data_table_name,$except)) {
+            // $except = array('app_setting','role_has_permissions','model_has_permissions','model_has_roles');
+            // if (!in_array($valTab->config_get_data_table_name,$except)) {
+                if ($valTab->config_get_data_sequence == 'on') {
                 #Get Last Increment Used
                 $maxId = $DbDest->select("SELECT MAX(id) FROM {$valTab->config_get_data_table_name};")[0]->max;
 
@@ -997,45 +996,49 @@ class CronjobController extends Controller
             }
 
             #PUSH data to Destination
-            foreach ($getDataSource->get() as $keyDataSource => $valDataSource) {
-                $newDestStatus = "ok";
-                $data = [];
-                foreach ($sourceSchema as $keySchema => $valSchema) {
-                    if ($valSchema != 'id') {
-                        if ($valSchema == $valTab->config_get_data_field_status) {
-                            $data[$valSchema] = $newDestStatus;
-                        } else {
-                            $data[$valSchema] = $valDataSource->$valSchema;
+            if ($getDataSource->count() > 0) {
+                foreach ($getDataSource->get() as $keyDataSource => $valDataSource) {
+                    $newDestStatus = "ok";
+                    $data = [];
+                    foreach ($sourceSchema as $keySchema => $valSchema) {
+                        if ($valSchema != 'id') {
+                            if ($valSchema == $valTab->config_get_data_field_status) {
+                                $data[$valSchema] = $newDestStatus;
+                            } else {
+                                $data[$valSchema] = $valDataSource->$valSchema;
+                            }
                         }
                     }
+                    try {
+                        $validateField = $valTab->config_get_data_field_validate1;
+                        $DbDest->table($valTab->config_get_data_table_name)
+                            ->updateOrInsert(
+                                [
+                                    $valTab->config_get_data_field_validate1 => $valDataSource->$validateField
+                                ],
+                                $data
+                            );
+                    } catch (\Throwable $th) {
+                        Log::alert("Can't insert/update to {$valTab->config_get_data_table_name}");
+                        Log::info($th);
+                    }
                 }
-
-                try {
-                    $validateField = $valTab->config_get_data_field_validate1;
-                    $DbDest->table($valTab->config_get_data_table_name)
-                        ->updateOrInsert(
-                            [
-                                $valTab->config_get_data_field_validate1 => $valDataSource->$validateField
-                            ],
-                            $data
-                        );
-                } catch (\Throwable $th) {
-                    Log::alert("Can't insert/update to {$valTab->config_get_data_table_name}");
-                    Log::info($th);
-                }
+                #Local Log
+                DB::table('log_cronjob')
+                ->insert([
+                    'log_cronjob_name' => 'getdata:cron',
+                    'log_cronjob_from_server_id' => $getSourceConn->db_con_m_w_id,
+                    'log_cronjob_from_server_name' => $getSourceConn->db_con_location_name,
+                    'log_cronjob_to_server_id' => $dest->db_con_m_w_id,
+                    'log_cronjob_to_server_name' => $dest->db_con_location_name,
+                    'log_cronjob_datetime' => Carbon::now(),
+                    'log_cronjob_note' => $valTab->config_get_data_table_name.'-Updated!',
+                ]);
+            }else{
+                echo $valTab->config_get_data_table_name;
             }
         }
-        #Local Log
-        DB::table('log_cronjob')
-        ->insert([
-            'log_cronjob_name' => 'getdata:cron',
-            'log_cronjob_from_server_id' => $getSourceConn->db_con_m_w_id,
-            'log_cronjob_from_server_name' => $getSourceConn->db_con_location_name,
-            'log_cronjob_to_server_id' => $dest->db_con_m_w_id,
-            'log_cronjob_to_server_name' => $dest->db_con_location_name,
-            'log_cronjob_datetime' => Carbon::now(),
-            'log_cronjob_note' => 'Sukses!',
-        ]);
+
         Log::info("Cronjob GET Data FINISH at ". Carbon::now()->format('Y-m-d H:i:s'));
 
         return "ok";

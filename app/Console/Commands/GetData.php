@@ -196,7 +196,7 @@ class GetData extends Command
             }
 
             #PUSH data to Destination
-            if (!empty($getDataSource->get())) {
+            if ($getDataSource->count() > 0) {
                 foreach ($getDataSource->get() as $keyDataSource => $valDataSource) {
                     $newDestStatus = "ok";
                     $data = [];
@@ -232,7 +232,7 @@ class GetData extends Command
                     'log_cronjob_to_server_id' => $dest->db_con_m_w_id,
                     'log_cronjob_to_server_name' => $dest->db_con_location_name,
                     'log_cronjob_datetime' => Carbon::now(),
-                    'log_cronjob_note' => $valTab->config_get_data_table_name.'-Updated!',
+                    'log_cronjob_note' => $valTab->config_get_data_table_name.'-UPDATED!',
                 ]);
             }
         }
