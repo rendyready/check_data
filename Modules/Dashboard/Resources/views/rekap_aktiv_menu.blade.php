@@ -287,66 +287,6 @@ $(document).ready(function() {
             dateFormat: 'Y-m-d',
     });
 
-    // //detail rekap laci
-    // $("#tampil_rekap").on('click','#button_detail', function() {
-    //     var id = $(this).attr('value');
-    //     var waroeng  = $('.filter_waroeng').val();
-    //     var tanggal  = $('.filter_tanggal').val();
-    //     var operator = $('.filter_operator').val();
-    //     $('#tampil_modal form')[0].reset();
-    //     $("#myModalLabel").html('Rekap Buka Laci');
-    //     $.ajax({
-    //         url: "/dashboard/rekap_aktiv_laci/detail_laci/"+id,
-    //         type: "GET",
-    //         dataType: 'json',
-    //         destroy: true,
-    //         success: function(data) {
-    //           console.log(data.rekap_modal_m_w_nama);
-    //           var date = new Date(data.r_b_l_tanggal);
-    //           var formattedDate = ("0" + date.getDate()).slice(-2) + "/" + ("0" + (date.getMonth() + 1)).slice(-2) + "/" + date.getFullYear();
-
-    //           $('#tanggal_pop').val(formattedDate);
-    //           $('#waroeng_pop').val(data.r_b_l_m_w_nama);
-    //           $('#operator_pop').val(data.name);
-
-    //           $('#detail_modal').DataTable({
-    //             destroy: true,
-    //             processing: true,
-    //             scrollX: true,
-    //             //   scrollY: "300px",
-    //             autoWidth: false,
-    //             paging: false,
-    //             dom: 'Bfrtip',
-    //             buttons: [],
-    //             searching: false,
-    //             ajax: {
-    //                 url: "/dashboard/rekap_aktiv_laci/detail_show_laci/"+id,
-    //                 data : {
-    //                   waroeng: waroeng,
-    //                   tanggal: tanggal,
-    //                   operator: operator,
-    //                 },
-    //             type : "GET",
-    //             },
-    //             columns: [
-    //                       { data: 'waktu', class: 'text-center'},
-    //                       { data: 'intensitas', class: 'text-center'},
-    //                       { data: 'keterangan', class: 'text-center' },
-    //                     ],
-    //         });
-    //       },
-    //     });
-    //   $("#tampil_modal").modal('show');
-    // }); 
-
-            // $("#tampil_rekap").on('click','#button_pdf', function() {
-            //     var id = $(this).attr('value');
-            //     var waroeng = $('.filter_waroeng').val();
-            //     var tanggal = $('.filter_tanggal').val();
-            //     var url = 'kas_kasir/export_pdf?id='+id+'&waroeng='+waroeng+'&tanggal='+tanggal;
-            //     window.open(url,'_blank');
-            // });
-
 });
 </script>
 @endsection

@@ -39,6 +39,7 @@
                                             @foreach ($data->area as $area)
                                                 <option value="{{ $area->m_area_id }}"> {{ $area->m_area_nama }} </option>
                                             @endforeach
+                                            <option value="all">All Area</option>
                                             </select>
                                         @else
                                             <select id="filter_area" data-placeholder="Pilih Area" style="width: 100%;"
@@ -101,36 +102,41 @@
                         <th colspan="3" class="text-center">Take Away</th>
                         <th colspan="3" class="text-center">Grab</th>
                         <th colspan="3" class="text-center">Gojek</th>
-                        <th colspan="3" class="text-center">Shopee</th>
                         <th colspan="3" class="text-center">Grab Mart</th>
-                        <th colspan="6" class="text-center">Rincian</th>
+                        <th colspan="3" class="text-center">Shopee</th>
+                        <th colspan="3" class="text-center">Maxim</th>
+                        <th colspan="5" class="text-center">Rincian</th>
+                        <th rowspan="2" class="text-center">Pajak (Dine In & Take Away)</th>
                     </tr>
                     <tr>
-                        <th rowspan="1" class="text-center">Nota</th>
                         <th rowspan="1" class="text-center">Menu</th>
                         <th rowspan="1" class="text-center">Non Menu</th>
-
                         <th rowspan="1" class="text-center">Nota</th>
+
                         <th rowspan="1" class="text-center">Menu</th>
                         <th rowspan="1" class="text-center">Non Menu</th>
-
                         <th rowspan="1" class="text-center">Nota</th>
+
                         <th rowspan="1" class="text-center">Menu</th>
                         <th rowspan="1" class="text-center">Non Menu</th>
-
                         <th rowspan="1" class="text-center">Nota</th>
+
                         <th rowspan="1" class="text-center">Menu</th>
                         <th rowspan="1" class="text-center">Non Menu</th>
-
                         <th rowspan="1" class="text-center">Nota</th>
-                        <th rowspan="1" class="text-center">Menu</th>
-                        <th rowspan="1" class="text-center">Non Menu</th>
 
-                        <th rowspan="1" class="text-center">Nota</th>
                         <th rowspan="1" class="text-center">WBD SS</th>
                         <th rowspan="1" class="text-center">WBD Frozen</th>
-
                         <th rowspan="1" class="text-center">Nota</th>
+
+                        <th rowspan="1" class="text-center">Menu</th>
+                        <th rowspan="1" class="text-center">Non Menu</th>
+                        <th rowspan="1" class="text-center">Nota</th>
+
+                        <th rowspan="1" class="text-center">Menu</th>
+                        <th rowspan="1" class="text-center">Non Menu</th>
+                        <th rowspan="1" class="text-center">Nota</th>
+
                         <th rowspan="1" class="text-center">Es Cream</th>
                         <th rowspan="1" class="text-center">Air Mineral</th>
                         <th rowspan="1" class="text-center">Kerupuk</th>
@@ -164,7 +170,7 @@ $(document).ready(function() {
         $('.filter_waroeng').on('change', function() {
         var waroeng  = $('.filter_waroeng').val();
         var tanggal  = $('.filter_tanggal').val(); 
-        if(waroeng && tanggal){
+        if(waroeng != 'all' && tanggal){
             $("#button_non_menu").show();  
         }
     });
@@ -172,7 +178,7 @@ $(document).ready(function() {
         $('.filter_tanggal').on('change', function() {
         var waroeng  = $('.filter_waroeng').val();
         var tanggal  = $('.filter_tanggal').val(); 
-        if(waroeng && tanggal){
+        if(waroeng != 'all' && tanggal){
             $("#button_non_menu").show();  
         }
     });
@@ -181,7 +187,7 @@ $(document).ready(function() {
     $('#non_menu').on('click', function() {
         var waroeng  = $('.filter_waroeng').val();
         var tanggal  = $('.filter_tanggal').val(); 
-        var url = 'rekap_kategori/rekap_non_menu?waroeng='+waroeng+'&tanggal='+tanggal;
+        var url = 'non_menu/rekap_non_menu?waroeng='+waroeng+'&tanggal='+tanggal;
         window.open(url,'lap_non_menu.blade.php');
     });
 
@@ -267,6 +273,9 @@ if(HakAksesPusat){
             alert('Harap lengkapi kolom tanggal');
             $(".filter_waroeng").val(prev).trigger('change');
         }  
+        if (id_waroeng == 'all'){
+            $("#button_non_menu").hide();
+        }
     });
   }
 

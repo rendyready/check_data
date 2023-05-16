@@ -479,6 +479,12 @@
                                             <span class="nav-main-link-name">Rekap Penjualan Kategori Menu</span>
                                         </a>
                                     </li>
+                                    <li class="nav-main-item">
+                                        <a class="nav-main-link{{ request()->is('dashboard/non_menu') ? ' active' : '' }}"
+                                            href="{{ route('non_menu.index') }}">
+                                            <span class="nav-main-link-name">Rekap Penjualan Non Menu</span>
+                                        </a>
+                                    </li>
 
                                     <li
                                         class="nav-main-item{{ request()->is('dashboard/rekap_aktiv') ? ' open' : '' }}">
