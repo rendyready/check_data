@@ -324,13 +324,13 @@ class RekapNonMenuController extends Controller
                }           
                
             if(in_array($valType->m_t_t_id, [1, 2, 3, 4, 6, 7])){
-                $data[$valSesi->rekap_modal_sesi][$valType->m_t_t_id.'-'.'nota_menu'] = number_format($nota_menu + $nota_non_menu);
                 $data[$valSesi->rekap_modal_sesi][$valType->m_t_t_id.'-'.'menu'] = number_format($menu_tot);
                 $data[$valSesi->rekap_modal_sesi][$valType->m_t_t_id.'-'.'non_menu'] = number_format($non_menu);
+                $data[$valSesi->rekap_modal_sesi][$valType->m_t_t_id.'-'.'nota_menu'] = number_format($nota_menu + $nota_non_menu);
             } else {
-                $data[$valSesi->rekap_modal_sesi][$valType->m_t_t_id.'-'.'nota_wbd'] = number_format($nota_bumbu_grab + $nota_frozen_grab);
                 $data[$valSesi->rekap_modal_sesi][$valType->m_t_t_id.'-'.'wbd_bb'] = number_format($wbd_bumbu_grab);
                 $data[$valSesi->rekap_modal_sesi][$valType->m_t_t_id.'-'.'wbd_frozen'] = number_format($wbd_frozen_grab);
+                $data[$valSesi->rekap_modal_sesi][$valType->m_t_t_id.'-'.'nota_wbd'] = number_format($nota_bumbu_grab + $nota_frozen_grab);
             } 
             
             }

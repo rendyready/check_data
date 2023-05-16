@@ -106,36 +106,36 @@
                         <th colspan="3" class="text-center">Shopee</th>
                         <th colspan="3" class="text-center">Maxim</th>
                         <th colspan="5" class="text-center">Rincian</th>
-                        <th rowspan="2" class="text-center">Pajak</th>
+                        <th rowspan="2" class="text-center">Pajak (Dine In & Take Away)</th>
                     </tr>
                     <tr>
-                        <th rowspan="1" class="text-center">Nota</th>
                         <th rowspan="1" class="text-center">Menu</th>
                         <th rowspan="1" class="text-center">Non Menu</th>
-
                         <th rowspan="1" class="text-center">Nota</th>
+
                         <th rowspan="1" class="text-center">Menu</th>
                         <th rowspan="1" class="text-center">Non Menu</th>
-
                         <th rowspan="1" class="text-center">Nota</th>
+
                         <th rowspan="1" class="text-center">Menu</th>
                         <th rowspan="1" class="text-center">Non Menu</th>
-
                         <th rowspan="1" class="text-center">Nota</th>
+
                         <th rowspan="1" class="text-center">Menu</th>
                         <th rowspan="1" class="text-center">Non Menu</th>
-
                         <th rowspan="1" class="text-center">Nota</th>
+
                         <th rowspan="1" class="text-center">WBD SS</th>
                         <th rowspan="1" class="text-center">WBD Frozen</th>
-
                         <th rowspan="1" class="text-center">Nota</th>
+
                         <th rowspan="1" class="text-center">Menu</th>
                         <th rowspan="1" class="text-center">Non Menu</th>
-
                         <th rowspan="1" class="text-center">Nota</th>
+
                         <th rowspan="1" class="text-center">Menu</th>
                         <th rowspan="1" class="text-center">Non Menu</th>
+                        <th rowspan="1" class="text-center">Nota</th>
 
                         <th rowspan="1" class="text-center">Es Cream</th>
                         <th rowspan="1" class="text-center">Air Mineral</th>
