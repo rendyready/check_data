@@ -196,44 +196,47 @@ class GetData extends Command
             }
 
             #PUSH data to Destination
-            foreach ($getDataSource->get() as $keyDataSource => $valDataSource) {
-                $newDestStatus = "ok";
-                $data = [];
-                foreach ($sourceSchema as $keySchema => $valSchema) {
-                    if ($valSchema != 'id') {
-                        if ($valSchema == $valTab->config_get_data_field_status) {
-                            $data[$valSchema] = $newDestStatus;
-                        } else {
-                            $data[$valSchema] = $valDataSource->$valSchema;
+            if (!empty($getDataSource->get())) {
+                foreach ($getDataSource->get() as $keyDataSource => $valDataSource) {
+                    $newDestStatus = "ok";
+                    $data = [];
+                    foreach ($sourceSchema as $keySchema => $valSchema) {
+                        if ($valSchema != 'id') {
+                            if ($valSchema == $valTab->config_get_data_field_status) {
+                                $data[$valSchema] = $newDestStatus;
+                            } else {
+                                $data[$valSchema] = $valDataSource->$valSchema;
+                            }
                         }
                     }
-                }
-                try {
-                    $validateField = $valTab->config_get_data_field_validate1;
-                    $DbDest->table($valTab->config_get_data_table_name)
-                        ->updateOrInsert(
-                            [
-                                $valTab->config_get_data_field_validate1 => $valDataSource->$validateField
-                            ],
-                            $data
-                        );
-                } catch (\Throwable $th) {
-                    Log::alert("Can't insert/update to {$valTab->config_get_data_table_name}");
-                    Log::info($th);
+                    try {
+                        $validateField = $valTab->config_get_data_field_validate1;
+                        $DbDest->table($valTab->config_get_data_table_name)
+                            ->updateOrInsert(
+                                [
+                                    $valTab->config_get_data_field_validate1 => $valDataSource->$validateField
+                                ],
+                                $data
+                            );
+                    } catch (\Throwable $th) {
+                        Log::alert("Can't insert/update to {$valTab->config_get_data_table_name}");
+                        Log::info($th);
+                    }
                 }
             }
+            #Local Log
+            DB::table('log_cronjob')
+            ->insert([
+                'log_cronjob_name' => 'getdata:cron',
+                'log_cronjob_from_server_id' => $getSourceConn->db_con_m_w_id,
+                'log_cronjob_from_server_name' => $getSourceConn->db_con_location_name,
+                'log_cronjob_to_server_id' => $dest->db_con_m_w_id,
+                'log_cronjob_to_server_name' => $dest->db_con_location_name,
+                'log_cronjob_datetime' => Carbon::now(),
+                'log_cronjob_note' => $valTab->config_get_data_table_name.'-Updated!',
+            ]);
         }
-        #Local Log
-        DB::table('log_cronjob')
-        ->insert([
-            'log_cronjob_name' => 'getdata:cron',
-            'log_cronjob_from_server_id' => $getSourceConn->db_con_m_w_id,
-            'log_cronjob_from_server_name' => $getSourceConn->db_con_location_name,
-            'log_cronjob_to_server_id' => $dest->db_con_m_w_id,
-            'log_cronjob_to_server_name' => $dest->db_con_location_name,
-            'log_cronjob_datetime' => Carbon::now(),
-            'log_cronjob_note' => 'Sukses!',
-        ]);
+
         Log::info("Cronjob GET Data FINISH at ". Carbon::now()->format('Y-m-d H:i:s'));
 
         return Command::SUCCESS;

@@ -54,7 +54,8 @@ class ConfGetDataSeeder extends Seeder
 
         foreach ($table as $key => $valTable) {
             $seq = ($valTable == 'app_setting') ? 'off':'on';
-            $trun = ($valTable == 'app_setting') ? 'on':'off';
+            // $trun = ($valTable == 'app_setting') ? 'on':'off';
+            $trun = 'off';
 
             DB::table('config_get_data')->insert([
                 'config_get_data_table_name' => $valTable,
