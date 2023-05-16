@@ -39,6 +39,7 @@
                                             @foreach ($data->area as $area)
                                                 <option value="{{ $area->m_area_id }}"> {{ $area->m_area_nama }} </option>
                                             @endforeach
+                                            <option value="all">All Area</option>
                                             </select>
                                         @else
                                             <select id="filter_area" data-placeholder="Pilih Area" style="width: 100%;"
@@ -101,10 +102,11 @@
                         <th colspan="3" class="text-center">Take Away</th>
                         <th colspan="3" class="text-center">Grab</th>
                         <th colspan="3" class="text-center">Gojek</th>
-                        <th colspan="2" class="text-center">Grab Mart</th>
+                        <th colspan="3" class="text-center">Grab Mart</th>
                         <th colspan="3" class="text-center">Shopee</th>
                         <th colspan="3" class="text-center">Maxim</th>
-                        <th colspan="6" class="text-center">Rincian</th>
+                        <th colspan="5" class="text-center">Rincian</th>
+                        <th rowspan="2" class="text-center">Pajak</th>
                     </tr>
                     <tr>
                         <th rowspan="1" class="text-center">Nota</th>
@@ -125,7 +127,7 @@
 
                         <th rowspan="1" class="text-center">Nota</th>
                         <th rowspan="1" class="text-center">WBD SS</th>
-                        {{-- <th rowspan="1" class="text-center">WBD Frozen</th> --}}
+                        <th rowspan="1" class="text-center">WBD Frozen</th>
 
                         <th rowspan="1" class="text-center">Nota</th>
                         <th rowspan="1" class="text-center">Menu</th>
@@ -135,7 +137,6 @@
                         <th rowspan="1" class="text-center">Menu</th>
                         <th rowspan="1" class="text-center">Non Menu</th>
 
-                        <th rowspan="1" class="text-center">Nota</th>
                         <th rowspan="1" class="text-center">Es Cream</th>
                         <th rowspan="1" class="text-center">Air Mineral</th>
                         <th rowspan="1" class="text-center">Kerupuk</th>
@@ -169,7 +170,7 @@ $(document).ready(function() {
         $('.filter_waroeng').on('change', function() {
         var waroeng  = $('.filter_waroeng').val();
         var tanggal  = $('.filter_tanggal').val(); 
-        if(waroeng && tanggal){
+        if(waroeng != 'all' && tanggal){
             $("#button_non_menu").show();  
         }
     });
@@ -177,7 +178,7 @@ $(document).ready(function() {
         $('.filter_tanggal').on('change', function() {
         var waroeng  = $('.filter_waroeng').val();
         var tanggal  = $('.filter_tanggal').val(); 
-        if(waroeng && tanggal){
+        if(waroeng != 'all' && tanggal){
             $("#button_non_menu").show();  
         }
     });
@@ -186,7 +187,7 @@ $(document).ready(function() {
     $('#non_menu').on('click', function() {
         var waroeng  = $('.filter_waroeng').val();
         var tanggal  = $('.filter_tanggal').val(); 
-        var url = 'rekap_kategori/rekap_non_menu?waroeng='+waroeng+'&tanggal='+tanggal;
+        var url = 'non_menu/rekap_non_menu?waroeng='+waroeng+'&tanggal='+tanggal;
         window.open(url,'lap_non_menu.blade.php');
     });
 
@@ -224,36 +225,6 @@ $(document).ready(function() {
                 success:function(data){ 
                     console.log(data);
                 }
-                // columns: [
-                //         { data: 'area', name: 'area' },
-                //         { data: 'waroeng', name: 'waroeng' },
-                //         { data: 'tanggal', name: 'tanggal' },
-                //         { data: 'sesi', name: 'sesi' },
-                //         { data: 'operator', name: 'operator' },
-                //         // { data: 'dine_in.nota', name: 'dine_in.nota' },
-                //         { data: 'dine_in.menu', name: 'dine_in.menu' },
-                //         { data: 'dine_in.non_menu', name: 'dine_in.non_menu' },
-                //         // { data: 'take_away.nota', name: 'take_away.nota' },
-                //         { data: 'take_away.menu', name: 'take_away.menu' },
-                //         { data: 'take_away.non_menu', name: 'take_away.non_menu' },
-                //         // { data: 'grab.nota', name: 'grab.nota' },
-                //         { data: 'grab.menu', name: 'grab.menu' },
-                //         { data: 'grab.non_menu', name: 'grab.non_menu' },
-                //         // { data: 'gojek.nota', name: 'gojek.nota' },
-                //         { data: 'gojek.menu', name: 'gojek.menu' },
-                //         { data: 'gojek.non_menu', name: 'gojek.non_menu' },
-                //         // { data: 'shopee.nota', name: 'shopee.nota' },
-                //         { data: 'shopee.menu', name: 'shopee.menu' },
-                //         { data: 'shopee.non_menu', name: 'shopee.non_menu' },
-                //         // { data: 'grab_mart.nota', name: 'grab_mart.nota' },
-                //         { data: 'grab_mart.wbd_ss', name: 'grab_mart.wbd_ss' },
-                //         { data: 'grab_mart.wbd_frozen', name: 'grab_mart.wbd_frozen' },
-                //         { data: 'rincian.es_cream', name: 'rincian.es_cream' },
-                //         { data: 'rincian.air_mineral', name: 'rincian.air_mineral' },
-                //         { data: 'rincian.kerupuk', name: 'rincian.kerupuk' },
-                //         { data: 'rincian.wbd_bb', name: 'rincian.wbd_bb' },
-                //         { data: 'rincian.wbd_frozen', name: 'rincian.wbd_frozen' }
-                // ]
         });    
     });
 
@@ -302,6 +273,9 @@ if(HakAksesPusat){
             alert('Harap lengkapi kolom tanggal');
             $(".filter_waroeng").val(prev).trigger('change');
         }  
+        if (id_waroeng == 'all'){
+            $("#button_non_menu").hide();
+        }
     });
   }
 
