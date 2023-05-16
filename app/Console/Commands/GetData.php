@@ -223,18 +223,18 @@ class GetData extends Command
                         Log::info($th);
                     }
                 }
+                #Local Log
+                DB::table('log_cronjob')
+                ->insert([
+                    'log_cronjob_name' => 'getdata:cron',
+                    'log_cronjob_from_server_id' => $getSourceConn->db_con_m_w_id,
+                    'log_cronjob_from_server_name' => $getSourceConn->db_con_location_name,
+                    'log_cronjob_to_server_id' => $dest->db_con_m_w_id,
+                    'log_cronjob_to_server_name' => $dest->db_con_location_name,
+                    'log_cronjob_datetime' => Carbon::now(),
+                    'log_cronjob_note' => $valTab->config_get_data_table_name.'-Updated!',
+                ]);
             }
-            #Local Log
-            DB::table('log_cronjob')
-            ->insert([
-                'log_cronjob_name' => 'getdata:cron',
-                'log_cronjob_from_server_id' => $getSourceConn->db_con_m_w_id,
-                'log_cronjob_from_server_name' => $getSourceConn->db_con_location_name,
-                'log_cronjob_to_server_id' => $dest->db_con_m_w_id,
-                'log_cronjob_to_server_name' => $dest->db_con_location_name,
-                'log_cronjob_datetime' => Carbon::now(),
-                'log_cronjob_note' => $valTab->config_get_data_table_name.'-Updated!',
-            ]);
         }
 
         Log::info("Cronjob GET Data FINISH at ". Carbon::now()->format('Y-m-d H:i:s'));
