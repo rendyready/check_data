@@ -169,7 +169,12 @@
                 }
             });
             Codebase.helpersOnLoad(['jq-select2']);
-            var t = $('#user').DataTable();
+            var t = $('#user').DataTable({
+                processing: false,
+                serverSide: false,
+                destroy: true,
+                pageLength: 10,
+                order: [0, 'asc']} );
             $("#user").append(
                 $('<tfoot/>').append($("#user thead tr").clone())
             );
@@ -203,6 +208,7 @@
                             .map(function(item) {
                                 return parseInt(item);
                             });
+                        console.log(waroeng_akses);
                         $("#waroeng_akses").val(waroeng_akses).trigger('change');
                     },
                     error: function() {}
