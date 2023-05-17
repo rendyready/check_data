@@ -1000,6 +1000,9 @@ class CronjobController extends Controller
             $loop = ceil($countData/$bagi);
 
             if ($loop > 0) {
+                if ($loop > 10) {
+                    $loop = 10;
+                }
                 for ($i=1; $i <= $loop; $i++) {
                     #filter data ready on lokal
                     $ready = $DbDest->table($valTab->config_get_data_table_name)->get();
