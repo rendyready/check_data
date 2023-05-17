@@ -833,6 +833,10 @@ class CronjobController extends Controller
 
     public function getdata()
     {
+        // $count = 70127;
+        // $bagi = ($count/100)/70;
+        // echo $bagi."<br>";
+        // return ceil($bagi);
         #Cek cronjob status
         $cronStatus = DB::table('cronjob')
                     ->where('cronjob_name','getdata:cron')
@@ -949,36 +953,9 @@ class CronjobController extends Controller
                 #SKIP
                 exit();
             }
-
-            #filter data ready on lokal
-            $ready = $DbDest->table($valTab->config_get_data_table_name)->get();
-            $fieldId = $valTab->config_get_data_field_validate1;
-            $filterNotIn = [];
-            foreach ($ready as $key => $value) {
-                array_push($filterNotIn,$value->$fieldId);
-            }
-
-            $statusCheck1 = "send";
-            $statusCheck2 = "edit";
-            $fieldStatus = $valTab->config_get_data_field_status;
-            $getDataSource = $DbSource->table($valTab->config_get_data_table_name);
-            if ($valTab->config_get_data_truncate == "off") {
-                $getDataSource->whereNotIn($valTab->config_get_data_field_validate1,$filterNotIn);
-                $getDataSource->orWhere($fieldStatus,"{$statusCheck1}");
-                $getDataSource->orWhere($fieldStatus,"{$statusCheck2}");
-                $getDataSource->orderBy($valTab->config_get_data_field_validate1,'asc');
-                if ($valTab->config_get_data_limit > 0) {
-                    $getDataSource->limit($valTab->config_get_data_limit);
-                }
-            }
-
-            if ($valTab->config_get_data_truncate == "on" && $valTab->config_get_data_table_tipe == "master") {
-                $DbDest->statement("TRUNCATE TABLE {$valTab->config_get_data_table_name} RESTART IDENTITY;");
-            }
-
             // $except = array('app_setting','role_has_permissions','model_has_permissions','model_has_roles');
             // if (!in_array($valTab->config_get_data_table_name,$except)) {
-                if ($valTab->config_get_data_sequence == 'on') {
+            if ($valTab->config_get_data_sequence == 'on') {
                 #Get Last Increment Used
                 $maxId = $DbDest->select("SELECT MAX(id) FROM {$valTab->config_get_data_table_name};")[0]->max;
 
@@ -995,32 +972,85 @@ class CronjobController extends Controller
                 }
             }
 
-            #PUSH data to Destination
-            if ($getDataSource->count() > 0) {
-                foreach ($getDataSource->get() as $keyDataSource => $valDataSource) {
-                    $newDestStatus = "ok";
-                    $data = [];
-                    foreach ($sourceSchema as $keySchema => $valSchema) {
-                        if ($valSchema != 'id') {
-                            if ($valSchema == $valTab->config_get_data_field_status) {
-                                $data[$valSchema] = $newDestStatus;
-                            } else {
-                                $data[$valSchema] = $valDataSource->$valSchema;
-                            }
+            if ($valTab->config_get_data_truncate == "on" && $valTab->config_get_data_table_tipe == "master") {
+                $DbDest->statement("TRUNCATE TABLE {$valTab->config_get_data_table_name} RESTART IDENTITY;");
+            }
+
+            #First check to setup looping
+            $ready = $DbDest->table($valTab->config_get_data_table_name)->get();
+            $fieldId = $valTab->config_get_data_field_validate1;
+            $filterNotIn = [];
+            foreach ($ready as $key => $value) {
+                array_push($filterNotIn,$value->$fieldId);
+            }
+
+            $statusCheck1 = "send";
+            $statusCheck2 = "edit";
+            $fieldStatus = $valTab->config_get_data_field_status;
+            $getDataSource = $DbSource->table($valTab->config_get_data_table_name);
+            if ($valTab->config_get_data_truncate == "off") {
+                $getDataSource->whereNotIn($valTab->config_get_data_field_validate1,$filterNotIn);
+                $getDataSource->orWhere($fieldStatus,"{$statusCheck1}");
+                $getDataSource->orWhere($fieldStatus,"{$statusCheck2}");
+                $getDataSource->orderBy($valTab->config_get_data_field_validate1,'asc');
+            }
+
+            $countData = $getDataSource->count();
+            $bagi = ($valTab->config_get_data_limit == 0) ? 1:$valTab->config_get_data_limit;
+            $loop = ceil($countData/$bagi);
+
+            if ($loop > 0) {
+                for ($i=1; $i <= $loop; $i++) {
+                    #filter data ready on lokal
+                    $ready = $DbDest->table($valTab->config_get_data_table_name)->get();
+                    $fieldId = $valTab->config_get_data_field_validate1;
+                    $filterNotIn = [];
+                    foreach ($ready as $key => $value) {
+                        array_push($filterNotIn,$value->$fieldId);
+                    }
+
+                    $statusCheck1 = "send";
+                    $statusCheck2 = "edit";
+                    $fieldStatus = $valTab->config_get_data_field_status;
+                    $getDataSource = $DbSource->table($valTab->config_get_data_table_name);
+                    if ($valTab->config_get_data_truncate == "off") {
+                        $getDataSource->whereNotIn($valTab->config_get_data_field_validate1,$filterNotIn);
+                        $getDataSource->orWhere($fieldStatus,"{$statusCheck1}");
+                        $getDataSource->orWhere($fieldStatus,"{$statusCheck2}");
+                        $getDataSource->orderBy($valTab->config_get_data_field_validate1,'asc');
+                        if ($valTab->config_get_data_limit > 0) {
+                            $getDataSource->limit($valTab->config_get_data_limit);
                         }
                     }
-                    try {
-                        $validateField = $valTab->config_get_data_field_validate1;
-                        $DbDest->table($valTab->config_get_data_table_name)
-                            ->updateOrInsert(
-                                [
-                                    $valTab->config_get_data_field_validate1 => $valDataSource->$validateField
-                                ],
-                                $data
-                            );
-                    } catch (\Throwable $th) {
-                        Log::alert("Can't insert/update to {$valTab->config_get_data_table_name}");
-                        Log::info($th);
+
+                    #PUSH data to Destination
+                    if ($getDataSource->count() > 0) {
+                        foreach ($getDataSource->get() as $keyDataSource => $valDataSource) {
+                            $newDestStatus = "ok";
+                            $data = [];
+                            foreach ($sourceSchema as $keySchema => $valSchema) {
+                                if ($valSchema != 'id') {
+                                    if ($valSchema == $valTab->config_get_data_field_status) {
+                                        $data[$valSchema] = $newDestStatus;
+                                    } else {
+                                        $data[$valSchema] = $valDataSource->$valSchema;
+                                    }
+                                }
+                            }
+                            try {
+                                $validateField = $valTab->config_get_data_field_validate1;
+                                $DbDest->table($valTab->config_get_data_table_name)
+                                    ->updateOrInsert(
+                                        [
+                                            $valTab->config_get_data_field_validate1 => $valDataSource->$validateField
+                                        ],
+                                        $data
+                                    );
+                            } catch (\Throwable $th) {
+                                Log::alert("Can't insert/update to {$valTab->config_get_data_table_name}");
+                                Log::info($th);
+                            }
+                        }
                     }
                 }
                 #Local Log
@@ -1034,8 +1064,6 @@ class CronjobController extends Controller
                     'log_cronjob_datetime' => Carbon::now(),
                     'log_cronjob_note' => $valTab->config_get_data_table_name.'-Updated!',
                 ]);
-            }else{
-                echo $valTab->config_get_data_table_name;
             }
         }
 
