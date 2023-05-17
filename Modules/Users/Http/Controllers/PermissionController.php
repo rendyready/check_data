@@ -4,11 +4,12 @@ namespace Modules\Users\Http\Controllers;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use illuminate\Support\Str;
+use App\Models\Permission;
 class PermissionController extends Controller
 {
     /**
@@ -17,67 +18,45 @@ class PermissionController extends Controller
      */
     public function index()
     {
-        
-        return view('permision::index');
+        $data = Permission::all();
+        return view('users::permision',compact('data'));
     }
 
     /**
      * Show the form for creating a new resource.
      * @return Renderable
      */
-    public function create()
+    public function action(Request $request)
     {
-        return view('users::create');
+        if($request->ajax())
+    	{
+            $name = Str::lower($request->name);
+            $check = DB::table('permissions')->where('name',$name)->first();
+            if (!empty($check)) {
+                return response()->json(['error'=>'Nama Telah Ada']);
+            } else {
+                if ($request->action == 'add') {
+                    $data = array(
+                        'name'	=>	$request->name,
+                        'guard_name' =>'web',
+                        'created_at' => Carbon::now(),
+                    );
+                    DB::table('permissions')->insert($data);
+                } elseif ($request->action == 'edit') {
+                    $data = array(
+                        'name'	=>	$request->name,
+                        'guard_name' =>'web',
+                        'updated_at' => Carbon::now(),
+                        'permissions_status_sync' => 'send'
+                    );
+                    DB::table('permissions')->where('id',$request->id)
+                    ->update($data);
+                }
+                return response(['messages' => 'Berhasil Tambah Permission','type' => 'success','action' => 'add']);
+            }
+    		
+    	}
     }
 
-    /**
-     * Store a newly created resource in storage.
-     * @param Request $request
-     * @return Renderable
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Show the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
-    public function show($id)
-    {
-        return view('users::show');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
-    public function edit($id)
-    {
-        return view('users::edit');
-    }
-
-    /**
-     * Update the specified resource in storage.
-     * @param Request $request
-     * @param int $id
-     * @return Renderable
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     * @param int $id
-     * @return Renderable
-     */
-    public function destroy($id)
-    {
-        //
-    }
+    
 }

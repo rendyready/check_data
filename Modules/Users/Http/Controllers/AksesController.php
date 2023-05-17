@@ -2,12 +2,12 @@
 
 namespace Modules\Users\Http\Controllers;
 
+use App\Models\Permission;
+use Carbon\Carbon;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
-use Carbon\Carbon;
 use illuminate\Support\Str;
 
 class AksesController extends Controller
@@ -19,36 +19,56 @@ class AksesController extends Controller
     public function index()
     {
         $data = DB::table('roles')->get();
-        return view('users::akses', compact('data'));
+        $permision = Permission::all();
+        return view('users::akses', compact('data', 'permision'));
     }
     public function action(Request $request)
-    { 
-    	if($request->ajax())
-    	{
+    {
+        if ($request->ajax()) {
             $name = Str::lower($request->name);
-            $check = DB::table('roles')->where('name',$name)->first();
+            $check = DB::table('roles')->where('name', $name)->first();
             if (!empty($check)) {
-                return response()->json(['error'=>'Nama Telah Ada']);
+                return response()->json(['messages' => 'Nama Telah Ada', 'type' => 'danger']);
             } else {
                 if ($request->action == 'add') {
                     $data = array(
-                        'name'	=>	$request->name,
-                        'guard_name' =>'web',
+                        'name' => $request->name,
+                        'guard_name' => 'web',
                         'created_at' => Carbon::now(),
                     );
                     DB::table('roles')->insert($data);
                 } elseif ($request->action == 'edit') {
                     $data = array(
-                        'name'	=>	$request->name,
-                        'guard_name' =>'web',
+                        'name' => $request->name,
+                        'guard_name' => 'web',
                         'updated_at' => Carbon::now(),
+                        'roles_status_sync' => 'send',
                     );
-                    DB::table('roles')->where('id',$request->id)
-                    ->update($data);
+                    DB::table('roles')->where('id', $request->id)
+                        ->update($data);
+                    return response()->json(['messages' => 'Role Berhasil Ditambahkan', 'type' => 'success']);
+                } else {
+                    $roleData = $request->only('name'); 
+                    $permissions = $request->input('permission_ids', []);
+                    $role = Role::updateOrCreate(
+                        ['name' => $roleData['name']],
+                        ['name' => $roleData['name']]
+                    );
+                    $role->permissions()->sync($permissions);
+                    return response()->json(['messages' => 'Role Berhasil Ditambahkan', 'type' => 'success']);
                 }
-                return response()->json($request);
             }
-    		
-    	}
+
+        }
+    }
+    public function edit($id)
+    {
+        $data = DB::table('roles')->where('id', $id)->first();
+        return response()->json($data);
+    }
+    public function rolehaspermission($id)
+    {
+        $data = DB::table('role_has_permissions')->where('role_id', $id)->get();
+        return response()->json($data);
     }
 }
