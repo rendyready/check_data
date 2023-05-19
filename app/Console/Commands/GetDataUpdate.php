@@ -10,14 +10,14 @@ use App\Helpers\Helper;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Log;
 
-class GetData extends Command
+class GetDataUpdate extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'getdata:cron';
+    protected $signature = 'getdataupdate:cron';
 
     /**
      * The console command description.
@@ -35,7 +35,7 @@ class GetData extends Command
     {
         #Cek cronjob status
         $cronStatus = DB::table('cronjob')
-                    ->where('cronjob_name','getdata:cron')
+                    ->where('cronjob_name','getdataupdate:cron')
                     ->first();
 
         if ($cronStatus->cronjob_status == 'open') {
@@ -88,7 +88,7 @@ class GetData extends Command
 
         #GET Data is open?
         $getDataOpen = $DbSource->table('cronjob')
-            ->where('cronjob_name','getdata:cron')
+            ->where('cronjob_name','getdataupdate:cron')
             ->first();
 
         if ($getDataOpen->cronjob_status == 'close') {
@@ -151,21 +151,21 @@ class GetData extends Command
             }
 
             #filter data ready on lokal
-            $ready = $DbDest->table($valTab->config_get_data_table_name)->get();
-            $fieldId = $valTab->config_get_data_field_validate1;
-            $filterNotIn = [];
-            foreach ($ready as $key => $value) {
-                array_push($filterNotIn,$value->$fieldId);
-            }
+            // $ready = $DbDest->table($valTab->config_get_data_table_name)->get();
+            // $fieldId = $valTab->config_get_data_field_validate1;
+            // $filterNotIn = [];
+            // foreach ($ready as $key => $value) {
+            //     array_push($filterNotIn,$value->$fieldId);
+            // }
 
-            // $statusCheck1 = "send";
-            // $statusCheck2 = "edit";
-            // $fieldStatus = $valTab->config_get_data_field_status;
+            $statusCheck1 = "send";
+            $statusCheck2 = "edit";
+            $fieldStatus = $valTab->config_get_data_field_status;
             $getDataSource = $DbSource->table($valTab->config_get_data_table_name);
             if ($valTab->config_get_data_truncate == "off") {
-                $getDataSource->whereNotIn($valTab->config_get_data_field_validate1,$filterNotIn);
-                // $getDataSource->orWhere($fieldStatus,"{$statusCheck1}");
-                // $getDataSource->orWhere($fieldStatus,"{$statusCheck2}");
+                // $getDataSource->whereNotIn($valTab->config_get_data_field_validate1,$filterNotIn);
+                $getDataSource->where($fieldStatus,"{$statusCheck1}");
+                $getDataSource->orWhere($fieldStatus,"{$statusCheck2}");
                 $getDataSource->orderBy($valTab->config_get_data_field_validate1,'asc');
                 if ($valTab->config_get_data_limit > 0) {
                     $getDataSource->limit($valTab->config_get_data_limit);
@@ -226,7 +226,7 @@ class GetData extends Command
                 #Local Log
                 DB::table('log_cronjob')
                 ->insert([
-                    'log_cronjob_name' => 'getdata:cron',
+                    'log_cronjob_name' => 'getdataupdate:cron',
                     'log_cronjob_from_server_id' => $getSourceConn->db_con_m_w_id,
                     'log_cronjob_from_server_name' => $getSourceConn->db_con_location_name,
                     'log_cronjob_to_server_id' => $dest->db_con_m_w_id,

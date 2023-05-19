@@ -1028,6 +1028,9 @@ class CronjobController extends Controller
 
                     #PUSH data to Destination
                     if ($getDataSource->count() > 0) {
+                        // if ($valTab->config_get_data_table_name == 'm_menu_harga') {
+                        //     return $getDataSource->get();
+                        // }
                         foreach ($getDataSource->get() as $keyDataSource => $valDataSource) {
                             $newDestStatus = "ok";
                             $data = [];
