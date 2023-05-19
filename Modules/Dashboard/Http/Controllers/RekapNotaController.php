@@ -106,6 +106,7 @@ class RekapNotaController extends Controller
             foreach ($get2 as $key => $value) {
                 $row = array();
                 $row[] = date('d-m-Y', strtotime($value->r_t_tanggal));
+                $row[] = date('H:i', strtotime($value->r_t_jam));
                 $row[] = $value->name;
                 $row[] = $value->r_t_nota_code;
                 $row[] = $value->r_t_bigboss;
