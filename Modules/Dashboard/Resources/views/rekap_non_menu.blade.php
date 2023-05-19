@@ -88,8 +88,9 @@
                         </div>
 
                     </form>      
-             
-            <div class="table-responsive">
+                    
+            <div id="tampil" class="table-responsive text-center">
+                {{-- <button type="button" id="export_excel" class="btn btn-sm btn-primary">Export Excel</button> --}}
             <table id="tampil_rekap" class="table table-sm table-bordered table-hover table-striped table-vcenter js-dataTable-full nowrap">
                 <thead>
                     <tr>
@@ -102,9 +103,8 @@
                         <th colspan="3" class="text-center">Take Away</th>
                         <th colspan="3" class="text-center">Grab</th>
                         <th colspan="3" class="text-center">Gojek</th>
-                        <th colspan="3" class="text-center">Grab Mart</th>
                         <th colspan="3" class="text-center">Shopee</th>
-                        <th colspan="3" class="text-center">Maxim</th>
+                        <th colspan="3" class="text-center">Grab Mart</th>
                         <th colspan="5" class="text-center">Rincian</th>
                         <th rowspan="2" class="text-center">Pajak (Dine In & Take Away)</th>
                     </tr>
@@ -125,16 +125,12 @@
                         <th rowspan="1" class="text-center">Non Menu</th>
                         <th rowspan="1" class="text-center">Nota</th>
 
-                        <th rowspan="1" class="text-center">WBD SS</th>
+                        <th rowspan="1" class="text-center">Menu</th>
+                        <th rowspan="1" class="text-center">Non Menu</th>
+                        <th rowspan="1" class="text-center">Nota</th>
+
+                        <th rowspan="1" class="text-center">WBD BB</th>
                         <th rowspan="1" class="text-center">WBD Frozen</th>
-                        <th rowspan="1" class="text-center">Nota</th>
-
-                        <th rowspan="1" class="text-center">Menu</th>
-                        <th rowspan="1" class="text-center">Non Menu</th>
-                        <th rowspan="1" class="text-center">Nota</th>
-
-                        <th rowspan="1" class="text-center">Menu</th>
-                        <th rowspan="1" class="text-center">Non Menu</th>
                         <th rowspan="1" class="text-center">Nota</th>
 
                         <th rowspan="1" class="text-center">Es Cream</th>
@@ -165,6 +161,7 @@ $(document).ready(function() {
     var HakAksesPusat = userInfoPusat.dataset.hasAccess === 'true';
 
     $("#button_non_menu").hide();
+    $("#tampil").hide();
 
     if(HakAksesArea){
         $('.filter_waroeng').on('change', function() {
@@ -191,13 +188,20 @@ $(document).ready(function() {
         window.open(url,'lap_non_menu.blade.php');
     });
 
+    $('#export_excel').on('click', function() {
+        var waroeng  = $('.filter_waroeng').val();
+        var tanggal  = $('.filter_tanggal').val(); 
+        var url = 'non_menu/export_excel?waroeng='+waroeng+'&tanggal='+tanggal;
+        window.open(url,'rekap_non_menu_excel.blade.php');
+    });
+
     $('#cari').on('click', function() {
         var area     = $('.filter_area').val();
         var waroeng  = $('.filter_waroeng').val();
         var tanggal  = $('.filter_tanggal').val(); 
-
+        $("#tampil").show();
         $('#tampil_rekap').DataTable({
-            button: [],
+            // buttons: [],
             destroy: true,
             orderCellsTop: true,
             processing: true,
@@ -211,6 +215,18 @@ $(document).ready(function() {
                         className: 'dt-body-center'
                     },
                 ],
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    text: 'Export Excel',
+                    title: 'Laporan Rekap Non Menu - ' + tanggal,
+                    // exportOptions: {
+                    //     columns: [1, 2, 3, 4, 5]
+                    // },
+                    pageSize: 'A4',
+                    pageOrientation: 'potrait',
+                }
+            ],
             lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
             pageLength: 10,
             ajax: {
