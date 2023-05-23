@@ -79,7 +79,8 @@ class RekapMenuHarianController extends Controller
             if($request->id_sif != 'all'){
                 $trans->where('rekap_modal_sesi', $request->id_sif);
             } 
-            $trans = $trans->orderBy('m_t_t_id', 'asc')
+            $trans = $trans->where('rekap_modal_m_w_id', $request->id_waroeng)
+            ->orderBy('m_t_t_id', 'asc')
             ->get();
 
         $data = array();
