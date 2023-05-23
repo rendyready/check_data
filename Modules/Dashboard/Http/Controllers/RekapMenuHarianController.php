@@ -93,11 +93,18 @@ class RekapMenuHarianController extends Controller
     }
 
     function show(Request $request) {
+        // return $request->all();
+        $get_modal_id = DB::table('rekap_modal')
+        ->where('rekap_modal_m_w_id',$request->waroeng)
+        ->where('rekap_modal_sesi',$request->sesi)
+        ->where(DB::raw('DATE(rekap_modal_tanggal)'), $request->tanggal)
+        ->first();
         $refund = DB::table('rekap_refund_detail')
             ->join('rekap_refund', 'r_r_id', 'r_r_detail_r_r_id')
             ->join('rekap_modal', 'rekap_modal_id', 'r_r_rekap_modal_id')
             ->join('rekap_transaksi', 'r_t_id', 'r_r_r_t_id')
             ->join('m_transaksi_tipe', 'm_t_t_id', 'r_t_m_t_t_id')
+            ->where('r_r_rekap_modal_id',$get_modal_id->rekap_modal_id)
             ->get();
 
             $get = DB::table('rekap_transaksi_detail')
@@ -134,10 +141,12 @@ class RekapMenuHarianController extends Controller
                 $row[] = $val_menu->r_t_detail_m_produk_nama;
                 $qty = $val_menu->qty;
                 $nominal = number_format($val_menu->r_t_detail_reguler_price * $val_menu->qty);
-                foreach ($refund as $key => $valRef) {
-                    if ($val_menu->r_t_detail_m_produk_id == $valRef->r_r_detail_m_produk_id && $val_menu->r_t_tanggal == $valRef->r_r_tanggal && $val_menu->rekap_modal_sesi == $valRef->rekap_modal_sesi && $val_menu->m_t_t_name == $valRef->m_t_t_name) {
-                        $qty = $val_menu->qty - $valRef->r_r_detail_qty;
-                        $nominal = number_format($val_menu->r_t_detail_reguler_price * $qty);
+                if (!empty($refund)) {
+                    foreach ($refund as $key => $valRef) {
+                        if ($val_menu->r_t_detail_m_produk_id == $valRef->r_r_detail_m_produk_id && $val_menu->r_t_tanggal == $valRef->r_r_tanggal && $val_menu->rekap_modal_sesi == $valRef->rekap_modal_sesi && $val_menu->m_t_t_name == $valRef->m_t_t_name) {
+                            $qty = $val_menu->qty - $valRef->r_r_detail_qty;
+                            $nominal = number_format($val_menu->r_t_detail_reguler_price * $qty);
+                        }
                     }
                 }
                 $row[] = $qty;
