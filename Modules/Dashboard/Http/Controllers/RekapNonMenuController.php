@@ -145,7 +145,7 @@ class RekapNonMenuController extends Controller
                #Menu
                $menu = DB::table('rekap_transaksi')
                        ->join('rekap_transaksi_detail','r_t_detail_r_t_id','r_t_id')
-                       ->selectRaw('r_t_m_t_t_id, r_t_rekap_modal_id, sum(r_t_detail_reguler_price*r_t_detail_qty) nominal, count(r_t_id) as nota')
+                       ->selectRaw('r_t_m_t_t_id, r_t_rekap_modal_id, sum(r_t_detail_reguler_price*r_t_detail_qty) nominal, count(r_t_id) nota')
                        ->where([
                            'r_t_rekap_modal_id' => $valSesi->rekap_modal_id,
                            'r_t_m_t_t_id' => $valType->m_t_t_id
@@ -159,7 +159,7 @@ class RekapNonMenuController extends Controller
                    $menu_tot = $menu->nominal;
                    $nota_menu = $menu->nota;
                }
-
+            
                #Non-Menu
                $nonMenu = DB::table('rekap_transaksi')
                        ->join('rekap_transaksi_detail','r_t_detail_r_t_id','r_t_id')
@@ -326,13 +326,14 @@ class RekapNonMenuController extends Controller
                    $pajak_tot = $pajak->pajak;
                }           
                
-                if(in_array($valType->m_t_t_id, [1, 2, 3, 4, 6])){
+                if(in_array($valType->m_t_t_id, [1,2,3,4,6,7])){
                     $data[$valSesi->rekap_modal_sesi][$valType->m_t_t_id.'-'.'menu'] = number_format($menu_tot);
                     $data[$valSesi->rekap_modal_sesi][$valType->m_t_t_id.'-'.'non_menu'] = number_format($non_menu);
-                    $data[$valSesi->rekap_modal_sesi][$valType->m_t_t_id.'-'.'nota_menu'] = number_format($nota_menu + $nota_non_menu);
+                    $data[$valSesi->rekap_modal_sesi][$valType->m_t_t_id.'-'.'nota_menu'] = number_format($nota_menu);
                 } 
+
+            }
                 
-                }
                     $data[$valSesi->rekap_modal_sesi]['wbd_bb'] = number_format($wbd_bumbu_grab);
                     $data[$valSesi->rekap_modal_sesi]['wbd_frozen'] = number_format($wbd_frozen_grab);
                     $data[$valSesi->rekap_modal_sesi]['nota_wbd'] = number_format($nota_bumbu_grab + $nota_frozen_grab);
@@ -935,15 +936,17 @@ class RekapNonMenuController extends Controller
     //                  $data[$valSesi->rekap_modal_sesi]['tanggal'] = date('d-m-Y', strtotime($valSesi->rekap_modal_tanggal));
     //                  $data[$valSesi->rekap_modal_sesi]['sesi'] = $valSesi->rekap_modal_sesi;
     //                  $data[$valSesi->rekap_modal_sesi]['operator'] = $valSesi->name;
-    //                  if(in_array($valType->m_t_t_id, [1, 2, 3, 4, 6, 7])){
+    //                  if(in_array($query['key'], ['menu', 'non_menu'])){
     //                     $data[$valSesi->rekap_modal_sesi][$query['key']] = number_format($nominal);
     //                     $data[$valSesi->rekap_modal_sesi]['nota_' . $query['key']] = number_format($nota);
     //                  }
-    //                  $data[$valSesi->rekap_modal_sesi][$query['key']] = number_format($nominal);
-    //                  $data[$valSesi->rekap_modal_sesi]['nota_' . $query['key']] = number_format($nota);
+    //                 //  $data[$valSesi->rekap_modal_sesi][$query['key']] = number_format($nominal);
+    //                 //  $data[$valSesi->rekap_modal_sesi]['nota_' . $query['key']] = number_format($nota);
+                     
     //              }
     //             //  $data[$valSesi->rekap_modal_sesi] = number_format($nominal);
     //             //  $data[$valSesi->rekap_modal_sesi] = number_format($nota);
+                
     //          }
     //     }
     //     $convert = [];
