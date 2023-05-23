@@ -186,7 +186,7 @@
                 $("#modal-popout").modal('show');
                 $("#password").attr('required', true);
             });
-            $(".buttonEdit").on('click', function() {
+            $(document).on('click','.buttonEdit', function() {
                 id = $(this).attr('value');
                 $('#modal-popout form')[0].reset();
                 $('#action').val('edit');
@@ -198,7 +198,6 @@
                     type: "GET",
                     dataType: 'json',
                     success: function(respond) {
-                        console.log(respond);
                         $("#id").val(respond.id).trigger('change');
                         $("#name").val(respond.name).trigger('change');
                         $("#email").val(respond.email).trigger('change');

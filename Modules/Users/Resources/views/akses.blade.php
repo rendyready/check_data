@@ -100,8 +100,8 @@
                                                 <div class="form-group">
                                                     <label for="name">Permission Name</label>
                                                     <div>
-                                                        <input class="form-control" type="text" name="name"
-                                                            id="name" style="width: 100%;" required>
+                                                        <input class="form-control" type="text" name="role_name"
+                                                            id="role_name" style="width: 100%;" readonly>
                                                     </div>
                                                 </div>
                                                 <div class="form-check">
@@ -151,33 +151,39 @@
     <!-- END Page Content -->
 @endsection
 @section('js')
-    <script type="module">
-  $(document).ready(function(){
-    $('#checkbox-all').on('change', function() {
-            $('.checkbox-item').prop('checked', $(this).is(':checked'));
-        });
-    $('.checkbox-item').on('change', function() {
-            var allChecked = $('.checkbox-item:checked').length === $('.checkbox-item').length;
-            $('#checkbox-all').prop('checked', allChecked);
-        });
-    $.ajaxSetup({
-    headers:{
-      'X-CSRF-Token' : $("input[name=_token]").val()
-        }
-    });
-    var t = $('#akses').DataTable({
-            processing: false,
-            serverSide: false,
-            destroy: true,
-            pageLength: 10,
-            order: [0, 'asc']});
-    $(".buttonInsert").on('click', function() {
-        $('#modal-popout form')[0].reset();
-        $('#action').val('add');
-        $("#myModalLabel").html('Tambah Hak Akses');
-        $("#modal-popout").modal('show');
-    });
-    $(".buttonEdit").on('click', function() {
+    <script>
+        $(document).ready(function() {
+            $('#checkbox-all').on('change', function() {
+                $('.checkbox-item').prop('checked', $(this).is(':checked'));
+            });
+
+            $('.checkbox-item').on('change', function() {
+                var allChecked = $('.checkbox-item:checked').length === $('.checkbox-item').length;
+                $('#checkbox-all').prop('checked', allChecked);
+            });
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-Token': $("input[name=_token]").val()
+                }
+            });
+
+            var t = $('#akses').DataTable({
+                processing: false,
+                serverSide: false,
+                destroy: true,
+                pageLength: 10,
+                order: [0, 'asc']
+            });
+
+            $(".buttonInsert").on('click', function() {
+                $('#modal-popout form')[0].reset();
+                $('#action').val('add');
+                $("#myModalLabel").html('Tambah Hak Akses');
+                $("#modal-popout").modal('show');
+            });
+
+            $(".buttonEdit").on('click', function() {
                 var id = $(this).attr('value');
                 $('#modal-popout form')[0].reset();
                 $('#action').val('edit');
@@ -190,93 +196,113 @@
                         $("#id").val(respond.id).trigger('change');
                         $("#name").val(respond.name).trigger('change');
                     },
-                    error: function() {}
+                    error: function() {
+                        console.log("Error occurred while fetching data.");
+                    }
                 });
                 $("#modal-popout").modal('show');
-    });
-    $(".buttonDetail").on('click', function () {
-      var detail = $(this).attr('value');
-      $('#modal-popout2 form')[0].reset();
-      $('#action2').val('permission_edit');
-      $("#myModalLabel2").html('Ubah Permission Role');
-            $.ajax({
-                url: '/users/akses/permission-edit/'+detail,
-                type: 'GET',
-                success: function(response) {
-                    var checkboxValues = response.role_id;
-                    // Update checkbox values based on the response
-                    $('input[name="permission_id[]"]').each(function() {
-                        var checkbox = $(this);
-                        var permissionId = checkbox.val();
-
-                        if (checkboxValues.includes(permissionId)) {
-                            checkbox.prop('checked', true);
-                        } else {
-                            checkbox.prop('checked', false);
-                        }
-                    });
-                },
-                error: function(xhr) {
-                    console.log(xhr.responseText);
-                }
             });
-      $("#modal-popout2").modal('show');
-    });
-    $('#formAction').submit(function(e) {
-                if (!e.isDefaultPrevented()) {
-                    $.ajax({
-                        url: "{{ route('action.akses') }}",
-                        type: "POST",
-                        data: $('#modal-popout form').serialize(),
-                        success: function(data) {
-                                $('#modal-popout').modal('hide');
-                                Codebase.helpers('jq-notify', {
-                                    align: 'right',
-                                    from: 'top',
-                                    type: data.type,
-                                    icon: 'fa fa-info me-5',
-                                    message: data.messages
-                                });
-                                setTimeout(function() {
-                                    window.location.reload();
-                                }, 2500);
-                        },
-                    });
-                    return false;
-                }
-    });
-    $('#formpermission').submit(function(e) {
-            var id = $('#name').val();
-            var action = $('#action2');
-            var permission_val = $('input[name="permission_id[]"]:checked')
-                .map(function() {
+
+            $(".buttonDetail").on('click', function() {
+                var detail = $(this).attr('value');
+                $('#modal-popout2 form')[0].reset();
+                $('#action2').val('permission_edit');
+                $("#myModalLabel2").html('Ubah Permission Role');
+                $.ajax({
+                    url: '/users/akses/permission-edit/' + detail,
+                    type: 'GET',
+                    success: function(response) {
+                        $('#role_name').val(response.role.name);
+                        $('#id2').val(response.role.id);
+                        var checkboxValues = response.permissions ||
+                    []; // Initialize as empty array if undefined
+                        console.log(checkboxValues);
+                        var permissionIds = Array.isArray(checkboxValues) ? checkboxValues.map(
+                            String) : [];
+
+                        $('input[name="permission_id[]"]').each(function() {
+                            var checkbox = $(this);
+                            var permissionId = checkbox.val();
+
+                            if (permissionIds.includes(permissionId)) {
+                                checkbox.prop('checked', true);
+                            } else {
+                                checkbox.prop('checked', false);
+                            }
+                        });
+                    },
+                    error: function(xhr) {
+                        console.log(xhr.responseText);
+                    }
+                });
+
+                $("#modal-popout2").modal('show');
+            });
+
+
+            $('#formAction').submit(function(e) {
+                e.preventDefault(); // Prevent default form submission
+                var formData = $(this).serialize();
+
+                $.ajax({
+                    url: "{{ route('action.akses') }}",
+                    type: "POST",
+                    data: formData,
+                    success: function(data) {
+                        $('#modal-popout').modal('hide');
+                        Codebase.helpers('jq-notify', {
+                            align: 'right',
+                            from: 'top',
+                            type: data.type,
+                            icon: 'fa fa-info me-5',
+                            message: data.messages
+                        });
+                        setTimeout(function() {
+                            window.location.reload();
+                        }, 2500);
+                    },
+                    error: function(xhr) {
+                        console.log(xhr.responseText);
+                    }
+                });
+            });
+
+            $('#formpermission').submit(function(e) {
+                e.preventDefault(); // Prevent default form submission
+                var id = $('#role_name').val();
+                var action = $('#action2').val();
+                var permission_val = $('input[name="permission_id[]"]:checked').map(function() {
                     return $(this).val();
-                })
-                .get();
-                    $.ajax({
-                        url: "{{route('action.akses')}}",
-                        type: "POST",
-                        data: {name:id,permission_val:permission_val,action:action},
-                        success: function(data) {
-                                $('#modal-popout2').modal('hide');
-                                Codebase.helpers('jq-notify', {
-                                    align: 'right',
-                                    from: 'top',
-                                    type: data.type,
-                                    icon: 'fa fa-info me-5',
-                                    message: data.messages
-                                });
-                                // setTimeout(function() {
-                                //     window.location.reload();
-                                // }, 2500);
-                        },
-                    });
-                    return false;
-                
-    });
-  $("#akses").append(
-       $('<tfoot/>').append( $("#akses thead tr").clone() )
-      );
-  });
-  </script>
+                }).get();
+
+                $.ajax({
+                    url: "{{ route('action.akses') }}",
+                    type: "POST",
+                    data: {
+                        name: id,
+                        permission_id: permission_val,
+                        action: action
+                    },
+                    success: function(data) {
+                        $('#modal-popout2').modal('hide');
+                        Codebase.helpers('jq-notify', {
+                            align: 'right',
+                            from: 'top',
+                            type: data.type,
+                            icon: 'fa fa-info me-5',
+                            message: data.messages
+                        });
+                        setTimeout(function() {
+                            window.location.reload();
+                        }, 1500);
+                    },
+                    error: function(xhr) {
+                        console.log(xhr.responseText);
+                    }
+                });
+            });
+
+            $("#akses").append($('<tfoot/>').append($("#akses thead tr").clone()));
+        });
+    </script>
 @endsection
