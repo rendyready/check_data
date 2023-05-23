@@ -92,23 +92,12 @@ class RekapMenuHarianController extends Controller
     }
 
     function show(Request $request) {
-        $refund = DB::table('rekap_refund')
-            ->join('rekap_refund_detail', 'r_r_detail_r_r_id', 'r_r_id')
+        $refund = DB::table('rekap_refund_detail')
+            ->join('rekap_refund', 'r_r_id', 'r_r_detail_r_r_id')
             ->join('rekap_modal', 'rekap_modal_id', 'r_r_rekap_modal_id')
             ->join('rekap_transaksi', 'r_t_id', 'r_r_r_t_id')
-            ->join('m_transaksi_tipe', 'm_t_t_id', 'r_t_m_t_t_id');
-            // if (strpos($request->tanggal, 'to') !== false) {
-            //     [$start, $end] = explode('to', $request->tanggal);
-            //     $refund->whereBetween('rekap_modal_tanggal', [$start, $end]);
-            //     } else {
-            //     $refund->where('rekap_modal_tanggal', $request->tanggal);
-            //     }
-            //     $refund->where('rekap_modal_m_area_id', $request->area)
-            //             ->where('rekap_modal_m_w_id', $request->waroeng);
-            //             if ($request->sesi != 'all') {
-            //                 $refund->where('rekap_modal_sesi', $request->sesi);
-            //             }
-                $refund = $refund->get();
+            ->join('m_transaksi_tipe', 'm_t_t_id', 'r_t_m_t_t_id')
+            ->get();
 
             $get = DB::table('rekap_transaksi_detail')
                     ->join('rekap_transaksi', 'r_t_id', 'r_t_detail_r_t_id')
