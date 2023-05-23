@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $guard_name
  * @property Carbon $created_at
  * @property Carbon|null $updated_at
+ * @property string $permissions_status_sync
  * 
  * @property Collection|ModelHasPermission[] $model_has_permissions
  * @property Collection|Role[] $roles
@@ -30,7 +31,8 @@ class Permission extends Model
 
 	protected $fillable = [
 		'name',
-		'guard_name'
+		'guard_name',
+		'permissions_status_sync'
 	];
 
 	public function model_has_permissions()

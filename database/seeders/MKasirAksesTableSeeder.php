@@ -14,7 +14,8 @@ class MKasirAksesTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('m_kasir_akses')->truncate();
+        // DB::table('m_kasir_akses')->truncate();
+        DB::statement("TRUNCATE TABLE m_kasir_akses RESTART IDENTITY;");
 
         $waroeng = DB::table('m_w')->get();
 
@@ -70,6 +71,6 @@ class MKasirAksesTableSeeder extends Seeder
                 ],
             ]);
         }
-        
+
     }
 }
