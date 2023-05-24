@@ -137,12 +137,10 @@ class RekapMenuHarianController extends Controller
                 $row[] = $val_menu->r_t_detail_m_produk_nama;
                 $qty = $val_menu->qty;
                 $nominal = number_format($val_menu->r_t_detail_reguler_price * $val_menu->qty);
-                if (!empty($refund)){
-                    foreach ($refund as $key => $valRef) {
-                        if ($val_menu->r_t_detail_m_produk_id == $valRef->r_r_detail_m_produk_id && $val_menu->r_t_tanggal == $valRef->r_r_tanggal && $val_menu->rekap_modal_sesi == $valRef->rekap_modal_sesi && $val_menu->m_t_t_name == $valRef->m_t_t_name) {
-                            $qty = $val_menu->qty - $valRef->r_r_detail_qty;
-                            $nominal = number_format($val_menu->r_t_detail_reguler_price * $qty);
-                        }
+                foreach ($refund as $key => $valRef) {
+                    if ($val_menu->r_t_detail_m_produk_id == $valRef->r_r_detail_m_produk_id && $val_menu->r_t_tanggal == $valRef->r_r_tanggal && $val_menu->rekap_modal_sesi == $valRef->rekap_modal_sesi && $val_menu->m_t_t_name == $valRef->m_t_t_name) {
+                        $qty = $val_menu->qty - $valRef->r_r_detail_qty;
+                        $nominal = number_format($val_menu->r_t_detail_reguler_price * $qty);
                     }
                 }
                 $row[] = $qty;
