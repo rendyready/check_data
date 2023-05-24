@@ -770,8 +770,12 @@
 
                         </ul>
                     </li>
-                    @role('admin|manajer akuntansi|kasi akuntansi|kasi keuangan pusat|kasi keuangan area|asisten
-                        keuangan|kaur akuntansi|kaur keuangan|staf akuntansi|staf keuangan')
+                    @can('dashboard.view')
+                        {{-- <h3>Anda punya akses sebagai Admin</h3> --}}
+                    @elsecan('dashboard.edit')
+                        {{-- <h3>Anda punya akses sebagai Editor</h3> --}}
+                    @else
+                        {{-- <h3>Anda tidak punya akses</h3> --}}
                         <li class="nav-main-item{{ request()->is('akuntansi/*') ? ' open' : '' }}">
                             <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true"
                                 aria-expanded="true" href="#">
@@ -779,7 +783,7 @@
                                 <span class="nav-main-link-name">Akuntansi</span>
                             </a>
                             <ul class="nav-main-submenu">
-                                @role('admin|manajer akuntansi|kasi akuntansi|kaur akuntansi')
+                                
                                     <li class="nav-main-item">
                                         <a class="nav-main-link{{ request()->is('akuntansi/rekening') ? ' active' : '' }}"
                                             href="{{ route('rekening.index') }}">
@@ -792,8 +796,7 @@
                                             <span class="nav-main-link-name">Link Akuntansi</span>
                                         </a>
                                     </li>
-                                @else
-                                @endrole
+                         
                                 <li class="nav-main-item">
                                     <a class="nav-main-link{{ request()->is('akuntansi/jurnal_kas') ? ' active' : '' }}"
                                         href="{{ route('jurnal_kas.index') }}">
@@ -815,8 +818,7 @@
 
                             </ul>
                         </li>
-                    @else
-                    @endrole
+                    @endcan
                     <li class="nav-main-item{{ request()->is('hrd/*') ? ' open' : '' }}">
                         <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true"
                             aria-expanded="true" href="#">
