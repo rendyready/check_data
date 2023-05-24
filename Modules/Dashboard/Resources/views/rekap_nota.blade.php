@@ -101,9 +101,10 @@
               <thead>
                 <tr>
                   <th>Tanggal</th>
+                  <th>Jam</th>
                   <th>Operator</th>
                   <th>No. Nota</th>
-                  <th>Big</th>
+                  <th>Big Boss</th>
                   <th>Tax</th>
                   <th>Total</th>
                   <th>SC</th>

@@ -294,6 +294,7 @@ $(document).ready(function() {
   }
 
     $('#filter_sif').on('select2:select', function() {
+        var id_waroeng  = $('.filter_waroeng').val();  
         var id_sif = $(this).val();    
         if(id_sif !== 'all'){
             $.ajax({
@@ -302,6 +303,7 @@ $(document).ready(function() {
             dataType: 'JSON',
             data : {
                 id_sif: id_sif,
+                id_waroeng: id_waroeng,
             },
             success:function(res){               
                 if(res){
