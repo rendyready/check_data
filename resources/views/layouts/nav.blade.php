@@ -771,11 +771,11 @@
                         </ul>
                     </li>
                     @can('dashboard.view')
-                        <h3>Anda punya akses sebagai Admin</h3>
+                        {{-- <h3>Anda punya akses sebagai Admin</h3> --}}
                     @elsecan('dashboard.edit')
-                        <h3>Anda punya akses sebagai Editor</h3>
+                        {{-- <h3>Anda punya akses sebagai Editor</h3> --}}
                     @else
-                        <h3>Anda tidak punya akses</h3>
+                        {{-- <h3>Anda tidak punya akses</h3> --}}
                         <li class="nav-main-item{{ request()->is('akuntansi/*') ? ' open' : '' }}">
                             <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true"
                                 aria-expanded="true" href="#">
