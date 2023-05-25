@@ -130,7 +130,7 @@ $(document).ready(function() {
         var tanggal  = $('.filter_tanggal').val();
         var operator = $('.filter_operator').val(); 
         var status   = $('.filter_status').val();  
-        console.log(status);
+        
         $('.show_nota').remove(); 
             $.ajax({
             type:"GET",
@@ -336,7 +336,7 @@ $(document).ready(function() {
             $(".filter_waroeng").val(prev).trigger('change');
         }  
         $(".filter_operator").empty(); 
-        $(".filter_status").empty();   
+        $(".filter_status").val(prev).trigger('change');   
     });
   } 
 
@@ -377,7 +377,7 @@ $(document).ready(function() {
             $(".filter_operator").empty();
             $(".filter_waroeng").val(prev).trigger('change');
         }   
-        $(".filter_status").empty();    
+        $(".filter_status").val(prev).trigger('change');      
     });
 
   } else {
