@@ -225,7 +225,7 @@ class RekapNonMenuController extends Controller
                if (!empty($wbdBumbu)) {
                    $wbd_bumbu = $wbdBumbu->nominal;
                }
-            //    return $listWbdBumbu;
+           
                #Wbd-BumbuGrab
                $wbdBumbuGrab = DB::table('rekap_transaksi')
                        ->join('rekap_transaksi_detail','r_t_detail_r_t_id','r_t_id')
@@ -245,7 +245,7 @@ class RekapNonMenuController extends Controller
                         ])->first();
                 $wbd_bumbu_grab = 0;
                 $grab_nota = 0;
-                if (!empty($wbdBumbuGrab)) {
+                if (!empty($wbdBumbuGrab) && $valType->m_t_t_id == 5 && $wbdBumbuGrab->r_t_m_t_t_id == $valType->m_t_t_id) {
                     $wbd_bumbu_grab = $wbdBumbuGrab->nominal;
                     $grab_nota = $menu_grab->nota;
                 }
@@ -276,7 +276,7 @@ class RekapNonMenuController extends Controller
                        ->groupBy('r_t_rekap_modal_id', 'r_t_m_t_t_id')
                        ->first();
                 $wbd_frozen_grab = 0;
-                if (!empty($wbdFrozenGrab)) {
+                if (!empty($wbdFrozenGrab) && $valType->m_t_t_id == 5 && $wbdBumbuGrab->r_t_m_t_t_id == $valType->m_t_t_id) {
                     $wbd_frozen_grab = $wbdFrozenGrab->nominal;
                }
                #Kerupuk
