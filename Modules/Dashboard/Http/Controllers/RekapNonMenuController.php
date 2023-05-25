@@ -232,7 +232,7 @@ class RekapNonMenuController extends Controller
                        ->selectRaw('r_t_rekap_modal_id, sum(r_t_detail_reguler_price*r_t_detail_qty) nominal, r_t_m_t_t_id')
                        ->where([
                            'r_t_rekap_modal_id' => $valSesi->rekap_modal_id,
-                           'r_t_m_t_t_id' => $valType->m_t_t_id
+                           'r_t_m_t_t_id' => 5
                        ])
                        ->whereIn('r_t_detail_m_produk_id',$listWbdBumbu)
                        ->groupBy('r_t_rekap_modal_id', 'r_t_m_t_t_id')
@@ -241,11 +241,11 @@ class RekapNonMenuController extends Controller
                         ->selectRaw('count(r_t_id) nota')
                         ->where([
                             'r_t_rekap_modal_id' => $valSesi->rekap_modal_id,
-                            'r_t_m_t_t_id' => $valType->m_t_t_id
+                            'r_t_m_t_t_id' => 5
                         ])->first();
                 $wbd_bumbu_grab = 0;
                 $grab_nota = 0;
-                if (!empty($wbdBumbuGrab) && $valType->m_t_t_id == 5 && $wbdBumbuGrab->r_t_m_t_t_id == $valType->m_t_t_id) {
+                if (!empty($wbdBumbuGrab) && !empty($menu_grab) && $wbdBumbuGrab->r_t_m_t_t_id == 5) {
                     $wbd_bumbu_grab = $wbdBumbuGrab->nominal;
                     $grab_nota = $menu_grab->nota;
                 }
@@ -270,13 +270,13 @@ class RekapNonMenuController extends Controller
                        ->selectRaw('r_t_rekap_modal_id, sum(r_t_detail_reguler_price*r_t_detail_qty) nominal, r_t_m_t_t_id')
                        ->where([
                            'r_t_rekap_modal_id' => $valSesi->rekap_modal_id,
-                           'r_t_m_t_t_id' => $valType->m_t_t_id
+                           'r_t_m_t_t_id' => 5
                        ])
                        ->whereIn('r_t_detail_m_produk_id',$listWbdFrozen)
                        ->groupBy('r_t_rekap_modal_id', 'r_t_m_t_t_id')
                        ->first();
                 $wbd_frozen_grab = 0;
-                if (!empty($wbdFrozenGrab) && $valType->m_t_t_id == 5 && $wbdBumbuGrab->r_t_m_t_t_id == $valType->m_t_t_id) {
+                if (!empty($wbdFrozenGrab)) {
                     $wbd_frozen_grab = $wbdFrozenGrab->nominal;
                }
                #Kerupuk
@@ -330,12 +330,12 @@ class RekapNonMenuController extends Controller
                     $data[$valSesi->rekap_modal_sesi][$valType->m_t_t_id.'-'.'menu'] = number_format($menu_tot);
                     $data[$valSesi->rekap_modal_sesi][$valType->m_t_t_id.'-'.'non_menu'] = number_format($non_menu);
                     $data[$valSesi->rekap_modal_sesi][$valType->m_t_t_id.'-'.'nota_menu'] = number_format($nota_menu);
-                } elseif ($valType->m_t_t_name == 'grabmart'){
-                    $data[$valSesi->rekap_modal_sesi][$valType->m_t_t_id.'-'.'wbd_bb'] = number_format($wbd_bumbu_grab);
-                    $data[$valSesi->rekap_modal_sesi][$valType->m_t_t_id.'-'.'wbd_frozen'] = number_format($wbd_frozen_grab);
-                    $data[$valSesi->rekap_modal_sesi][$valType->m_t_t_id.'-'.'nota_grab'] = number_format($grab_nota);
-                }
+                } 
             }
+                    $data[$valSesi->rekap_modal_sesi]['wbd_bb'] = number_format($wbd_bumbu_grab);
+                    $data[$valSesi->rekap_modal_sesi]['wbd_frozen'] = number_format($wbd_frozen_grab);
+                    $data[$valSesi->rekap_modal_sesi]['nota_grab'] = number_format($grab_nota);
+
                     $data[$valSesi->rekap_modal_sesi]['ice_cream'] = number_format($ice_cream);
                     $data[$valSesi->rekap_modal_sesi]['air_mineral'] = number_format($mineral_tot);
                     $data[$valSesi->rekap_modal_sesi]['Kerupuk'] = number_format($kerupuk_tot);
