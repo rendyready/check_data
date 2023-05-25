@@ -183,7 +183,7 @@
                 $("#modal-popout").modal('show');
             });
 
-            $(".buttonEdit").on('click', function() {
+            $(document).on('click','.buttonEdit', function() {
                 var id = $(this).attr('value');
                 $('#modal-popout form')[0].reset();
                 $('#action').val('edit');
@@ -203,7 +203,7 @@
                 $("#modal-popout").modal('show');
             });
 
-            $(".buttonDetail").on('click', function() {
+            $(document).on('click', '.buttonDetail',function() {
                 var detail = $(this).attr('value');
                 $('#modal-popout2 form')[0].reset();
                 $('#action2').val('permission_edit');
