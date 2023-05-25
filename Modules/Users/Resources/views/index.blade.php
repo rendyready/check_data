@@ -169,7 +169,12 @@
                 }
             });
             Codebase.helpersOnLoad(['jq-select2']);
-            var t = $('#user').DataTable();
+            var t = $('#user').DataTable({
+                processing: false,
+                serverSide: false,
+                destroy: true,
+                pageLength: 10,
+                order: [0, 'asc']} );
             $("#user").append(
                 $('<tfoot/>').append($("#user thead tr").clone())
             );
@@ -181,7 +186,7 @@
                 $("#modal-popout").modal('show');
                 $("#password").attr('required', true);
             });
-            $(".buttonEdit").on('click', function() {
+            $(document).on('click','.buttonEdit', function() {
                 id = $(this).attr('value');
                 $('#modal-popout form')[0].reset();
                 $('#action').val('edit');
@@ -193,7 +198,6 @@
                     type: "GET",
                     dataType: 'json',
                     success: function(respond) {
-                        console.log(respond);
                         $("#id").val(respond.id).trigger('change');
                         $("#name").val(respond.name).trigger('change');
                         $("#email").val(respond.email).trigger('change');
@@ -203,6 +207,7 @@
                             .map(function(item) {
                                 return parseInt(item);
                             });
+                        console.log(waroeng_akses);
                         $("#waroeng_akses").val(waroeng_akses).trigger('change');
                     },
                     error: function() {}
