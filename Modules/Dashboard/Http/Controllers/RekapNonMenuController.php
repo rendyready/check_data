@@ -98,15 +98,6 @@ class RekapNonMenuController extends Controller
            array_push($listIceCream,$valMenu->m_produk_id);
        }
 
-       $getWbdBumbu = DB::table('m_produk')
-                ->join('config_sub_jenis_produk','config_sub_jenis_produk_m_produk_id','=','m_produk_id')
-                ->select('m_produk_id')
-                ->whereIn('config_sub_jenis_produk_m_sub_jenis_produk_id',[35])->get();
-       $listWbdBumbu = [];
-       foreach ($getWbdBumbu as $key => $valMenu) {
-           array_push($listWbdBumbu,$valMenu->m_produk_id);
-       }
-
        $getWbdFrozen = DB::table('m_produk')
                 ->join('config_sub_jenis_produk','config_sub_jenis_produk_m_produk_id','=','m_produk_id')
                 ->select('m_produk_id')
@@ -170,29 +161,12 @@ class RekapNonMenuController extends Controller
                        ])
                        ->whereIn('r_t_detail_m_produk_id',$listNonMenu)
                        ->whereNotIn('r_t_detail_m_produk_id',$listKbd)
-                    //    ->whereNotIn('r_t_detail_m_produk_id',$listIceCream)
                        ->groupBy('r_t_rekap_modal_id')
                        ->first();
 
                 $non_menu =0;
                if (!empty($nonMenu)) {
                    $non_menu = $nonMenu->nominal;
-               }
-
-               #KBD
-               $kbd = DB::table('rekap_transaksi')
-                       ->join('rekap_transaksi_detail','r_t_detail_r_t_id','r_t_id')
-                       ->selectRaw('r_t_m_t_t_id, r_t_rekap_modal_id, sum(r_t_detail_reguler_price*r_t_detail_qty) nominal')
-                       ->where([
-                           'r_t_rekap_modal_id' => $valSesi->rekap_modal_id,
-                           'r_t_m_t_t_id' => $valType->m_t_t_id
-                       ])
-                       ->whereIn('r_t_detail_m_produk_id',$listKbd)
-                       ->groupBy('r_t_rekap_modal_id', 'r_t_m_t_t_id')
-                       ->first();
-               $wbd = 0;
-               if (!empty($kbd)) {
-                   $wbd = $kbd->nominal;
                }
 
                #Ice-Cream
@@ -218,7 +192,8 @@ class RekapNonMenuController extends Controller
                        ->where([
                            'r_t_rekap_modal_id' => $valSesi->rekap_modal_id,
                        ])
-                       ->whereIn('r_t_detail_m_produk_id',$listWbdBumbu)
+                       ->whereIn('r_t_detail_m_produk_id',$listKbd)
+                       ->whereNotIn('r_t_detail_m_produk_id',$listWbdFrozen)
                        ->groupBy('r_t_rekap_modal_id')
                        ->first();
                 $wbd_bumbu = 0;
@@ -234,7 +209,8 @@ class RekapNonMenuController extends Controller
                            'r_t_rekap_modal_id' => $valSesi->rekap_modal_id,
                            'r_t_m_t_t_id' => 5
                        ])
-                       ->whereIn('r_t_detail_m_produk_id',$listWbdBumbu)
+                       ->whereIn('r_t_detail_m_produk_id',$listKbd)
+                       ->whereNotIn('r_t_detail_m_produk_id',$listWbdFrozen)
                        ->groupBy('r_t_rekap_modal_id', 'r_t_m_t_t_id')
                        ->first();
                 $menu_grab = DB::table('rekap_transaksi')
@@ -264,6 +240,7 @@ class RekapNonMenuController extends Controller
                if (!empty($wbdFrozen)) {
                    $wbd_frozen = $wbdFrozen->nominal;
                }
+               
                #Wbd-FrozenGrab
                $wbdFrozenGrab = DB::table('rekap_transaksi')
                        ->join('rekap_transaksi_detail','r_t_detail_r_t_id','r_t_id')
@@ -279,6 +256,7 @@ class RekapNonMenuController extends Controller
                 if (!empty($wbdFrozenGrab)) {
                     $wbd_frozen_grab = $wbdFrozenGrab->nominal;
                }
+
                #Kerupuk
                $kerupuk = DB::table('rekap_transaksi')
                         ->join('rekap_transaksi_detail','r_t_detail_r_t_id','r_t_id')
@@ -293,6 +271,7 @@ class RekapNonMenuController extends Controller
                if (!empty($kerupuk)) {
                    $kerupuk_tot = $kerupuk->nominal;
                }
+
                #mineral
                $mineral = DB::table('rekap_transaksi')
                        ->join('rekap_transaksi_detail','r_t_detail_r_t_id','r_t_id')
@@ -306,7 +285,8 @@ class RekapNonMenuController extends Controller
                 $mineral_tot = 0;
                if (!empty($mineral)) {
                    $mineral_tot = $mineral->nominal;
-               }         
+               }  
+
                #pajak
                $pajak = DB::table('rekap_transaksi')
                        ->selectRaw('r_t_rekap_modal_id, SUM(r_t_nominal_pajak) pajak')
