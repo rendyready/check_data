@@ -79,6 +79,15 @@ class ConfGetDataSeeder extends Seeder
             'config_get_data_field_validate1' => 'id'
         ]);
         DB::table('config_get_data')->insert([
+            'config_get_data_table_name' => 'permissions',
+            'config_get_data_table_tipe' => 'master',
+            'config_get_data_status' => 'on',
+            'config_get_data_limit' => 0,
+            'config_get_data_sequence' => 'on',
+            'config_get_data_field_status' => 'permissions_status_sync',
+            'config_get_data_field_validate1' => 'id'
+        ]);
+        DB::table('config_get_data')->insert([
             'config_get_data_table_name' => 'role_has_permissions',
             'config_get_data_table_tipe' => 'master',
             'config_get_data_status' => 'on',
