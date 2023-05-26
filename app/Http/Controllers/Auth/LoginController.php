@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Artisan;
 class LoginController extends Controller
 {
     /*
@@ -53,6 +54,7 @@ class LoginController extends Controller
     }
     protected function authenticated(Request $request, $user)
     {
+        Artisan::call('cache:clear');
         if (!$user->hasVerifiedAccount()) {
             auth()->logout();
             $token = Password::createToken($user);

@@ -302,7 +302,7 @@
                                                     </a>
                                                 </li>
                                             @endcan
-                                            @can('setting footer.view')
+                                            @can('seting footer.view')
                                                 <li class="nav-main-item">
                                                     <a class="nav-main-link{{ request()->is('master/conf_footer') ? ' active' : '' }}"
                                                         href="{{ route('conf_footer.index') }}">
@@ -336,7 +336,7 @@
                                                     </a>
                                                 </li>
                                             @endcan
-                                            @can('pakak.view')
+                                            @can('pajak.view')
                                                 <li class="nav-main-item">
                                                     <a class="nav-main-link{{ request()->is('master/m_pajak') ? ' active' : '' }}"
                                                         href="{{ route('m_pajak.index') }}">
@@ -538,7 +538,7 @@
                                                     </a>
                                                 </li>
                                             @endcan
-                                            @can('rekap aktifitas kasir')
+                                            @can('rekap aktifitas kasir.view')
                                                 <li
                                                     class="nav-main-item{{ request()->is('dashboard/rekap_aktiv') ? ' open' : '' }}">
                                                     <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu"
