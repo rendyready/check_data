@@ -51,7 +51,7 @@ class RekapNonMenuController extends Controller
         return response()->json($data);
     }
 
-    public function show(Request $request)
+    public function show1(Request $request)
     {
        $typeTransaksi = DB::table('m_transaksi_tipe')->get();
        $sesi = DB::table('rekap_modal')
@@ -456,178 +456,241 @@ class RekapNonMenuController extends Controller
        return $pdf->download('lap_non_menu_'.tgl_indo($request->tanggal).'.pdf');
     }
 
-    public function show22(Request $request)
+    public function show(Request $request)
     {
-        $typeTransaksi = DB::table('m_transaksi_tipe')->get();
-        $sesi = DB::table('rekap_modal')
-                ->join('users','users_id','=','rekap_modal_created_by')
-                ->where(DB::raw('DATE(rekap_modal_tanggal)'), $request->tanggal);
-                if($request->area != 'all'){
-                     $sesi->where('rekap_modal_m_area_id', $request->area);
-                     if($request->waroeng != 'all') {
-                         $sesi->where('rekap_modal_m_w_id', $request->waroeng);
-                     }
-                 }
-                $sesi = $sesi->where('rekap_modal_status', 'close')
-                ->orderBy('rekap_modal_sesi','asc')
-                ->get();
- 
-        $getMenu = DB::table('m_produk')
-                ->select('m_produk_id')
-                ->whereNotIn('m_produk_m_jenis_produk_id',[9,11,12,13])->get();
-        $listMenu = [];
-        foreach ($getMenu as $key => $valMenu) {
-            array_push($listMenu,$valMenu->m_produk_id);
-        }
-        $getNonMenu = DB::table('m_produk')
-                ->select('m_produk_id')
-                ->whereIn('m_produk_m_jenis_produk_id',[9])->get();
-        $listNonMenu = [];
-        foreach ($getNonMenu as $key => $valMenu) {
-            array_push($listNonMenu,$valMenu->m_produk_id);
-        }
-        $getKbd = DB::table('m_produk')
-                ->select('m_produk_id')
-                ->whereIn('m_produk_m_jenis_produk_id',[11])->get();
-        $listKbd = [];
-        foreach ($getKbd as $key => $valMenu) {
-            array_push($listKbd,$valMenu->m_produk_id);
-        }
- 
-        $getIceCream = DB::table('m_produk')
+       $typeTransaksi = DB::table('m_transaksi_tipe')->get();
+       $sesi = DB::table('rekap_modal')
+               ->join('users','users_id','=','rekap_modal_created_by')
+               ->where(DB::raw('DATE(rekap_modal_tanggal)'), $request->tanggal);
+               if($request->area != 'all'){
+                    $sesi->where('rekap_modal_m_area_id', $request->area);
+                    if($request->waroeng != 'all') {
+                        $sesi->where('rekap_modal_m_w_id', $request->waroeng);
+                    }
+                }
+               $sesi = $sesi->where('rekap_modal_status', 'close')
+               ->orderBy('rekap_modal_sesi','asc')
+               ->get();
+
+       $getMenu = DB::table('m_produk')
+               ->select('m_produk_id')
+               ->whereNotIn('m_produk_m_jenis_produk_id',[9,11,12,13])->get();
+       $listMenu = [];
+       foreach ($getMenu as $key => $valMenu) {
+           array_push($listMenu,$valMenu->m_produk_id);
+       }
+       $getNonMenu = DB::table('m_produk')
+               ->select('m_produk_id')
+               ->whereIn('m_produk_m_jenis_produk_id',[9])->get();
+       $listNonMenu = [];
+       foreach ($getNonMenu as $key => $valMenu) {
+           array_push($listNonMenu,$valMenu->m_produk_id);
+       }
+       $getKbd = DB::table('m_produk')
+               ->select('m_produk_id')
+               ->whereIn('m_produk_m_jenis_produk_id',[11])->get();
+       $listKbd = [];
+       foreach ($getKbd as $key => $valMenu) {
+           array_push($listKbd,$valMenu->m_produk_id);
+       }
+
+       $getIceCream = DB::table('m_produk')
+               ->join('config_sub_jenis_produk','config_sub_jenis_produk_m_produk_id','=','m_produk_id')
+               ->select('m_produk_id')
+               ->whereIn('config_sub_jenis_produk_m_sub_jenis_produk_id',[20,22,23,24,25])->get();
+       $listIceCream = [];
+       foreach ($getIceCream as $key => $valMenu) {
+           array_push($listIceCream,$valMenu->m_produk_id);
+       }
+
+       $getWbdFrozen = DB::table('m_produk')
                 ->join('config_sub_jenis_produk','config_sub_jenis_produk_m_produk_id','=','m_produk_id')
                 ->select('m_produk_id')
-                ->whereIn('config_sub_jenis_produk_m_sub_jenis_produk_id',[20,22,23,24,25])->get();
-        $listIceCream = [];
-        foreach ($getIceCream as $key => $valMenu) {
-            array_push($listIceCream,$valMenu->m_produk_id);
-        }
- 
-        $getWbdBumbu = DB::table('m_produk')
-                 ->join('config_sub_jenis_produk','config_sub_jenis_produk_m_produk_id','=','m_produk_id')
-                 ->select('m_produk_id')
-                 ->whereIn('config_sub_jenis_produk_m_sub_jenis_produk_id',[35])->get();
-        $listWbdBumbu = [];
-        foreach ($getWbdBumbu as $key => $valMenu) {
-            array_push($listWbdBumbu,$valMenu->m_produk_id);
-        }
- 
-        $getWbdFrozen = DB::table('m_produk')
-                 ->join('config_sub_jenis_produk','config_sub_jenis_produk_m_produk_id','=','m_produk_id')
-                 ->select('m_produk_id')
-                 ->whereIn('config_sub_jenis_produk_m_sub_jenis_produk_id',[45])->get();
-        $listWbdFrozen = [];
-        foreach ($getWbdFrozen as $key => $valMenu) {
-            array_push($listWbdFrozen,$valMenu->m_produk_id);
-        }
- 
-        $getKerupuk = DB::table('m_produk')
-             ->join('config_sub_jenis_produk','config_sub_jenis_produk_m_produk_id','=','m_produk_id')
-             ->select('m_produk_id')
-             ->whereIn('config_sub_jenis_produk_m_sub_jenis_produk_id',[47])->get();
-         $listKerupuk = [];
-         foreach ($getKerupuk as $key => $valMenu) {
-             array_push($listKerupuk,$valMenu->m_produk_id);
-         }
-        $getMineral = DB::table('m_produk')
-             ->join('config_sub_jenis_produk','config_sub_jenis_produk_m_produk_id','=','m_produk_id')
-             ->select('m_produk_id')
-             ->whereIn('config_sub_jenis_produk_m_sub_jenis_produk_id',[12])->get();
-         $listMineral = [];
-         foreach ($getMineral as $key => $valMenu) {
-             array_push($listMineral,$valMenu->m_produk_id);
-         } 
+                ->whereIn('config_sub_jenis_produk_m_sub_jenis_produk_id',[45])->get();
+       $listWbdFrozen = [];
+       foreach ($getWbdFrozen as $key => $valMenu) {
+           array_push($listWbdFrozen,$valMenu->m_produk_id);
+       }
 
-         $data = [];
+       $getKerupuk = DB::table('m_produk')
+            ->join('config_sub_jenis_produk','config_sub_jenis_produk_m_produk_id','=','m_produk_id')
+            ->select('m_produk_id')
+            ->whereIn('config_sub_jenis_produk_m_sub_jenis_produk_id',[47])->get();
+        $listKerupuk = [];
+        foreach ($getKerupuk as $key => $valMenu) {
+            array_push($listKerupuk,$valMenu->m_produk_id);
+        }
+       $getMineral = DB::table('m_produk')
+            ->join('config_sub_jenis_produk','config_sub_jenis_produk_m_produk_id','=','m_produk_id')
+            ->select('m_produk_id')
+            ->whereIn('config_sub_jenis_produk_m_sub_jenis_produk_id',[12])->get();
+        $listMineral = [];
+        foreach ($getMineral as $key => $valMenu) {
+            array_push($listMineral,$valMenu->m_produk_id);
+        }
 
-         foreach ($sesi as $valSesi) {
-             foreach ($typeTransaksi as $valType) {
-                 $data[$valSesi->rekap_modal_sesi] = [
-                     'area' => $valSesi->rekap_modal_m_area_nama,
-                     'waroeng' => $valSesi->rekap_modal_m_w_nama,
-                     'tanggal' => date('d-m-Y', strtotime($valSesi->rekap_modal_tanggal)),
-                     'sesi' => $valSesi->rekap_modal_sesi,
-                     'operator' => $valSesi->name
-                 ];
-         
-                 $queries = [
-                     [
-                         'list' => $listMenu,
-                         'key' => 'menu',
-                     ],
-                     [
-                         'list' => $listNonMenu,
-                         'key' => 'non_menu',
-                     ],
-                     [
-                         'list' => $listKbd,
-                         'key' => 'WBD BB',
-                     ],
-                     [
-                         'list' => $listIceCream,
-                         'key' => 'ice_cream',
-                     ],
-                     [
-                         'list' => $listWbdBumbu,
-                         'key' => 'wbd_bb',
-                     ],
-                     [
-                         'list' => $listWbdFrozen,
-                         'key' => 'wbd_frozen',
-                     ],
-                     [
-                         'list' => $listKerupuk,
-                         'key' => 'Kerupuk',
-                     ],
-                     [
-                         'list' => $listMineral,
-                         'key' => 'air_mineral',
-                     ]
-                 ];
-                 
-                 foreach ($queries as $query) {
-                     $result = DB::table('rekap_transaksi')
-                         ->join('rekap_transaksi_detail', 'r_t_detail_r_t_id', 'r_t_id')
-                         ->selectRaw('r_t_rekap_modal_id, sum(r_t_detail_reguler_price*r_t_detail_qty) as nominal, count(r_t_id) as nota')
-                         ->where([
-                             'r_t_rekap_modal_id' => $valSesi->rekap_modal_id,
-                             'r_t_m_t_t_id' => $valType->m_t_t_id
-                         ])
-                         ->whereIn('r_t_detail_m_produk_id', $query['list'])
-                         ->groupBy('r_t_rekap_modal_id')
-                         ->first();
-         
-                     $nominal = 0;
-                     $nota = 0;
-                     if (!empty($result)) {
-                         $nominal = $result->nominal;
-                         $nota = $result->nota;
-                     }
-         
-                     $data[$valSesi->rekap_modal_sesi]['area'] = $valSesi->rekap_modal_m_area_nama;
-                     $data[$valSesi->rekap_modal_sesi]['waroeng'] = $valSesi->rekap_modal_m_w_nama;
-                     $data[$valSesi->rekap_modal_sesi]['tanggal'] = date('d-m-Y', strtotime($valSesi->rekap_modal_tanggal));
-                     $data[$valSesi->rekap_modal_sesi]['sesi'] = $valSesi->rekap_modal_sesi;
-                     $data[$valSesi->rekap_modal_sesi]['operator'] = $valSesi->name;
-                     if(in_array($query['key'], ['menu', 'non_menu'])){
-                        $data[$valSesi->rekap_modal_sesi][$query['key']] = number_format($nominal);
-                        $data[$valSesi->rekap_modal_sesi]['nota_' . $query['key']] = number_format($nota);
-                     }
-                    //  $data[$valSesi->rekap_modal_sesi][$query['key']] = number_format($nominal);
-                    //  $data[$valSesi->rekap_modal_sesi]['nota_' . $query['key']] = number_format($nota);
-                     
-                 }
-                //  $data[$valSesi->rekap_modal_sesi] = number_format($nominal);
-                //  $data[$valSesi->rekap_modal_sesi] = number_format($nota);
-                
-             }
-        }
-        $convert = [];
-        foreach ($data as $row) {
-            $convert[] = array_values($row);
-        }
+       $data = [];
+       foreach ($sesi as $key => $valSesi) {
+            foreach ($typeTransaksi as $key => $valType) {
+               #nominal
+               $queries = DB::table('rekap_transaksi')
+                       ->join('rekap_transaksi_detail','r_t_detail_r_t_id','r_t_id')
+                       ->selectRaw('r_t_rekap_modal_id, sum(r_t_detail_reguler_price*r_t_detail_qty) nominal')
+                       ->where([
+                           'r_t_rekap_modal_id' => $valSesi->rekap_modal_id,
+                           'r_t_m_t_t_id' => $valType->m_t_t_id
+                       ])->groupBy('r_t_rekap_modal_id');
+                $queries_no_mtd = DB::table('rekap_transaksi')
+                       ->join('rekap_transaksi_detail','r_t_detail_r_t_id','r_t_id')
+                       ->selectRaw('r_t_rekap_modal_id, sum(r_t_detail_reguler_price*r_t_detail_qty) nominal')
+                       ->where([
+                           'r_t_rekap_modal_id' => $valSesi->rekap_modal_id
+                       ])->groupBy('r_t_rekap_modal_id');
+                $grab = DB::table('rekap_transaksi')
+                       ->join('rekap_transaksi_detail','r_t_detail_r_t_id','r_t_id')
+                       ->selectRaw('r_t_rekap_modal_id, sum(r_t_detail_reguler_price*r_t_detail_qty) nominal, r_t_m_t_t_id')
+                       ->where([
+                           'r_t_rekap_modal_id' => $valSesi->rekap_modal_id,
+                           'r_t_m_t_t_id' => 5
+                       ])->groupBy('r_t_rekap_modal_id', 'r_t_m_t_t_id');
+
+                #Nota      
+                $menu_nota = DB::table('rekap_transaksi')
+                        ->selectRaw('count(r_t_id) nota')
+                        ->where([
+                            'r_t_rekap_modal_id' => $valSesi->rekap_modal_id,
+                            'r_t_m_t_t_id' => $valType->m_t_t_id
+                        ])->first();
+                $menu_grab = DB::table('rekap_transaksi')
+                        ->selectRaw('count(r_t_id) nota')
+                        ->where([
+                            'r_t_rekap_modal_id' => $valSesi->rekap_modal_id,
+                            'r_t_m_t_t_id' => 5
+                        ])->first();
+                        
+                #Menu 
+                $menu = $queries->whereIn('r_t_detail_m_produk_id',$listMenu)
+                        ->first();
+                $menu_tot = 0;
+                $nota_menu = 0;
+               if (!empty($menu)) {
+                   $menu_tot = $menu->nominal;
+                   $nota_menu = $menu_nota->nota;
+               }
+            
+               #Non-Menu
+               $nonMenu = $queries->whereIn('r_t_detail_m_produk_id',$listNonMenu)
+                       ->whereNotIn('r_t_detail_m_produk_id',$listKbd)
+                       ->first();
+
+                $non_menu =0;
+               if (!empty($nonMenu)) {
+                   $non_menu = $nonMenu->nominal;
+               }
+
+                #Ice-Cream
+                $ice_cream = $queries_no_mtd->whereIn('r_t_detail_m_produk_id',$listIceCream)
+                       ->first();
+                $ice_cream = 0;
+               if (!empty($iceCream)) {
+                   $ice_cream = $iceCream->nominal;
+               }
+
+               #Wbd-Bumbu
+               $wbdBumbu = $queries_no_mtd->whereIn('r_t_detail_m_produk_id',$listKbd)
+                       ->whereNotIn('r_t_detail_m_produk_id',$listWbdFrozen)
+                       ->first();
+                $wbd_bumbu = 0;
+               if (!empty($wbdBumbu)) {
+                   $wbd_bumbu = $wbdBumbu->nominal;
+               }
+           
+               #Wbd-BumbuGrab
+               $wbdBumbuGrab = $grab->whereIn('r_t_detail_m_produk_id',$listKbd)
+                       ->whereNotIn('r_t_detail_m_produk_id',$listWbdFrozen)
+                       ->first();
     
-        $output = array("data" => $convert);
-        return response()->json($data);
+                $wbd_bumbu_grab = 0;
+                $grab_nota = 0;
+                if (!empty($wbdBumbuGrab) && !empty($menu_grab) && $wbdBumbuGrab->r_t_m_t_t_id == 5) {
+                    $wbd_bumbu_grab = $wbdBumbuGrab->nominal;
+                    $grab_nota = $menu_grab->nota;
+                }
+                 
+               #Wbd-Frozen
+               $wbdFrozen = $queries_no_mtd->whereIn('r_t_detail_m_produk_id',$listWbdFrozen)
+                       ->first();
+                $wbd_frozen = 0;
+               if (!empty($wbdFrozen)) {
+                   $wbd_frozen = $wbdFrozen->nominal;
+               }
+               
+               #Wbd-FrozenGrab
+               $wbdFrozenGrab = $grab->whereIn('r_t_detail_m_produk_id',$listWbdFrozen)
+                       ->first();
+                $wbd_frozen_grab = 0;
+                if (!empty($wbdFrozenGrab)) {
+                    $wbd_frozen_grab = $wbdFrozenGrab->nominal;
+               }
+
+               #Kerupuk
+               $kerupuk = $queries_no_mtd->whereIn('r_t_detail_m_produk_id',$listKerupuk)
+                        ->first();
+                $kerupuk_tot = 0;
+               if (!empty($kerupuk)) {
+                   $kerupuk_tot = $kerupuk->nominal;
+               }
+
+               #mineral
+               $mineral = $queries_no_mtd->whereIn('r_t_detail_m_produk_id',$listMineral)
+                       ->first();
+                $mineral_tot = 0;
+               if (!empty($mineral)) {
+                   $mineral_tot = $mineral->nominal;
+               }  
+
+               #pajak
+               $pajak = DB::table('rekap_transaksi')
+                       ->selectRaw('r_t_rekap_modal_id, SUM(r_t_nominal_pajak) pajak')
+                       ->where([
+                           'r_t_rekap_modal_id' => $valSesi->rekap_modal_id,
+                       ])
+                       ->groupBy('r_t_rekap_modal_id')
+                       ->first();
+                $pajak_tot = 0;
+               if (!empty($pajak)) {
+                   $pajak_tot = $pajak->pajak;
+               }           
+               
+                $data[$valSesi->rekap_modal_sesi]['area'] = $valSesi->rekap_modal_m_area_nama;
+                $data[$valSesi->rekap_modal_sesi]['waroeng'] = $valSesi->rekap_modal_m_w_nama;
+                $data[$valSesi->rekap_modal_sesi]['tanggal'] = date('d-m-Y', strtotime($valSesi->rekap_modal_tanggal));
+                $data[$valSesi->rekap_modal_sesi]['sesi'] = $valSesi->rekap_modal_sesi;
+                $data[$valSesi->rekap_modal_sesi]['operator'] = $valSesi->name;
+
+                if(in_array($valType->m_t_t_name, ['dine in', 'take away', 'grab', 'gojek', 'shopeefood'])){
+                    $data[$valSesi->rekap_modal_sesi][$valType->m_t_t_id.'-'.'menu'] = number_format($menu_tot);
+                    $data[$valSesi->rekap_modal_sesi][$valType->m_t_t_id.'-'.'non_menu'] = number_format($non_menu);
+                    $data[$valSesi->rekap_modal_sesi][$valType->m_t_t_id.'-'.'nota_menu'] = number_format($nota_menu);
+                } 
+            }
+                    $data[$valSesi->rekap_modal_sesi]['wbd_bb'] = number_format($wbd_bumbu_grab);
+                    $data[$valSesi->rekap_modal_sesi]['wbd_frozen'] = number_format($wbd_frozen_grab);
+                    $data[$valSesi->rekap_modal_sesi]['nota_grab'] = number_format($grab_nota);
+
+                    $data[$valSesi->rekap_modal_sesi]['ice_cream'] = number_format($ice_cream);
+                    $data[$valSesi->rekap_modal_sesi]['air_mineral'] = number_format($mineral_tot);
+                    $data[$valSesi->rekap_modal_sesi]['Kerupuk'] = number_format($kerupuk_tot);
+                    $data[$valSesi->rekap_modal_sesi]['WBD BB'] = number_format($wbd_bumbu);
+                    $data[$valSesi->rekap_modal_sesi]['WBD Frozen'] = number_format($wbd_frozen);
+                    $data[$valSesi->rekap_modal_sesi]['Pajak'] = number_format($pajak_tot);
+        }
+            $convert = [];
+            foreach ($data as $row) {
+                $convert[] = array_values($row);
+            }
+           
+            $output = array("data" => $convert);
+            return response()->json($data);
     }
 }
