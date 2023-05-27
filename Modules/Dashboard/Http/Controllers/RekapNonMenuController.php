@@ -520,6 +520,7 @@ class RekapNonMenuController extends Controller
         foreach ($getKerupuk as $key => $valMenu) {
             array_push($listKerupuk,$valMenu->m_produk_id);
         }
+        // return $listKerupuk;
        $getMineral = DB::table('m_produk')
             ->join('config_sub_jenis_produk','config_sub_jenis_produk_m_produk_id','=','m_produk_id')
             ->select('m_produk_id')
@@ -529,30 +530,59 @@ class RekapNonMenuController extends Controller
             array_push($listMineral,$valMenu->m_produk_id);
         }
 
-       $data = [];
+        $data = [];
+        $menu_tot = 0;
+        $non_menu = 0;
+        $ice_cream = 0;
+        $wbd_bumbu_grab = 0;
+        $wbd_frozen = 0;
+        $wbd_frozen_grab = 0;
+        $kerupuk_tot = 0;
+        $mineral_tot = 0;
+        $pajak_tot = 0;
+        $nota_menu = 0;
+        $wbd_bumbu = 0;
+        $grab_nota = 0;
        foreach ($sesi as $key => $valSesi) {
-            foreach ($typeTransaksi as $key => $valType) {
-               #nominal
-               $queries = DB::table('rekap_transaksi')
-                       ->join('rekap_transaksi_detail','r_t_detail_r_t_id','r_t_id')
-                       ->selectRaw('r_t_rekap_modal_id, sum(r_t_detail_reguler_price*r_t_detail_qty) nominal')
-                       ->where([
-                           'r_t_rekap_modal_id' => $valSesi->rekap_modal_id,
-                           'r_t_m_t_t_id' => $valType->m_t_t_id
-                       ])->groupBy('r_t_rekap_modal_id');
-                $queries_no_mtd = DB::table('rekap_transaksi')
-                       ->join('rekap_transaksi_detail','r_t_detail_r_t_id','r_t_id')
-                       ->selectRaw('r_t_rekap_modal_id, sum(r_t_detail_reguler_price*r_t_detail_qty) nominal')
-                       ->where([
-                           'r_t_rekap_modal_id' => $valSesi->rekap_modal_id
-                       ])->groupBy('r_t_rekap_modal_id');
+            foreach ($typeTransaksi as $typeKey => $valType) {
+               #nominal                       
+               $query = DB::table('rekap_transaksi')
+                        ->join('rekap_transaksi_detail','r_t_detail_r_t_id','r_t_id')
+                        ->selectRaw('r_t_rekap_modal_id, 
+                        sum(CASE WHEN r_t_detail_m_produk_id IN ('.implode(',', $listMenu).') THEN r_t_detail_reguler_price * r_t_detail_qty ELSE 0 END) as menu_total,
+                        sum(CASE WHEN r_t_detail_m_produk_id IN ('.implode(',', $listNonMenu).') AND r_t_detail_m_produk_id NOT IN ('.implode(',', $listKbd).') THEN r_t_detail_reguler_price * r_t_detail_qty ELSE 0 END) as non_menu_total')
+                        ->where([
+                            'r_t_rekap_modal_id' => $valSesi->rekap_modal_id,
+                            'r_t_m_t_t_id' => $valType->m_t_t_id
+                        ])
+                        ->groupby('r_t_rekap_modal_id')
+                        ->first();
+                        
+                $query_no_method = DB::table('rekap_transaksi')
+                        ->join('rekap_transaksi_detail','r_t_detail_r_t_id','r_t_id')
+                        ->selectRaw('r_t_rekap_modal_id, 
+                        sum(CASE WHEN r_t_detail_m_produk_id IN ('.implode(',', $listIceCream).') THEN r_t_detail_reguler_price * r_t_detail_qty ELSE 0 END) as ice_cream,
+                        sum(CASE WHEN r_t_detail_m_produk_id IN ('.implode(',', $listKbd).') AND r_t_detail_m_produk_id NOT IN ('.implode(',', $listWbdFrozen).') THEN r_t_detail_reguler_price * r_t_detail_qty ELSE 0 END) as wbd_bb,
+                        sum(CASE WHEN r_t_detail_m_produk_id IN ('.implode(',', $listWbdFrozen).') THEN r_t_detail_reguler_price * r_t_detail_qty ELSE 0 END) as wbd_frozen,
+                        sum(CASE WHEN r_t_detail_m_produk_id IN ('.implode(',', $listKerupuk).') THEN r_t_detail_reguler_price * r_t_detail_qty ELSE 0 END) as kerupuk,
+                        sum(CASE WHEN r_t_detail_m_produk_id IN ('.implode(',', $listMineral).') THEN r_t_detail_reguler_price * r_t_detail_qty ELSE 0 END) as mineral')
+                        ->where([
+                            'r_t_rekap_modal_id' => $valSesi->rekap_modal_id,
+                        ])
+                        ->groupby('r_t_rekap_modal_id')
+                        ->first();
+                
                 $grab = DB::table('rekap_transaksi')
-                       ->join('rekap_transaksi_detail','r_t_detail_r_t_id','r_t_id')
-                       ->selectRaw('r_t_rekap_modal_id, sum(r_t_detail_reguler_price*r_t_detail_qty) nominal, r_t_m_t_t_id')
-                       ->where([
-                           'r_t_rekap_modal_id' => $valSesi->rekap_modal_id,
-                           'r_t_m_t_t_id' => 5
-                       ])->groupBy('r_t_rekap_modal_id', 'r_t_m_t_t_id');
+                        ->join('rekap_transaksi_detail','r_t_detail_r_t_id','r_t_id')
+                        ->selectRaw('r_t_rekap_modal_id, r_t_m_t_t_id,
+                        sum(CASE WHEN r_t_detail_m_produk_id IN ('.implode(',', $listWbdFrozen).') THEN r_t_detail_reguler_price * r_t_detail_qty ELSE 0 END) as grab_frozen,
+                        sum(CASE WHEN r_t_detail_m_produk_id IN ('.implode(',', $listKbd).') AND r_t_detail_m_produk_id NOT IN ('.implode(',', $listWbdFrozen).') THEN r_t_detail_reguler_price * r_t_detail_qty ELSE 0 END) as grab_bb')
+                        ->where([
+                            'r_t_rekap_modal_id' => $valSesi->rekap_modal_id,
+                            'r_t_m_t_t_id' => 5
+                        ])
+                        ->groupby('r_t_rekap_modal_id', 'r_t_m_t_t_id')
+                        ->first();
 
                 #Nota      
                 $menu_nota = DB::table('rekap_transaksi')
@@ -567,97 +597,64 @@ class RekapNonMenuController extends Controller
                             'r_t_rekap_modal_id' => $valSesi->rekap_modal_id,
                             'r_t_m_t_t_id' => 5
                         ])->first();
-                        
-                #Menu 
-                $menu = $queries->whereIn('r_t_detail_m_produk_id',$listMenu)
+
+                #pajak-Query
+               $pajak = DB::table('rekap_transaksi')
+                        ->selectRaw('r_t_rekap_modal_id, SUM(r_t_nominal_pajak) pajak')
+                        ->where([
+                            'r_t_rekap_modal_id' => $valSesi->rekap_modal_id,
+                        ])
+                        ->groupBy('r_t_rekap_modal_id')
                         ->first();
-                $menu_tot = 0;
-                $nota_menu = 0;
-               if (!empty($menu)) {
-                   $menu_tot = $menu->nominal;
+
+                #Menu
+               if (!empty($query->menu_total)) {
+                   $menu_tot = $query->menu_total;
                    $nota_menu = $menu_nota->nota;
                }
-            
+
                #Non-Menu
-               $nonMenu = $queries->whereIn('r_t_detail_m_produk_id',$listNonMenu)
-                       ->whereNotIn('r_t_detail_m_produk_id',$listKbd)
-                       ->first();
-
-                $non_menu =0;
-               if (!empty($nonMenu)) {
-                   $non_menu = $nonMenu->nominal;
-               }
-
+               if (!empty($query->non_menu_total)) {
+                    $non_menu = $query->non_menu_total;
+                }
+                
                 #Ice-Cream
-                $ice_cream = $queries_no_mtd->whereIn('r_t_detail_m_produk_id',$listIceCream)
-                       ->first();
-                $ice_cream = 0;
-               if (!empty($iceCream)) {
-                   $ice_cream = $iceCream->nominal;
+               if (!empty($query_no_method->ice_cream)) {
+                   $ice_cream = $query_no_method->ice_cream;
                }
 
-               #Wbd-Bumbu
-               $wbdBumbu = $queries_no_mtd->whereIn('r_t_detail_m_produk_id',$listKbd)
-                       ->whereNotIn('r_t_detail_m_produk_id',$listWbdFrozen)
-                       ->first();
-                $wbd_bumbu = 0;
-               if (!empty($wbdBumbu)) {
-                   $wbd_bumbu = $wbdBumbu->nominal;
-               }
-           
-               #Wbd-BumbuGrab
-               $wbdBumbuGrab = $grab->whereIn('r_t_detail_m_produk_id',$listKbd)
-                       ->whereNotIn('r_t_detail_m_produk_id',$listWbdFrozen)
-                       ->first();
-    
-                $wbd_bumbu_grab = 0;
-                $grab_nota = 0;
-                if (!empty($wbdBumbuGrab) && !empty($menu_grab) && $wbdBumbuGrab->r_t_m_t_t_id == 5) {
-                    $wbd_bumbu_grab = $wbdBumbuGrab->nominal;
+               #Wbd-BB
+               if (!empty($query_no_method->ice_cream)) {
+                    $wbd_bumbu = $query_no_method->wbd_bb;
+                }
+
+                #Wbd-Frozen
+               if (!empty($query_no_method->wbd_frozen)) {
+                    $wbd_frozen = $query_no_method->wbd_frozen;
+                }
+                
+                #Wbd-BB-Grab
+                if (!empty($grab->grab_bb) && !empty($menu_grab) && $grab->r_t_m_t_t_id == 5) {
+                    $wbd_bumbu_grab = $grab->grab_bb;
                     $grab_nota = $menu_grab->nota;
                 }
                  
-               #Wbd-Frozen
-               $wbdFrozen = $queries_no_mtd->whereIn('r_t_detail_m_produk_id',$listWbdFrozen)
-                       ->first();
-                $wbd_frozen = 0;
-               if (!empty($wbdFrozen)) {
-                   $wbd_frozen = $wbdFrozen->nominal;
-               }
-               
-               #Wbd-FrozenGrab
-               $wbdFrozenGrab = $grab->whereIn('r_t_detail_m_produk_id',$listWbdFrozen)
-                       ->first();
-                $wbd_frozen_grab = 0;
-                if (!empty($wbdFrozenGrab)) {
-                    $wbd_frozen_grab = $wbdFrozenGrab->nominal;
+               #Wbd-Frozen-Grab
+               if (!empty($grab->grab_frozen) && $grab->r_t_m_t_t_id == 5) {
+                   $wbd_frozen_grab = $grab->grab_frozen;
                }
 
                #Kerupuk
-               $kerupuk = $queries_no_mtd->whereIn('r_t_detail_m_produk_id',$listKerupuk)
-                        ->first();
-                $kerupuk_tot = 0;
-               if (!empty($kerupuk)) {
-                   $kerupuk_tot = $kerupuk->nominal;
+               if (!empty($query_no_method->kerupuk)) {
+                   $kerupuk_tot = $query_no_method->kerupuk;
                }
 
                #mineral
-               $mineral = $queries_no_mtd->whereIn('r_t_detail_m_produk_id',$listMineral)
-                       ->first();
-                $mineral_tot = 0;
-               if (!empty($mineral)) {
-                   $mineral_tot = $mineral->nominal;
+               if (!empty($query_no_method->mineral)) {
+                   $mineral_tot = $query_no_method->mineral;
                }  
-
-               #pajak
-               $pajak = DB::table('rekap_transaksi')
-                       ->selectRaw('r_t_rekap_modal_id, SUM(r_t_nominal_pajak) pajak')
-                       ->where([
-                           'r_t_rekap_modal_id' => $valSesi->rekap_modal_id,
-                       ])
-                       ->groupBy('r_t_rekap_modal_id')
-                       ->first();
-                $pajak_tot = 0;
+                
+               #Pajak
                if (!empty($pajak)) {
                    $pajak_tot = $pajak->pajak;
                }           
@@ -691,6 +688,6 @@ class RekapNonMenuController extends Controller
             }
            
             $output = array("data" => $convert);
-            return response()->json($data);
+            return response()->json($output);
     }
 }
