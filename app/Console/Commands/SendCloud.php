@@ -265,10 +265,11 @@ class SendCloud extends Command
                 #PUSH Refund Tabel
                 $refundDetSchema = Schema::connection('source')->getColumnListing('rekap_refund_detail');
                 $getRefundDet = $DbSource->table('rekap_refund_detail')
+                    ->select('rekap_refund_detail.*')
                     ->leftJoin('rekap_refund','r_r_id','r_r_detail_r_r_id')
                     ->leftJoin('rekap_transaksi','r_t_id','r_r_r_t_id')
                     ->where('r_r_r_t_id',$valDataTrans->r_t_id)
-                    ->orderBy('id','asc')
+                    ->orderBy('rekap_refund_detail.id','asc')
                     ->limit(200);
 
                 if ($getRefundDet->count() > 0) {
