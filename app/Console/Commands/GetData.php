@@ -115,7 +115,7 @@ class GetData extends Command
         ]);
 
         try {
-            $cekConn = Schema::connection('source')->hasTable('users');
+            $cekConn = Schema::connection('destination')->hasTable('users');
 
             $status = '';
             if ($cekConn) {

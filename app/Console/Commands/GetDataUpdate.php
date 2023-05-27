@@ -115,7 +115,7 @@ class GetDataUpdate extends Command
         ]);
 
         try {
-            $cekConn = Schema::connection('source')->hasTable('users');
+            $cekConn = Schema::connection('destination')->hasTable('users');
 
             $status = '';
             if ($cekConn) {
@@ -210,12 +210,18 @@ class GetDataUpdate extends Command
                         }
                     }
                     try {
-                        $validateField = $valTab->config_get_data_field_validate1;
+                        // $validateField = $valTab->config_get_data_field_validate1;
+                        $validationField = [];
+                        for ($i=1; $i <= 4; $i++) {
+                            $validate = "config_get_data_field_validate{$i}";
+                            $validateField = $valTab->$validate;
+                            if (!empty($validateField)) {
+                                $validationField[$validateField] = $valDataSource->$validateField;
+                            }
+                        }
                         $DbDest->table($valTab->config_get_data_table_name)
                             ->updateOrInsert(
-                                [
-                                    $valTab->config_get_data_field_validate1 => $valDataSource->$validateField
-                                ],
+                                $validationField,
                                 $data
                             );
                     } catch (\Throwable $th) {

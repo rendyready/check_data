@@ -26,5 +26,6 @@ Route::get('/cron', [CronjobController::class, 'index']);
 Route::get('/migrate', [CronjobController::class, 'migrate']);
 Route::get('/encrypt/{pass}', [CronjobController::class, 'encrypt']);
 Route::get('/getdata', [CronjobController::class, 'getdata']);
+Route::get('/sendcloud', [CronjobController::class, 'sendcloud']);
 
 Route::get('/upgrade', [VersionController::class, 'upgrade']);

@@ -153,6 +153,7 @@ class DataSyncCron extends Command
         if (count($tableList) > 0) {
             #Get List Destination to Sync
             $dest = DB::table('db_con')->where('db_con_data_status','destination')
+                    ->where('db_con_location','!=','cloud')
                     ->where('db_con_sync_status','aktif');
             $countDest = $dest->count();
             $getDest = $dest->get();
