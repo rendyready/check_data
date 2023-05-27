@@ -159,7 +159,8 @@
                                 <thead>
                                     <th>Jam Input</th>
                                     <th>No Bukti</th>
-                                    <th>Asal Gudang</th>
+                                    <th>Tujuan Gudang</th>
+                                    <th>Nama Barang</th>
                                     <th>Qty</th>
                                     <th>Satuan</th>
                                     <th>Operator</th>
@@ -169,7 +170,8 @@
                                 <tfoot>
                                     <th>Jam Input</th>
                                     <th>No Bukti</th>
-                                    <th>Asal Gudang</th>
+                                    <th>Tujuan Gudang</th>
+                                    <th>Nama Barang</th>
                                     <th>Qty</th>
                                     <th>Satuan</th>
                                     <th>Operator</th>
@@ -284,7 +286,7 @@ function get_code() {
 	  var no =2;
 	  $('.tambah').on('click',function(){
 	    no++;
-		$('#form').append('<tr id="row'+no+'">'+
+		$('#form').append('<tr class="remove" id="row'+no+'">'+
                         '<td><select class="js-select2 nama_barang" name="rekap_tf_gudang_m_produk_id[]" id="rekap_tf_gudang_m_produk_id'+no+'" style="width: 100%;" data-placeholder="Pilih Nama Barang" required><option></option></select></td>'+
                         '<td><input type="text" class="form-control number form-control-sm qty" name="rekap_tf_gudang_qty_kirim[]" id="rekap_tf_gudang_qty_kirim" required><span class="stok" id="stok'+no+'"></span></td>'+
                         '<td><input type="text" class="form-control form-control-sm satuan" id="satuan'+no+'" readonly></td>'+
@@ -332,9 +334,6 @@ function get_code() {
           $('#rekap_tf_gudang_grand_tot').val(grdtot.toLocaleString("id"));
           $('#total_sum_value').html(': Rp '+grdtot.toLocaleString("id"));
     });
-    $('.close').on('click',function () {
-        $('.alert').remove();
-    })  
     $('#formAction').submit( function(e){
                 if(!e.isDefaultPrevented()){
                     $.ajax({
@@ -351,7 +350,7 @@ function get_code() {
                             });
                             table.ajax.reload();
                             $('.remove').remove();
-                            $('#rekap_beli_detail_m_produk_id1,.reset').trigger('change').val('');
+                            $('#rekap_tf_gudang_m_produk_id1,.reset').trigger('change').val('');
                             $('#formAction').find('.persendisc').trigger('input');
                             get_code();
                         },

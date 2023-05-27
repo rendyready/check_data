@@ -110,10 +110,11 @@ return new class extends Migration
             $table->timestampTz('rekap_beli_updated_at')->useCurrentOnUpdate()->nullable()->default(NULL);
             $table->timestampTz('rekap_beli_deleted_at')->nullable()->default(NULL);
         });
-
+        Schema::dropIfExists('rekap_beli_detail');
         Schema::create('rekap_beli_detail', function (Blueprint $table) {
             $table->id('id');
-            $table->string('rekap_beli_detail_rekap_beli_code')->unique();
+            $table->string('rekap_beli_detail_id')->unique();
+            $table->string('rekap_beli_detail_rekap_beli_code');
             $table->string('rekap_beli_detail_m_produk_code');
             $table->string('rekap_beli_detail_m_produk_nama');
             $table->string('rekap_beli_detail_catatan');
@@ -135,21 +136,21 @@ return new class extends Migration
             $table->timestampTz('rekap_beli_detail_deleted_at')->nullable()->default(NULL);
         });
 
-        $table[1] = 'rekap_beli_detail';
-        $table[2] = 'm_area';
-        $table[3] = 'm_pajak';
-        $table[4] = 'm_sc';
-        $table[5] = 'm_w_jenis';
-        $table[6] = 'm_w';
-        $table[7] = 'm_footer';
-        $table[8] = 'm_jenis_nota';
-        $table[9] = 'm_menu_harga';
-        $table[10] = 'm_jenis_produk';
-        foreach ($table as $key => $valTable) {
-            Schema::table($valTable, function (Blueprint $table) use($valTable) {
-                $table->string($valTable."_status_sync", 20)->default('send');
-            });
-        }
+        // $table[1] = 'rekap_beli_detail';
+        // $table[2] = 'm_area';
+        // $table[3] = 'm_pajak';
+        // $table[4] = 'm_sc';
+        // $table[5] = 'm_w_jenis';
+        // $table[6] = 'm_w';
+        // $table[7] = 'm_footer';
+        // $table[8] = 'm_jenis_nota';
+        // $table[9] = 'm_menu_harga';
+        // $table[10] = 'm_jenis_produk';
+        // foreach ($table as $key => $valTable) {
+        //     Schema::table($valTable, function (Blueprint $table) use($valTable) {
+        //         $table->string($valTable."_status_sync", 20)->default('send');
+        //     });
+        // }
     }
 
     /**
@@ -159,8 +160,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('sipedas', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('rekap_inv_penjualan');
+        Schema::dropIfExists('rekap_beli');
+        Schema::dropIfExists('rekap_beli_detail');
     }
 };

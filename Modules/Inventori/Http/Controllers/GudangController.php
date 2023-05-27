@@ -218,7 +218,7 @@ class GudangController extends Controller
     {
         $data_histori = DB::table('rekap_tf_gudang')
         ->select('rekap_tf_gudang_code','rekap_tf_gudang_tgl_keluar',
-        'name','m_gudang_nama','rekap_tf_gudang_qty_keluar','rekap_tf_gudang_satuan_keluar')
+        'name','m_gudang_nama','rekap_tf_gudang_qty_keluar','rekap_tf_gudang_satuan_keluar','rekap_tf_gudang_m_produk_nama')
         ->join('users','users_id','rekap_tf_gudang_created_by')
         ->join('m_gudang','m_gudang_code','rekap_tf_gudang_tujuan_code')
         ->where('rekap_tf_gudang_asal_code',$id)
@@ -232,10 +232,10 @@ class GudangController extends Controller
             $row[] = tgl_waktuid($key->rekap_tf_gudang_tgl_keluar);
             $row[] = $key->rekap_tf_gudang_code;
             $row[] = ucwords($key->m_gudang_nama);
+            $row[] = $key->rekap_tf_gudang_m_produk_nama;
             $row[] = num_format($key->rekap_tf_gudang_qty_keluar);
             $row[] = $key->rekap_tf_gudang_satuan_keluar;
             $row[] = ucwords($key->name);
-
             $data[] = $row;
             $no++;
         }
