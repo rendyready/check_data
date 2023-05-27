@@ -295,7 +295,7 @@ if(HakAksesPusat){
     });
   }
 
-    $('#filter_tanggal').flatpickr({
+    $('.filter_tanggal').flatpickr({
             // mode: "range",
             dateFormat: 'Y-m-d',         
     });

@@ -539,8 +539,7 @@
                                                 </li>
                                             @endcan
                                             @can('rekap aktifitas kasir')
-                                                <li
-                                                    class="nav-main-item{{ request()->is('dashboard/rekap_aktiv') ? ' open' : '' }}">
+                                                <li class="nav-main-item{{ request()->is('dashboard/rekap_aktiv') ? ' open' : '' }}">
                                                     <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu"
                                                         aria-haspopup="true" aria-expanded="true" href="#">
                                                         <span class="nav-main-link-name">Rekap Aktivitas Kasir</span>
