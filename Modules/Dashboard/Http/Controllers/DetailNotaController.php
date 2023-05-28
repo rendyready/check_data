@@ -29,9 +29,6 @@ class DetailNotaController extends Controller
         $data->area = DB::table('m_area')
             ->orderby('m_area_id', 'ASC')
             ->get();
-        $data->user = DB::table('users')
-            ->orderby('id', 'ASC')
-            ->get();
         $data->transaksi_rekap = DB::table('rekap_transaksi')
             ->orderby('r_t_id', 'ASC')
             ->get();
@@ -82,7 +79,7 @@ class DetailNotaController extends Controller
     {
         $data = new \stdClass();
         if($request->status == 'paid'){
-        $data->transaksi_rekap1 = DB::table('rekap_transaksi')
+       $transaksi_rekap = DB::table('rekap_transaksi')
             ->join('users', 'users_id', 'r_t_created_by')
             ->join('m_transaksi_tipe', 'm_t_t_id', 'r_t_m_t_t_id')
             ->join('rekap_payment_transaksi', 'r_p_t_r_t_id', 'r_t_id')
@@ -90,22 +87,32 @@ class DetailNotaController extends Controller
             ->where('r_t_m_w_id', $request->waroeng)
             ->where('r_t_status', 'paid');
             if($request->operator != 'all'){
-                $data->transaksi_rekap1->where('r_t_created_by', $request->operator);
+                $transaksi_rekap->where('r_t_created_by', $request->operator);
             }
             if (strpos($request->tanggal, 'to') !== false) {
                 $dates = explode('to' ,$request->tanggal);
-                $data->transaksi_rekap1->whereBetween('r_t_tanggal', $dates);
+                $transaksi_rekap->whereBetween('r_t_tanggal', $dates);
             } else {
-                $data->transaksi_rekap1->where('r_t_tanggal', $request->tanggal);
+                $transaksi_rekap->where('r_t_tanggal', $request->tanggal);
             }
-            $data->transaksi_rekap = $data->transaksi_rekap1->orderby('r_t_tanggal', 'ASC')
+            $data->transaksi_rekap = $transaksi_rekap->orderby('r_t_tanggal', 'ASC')
                 ->orderby('r_t_nota_code', 'ASC')
                 ->get();
-        $data->detail_nota = DB::table('rekap_transaksi_detail')
+                
+        $detail_nota = DB::table('rekap_transaksi_detail')
             ->join('m_produk', 'm_produk_id', 'r_t_detail_m_produk_id')
             ->join('m_jenis_produk', 'm_jenis_produk_id', 'm_produk_m_jenis_produk_id')
-            ->where('r_t_detail_status', 'paid')
-            ->orderby('m_jenis_produk_urut', 'ASC')
+            ->join('rekap_transaksi', 'r_t_id', 'r_t_detail_r_t_id');
+            if($request->operator != 'all'){
+                $detail_nota->where('r_t_created_by', $request->operator);
+            }
+            if (strpos($request->tanggal, 'to') !== false) {
+                $dates = explode('to' ,$request->tanggal);
+                $detail_nota->whereBetween('r_t_tanggal', $dates);
+            } else {
+                $detail_nota->where('r_t_tanggal', $request->tanggal);
+            }
+            $data->detail_nota = $detail_nota->orderby('m_jenis_produk_urut', 'ASC')
             ->orderby('r_t_detail_m_produk_nama', 'ASC')
             ->get();
 
@@ -125,10 +132,20 @@ class DetailNotaController extends Controller
             }
             $data->transaksi_rekap = $data->transaksi_rekap2->get();
 
-        $data->detail_nota = DB::table('rekap_lost_bill_detail')
+        $detail_nota = DB::table('rekap_lost_bill_detail')
             ->join('m_produk', 'm_produk_id', 'r_l_b_detail_m_produk_id')
             ->join('m_jenis_produk', 'm_jenis_produk_id', 'm_produk_m_jenis_produk_id')
-            ->get();
+            ->join('rekap_lost_bill', 'r_l_b_id', 'r_l_b_detail_r_l_b_id');
+            if (strpos($request->tanggal, 'to') !== false) {
+                $dates = explode('to' ,$request->tanggal);
+                $detail_nota->whereBetween('r_l_b_tanggal', $dates);
+            } else {
+                $detail_nota->where('r_l_b_tanggal', $request->tanggal);
+            }
+            if($request->operator != 'all'){
+                $detail_nota->where('r_l_b_created_by', $request->operator);
+            }
+            $data->detail_nota = $detail_nota->get();
         }
         return response()->json($data);
     }
