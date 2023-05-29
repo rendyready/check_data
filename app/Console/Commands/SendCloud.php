@@ -303,18 +303,19 @@ class SendCloud extends Command
 
                 $lastId = $valDataTrans->id;
             }
-
-            DB::table('log_sendcloud')
-            ->updateOrInsert(
-                [
-                    'log_sendcloud_table' => 'rekap_transaksi'
-                ],
-                [
-                    'log_sendcloud_table' => 'rekap_transaksi',
-                    'log_sendcloud_last_id' => $lastId,
-                    'log_sendcloud_note' => 'ok'
-                ]
-            );
+            if ($lastId != 0) {
+                DB::table('log_sendcloud')
+                    ->updateOrInsert(
+                    [
+                        'log_sendcloud_table' => 'rekap_transaksi'
+                    ],
+                    [
+                        'log_sendcloud_table' => 'rekap_transaksi',
+                        'log_sendcloud_last_id' => $lastId,
+                        'log_sendcloud_note' => 'ok'
+                    ]
+                );
+            }
         }
 
         #Local Log
