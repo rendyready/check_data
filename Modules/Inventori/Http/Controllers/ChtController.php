@@ -30,7 +30,7 @@ class ChtController extends Controller
     {
         $waroeng_id = Auth::user()->waroeng_id;
         foreach ($request->rekap_beli_detail_id as $key => $value) {
-            if (!empty($cht_qty)) {
+            if (!empty($request->rekap_beli_detail_terima_qty[$key])) {
                 $cht_qty = convertfloat($request->rekap_beli_detail_terima_qty[$key]);
                 $save_beli = DB::table('rekap_beli_detail')
                     ->where('rekap_beli_detail_id', $request->rekap_beli_detail_id[$key])
