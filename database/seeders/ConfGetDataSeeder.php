@@ -91,37 +91,40 @@ class ConfGetDataSeeder extends Seeder
             'config_get_data_table_name' => 'role_has_permissions',
             'config_get_data_table_tipe' => 'master',
             'config_get_data_status' => 'on',
-            'config_get_data_limit' => 0,
+            'config_get_data_limit' => 500,
             'config_get_data_sequence' => 'off',
             'config_get_data_field_status' => 'r_h_p_status_sync',
-            'config_get_data_field_validate1' => 'permission_id',
-            'config_get_data_field_validate2' => 'role_id'
+            'config_get_data_field_validate1' => 'r_h_p_id',
+            // 'config_get_data_field_validate1' => 'permission_id',
+            // 'config_get_data_field_validate2' => 'role_id'
         ]);
         DB::table('config_get_data')->insert([
             'config_get_data_table_name' => 'model_has_permissions',
             'config_get_data_table_tipe' => 'master',
             'config_get_data_status' => 'on',
-            'config_get_data_limit' => 0,
+            'config_get_data_limit' => 500,
             'config_get_data_sequence' => 'off',
             'config_get_data_field_status' => 'm_h_p_status_sync',
-            'config_get_data_field_validate1' => 'model_id',
-            'config_get_data_field_validate2' => 'permission_id'
+            'config_get_data_field_validate1' => 'm_h_p_id',
+            // 'config_get_data_field_validate1' => 'model_id',
+            // 'config_get_data_field_validate2' => 'permission_id'
         ]);
         DB::table('config_get_data')->insert([
             'config_get_data_table_name' => 'model_has_roles',
             'config_get_data_table_tipe' => 'master',
             'config_get_data_status' => 'on',
-            'config_get_data_limit' => 0,
+            'config_get_data_limit' => 500,
             'config_get_data_sequence' => 'off',
             'config_get_data_field_status' => 'm_h_r_status_sync',
-            'config_get_data_field_validate1' => 'model_id'
+            'config_get_data_field_validate1' => 'm_h_r_id'
+            // 'config_get_data_field_validate1' => 'model_id'
         ]);
 
         DB::table('config_get_data')->insert([
             'config_get_data_table_name' => 'm_transaksi_tipe',
             'config_get_data_table_tipe' => 'master',
             'config_get_data_status' => 'on',
-            'config_get_data_limit' => 0,
+            'config_get_data_limit' => 100,
             'config_get_data_sequence' => 'on',
             'config_get_data_field_status' => 'm_t_t_status_sync',
             'config_get_data_field_validate1' => 'm_t_t_id'

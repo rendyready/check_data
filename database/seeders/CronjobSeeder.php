@@ -39,7 +39,11 @@ class CronjobSeeder extends Seeder
         ]);
         DB::table('cronjob')->insert([
             'cronjob_name' => 'sendcloud:cron',
-            // 'cronjob_status' => 'close'
+            'cronjob_status' => 'close'
+        ]);
+        DB::table('cronjob')->insert([
+            'cronjob_name' => 'mastercontrol:cron',
+            'cronjob_status' => 'open'
         ]);
     }
 }
