@@ -60,7 +60,6 @@ class BeliController extends Controller
     {$terbayar = (empty($request->rekap_beli_terbayar)) ? 0 : $request->rekap_beli_terbayar;
         $ongkir = (empty($request->rekap_beli_ongkir)) ? 0 : $request->rekap_beli_ongkir;
         $rekap_beli = array(
-            'rekap_beli_id' => $this->getMasterId('rekap_beli'),
             'rekap_beli_code' => $request->rekap_beli_code,
             'rekap_beli_code_nota' => $request->rekap_beli_code_nota,
             'rekap_beli_tgl' => $request->rekap_beli_tgl,
@@ -93,7 +92,7 @@ class BeliController extends Controller
                 ->where('m_stok_gudang_code', $request->rekap_beli_gudang_code)
                 ->first();
             $data = array(
-                'rekap_beli_detail_id' => $this->getMasterId('rekap_beli_detail'),
+                'rekap_beli_detail_id' => $this->getNextId('rekap_beli_detail',Auth::user()->waroeng_id),
                 'rekap_beli_detail_rekap_beli_code' => $request->rekap_beli_code,
                 'rekap_beli_detail_m_produk_code' => $request->rekap_beli_detail_m_produk_id[$key],
                 'rekap_beli_detail_m_produk_nama' => $produk->m_stok_produk_nama,

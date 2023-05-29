@@ -532,7 +532,7 @@
                     var rekap_beli_tot_nom = parseFloat(grandtotal) + parseFloat(ppnrp) + parseFloat(ongkir);
                     $('.ppnrp').val(ppnrp);
                     $('.rekap_beli_tot_nom').val(rekap_beli_tot_nom.toLocaleString('id'));
-                    if (rekap_beli_tot_nom - bayar < 0) {
+                    if ((bayar-rekap_beli_tot_nom) > 0) {
                         Codebase.helpers('jq-notify', {
                             align: 'right', // 'right', 'left', 'center'
                             from: 'top', // 'top', 'bottom'
@@ -603,6 +603,7 @@
                             $('.remove').remove();
                             $('#rekap_beli_detail_m_produk_id1,.reset,.supplier').trigger(
                                 'change').val('');
+                            $('.grdtot,.bayar').val(0);
                             $('#form').find('.persendisc').trigger('input');
                             get_code();
                         },
