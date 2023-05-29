@@ -131,14 +131,12 @@ $(document).ready(function() {
         var operator = $('.filter_operator').val(); 
         var status   = $('.filter_status').val();  
         
-        $('.show_nota').remove(); 
+        // $('.show_nota').remove(); 
             $.ajax({
             type:"GET",
             url: '{{route("detail.show")}}',
             dataType: 'JSON',
-            scrollY: "300px",
-            scrollX: true,
-            scrollCollapse: true,
+
             data : 
             {
               waroeng: waroeng,
@@ -150,7 +148,7 @@ $(document).ready(function() {
               if(status == 'paid'){
               $.each(data.transaksi_rekap, function (key, value) {
                 var id = value.r_t_id.toString().replace(/\./g,'');
-                // console.log(item.r_t_id);
+                // console.log(value.r_t_tanggal);
                   $('#show_nota').append('<div class="col-xl-4 show_nota">'+
                         '<div class="block block-rounded mb-1">'+
                           '<div class="block-header block-header-default block-header-rtl bg-pulse">'+
@@ -336,7 +334,7 @@ $(document).ready(function() {
             $(".filter_waroeng").val(prev).trigger('change');
         }  
         $(".filter_operator").empty(); 
-        $(".filter_status").val(prev).trigger('change');   
+        // $(".filter_status").val(prev).trigger('change');   
     });
   } 
 
@@ -360,7 +358,7 @@ $(document).ready(function() {
               tanggal: tanggal,
             },
             success:function(res){   
-              console.log(res);       
+              // console.log(res);       
                 if(res){
                     $(".filter_operator").empty();
                     $(".filter_operator").append('<option></option>');
@@ -377,7 +375,7 @@ $(document).ready(function() {
             $(".filter_operator").empty();
             $(".filter_waroeng").val(prev).trigger('change');
         }   
-        $(".filter_status").val(prev).trigger('change');      
+        // $(".filter_status").val(prev).trigger('change');      
     });
 
   } else {
