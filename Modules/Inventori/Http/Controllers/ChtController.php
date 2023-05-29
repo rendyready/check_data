@@ -30,13 +30,13 @@ class ChtController extends Controller
     {
         $waroeng_id = Auth::user()->waroeng_id;
         foreach ($request->rekap_beli_detail_id as $key => $value) {
-            $cht_qty = convertfloat($request->rekap_beli_detail_terima_qty[$key]);
-            $save_beli = DB::table('rekap_beli_detail')
-                ->where('rekap_beli_detail_id', $request->rekap_beli_detail_id[$key])
-                ->update(['rekap_beli_detail_terima_qty' => $cht_qty,
-                    'rekap_beli_detail_status_sync' => 'edit']);
-
             if (!empty($cht_qty)) {
+                $cht_qty = convertfloat($request->rekap_beli_detail_terima_qty[$key]);
+                $save_beli = DB::table('rekap_beli_detail')
+                    ->where('rekap_beli_detail_id', $request->rekap_beli_detail_id[$key])
+                    ->update(['rekap_beli_detail_terima_qty' => $cht_qty,
+                        'rekap_beli_detail_status_sync' => 'edit']);
+                
                 $get_stok = $this->get_last_stok($request->rekap_beli_gudang_code, $request->rekap_beli_detail_m_produk_code[$key]);
                 $saldo_terakhir = $get_stok->m_stok_saldo;
                 $hpp_terakhir = $get_stok->m_stok_hpp;
