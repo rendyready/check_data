@@ -138,7 +138,13 @@ Route::group(['prefix' => 'inventori', 'controller' => RphController::class, 'mi
     Route::get('rph_belanja_detail/{id}','belanja_detail')->name('belanja.detail');
 });
 
-
+//master grub bb
+Route::group(['prefix' => 'inventori', 'controller' => GroupBBController::class, 'middleware' => ['auth', 'web']], function () {
+    Route::get('m_grub_bb', 'index')->name('m_grub_bb.index');
+    Route::get('m_grub_bb/list','list')->name('m_grub_bb.list');
+    Route::get('m_grub_bb/edit/{id}', 'edit')->name('m_grub_bb.edit');
+    Route::post('m_grub_bb/action', 'action')->name('m_grub_bb.action');
+});
 
 
 

@@ -218,7 +218,7 @@
                                             <label class="col-sm-4 col-form-label" for="rekap_beli_ongkir">Ongkos
                                                 Kirim</label>
                                             <div class="col-sm-6">
-                                                <input type="text" class="form-control form-control-sm number ongkir"
+                                                <input type="text" class="form-control form-control-sm number reset ongkir"
                                                     id="rekap_beli_ongkir" name="rekap_beli_ongkir">
                                             </div>
                                         </div>
@@ -353,6 +353,39 @@
             Codebase.helpersOnLoad(['jq-select2']);
             var datas, table;
             $('#rekap_beli_gudang_code').on('change', function() {
+                var asal = $(this).val();
+
+                var getDataAndReloadTable = function() {
+                    $('#rekap_beli_detail_m_produk_id1').empty();
+                    $('#rekap_beli_detail_m_produk_id1').append('<option></option>');
+                    $.get("/inventori/stok/" + asal, function(data) {
+                        datas = data;
+                        $.each(data, function(key, value) {
+                            $('#rekap_beli_detail_m_produk_id1')
+                                .append($('<option>', {
+                                        value: key
+                                    })
+                                    .text(value));
+                        });
+                    });
+
+                    table = $('#tb_beli').DataTable({
+                        "destroy": true,
+                        "orderCellsTop": true,
+                        "processing": true,
+                        "autoWidth": true,
+                        "lengthMenu": [
+                            [10, 25, 50, 100, -1],
+                            [10, 25, 50, 100, "All"]
+                        ],
+                        "pageLength": 10,
+                        "ajax": {
+                            "url": "beli/history/" + asal,
+                            "type": "GET"
+                        }
+                    });
+                };
+
                 if ($('.fc').serialize().length > 191) {
                     Swal.fire({
                         title: 'Apakah Anda Yakin ?',
@@ -368,74 +401,17 @@
                                 'Berhasil',
                                 'Gudang Telah Berganti.',
                                 'success'
-                            )
-                            $('#rekap_beli_detail_m_produk_id1').empty();
-                            $('#rekap_beli_detail_m_produk_id1').append('<option></option>');
-                            var asal = $(this).val()
-                            $.get("/inventori/stok/" + asal, function(data) {
-                                datas = data;
-                                $.each(data, function(key, value) {
-                                    $('#rekap_beli_detail_m_produk_id1')
-                                        .append($('<option>', {
-                                                value: key
-                                            })
-                                            .text(value));
-                                });
-                            });
-                            $(function() {
-                                table = $('#tb_beli').DataTable({
-                                    "destroy": true,
-                                    "orderCellsTop": true,
-                                    "processing": true,
-                                    "autoWidth": true,
-                                    "lengthMenu": [
-                                        [10, 25, 50, 100, -1],
-                                        [10, 25, 50, 100, "All"]
-                                    ],
-                                    "pageLength": 10,
-                                    "ajax": {
-                                        "url": "beli/history/" + asal,
-                                        "type": "GET"
-                                    }
-                                });
-                            });
+                            );
+                            getDataAndReloadTable();
                             $('.remove').remove();
                             $('.reset').trigger('changer').val('');
                         }
                     });
                 } else {
-                    var asal = $(this).val()
-                    $('#rekap_beli_detail_m_produk_id1').empty();
-                    $('#rekap_beli_detail_m_produk_id1').append('<option></option>');
-                    $.get("/inventori/stok/" + asal, function(data) {
-                        datas = data;
-                        $.each(data, function(key, value) {
-                            $('#rekap_beli_detail_m_produk_id1')
-                                .append($('<option>', {
-                                        value: key
-                                    })
-                                    .text(value));
-                        });
-                    });
-                    $(function() {
-                        table = $('#tb_beli').DataTable({
-                            "destroy": true,
-                            "orderCellsTop": true,
-                            "processing": true,
-                            "autoWidth": true,
-                            "lengthMenu": [
-                                [10, 25, 50, 100, -1],
-                                [10, 25, 50, 100, "All"]
-                            ],
-                            "pageLength": 10,
-                            "ajax": {
-                                "url": "beli/history/" + asal,
-                                "type": "GET"
-                            }
-                        });
-                    });
+                    getDataAndReloadTable();
                 }
             });
+
 
             var no = 2;
             var supplier = new Array();
@@ -532,7 +508,7 @@
                     var rekap_beli_tot_nom = parseFloat(grandtotal) + parseFloat(ppnrp) + parseFloat(ongkir);
                     $('.ppnrp').val(ppnrp);
                     $('.rekap_beli_tot_nom').val(rekap_beli_tot_nom.toLocaleString('id'));
-                    if ((bayar-rekap_beli_tot_nom) > 0) {
+                    if ((bayar - rekap_beli_tot_nom) > 0) {
                         Codebase.helpers('jq-notify', {
                             align: 'right', // 'right', 'left', 'center'
                             from: 'top', // 'top', 'bottom'
@@ -586,32 +562,48 @@
                 }
             });
             $('#formAction').submit(function(e) {
-                if (!e.isDefaultPrevented()) {
-                    $.ajax({
-                        url: "{{ route('beli.simpan') }}",
-                        type: "POST",
-                        data: $('form').serialize(),
-                        success: function(data) {
-                            Codebase.helpers('jq-notify', {
-                                align: 'right', // 'right', 'left', 'center'
-                                from: 'top', // 'top', 'bottom'
-                                type: 'success', // 'info', 'success', 'warning', 'danger'
-                                icon: 'fa fa-info me-5', // Icon class
-                                message: 'Input Pembelian Berhasil'
-                            });
-                            table.ajax.reload();
-                            $('.remove').remove();
-                            $('#rekap_beli_detail_m_produk_id1,.reset,.supplier').trigger(
-                                'change').val('');
-                            $('.grdtot,.bayar').val(0);
-                            $('#form').find('.persendisc').trigger('input');
-                            get_code();
-                        },
-                        error: function() {
-                            alert("Tidak dapat menyimpan data!");
+                e.preventDefault();
+                var dibayar = $('#rekap_beli_terbayar').val();
+                var ajaxData = {
+                    url: "{{ route('beli.simpan') }}",
+                    type: "POST",
+                    data: $('form').serialize(),
+                    success: function(data) {
+                        Codebase.helpers('jq-notify', {
+                            align: 'right',
+                            from: 'top',
+                            type: 'success',
+                            icon: 'fa fa-info me-5',
+                            message: 'Input Pembelian Berhasil'
+                        });
+                        table.ajax.reload();
+                        $('.remove').remove();
+                        $('#rekap_beli_detail_m_produk_id1,.reset,.supplier').trigger('change').val(
+                            '');
+                        $('.grdtot,.bayar').val(0);
+                        $('#form').find('.persendisc').trigger('input');
+                        get_code();
+                    },
+                    error: function() {
+                        alert("Tidak dapat menyimpan data!");
+                    }
+                };
+                if (dibayar == 0) {
+                    Swal.fire({
+                        title: 'Apakah Anda Yakin Belanja Non Tunai?',
+                        text: "Anda Akan Input Pembelian Secara Non Tunai",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Ya'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax(ajaxData);
                         }
                     });
-                    return false;
+                } else {
+                    $.ajax(ajaxData);
                 }
             });
             $(document).on('click', '.detail', function() {

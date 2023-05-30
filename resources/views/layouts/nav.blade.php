@@ -743,7 +743,7 @@
                                                 class="nav-main-item{{ request()->is('inventori/kartu_stock') ? ' open' : '' }}">
                                                 <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu"
                                                     aria-haspopup="true" aria-expanded="true" href="#">
-                                                    <span class="nav-main-link-name">Kartu Stock</span>
+                                                    <span class="nav-main-link-name">Laporan Stock</span>
                                                 </a>
                                                 <ul class="nav-main-submenu">
                                                     <li class="nav-main-item">
@@ -959,9 +959,17 @@
                                 @endcan
                                 @can('hak akses.view')
                                 <li class="nav-main-item">
-                                    <a class="nav-main-link{{ request()->is('user/akses') ? ' active' : '' }}"
+                                    <a class="nav-main-link{{ request()->is('users/akses') ? ' active' : '' }}"
                                         href="{{ route('akses.index') }}">
                                         <span class="nav-main-link-name">Hak Akses</span>
+                                    </a>
+                                </li>
+                                @endcan
+                                @can('permission.view')
+                                <li class="nav-main-item">
+                                    <a class="nav-main-link{{ request()->is('users/permission') ? ' active' : '' }}"
+                                        href="{{ route('permission.index') }}">
+                                        <span class="nav-main-link-name">Permission</span>
                                     </a>
                                 </li>
                                 @endcan
