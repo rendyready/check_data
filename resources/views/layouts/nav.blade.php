@@ -609,6 +609,12 @@
                                                         <span class="nav-main-link-name">Data Bahan Baku</span>
                                                     </a>
                                                 </li>
+                                                <li class="nav-main-item">
+                                                    <a class="nav-main-link{{ request()->is('inventori/m_grub_bb') ? ' active' : '' }}"
+                                                        href="{{ route('m_grub_bb.index') }}">
+                                                        <span class="nav-main-link-name">Grub Bahan Baku</span>
+                                                    </a>
+                                                </li>
                                             @endcan
                                             @can('data gudang.view')
                                                 <li class="nav-main-item">
