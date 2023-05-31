@@ -121,6 +121,21 @@
                                                           </select>
                                                       </div>
                                                   </div>
+                                                  <div class="form-group">
+                                                    <label for="m_std_bb_resep_gudang_status">Gudang Status
+                                                        </label>
+                                                    <div>
+                                                        <select class="js-select2"
+                                                            id="m_std_bb_resep_gudang_status"
+                                                            name="m_std_bb_resep_gudang_status"
+                                                            style="width: 100%;" data-container="#form_std_bb"
+                                                            data-placeholder="Pilih Status">
+                                                            <option></option>
+                                                          <option value="produksi">Produksi</option>
+                                                          <option value="pengadaan">Pengadaan</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
                                                 </div>
                                         </div>
                                         <div class="block-content block-content-full text-end bg-body">

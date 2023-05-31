@@ -30,24 +30,25 @@ class GroupBBController extends Controller
             ->leftJoin('m_produk AS produk_asal', 'm_std_bb_resep.m_std_bb_resep_m_produk_code_asal', '=', 'produk_asal.m_produk_code')
             ->leftJoin('m_produk AS produk_relasi', 'm_std_bb_resep.m_std_bb_resep_m_produk_code_relasi', '=', 'produk_relasi.m_produk_code')
             ->leftJoin('m_satuan', 'm_std_bb_resep_m_satuan_id', '=', 'm_satuan.m_satuan_id')
-            ->select('m_std_bb_resep.*', 'produk_asal.m_produk_nama AS produk_asal_nama', 'produk_relasi.m_produk_nama AS produk_relasi_nama','m_satuan_kode')
+            ->select('m_std_bb_resep.*', 'produk_asal.m_produk_nama AS produk_asal_nama', 'produk_relasi.m_produk_nama AS produk_relasi_nama', 'm_satuan_kode')
             ->get();
-            $data = array();
-            $no = 1;
-            foreach ($list as $key => $value) {
-                $row = array();
-                $row[] = $no;
-                $row[] = $value->produk_asal_nama;
-                $row[] = $value->produk_relasi_nama;
-                $row[] = $value->m_std_bb_resep_qty;
-                $row[] = $value->m_std_bb_resep_porsi;
-                $row[] = $value->m_satuan_kode;
-                $row[] = '<a class="btn btn-info btn-sm" onclick="editdetail('.$value->m_std_bb_resep_id.')"><i class="fa fa-edit"></i></a>';
-                $data[] = $row;
-                $no++;
-            }
-            $output = array("data" => $data);
-            return response()->json($output);
+        $data = array();
+        $no = 1;
+        foreach ($list as $key => $value) {
+            $row = array();
+            $row[] = $no;
+            $row[] = $value->produk_asal_nama;
+            $row[] = $value->produk_relasi_nama;
+            $row[] = $value->m_std_bb_resep_qty;
+            $row[] = $value->m_std_bb_resep_porsi;
+            $row[] = $value->m_satuan_kode;
+            $row[] = $value->m_std_bb_resep_gudang_status;
+            $row[] = '<a class="btn btn-info btn-sm" onclick="editdetail(' . $value->m_std_bb_resep_id . ')"><i class="fa fa-edit"></i></a>';
+            $data[] = $row;
+            $no++;
+        }
+        $output = array("data" => $data);
+        return response()->json($output);
     }
 
     /**
@@ -66,19 +67,22 @@ class GroupBBController extends Controller
                 if (!empty($cek_duplicate)) {
                     return response(['messages' => 'Grub BB  Sudah Ada!', 'type' => 'danger']);
                 } else {
-                    $data = $request->except('_token', 'action','id');
+                    $data = $request->except('_token', 'action', 'id');
                     $data['m_std_bb_resep_created_by'] = Auth::user()->users_id;
                     $data['m_std_bb_resep_id'] = $this->getNextId('m_std_bb_resep', Auth::user()->waroeng_id);
+                    $data['m_std_bb_resep_m_produk_nama_asal'] = $this->get_produk($data['m_std_bb_resep_m_produk_code_asal'])->m_produk_nama;
+                    $data['m_std_bb_resep_m_produk_nama_relasi'] = $this->get_produk($data['m_std_bb_resep_m_produk_code_relasi'])->m_produk_nama;
                     DB::table('m_std_bb_resep')->insert($data);
                     return response(['messages' => 'Berhasil Tambah Grub BB', 'type' => 'success']);
                 }
             } elseif ($request->action == 'edit') {
                 $data = $request->except('_token', 'action');
                 $data['m_std_bb_resep_updated_by'] = Auth::user()->users_id;
+                $data['m_std_bb_resep_m_produk_nama_asal'] = $this->get_produk($data['m_std_bb_resep_m_produk_code_asal']);
+                $data['m_std_bb_resep_m_produk_nama_relasi'] = $this->get_produk($data['m_std_bb_resep_m_produk_code_relasi']);
                 DB::table('m_std_bb_resep')->where('m_std_bb_resep_id', $request->id)->update($data);
                 return response(['messages' => 'Berhasil Ubah Grub BB', 'type' => 'success']);
             }
-
         }
     }
 

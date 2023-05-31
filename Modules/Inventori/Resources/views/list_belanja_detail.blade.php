@@ -7,7 +7,7 @@
                 <div class="block block-themed h-100 mb-0">
                     <div class="block-header bg-pulse">
                         <h3 class="block-title">
-                            KEBUTUHAN BELANJA DETAIL {{tgl_indo($rph_tanggal)}}
+                            KEBUTUHAN BELANJA DETAIL {{ tgl_indo($rph->rph_tgl) }}
                     </div>
                     <div class="block-content text-muted">
                         <div class="col-md-4">
@@ -29,37 +29,37 @@
                             </div>
                         </div>
                         <div class="col-md-4">
-
+                            @if ($rph->rph_order_status == 'buka')
+                                <a class="btn btn-success mr-2 mb-2 order" title="order" style="color: #fff"><i
+                                        class="fa fa-plus mr-5"></i> Kirim Order Ke Gudang</a>
+                            @endif
                         </div>
-                        <table id="detail_belanja" class="table table-sm table-bordered table-striped table-vcenter js-dataTable-full">
+                        <table id="detail_belanja"
+                            class="table table-sm table-bordered table-striped table-vcenter js-dataTable-full">
                             <thead>
                                 <tr>
                                     <th>No</th>
                                     <th>Nama Bahan Baku</th>
-                                    <th>Qty Rph</th>
-                                    <th>Stok Produksi</th>
+                                    <th>Qty Kebutuhan</th>
+                                    <th>Stok Sisa</th>
                                     <th>Satuan Produksi</th>
-                                    <th>Kebutuhan</th>
-                                    <th>Stok Gudang</th>
-                                    <th>Qty Belanja</th>
-                                    <th>Satuan Belanja</th>
+                                    <th>Order Gudang</th>
+                                    <th>Satuan Order</th>
                                 </tr>
                             </thead>
                             <tbody>
-                              @foreach ($data2 as $item)
-                                  <tr>
-                                      <td>{{$item['no']}}</td>
-                                      <td>{{$item['nama'] }}</td>
-                                      <td>{{$item['qty_rph'] }}</td>
-                                      <td>{{$item['sat_produksi'] }}</td>
-                                      <td>{{$item['qty_produksi'] }}</td>
-                                      <td>{{$item['kebutuhan']}}</td>
-                                      <td>{{$item['qty_gudang']}}</td>
-                                      <td>{{$item['belanja']}}</td>
-                                      <td>{{$item['sat_belanja']}}</td>
-                                  </tr>
-                              @endforeach
-                          </tbody>                          
+                                @foreach ($data2 as $item)
+                                    <tr>
+                                        <td>{{ $item['no'] }}</td>
+                                        <td>{{ $item['nama'] }}</td>
+                                        <td>{{ $item['qty_rph'] }}</td>
+                                        <td>{{ $item['qty_produksi'] }}</td>
+                                        <td>{{ $item['sat_produksi'] }}</td>
+                                        <td>{{ $item['kebutuhan'] }}</td>
+                                        <td>{{ $item['sat_belanja'] }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -81,13 +81,13 @@
         buttons: [
             {
                 extend: 'excel',
-                filename: 'kebutahan belanja {{$rph_tanggal}}',
-                title: 'Kebutahan Belanja {{$rph_tanggal}}'
+                filename: 'kebutahan belanja {{$rph->rph_tgl}}',
+                title: 'Kebutahan Belanja {{$rph->rph_tgl}}'
             },
             {
                 extend: 'pdf',
-                filename: 'kebutahan belanja {{$rph_tanggal}}',
-                title: 'Kebutahan Belanja {{$rph_tanggal}}'
+                filename: 'kebutahan belanja {{$rph->rph_tgl}}',
+                title: 'Kebutahan Belanja {{$rph->rph_tgl}}'
             },
             {
                 extend: 'print',

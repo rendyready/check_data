@@ -96,18 +96,26 @@ class RphController extends Controller
                     ->where('m_resep_m_produk_code',$request->rph_detail_menu_m_produk_code[$key])
                     ->get();
                     foreach ($get_resep as $value) {
-                        $get_std_resep = DB::table('m_std_bb_resep')->where('m_std_bb_resep_m_produk_code',$value->m_resep_detail_bb_code)->first();
+                        $get_std_resep = DB::table('m_std_bb_resep')
+                        ->where('m_std_bb_resep_m_produk_code_asal',$value->m_resep_detail_bb_code)
+                        ->where('m_std_bb_resep_gudang_status','produksi')
+                        ->first();
                         if (!empty($get_std_resep)) {
-                            $bb_qty = ($request->rph_detail_menu_qty[$key]*$value->m_resep_detail_bb_qty)/$get_std_resep->m_std_bb_resep_qty;
+                            $bb_qty = ($request->rph_detail_menu_qty[$key] * $value->m_resep_detail_bb_qty) / convertfloat($get_std_resep->m_std_bb_resep_qty);
+                            $bb_code = $get_std_resep->m_std_bb_resep_m_produk_code_relasi;
+                        } elseif (!is_null($value->m_resep_detail_standar_porsi)) {
+                            $bb_qty = $request->rph_detail_menu_qty[$key]/ $value->m_resep_detail_standar_porsi;
+                            $bb_code = $value->m_resep_detail_bb_code;
                         } else {
-                            $bb_qty =  $request->rph_detail_menu_qty[$key]*$value->m_resep_detail_bb_qty;
+                            // Skip penyimpanan dan perhitungan jika m_resep_detail_standar_porsi bernilai null
+                            continue;
                         }
                         
                         $detail_resep = array(
                             'rph_detail_bb_id' => $this->getNextId('rph_detail_bb',$waroeng_id),
                             'rph_detail_bb_rph_detail_menu_id' => $rph_detail_menu_id,
                             'rph_detail_bb_rph_code' => $request->rph_code,
-                            'rph_detail_bb_m_produk_code' => $value->m_resep_detail_bb_code,
+                            'rph_detail_bb_m_produk_code' => $bb_code,
                             'rph_detail_bb_m_produk_nama' => $value->m_resep_detail_m_produk_nama,
                             'rph_detail_bb_qty' => $bb_qty,
                             'rph_detail_bb_created_at' => Carbon::now(),
@@ -204,25 +212,32 @@ class RphController extends Controller
                     ->whereNotNull('m_resep_detail_standar_porsi')
                     ->get();
                     foreach ($get_resep as $value) {
-                        $get_std_resep = DB::table('m_std_bb_resep')->where('m_std_bb_resep_m_produk_code',$value->m_resep_detail_bb_code)->first();
+                        $get_std_resep = DB::table('m_std_bb_resep')->where('m_std_bb_resep_m_produk_code_asal',$value->m_resep_detail_bb_code)->first();
                         if (!empty($get_std_resep)) {
-                            $bb_qty = ($request->rph_detail_menu_qty[$key]*$value->m_resep_detail_bb_qty)/$get_std_resep->m_std_bb_resep_qty;
+                            $bb_qty = ($request->rph_detail_menu_qty[$key] * $value->m_resep_detail_bb_qty) / convertfloat($get_std_resep->m_std_bb_resep_qty);
+                            $bb_code = $get_std_resep->m_std_bb_resep_m_produk_code_relasi;
+                            $bb_nama = $get_std_resep->m_std_bb_resep_m_produk_nama_relasi;
+                        } elseif (!is_null($value->m_resep_detail_standar_porsi)) {
+                            $bb_qty = $request->rph_detail_menu_qty[$key]/ $value->m_resep_detail_standar_porsi;
+                            $bb_code = $value->m_resep_detail_bb_code;
+                            $bb_nama = $value->m_resep_detail_m_produk_nama;
                         } else {
-                           $bb_qty =  $request->rph_detail_menu_qty[$key]/$value->m_resep_detail_standar_porsi;
+                            // Skip penyimpanan dan perhitungan jika m_resep_detail_standar_porsi bernilai null
+                            continue;
                         }
                         
                         $detail_resep = array(
                             'rph_detail_bb_id' => $this->getNextId('rph_detail_bb',$waroeng_id),
                             'rph_detail_bb_rph_detail_menu_id' => $id,
                             'rph_detail_bb_rph_code' => $request->rph_code,
-                            'rph_detail_bb_m_produk_code' => $value->m_resep_detail_bb_code,
-                            'rph_detail_bb_m_produk_nama' => $value->m_resep_detail_m_produk_nama,
+                            'rph_detail_bb_m_produk_code' => $bb_code,
+                            'rph_detail_bb_m_produk_nama' => $bb_nama,
                             'rph_detail_bb_qty' => $bb_qty,
                             'rph_detail_bb_created_at' => Carbon::now(),
                             'rph_detail_bb_created_by' => Auth::id()
                         );
                     DB::table('rph_detail_bb')->updateOrInsert(['rph_detail_bb_rph_detail_menu_id' => $id, 
-                                    'rph_detail_bb_m_produk_code' => $value->m_resep_detail_bb_code],
+                                    'rph_detail_bb_m_produk_code' => $bb_code],
                                     $detail_resep);
                     }
             }
@@ -276,7 +291,6 @@ class RphController extends Controller
                 DB::raw('SUM(rph_detail_bb_qty) as qty_rph'),
                 'ms1.m_stok_saldo as qty_produksi',
                 'ms2.m_stok_saldo as qty_gudang',
-                // DB::raw('CASE WHEN SUM(CAST(rph_detail_bb_qty AS FLOAT) - ms1.m_stok_saldo - ms2.m_stok_saldo) < 0 THEN 0 ELSE SUM(CAST(rph_detail_bb_qty AS FLOAT) - ms1.m_stok_saldo - ms2.m_stok_saldo) END as qty_beli')
             )
             ->groupBy('rph_detail_bb_m_produk_code', 'rph_detail_bb_m_produk_nama', 'qty_produksi', 'qty_gudang','satuan1','satuan2')
             ->where('rph_detail_bb_rph_code', $id)
@@ -284,7 +298,75 @@ class RphController extends Controller
             $no = 0;
             $data2 = array();
             foreach ($get_list as $value) {
-                $get_std_resep = DB::table('m_std_bb_resep')->where('m_std_bb_resep_m_produk_code',$value->rph_detail_bb_m_produk_code)->first();
+                $get_std_resep = DB::table('m_std_bb_resep')->where('m_std_bb_resep_m_produk_code_asal',$value->rph_detail_bb_m_produk_code)->first();
+               if (!empty($get_std_resep)) {
+                    $qty_kebutuhan_produksi = ($value->qty_rph-$value->qty_produksi)/$get_std_resep->m_std_bb_resep_porsi;
+                    if ($qty_kebutuhan_produksi<0) {$qty_kebutuhan_produksi = 0;}
+               } else {
+                $qty_kebutuhan_produksi = $value->qty_rph-$value->qty_produksi;
+                if ($qty_kebutuhan_produksi<0) {$qty_kebutuhan_produksi = 0;}
+               }
+                $row = array();
+                $no++;
+                $row['no'] = $no;
+                $row['nama'] = $value->rph_detail_bb_m_produk_nama;
+                $row['qty_rph'] = number_format($value->qty_rph, 2);
+                $row['qty_produksi'] = $value->qty_produksi;
+                $row['sat_produksi'] = $value->satuan1;
+                $row['kebutuhan'] = number_format($qty_kebutuhan_produksi, 2);
+                $row['qty_gudang'] = $value->qty_gudang;
+                $row['belanja'] = $retVal = ($qty_kebutuhan_produksi-$value->qty_gudang <0) ? 0 : $qty_kebutuhan_produksi-$value->qty_gudang ;
+                $row['sat_belanja'] = $value->satuan2;
+                $data2[] = $row;
+            }
+        return view('inventori::list_belanja_detail',compact('data','data2','rph'));
+    }
+    public function kunci_order(Request $request)
+    {
+        
+    }
+    public function belanja_detail_lengkap($id)
+    { 
+        $waroeng_id = Auth::user()->waroeng_id;
+        $data = new \stdClass();
+        $data->waroeng_nama = DB::table('m_w')->select('m_w_nama')->where('m_w_id', $waroeng_id)->first();
+       
+        $rph = DB::table('rph')->where('rph_code', $id)->first();
+
+        $get_list = DB::table('rph')
+            ->join('rph_detail_bb', 'rph_detail_bb_rph_code', 'rph_code')
+            ->join('m_stok as ms1', function ($join1) use ($rph) {
+                $join1->on('ms1.m_stok_m_produk_code', 'rph_detail_bb_m_produk_code')
+                    ->join('m_gudang as mg1', function ($join2) use ($rph) {
+                        $join2->on('ms1.m_stok_gudang_code', 'mg1.m_gudang_code')
+                            ->where('mg1.m_gudang_nama', '=', 'gudang produksi waroeng')
+                            ->where('mg1.m_gudang_m_w_id', '=', $rph->rph_m_w_id);
+                    });
+            })
+            ->join('m_stok as ms2', function ($join1) use ($rph) {
+                $join1->on('ms2.m_stok_m_produk_code', 'rph_detail_bb_m_produk_code')
+                    ->join('m_gudang as mg2', function ($join2) use ($rph) {
+                        $join2->on('ms2.m_stok_gudang_code', 'mg2.m_gudang_code')
+                            ->where('mg2.m_gudang_nama', '=', 'gudang utama waroeng')
+                            ->where('mg2.m_gudang_m_w_id', '=', $rph->rph_m_w_id);
+                    });
+            })
+            ->select(
+                'rph_detail_bb_m_produk_code',
+                'rph_detail_bb_m_produk_nama',
+                'ms1.m_stok_satuan as satuan1',
+                'ms2.m_stok_satuan as satuan2',
+                DB::raw('SUM(rph_detail_bb_qty) as qty_rph'),
+                'ms1.m_stok_saldo as qty_produksi',
+                'ms2.m_stok_saldo as qty_gudang',
+            )
+            ->groupBy('rph_detail_bb_m_produk_code', 'rph_detail_bb_m_produk_nama', 'qty_produksi', 'qty_gudang','satuan1','satuan2')
+            ->where('rph_detail_bb_rph_code', $id)
+            ->get();
+            $no = 0;
+            $data2 = array();
+            foreach ($get_list as $value) {
+                $get_std_resep = DB::table('m_std_bb_resep')->where('m_std_bb_resep_m_produk_code_asal',$value->rph_detail_bb_m_produk_code)->first();
                if (!empty($get_std_resep)) {
                     $qty_kebutuhan_produksi = ($value->qty_rph-$value->qty_produksi)/$get_std_resep->m_std_bb_resep_porsi;
                     if ($qty_kebutuhan_produksi<0) {$qty_kebutuhan_produksi = 0;}
@@ -299,7 +381,7 @@ class RphController extends Controller
                 $row['qty_rph'] = $value->qty_rph;
                 $row['qty_produksi'] = $value->qty_produksi;
                 $row['sat_produksi'] = $value->satuan1;
-                $row['kebutuhan'] = $qty_kebutuhan_produksi;
+                $row['kebutuhan'] = number_format($qty_kebutuhan_produksi, 2);
                 $row['qty_gudang'] = $value->qty_gudang;
                 $row['belanja'] = $retVal = ($qty_kebutuhan_produksi-$value->qty_gudang <0) ? 0 : $qty_kebutuhan_produksi-$value->qty_gudang ;
                 $row['sat_belanja'] = $value->satuan2;
@@ -307,10 +389,6 @@ class RphController extends Controller
             }
         $rph_tanggal = $rph->rph_tgl;
         return view('inventori::list_belanja_detail',compact('data','data2','rph_tanggal'));
-        
-        
-    
-
     }
 
 }

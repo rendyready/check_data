@@ -18,11 +18,14 @@ return new class extends Migration
             $table->id('id');
             $table->string('m_std_bb_resep_id')->unique();
             $table->string('m_std_bb_resep_m_produk_code_asal');
+            $table->string('m_std_bb_resep_m_produk_nama_asal');
             $table->string('m_std_bb_resep_m_produk_code_relasi');
+            $table->string('m_std_bb_resep_m_produk_nama_relasi');
             $table->string('m_std_bb_resep_qty');
             $table->string('m_std_bb_resep_porsi');
             $table->unsignedBigInteger('m_std_bb_resep_m_satuan_id');
-            $table->string("m_std_bb_resep_status_sync")->default('send');
+            $table->string('m_std_bb_resep_gudang_status');
+            $table->string('m_std_bb_resep_status_sync')->default('send');
             $table->bigInteger('m_std_bb_resep_created_by');
             $table->bigInteger('m_std_bb_resep_updated_by')->nullable();
             $table->bigInteger('m_std_bb_resep_deleted_by')->nullable();
