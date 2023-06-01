@@ -131,7 +131,7 @@ $(document).ready(function() {
         var operator = $('.filter_operator').val(); 
         var status   = $('.filter_status').val();  
         
-        // $('.show_nota').remove(); 
+        $('.show_nota').remove(); 
             $.ajax({
             type:"GET",
             url: '{{route("detail.show")}}',

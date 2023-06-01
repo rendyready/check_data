@@ -98,8 +98,18 @@ class LaporanPembelianController extends Controller
             $data->transaksi_rekap2 = $data->transaksi_rekap->orderby('rekap_beli_tgl', 'ASC')
                 ->orderby('rekap_beli_code', 'ASC')
                 ->get();
-        $data->detail_nota = DB::table('rekap_beli_detail')
-            ->orderby('rekap_beli_detail_m_produk_nama', 'ASC')
+        $detail_nota = DB::table('rekap_beli_detail')
+            ->join('rekap_beli', 'rekap_beli_code', 'rekap_beli_detail_rekap_beli_code');
+            if($request->pengadaan != 'all'){
+                $detail_nota->where('rekap_beli_created_by', $request->pengadaan);
+            }
+            if (strpos($request->tanggal, 'to') !== false) {
+                $dates = explode('to' ,$request->tanggal);
+                $detail_nota->whereBetween('rekap_beli_tgl', $dates);
+            } else {
+                $detail_nota->where('rekap_beli_tgl', $request->tanggal);
+            }
+            $data->detail_nota= $detail_nota->orderby('rekap_beli_detail_m_produk_nama', 'ASC')
             ->get();
        
         return response()->json($data);

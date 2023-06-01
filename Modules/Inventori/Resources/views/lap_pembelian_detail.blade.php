@@ -133,6 +133,7 @@ $(document).ready(function() {
             success:function(data){  
               $.each(data.transaksi_rekap2, function (key, value) {
                 // console.log(item.r_t_id); 
+                var id = value.rekap_beli_code.toString().replace(/\./g,'');
                   $('#show_nota').append('<div class="col-xl-4 show_nota">'+
                         '<div class="block block-rounded mb-1">'+
                           '<div class="block-header block-header-default block-header-rtl bg-pulse">'+
@@ -144,7 +145,7 @@ $(document).ready(function() {
                           '</div>'+
                           '<div class="block-content mb-4" style="background-color: rgba(224, 224, 224, 0.5)">'+
                             '<table class="table table-border table-striped table-vcenter js-dataTable-full" style="font-size: 13px;">'+
-                              '<thead id="sub_nota'+ value.rekap_beli_code +'">'+
+                              '<thead id="sub_nota'+ id +'">'+
                                 '</thead>'+
                               '<tbody>'+
                                 '<tr style="background-color: white;" class="text-end fw-semibold">'+
@@ -179,7 +180,8 @@ $(document).ready(function() {
                   });
                     $.each(data.detail_nota, function (key, item) {
                         // console.log(item.r_t_detail_r_t_id);
-                        $('#sub_nota'+ item.rekap_beli_detail_rekap_beli_code).append(
+                        var id_detail = item.rekap_beli_detail_rekap_beli_code.toString().replace(/\./g,'');
+                        $('#sub_nota'+ id_detail).append(
                                 '<tr style="background-color: white;" class="show_nota">'+
                                   '<td>'+
                                     '<small class="fw-semibold" style="font-size: 15px;">'+ item.rekap_beli_detail_m_produk_nama +'</small> <br>'+
@@ -240,7 +242,7 @@ $(document).ready(function() {
             $(".filter_waroeng").empty();
             $(".filter_area").val(prev).trigger('change');
         }     
-        $(".filter_operator").empty(); 
+        // $(".filter_operator").empty(); 
     });
   } 
 

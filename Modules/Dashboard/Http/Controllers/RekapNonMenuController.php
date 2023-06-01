@@ -76,7 +76,7 @@ class RekapNonMenuController extends Controller
        }
        $getNonMenu = DB::table('m_produk')
                ->select('m_produk_id')
-               ->whereIn('m_produk_m_jenis_produk_id',[9])->get();
+               ->whereIn('m_produk_m_jenis_produk_id',[9,11])->get();
        $listNonMenu = [];
        foreach ($getNonMenu as $key => $valMenu) {
            array_push($listNonMenu,$valMenu->m_produk_id);
@@ -154,21 +154,20 @@ class RekapNonMenuController extends Controller
                #Non-Menu
                $nonMenu = DB::table('rekap_transaksi')
                        ->join('rekap_transaksi_detail','r_t_detail_r_t_id','r_t_id')
-                       ->selectRaw('r_t_rekap_modal_id, sum(r_t_detail_reguler_price*r_t_detail_qty) nominal')
+                       ->selectRaw('r_t_rekap_modal_id, r_t_m_t_t_id, sum(r_t_detail_reguler_price*r_t_detail_qty) nominal')
                        ->where([
                            'r_t_rekap_modal_id' => $valSesi->rekap_modal_id,
                            'r_t_m_t_t_id' => $valType->m_t_t_id
                        ])
-                       ->whereIn('r_t_detail_m_produk_id',$listNonMenu)
-                       ->whereNotIn('r_t_detail_m_produk_id',$listKbd)
-                       ->groupBy('r_t_rekap_modal_id')
+                       ->whereIn('r_t_detail_m_produk_id', $listNonMenu)
+                       ->groupBy('r_t_rekap_modal_id', 'r_t_m_t_t_id')
                        ->first();
 
-                $non_menu =0;
+                $non_menu = 0;
                if (!empty($nonMenu)) {
                    $non_menu = $nonMenu->nominal;
                }
-
+         
                #Ice-Cream
                $iceCream = DB::table('rekap_transaksi')
                        ->join('rekap_transaksi_detail','r_t_detail_r_t_id','r_t_id')
