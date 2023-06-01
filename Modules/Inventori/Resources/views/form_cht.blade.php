@@ -128,7 +128,8 @@
   $('#formAction').submit( function(e){
                 if(!e.isDefaultPrevented()){
                   table.columns([1,2,3,4]).visible(true);
-                  var dataf = $('#formAction').serialize();
+                  var rekap_beli_gudang_code = $('#rekap_beli_gudang_code').val();
+                  var dataf = $('input,select').serialize();
                     $.ajax({
                         url : "{{ route('cht.simpan') }}",
                         type : "POST",

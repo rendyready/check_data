@@ -28,7 +28,8 @@
                                             <input type="text" class="form-control nota" id="rekap_so_m_w_nama"
                                                 name="rekap_so_m_w_nama" value="{{ ucwords($data->waroeng->m_w_nama) }}"
                                                 readonly>
-                                            <input type="hidden" name="rekap_so_m_w_code" value="{{ $data->waroeng->m_w_code }}">
+                                            <input type="hidden" name="rekap_so_m_w_code"
+                                                value="{{ $data->waroeng->m_w_code }}">
                                         </div>
                                     </div>
                                 </div>
@@ -47,7 +48,8 @@
                                                 name="gudang_nama" value="{{ ucwords($data->gudang_nama) }}" readonly>
                                             <input type="hidden" name="rekap_so_m_gudang_code"
                                                 value="{{ $data->gudang_code }}">
-                                                <input type="hidden" name="rekap_so_m_klasifikasi_produk_id" value="{{$data->kat_id}}">
+                                            <input type="hidden" name="rekap_so_m_klasifikasi_produk_id"
+                                                value="{{ $data->kat_id }}">
                                         </div>
                                     </div>
                                 </div>
@@ -103,12 +105,41 @@
 @section('js')
     <script>
         $(function() {
-            $('.simpan').on('click',function(e) {
-                // Mengirim data ke server melalui AJAX
+            $(document).on('click', '#simpan', function(e) {
+                e.preventDefault();
+
+                var inputData = {
+                    rekap_beli_created_by: $('#rekap_beli_created_by').val(),
+                    rekap_so_code: $('.nota[name="rekap_so_code"]').val(),
+                    rekap_so_m_w_nama: $('#rekap_so_m_w_nama').val(),
+                    rekap_so_m_w_code: $('input[name="rekap_so_m_w_code"]').val(),
+                    rekap_so_tgl: $('#rekap_so_tgl').val(),
+                    gudang_nama: $('#gudang_nama').val(),
+                    rekap_so_m_gudang_code: $('input[name="rekap_so_m_gudang_code"]').val(),
+                    rekap_so_m_klasifikasi_produk_id: $(
+                        'input[name="rekap_so_m_klasifikasi_produk_id"]').val(),
+                    rekap_so_detail: []
+                };
+
+                $('#tb-so tbody tr').each(function(index, element) {
+                    var row = {
+                        rekap_so_detail_m_produk_code: $(element).find(
+                            'input[name="rekap_so_detail_m_produk_code[]"]').val(),
+                        rekap_so_detail_qty: $(element).find(
+                            'input[name="rekap_so_detail_qty[]"]').val(),
+                        rekap_so_detail_satuan: $(element).find(
+                            'input[name="rekap_so_detail_satuan[]"]').val(),
+                        rekap_so_detail_qty_riil: $(element).find('.rill').val()
+                    };
+
+                    inputData.rekap_so_detail.push(row);
+                });
+
                 $.ajax({
-                    type: "post", 
-                    url: "{{ route('stok_so.simpan') }}",
-                    data: $('input').serialize(),
+                    type: 'POST',
+                    url: '{{ route('stok_so.simpan') }}',
+                    data: JSON.stringify(inputData),
+                    contentType: 'application/json',
                     success: function(data) {
                         Codebase.helpers('jq-notify', {
                             align: 'right', // 'right', 'left', 'center'
@@ -117,12 +148,17 @@
                             icon: 'fa fa-info me-5', // Icon class
                             message: 'Input SO Berhasil Anda Akan Dialihkan Ke Halaman Utama'
                         });
-                        setTimeout(function() {
-                            window.location.href = "{{ route('stok_so.index') }}";
-                        }, 2000);
+                        // setTimeout(function() {
+                        //     window.location.href = "{{ route('stok_so.index') }}";
+                        // }, 500);
+                    },
+                    error: function(xhr, textStatus, errorThrown) {
+                        // Tindakan saat terjadi kesalahan
                     }
                 });
             });
+
+
         })
         $(document).ready(function() {
             Codebase.helpersOnLoad(['jq-select2']);

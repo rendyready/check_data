@@ -133,14 +133,15 @@
                         type : "POST",
                         data : dataf,
                         success : function(data){
-                            $.notify({
-                              align: 'right',       
-                              from: 'top',                
-                              type: 'success',               
-                              icon: 'fa fa-success me-5',    
-                              message: 'Berhasil Simpan'
+                            Codebase.helpers('jq-notify', {
+                              align: 'right', // 'right', 'left', 'center'
+                              from: 'top', // 'top', 'bottom'
+                              type: 'success', // 'info', 'success', 'warning', 'danger'
+                              icon: 'fa fa-info me-5', // Icon class
+                              message: 'Berhasil Input Terima Gudang'
                             });
                            table.ajax.reload();
+                           table2.ajax.reload();
                         },
                         error : function(){
                             alert("Tidak dapat menyimpan data!");
