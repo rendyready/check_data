@@ -7,7 +7,7 @@
                 <div class="block block-themed h-100 mb-0">
                     <div class="block-header bg-pulse">
                         <h3 class="block-title">
-                            KEBUTUHAN BELANJA DETAIL {{ tgl_indo($rph->rph_tgl) }}
+                            KEBUTUHAN BB PRODUKSI HARIAN {{ tgl_indo($rph->rph_tgl) }}
                     </div>
                     <div class="block-content text-muted">
                         <div class="col-md-4">
@@ -69,31 +69,45 @@
     <!-- END Page Content -->
 @endsection
 @section('js')
-    <script type="module">
-  $(document).ready(function() {
-    $.ajaxSetup({
-    headers:{
-      'X-CSRF-Token' : $("input[name=_token]").val()
-        }
-      });
-      $('#detail_belanja').DataTable({
-        destroy:'true',
-        buttons: [
-            {
-                extend: 'excel',
-                filename: 'kebutahan belanja {{$rph->rph_tgl}}',
-                title: 'Kebutahan Belanja {{$rph->rph_tgl}}'
-            },
-            {
-                extend: 'pdf',
-                filename: 'kebutahan belanja {{$rph->rph_tgl}}',
-                title: 'Kebutahan Belanja {{$rph->rph_tgl}}'
-            },
-            {
-                extend: 'print',
-            }
-        ]
-    });
-  });
-</script>
+    <script>
+        $(document).ready(function() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-Token': $("input[name=_token]").val()
+                }
+            });
+            $('#detail_belanja').DataTable({
+                destroy: 'true',
+                buttons: [{
+                        extend: 'excel',
+                        filename: 'kebutahan belanja {{ $rph->rph_tgl }}',
+                        title: 'Kebutahan Belanja {{ $rph->rph_tgl }}'
+                    },
+                    {
+                        extend: 'pdf',
+                        filename: 'kebutahan belanja {{ $rph->rph_tgl }}',
+                        title: 'Kebutahan Belanja {{ $rph->rph_tgl }}'
+                    },
+                    {
+                        extend: 'print',
+                    }
+                ]
+            });
+            $('.order').click(function() {
+                var data = {
+                    rph_code: '{{ $rph->rph_code }}',
+                }
+                $.ajax({
+                    url: "/inventori/rph/belanja/order_produksi",
+                    type: "POST",
+                    data : data,
+                    success: function(respond) {
+                    //    window.location.reload();
+                    },
+                    error: function() {
+                    }
+                });
+            });
+        });
+    </script>
 @endsection

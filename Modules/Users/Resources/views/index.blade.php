@@ -63,7 +63,7 @@
                                                         <div>
                                                             <select class="js-select2" id="roles" name="roles[]"
                                                                 style="width: 100%;" data-container="#modal-popout"
-                                                                data-placeholder="Pilih Hak Akses" multiple required>
+                                                                data-placeholder="Pilih Hak Akses" multiple="multiple" required>
                                                                 <option></option>
                                                                 @foreach ($data->roles as $item)
                                                                     <option value="{{ $item->name }}">{{ $item->name }}
@@ -78,7 +78,7 @@
                                                         <label for="waroeng_id">Wilayah Kerja</label>
                                                         <div>
                                                             <select class="js-select2" id="waroeng_id" name="waroeng_id"
-                                                                style="width: 100%;" data-container="#modal-popout"
+                                                                style="width: 100%;"
                                                                 data-placeholder="Choose one.." required>
                                                                 <option></option>
                                                                 @foreach ($data->waroeng as $item)
@@ -95,7 +95,7 @@
                                                         <div>
                                                             <select class="js-select2" id="waroeng_akses"
                                                                 name="waroeng_akses[]" style="width: 100%;"
-                                                                data-container="#modal-popout"
+                                                                
                                                                 data-placeholder="Pilih Waroeng" multiple="multiple"
                                                                 required>
                                                                 @foreach ($data->waroeng as $item)
@@ -168,13 +168,18 @@
                     'X-CSRF-Token': $("input[name=_token]").val()
                 }
             });
-            Codebase.helpersOnLoad(['jq-select2']);
+            $('.js-select2').select2({
+                dropdownParent: $('#formAction'),
+                dropdownPosition: 'below',
+                tags: true,
+            });
             var t = $('#user').DataTable({
                 processing: false,
                 serverSide: false,
                 destroy: true,
                 pageLength: 10,
-                order: [0, 'asc']} );
+                order: [0, 'asc']
+            });
             $("#user").append(
                 $('<tfoot/>').append($("#user thead tr").clone())
             );
@@ -186,7 +191,7 @@
                 $("#modal-popout").modal('show');
                 $("#password").attr('required', true);
             });
-            $(document).on('click','.buttonEdit', function() {
+            $(document).on('click', '.buttonEdit', function() {
                 id = $(this).attr('value');
                 $('#modal-popout form')[0].reset();
                 $('#action').val('edit');

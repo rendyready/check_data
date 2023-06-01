@@ -5,7 +5,7 @@ namespace Modules\Learn\Http\Controllers;
 use Carbon\Carbon;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 
 class LearnController extends Controller
@@ -16,7 +16,8 @@ class LearnController extends Controller
      */
     public function index(Request $request)
     {
-        $get_trans = DB::table('log_transaksi_cr')->limit(5)->get();
+        #Log Info
+        $get_trans = DB::table('log_transaksi_cr')->limit(50)->get();
 
         foreach ($get_trans as $key) {
             $get_trans_m_w = DB::table('rekap_transaksi')->where('r_t_id', $key->log_transaksi_cr_r_t_id)->value('r_t_m_w_id');
@@ -24,12 +25,13 @@ class LearnController extends Controller
                 ->join('m_produk', 'r_t_detail_m_produk_code', 'm_produk_code')
                 ->where('r_t_detail_r_t_id', $key->log_transaksi_cr_r_t_id)
                 ->get();
-        
+
             foreach ($get_trans_detail as $val) {
                 // ke wbd
-                if ($get_trans_detail->m_produk_scp == 'ya' ||
-                    $get_trans_detail->m_produk_hpp == 'sales' ||
-                    $get_trans_detail->m_produk_m_jenis_produk_id == 11) {
+                if ($val->m_produk_scp == 'ya' &&
+                    $val->m_produk_hpp == 'sales' &&
+                    $val->m_produk_m_jenis_produk_id == 11) {
+                
                     $get_gudang_code = DB::table('m_gudang')
                         ->where('m_gudang_nama', 'gudang wbd waroeng')
                         ->where('m_gudang_m_w_id', $get_trans_m_w)->value('m_gudang_code');
@@ -59,29 +61,30 @@ class LearnController extends Controller
                         'm_stok_detail_created_at' => Carbon::now(),
                     ];
                     DB::table('m_stok_detail')->insert($stok_detail);
-                    $remove_list = DB::table('log_transaksi_cr')
-                        ->where('log_transaksi_cr_r_t_id', $key->log_transaksi_cr_r_t_id)
-                        ->delete();
+                   
                 } else {
-                    $get_resep = DB::table('m_resep')
+                   $get_resep = DB::table('m_resep')
                         ->join('m_resep_detail', 'm_resep_code', 'm_resep_detail_m_resep_code')
                         ->where('m_resep_m_produk_code', $val->r_t_detail_m_produk_code)
-                        ->whereNotNull('m_resep_detail_standar_porsi')
                         ->get();
-        
+
                     foreach ($get_resep as $val2) {
-                        $get_status_scp = DB::table('m_produk')->where('m_produk_code', $val2->m_resep_detail_bb_code)->first();
-        
-                        if ($get_status_scp->m_produk_scp == 'ya' || $get_status_scp == 'scp') {
-                            $get_std_resep = DB::table('m_std_bb_resep')->where('m_std_bb_resep_m_produk_code_asal', $val2->m_resep_detail_bb_code)->first();
-        
-                            if (empty($get_std_resep)) {
+                        if ($val->m_produk_scp == 'ya' && $val->m_produk_hpp == 'scp') {
+                            $get_std_resep = DB::table('m_std_bb_resep')
+                                ->where('m_std_bb_resep_m_produk_code_asal', $val2->m_resep_detail_bb_code)
+                                ->where('m_std_bb_resep_gudang_status', 'produksi')
+                                ->first();
+
+                            if (!empty($get_std_resep)) {
+                                $qty = ($val->r_t_detail_qty * $val2->m_resep_detail_bb_qty) / convertfloat($get_std_resep->m_std_bb_resep_qty);
+                                $bb = $get_std_resep->m_std_bb_resep_m_produk_code_relasi;
+                            } elseif (!empty($val2->m_resep_detail_standar_porsi)) {
                                 $qty = $val->r_t_detail_qty / $val2->m_resep_detail_standar_porsi;
                                 $bb = $val2->m_resep_detail_bb_code;
                             } else {
-                                $qty = ($val->r_t_detail_qty * $val2->m_resep_detail_bb_qty) / $get_std_resep->m_std_bb_resep_qty;
-                                $bb = $get_std_resep->m_std_bb_resep_m_produk_code_relasi;
+                                continue;
                             }
+                            $qty = number_format($qty, 2);
                             $get_gudang_code = DB::table('m_gudang')
                                 ->where('m_gudang_nama', 'gudang produksi waroeng')
                                 ->where('m_gudang_m_w_id', $get_trans_m_w)->value('m_gudang_code');
@@ -110,14 +113,14 @@ class LearnController extends Controller
                                 'm_stok_detail_created_by' => 1,
                             ];
                             DB::table('m_stok_detail')->insert($stok_detail);
-                            $remove_list = DB::table('log_transaksi_cr')
-                                ->where('log_transaksi_cr_r_t_id', $key->log_transaksi_cr_r_t_id)
-                                ->delete();
                         }
                     }
                 }
             }
-        }        
+            $remove_list = DB::table('log_transaksi_cr')
+            ->where('log_transaksi_cr_r_t_id', $key->log_transaksi_cr_r_t_id)
+            ->delete();
+        }
         return view('learn::index');
     }
 

@@ -161,7 +161,13 @@
                             }, 2000);
                         },
                         error: function(jqXHR, textStatus, errorThrown) {
-                            // Handle the error condition, if any
+                            Codebase.helpers('jq-notify', {
+                                align: 'right',
+                                from: 'top',
+                                type: 'error',
+                                icon: 'fa fa-exclamation-triangle me-5',
+                                message: 'RPH sudah di kunci oleh produksi.'
+                            });
                         }
                     });
                 }

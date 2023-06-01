@@ -136,6 +136,7 @@ Route::group(['prefix' => 'inventori', 'controller' => RphController::class, 'mi
     Route::put('rph/update','update')->name('rph.update');
     Route::get('rph_belanja','belanja')->name('belanja.index');
     Route::get('rph_belanja_detail/{id}','belanja_detail')->name('belanja.detail');
+    Route::post('rph/belanja/order_produksi','order_produksi')->name('belanja.order_produksi');
 });
 
 //master grub bb
