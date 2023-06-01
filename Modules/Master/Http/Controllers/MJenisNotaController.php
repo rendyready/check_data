@@ -101,6 +101,7 @@ class MJenisNotaController extends Controller
                     'm_menu_harga_status' => $key->m_menu_harga_status,
                     'm_menu_harga_tax_status' => $key->m_menu_harga_tax_status,
                     'm_menu_harga_sc_status' => $key->m_menu_harga_sc_status,
+                    'm_menu_harga_status_sync' => 'send',
                     'm_menu_harga_created_by' => Auth::user()->id,
                 );
                 MMenuHarga::insert($data_harga);
@@ -112,6 +113,7 @@ class MJenisNotaController extends Controller
                     'm_menu_harga_status' => $key->m_menu_harga_status,
                     'm_menu_harga_tax_status' => $key->m_menu_harga_tax_status,
                     'm_menu_harga_sc_status' => $key->m_menu_harga_sc_status,
+                    'm_menu_harga_status_sync' => 'send',
                     'm_menu_harga_created_by' => Auth::user()->id,
                 );
                 MMenuHarga::where('m_menu_harga_id',$cek->m_menu_harga_id)->update($data_harga);
