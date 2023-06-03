@@ -46,37 +46,40 @@ class User extends Authenticatable
 
     protected $table = 'users';
 
-	protected $casts = [
-		'users_id' => 'int',
-		'email_verified_at' => 'datetime',
-		'waroeng_id' => 'int',
-		'waroeng_akses' => 'binary',
-		'created_by' => 'int',
-		'updated_by' => 'int',
-		'deleted_by' => 'int',
-		'verified' => 'datetime'
-	];
+    protected $primaryKey = 'users_id';
 
-	protected $hidden = [
-		'password',
-		'remember_token'
-	];
+    public $incrementing = false;
 
-	protected $fillable = [
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'waroeng_id' => 'int',
+        'waroeng_akses' => 'binary',
+        'created_by' => 'int',
+        'updated_by' => 'int',
+        'deleted_by' => 'int',
+        'verified' => 'datetime',
+    ];
+
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    protected $fillable = [
 		'users_id',
-		'name',
-		'email',
-		'email_verified_at',
-		'password',
-		'remember_token',
-		'waroeng_id',
-		'waroeng_akses',
-		'created_by',
-		'updated_by',
-		'deleted_by',
-		'verified',
-		'users_status_sync'
-	];
+        'name',
+        'email',
+        'email_verified_at',
+        'password',
+        'remember_token',
+        'waroeng_id',
+        'waroeng_akses',
+        'created_by',
+        'updated_by',
+        'deleted_by',
+        'verified',
+        'users_status_sync',
+    ];
     public function hasVerifiedAccount()
     {
         return $this->verified;

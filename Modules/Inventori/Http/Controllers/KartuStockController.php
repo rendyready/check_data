@@ -250,7 +250,7 @@ class KartuStockController extends Controller
                         $master_stok2->whereIn('m_stok_m_klasifikasi_produk_id', [1,2,3]);
                     }
                 } else {
-                    $master_stok2->whereIn('m_stok_gudang_code',  [60001, 60002]);
+                    $master_stok2->where('m_gudang_m_w_id',$request->waroeng)->whereIn('m_gudang_nama',  ['gudang utama waroeng', 'gudang produksi waroeng']);
                     if($request->bb != 'all'){
                         $master_stok2->where('m_stok_m_klasifikasi_produk_id', $request->bb);
                     } else {
