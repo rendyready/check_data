@@ -139,6 +139,7 @@ class GetDataUpdate extends Command
 
         $getTableList = DB::table('config_get_data')
                         ->where('config_get_data_status','on')
+                        ->orderBy('config_get_data_id','asc')
                         ->get();
         foreach ($getTableList as $key => $valTab) {
             #get Schema Table From resource
@@ -150,35 +151,9 @@ class GetDataUpdate extends Command
                 exit();
             }
 
-            #filter data ready on lokal
-            // $ready = $DbDest->table($valTab->config_get_data_table_name)->get();
-            // $fieldId = $valTab->config_get_data_field_validate1;
-            // $filterNotIn = [];
-            // foreach ($ready as $key => $value) {
-            //     array_push($filterNotIn,$value->$fieldId);
-            // }
-
-            $statusCheck1 = "send";
-            $statusCheck2 = "edit";
-            $fieldStatus = $valTab->config_get_data_field_status;
-            $getDataSource = $DbSource->table($valTab->config_get_data_table_name);
-            if ($valTab->config_get_data_truncate == "off") {
-                // $getDataSource->whereNotIn($valTab->config_get_data_field_validate1,$filterNotIn);
-                $getDataSource->where($fieldStatus,"{$statusCheck1}");
-                $getDataSource->orWhere($fieldStatus,"{$statusCheck2}");
-                $getDataSource->orderBy($valTab->config_get_data_field_validate1,'asc');
-                if ($valTab->config_get_data_limit > 0) {
-                    $getDataSource->limit($valTab->config_get_data_limit);
-                }
-            }
-
-            if ($valTab->config_get_data_truncate == "on" && $valTab->config_get_data_table_tipe == "master") {
-                $DbDest->statement("TRUNCATE TABLE {$valTab->config_get_data_table_name} RESTART IDENTITY;");
-            }
-
             // $except = array('app_setting','role_has_permissions','model_has_permissions','model_has_roles');
             // if (!in_array($valTab->config_get_data_table_name,$except)) {
-                if ($valTab->config_get_data_sequence == 'on') {
+            if ($valTab->config_get_data_sequence == 'on') {
                 #Get Last Increment Used
                 $maxId = $DbDest->select("SELECT MAX(id) FROM {$valTab->config_get_data_table_name};")[0]->max;
 
@@ -195,8 +170,35 @@ class GetDataUpdate extends Command
                 }
             }
 
+            #Cek Last Sync
+            $lastId = DB::table('log_data_sync')
+                        ->where('log_data_sync_cron','getdataupdate:cron')
+                        ->where('log_data_sync_table',$valTab->config_get_data_table_name)
+                        ->first();
+
+            $statusCheck1 = "send";
+            $statusCheck2 = "edit";
+            $fieldStatus = $valTab->config_get_data_field_status;
+            $getDataSource = $DbSource->table($valTab->config_get_data_table_name);
+            if (!empty($lastId)) {
+                $getDataSource->where($valTab->config_get_data_field_validate1,'>',$lastId->log_data_sync_last);
+            }
+            if ($valTab->config_get_data_truncate == "off") {
+                $getDataSource->where($fieldStatus,"{$statusCheck1}");
+                $getDataSource->orWhere($fieldStatus,"{$statusCheck2}");
+                $getDataSource->orderBy($valTab->config_get_data_field_validate1,'asc');
+                if ($valTab->config_get_data_limit > 0) {
+                    $getDataSource->limit($valTab->config_get_data_limit);
+                }
+            }
+
+            if ($valTab->config_get_data_truncate == "on" && $valTab->config_get_data_table_tipe == "master") {
+                $DbDest->statement("TRUNCATE TABLE {$valTab->config_get_data_table_name} RESTART IDENTITY;");
+            }
+
             #PUSH data to Destination
-            if ($getDataSource->count() > 0) {
+            if ($getDataSource->get()->count() > 0) {
+                $nextLast = 0;
                 foreach ($getDataSource->get() as $keyDataSource => $valDataSource) {
                     $newDestStatus = "ok";
                     $data = [];
@@ -224,22 +226,41 @@ class GetDataUpdate extends Command
                                 $validationField,
                                 $data
                             );
+
+                        $validateField1 = $valTab->config_get_data_field_validate1;
+                        $nextLast = $valDataSource->$validateField1;
+
                     } catch (\Throwable $th) {
                         Log::alert("Can't insert/update to {$valTab->config_get_data_table_name}");
                         Log::info($th);
                     }
                 }
-                #Local Log
-                DB::table('log_cronjob')
-                ->insert([
-                    'log_cronjob_name' => 'getdataupdate:cron',
-                    'log_cronjob_from_server_id' => $getSourceConn->db_con_m_w_id,
-                    'log_cronjob_from_server_name' => $getSourceConn->db_con_location_name,
-                    'log_cronjob_to_server_id' => $dest->db_con_m_w_id,
-                    'log_cronjob_to_server_name' => $dest->db_con_location_name,
-                    'log_cronjob_datetime' => Carbon::now(),
-                    'log_cronjob_note' => $valTab->config_get_data_table_name.'-UPDATED!',
-                ]);
+                if ($nextLast != 0) {
+                    DB::table('log_data_sync')
+                        ->updateOrInsert(
+                        [
+                            'log_data_sync_cron' => 'getdataupdate:cron',
+                            'log_data_sync_table' => $valTab->config_get_data_table_name,
+                        ],
+                        [
+                            'log_data_sync_cron' => 'getdataupdate:cron',
+                            'log_data_sync_table' => $valTab->config_get_data_table_name,
+                            'log_data_sync_last' => $nextLast,
+                            'log_data_sync_note' => 'ok'
+                        ]
+                    );
+                    #Local Log
+                    DB::table('log_cronjob')
+                    ->insert([
+                        'log_cronjob_name' => 'getdataupdate:cron',
+                        'log_cronjob_from_server_id' => $getSourceConn->db_con_m_w_id,
+                        'log_cronjob_from_server_name' => $getSourceConn->db_con_location_name,
+                        'log_cronjob_to_server_id' => $dest->db_con_m_w_id,
+                        'log_cronjob_to_server_name' => $dest->db_con_location_name,
+                        'log_cronjob_datetime' => Carbon::now(),
+                        'log_cronjob_note' => $valTab->config_get_data_table_name.'-UPDATED!',
+                    ]);
+                }
             }
         }
 

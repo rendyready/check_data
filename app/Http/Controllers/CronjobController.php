@@ -833,10 +833,6 @@ class CronjobController extends Controller
 
     public function getdata()
     {
-        // $count = 70127;
-        // $bagi = ($count/100)/70;
-        // echo $bagi."<br>";
-        // return ceil($bagi);
         #Cek cronjob status
         $cronStatus = DB::table('cronjob')
                     ->where('cronjob_name','getdata:cron')
@@ -919,7 +915,7 @@ class CronjobController extends Controller
         ]);
 
         try {
-            $cekConn = Schema::connection('source')->hasTable('users');
+            $cekConn = Schema::connection('destination')->hasTable('users');
 
             $status = '';
             if ($cekConn) {
@@ -972,104 +968,86 @@ class CronjobController extends Controller
                 }
             }
 
+            #Cek Last Sync
+            $lastId = DB::table('log_data_sync')
+                        ->where('log_data_sync_cron','getdata:cron')
+                        ->where('log_data_sync_table',$valTab->config_get_data_table_name)
+                        ->first();
+
+            #GET Sumber Data
+            $getDataSource = $DbSource->table($valTab->config_get_data_table_name);
+            if (!empty($lastId)) {
+                $getDataSource->where($valTab->config_get_data_field_validate1,'>',$lastId->log_data_sync_last);
+            }
+            $getDataSource->orderBy($valTab->config_get_data_field_validate1,'asc');
+            if ($valTab->config_get_data_truncate == "off") {
+                if ($valTab->config_get_data_limit > 0) {
+                    $getDataSource->limit($valTab->config_get_data_limit);
+                }
+            }
+
             if ($valTab->config_get_data_truncate == "on" && $valTab->config_get_data_table_tipe == "master") {
                 $DbDest->statement("TRUNCATE TABLE {$valTab->config_get_data_table_name} RESTART IDENTITY;");
             }
 
-            #First check to setup looping
-            $ready = $DbDest->table($valTab->config_get_data_table_name)->get();
-            $fieldId = $valTab->config_get_data_field_validate1;
-            $filterNotIn = [];
-            foreach ($ready as $key => $value) {
-                array_push($filterNotIn,$value->$fieldId);
-            }
-
-            $statusCheck1 = "send";
-            $statusCheck2 = "edit";
-            $fieldStatus = $valTab->config_get_data_field_status;
-            $getDataSource = $DbSource->table($valTab->config_get_data_table_name);
-            if ($valTab->config_get_data_truncate == "off") {
-                $getDataSource->whereNotIn($valTab->config_get_data_field_validate1,$filterNotIn);
-                $getDataSource->orWhere($fieldStatus,"{$statusCheck1}");
-                $getDataSource->orWhere($fieldStatus,"{$statusCheck2}");
-                $getDataSource->orderBy($valTab->config_get_data_field_validate1,'asc');
-            }
-
-            $countData = $getDataSource->count();
-            $bagi = ($valTab->config_get_data_limit == 0) ? 1:$valTab->config_get_data_limit;
-            $loop = ceil($countData/$bagi);
-
-            if ($loop > 0) {
-                if ($loop > 10) {
-                    $loop = 10;
-                }
-                for ($i=1; $i <= $loop; $i++) {
-                    #filter data ready on lokal
-                    $ready = $DbDest->table($valTab->config_get_data_table_name)->get();
-                    $fieldId = $valTab->config_get_data_field_validate1;
-                    $filterNotIn = [];
-                    foreach ($ready as $key => $value) {
-                        array_push($filterNotIn,$value->$fieldId);
-                    }
-
-                    $statusCheck1 = "send";
-                    $statusCheck2 = "edit";
-                    $fieldStatus = $valTab->config_get_data_field_status;
-                    $getDataSource = $DbSource->table($valTab->config_get_data_table_name);
-                    if ($valTab->config_get_data_truncate == "off") {
-                        $getDataSource->whereNotIn($valTab->config_get_data_field_validate1,$filterNotIn);
-                        $getDataSource->orWhere($fieldStatus,"{$statusCheck1}");
-                        $getDataSource->orWhere($fieldStatus,"{$statusCheck2}");
-                        $getDataSource->orderBy($valTab->config_get_data_field_validate1,'asc');
-                        if ($valTab->config_get_data_limit > 0) {
-                            $getDataSource->limit($valTab->config_get_data_limit);
-                        }
-                    }
-
-                    #PUSH data to Destination
-                    if ($getDataSource->count() > 0) {
-                        // if ($valTab->config_get_data_table_name == 'm_menu_harga') {
-                        //     return $getDataSource->get();
-                        // }
-                        foreach ($getDataSource->get() as $keyDataSource => $valDataSource) {
-                            $newDestStatus = "ok";
-                            $data = [];
-                            foreach ($sourceSchema as $keySchema => $valSchema) {
-                                if ($valSchema != 'id') {
-                                    if ($valSchema == $valTab->config_get_data_field_status) {
-                                        $data[$valSchema] = $newDestStatus;
-                                    } else {
-                                        $data[$valSchema] = $valDataSource->$valSchema;
-                                    }
-                                }
-                            }
-                            try {
-                                $validateField = $valTab->config_get_data_field_validate1;
-                                $DbDest->table($valTab->config_get_data_table_name)
-                                    ->updateOrInsert(
-                                        [
-                                            $valTab->config_get_data_field_validate1 => $valDataSource->$validateField
-                                        ],
-                                        $data
-                                    );
-                            } catch (\Throwable $th) {
-                                Log::alert("Can't insert/update to {$valTab->config_get_data_table_name}");
-                                Log::info($th);
+            #PUSH data to Destination
+            if ($getDataSource->get()->count() > 0) {
+                $nextLast = 0;
+                foreach ($getDataSource->get() as $keyDataSource => $valDataSource) {
+                    $newDestStatus = "ok";
+                    $data = [];
+                    foreach ($sourceSchema as $keySchema => $valSchema) {
+                        if ($valSchema != 'id') {
+                            if ($valSchema == $valTab->config_get_data_field_status) {
+                                $data[$valSchema] = $newDestStatus;
+                            } else {
+                                $data[$valSchema] = $valDataSource->$valSchema;
                             }
                         }
                     }
+                    try {
+                        $validateField = $valTab->config_get_data_field_validate1;
+                        $DbDest->table($valTab->config_get_data_table_name)
+                            ->updateOrInsert(
+                                [
+                                    $valTab->config_get_data_field_validate1 => $valDataSource->$validateField
+                                ],
+                                $data
+                            );
+
+                        $nextLast = $valDataSource->$validateField;
+                    } catch (\Throwable $th) {
+                        Log::alert("Can't insert/update to {$valTab->config_get_data_table_name}");
+                        Log::info($th);
+                    }
                 }
-                #Local Log
-                DB::table('log_cronjob')
-                ->insert([
-                    'log_cronjob_name' => 'getdata:cron',
-                    'log_cronjob_from_server_id' => $getSourceConn->db_con_m_w_id,
-                    'log_cronjob_from_server_name' => $getSourceConn->db_con_location_name,
-                    'log_cronjob_to_server_id' => $dest->db_con_m_w_id,
-                    'log_cronjob_to_server_name' => $dest->db_con_location_name,
-                    'log_cronjob_datetime' => Carbon::now(),
-                    'log_cronjob_note' => $valTab->config_get_data_table_name.'-Updated!',
-                ]);
+                if ($nextLast != 0) {
+                    DB::table('log_data_sync')
+                        ->updateOrInsert(
+                        [
+                            'log_data_sync_cron' => 'getdata:cron',
+                            'log_data_sync_table' => $valTab->config_get_data_table_name,
+                        ],
+                        [
+                            'log_data_sync_cron' => 'getdata:cron',
+                            'log_data_sync_table' => $valTab->config_get_data_table_name,
+                            'log_data_sync_last' => $nextLast,
+                            'log_data_sync_note' => 'ok'
+                        ]
+                    );
+                    #Local Log
+                    DB::table('log_cronjob')
+                    ->insert([
+                        'log_cronjob_name' => 'getdata:cron',
+                        'log_cronjob_from_server_id' => $getSourceConn->db_con_m_w_id,
+                        'log_cronjob_from_server_name' => $getSourceConn->db_con_location_name,
+                        'log_cronjob_to_server_id' => $dest->db_con_m_w_id,
+                        'log_cronjob_to_server_name' => $dest->db_con_location_name,
+                        'log_cronjob_datetime' => Carbon::now(),
+                        'log_cronjob_note' => $valTab->config_get_data_table_name.'-UPDATED!',
+                    ]);
+                }
+
             }
         }
 

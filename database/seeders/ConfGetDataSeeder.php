@@ -56,7 +56,7 @@ class ConfGetDataSeeder extends Seeder
             $seq = ($valTable == 'app_setting') ? 'off':'on';
             // $trun = ($valTable == 'app_setting') ? 'on':'off';
             $trun = 'off';
-            $limit = ($valTable == 'm_menu_harga' || $valTable == 'users') ? 5000 : 100;
+            $limit = ($valTable == 'm_menu_harga' || $valTable == 'users' || $valTable == 'm_meja') ? 5000 : 100;
 
             DB::table('config_get_data')->insert([
                 'config_get_data_table_name' => $valTable,
