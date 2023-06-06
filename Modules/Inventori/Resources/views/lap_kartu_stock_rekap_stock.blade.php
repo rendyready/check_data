@@ -14,6 +14,17 @@
 
                         <div class="row">
                             <div class="col-md-5">
+                                <div class="row mb-3">
+                                    <label class="col-sm-3 col-form-label" >Tanggal</label>
+                                    <div class="col-sm-9">
+                                        <input name="r_t_tanggal" class="cari form-control filter_tanggal" type="text" placeholder="Pilih Tanggal.." id="filter_tanggal" readonly/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-5">
                                 <div class="row mb-2">
                                     <label class="col-sm-3 col-form-label">Area</label>
                                     <div class="col-sm-9">
@@ -75,7 +86,6 @@
                                             @foreach ($data->gudang as $gudang)
                                                 <option value="{{ $gudang->m_gudang_code }}"> {{ $gudang->m_gudang_nama }} </option>
                                             @endforeach
-                                            <option value="all">Gudang Utama dan Produksi</option>
                                             </select>
                                         @else
                                             <select id="filter_gudang2" style="width: 100%;"
@@ -86,11 +96,11 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            {{-- <div class="col-md-6">
                                 <div class="row mb-3">
                                     <label class="col-sm-3 col-form-label" for="rekap_inv_penjualan_created_by">Klasifikasi</label>
                                     <div class="col-sm-9">
-                                        <select id="filter_bb" data-placeholder="Pilih Klasifikasi BB" style="width: 100%;"
+                                        <select id="filter_bb" data-placeholder="Pilih Klasifikasi Bahan Baku" style="width: 100%;"
                                             class="cari f-area js-select2 form-control filter_bb" name="m_w_m_area_id">
                                             <option></option>
                                             @foreach ($data->bb as $bb)
@@ -100,7 +110,7 @@
                                         </select>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
                         </div> 
 
                         <div id="user-info" data-waroeng-id="{{ Auth::user()->waroeng_id }}" data-has-access="{{ in_array(Auth::user()->waroeng_id, $data->akses_area) ? 'true' : 'false' }}"></div>
@@ -116,7 +126,7 @@
               <thead>
                 <tr>
                   <th class="text-center">Gudang</th>
-                  <th class="text-center">Klasifikasi</th>
+                  {{-- <th class="text-center">Klasifikasi</th> --}}
                   <th class="text-center">Bahan Baku</th>
                   <th class="text-center">Stok Awal</th>
                   <th class="text-center">Masuk</th>
@@ -153,10 +163,11 @@ $(document).ready(function() {
     var HakAksesPusat = userInfoPusat.dataset.hasAccess === 'true';
 
     $('#cari').on('click', function() {
-    var area = $('.filter_area').val();
-    var waroeng = $('.filter_waroeng').val();
-    var gudang = $('.filter_gudang').val();
-    var bb = $('.filter_bb').val();
+        var tanggal = $('.filter_tanggal').val();
+        var area    = $('.filter_area').val();
+        var waroeng = $('.filter_waroeng').val();
+        var gudang  = $('.filter_gudang').val();
+        // var bb      = $('.filter_bb').val();
 
     $('#tampil_rekap').DataTable({
         buttons: [],
@@ -173,10 +184,11 @@ $(document).ready(function() {
         ajax: {
             url: '{{route("rekap_stock.tampil_rekap")}}',
             data : {
+                tanggal: tanggal,
                 area: area,
                 waroeng: waroeng,
                 gudang: gudang,
-                bb: bb,
+                // bb: bb,
             },
             type : "GET",
             },
@@ -241,6 +253,11 @@ $(document).ready(function() {
                 });
         });
     }
+
+    $('.filter_tanggal').flatpickr({
+            mode: "range",
+            dateFormat: 'Y-m-d',  
+    });
 
 });
 </script>

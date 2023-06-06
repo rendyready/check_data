@@ -188,12 +188,12 @@ $(document).ready(function() {
         window.open(url,'lap_non_menu.blade.php');
     });
 
-    $('#export_excel').on('click', function() {
-        var waroeng  = $('.filter_waroeng').val();
-        var tanggal  = $('.filter_tanggal').val(); 
-        var url = 'non_menu/export_excel?waroeng='+waroeng+'&tanggal='+tanggal;
-        window.open(url,'rekap_non_menu_excel.blade.php');
-    });
+    // $('#export_excel').on('click', function() {
+    //     var waroeng  = $('.filter_waroeng').val();
+    //     var tanggal  = $('.filter_tanggal').val(); 
+    //     var url = 'non_menu/export_excel?waroeng='+waroeng+'&tanggal='+tanggal;
+    //     window.open(url,'rekap_non_menu_excel.blade.php');
+    // });
 
     $('#cari').on('click', function() {
         var area     = $('.filter_area').val();

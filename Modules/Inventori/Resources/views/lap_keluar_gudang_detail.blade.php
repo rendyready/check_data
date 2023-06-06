@@ -148,6 +148,7 @@ $(document).ready(function() {
             },
             success:function(data){  
               $.each(data.transaksi, function (key, value) {
+                var id = value.rekap_tf_gudang_code.toString().replace(/\./g,'');
               $('#show_nota').append('<div class="col-xl-4 show_nota">'+
                         '<div class="block block-rounded mb-1">'+
                           (status == 'asal' ? '<div class="block-header block-header-default block-header-rtl bg-pulse">' : '<div class="block-header block-header-default block-header-rtl bg-warning">') +
@@ -159,7 +160,7 @@ $(document).ready(function() {
                           '</div>'+
                           '<div class="block-content mb-4" style="background-color: rgba(224, 224, 224, 0.5)">'+
                             '<table class="table table-border table-striped table-vcenter js-dataTable-full" style="font-size: 13px;">'+
-                              '<thead id="sub_nota'+ value.rekap_tf_gudang_code +'">'+
+                              '<thead id="sub_nota'+ id +'">'+
                                 '</thead>'+
                               '<tbody>'+
                                 '<tr style="background-color: white;" class="text-end fw-semibold">'+
@@ -173,7 +174,8 @@ $(document).ready(function() {
                       '</div>');
                   });
                     $.each(data.detail, function (key, item) {
-                        $('#sub_nota'+ item.rekap_tf_gudang_code).append(
+                      var id_detail = item.rekap_tf_gudang_code.toString().replace(/\./g,'');
+                        $('#sub_nota'+ id_detail).append(
                           '<tr class="sub_sub_nota" style="background-color: white;">'+
                                     '<td>'+
                                     '<small class="fw-semibold" style="font-size: 15px;">'+ item.rekap_tf_gudang_m_produk_nama +'</small> <br>'+
