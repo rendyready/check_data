@@ -21,7 +21,7 @@ class PecahGabungController extends Controller
         $gudang_default = DB::table('m_gudang')->select('m_gudang_id')
             ->where('m_gudang_m_w_id', $waroeng_id)->where('m_gudang_nama', 'gudang utama waroeng')->first()->m_gudang_id;
         $gudang_id = (empty($request->gudang_id)) ? $gudang_default : $request->gudang_id;
-        $user = Auth::id();
+        $user = Auth::user()->users_id;
         $data = new \stdClass();
         $data->gudang = DB::table('m_gudang')
             ->where('m_gudang_m_w_id', $waroeng_id)
@@ -63,7 +63,7 @@ class PecahGabungController extends Controller
                     // 'rekap_pcb_brg_hasil_isi' => $request->rekap_pcb_brg_hasil_isi[$key],
                     'rekap_pcb_brg_hasil_qty' => $request->rekap_pcb_brg_hasil_qty[$key],
                     'rekap_pcb_brg_hasil_hpp' => $hpp_hasil,
-                    'rekap_pcb_created_by' => Auth::id(),
+                    'rekap_pcb_created_by' => Auth::user()->users_id,
                     'rekap_pcb_created_by_name' => $request->rekap_pcb_created_by_name,
                 );
                 DB::table('rekap_pcb')->insert($data);
@@ -83,7 +83,7 @@ class PecahGabungController extends Controller
                     'm_stok_detail_saldo' => $saldo_now,
                     'm_stok_detail_hpp' => $hpp_now,
                     'm_stok_detail_catatan' => 'masuk pecah ' . $request->rekap_pcb_code,
-                    'm_stok_detail_created_by' => Auth::id(),
+                    'm_stok_detail_created_by' => Auth::user()->users_id,
                     'm_stok_detail_created_at' => Carbon::now(),
                 );
                 DB::table('m_stok_detail')->insert($stok_detail);
@@ -116,7 +116,7 @@ class PecahGabungController extends Controller
                 'm_stok_detail_saldo' => $saldo_now,
                 'm_stok_detail_hpp' => $request->rekap_pcb_brg_asal_hppisi[0],
                 'm_stok_detail_catatan' => 'keluar pecah ' . $request->rekap_pcb_code,
-                'm_stok_detail_created_by' => Auth::id(),
+                'm_stok_detail_created_by' => Auth::user()->users_id,
                 'm_stok_detail_created_at' => Carbon::now(),
             );
             DB::table('m_stok_detail')->insert($stok_detail);
@@ -153,7 +153,7 @@ class PecahGabungController extends Controller
                     // 'rekap_pcb_brg_hasil_isi' => $request->rekap_pcb_brg_hasil_isi[$key],
                     'rekap_pcb_brg_hasil_qty' => $request->rekap_pcb_brg_hasil_qty[$key],
                     'rekap_pcb_brg_hasil_hpp' => $jumlah_hpp / $request->rekap_pcb_brg_hasil_qty[$key],
-                    'rekap_pcb_created_by' => Auth::id(),
+                    'rekap_pcb_created_by' => Auth::user()->users_id,
                     'rekap_pcb_created_by_name' => $request->rekap_pcb_created_by_name,
                 );
                 DB::table('rekap_pcb')->insert($data);
@@ -172,7 +172,7 @@ class PecahGabungController extends Controller
                     'm_stok_detail_saldo' => $saldo_now,
                     'm_stok_detail_hpp' => $get_stok->m_stok_hpp,
                     'm_stok_detail_catatan' => 'keluar gabung ' . $request->rekap_pcb_code,
-                    'm_stok_detail_created_by' => Auth::id(),
+                    'm_stok_detail_created_by' => Auth::user()->users_id,
                     'm_stok_detail_created_at' => Carbon::now(),
                 );
                 DB::table('m_stok_detail')->insert($stok_detail);
@@ -203,7 +203,7 @@ class PecahGabungController extends Controller
                 'm_stok_detail_saldo' => $saldo_now,
                 'm_stok_detail_hpp' => $hpp_now,
                 'm_stok_detail_catatan' => 'masuk gabung ' . $request->rekap_pcb_code,
-                'm_stok_detail_created_by' => Auth::id(),
+                'm_stok_detail_created_by' => Auth::user()->users_id,
                 'm_stok_detail_created_at' => Carbon::now(),
             );
             DB::table('m_stok_detail')->insert($stok_detail);

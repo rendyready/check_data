@@ -66,7 +66,7 @@ class GudangController extends Controller
                     'm_gudang_m_w_id' => $request->m_gudang_m_w_id,
                     'm_gudang_nama' => strtolower($request->m_gudang_nama),
                     'm_gudang_m_w_nama' => $waroeng->m_w_nama,
-                    'm_gudang_created_by' => Auth::id(),
+                    'm_gudang_created_by' => Auth::user()->users_id,
                     'm_gudang_created_at' => Carbon::now(),
                 );
                 if (empty($validate)) {
@@ -97,7 +97,7 @@ class GudangController extends Controller
                             'm_stok_m_klasifikasi_produk_id' => $key->m_produk_m_klasifikasi_produk_id,
                             'm_stok_awal' => 0,
                             'm_stok_isi' => $key->m_produk_qty_isi,
-                            'm_stok_created_by' => Auth::id(),
+                            'm_stok_created_by' => Auth::user()->users_id,
                             'm_stok_created_at' => Carbon::now(),
                         );
                         DB::table('m_stok')->insert($data_bb);
@@ -115,7 +115,7 @@ class GudangController extends Controller
                     'm_gudang_m_w_id' => $request->m_gudang_m_w_id,
                     'm_gudang_nama' => strtolower($request->m_gudang_nama),
                     'm_gudang_status_sync' => 'edit',
-                    'm_gudang_updated_by' => Auth::id(),
+                    'm_gudang_updated_by' => Auth::user()->users_id,
                     'm_gudang_updated_at' => Carbon::now(),
                 );
                 if ($validate == null) {
@@ -150,7 +150,7 @@ class GudangController extends Controller
     public function gudang_out()
     {
         $data = new \stdClass();
-        $user = Auth::id();
+        $user = Auth::user()->users_id;
         $w_id = Auth::user()->waroeng_id;
         $waroeng_nama = DB::table('m_w')->select('m_w_nama')->where('m_w_id', $w_id)->first();
         $data->tgl_now = Carbon::now()->format('Y-m-d');
@@ -181,7 +181,7 @@ class GudangController extends Controller
                 'rekap_tf_gudang_satuan_keluar' => $satuan_asal->m_stok_satuan,
                 'rekap_tf_gudang_satuan_terima' =>  $satuan_kirim->m_stok_satuan,
                 'rekap_tf_gudang_m_w_id' => Auth::user()->waroeng_id,
-                'rekap_tf_gudang_created_by' => Auth::id(),
+                'rekap_tf_gudang_created_by' => Auth::user()->users_id,
                 'rekap_tf_gudang_created_at' => Carbon::now(),
             );
             DB::table('rekap_tf_gudang')->insert($rekap_tf);
@@ -200,7 +200,7 @@ class GudangController extends Controller
                 'm_stok_detail_hpp' => $satuan_asal->m_stok_hpp,
                 'm_stok_detail_catatan' => 'keluar ' . $m_g_tj->m_gudang_nama . ' ' . $request->rekap_tf_gudang_code,
                 'm_stok_detail_gudang_code' => $request->rekap_tf_gudang_asal_code,
-                'm_stok_detail_created_by' => Auth::id(),
+                'm_stok_detail_created_by' => Auth::user()->users_id,
                 'm_stok_detail_created_at' => Carbon::now(),
             );
             DB::table('m_stok_detail')->insert($mutasi_detail);
@@ -340,7 +340,7 @@ class GudangController extends Controller
                     'm_stok_detail_hpp' => $data_tf->rekap_tf_gudang_hpp,
                     'm_stok_detail_catatan' => 'terima tf '.$data_tf->rekap_tf_gudang_code,
                     'm_stok_detail_gudang_code' => $request->rekap_tf_gudang_tujuan_code,
-                    'm_stok_detail_created_by' => Auth::id(),
+                    'm_stok_detail_created_by' => Auth::user()->users_id,
                     'm_stok_detail_created_at' => Carbon::now(),
                 );
                 DB::table('m_stok_detail')->insert($stok_detail);

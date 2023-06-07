@@ -55,7 +55,7 @@ class UsersController extends Controller
                 'password' => Hash::make($request->password),
                 'waroeng_id' => $request->waroeng_id,
                 'waroeng_akses' => '['.$waroeng_akses.']',
-                'created_by' => Auth::id(),
+                'created_by' => Auth::user()->users_id,
                 'created_at' => Carbon::now(),
             );
             DB::table('users')->insert($data);
@@ -70,7 +70,7 @@ class UsersController extends Controller
                     'password' => Hash::make($request->password),
                     'waroeng_id' => $request->waroeng_id,
                     'waroeng_akses' => '['.$waroeng_akses.']',
-                    'updated_by' => Auth::id(),
+                    'updated_by' => Auth::user()->users_id,
                     'updated_at' => Carbon::now(),
                     'users_status_sync' => 'edit',
                 );
@@ -80,7 +80,7 @@ class UsersController extends Controller
                     'email' => strtolower($request->email),
                     'waroeng_id' => $request->waroeng_id,
                     'waroeng_akses' => '['.$waroeng_akses.']',
-                    'updated_by' => Auth::id(),
+                    'updated_by' => Auth::user()->users_id,
                     'updated_at' => Carbon::now(),
                     'users_status_sync' => 'edit',
                 );
@@ -93,7 +93,7 @@ class UsersController extends Controller
         } else {
             $data = array(
                 'deleted_at' => Carbon::now(),
-                'deleted_by' => Auth::id(),
+                'deleted_by' => Auth::user()->users_id,
             );
             DB::table('users')
                 ->where('users_id', $request->id)

@@ -18,7 +18,7 @@ class PenjualanInternalController extends Controller
     public function index()
     {
         $data = new \stdClass ();
-        $user = Auth::id();
+        $user = Auth::user()->users_id;
         $waroeng_id = Auth::user()->waroeng_id;
         $data->waroeng_nama = DB::table('m_w')->select('m_w_nama')->where('m_w_id', $waroeng_id)->first();
         $data->tgl_now = Carbon::now()->format('Y-m-d');
@@ -67,7 +67,7 @@ class PenjualanInternalController extends Controller
             'rekap_beli_tot_nom' => convertfloat($request->rekap_beli_tot_nom),
             'rekap_beli_ket' => 'dari' . $request->distributor,
             'rekap_beli_created_at' => Carbon::now(),
-            'rekap_beli_created_by' => Auth::id(),
+            'rekap_beli_created_by' => Auth::user()->users_id,
         );
 
         $insert = DB::table('rekap_beli')->insert($rekap_beli);
@@ -90,7 +90,7 @@ class PenjualanInternalController extends Controller
                 'rekap_beli_detail_discrp' => convertfloat($request->rekap_beli_detail_discrp[$key]),
                 'rekap_beli_detail_subtot' => convertfloat($request->rekap_beli_detail_subtot[$key]),
                 'rekap_beli_detail_m_w_id' => $request->waroeng_tujuan,
-                'rekap_beli_detail_created_by' => Auth::id(),
+                'rekap_beli_detail_created_by' => Auth::user()->users_id,
                 'rekap_beli_detail_created_at' => Carbon::now(),
             );
             DB::table('rekap_beli_detail')->insert($data);
@@ -113,7 +113,7 @@ class PenjualanInternalController extends Controller
                 'm_stok_detail_saldo' => $stok_asal->m_stok_saldo - convertfloat($request->rekap_beli_detail_qty[$key]),
                 'm_stok_detail_hpp' => $stok_asal->m_stok_hpp,
                 'm_stok_detail_catatan' => 'penjualan ke ' . $m_w_tujuan->m_w_nama . ' ' . $request->rekap_beli_code,
-                'm_stok_detail_created_by' => Auth::id(),
+                'm_stok_detail_created_by' => Auth::user()->users_id,
                 'm_stok_detail_created_at' => Carbon::now(),
             );
             DB::table('m_stok_detail')->insert($stok_detail);

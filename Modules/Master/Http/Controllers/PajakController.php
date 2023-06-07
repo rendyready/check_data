@@ -30,7 +30,7 @@ class PajakController extends Controller
                         $data = array(
                             'm_pajak_id' => $this->getMasterId('m_pajak'),
                             'm_pajak_value'    =>    $request->m_pajak_value,
-                            'm_pajak_created_by' => Auth::id(),
+                            'm_pajak_created_by' => Auth::user()->users_id,
                             'm_pajak_created_at' => Carbon::now(),
                         );
                         DB::table('m_pajak')->insert($data);
@@ -43,7 +43,7 @@ class PajakController extends Controller
                         $data = array(
                             'm_pajak_value'    =>    $request->m_pajak_value,
                             'm_pajak_status_sync' => 'send',
-                            'm_pajak_updated_by' => Auth::id(),
+                            'm_pajak_updated_by' => Auth::user()->users_id,
                             'm_pajak_updated_at' => Carbon::now(),
                         );
                         DB::table('m_pajak')->where('m_pajak_id', $request->id)

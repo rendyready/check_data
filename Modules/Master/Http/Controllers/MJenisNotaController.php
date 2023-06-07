@@ -52,7 +52,7 @@ class MJenisNotaController extends Controller
         if (empty($request->m_jenis_nota_id)) {
             if ($cek->count() <= 0) {
                 MJenisNotum::insert($request->only('m_jenis_nota_m_w_id', 'm_jenis_nota_m_t_t_id') + [
-                    'm_jenis_nota_created_by' => Auth::user()->id,
+                    'm_jenis_nota_created_by' => Auth::user()->users_id,
                     'm_jenis_nota_id' => $this->getMasterId('m_jenis_nota'),
                 ]);
             }
@@ -60,7 +60,7 @@ class MJenisNotaController extends Controller
             if ($cek->count() == 1) {
                 MJenisNotum::where('m_jenis_nota_id', $request->m_jenis_nota_id)
                     ->update($request->only('m_jenis_nota_m_w_id', 'm_jenis_nota_m_t_t_id') + [
-                        'm_jenis_nota_updated_by' => Auth::user()->id,
+                        'm_jenis_nota_updated_by' => Auth::user()->users_id,
                         'm_jenis_nota_status_sync' => 'send',
                     ]);
             }
@@ -78,7 +78,7 @@ class MJenisNotaController extends Controller
                 'm_jenis_nota_id' => $this->getMasterId('m_jenis_nota'),
                 'm_jenis_nota_m_w_id' => $request->m_jenis_nota_waroeng_tujuan_id,
                 'm_jenis_nota_m_t_t_id' => $request->m_jenis_nota_trans_id_tujuan,
-                'm_jenis_nota_created_by' => Auth::user()->id,
+                'm_jenis_nota_created_by' => Auth::user()->users_id,
             ]);
             $last_nota_id = MJenisNotum::latest('m_jenis_nota_created_at')->first()->m_jenis_nota_id;
 
@@ -102,7 +102,7 @@ class MJenisNotaController extends Controller
                     'm_menu_harga_tax_status' => $key->m_menu_harga_tax_status,
                     'm_menu_harga_sc_status' => $key->m_menu_harga_sc_status,
                     'm_menu_harga_status_sync' => 'send',
-                    'm_menu_harga_created_by' => Auth::user()->id,
+                    'm_menu_harga_created_by' => Auth::user()->users_id,
                 );
                 MMenuHarga::insert($data_harga);
             }else{
@@ -114,7 +114,7 @@ class MJenisNotaController extends Controller
                     'm_menu_harga_tax_status' => $key->m_menu_harga_tax_status,
                     'm_menu_harga_sc_status' => $key->m_menu_harga_sc_status,
                     'm_menu_harga_status_sync' => 'send',
-                    'm_menu_harga_created_by' => Auth::user()->id,
+                    'm_menu_harga_created_by' => Auth::user()->users_id,
                 );
                 MMenuHarga::where('m_menu_harga_id',$cek->m_menu_harga_id)->update($data_harga);
             }
@@ -147,6 +147,9 @@ class MJenisNotaController extends Controller
                         DB::table('m_menu_harga')
                             ->where('m_menu_harga_id', $harga_menu->m_menu_harga_id)
                             ->update(['m_menu_harga_nominal' => convertfloat($request->nom_harga[$key]),
+                                'm_menu_harga_status' => $request->m_menu_harga_status,
+                                'm_menu_harga_tax_status' => $request->m_menu_harga_tax_status,
+                                'm_menu_harga_sc_status' => $request->m_menu_harga_sc_status,
                                 'm_menu_harga_status_sync' => 'send']);
                     } else {
                         DB::table('m_menu_harga')->insert([
@@ -154,9 +157,10 @@ class MJenisNotaController extends Controller
                             'm_menu_harga_m_jenis_nota_id' => $nota->m_jenis_nota_id,
                             'm_menu_harga_m_produk_id' => $request->m_produk_id,
                             'm_menu_harga_nominal' => convertfloat($request->nom_harga[$key]),
-                            'm_menu_harga_status' => '1',
-                            'm_menu_harga_tax_status' => '1',
-                            'm_menu_harga_created_by' => Auth::user()->id,
+                            'm_menu_harga_status' => $request->m_menu_harga_status,
+                            'm_menu_harga_tax_status' => $request->m_menu_harga_sc_status,
+                            'm_menu_harga_sc_status' => $request->m_menu_harga_sc_status,
+                            'm_menu_harga_created_by' => Auth::user()->users_id,
                         ]);
                     }
                 }
@@ -206,7 +210,7 @@ class MJenisNotaController extends Controller
         if (empty($request->m_menu_harga_id)) {
             if ($cek->count() <= 0) {
                 MMenuHarga::insert($request->except('m_menu_harga_id', '_token') + [
-                    'm_menu_harga_created_by' => Auth::user()->id,
+                    'm_menu_harga_created_by' => Auth::user()->users_id,
                     'm_menu_harga_id' => $this->getMasterId('m_menu_harga'),
                 ]);
             }
@@ -214,7 +218,7 @@ class MJenisNotaController extends Controller
             if ($cek->count() == 1) {
                 MMenuHarga::where('m_menu_harga_id', $request->m_menu_harga_id)
                     ->update($request->except('m_menu_harga_id', '_token') + [
-                        'm_menu_harga_created_by' => Auth::user()->id,
+                        'm_menu_harga_created_by' => Auth::user()->users_id,
                         'm_menu_harga_status_sync' => 'send',
                     ]);
             }

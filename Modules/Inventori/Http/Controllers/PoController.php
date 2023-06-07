@@ -18,7 +18,7 @@ class PoController extends Controller
     {$data = new \stdClass();
         
         $get_max_id = DB::table('rekap_po')->orderBy('rekap_po_id','desc')->first();
-        $user = Auth::id();
+        $user = Auth::user()->users_id;
         $data->code = (empty($get_max_id->rekap_po_id)) ? $urut = "200001". $user : $urut = substr($get_max_id->rekap_po_code,0,-1)+'1'. $user; 
         return view('inventori::form_po',compact('data'));
     }
@@ -38,7 +38,7 @@ class PoController extends Controller
             'rekap_po_supplier_alamat' => $request->rekap_po_supplier_alamat,
             'rekap_po_m_w_id' => Auth::user()->waroeng_id,
             'rekap_po_created_at' => Carbon::now(),
-            'rekap_po_created_by' => Auth::id()
+            'rekap_po_created_by' => Auth::user()->users_id
 
         );
 
@@ -55,7 +55,7 @@ class PoController extends Controller
                 'rekap_po_detail_qty' => $request->rekap_po_detail_qty[$key],
                 'rekap_po_detail_satuan' => $request->rekap_po_detail_catatan[$key],
                 'rekap_po_detail_catatan' => $request->rekap_po_detail_catatan[$key],
-                'rekap_po_detail_created_by' => Auth::id(),
+                'rekap_po_detail_created_by' => Auth::user()->users_id,
                 'rekap_po_detail_created_at' => Carbon::now()
             );
             DB::table('rekap_po_detail')->insert($data);

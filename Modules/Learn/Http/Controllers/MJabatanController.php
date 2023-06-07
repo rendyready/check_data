@@ -42,7 +42,7 @@ class MJabatanController extends Controller
                 } elseif ($jabatan == null) {
                     $data = array(
                         'm_level_jabatan_nama' => $raw,
-                        'm_level_jabatan_created_by' => Auth::id(),
+                        'm_level_jabatan_created_by' => Auth::user()->users_id,
                         'm_level_jabatan_created_at' => Carbon::now(),
                     );
                     DB::table('m_level_jabatan')
@@ -66,7 +66,7 @@ class MJabatanController extends Controller
                 } elseif ($jabatan == false) {
                     // $data = array(
                     //     'm_level_jabatan_nama' => $request->m_level_jabatan_nama,
-                    //     'm_level_jabatan_updated_by' => Auth::id(),
+                    //     'm_level_jabatan_updated_by' => Auth::user()->users_id,
                     //     'm_level_jabatan_updated_at' => Carbon::now(),
                     // );
                     // DB::table('m_level_jabatan')

@@ -49,7 +49,7 @@ class MPlotProduksiController extends Controller
                     $data = array(
                         'm_plot_produksi_id' => $request->m_plot_produksi_id,
                         'm_plot_produksi_nama' => $request->m_plot_produksi_nama,
-                        'm_plot_produksi_created_by' => Auth::id(),
+                        'm_plot_produksi_created_by' => Auth::user()->users_id,
                         'm_plot_produksi_created_at' => Carbon::now(),
                     );
                     DB::table('m_plot_produksi')
@@ -58,7 +58,7 @@ class MPlotProduksiController extends Controller
                 } elseif ($request->action == 'edit') {
                     $data = array(
                         'm_plot_produksi_nama' => $request->m_plot_produksi_nama,
-                        'm_plot_produksi_updated_by' => Auth::id(),
+                        'm_plot_produksi_updated_by' => Auth::user()->users_id,
                         'm_plot_produksi_updated_at' => Carbon::now(),
                     );
                     DB::table('m_plot_produksi')->where('m_plot_produksi_id', $request->m_plot_produksi_id)

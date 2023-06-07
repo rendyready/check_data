@@ -79,7 +79,7 @@ class RekeningController extends Controller
                 'm_rekening_no_akun' => $request->m_rekening_no_akun[$key],
                 'm_rekening_nama' => strtolower($request->m_rekening_nama[$key]),
                 'm_rekening_saldo' => str_replace(',', '.', $str1),
-                'm_rekening_created_by' => Auth::id(),
+                'm_rekening_created_by' => Auth::user()->users_id,
                 'm_rekening_created_at' => Carbon::now()
             );
             DB::table('m_rekening')->insert($data);
@@ -108,7 +108,7 @@ class RekeningController extends Controller
                     'm_rekening_no_akun' => $key->m_rekening_no_akun,
                     'm_rekening_nama' => $key->m_rekening_nama,
                     'm_rekening_saldo' => $saldo,
-                    'm_rekening_created_by' => Auth::id(),
+                    'm_rekening_created_by' => Auth::user()->users_id,
                     'm_rekening_created_at' => Carbon::now()
                 );
                 DB::table('m_rekening')->insert($data);
@@ -153,7 +153,7 @@ class RekeningController extends Controller
             'm_rekening_no_akun'	=>	$request->m_rekening_no_akun,
             'm_rekening_nama'	    =>	$request->m_rekening_nama,
             'm_rekening_saldo'	    =>	str_replace(',', '.', $str1),
-            'm_rekening_updated_by' => Auth::id(),
+            'm_rekening_updated_by' => Auth::user()->users_id,
             'm_rekening_updated_at' => Carbon::now(),
         );
        return $update = DB::table('m_rekening')->where('m_rekening_no_akun', $rekening_old)

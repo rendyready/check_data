@@ -125,7 +125,7 @@ class JurnalUmumController extends Controller
                     'rekap_jurnal_umum_user' => Auth::user()->name,
                     'rekap_jurnal_umum_status_sync' => 'send',
                     'rekap_jurnal_umum_no_bukti' => $code,
-                    'rekap_jurnal_umum_created_by' => Auth::id(),
+                    'rekap_jurnal_umum_created_by' => Auth::user()->users_id,
                     'rekap_jurnal_umum_created_at' => Carbon::now()
                 );
                 DB::table('rekap_jurnal_umum')->insert($data);

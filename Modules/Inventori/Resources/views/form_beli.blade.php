@@ -143,7 +143,7 @@
                                                 </select></td>
                                             <td>
                                                 <textarea class="form-control fc reset form-control-sm" name="rekap_beli_detail_catatan[]"
-                                                    id="rekap_beli_detail_catatan" cols="50" required placeholder="catatan bb atau satuan"></textarea>
+                                                    id="rekap_beli_detail_catatan" cols="50" required placeholder="catatan bb atau satuan harus di isi !!"></textarea>
                                             </td>
                                             <td><input type="text"
                                                     class="form-control fc reset number form-control-sm qty"
@@ -236,7 +236,7 @@
                                                 for="rekap_beli_terbayar">Dibayar</label>
                                             <div class="col-sm-6">
                                                 <input type="text" class="form-control number form-control-sm bayar"
-                                                    id="rekap_beli_terbayar" name="rekap_beli_terbayar" value="0">
+                                                    id="rekap_beli_terbayar" name="rekap_beli_terbayar">
                                             </div>
                                         </div>
                                         <div class="row mb-1">
@@ -343,6 +343,7 @@
                 $('#rekap_beli_code').val(data);
             });
         }
+        var datas, table, asal;
         $(document).ready(function() {
             get_code();
             $.ajaxSetup({
@@ -351,9 +352,8 @@
                 }
             });
             Codebase.helpersOnLoad(['jq-select2']);
-            var datas, table;
             $('#rekap_beli_gudang_code').on('change', function() {
-                var asal = $(this).val();
+                asal = $(this).val();
 
                 var getDataAndReloadTable = function() {
                     $('#rekap_beli_detail_m_produk_id1').empty();
@@ -421,12 +421,12 @@
                     '<td><select class="js-select2 nama_barang" name="rekap_beli_detail_m_produk_id[]" id="rekap_beli_detail_m_produk_id' +
                     no +
                     '" style="width: 100%;" data-placeholder="Pilih Nama Barang" required > <option></option></select></td>' +
-                    '<td><textarea class="form-control form-control-sm" name="rekap_beli_detail_catatan[]" id="rekap_beli_detail_catatan" cols="50" required placeholder="catatan bb atau satuan"></textarea></td>' +
-                    '<td><input type="text" class="form-control number form-control-sm qty" name="rekap_beli_detail_qty[]" id="rekap_beli_detail_qty" required></td>' +
-                    '<td><input type="text" class="form-control number form-control-sm harga" name="rekap_beli_detail_harga[]" id="rekap_beli_detail_harga" required></td>' +
-                    '<td><input type="text" class="form-control number form-control-sm persendisc" name="rekap_beli_detail_disc[]" id="rekap_beli_detail_disc"></td>' +
-                    '<td><input type="text" class="form-control number form-control-sm rupiahdisc" name="rekap_beli_detail_discrp[]" id="rekap_beli_detail_discrp"></td>' +
-                    '<td><input type="text" class="form-control number form-control-sm subtot" name="rekap_beli_detail_subtot[]" id="rekap_beli_detail_subtot" readonly></td>' +
+                    '<td><textarea class="form-control form-control-sm" name="rekap_beli_detail_catatan[]" id="rekap_beli_detail_catatan'+no+'" cols="50" required placeholder="catatan bb atau satuan harus di isi !!"></textarea></td>' +
+                    '<td><input type="text" class="form-control number form-control-sm qty" name="rekap_beli_detail_qty[]" id="rekap_beli_detail_qty'+no+'" required></td>' +
+                    '<td><input type="text" class="form-control number form-control-sm harga" name="rekap_beli_detail_harga[]" id="rekap_beli_detail_harga'+no+'" required></td>' +
+                    '<td><input type="text" class="form-control number form-control-sm persendisc" name="rekap_beli_detail_disc[]" id="rekap_beli_detail_disc'+no+'"></td>' +
+                    '<td><input type="text" class="form-control number form-control-sm rupiahdisc" name="rekap_beli_detail_discrp[]" id="rekap_beli_detail_discrp'+no+'"></td>' +
+                    '<td><input type="text" class="form-control number form-control-sm subtot" name="rekap_beli_detail_subtot[]" id="rekap_beli_detail_subtot'+no+'" readonly></td>' +
                     '<td><button type="button" id="' + no +
                     '" class="btn btn-danger btn_remove"><i class="fa fa-trash"></i></button></td></tr>');
                 Codebase.helpersOnLoad(['jq-select2']);
@@ -498,11 +498,8 @@
                     var disctotrp = $("[name='rekap_beli_disc_rp']").val().replace(/\./g, '').replace(/\,/g,
                         '.');
                     var ppn = $("[name='rekap_beli_ppn']").val();
-                    var bayar = $("[name='rekap_beli_terbayar']").val().replace(/\./g, '').replace(/\,/g, '.');
-                    var ongkir = $("[name='rekap_beli_ongkir']").val().replace(/\./g, '').replace(/\,/g, '.');
-                    if (ongkir === "") {
-                        var ongkir = 0;
-                    }
+                    var bayar = $("[name='rekap_beli_terbayar']").val().replace(/\./g, '').replace(/\,/g, '.')||0;
+                    var ongkir = $("[name='rekap_beli_ongkir']").val().replace(/\./g, '').replace(/\,/g, '.') ||0;
                     var grandtotal = grdtot * parseFloat((100 - disc_tot) / 100) - disctotrp;
                     var ppnrp = parseFloat(ppn / 100) * grandtotal;
                     var rekap_beli_tot_nom = parseFloat(grandtotal) + parseFloat(ppnrp) + parseFloat(ongkir);
@@ -516,7 +513,7 @@
                             icon: 'fa fa-info me-5', // Icon class
                             message: 'Nominal Bayar Tidak Boleh Lebih Dari Tagihan'
                         });
-                        $('.bayar').val(0);
+                        $('.bayar').val('');
                         $tblrows.find('.persendisc').trigger('input');
                     } else {
                         $('.sisa').val((rekap_beli_tot_nom - bayar).toLocaleString('id'));
@@ -580,9 +577,11 @@
                         $('.remove').remove();
                         $('#rekap_beli_detail_m_produk_id1,.reset,.supplier').trigger('change').val(
                             '');
-                        $('.grdtot,.bayar').val(0);
+                        $('.grdtot').val(0);
+                        $('.bayar').val('');
                         $('#form').find('.persendisc').trigger('input');
                         get_code();
+                        $('html, body').animate({ scrollTop: 0 }, 'slow');
                     },
                     error: function() {
                         alert("Tidak dapat menyimpan data!");

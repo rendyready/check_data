@@ -212,7 +212,7 @@ class MStokController extends Controller
                             'm_stok_detail_catatan' => 'so ' . $so_code,
                             'm_stok_detail_gudang_code' => $request->rekap_so_m_gudang_code,
                             'm_stok_detail_status_sync' => 'send',
-                            'm_stok_detail_created_by' => Auth::id(),
+                            'm_stok_detail_created_by' => Auth::user()->users_id,
                             'm_stok_detail_created_at' => Carbon::now(),
                         );
                         DB::table('m_stok_detail')->insert($detail_so);
@@ -223,7 +223,7 @@ class MStokController extends Controller
                                 'm_stok_saldo' => $qty_riil,
                                 'm_stok_status_sync' => 'send',
                                 'm_stok_updated_at' => Carbon::now(),
-                                'm_stok_updated_by' => Auth::id(),
+                                'm_stok_updated_by' => Auth::user()->users_id,
                             ]);
                     
                 }

@@ -49,7 +49,7 @@ class FooterController extends Controller
                         'm_footer_value'    =>    $request->m_footer_value,
                         'm_footer_m_w_id' =>    $request->m_footer_m_w_id,
                         'm_footer_priority' =>    $request->m_footer_priority,
-                        'm_footer_created_by' => Auth::id(),
+                        'm_footer_created_by' => Auth::user()->users_id,
                         'm_footer_created_at' => Carbon::now(),
                     );
                     DB::table('m_footer')->insert($data);
@@ -58,7 +58,7 @@ class FooterController extends Controller
                         'm_footer_value'    =>    $request->m_footer_value,
                         'm_footer_m_w_id' =>    $request->m_footer_m_w_id,
                         'm_footer_priority' =>    $request->m_footer_priority,
-                        'm_footer_updated_by' => Auth::id(),
+                        'm_footer_updated_by' => Auth::user()->users_id,
                         'm_footer_updated_at' => Carbon::now(),
                         'm_footer_status_sync' => 'send',
                     );

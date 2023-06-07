@@ -74,7 +74,7 @@ class ProdukController extends Controller
                         "m_produk_jual" => $request->m_produk_jual,
                         "m_produk_scp" => $request->m_produk_scp,
                         "m_produk_hpp" => $request->m_produk_hpp,
-                        "m_produk_created_by" => Auth::id(),
+                        "m_produk_created_by" => Auth::user()->users_id,
                         "m_produk_created_at" => Carbon::now(),
                     ]);
                     DB::table('m_klasifikasi_produk')->where('m_klasifikasi_produk_id',$kat)->update(['m_klasifikasi_produk_last_id'=>$num]);
@@ -93,7 +93,7 @@ class ProdukController extends Controller
                             'm_stok_satuan_id' => $satuan_id,
                             'm_stok_satuan' => $satuan->m_satuan_kode,
                             'm_stok_awal' => 0,
-                            'm_stok_created_by' => Auth::id(),
+                            'm_stok_created_by' => Auth::user()->users_id,
                             'm_stok_created_at' => Carbon::now(),
                         );
                         DB::table('m_stok')->insert($data_bb);
@@ -121,7 +121,7 @@ class ProdukController extends Controller
                             "m_produk_scp" => $request->m_produk_scp,
                             "m_produk_hpp" => $request->m_produk_hpp,
                             "m_produk_status_sync" => 'send',
-                            "m_produk_updated_by" => Auth::id(),
+                            "m_produk_updated_by" => Auth::user()->users_id,
                             "m_produk_updated_at" => Carbon::now(),
                         ]);
                         return response(['messages' => 'Berhasil Edit Produk !', 'type' => 'success']);
