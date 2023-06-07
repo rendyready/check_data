@@ -126,4 +126,8 @@ class Controller extends BaseController
     {
         return $akses_pusat = [1, 2, 3, 4, 5];
     }
+    public function get_produk($id)
+    {
+        return DB::table('m_produk')->where('m_produk_code',$id)->first();
+    }
 }

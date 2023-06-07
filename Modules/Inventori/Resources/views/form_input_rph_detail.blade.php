@@ -122,32 +122,52 @@
                 });
             @endforeach
             $('#simpan').click(function(e) {
+                e.preventDefault();
+
                 var tgl = $('#rph_tgl').val();
-                if (tgl == '') {
+                if (tgl === '') {
                     Codebase.helpers('jq-notify', {
-                        align: 'right', // 'right', 'left', 'center'
-                        from: 'top', // 'top', 'bottom'
-                        type: 'danger', // 'info', 'success', 'warning', 'danger'
-                        icon: 'fa fa-info me-5', // Icon class
+                        align: 'right',
+                        from: 'top',
+                        type: 'danger',
+                        icon: 'fa fa-info me-5',
                         message: 'Tanggal RPH Belum Terisi'
                     });
-                    e.preventDefault();
                 } else {
+                    $('.tab-pane').each(function() {
+                        var $tabPane = $(this);
+                        var $table = $tabPane.find('table');
+                        // Get the DataTable instance
+                        var dataTable = $table.DataTable();
+                        // Clear the search input and remove the search filter
+                        dataTable.search('').draw();
+                    });
+
+                    // Send the data to the server using Ajax
                     $.ajax({
-                        type: "post",
-                        url: "{{ route('rph.simpan') }}",
+                        type: 'POST',
+                        url: '{{ route('rph.simpan') }}',
                         data: $('input').serialize(),
-                        success: function(data) {
+                        success: function(response) {
                             Codebase.helpers('jq-notify', {
-                              align: 'right', // 'right', 'left', 'center'
-                              from: 'top', // 'top', 'bottom'
-                              type: data.type, // 'info', 'success', 'warning', 'danger'
-                              icon: 'fa fa-info me-5', // Icon class
-                              message: data.messages
+                                align: 'right',
+                                from: 'top',
+                                type: response.type,
+                                icon: 'fa fa-info me-5',
+                                message: response.messages
                             });
                             setTimeout(function() {
-                                window.location.href = "{{route('rph.index')}}";
+                                window.location.href = '{{ route('rph.index') }}';
                             }, 2000);
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            Codebase.helpers('jq-notify', {
+                                align: 'right',
+                                from: 'top',
+                                type: 'error',
+                                icon: 'fa fa-exclamation-triangle me-5',
+                                message: 'RPH sudah di kunci oleh produksi.'
+                            });
                         }
                     });
                 }

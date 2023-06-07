@@ -84,8 +84,9 @@
                                             class="cari f-area js-select2 form-control filter_gudang" name="m_w_m_area_id">
                                             <option></option>
                                             @foreach ($data->gudang as $gudang)
-                                                <option value="{{ $gudang->m_gudang_code }}"> {{ $gudang->m_gudang_nama }} </option>
+                                                <option value="{{ $gudang->m_gudang_nama }}"> {{ $gudang->m_gudang_nama }} </option>
                                             @endforeach
+                                            <option value="all">Gudang Utama dan Produksi</option>
                                             </select>
                                         @else
                                             <select id="filter_gudang2" style="width: 100%;"

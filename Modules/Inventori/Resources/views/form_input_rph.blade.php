@@ -53,7 +53,7 @@
                                       <td>{{ $item->name }}</td>
                                       <td>{{ tgl_indo($item->rph_created_at) }}</td>
                                       <td>
-                                        @if (date('Y-m-d', strtotime($item->rph_created_at)) >= date("Y-m-d"))
+                                        @if ($item->rph_order_status == 'buka')
                                         <a href="{{ route('rph.edit', $item->rph_code) }}" class="btn btn-sm btn-warning"><i class="fa fa-pencil"></i></a>
                                         @else
                                         <a href="{{ route('rph.detail', $item->rph_code) }}" class="btn btn-sm btn-info"><i class="fa fa-eye"></i></a>
