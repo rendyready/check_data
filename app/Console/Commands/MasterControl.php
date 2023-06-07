@@ -151,86 +151,126 @@ class MasterControl extends Command
                 exit();
             }
 
-            #Cek Last Sync
-            $lastId = DB::table('log_data_sync')
-                        ->where('log_data_sync_cron','mastercontrol:cron')
-                        ->where('log_data_sync_table',$valTab->config_get_data_table_name)
-                        ->first();
-
-            #GET Local
-            $getDataLocal = $DbLocal->table($valTab->config_get_data_table_name);
-            if (!empty($lastId)) {
-                $getDataLocal->where($valTab->config_get_data_field_validate1,'>=',$lastId->log_data_sync_last);
+            #comparing data lokal <-> pusat
+            $getLocal = $DbLocal->table($valTab->config_get_data_table_name)->get();
+            $fieldId = $valTab->config_get_data_field_validate1;
+            $dataLocal = [];
+            foreach ($getLocal as $key => $value) {
+                array_push($dataLocal,$value->$fieldId);
             }
-            $getDataLocal->orderBy($valTab->config_get_data_field_validate1,'asc');
-            $getDataLocal->limit(100);
 
-            // if ($valTab->config_get_data_limit > 0) {
-            //     $getDataLocal->limit($valTab->config_get_data_limit);
+            $getPusat = $DbPusat->table($valTab->config_get_data_table_name)->get();
+            $fieldId = $valTab->config_get_data_field_validate1;
+            $dataPusat = [];
+            foreach ($getPusat as $key => $value) {
+                array_push($dataPusat,$value->$fieldId);
+            }
+
+            $notExist = array_diff($dataLocal,$dataPusat);
+
+            if (count($notExist) > 0) {
+                try {
+                    $DbLocal->table($valTab->config_get_data_table_name)
+                    ->whereIn($fieldId,$notExist)
+                    ->delete();
+                } catch (\Throwable $th) {
+                    Log::alert("Can't delete data from {$valTab->config_get_data_table_name}");
+                    Log::info($th);
+                }
+            }
+
+            #Local Log
+            DB::table('log_cronjob')
+            ->insert([
+                'log_cronjob_name' => 'mastercontrol:cron',
+                'log_cronjob_from_server_id' => $getSourceConn->db_con_m_w_id,
+                'log_cronjob_from_server_name' => $getSourceConn->db_con_location_name,
+                'log_cronjob_to_server_id' => $dest->db_con_m_w_id,
+                'log_cronjob_to_server_name' => $dest->db_con_location_name,
+                'log_cronjob_datetime' => Carbon::now(),
+                'log_cronjob_note' => $valTab->config_get_data_table_name.'-CHECKED!',
+            ]);
+
+            // #Cek Last Sync
+            // $lastId = DB::table('log_data_sync')
+            //             ->where('log_data_sync_cron','mastercontrol:cron')
+            //             ->where('log_data_sync_table',$valTab->config_get_data_table_name)
+            //             ->first();
+
+            // #GET Local
+            // $getDataLocal = $DbLocal->table($valTab->config_get_data_table_name);
+            // if (!empty($lastId)) {
+            //     $getDataLocal->where($valTab->config_get_data_field_validate1,'>=',$lastId->log_data_sync_last);
             // }
+            // $getDataLocal->orderBy($valTab->config_get_data_field_validate1,'asc');
+            // $getDataLocal->limit(100);
 
-            #remove local master where not in server
-            if ($getDataLocal->get()->count() > 0) {
-                $nextLast = 0;
-                foreach ($getDataLocal->get() as $keyDataLocal => $valDataLocal) {
-                    try {
-                        $validateField = $valTab->config_get_data_field_validate1;
-                        $dataExist = $DbPusat->table($valTab->config_get_data_table_name)
-                                    ->where($valTab->config_get_data_field_validate1,$valDataLocal->$validateField)->get();
+            // // if ($valTab->config_get_data_limit > 0) {
+            // //     $getDataLocal->limit($valTab->config_get_data_limit);
+            // // }
 
-                        $id = $valDataLocal->$validateField;
-                        if ($dataExist->count() < 1) {
-                            $DbLocal->table($valTab->config_get_data_table_name)
-                                    ->where($valTab->config_get_data_field_validate1,$id)
-                                    ->delete();
-                        }
+            // #remove local master where not in server
+            // if ($getDataLocal->get()->count() > 0) {
+            //     $nextLast = 0;
+            //     foreach ($getDataLocal->get() as $keyDataLocal => $valDataLocal) {
+            //         try {
+            //             $validateField = $valTab->config_get_data_field_validate1;
+            //             $dataExist = $DbPusat->table($valTab->config_get_data_table_name)
+            //                         ->where($valTab->config_get_data_field_validate1,$valDataLocal->$validateField)->get();
 
-                        $nextLast = $id;
-                    } catch (\Throwable $th) {
-                        Log::alert("Can't delete data from {$valTab->config_get_data_table_name}");
-                        Log::info($th);
-                    }
-                }
-                if ($nextLast != 0) {
-                    $validateField = $valTab->config_get_data_field_validate1;
-                    $firstId = $DbLocal->table($valTab->config_get_data_table_name)
-                        ->orderBy($valTab->config_get_data_field_validate1,'asc')
-                        ->first()->$validateField;
+            //             $id = $valDataLocal->$validateField;
+            //             if ($dataExist->count() < 1) {
+            //                 $DbLocal->table($valTab->config_get_data_table_name)
+            //                         ->where($valTab->config_get_data_field_validate1,$id)
+            //                         ->delete();
+            //             }
 
-                    $endId = $DbLocal->table($valTab->config_get_data_table_name)
-                        ->orderBy($valTab->config_get_data_field_validate1,'desc')
-                        ->first()->$validateField;
+            //             $nextLast = $id;
+            //         } catch (\Throwable $th) {
+            //             Log::alert("Can't delete data from {$valTab->config_get_data_table_name}");
+            //             Log::info($th);
+            //         }
+            //     }
+            //     if ($nextLast != 0) {
+            //         $validateField = $valTab->config_get_data_field_validate1;
+            //         $firstId = $DbLocal->table($valTab->config_get_data_table_name)
+            //             ->orderBy($valTab->config_get_data_field_validate1,'asc')
+            //             ->first()->$validateField;
 
-                    if ($nextLast == $endId) {
-                        $nextLast = $firstId;
-                    }
+            //         $endId = $DbLocal->table($valTab->config_get_data_table_name)
+            //             ->orderBy($valTab->config_get_data_field_validate1,'desc')
+            //             ->first()->$validateField;
 
-                    DB::table('log_data_sync')
-                        ->updateOrInsert(
-                        [
-                            'log_data_sync_cron' => 'mastercontrol:cron',
-                            'log_data_sync_table' => $valTab->config_get_data_table_name,
-                        ],
-                        [
-                            'log_data_sync_cron' => 'mastercontrol:cron',
-                            'log_data_sync_table' => $valTab->config_get_data_table_name,
-                            'log_data_sync_last' => $nextLast,
-                            'log_data_sync_note' => 'ok'
-                        ]
-                    );
-                    #Local Log
-                    DB::table('log_cronjob')
-                    ->insert([
-                        'log_cronjob_name' => 'mastercontrol:cron',
-                        'log_cronjob_from_server_id' => $getSourceConn->db_con_m_w_id,
-                        'log_cronjob_from_server_name' => $getSourceConn->db_con_location_name,
-                        'log_cronjob_to_server_id' => $dest->db_con_m_w_id,
-                        'log_cronjob_to_server_name' => $dest->db_con_location_name,
-                        'log_cronjob_datetime' => Carbon::now(),
-                        'log_cronjob_note' => $valTab->config_get_data_table_name.'-CHECKED!',
-                    ]);
-                }
-            }
+            //         if ($nextLast == $endId) {
+            //             $nextLast = $firstId;
+            //         }
+
+            //         DB::table('log_data_sync')
+            //             ->updateOrInsert(
+            //             [
+            //                 'log_data_sync_cron' => 'mastercontrol:cron',
+            //                 'log_data_sync_table' => $valTab->config_get_data_table_name,
+            //             ],
+            //             [
+            //                 'log_data_sync_cron' => 'mastercontrol:cron',
+            //                 'log_data_sync_table' => $valTab->config_get_data_table_name,
+            //                 'log_data_sync_last' => $nextLast,
+            //                 'log_data_sync_note' => 'ok'
+            //             ]
+            //         );
+            //         #Local Log
+            //         DB::table('log_cronjob')
+            //         ->insert([
+            //             'log_cronjob_name' => 'mastercontrol:cron',
+            //             'log_cronjob_from_server_id' => $getSourceConn->db_con_m_w_id,
+            //             'log_cronjob_from_server_name' => $getSourceConn->db_con_location_name,
+            //             'log_cronjob_to_server_id' => $dest->db_con_m_w_id,
+            //             'log_cronjob_to_server_name' => $dest->db_con_location_name,
+            //             'log_cronjob_datetime' => Carbon::now(),
+            //             'log_cronjob_note' => $valTab->config_get_data_table_name.'-CHECKED!',
+            //         ]);
+            //     }
+            // }
         }
 
         Log::info("Cronjob Master Controlling FINISH at ". Carbon::now()->format('Y-m-d H:i:s'));
