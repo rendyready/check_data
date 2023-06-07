@@ -371,7 +371,7 @@ class RekapNonMenuController extends Controller
        foreach ($getIceCream as $key => $valMenu) {
            array_push($listIceCream,$valMenu->m_produk_id);
        }
-       // return $listIceCream;
+    //    return $listMenu;
        $sales = [];
        foreach ($sesi as $key => $valSesi) {
            foreach ($typeTransaksi as $key => $valType) {
@@ -383,7 +383,7 @@ class RekapNonMenuController extends Controller
                #Menu
                $menu = DB::table('rekap_transaksi')
                        ->join('rekap_transaksi_detail','r_t_detail_r_t_id','r_t_id')
-                       ->selectRaw('r_t_rekap_modal_id, sum(r_t_detail_reguler_price*r_t_detail_qty) nominal')
+                       ->selectRaw('r_t_rekap_modal_id, r_t_m_t_t_id, sum(r_t_detail_reguler_price*r_t_detail_qty) nominal')
                        ->where([
                            'r_t_rekap_modal_id' => $valSesi->rekap_modal_id,
                            'r_t_m_t_t_id' => $valType->m_t_t_id
@@ -451,6 +451,7 @@ class RekapNonMenuController extends Controller
            'tanggal' => $tanggal,
            'tglCetak' => Carbon::now()->format('Y-m-d H:i:s')
        ];
+    //    return $sales;
        $pdf = pdf::loadview('dashboard::lap_non_menu', $data)->setPaper('a4');
        return $pdf->download('lap_non_menu_'.tgl_indo($request->tanggal).'.pdf');
     }

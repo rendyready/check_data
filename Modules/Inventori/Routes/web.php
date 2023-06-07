@@ -109,7 +109,7 @@ Route::group(['prefix' => 'inventori', 'controller' => KartuStockController::cla
     Route::get('rekap_stock', 'rekap_stk')->name('rekap_stock.rekap_stk');
     Route::get('rekap_stock/tampil_rekap', 'tampil_rekap')->name('rekap_stock.tampil_rekap');
     Route::get('kartu_stock/select_gudang_rekap', 'select_gudang_rekap')->name('kartu_stock.select_gudang_rekap');
-    Route::get('kartu_stock/select_bb_rekap', 'select_bb_rekap')->name('kartu_stock.select_bb_rekap');
+    // Route::get('kartu_stock/select_bb_rekap', 'select_bb_rekap')->name('kartu_stock.select_bb_rekap');
 });
 //Laporan Pembelian
 Route::group(['prefix' => 'inventori', 'controller' => LaporanPembelianController::class, 'middleware' => ['auth', 'web']], function () {
