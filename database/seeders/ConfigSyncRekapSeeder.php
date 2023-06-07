@@ -154,7 +154,14 @@ class ConfigSyncRekapSeeder extends Seeder
             'config_sync_field_status' => 'r_r_detail_status_sync',
             'config_sync_field_validate1' => 'r_r_detail_id'
         ]);
-
+        DB::table('config_sync')->insert([
+            'config_sync_table_name' => 'users',
+            'config_sync_table_tipe' => 'master',
+            'config_sync_status' => 'aktif',
+            'config_sync_limit' => 100,
+            'config_sync_field_status' => 'users_status_sync',
+            'config_sync_field_validate1' => 'users_id'
+        ]);
 
     }
 }
