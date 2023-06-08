@@ -192,8 +192,8 @@ class GetData extends Command
             }
 
             #PUSH data to Destination
+            $nextLast = 0;
             if ($getDataSource->get()->count() > 0) {
-                $nextLast = 0;
                 foreach ($getDataSource->get() as $keyDataSource => $valDataSource) {
                     $newDestStatus = "ok";
                     $data = [];
