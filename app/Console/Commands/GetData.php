@@ -222,33 +222,32 @@ class GetData extends Command
                         Log::info($th);
                     }
                 }
-                if ($nextLast != 0) {
-                    DB::table('log_data_sync')
-                        ->updateOrInsert(
-                        [
-                            'log_data_sync_cron' => 'getdata:cron',
-                            'log_data_sync_table' => $valTab->config_get_data_table_name,
-                        ],
-                        [
-                            'log_data_sync_cron' => 'getdata:cron',
-                            'log_data_sync_table' => $valTab->config_get_data_table_name,
-                            'log_data_sync_last' => $nextLast,
-                            'log_data_sync_note' => 'ok'
-                        ]
-                    );
-                    #Local Log
-                    DB::table('log_cronjob')
-                    ->insert([
-                        'log_cronjob_name' => 'getdata:cron',
-                        'log_cronjob_from_server_id' => $getSourceConn->db_con_m_w_id,
-                        'log_cronjob_from_server_name' => $getSourceConn->db_con_location_name,
-                        'log_cronjob_to_server_id' => $dest->db_con_m_w_id,
-                        'log_cronjob_to_server_name' => $dest->db_con_location_name,
-                        'log_cronjob_datetime' => Carbon::now(),
-                        'log_cronjob_note' => $valTab->config_get_data_table_name.'-UPDATED!',
-                    ]);
-                }
-
+            }
+            if ($nextLast != 0) {
+                DB::table('log_data_sync')
+                    ->updateOrInsert(
+                    [
+                        'log_data_sync_cron' => 'getdata:cron',
+                        'log_data_sync_table' => $valTab->config_get_data_table_name,
+                    ],
+                    [
+                        'log_data_sync_cron' => 'getdata:cron',
+                        'log_data_sync_table' => $valTab->config_get_data_table_name,
+                        'log_data_sync_last' => $nextLast,
+                        'log_data_sync_note' => 'ok'
+                    ]
+                );
+                #Local Log
+                DB::table('log_cronjob')
+                ->insert([
+                    'log_cronjob_name' => 'getdata:cron',
+                    'log_cronjob_from_server_id' => $getSourceConn->db_con_m_w_id,
+                    'log_cronjob_from_server_name' => $getSourceConn->db_con_location_name,
+                    'log_cronjob_to_server_id' => $dest->db_con_m_w_id,
+                    'log_cronjob_to_server_name' => $dest->db_con_location_name,
+                    'log_cronjob_datetime' => Carbon::now(),
+                    'log_cronjob_note' => $valTab->config_get_data_table_name.'-UPDATED!',
+                ]);
             }
         }
 
