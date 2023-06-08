@@ -238,9 +238,12 @@ class GetDataUpdate extends Command
             }
             if ($nextLast == 0) {
                 $validateField = $valTab->config_get_data_field_validate1;
-                $nextLast = $DbSource->table($valTab->config_get_data_table_name)
+                $data = $DbSource->table($valTab->config_get_data_table_name)
                     ->orderBy($valTab->config_get_data_field_validate1,'asc')
-                    ->first()->$validateField;
+                    ->first();
+                if (!empty($data)) {
+                    $nextLast = $data->$validateField;
+                }
             }
             if ($nextLast != 0) {
                 DB::table('log_data_sync')
