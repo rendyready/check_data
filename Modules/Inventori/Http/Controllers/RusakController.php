@@ -77,8 +77,7 @@ class RusakController extends Controller
             ->update($data2);
 
             $input_detail = array(
-                'm_stok_detail_id' => $this->getMasterId('m_stok_detail'),
-                'm_stok_detail_code' => $this->getNextId('m_stok_detail',$waroeng_id),
+                'm_stok_detail_id' => $this->getNextId('m_stok_detail',$waroeng_id),
                 'm_stok_detail_m_produk_code' => $request->rekap_rusak_detail_m_produk_id[$key],
                 'm_stok_detail_tgl'=> Carbon::now(),
                 'm_stok_detail_m_produk_nama' => $produk->m_produk_nama,

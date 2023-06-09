@@ -16,13 +16,13 @@ class PecahGabungController extends Controller
      * @return Renderable
      */
     public function index()
-    {$get_max_id = DB::table('rekap_pcb')->orderBy('rekap_pcb_code', 'desc')->first();
+    {
+        $get_max_id = DB::table('rekap_pcb')->orderBy('rekap_pcb_code', 'desc')->first();
         $waroeng_id = Auth::user()->waroeng_id;
         $gudang_default = DB::table('m_gudang')->select('m_gudang_id')
             ->where('m_gudang_m_w_id', $waroeng_id)->where('m_gudang_nama', 'gudang utama waroeng')->first()->m_gudang_id;
-        $gudang_id = (empty($request->gudang_id)) ? $gudang_default : $request->gudang_id;
         $user = Auth::user()->users_id;
-        $data = new \stdClass();
+        $data = new \stdClass ();
         $data->gudang = DB::table('m_gudang')
             ->where('m_gudang_m_w_id', $waroeng_id)
             ->whereNotIn('m_gudang_nama', ['gudang produksi waroeng'])->get();
@@ -71,8 +71,8 @@ class PecahGabungController extends Controller
                 $saldo_now = $get_saldo_hasil->m_stok_saldo + $request->rekap_pcb_brg_hasil_qty[$key];
                 $hpp_now = (($get_saldo_hasil->m_stok_hpp * $get_saldo_hasil->m_stok_saldo) + ($hpp_hasil * $request->rekap_pcb_brg_hasil_qty[$key])) / ($get_saldo_hasil->m_stok_saldo + $request->rekap_pcb_brg_hasil_qty[$key]);
                 $stok_detail = array(
-                    'm_stok_detail_id' => $this->getMasterId('m_stok_detail'),
-                    'm_stok_detail_code' => $this->getNextId('m_stok_detail', $mw_id),
+
+                    'm_stok_detail_id' => $this->getNextId('m_stok_detail', $mw_id),
                     'm_stok_detail_tgl' => Carbon::now(),
                     'm_stok_detail_m_produk_code' => $request->rekap_pcb_brg_hasil_code[$key],
                     'm_stok_detail_m_produk_nama' => $request->rekap_pcb_brg_hasil_nama[$key],
@@ -104,8 +104,7 @@ class PecahGabungController extends Controller
                 ->first();
             $saldo_now = $get_saldo_asal->m_stok_saldo - $request->rekap_pcb_brg_asal_qty[0];
             $stok_detail = array(
-                'm_stok_detail_id' => $this->getMasterId('m_stok_detail'),
-                'm_stok_detail_code' => $this->getNextId('m_stok_detail', $mw_id),
+                'm_stok_detail_id' => $this->getNextId('m_stok_detail', $mw_id),
                 'm_stok_detail_tgl' => Carbon::now(),
                 'm_stok_detail_m_produk_code' => $request->rekap_pcb_brg_asal_code[0],
                 'm_stok_detail_m_produk_nama' => $request->rekap_pcb_brg_asal_nama[0],
@@ -160,8 +159,8 @@ class PecahGabungController extends Controller
                 $get_stok = $this->get_last_stok($request->rekap_pcb_gudang_asal_code, $request->rekap_pcb_brg_asal_code[$key]);
                 $saldo_now = $get_stok->m_stok_saldo - $request->rekap_pcb_brg_asal_qty[$key];
                 $stok_detail = array(
-                    'm_stok_detail_id' => $this->getMasterId('m_stok_detail'),
-                    'm_stok_detail_code' => $this->getNextId('m_stok_detail', $mw_id),
+
+                    'm_stok_detail_id' => $this->getNextId('m_stok_detail', $mw_id),
                     'm_stok_detail_tgl' => Carbon::now(),
                     'm_stok_detail_m_produk_code' => $request->rekap_pcb_brg_asal_code[$key],
                     'm_stok_detail_m_produk_nama' => $request->rekap_pcb_brg_asal_nama[$key],
@@ -191,8 +190,7 @@ class PecahGabungController extends Controller
             $saldo_now = $get_saldo_asal->m_stok_saldo + $request->rekap_pcb_brg_hasil_qty[0];
             $hpp_now = (($get_saldo_asal->m_stok_hpp * $get_saldo_asal->m_stok_saldo) + $jumlah_hpp) / ($get_saldo_asal->m_stok_saldo + $request->rekap_pcb_brg_hasil_qty[0]);
             $stok_detail = array(
-                'm_stok_detail_id' => $this->getMasterId('m_stok_detail'),
-                'm_stok_detail_code' => $this->getNextId('m_stok_detail', $mw_id),
+                'm_stok_detail_id' => $this->getNextId('m_stok_detail', $mw_id),
                 'm_stok_detail_tgl' => Carbon::now(),
                 'm_stok_detail_m_produk_code' => $request->rekap_pcb_brg_hasil_code[0],
                 'm_stok_detail_m_produk_nama' => $request->rekap_pcb_brg_hasil_nama[0],
@@ -224,7 +222,7 @@ class PecahGabungController extends Controller
         $list = DB::table('rekap_pcb')
             ->where('rekap_pcb_tgl', $tgl_now)
             ->where('rekap_pcb_gudang_asal_code', $request->gudang_code)
-            ->where('rekap_pcb_aksi',$request->aksi)
+            ->where('rekap_pcb_aksi', $request->aksi)
             ->get();
         $data = array();
         foreach ($list as $key) {
@@ -245,7 +243,7 @@ class PecahGabungController extends Controller
     }
     public function get_code()
     {
-        $code = $this->getNextId('rekap_pcb',Auth::user()->waroeng_id);
+        $code = $this->getNextId('rekap_pcb', Auth::user()->waroeng_id);
         return response()->json($code);
     }
 

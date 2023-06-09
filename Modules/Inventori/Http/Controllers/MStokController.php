@@ -199,8 +199,7 @@ class MStokController extends Controller
                     DB::table('rekap_so_detail')->insert($detail);
                         $saldo_terakhir = $produk->m_stok_saldo;
                         $detail_so = array(
-                            'm_stok_detail_id' => $this->getMasterId('m_stok_detail'),
-                            'm_stok_detail_code' => $this->getNextId('m_stok_detail', $waroeng_id),
+                            'm_stok_detail_id' => $this->getNextId('m_stok_detail', $waroeng_id),
                             'm_stok_detail_m_produk_code' => $detailData['rekap_so_detail_m_produk_code'],
                             'm_stok_detail_tgl' => Carbon::now(),
                             'm_stok_detail_m_produk_nama' => $produk->m_stok_produk_nama,

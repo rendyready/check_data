@@ -101,8 +101,7 @@ class PenjualanInternalController extends Controller
                 ->where('m_stok_gudang_code', $request->asal_gudang)
                 ->first();
             $stok_detail = array(
-                'm_stok_detail_id' => $this->getMasterId('m_stok_detail'),
-                'm_stok_detail_code' => $this->getNextId('m_stok_detail', $m_w_asal->m_w_id),
+                'm_stok_detail_id' => $this->getNextId('m_stok_detail', $m_w_asal->m_w_id),
                 'm_stok_detail_tgl' => Carbon::now(),
                 'm_stok_detail_m_produk_code' => $request->rekap_beli_detail_m_produk_id[$key],
                 'm_stok_detail_m_produk_nama' => $stok_asal->m_stok_produk_nama,

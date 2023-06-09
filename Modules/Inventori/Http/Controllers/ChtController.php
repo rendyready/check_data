@@ -43,8 +43,7 @@ class ChtController extends Controller
                 $data_masuk = $cht_qty;
                 $hpp_now = ($request->rekap_beli_detail_subtot[$key] + ($saldo_terakhir * $hpp_terakhir)) / ($saldo_terakhir + $data_masuk);
                 $data = array(
-                    'm_stok_detail_id' => $this->getMasterId('m_stok_detail'),
-                    'm_stok_detail_code' => $this->getNextId('m_stok_detail', $waroeng_id),
+                    'm_stok_detail_id' => $this->getNextId('m_stok_detail', $waroeng_id),
                     'm_stok_detail_m_produk_code' => $request->rekap_beli_detail_m_produk_code[$key],
                     'm_stok_detail_tgl' => Carbon::now(),
                     'm_stok_detail_m_produk_nama' => $get_stok->m_stok_produk_nama,
