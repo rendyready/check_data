@@ -62,8 +62,8 @@
                                                         <label for="roles">Hak Akses</label>
                                                         <div>
                                                             <select class="js-select2" id="roles" name="roles[]"
-                                                                style="width: 100%;" data-container="#modal-popout"
-                                                                data-placeholder="Pilih Hak Akses" multiple="multiple" required>
+                                                                style="width: 100%;" data-placeholder="Pilih Hak Akses"
+                                                                multiple="multiple" required>
                                                                 <option></option>
                                                                 @foreach ($data->roles as $item)
                                                                     <option value="{{ $item->name }}">{{ $item->name }}
@@ -78,8 +78,8 @@
                                                         <label for="waroeng_id">Wilayah Kerja</label>
                                                         <div>
                                                             <select class="js-select2" id="waroeng_id" name="waroeng_id"
-                                                                style="width: 100%;"
-                                                                data-placeholder="Choose one.." required>
+                                                                style="width: 100%;" data-placeholder="Choose one.."
+                                                                required>
                                                                 <option></option>
                                                                 @foreach ($data->waroeng as $item)
                                                                     <option value="{{ $item->m_w_id }}">
@@ -93,9 +93,8 @@
                                                     <div class="form-group">
                                                         <label for="waroeng_id">Waroeng Akses</label>
                                                         <div>
-                                                            <select class="js-select2" id="waroeng_akses"
+                                                            <select class="js-select2-multi" id="waroeng_akses"
                                                                 name="waroeng_akses[]" style="width: 100%;"
-                                                                
                                                                 data-placeholder="Pilih Waroeng" multiple="multiple"
                                                                 required>
                                                                 @foreach ($data->waroeng as $item)
@@ -169,6 +168,9 @@
                 }
             });
             $('.js-select2').select2({
+                dropdownParent: $('#formAction'),
+            });
+            $('.js-select2-multi').select2({
                 dropdownParent: $('#formAction'),
                 dropdownPosition: 'below',
                 tags: true,

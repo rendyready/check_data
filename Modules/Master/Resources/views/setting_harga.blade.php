@@ -10,12 +10,12 @@
                             Setting Harga Nota
                     </div>
                     <div class="block-content text-muted">
-                        <a class="btn btn-success mr-5 mb-5 buttonInsert" value="" title="Edit" style="color: #fff"><i
-                                class="fa fa-plus mr-5"></i> Harga Nota</a>
+                        {{-- <a class="btn btn-success mr-5 mb-5 buttonInsert" value="" title="Edit" style="color: #fff"><i
+                                class="fa fa-plus mr-5"></i> Harga Nota</a> --}}
                         <a class="btn btn-info mr-5 mb-5 buttonCopy" value="" title="copy" style="color: #fff"><i
                                 class="fa fa-copy mr-5"></i> Copy Nota</a>
                         <a class="btn btn-warning mr-5 mb-5 buttonUpdate" value="" title="update"
-                            style="color: #fff"><i class="fa fa-refresh mr-5"></i> Update Harga</a>
+                            style="color: #fff"><i class="fa fa-refresh mr-5"></i> Update Harga/Status</a>
                         @csrf
                         <table id="my_table" class="table table-bordered table-striped table-vcenter js-dataTable-full">
                             <thead>
@@ -139,7 +139,7 @@
                                     <div class="form-group">
                                         <label for="m_jenis_nota_trans_id_asal">Sumber Jenis Transaksi</label>
                                         <div>
-                                            <select class="js-select2" id="m_jenis_nota_trans_id_asal"
+                                            <select class="js-select2-copy" id="m_jenis_nota_trans_id_asal"
                                                 name="m_jenis_nota_trans_id_asal" style="width: 100%;"
                                                 data-container="#copy_nota" data-placeholder="Choose one..">
                                                 <option></option>
@@ -156,7 +156,7 @@
                                     <div class="form-group">
                                         <label for="m_jenis_nota_waroeng_sumber_id">Sumber Nota Waroeng</label>
                                         <div>
-                                            <select class="js-select2" id="m_jenis_nota_waroeng_sumber_id"
+                                            <select class="js-select2-copy" id="m_jenis_nota_waroeng_sumber_id"
                                                 name="m_jenis_nota_waroeng_sumber_id" style="width: 100%;"
                                                 data-container="#copy_nota" data-placeholder="Choose one..">
                                                 <option></option>
@@ -172,7 +172,7 @@
                                     <div class="form-group">
                                         <label for="m_jenis_nota_trans_id_tujuan">Tujuan Jenis Transaksi</label>
                                         <div>
-                                            <select class="js-select2" id="m_jenis_nota_trans_id_tujuan"
+                                            <select class="js-select2-copy" id="m_jenis_nota_trans_id_tujuan"
                                                 name="m_jenis_nota_trans_id_tujuan" style="width: 100%;"
                                                 data-container="#copy_nota" data-placeholder="Choose one..">
                                                 <option></option>
@@ -189,7 +189,7 @@
                                     <div class="form-group">
                                         <label for="m_jenis_nota_waroeng_tujuan_id">Tujuan Nota Waroeng</label>
                                         <div>
-                                            <select class="js-select2" id="m_jenis_nota_waroeng_tujuan_id"
+                                            <select class="js-select2-copy" id="m_jenis_nota_waroeng_tujuan_id"
                                                 name="m_jenis_nota_waroeng_tujuan_id" style="width: 100%;"
                                                 data-container="#copy_nota" data-placeholder="Choose one..">
                                                 <option></option>
@@ -351,6 +351,9 @@
             Codebase.helpersOnLoad(['jq-rangeslider']);
             $('.js-select2').select2({
                 dropdownParent: $('#formAction3')
+            });
+            $('.js-select2-copy').select2({
+                dropdownParent: $('#formAction2')
             });
             $(".buttonInsert").on('click', function() {
                 $("#myModalLabel").html('Tambah Harga Nota');
