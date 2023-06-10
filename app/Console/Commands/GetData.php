@@ -178,7 +178,7 @@ class GetData extends Command
             #GET Sumber Data
             $getDataSource = $DbSource->table($valTab->config_get_data_table_name);
             if (!empty($lastId)) {
-                $getDataSource->where($valTab->config_get_data_field_validate1,'>',$lastId->log_data_sync_last);
+                $getDataSource->where($valTab->config_get_data_field_validate1,'>=',$lastId->log_data_sync_last);
             }
             $getDataSource->orderBy($valTab->config_get_data_field_validate1,'asc');
             if ($valTab->config_get_data_truncate == "off") {
@@ -220,6 +220,18 @@ class GetData extends Command
                     } catch (\Throwable $th) {
                         Log::alert("Can't insert/update to {$valTab->config_get_data_table_name}");
                         Log::info($th);
+                    }
+                }
+            }else{
+                $countDataSource = $DbSource->table($valTab->config_get_data_table_name)->get()->count();
+                $countDataDest = $DbDest->table($valTab->config_get_data_table_name)->get()->count();
+                if ($countDataSource > $countDataDest) {
+                    $validateField = $valTab->config_get_data_field_validate1;
+                    $data = $DbSource->table($valTab->config_get_data_table_name)
+                        ->orderBy($valTab->config_get_data_field_validate1,'asc')
+                        ->first();
+                    if (!empty($data)) {
+                        $nextLast = $data->$validateField;
                     }
                 }
             }
