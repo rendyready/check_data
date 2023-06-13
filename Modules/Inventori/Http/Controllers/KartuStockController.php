@@ -261,8 +261,9 @@ class KartuStockController extends Controller
             $stok_awal_get = $stok_awal->where('m_gudang_m_w_id', $request->waroeng)->get();
             $stok_awal = $stok_awal->where('m_gudang_m_w_id', $request->waroeng)->first();
 
-            $stokkeluar = 0;
+        
         $i = 0;
+        $stokkeluar = 0;
         $data = array();
         foreach ($stok as $stock) {
             $first_stok = 0;
@@ -281,13 +282,14 @@ class KartuStockController extends Controller
                 // }
 
                     if($stock->m_stok_detail_m_produk_nama == $mStok->m_stok_produk_nama && $stock->m_gudang_nama == $mStok->m_gudang_nama){
-                        if(empty($stok_awal->m_stok_detail_tgl) && $stokkeluar == 0){
+                        if(empty($stok_awal->m_stok_detail_tgl) ){
                             $first_stok = $mStok->m_stok_awal;
+                            // $stokkeluar = 1;
                         } else {
                             foreach ($stok_awal_get as $getStokAwal){
-                                if ($stock->m_stok_detail_m_produk_nama == $getStokAwal->m_stok_detail_m_produk_nama && $stock->m_gudang_nama == $getStokAwal->m_gudang_nama){
+                                // if ($stock->m_stok_detail_m_produk_nama == $getStokAwal->m_stok_detail_m_produk_nama && $stock->m_gudang_nama == $getStokAwal->m_gudang_nama){
                                     $first_stok = $mStok->m_stok_awal + $stokkeluar;
-                                }
+                                // }
                             }
                         }
                     } 
@@ -301,15 +303,15 @@ class KartuStockController extends Controller
             $row[] = $first_stok;
             $row[] = $stock->masuk ?? 0;
             $row[] = $stock->keluar ?? 0;
-            if($i == 0){
+            // if($i == 0){
                 $stokkeluar = $first_stok + $stock->masuk - $stock->keluar;
                 $row[] = $stokkeluar;
-                $i = 1;
-            } else {
-                $row[] = $stokkeluar + $stock->masuk - $stock->keluar;
-                $stokkeluar = $stokkeluar + $stock->masuk - $stock->keluar;
-            }
-            // $row[] = $stock->saldo ?? 0;
+                // $i = 1;
+            // } else {
+            //     $row[] = $stokkeluar + $stock->masuk - $stock->keluar;
+            //     $stokkeluar = $stokkeluar + $stock->masuk - $stock->keluar;
+            // }
+            // // $row[] = $stock->saldo ?? 0;
             $row[] = $stock->m_stok_detail_satuan;
             $row[] = number_format($stock->hpp);
             $data[] = $row;
