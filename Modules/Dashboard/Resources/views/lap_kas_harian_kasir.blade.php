@@ -96,6 +96,8 @@
                                     <th>Saldo Akhir</th>
                                     <th>Saldo Real</th>
                                     <th>Selisih</th>
+                                    <th>Free Kembalian</th>
+                                    <th>Pembulatan</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -228,7 +230,24 @@ $(document).ready(function() {
           },
           success: function(data) {
               console.log(data);
-          }
+          },
+          footer: true,
+            drawCallback: function(settings) {
+                var api = this.api();
+                var totalSaldoAkhir = api.column(6, { page: 'current' }).data().reduce(function(a, b) {
+                    var val = parseFloat(b.replace(/[^0-9.-]/g, ''));
+                    return a + val;
+                }, 0);
+
+                $(api.column(6).footer()).html('Total: ' + totalSaldoAkhir);
+                $(api.table().footer()).find('tr').addClass('footer');
+            },
+            rowCallback: function(row, data) {
+                if ($(row).hasClass('footer')) {
+                    $(row).css('background-color', 'red');
+                    $(row).css('color', 'white');
+                }
+            }
       });
   });
 

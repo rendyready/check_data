@@ -37,9 +37,6 @@ class KartuStockController extends Controller
         $data->area = DB::table('m_area')
             ->orderby('m_area_id', 'ASC')
             ->get();
-        $data->user = DB::table('users')
-            ->orderby('id', 'ASC')
-            ->get();
         return view('inventori::lap_kartu_stock', compact('data'));
     }
 
@@ -91,14 +88,14 @@ class KartuStockController extends Controller
 
     public function show(Request $request)
     {
-        //stokawal2
+        //stok awal master
         $master_stok = DB::table('m_stok')
             ->select('m_stok_awal')
             ->where('m_stok_gudang_code', $request->gudang)
             ->where('m_stok_m_produk_code', $request->bb)
             ->first();
 
-        //stok awal1
+        //stok awal detail
         $stok_awal = DB::table('m_stok_detail')
             ->join('m_gudang', 'm_gudang_code', 'm_stok_detail_gudang_code')
             // ->select(DB::raw('SUM(m_stok_detail_masuk - m_stok_detail_keluar + m_stok_detail_so) as stok_awal'))
@@ -112,7 +109,6 @@ class KartuStockController extends Controller
                 $stok_awal->where('m_stok_detail_tgl', '<', $request->tanggal);
             }
             $stok_awal = $stok_awal->orderby('m_stok_detail_id', 'desc')->first();
-
 
         $stok = DB::table('m_stok_detail')
             ->join('m_gudang', 'm_gudang_code', 'm_stok_detail_gudang_code')
@@ -130,47 +126,35 @@ class KartuStockController extends Controller
             ->where('m_stok_detail_gudang_code', $request->gudang)
             ->orderby('m_stok_detail_created_at', 'ASC')
             ->get();
-// return $stok_awal;
-        $i = 0;
-        $data = array();
-        if(empty($stok_awal)){
-            $stok_awal = 0;
-        } else {
-            $stok_awal = $stok_awal->m_stok_detail_saldo;
-        }
 
-        if($stok_awal == 0){
-            $stokawal = $master_stok->m_stok_awal;
-        } else {
-            $stokawal = $stok_awal;
-        }
-        $row = array();
-        $row[] = '';
-        $row[] = '';
-        $row[] = '';
-        $row[] = '';
-        $row[] = 'Stok Awal';
-        $row[] = number_format($stokawal ?? 0);
-        $row[] = '';
-        $row[] = '';
-        $row[] = '';
-        $data[] = $row;
+        $i = 0;        
+        $data = array();
         foreach ($stok as $value) {
-            // $stokawal = $stok_awal->stok_awal;
             $row = array();
             $row[] = date('d-m-Y', strtotime($value->m_stok_detail_tgl));
             $row[] = $value->m_stok_detail_m_produk_nama;
-            $row[] = number_format($value->m_stok_detail_masuk ?? 0);
-            $row[] = number_format($value->m_stok_detail_keluar ?? 0);
-            $row[] = number_format($value->m_stok_detail_so ?? 0);
+            if(empty($stok_awal)){
+                $stokawal = $master_stok->m_stok_awal;
+                $row[] = $stokawal;
+                $stok_awal = 1;
+            } elseif ($value->m_stok_detail_so == 0) {
+                $stokawal = $stokkeluar;
+                $row[] = $stokawal;
+            } elseif ($value->m_stok_detail_so != 0) {
+                $stokawal = $value->m_stok_detail_so;
+                $row[] = $stokawal;
+            }
+            $row[] = $value->m_stok_detail_masuk ?? 0;
+            $row[] = $value->m_stok_detail_keluar ?? 0;
             if($i == 0){
-                $stokkeluar = $stokawal + $value->m_stok_detail_masuk - $value->m_stok_detail_keluar + $value->m_stok_detail_so;
+                $stokkeluar = $stokawal + $value->m_stok_detail_masuk - $value->m_stok_detail_keluar;
                 $row[] = $stokkeluar;
                 $i = 1;
             } else {
-                $row[] = $stokkeluar + $value->m_stok_detail_masuk - $value->m_stok_detail_keluar + $value->m_stok_detail_so;
-                $stokkeluar = $stokkeluar + $value->m_stok_detail_masuk - $value->m_stok_detail_keluar + $value->m_stok_detail_so;
+                $row[] = $stokkeluar + $value->m_stok_detail_masuk - $value->m_stok_detail_keluar;
+                $stokkeluar = $stokkeluar + $value->m_stok_detail_masuk - $value->m_stok_detail_keluar;
             }
+            $row[] = $value->m_stok_detail_so ?? 0;
             $row[] = $value->m_stok_detail_satuan;
             $row[] = rupiah($value->m_stok_detail_hpp, 0);
             $row[] = $value->m_stok_detail_catatan;
@@ -207,19 +191,6 @@ class KartuStockController extends Controller
         return view('inventori::lap_kartu_stock_rekap_stock', compact('data'));
     }
 
-    // public function select_bb_rekap()
-    // {
-    //     $bb2 = DB::table('m_klasifikasi_produk')
-    //         ->orderBy('m_klasifikasi_produk_id', 'asc')
-    //         ->get();
-    //     $data = array();
-    //     foreach ($bb as $val) {
-    //         $data[$val->m_klasifikasi_produk_id] = [$val->m_klasifikasi_produk_nama];
-    //         $data['all'] = 'All Klasifikasi Produk';
-    //     }
-    //     return response()->json($data);
-    // }
-
     public function select_gudang_rekap(Request $request)
     {
         $gudang = DB::table('m_gudang')
@@ -236,39 +207,12 @@ class KartuStockController extends Controller
 
     public function tampil_rekap(Request $request)
     {
-        //stokawal kosong
-    
-        // ->select('m_stok_awal');
-        // if($request->gudang != 'all'){
-        //     $master_stok->where('m_gudang_nama', $request->gudang);
-        // } else {
-        //     $master_stok->whereIn('m_gudang_nama',  ['gudang utama waroeng', 'gudang produksi waroeng']);
-        // }
-        // $master_stok = $master_stok->get();
-
-    //stok awal tanggal sebelum
-    // $stok_awal = DB::table('m_stok_detail')
-    //     ->join('m_gudang', 'm_gudang_code', 'm_stok_detail_gudang_code')
-    //     ->select('m_stok_detail_saldo', 'm_stok_produk_nama');
-    //     if($request->gudang != 'all'){
-    //         $stok_awal->where('m_gudang_nama', $request->gudang);
-    //     } else {
-    //         $stok_awal->whereIn('m_gudang_nama',  ['gudang utama waroeng', 'gudang produksi waroeng']);
-    //     }
-    //     if (strpos($request->tanggal, 'to') !== false) {
-    //         [$start, $end] = explode('to', $request->tanggal);
-    //         $stok_awal->where('m_stok_detail_tgl', '<', $start);
-    //     } else {
-    //         $stok_awal->where('m_stok_detail_tgl', '<', $request->tanggal);
-    //     }
-    //     $stok_awal = $stok_awal->first();
          
-
     $stok = DB::table('m_stok_detail')
             ->join('m_gudang', 'm_gudang_code', 'm_stok_detail_gudang_code')
             ->join('m_w', 'm_w_id', 'm_gudang_m_w_id')
             ->join('m_area', 'm_area_id', 'm_w_m_area_id')
-            ->selectRaw('m_stok_detail_m_produk_nama, SUM(m_stok_detail_masuk) as masuk, SUM(m_stok_detail_keluar) as keluar, SUM(m_stok_detail_saldo) as saldo, avg(m_stok_detail_hpp) hpp, m_gudang_nama, m_stok_detail_satuan');
+            ->selectRaw('m_stok_detail_m_produk_nama, SUM(m_stok_detail_masuk) as masuk, SUM(m_stok_detail_keluar) as keluar, max(m_stok_detail_saldo) as saldo, avg(m_stok_detail_hpp) hpp, m_gudang_nama, m_stok_detail_satuan');
             if($request->gudang != 'all'){
                 $stok->where('m_gudang_nama', $request->gudang);
             } else {
@@ -287,57 +231,90 @@ class KartuStockController extends Controller
             ->orderby('m_stok_detail_m_produk_nama', 'ASC')
             ->get();
 
-           
-            
-    
-            
+        $master_stok = DB::table('m_stok')
+            ->join('m_gudang', 'm_gudang_code', 'm_stok_gudang_code');
+            // ->join('m_stok_detail', 'm_stok_detail_m_produk_code', 'm_stok_m_produk_code');
+            if($request->gudang != 'all'){
+                $master_stok->where('m_gudang_nama', $request->gudang);
+            } else {
+                $master_stok->whereIn('m_gudang_nama',  ['gudang utama waroeng', 'gudang produksi waroeng']);
+            }
+            $master_stok = $master_stok->where('m_gudang_m_w_id', $request->waroeng)
+            // ->where('m_stok_saldo' > 0)
+            ->orderby('m_stok_produk_nama', 'ASC')
+            ->get();
 
+        $stok_awal = DB::table('m_stok_detail')
+            ->join('m_gudang', 'm_gudang_code', 'm_stok_detail_gudang_code')
+            ->select('m_stok_detail_saldo', 'm_stok_detail_m_produk_nama', 'm_gudang_nama', 'm_stok_detail_tgl');
+            if($request->gudang != 'all'){
+                $stok_awal->where('m_gudang_nama', $request->gudang);
+            } else {
+                $stok_awal->whereIn('m_gudang_nama',  ['gudang utama waroeng', 'gudang produksi waroeng']);
+            }
+            if (strpos($request->tanggal, 'to') !== false) {
+                [$start, $end] = explode('to', $request->tanggal);
+                $stok_awal->where('m_stok_detail_tgl', '<', $start);
+            } else {
+                $stok_awal->where('m_stok_detail_tgl', '<', $request->tanggal);
+            }
+            $stok_awal_get = $stok_awal->where('m_gudang_m_w_id', $request->waroeng)->get();
+            $stok_awal = $stok_awal->where('m_gudang_m_w_id', $request->waroeng)->first();
+
+            $stokkeluar = 0;
+        $i = 0;
         $data = array();
-        $first_stok = 0;
-        // foreach ($master_stok as $stokMaster){
-            foreach ($stok as $stock) {
+        foreach ($stok as $stock) {
+            $first_stok = 0;
+            foreach($master_stok as $mStok){
 
-                $master_stok = DB::table('m_stok')
-                ->join('m_gudang', 'm_gudang_code', 'm_stok_gudang_code')->first();
-                
-            $stok_awal = DB::table('m_stok_detail')
-                    ->join('m_gudang', 'm_gudang_code', 'm_stok_detail_gudang_code')
-                    ->selectRaw('SUM(m_stok_detail_saldo) saldo_awal, m_stok_detail_m_produk_nama');
-                    if($request->gudang != 'all'){
-                        $stok_awal->where('m_gudang_nama', $request->gudang);
-                    } else {
-                        $stok_awal->whereIn('m_gudang_nama',  ['gudang utama waroeng', 'gudang produksi waroeng']);
-                    }
-                    if (strpos($request->tanggal, 'to') !== false) {
-                        [$start, $end] = explode('to', $request->tanggal);
-                        $stok_awal->where('m_stok_detail_tgl', '<', $start);
-                    } else {
-                        $stok_awal->where('m_stok_detail_tgl', '<', $request->tanggal);
-                    }
-                    $stok_awal = $stok_awal->groupby('m_stok_detail_m_produk_nama')->first();
+                // if(empty($stok_awal)){
+                //     $stokawal = $master_stok->m_stok_awal;
+                //     $row[] = $stokawal;
+                //     $stok_awal = 1;
+                // } elseif ($value->m_stok_detail_so == 0) {
+                //     $stokawal = $stokkeluar;
+                //     $row[] = $stokawal;
+                // } elseif ($value->m_stok_detail_so != 0) {
+                //     $stokawal = $value->m_stok_detail_so;
+                //     $row[] = $stokawal;
+                // }
 
-            
-            if($stock->m_stok_detail_m_produk_nama == $master_stok->m_stok_produk_nama && $stock->m_gudang_nama == $master_stok->m_gudang_nama){
-                if(empty($stok_awal->saldo_awal)){
-                    $first_stok = $master_stok->m_stok_awal;
-                } else {
-                    $first_stok = $stokMaster->m_stok_awal + $stok_awal->saldo_awal;
-                }
-            } 
+                    if($stock->m_stok_detail_m_produk_nama == $mStok->m_stok_produk_nama && $stock->m_gudang_nama == $mStok->m_gudang_nama){
+                        if(empty($stok_awal->m_stok_detail_tgl) && $stokkeluar == 0){
+                            $first_stok = $mStok->m_stok_awal;
+                        } else {
+                            foreach ($stok_awal_get as $getStokAwal){
+                                if ($stock->m_stok_detail_m_produk_nama == $getStokAwal->m_stok_detail_m_produk_nama && $stock->m_gudang_nama == $getStokAwal->m_gudang_nama){
+                                    $first_stok = $mStok->m_stok_awal + $stokkeluar;
+                                }
+                            }
+                        }
+                    } 
+                    // $first_stok = $mStok->m_stok_awal;
+                    // $first_stok = $mStok->m_stok_awal + $mStok->m_stok_saldo;
+            }
             
             $row = array();
             $row[] = $stock->m_gudang_nama;
             $row[] = $stock->m_stok_detail_m_produk_nama;
             $row[] = $first_stok;
-            $row[] = number_format($stock->masuk ?? 0);
-            $row[] = number_format($stock->keluar ?? 0);
-            $row[] = number_format($stock->saldo ?? 0);
+            $row[] = $stock->masuk ?? 0;
+            $row[] = $stock->keluar ?? 0;
+            if($i == 0){
+                $stokkeluar = $first_stok + $stock->masuk - $stock->keluar;
+                $row[] = $stokkeluar;
+                $i = 1;
+            } else {
+                $row[] = $stokkeluar + $stock->masuk - $stock->keluar;
+                $stokkeluar = $stokkeluar + $stock->masuk - $stock->keluar;
+            }
+            // $row[] = $stock->saldo ?? 0;
             $row[] = $stock->m_stok_detail_satuan;
             $row[] = number_format($stock->hpp);
             $data[] = $row;
-            }
-        // }
-        
+        }
+        // return $first_stok;
         $output = array("data" => $data);
         return response()->json($output);
     }
