@@ -61,10 +61,6 @@
                                 <table id="tb-cht" class="table table-sm table-bordered table-striped table-vcenter">
                                     <thead>
                                         <th>No</th>
-                                        <th hidden>id</th>
-                                        <th hidden>code</th>
-                                        <th hidden>detail</th>
-                                        <th hidden>produk_id</th>
                                         <th>Tanggal</th>
                                         <th>Supplier</th>
                                         <th>Nama Barang</th>
@@ -111,25 +107,6 @@
                     destroy: true,
                     paging: false,
                     serverside: true,
-                    columnDefs: [{
-                            target: 1,
-                            visible: false,
-                            searchable: false
-                        },
-                        {
-                            target: 2,
-                            visible: false
-                        },
-                        {
-                            target: 3,
-                            visible: false,
-                            searchable: false
-                        },
-                        {
-                            target: 4,
-                            visible: false
-                        }
-                    ],
                     ajax: {
                         url: "/inventori/cht/list",
                         data: {
@@ -138,12 +115,9 @@
                         type: "GET",
                     }
                 });
-
-
             })
             $('#formAction').submit(function(e) {
                 if (!e.isDefaultPrevented()) {
-                    table.columns([1, 2, 3, 4]).visible(true);
                     var dataf = table.$('input, select').serialize() + '&rekap_beli_gudang_code=' + $(
                         '#rekap_beli_gudang_code').val();
                     $.ajax({
@@ -151,14 +125,19 @@
                         type: "POST",
                         data: dataf,
                         success: function(data) {
-                            Codebase.helpers('jq-notify', {
-                                align: 'right', // 'right', 'left', 'center'
-                                from: 'top', // 'top', 'bottom'
-                                type: 'susscess', // 'info', 'success', 'warning', 'danger'
-                                icon: 'fa fa-info me-5', // Icon class
-                                message: 'Berhasil Simpan CHT'
-                            });
-                            window.location.reload();
+                            table.ajax.reload();
+                            $('html, body').animate({
+                                scrollTop: 0
+                            }, 'slow');
+                            setTimeout(function() {
+                                Codebase.helpers('jq-notify', {
+                                    align: 'right', // 'right', 'left', 'center'
+                                    from: 'top', // 'top', 'bottom'
+                                    type: 'success', // 'info', 'success', 'warning', 'danger'
+                                    icon: 'fa fa-info me-5', // Icon class
+                                    message: 'Berhasil Simpan CHT'
+                                });
+                            }, 500); // Delay of 500 milliseconds
                         },
                         error: function() {
                             alert("Tidak dapat menyimpan data!");

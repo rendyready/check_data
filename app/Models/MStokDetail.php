@@ -14,7 +14,6 @@ use Illuminate\Database\Eloquent\Model;
  * 
  * @property int $id
  * @property string $m_stok_detail_id
- * @property string $m_stok_detail_code
  * @property Carbon $m_stok_detail_tgl
  * @property string $m_stok_detail_m_produk_code
  * @property string $m_stok_detail_m_produk_nama
@@ -59,7 +58,6 @@ class MStokDetail extends Model
 
 	protected $fillable = [
 		'm_stok_detail_id',
-		'm_stok_detail_code',
 		'm_stok_detail_tgl',
 		'm_stok_detail_m_produk_code',
 		'm_stok_detail_m_produk_nama',

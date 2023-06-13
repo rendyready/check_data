@@ -85,7 +85,7 @@ class SupplierController extends Controller
                         'm_supplier_rek_nama' => $request->m_supplier_rek_nama,
                         'm_supplier_bank_nama' => $request->m_supplier_bank_nama,
                         'm_supplier_saldo_awal' => $request->m_supplier_saldo_awal,
-                        'm_supplier_created_by' => Auth::id(),
+                        'm_supplier_created_by' => Auth::user()->users_id,
                         'm_supplier_created_at' => Carbon::now(),
                     );
                     DB::table('m_supplier')->insert($data);
@@ -110,7 +110,7 @@ class SupplierController extends Controller
                         'm_supplier_bank_nama' => $request->m_supplier_bank_nama,
                         'm_supplier_saldo_awal' => $request->m_supplier_saldo_awal,
                         'm_supplier_status_sync' => 'send',
-                        'm_supplier_updated_by' => Auth::id(),
+                        'm_supplier_updated_by' => Auth::user()->users_id,
                         'm_supplier_updated_at' => Carbon::now(),
                     );
                     DB::table('m_supplier')->where('m_supplier_code', $request->m_supplier_code)

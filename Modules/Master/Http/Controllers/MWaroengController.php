@@ -82,7 +82,7 @@ class MWaroengController extends Controller
                         'm_w_decimal' => $request->m_w_decimal,
                         'm_w_pembulatan' => $request->m_w_pembulatan,
                         'm_w_currency' => $request->m_w_currency,
-                        'm_w_created_by' => Auth::id(),
+                        'm_w_created_by' => Auth::user()->users_id,
                         'm_w_created_at' => Carbon::now(),
                     );
                     DB::table('m_w')->insert($data);
@@ -102,7 +102,7 @@ class MWaroengController extends Controller
                     'm_w_decimal' => $request->m_w_decimal,
                     'm_w_pembulatan' => $request->m_w_pembulatan,
                     'm_w_status_sync' => 'send',
-                    'm_w_updated_by' => Auth::id(),
+                    'm_w_updated_by' => Auth::user()->users_id,
                     'm_w_updated_at' => Carbon::now(),
                 );
                 DB::table('m_w')->where('m_w_id', $request->m_w_id)

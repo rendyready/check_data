@@ -53,7 +53,7 @@ class TransTipeController extends Controller
                         'm_t_t_profit_in' => $request->m_t_t_profit_in,
                         'm_t_t_profit_out' => $request->m_t_t_profit_out,
                         'm_t_t_group' => $request->m_t_t_group,
-                        'm_t_t_created_by' => Auth::id(),
+                        'm_t_t_created_by' => Auth::user()->users_id,
                         'm_t_t_created_at' => Carbon::now(),
                     );
                     DB::table('m_transaksi_tipe')->insert($data);
@@ -62,7 +62,7 @@ class TransTipeController extends Controller
                         'm_t_t_name' => $request->m_t_t_name,
                         'm_t_t_profit_price' => $request->m_t_t_profit_price,
                         'm_t_t_status_sync' => 'send',
-                        'm_t_t_updated_by' => Auth::id(),
+                        'm_t_t_updated_by' => Auth::user()->users_id,
                         'm_t_t_updated_at' => Carbon::now(),
                     );
                     DB::table('m_transaksi_tipe')->where('m_t_t_id', $request->m_t_t_id)

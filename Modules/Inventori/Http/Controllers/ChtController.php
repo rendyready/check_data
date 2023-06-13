@@ -36,15 +36,14 @@ class ChtController extends Controller
                     ->where('rekap_beli_detail_id', $request->rekap_beli_detail_id[$key])
                     ->update(['rekap_beli_detail_terima_qty' => $cht_qty,
                         'rekap_beli_detail_status_sync' => 'edit']);
-                
+
                 $get_stok = $this->get_last_stok($request->rekap_beli_gudang_code, $request->rekap_beli_detail_m_produk_code[$key]);
                 $saldo_terakhir = $get_stok->m_stok_saldo;
                 $hpp_terakhir = $get_stok->m_stok_hpp;
                 $data_masuk = $cht_qty;
                 $hpp_now = ($request->rekap_beli_detail_subtot[$key] + ($saldo_terakhir * $hpp_terakhir)) / ($saldo_terakhir + $data_masuk);
                 $data = array(
-                    'm_stok_detail_id' => $this->getMasterId('m_stok_detail'),
-                    'm_stok_detail_code' => $this->getNextId('m_stok_detail', $waroeng_id),
+                    'm_stok_detail_id' => $this->getNextId('m_stok_detail', $waroeng_id),
                     'm_stok_detail_m_produk_code' => $request->rekap_beli_detail_m_produk_code[$key],
                     'm_stok_detail_tgl' => Carbon::now(),
                     'm_stok_detail_m_produk_nama' => $get_stok->m_stok_produk_nama,
@@ -55,7 +54,7 @@ class ChtController extends Controller
                     'm_stok_detail_hpp' => $hpp_now,
                     'm_stok_detail_catatan' => 'pembelian ' . $request->rekap_beli_detail_rekap_beli_code[$key],
                     'm_stok_detail_gudang_code' => $request->rekap_beli_gudang_code,
-                    'm_stok_detail_created_by' => Auth::id(),
+                    'm_stok_detail_created_by' => Auth::user()->users_id,
                     'm_stok_detail_created_at' => Carbon::now(),
                 );
                 DB::table('m_stok_detail')->insert($data);
@@ -97,11 +96,10 @@ class ChtController extends Controller
         foreach ($cht as $item) {
             $row = array();
             $no++;
-            $row[] = $no;
-            $row[] = '<input type="text" class="form-control hide form-control-sm" name="rekap_beli_detail_id[]" id="rekap_beli_detail_id" value="' . $item->rekap_beli_detail_id . '" ></td>';
-            $row[] = '<input type="text" hide class="form-control form-control-sm" name="rekap_beli_detail_rekap_beli_code[]" id="rekap_beli_detail_rekap_beli_code" value="' . $item->rekap_beli_detail_rekap_beli_code . '" >';
-            $row[] = '<input type="text" hide class="form-control form-control-sm" name="rekap_beli_detail_m_produk_code[]" id="rekap_beli_detail_m_produk_code" value="' . $item->rekap_beli_detail_m_produk_code . '" >';
-            $row[] = '<input type="text" hide class="form-control form-control-sm" name="rekap_beli_detail_subtot[]" id="rekap_beli_detail_subtot" value="' . $item->rekap_beli_detail_subtot . '" >';
+            $row[] = $no . '<input type="hidden" class="form-control form-control-sm" name="rekap_beli_detail_id[]" id="rekap_beli_detail_id" value="' . $item->rekap_beli_detail_id . '" > ' .
+            '<input type="hidden"  class="form-control form-control-sm" name="rekap_beli_detail_rekap_beli_code[]" id="rekap_beli_detail_rekap_beli_code" value="' . $item->rekap_beli_detail_rekap_beli_code . '" >' .
+            '<input type="hidden"  class="form-control form-control-sm" name="rekap_beli_detail_m_produk_code[]" id="rekap_beli_detail_m_produk_code" value="' . $item->rekap_beli_detail_m_produk_code . '" >' .
+            '<input type="hidden"  class="form-control form-control-sm" name="rekap_beli_detail_subtot[]" id="rekap_beli_detail_subtot" value="' . $item->rekap_beli_detail_subtot . '" >';
             $row[] = tgl_indo($item->rekap_beli_tgl);
             $row[] = $item->rekap_beli_supplier_nama;
             $row[] = $item->rekap_beli_detail_m_produk_nama;

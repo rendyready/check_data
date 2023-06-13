@@ -54,7 +54,7 @@ class MAreaController extends Controller
                             'm_area_id' => $this->getMasterId('m_area'),
                             'm_area_nama'    => Str::lower(trim($request->m_area_nama)),
                             'm_area_code'    => $DBCount,
-                            'm_area_created_by' => Auth::id(),
+                            'm_area_created_by' => Auth::user()->users_id,
                             'm_area_created_at' => Carbon::now(),
                         ]);
                         return response(['Messages' => 'Berhasil Tambah Area !','type' => 'success']);
@@ -69,7 +69,7 @@ class MAreaController extends Controller
                 $data = array(
                     'm_area_nama'    => Str::lower($trim),
                     'm_area_status_sync' => 'send',
-                    'm_area_updated_by' => Auth::id(),
+                    'm_area_updated_by' => Auth::user()->users_id,
                     'm_area_updated_at' => Carbon::now(),
                 );
                 if (!empty($validate)) {
@@ -87,7 +87,7 @@ class MAreaController extends Controller
                 if ($RawDelete == null) {
                     $data = array(
                         'm_area_deleted_at' => Carbon::now(),
-                        'm_area_deleted_by' => Auth::id()
+                        'm_area_deleted_by' => Auth::user()->users_id
                     );
                     DB::table('m_area')
                         ->where('m_area_id', $request->id)

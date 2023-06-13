@@ -46,7 +46,7 @@ class MejaController extends Controller
                 "m_meja_m_meja_jenis_id" => $request->jenis_meja,
                 "m_meja_m_w_id" => $request->waroeng,
                 "m_meja_type" => $request->m_meja_type,
-                "m_meja_created_by" => Auth::id(),
+                "m_meja_created_by" => Auth::user()->users_id,
                 "m_meja_created_at" => Carbon::now(),
             ]);
         }
@@ -60,7 +60,7 @@ class MejaController extends Controller
                 "m_meja_m_meja_jenis_id" => $request->jenis_meja,
                 "m_meja_m_w_id" => $request->waroeng,
                 "m_meja_status_sync" =>'send',
-                "m_meja_updated_by" => Auth::id(),
+                "m_meja_updated_by" => Auth::user()->users_id,
                 "m_meja_updated_at" => Carbon::now(),
             ]);
         return Redirect::route('meja.index');

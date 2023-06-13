@@ -36,7 +36,7 @@ class SubJenisMController extends Controller
                         'm_sub_jenis_produk_id' => $this->getMasterId('m_sub_jenis_produk'),
                         'm_sub_jenis_produk_nama'    =>  Str::lower($request->m_sub_jenis_produk_nama),
                         'm_sub_jenis_produk_m_jenis_produk_id' => $request->m_jenis_produk_id,
-                        'm_sub_jenis_produk_created_by' => Auth::id(),
+                        'm_sub_jenis_produk_created_by' => Auth::user()->users_id,
                         'm_sub_jenis_produk_created_at' => Carbon::now(),
                     );
                     DB::table('m_sub_jenis_produk')->insert($data);
@@ -47,7 +47,7 @@ class SubJenisMController extends Controller
                     'm_sub_jenis_produk_nama'    =>    $request->m_sub_jenis_produk_nama,
                     'm_sub_jenis_produk_m_jenis_produk_id' => $request->m_sub_jenis_produk_m_jenis_produk_id,
                     'm_sub_jenis_produk_status_sync' => 'send',
-                    'm_sub_jenis_produk_updated_by' => Auth::id(),
+                    'm_sub_jenis_produk_updated_by' => Auth::user()->users_id,
                     'm_sub_jenis_produk_updated_at' => Carbon::now(),
                 );
                 DB::table('m_sub_jenis_produk', 'm_jenis_produk')->where('m_sub_jenis_produk_m_jenis_produk_id', $request->id)

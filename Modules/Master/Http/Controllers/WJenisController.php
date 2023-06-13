@@ -34,7 +34,7 @@ class WJenisController extends Controller
                     $data = array(
                         'm_w_jenis_id' => $this->getMasterId('m_w_jenis'),
                         'm_w_jenis_nama'    =>  $DBjenisNama,
-                        'm_w_jenis_created_by' => Auth::id(),
+                        'm_w_jenis_created_by' => Auth::user()->users_id,
                         'm_w_jenis_created_at' => Carbon::now(),
                     );
                     DB::table('m_w_jenis')->insert($data);
@@ -59,7 +59,7 @@ class WJenisController extends Controller
                     $data = array(
                         'm_w_jenis_nama' => $nameDatap,
                         'm_w_jenis_status_sync' => 'send',
-                        'm_w_jenis_updated_by' => Auth::id(),
+                        'm_w_jenis_updated_by' => Auth::user()->users_id,
                         'm_w_jenis_updated_at' => Carbon::now(),
                     );
                     DB::table('m_w_jenis')->where('m_w_jenis_id', $request->m_w_jenis_id)
@@ -74,7 +74,7 @@ class WJenisController extends Controller
                 if ($delCheck == null) {
                     $data = array(
                         'm_w_jenis_deleted_at' => Carbon::now(),
-                        'm_w_jenis_deleted_by' => Auth::id(),
+                        'm_w_jenis_deleted_by' => Auth::user()->users_id,
                     );
 
                     DB::table('m_w_jenis')

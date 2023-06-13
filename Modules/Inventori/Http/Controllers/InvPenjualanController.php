@@ -19,7 +19,7 @@ class InvPenjualanController extends Controller
         $data = new \stdClass();
         
         $get_max_id = DB::table('rekap_inv_penjualan')->orderBy('rekap_inv_penjualan_id','desc')->first();
-        $user = Auth::id();
+        $user = Auth::user()->users_id;
         $data->code = (empty($get_max_id->rekap_inv_penjualan_id)) ? $urut = "20000001". $user : $urut = substr($get_max_id->rekap_inv_penjualan_code,0,-1)+'1'. $user; 
         return view('inventori::form_penjualan_umum',compact('data'));
     }
@@ -44,7 +44,7 @@ class InvPenjualanController extends Controller
             'rekap_inv_penjualan_tersisa' => $request->rekap_inv_penjualan_tersisa,
             'rekap_inv_penjualan_tot_nom' => $request->rekap_inv_penjualan_tot_nom,
             'rekap_inv_penjualan_created_at' => Carbon::now(),
-            'rekap_inv_penjualan_created_by' => Auth::id()
+            'rekap_inv_penjualan_created_by' => Auth::user()->users_id
 
         );
 
@@ -65,7 +65,7 @@ class InvPenjualanController extends Controller
                 'rekap_inv_penjualan_detail_discrp' => $request->rekap_inv_penjualan_detail_discrp[$key],
                 'rekap_inv_penjualan_detail_subtot' => $request->rekap_inv_penjualan_detail_subtot[$key],
                 'rekap_inv_penjualan_detail_catatan' => $request->rekap_inv_penjualan_detail_catatan[$key],
-                'rekap_inv_penjualan_detail_created_by' => Auth::id(),
+                'rekap_inv_penjualan_detail_created_by' => Auth::user()->users_id,
                 'rekap_inv_penjualan_detail_created_at' => Carbon::now()
             );
             DB::table('rekap_inv_penjualan_detail')->insert($data);

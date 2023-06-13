@@ -128,7 +128,7 @@ class JurnalBankController extends Controller
                     'rekap_jurnal_bank_user' => Auth::user()->name,
                     'rekap_jurnal_bank_status_sync' => 'send',
                     'rekap_jurnal_bank_no_bukti' => $code,
-                    'rekap_jurnal_bank_created_by' => Auth::id(),
+                    'rekap_jurnal_bank_created_by' => Auth::user()->users_id,
                     'rekap_jurnal_bank_created_at' => Carbon::now(),
                 );
 

@@ -45,8 +45,7 @@ class LearnController extends Controller
                             'm_stok_updated_at' => Carbon::now(),
                         ]);
                     $stok_detail = [
-                        'm_stok_detail_id' => $this->getMasterId('m_stok_detail'),
-                        'm_stok_detail_code' => $this->getNextId('m_stok_detail', $get_trans_m_w),
+                        'm_stok_detail_id' => $this->getNextId('m_stok_detail', $get_trans_m_w),
                         'm_stok_detail_tgl' => Carbon::now(),
                         'm_stok_detail_m_produk_code' => $val->r_t_detail_m_produk_code,
                         'm_stok_detail_m_produk_nama' => $get_stok->m_stok_produk_nama,
@@ -98,8 +97,7 @@ class LearnController extends Controller
                                     'm_stok_updated_at' => Carbon::now(),
                                 ]);
                             $stok_detail = [
-                                'm_stok_detail_id' => $this->getMasterId('m_stok_detail'),
-                                'm_stok_detail_code' => $this->getNextId('m_stok_detail', $get_trans_m_w),
+                                'm_stok_detail_id' => $this->getNextId('m_stok_detail', $get_trans_m_w),
                                 'm_stok_detail_tgl' => Carbon::now(),
                                 'm_stok_detail_m_produk_code' => $bb,
                                 'm_stok_detail_m_produk_nama' => $get_stok->m_stok_produk_nama,

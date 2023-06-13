@@ -120,7 +120,7 @@ class RphController extends Controller
                             'rph_detail_bb_m_produk_nama' => $value->m_resep_detail_m_produk_nama,
                             'rph_detail_bb_qty' => $bb_qty,
                             'rph_detail_bb_created_at' => Carbon::now(),
-                            'rph_detail_bb_created_by' => Auth::id(),
+                            'rph_detail_bb_created_by' => Auth::user()->users_id,
                         );
                         DB::table('rph_detail_bb')->insert($detail_resep);
                     }
@@ -242,7 +242,7 @@ class RphController extends Controller
                             'rph_detail_bb_m_produk_nama' => $bb_nama,
                             'rph_detail_bb_qty' => $bb_qty,
                             'rph_detail_bb_created_at' => Carbon::now(),
-                            'rph_detail_bb_created_by' => Auth::id(),
+                            'rph_detail_bb_created_by' => Auth::user()->users_id,
                         );
                         DB::table('rph_detail_bb')->updateOrInsert(['rph_detail_bb_rph_detail_menu_id' => $id,
                             'rph_detail_bb_m_produk_code' => $bb_code],
@@ -401,10 +401,16 @@ class RphController extends Controller
     }
     public function order_produksi(Request $request)
     {
-        DB::table('rph')->where('rph_code', $request->rph_code)
-            ->update(['rph_order_status' => 'tutup',
-                'rph_updated_by' => Auth::user()->users_id]);
-        $produksi = $this->belanja_detail_lengkap($request->rph_code);
-
+        // DB::table('rph')->where('rph_code', $request->rph_code)
+        //     ->update(['rph_order_status' => 'tutup',
+        //         'rph_updated_by' => Auth::user()->users_id]);
+        $data = $this->belanja_detail_lengkap($request->rph_code);
+        $lokasi = ['produksi','gudang'];
+        foreach ($lokasi as $key) {
+            foreach ($data as $val => $value) {
+                
+            }
+        }
+        
     }
 }

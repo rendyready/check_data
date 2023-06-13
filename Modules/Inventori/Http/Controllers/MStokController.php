@@ -199,8 +199,7 @@ class MStokController extends Controller
                     DB::table('rekap_so_detail')->insert($detail);
                         $saldo_terakhir = $produk->m_stok_saldo;
                         $detail_so = array(
-                            'm_stok_detail_id' => $this->getMasterId('m_stok_detail'),
-                            'm_stok_detail_code' => $this->getNextId('m_stok_detail', $waroeng_id),
+                            'm_stok_detail_id' => $this->getNextId('m_stok_detail', $waroeng_id),
                             'm_stok_detail_m_produk_code' => $detailData['rekap_so_detail_m_produk_code'],
                             'm_stok_detail_tgl' => Carbon::now(),
                             'm_stok_detail_m_produk_nama' => $produk->m_stok_produk_nama,
@@ -212,7 +211,7 @@ class MStokController extends Controller
                             'm_stok_detail_catatan' => 'so ' . $so_code,
                             'm_stok_detail_gudang_code' => $request->rekap_so_m_gudang_code,
                             'm_stok_detail_status_sync' => 'send',
-                            'm_stok_detail_created_by' => Auth::id(),
+                            'm_stok_detail_created_by' => Auth::user()->users_id,
                             'm_stok_detail_created_at' => Carbon::now(),
                         );
                         DB::table('m_stok_detail')->insert($detail_so);
@@ -223,7 +222,7 @@ class MStokController extends Controller
                                 'm_stok_saldo' => $qty_riil,
                                 'm_stok_status_sync' => 'send',
                                 'm_stok_updated_at' => Carbon::now(),
-                                'm_stok_updated_by' => Auth::id(),
+                                'm_stok_updated_by' => Auth::user()->users_id,
                             ]);
                     
                 }

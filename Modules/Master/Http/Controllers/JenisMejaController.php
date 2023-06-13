@@ -46,7 +46,7 @@ class JenisMejaController extends Controller
                         'm_meja_jenis_nama'  =>  $m_meja_jenis_nama,
                         'm_meja_jenis_space' =>  $request->m_meja_jenis_space,
                         'm_meja_jenis_status' => strtolower($request->m_meja_jenis_status),
-                        'm_meja_jenis_created_by' => Auth::id(),
+                        'm_meja_jenis_created_by' => Auth::user()->users_id,
                         'm_meja_jenis_created_at' => Carbon::now(),
                     );
                     DB::table('m_meja_jenis')->insert($data);
@@ -56,7 +56,7 @@ class JenisMejaController extends Controller
                         'm_meja_jenis_space' =>    $request->m_meja_jenis_space,
                         'm_meja_jenis_status' =>    strtolower($request->m_meja_jenis_status),
                         'm_meja_jenis_status_sync' => 'send',
-                        'm_meja_jenis_updated_by' => Auth::id(),
+                        'm_meja_jenis_updated_by' => Auth::user()->users_id,
                         'm_meja_jenis_updated_at' => Carbon::now(),
                     );
                     DB::table('m_meja_jenis')->where('m_meja_jenis_id', $request->m_meja_jenis_id)

@@ -37,7 +37,7 @@ class RelasiKatMenuController extends Controller
     {   $dt = array( "config_sub_jenis_produk_id" => $this->getMasterId('config_sub_jenis_produk'),
         "config_sub_jenis_produk_m_produk_id" => $request->config_sub_jenis_produk_m_produk_id,
         "config_sub_jenis_produk_m_sub_jenis_produk_id" => $request->config_sub_jenis_produk_m_kategori_id,
-        "config_sub_jenis_produk_created_by" => Auth::id(),
+        "config_sub_jenis_produk_created_by" => Auth::user()->users_id,
         "config_sub_jenis_produk_created_at" => Carbon::now()
         );
         //don't need validate
@@ -69,7 +69,7 @@ class RelasiKatMenuController extends Controller
             "config_sub_jenis_produk_m_produk_id" => $request->config_sub_jenis_produk_m_produk_id,
             "config_sub_jenis_produk_m_sub_jenis_produk_id" => $request->config_sub_jenis_produk_m_kategori_id,
             "config_sub_jenis_produk_status_sync" => "send",
-            "config_sub_jenis_produk_updated_by" => Auth::id(),
+            "config_sub_jenis_produk_updated_by" => Auth::user()->users_id,
             "config_sub_jenis_produk_updated_at" => Carbon::now(),
         ]);
         return Redirect::route('m_produk_relasi.index');

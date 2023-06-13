@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('rph_detail_belanja', function (Blueprint $table) {
             $table->id();
-            $table->string('rph_detail_belanja_id');
+            $table->string('rph_detail_belanja_id')->unique();
             $table->string('rph_detail_belanja_rph_code');
             $table->string('rph_detail_belanja_m_produk_code');
             $table->string('rph_detail_belanja_m_produk_nama');
@@ -37,7 +37,7 @@ return new class extends Migration
         Schema::dropIfExists('rph');
         Schema::create('rph', function (Blueprint $table) {
             $table->id('id');
-            $table->string('rph_code');
+            $table->string('rph_code')->unique();
             $table->date('rph_tgl');
             $table->string('rph_m_w_id');
             $table->string('rph_m_w_nama');

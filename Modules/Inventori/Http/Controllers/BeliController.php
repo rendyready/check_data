@@ -18,7 +18,7 @@ class BeliController extends Controller
     public function index()
     {
         $data = new \stdClass();
-        $user = Auth::id();
+        $user = Auth::user()->users_id;
         $waroeng_id = Auth::user()->waroeng_id;
         $data->waroeng_nama = DB::table('m_w')->select('m_w_nama')->where('m_w_id', $waroeng_id)->first();
         $data->tgl_now = Carbon::now()->format('Y-m-d');
@@ -82,7 +82,7 @@ class BeliController extends Controller
             'rekap_beli_tot_nom' => convertfloat($request->rekap_beli_tot_nom),
             'rekap_beli_ket' => 'pembelian mandiri',
             'rekap_beli_created_at' => Carbon::now(),
-            'rekap_beli_created_by' => Auth::id(),
+            'rekap_beli_created_by' => Auth::user()->users_id,
         );
 
         $insert = DB::table('rekap_beli')->insert($rekap_beli);
@@ -105,12 +105,12 @@ class BeliController extends Controller
                 'rekap_beli_detail_discrp' => convertfloat($request->rekap_beli_detail_discrp[$key]),
                 'rekap_beli_detail_subtot' => convertfloat($request->rekap_beli_detail_subtot[$key]),
                 'rekap_beli_detail_m_w_id' => Auth::user()->waroeng_id,
-                'rekap_beli_detail_created_by' => Auth::id(),
+                'rekap_beli_detail_created_by' => Auth::user()->users_id,
                 'rekap_beli_detail_created_at' => Carbon::now(),
             );
             DB::table('rekap_beli_detail')->insert($data);
         }
-        return redirect()->back()->with('success', 'your message,here');
+        return response()->json(['success' => 'Pembelian Berhasil']);
     }
     public function select(Request $request)
     {

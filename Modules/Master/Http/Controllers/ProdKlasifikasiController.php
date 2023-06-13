@@ -33,7 +33,7 @@ class ProdKlasifikasiController extends Controller
                         'm_klasifikasi_produk_prefix' => Str::lower($request->m_klasifikasi_produk_prefix),
                         'm_klasifikasi_produk_nama'    =>   Str::lower($request->m_klasifikasi_produk_nama),
                         'm_klasifikasi_produk_last_id' => '1',
-                        'm_klasifikasi_produk_created_by' => Auth::id(),
+                        'm_klasifikasi_produk_created_by' => Auth::user()->users_id,
                         'm_klasifikasi_produk_created_at' => Carbon::now(),
                     );
                     DB::table('m_klasifikasi_produk')->insert($data);
@@ -43,7 +43,7 @@ class ProdKlasifikasiController extends Controller
                 $data = array(
                     'm_klasifikasi_produk_nama'    =>    $request->m_klasifikasi_produk_nama,
                     'm_klasifikasi_produk_status_sync' => 'send',
-                    'm_klasifikasi_produk_updated_by' => Auth::id(),
+                    'm_klasifikasi_produk_updated_by' => Auth::user()->users_id,
                     'm_klasifikasi_produk_updated_at' => Carbon::now(),
                 );
                 DB::table('m_klasifikasi_produk')->where('m_klasifikasi_produk_id', $request->id)

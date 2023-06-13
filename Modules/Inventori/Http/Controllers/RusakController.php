@@ -16,7 +16,7 @@ class RusakController extends Controller
      */
     public function index()
     {   $data = new \stdClass();
-        $user = Auth::id();
+        $user = Auth::user()->users_id;
         $w_id = Auth::user()->waroeng_id;
         $waroeng_nama = DB::table('m_w')->select('m_w_nama')->where('m_w_id',$w_id)->first();
         $data->code = $this->getNextId('rekap_rusak',$w_id); 
@@ -40,7 +40,7 @@ class RusakController extends Controller
             'rekap_rusak_m_w_id' => $waroeng_id,
             'rekap_rusak_m_w_nama' => $this->get_m_w_nama(),
             'rekap_rusak_created_at' => Carbon::now(),
-            'rekap_rusak_created_by' => Auth::id()
+            'rekap_rusak_created_by' => Auth::user()->users_id
         );
 
         $insert = DB::table('rekap_rusak')->insert($rekap_rusak);
@@ -58,7 +58,7 @@ class RusakController extends Controller
                 'rekap_rusak_detail_hpp' => $request->rekap_rusak_detail_hpp[$key],
                 'rekap_rusak_detail_sub_total' => $request->rekap_rusak_detail_sub_total[$key],
                 'rekap_rusak_detail_catatan' => $request->rekap_rusak_detail_catatan[$key],
-                'rekap_rusak_detail_created_by' => Auth::id(),
+                'rekap_rusak_detail_created_by' => Auth::user()->users_id,
                 'rekap_rusak_detail_created_at' => Carbon::now()
             );
             DB::table('rekap_rusak_detail')->insert($data);
@@ -77,8 +77,7 @@ class RusakController extends Controller
             ->update($data2);
 
             $input_detail = array(
-                'm_stok_detail_id' => $this->getMasterId('m_stok_detail'),
-                'm_stok_detail_code' => $this->getNextId('m_stok_detail',$waroeng_id),
+                'm_stok_detail_id' => $this->getNextId('m_stok_detail',$waroeng_id),
                 'm_stok_detail_m_produk_code' => $request->rekap_rusak_detail_m_produk_id[$key],
                 'm_stok_detail_tgl'=> Carbon::now(),
                 'm_stok_detail_m_produk_nama' => $produk->m_produk_nama,
@@ -89,7 +88,7 @@ class RusakController extends Controller
                 'm_stok_detail_hpp' => $data_stok->m_stok_hpp,
                 'm_stok_detail_catatan' => 'rusak '.$request->rekap_rusak_code,
                 'm_stok_detail_gudang_code' => $request->m_gudang_code,
-                'm_stok_detail_created_by' => Auth::id(),
+                'm_stok_detail_created_by' => Auth::user()->users_id,
                 'm_stok_detail_created_at' => Carbon::now()
             );
             DB::table('m_stok_detail')->insert($input_detail);

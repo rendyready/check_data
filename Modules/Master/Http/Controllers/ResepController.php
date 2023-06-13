@@ -42,7 +42,7 @@ class ResepController extends Controller
             "m_resep_m_produk_nama" => $produk->m_produk_nama,
             "m_resep_keterangan" => $request->m_resep_keterangan,
             "m_resep_status" => $request->m_resep_status,
-            "m_resep_created_by" => Auth::id(),
+            "m_resep_created_by" => Auth::user()->users_id,
             "m_resep_created_at" => Carbon::now(),
         ]);
         return redirect()->back();
@@ -74,7 +74,7 @@ class ResepController extends Controller
                 "m_resep_keterangan" => $request->m_resep_keterangan,
                 "m_resep_status" => $request->m_resep_status,
                 'm_resep_status_sync' => 'send',
-                "m_resep_updated_by" => Auth::id(),
+                "m_resep_updated_by" => Auth::user()->users_id,
                 "m_resep_updated_at" => Carbon::now(),
             ]);
         return Redirect::route('m_resep.index');
@@ -115,7 +115,7 @@ class ResepController extends Controller
                     'm_resep_detail_standar_porsi' => $request->m_resep_detail_standar_porsi,
                     'm_resep_detail_satuan' => $kode_satuan->m_satuan_kode,
                     'm_resep_detail_ket' => $request->m_resep_detail_ket,
-                    'm_resep_detail_created_by' => Auth::id(),
+                    'm_resep_detail_created_by' => Auth::user()->users_id,
                     'm_resep_detail_created_at' => Carbon::now(),
                 );
                 DB::table('m_resep_detail')->insert($data);
@@ -130,14 +130,14 @@ class ResepController extends Controller
                     'm_resep_detail_standar_porsi' => $request->m_resep_detail_standar_porsi,
                     'm_resep_detail_ket' => $request->m_resep_detail_ket,
                     'm_resep_detail_status_sync' => 'send',
-                    'm_resep_detail_updated_by' => Auth::id(),
+                    'm_resep_detail_updated_by' => Auth::user()->users_id,
                     'm_resep_detail_updated_at' => Carbon::now(),
                 );
                 DB::table('m_resep_detail')->where('m_resep_detail_id', $request->m_resep_detail_id)
                     ->update($data);
                 $resep_code = DB::table('m_resep_detail')->where('m_resep_detail_id',$request->m_resep_detail_id)->first();
                 DB::table('m_resep')->where('m_resep_code')->where('m_resep_code',$resep_code->m_resep_detail_m_resep_code)
-                ->update(['m_resep_updated_by' => Auth::id(),'m_resep_updated_at' => Carbon::now()]);
+                ->update(['m_resep_updated_by' => Auth::user()->users_id,'m_resep_updated_at' => Carbon::now()]);
             }
             return response()->json($request);
         }

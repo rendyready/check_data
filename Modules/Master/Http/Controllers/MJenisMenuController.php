@@ -51,7 +51,7 @@ class MJenisMenuController extends Controller
                         'm_jenis_produk_nama' => Str::lower($request->m_jenis_produk_nama),
                         'm_jenis_produk_odcr55' => $request->m_jenis_produk_odcr55,
                         'm_jenis_produk_urut' => $count + 1,
-                        'm_jenis_produk_created_by' => Auth::id(),
+                        'm_jenis_produk_created_by' => Auth::user()->users_id,
                         'm_jenis_produk_created_at' => Carbon::now(),
                     );
                     DB::table('m_jenis_produk')->insert($data);
@@ -62,7 +62,7 @@ class MJenisMenuController extends Controller
                     'm_jenis_produk_nama' => $request->m_jenis_produk_nama,
                     'm_jenis_produk_odcr55' => $request->m_jenis_produk_odcr55,
                     'm_jenis_produk_status_sync' => 'send',
-                    'm_jenis_produk_updated_by' => Auth::id(),
+                    'm_jenis_produk_updated_by' => Auth::user()->users_id,
                     'm_jenis_produk_updated_at' => Carbon::now(),
                 );
                 DB::table('m_jenis_produk')->where('m_jenis_produk_id', $request->id)

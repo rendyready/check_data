@@ -35,7 +35,7 @@ class SCController extends Controller
                     $data = array(
                         'm_sc_id' => $this->getMasterId('m_sc'),
                         'm_sc_value'    =>    $request->m_sc_value,
-                        'm_sc_created_by' => Auth::id(),
+                        'm_sc_created_by' => Auth::user()->users_id,
                         'm_sc_created_at' => Carbon::now(),
                     );
                     DB::table('m_sc')->insert($data);
@@ -43,7 +43,7 @@ class SCController extends Controller
                     $data = array(
                         'm_sc_value'    =>    $request->m_sc_value,
                         'm_sc_status_sync' => 'send',
-                        'm_sc_updated_by' => Auth::id(),
+                        'm_sc_updated_by' => Auth::user()->users_id,
                         'm_sc_updated_at' => Carbon::now(),
                     );
                     DB::table('m_sc')->where('id', $request->id)
