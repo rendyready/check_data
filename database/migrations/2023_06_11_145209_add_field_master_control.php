@@ -15,7 +15,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('m_area', function (Blueprint $table) {
-            $table->text('m_area_client_target')->default(DB::raw('list_waroeng()'));
+            // $table->text('m_area_client_target')->default(DB::raw('list_waroeng()'));
         });
     }
 

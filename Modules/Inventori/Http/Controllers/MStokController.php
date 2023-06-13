@@ -132,10 +132,10 @@ class MStokController extends Controller
             $no++;
             $row[] = $no;
             $row[] = tgl_indo($value->rekap_so_tgl);
-            $row[] = ucwords($value->name);
             $row[] = $value->m_klasifikasi_produk_nama;
+            $row[] = ucwords($value->name);
             $row[] = tgl_waktuid($value->rekap_so_created_at);
-            $row[] = '<button class="btn btn-warning"><i class="fa fa-eye">Detail</i></button>';
+            $row[] = '<button class="btn detail btn-warning" value="'.$value->rekap_so_id.'"><i class="fa fa-eye">Detail</i></button>';
             $data[] = $row;
         }
         $output = array('data' => $data);
@@ -159,75 +159,123 @@ class MStokController extends Controller
         $data->kat_id = $kat_id;
         return view('inventori::form_input_so_detail', compact('data'));
     }
+
     public function so_simpan(Request $request)
     {
         $waroeng_id = Auth::user()->waroeng_id;
+        $user_id = Auth::user()->users_id;
         $so_code = $this->getNextId('rekap_so', $waroeng_id);
-        $so_nota = array(
-            'rekap_so_code' => $so_code,
+        $so_nota = [
+            'rekap_so_id' => $so_code,
             'rekap_so_tgl' => tgl_indo_to_en($request->rekap_so_tgl),
             'rekap_so_m_klasifikasi_produk_id' => $request->rekap_so_m_klasifikasi_produk_id,
             'rekap_so_m_gudang_code' => $request->rekap_so_m_gudang_code,
             'rekap_so_m_w_code' => $request->rekap_so_m_w_code,
             'rekap_so_m_w_nama' => strtolower($request->rekap_so_m_w_nama),
-            'rekap_so_created_by' => Auth::user()->users_id,
+            'rekap_so_created_by' => $user_id,
             'rekap_so_created_at' => Carbon::now(),
-        );
-        DB::table('rekap_so')->insert($so_nota);
-    
+        ];
+
+        $produkCodes = [];
+        $rekap_so_detail = [];
+        $m_stok_detail = [];
+        $m_stok = [];
+
         foreach ($request->rekap_so_detail as $detailData) {
             $qty_riil = $detailData['rekap_so_detail_qty_riil'] ?? null;
+
             if (!is_null($qty_riil)) {
-               $produk = DB::table('m_stok')
-                    ->where('m_stok_m_produk_code', $detailData['rekap_so_detail_m_produk_code'])
-                    ->where('m_stok_gudang_code', $request->rekap_so_m_gudang_code)
-                    ->first();
-    
-                if (!is_null($produk)) {
-                    $detail = array(
-                        'rekap_so_detail_id' => $this->getNextId('rekap_so_detail', $waroeng_id),
-                        'rekap_so_detail_m_gudang_code' => $request->rekap_so_m_gudang_code,
-                        'rekap_so_detail_m_produk_code' => $detailData['rekap_so_detail_m_produk_code'],
-                        'rekap_so_detail_m_produk_nama' => $produk->m_stok_produk_nama,
-                        'rekap_so_detail_satuan' => $detailData['rekap_so_detail_satuan'],
-                        'rekap_so_detail_qty' => $detailData['rekap_so_detail_qty'],
-                        'rekap_so_detail_qty_riil' => $qty_riil,
-                        'rekap_so_detail_created_by' => Auth::user()->users_id,
-                        'rekap_so_detail_updated_at' => Carbon::now(),
-                    );
-    
-                    DB::table('rekap_so_detail')->insert($detail);
-                        $saldo_terakhir = $produk->m_stok_saldo;
-                        $detail_so = array(
-                            'm_stok_detail_id' => $this->getNextId('m_stok_detail', $waroeng_id),
-                            'm_stok_detail_m_produk_code' => $detailData['rekap_so_detail_m_produk_code'],
-                            'm_stok_detail_tgl' => Carbon::now(),
-                            'm_stok_detail_m_produk_nama' => $produk->m_stok_produk_nama,
-                            'm_stok_detail_satuan_id' => $produk->m_stok_satuan_id,
-                            'm_stok_detail_satuan' => $produk->m_stok_satuan,
-                            'm_stok_detail_so' => $qty_riil,
-                            'm_stok_detail_saldo' => $saldo_terakhir,
-                            'm_stok_detail_hpp' => $produk->m_stok_hpp,
-                            'm_stok_detail_catatan' => 'so ' . $so_code,
-                            'm_stok_detail_gudang_code' => $request->rekap_so_m_gudang_code,
-                            'm_stok_detail_status_sync' => 'send',
-                            'm_stok_detail_created_by' => Auth::user()->users_id,
-                            'm_stok_detail_created_at' => Carbon::now(),
-                        );
-                        DB::table('m_stok_detail')->insert($detail_so);
-                        DB::table('m_stok')
-                            ->where('m_stok_gudang_code', $request->rekap_so_m_gudang_code)
-                            ->where('m_stok_m_produk_code', $detailData['rekap_so_detail_m_produk_code'])
-                            ->update([
-                                'm_stok_saldo' => $qty_riil,
-                                'm_stok_status_sync' => 'send',
-                                'm_stok_updated_at' => Carbon::now(),
-                                'm_stok_updated_by' => Auth::user()->users_id,
-                            ]);
-                    
-                }
+                $qty_so  = string_num_tofloat($qty_riil);
+                $produkCodes[] = $detailData['rekap_so_detail_m_produk_code'];
+
+                $detail = [
+                    'rekap_so_detail_id' => $this->getNextId('rekap_so_detail', $waroeng_id),
+                    'rekap_so_detail_rekap_so_id' => $so_code,
+                    'rekap_so_detail_m_gudang_code' => $request->rekap_so_m_gudang_code,
+                    'rekap_so_detail_m_produk_code' => $detailData['rekap_so_detail_m_produk_code'],
+                    'rekap_so_detail_satuan' => $detailData['rekap_so_detail_satuan'],
+                    'rekap_so_detail_qty' => $detailData['rekap_so_detail_qty'],
+                    'rekap_so_detail_qty_riil' => $qty_so,
+                    'rekap_so_detail_created_at' => Carbon::now(),
+                    'rekap_so_detail_created_by' => $user_id,
+                ];
+
+                $rekap_so_detail[] = $detail;
+
+                $saldo_terakhir = null; // Inisialisasi saldo_terakhir
+
+                $detail_so = [
+                    'm_stok_detail_id' => $this->getNextId('m_stok_detail', $waroeng_id),
+                    'm_stok_detail_m_produk_code' => $detailData['rekap_so_detail_m_produk_code'],
+                    'm_stok_detail_tgl' => Carbon::now(),
+                    'm_stok_detail_satuan' => $detailData['rekap_so_detail_satuan'], // Ubah menjadi 'satuan' jika diperlukan
+                    'm_stok_detail_so' => $qty_so,
+                    'm_stok_detail_catatan' => 'so ' . $so_code,
+                    'm_stok_detail_gudang_code' => $request->rekap_so_m_gudang_code,
+                    'm_stok_detail_status_sync' => 'send',
+                    'm_stok_detail_created_by' => $user_id,
+                    'm_stok_detail_created_at' => Carbon::now(),
+                ];
+
+                $m_stok_detail[] = $detail_so;
             }
         }
+
+        // Mengambil data produk sekali
+        $produks = DB::table('m_stok')
+            ->whereIn('m_stok_m_produk_code', $produkCodes)
+            ->where('m_stok_gudang_code', $request->rekap_so_m_gudang_code)
+            ->get();
+        foreach ($produks as $produk) {
+            $index = array_search($produk->m_stok_m_produk_code, array_column($rekap_so_detail, 'rekap_so_detail_m_produk_code'));
+            if ($index !== false) {
+                $rekap_so_detail[$index]['rekap_so_detail_m_produk_nama'] = $produk->m_stok_produk_nama;
+            }
+            $saldo_terakhir = $produk->m_stok_saldo;
+            $detail_so = [
+                'm_stok_detail_m_produk_nama' => $produk->m_stok_produk_nama,
+                'm_stok_detail_satuan_id' => $produk->m_stok_satuan_id,
+                'm_stok_detail_saldo' => $saldo_terakhir,
+                'm_stok_detail_hpp' => $produk->m_stok_hpp,
+            ];
+
+            $m_stok_index = array_search($produk->m_stok_m_produk_code, array_column($m_stok_detail, 'm_stok_detail_m_produk_code'));
+            if ($m_stok_index !== false) {
+                $m_stok_detail[$m_stok_index]['m_stok_detail_m_produk_nama'] = $produk->m_stok_produk_nama;
+                $m_stok_detail[$m_stok_index]['m_stok_detail_satuan_id'] = $produk->m_stok_satuan_id;
+                $m_stok_detail[$m_stok_index]['m_stok_detail_saldo'] = $saldo_terakhir;
+                $m_stok_detail[$m_stok_index]['m_stok_detail_hpp'] = $produk->m_stok_hpp;
+            }
+
+            $m_stok[] = [
+                'm_stok_gudang_code' => $request->rekap_so_m_gudang_code,
+                'm_stok_m_produk_code' => $produk->m_stok_m_produk_code,
+                'm_stok_saldo' => $qty_so,
+                'm_stok_status_sync' => 'send',
+                'm_stok_updated_at' => Carbon::now(),
+                'm_stok_updated_by' => $user_id,
+            ];
+        }
+        DB::table('rekap_so')->insert($so_nota);
+        DB::table('rekap_so_detail')->insert($rekap_so_detail);
+        DB::table('m_stok_detail')->insert($m_stok_detail);
+
+        foreach ($m_stok as $m_stok_item) {
+            DB::table('m_stok')
+                ->where('m_stok_gudang_code', $m_stok_item['m_stok_gudang_code'])
+                ->where('m_stok_m_produk_code', $m_stok_item['m_stok_m_produk_code'])
+                ->update($m_stok_item);
+        }
     }
-    
+    public function so_detail($id) {
+        $data = new \stdClass ();
+        $get_so = DB::table('rekap_so')->where('rekap_so_id',$id)->first();
+        $data->so_detail = DB::table('rekap_so_detail')->where('rekap_so_detail_rekap_so_id',$id)->get();
+        $data->so = $get_so;
+        $data->gudang_nama = DB::table('m_gudang')->where('m_gudang_code',$get_so->rekap_so_m_gudang_code)->value('m_gudang_nama');
+        $data->aksi = 'detail';
+        $data->operator = DB::table('users')->where('users_id',$get_so->rekap_so_created_by)->value('name');
+        return view('inventori::form_input_so_detail', compact('data'));
+    }
+
 }

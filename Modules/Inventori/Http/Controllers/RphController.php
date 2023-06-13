@@ -404,7 +404,7 @@ class RphController extends Controller
         // DB::table('rph')->where('rph_code', $request->rph_code)
         //     ->update(['rph_order_status' => 'tutup',
         //         'rph_updated_by' => Auth::user()->users_id]);
-        $data = $this->belanja_detail_lengkap($request->rph_code);
+      return  $data = $this->belanja_detail_lengkap($request->rph_code);
         $lokasi = ['produksi','gudang'];
         foreach ($lokasi as $key) {
             foreach ($data as $val => $value) {
