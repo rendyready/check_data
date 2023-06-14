@@ -110,7 +110,7 @@ class MStokController extends Controller
         $data->waroeng_nama = DB::table('m_w')->select('m_w_nama')->where('m_w_id', $waroeng_id)->first();
         $data->tgl_now = Carbon::now()->format('Y-m-d');
         $data->gudang = DB::table('m_gudang')->where('m_gudang_m_w_id', $waroeng_id)->get();
-        $data->klasifikasi = DB::table('m_klasifikasi_produk')->whereNotIn('m_klasifikasi_produk_id', [4])->get();
+        $data->klasifikasi = DB::table('m_klasifikasi_produk')->get();
         return view('inventori::form_input_so', compact('data'));
     }
 
@@ -157,6 +157,7 @@ class MStokController extends Controller
         $data->gudang_nama = DB::table('m_gudang')->where('m_gudang_code', $g_id)->first()->m_gudang_nama;
         $data->gudang_code = $g_id;
         $data->kat_id = $kat_id;
+        $data->aksi = 'create';
         return view('inventori::form_input_so_detail', compact('data'));
     }
 

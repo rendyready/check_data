@@ -49,6 +49,27 @@ return new class extends Migration
             $table->timestampTz('rekap_so_detail_updated_at')->nullable()->useCurrentOnUpdate()->default(NULL);
             $table->timestampTz('rekap_so_detail_deleted_at')->nullable()->default(NULL);
         });
+        Schema::dropIfExists('rph_detail_belanja');
+        Schema::create('rph_detail_belanja', function (Blueprint $table) {
+            $table->id();
+            $table->string('rph_detail_belanja_id')->unique();
+            $table->string('rph_detail_belanja_rph_code');
+            $table->string('rph_detail_belanja_m_produk_code');
+            $table->string('rph_detail_belanja_m_produk_nama');
+            $table->string('rph_detail_belanja_qty_stok');
+            $table->string('rph_detail_belanja_qty_keb');
+            $table->string('rph_detail_belanja_qty_bb_order');
+            $table->string('rph_detail_belanja_satuan_keb');
+            $table->string('rph_detail_belanja_satuan_order');
+            $table->string('rph_detail_belanja_bagian');
+            $table->string('rph_detail_belanja_status_sync')->default('send');
+            $table->bigInteger('rph_detail_belanja_created_by');
+            $table->bigInteger('rph_detail_belanja_updated_by')->nullable();
+            $table->bigInteger('rph_detail_belanja_deleted_by')->nullable();
+            $table->timestampTz('rph_detail_belanja_created_at')->useCurrent();
+            $table->timestampTz('rph_detail_belanja_updated_at')->nullable()->useCurrentOnUpdate()->default(NULL);
+            $table->timestampTz('rph_detail_belanja_deleted_at')->nullable()->default(NULL);
+        });
     }
 
     /**
@@ -60,5 +81,6 @@ return new class extends Migration
     {
         Schema::dropIfExists('rekap_so');
         Schema::dropIfExists('rekap_so_detail');
+        Schema::dropIfExists('rph_detail_belanja');
     }
 };

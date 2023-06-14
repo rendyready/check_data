@@ -41,7 +41,7 @@
                                     <th>No</th>
                                     <th>Nama Bahan Baku</th>
                                     <th>Qty Kebutuhan</th>
-                                    <th>Stok Sisa</th>
+                                    <th>Stok Sisa Produksi</th>
                                     <th>Satuan Produksi</th>
                                     <th>Order Gudang</th>
                                     <th>Satuan Order</th>

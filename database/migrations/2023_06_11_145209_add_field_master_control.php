@@ -14,9 +14,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('m_area', function (Blueprint $table) {
-            // $table->text('m_area_client_target')->default(DB::raw('list_waroeng()'));
-        });
+        // Schema::table('m_area', function (Blueprint $table) {
+        //     // $table->text('m_area_client_target')->default(DB::raw('list_waroeng()'));
+        // });
     }
 
     /**
@@ -26,8 +26,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('m_area', function (Blueprint $table) {
-            $table->dropColumn(['m_area_client_target']);
-        });
+        // Schema::table('m_area', function (Blueprint $table) {
+        //     $table->dropColumn(['m_area_client_target']);
+        // });
     }
 };
