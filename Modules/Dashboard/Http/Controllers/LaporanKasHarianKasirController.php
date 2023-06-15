@@ -32,8 +32,8 @@ class LaporanKasHarianKasirController extends Controller
          $data->user = DB::table('users')
              ->orderby('id', 'ASC')
              ->get();
-         $data->transaksi_rekap = DB::table('rekap_transaksi')
-             ->get();
+        //  $data->transaksi_rekap = DB::table('rekap_transaksi')
+        //      ->get();
          return view('dashboard::lap_kas_harian_kasir', compact('data'));
      }
  
@@ -775,6 +775,8 @@ class LaporanKasHarianKasirController extends Controller
      {
             $saldoIn = DB::table('rekap_modal')
                         ->join('users', 'users_id', 'rekap_modal_created_by')
+                        ->join('rekap_transaksi', 'r_t_rekap_modal_id', 'rekap_modal_id')
+                        ->selectRaw('rekap_modal_id, rekap_modal_tanggal, rekap_modal_sesi, name, max(rekap_modal_nominal) rekap_modal_nominal, max(rekap_modal_cash_in) rekap_modal_cash_in, max(rekap_modal_cash_out) rekap_modal_cash_out, max(rekap_modal_cash_real) rekap_modal_cash_real, sum(r_t_nominal_free_kembalian) free, sum(r_t_nominal_pembulatan) bulat')
                         ->where('rekap_modal_m_w_id', $request->waroeng);
                         if (strpos($request->tanggal, 'to') !== false) {
                             [$start, $end] = explode('to', $request->tanggal);
@@ -785,9 +787,13 @@ class LaporanKasHarianKasirController extends Controller
                         if(!in_array(Auth::user()->waroeng_id, $this->get_akses_area())){
                             $saldoIn->where('rekap_modal_status', 'close');
                         } 
-                        $saldoIn1 = $saldoIn->orderBy('rekap_modal_tanggal', 'ASC')
+                        $saldoIn1 = $saldoIn->groupby('rekap_modal_id', 'rekap_modal_tanggal', 'rekap_modal_sesi', 'name')
+                        ->orderBy('rekap_modal_tanggal', 'ASC')
                         ->get();
         
+             $totalSelisih = 0;
+             $totalFreeKembalian = 0;
+             $totalPembulatan = 0;
              $data = array();
              foreach ($saldoIn1 as $key => $val_in) {
                         $row = array();
@@ -801,10 +807,32 @@ class LaporanKasHarianKasirController extends Controller
                         $row[] = number_format($saldoAkhir);
                         $row[] = number_format($val_in->rekap_modal_cash_real);
                         $row[] = number_format($val_in->rekap_modal_cash_real - $saldoAkhir);
+                        $row[] = number_format($val_in->free);
+                        $row[] = number_format($val_in->bulat);
                         $row[] ='<a id="button_detail" class="btn btn-sm button_detail btn-info" value="'.$val_in->rekap_modal_id.'" title="Detail Nota"><i class="fa-sharp fa-solid fa-eye"></i></a>
                         <a id="button_pdf" value="'.$val_in->rekap_modal_id.'" class="btn btn-sm btn-warning" title="Export PDF"><i class="fa-sharp fa-solid fa-file"></i></a>';
                         $data[] = $row;
+
+                        $totalSelisih += $val_in->rekap_modal_cash_real - $saldoAkhir;
+                        $totalFreeKembalian += $val_in->free;
+                        $totalPembulatan += $val_in->bulat;
                 }
+                $totalRow = array();
+                $totalRow[] = '';
+                $totalRow[] = '';
+                $totalRow[] = '';
+                $totalRow[] = '';
+                $totalRow[] = '';
+                $totalRow[] = '';
+                $totalRow[] = '';
+                $totalRow[] = 'Total';
+                $totalRow[] = number_format($totalSelisih);
+                $totalRow[] = number_format($totalFreeKembalian);
+                $totalRow[] = number_format($totalPembulatan);
+                $totalRow[] = '';
+
+                $data[] = $totalRow;
+               
  
          $output = array("data" => $data);
          return response()->json($output);

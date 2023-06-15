@@ -113,10 +113,11 @@
                 <tr>
                   <th class="text-center">Tanggal</th>
                   <th class="text-center">Bahan Baku</th>
+                  <th class="text-center">Stok Awal</th>
                   <th class="text-center">Masuk</th>
                   <th class="text-center">Keluar</th>
-                  <th class="text-center">SO</th>
                   <th class="text-center">Stok Akhir</th>
+                  <th class="text-center">SO</th>
                   <th class="text-center">Satuan</th>
                   <th class="text-center">HPP Barang</th>
                   <th class="text-center">Catatan</th>
@@ -164,12 +165,12 @@ $(document).ready(function() {
         scrollY: '300px',
         lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
         pageLength: 10,
-        "createdRow": function( row, data, dataIndex ) {
-            if (dataIndex === 0) {
-                $(row).addClass('bg-primary');
-                $(row).find('td').css('color', 'white');
-            }
-        },
+        // "createdRow": function( row, data, dataIndex ) {
+        //     if (dataIndex === 0) {
+        //         $(row).addClass('bg-primary');
+        //         $(row).find('td').css('color', 'white');
+        //     }
+        // },
         columnDefs: [ 
             { className: 'dt-center', targets: '_all' },
         ],
@@ -186,8 +187,8 @@ $(document).ready(function() {
             },
             success:function(data){ 
                 console.log(data);
-                var row = [];
-                table.row.add(row).draw(false);
+                // var row = [];
+                // table.row.add(row).draw(false);
             },
     });
 });

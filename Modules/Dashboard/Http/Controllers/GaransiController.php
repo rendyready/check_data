@@ -31,9 +31,6 @@ class GaransiController extends Controller
         $data->area = DB::table('m_area')
             ->orderby('m_area_id', 'ASC')
             ->get();
-        $data->user = DB::table('users')
-            ->orderby('id', 'ASC')
-            ->get();
         return view('dashboard::rekap_garansi', compact('data'));
     }
 
