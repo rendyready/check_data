@@ -126,11 +126,11 @@ class KartuStockController extends Controller
             ->where('m_stok_detail_gudang_code', $request->gudang)
             ->orderby('m_stok_detail_created_at', 'ASC')
             ->get();
-
+            
+        $previousSoDate = null; 
         $i = 0;    
         $a = 0;
         $stokkeluar = 0;   
-        $previousSoDate = null; 
         $data = array();
         foreach ($stok as $value) {
             $row = array();
@@ -140,9 +140,9 @@ class KartuStockController extends Controller
                 $stokawal = $master_stok->m_stok_awal;
                 $a = 1;
             } elseif ($stok_awal->m_stok_detail_so != null) {
-                $stokawal = $master_stok->m_stok_awal + $stok_awal->m_stok_detail_so;
+                $stokawal = $master_stok->m_stok_awal + $stok_awal->m_stok_detail_so; //$stok_awal->m_stok_detail_so ditanggal sebelumnya
             }  elseif ($stok_awal->m_stok_detail_so == null) {
-                $stokawal = $master_stok->m_stok_awal + $stokkeluar;
+                $stokawal = $master_stok->m_stok_awal + $stokkeluar; //$stokkeluar ditanggal sebelumnya
             }
             // } elseif (is_null($value->m_stok_detail_so) && is_null($previousSoDate) || $previousSoDate != date('Y-m-d', strtotime($value->m_stok_detail_tgl))) {
             //     $stokawal = $stokkeluar;

@@ -103,6 +103,7 @@ class RekeningController extends Controller
             if (empty($get_data2)) {
                 $saldo = ($request->m_rekening_copy_saldo == 'tidak') ? 0 : $key->m_rekening_saldo ;
                 $data = array(
+                    'm_rekening_id' => $this->getMasterId('m_rekening'),
                     'm_rekening_m_waroeng_id' => $request->waroeng_tujuan,
                     'm_rekening_kategori' => $key->m_rekening_kategori,
                     'm_rekening_no_akun' => $key->m_rekening_no_akun,
