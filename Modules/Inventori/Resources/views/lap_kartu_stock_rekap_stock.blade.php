@@ -84,9 +84,9 @@
                                             class="cari f-area js-select2 form-control filter_gudang" name="m_w_m_area_id">
                                             <option></option>
                                             @foreach ($data->gudang as $gudang)
-                                                <option value="{{ $gudang->m_gudang_nama }}"> {{ $gudang->m_gudang_nama }} </option>
+                                                <option value="{{ $gudang->m_gudang_code }}"> {{ $gudang->m_gudang_nama }} </option>
                                             @endforeach
-                                            <option value="all">Gudang Utama dan Produksi</option>
+                                            {{-- <option value="all">Gudang Utama dan Produksi</option> --}}
                                             </select>
                                         @else
                                             <select id="filter_gudang2" style="width: 100%;"
@@ -97,7 +97,7 @@
                                     </div>
                                 </div>
                             </div>
-                            {{-- <div class="col-md-6">
+                            <div class="col-md-6">
                                 <div class="row mb-3">
                                     <label class="col-sm-3 col-form-label" for="rekap_inv_penjualan_created_by">Klasifikasi</label>
                                     <div class="col-sm-9">
@@ -111,7 +111,7 @@
                                         </select>
                                     </div>
                                 </div>
-                            </div> --}}
+                            </div>
                         </div> 
 
                         <div id="user-info" data-waroeng-id="{{ Auth::user()->waroeng_id }}" data-has-access="{{ in_array(Auth::user()->waroeng_id, $data->akses_area) ? 'true' : 'false' }}"></div>
@@ -127,12 +127,13 @@
               <thead>
                 <tr>
                   <th class="text-center">Gudang</th>
-                  {{-- <th class="text-center">Klasifikasi</th> --}}
+                  <th class="text-center">Klasifikasi</th>
                   <th class="text-center">Bahan Baku</th>
                   <th class="text-center">Stok Awal</th>
                   <th class="text-center">Masuk</th>
                   <th class="text-center">Keluar</th>
                   <th class="text-center">Stok Akhir</th>
+                  <th class="text-center">Opname</th>
                   <th class="text-center">Satuan</th>
                   <th class="text-center">HPP Barang</th>
                 </tr>                
@@ -168,7 +169,7 @@ $(document).ready(function() {
         var area    = $('.filter_area').val();
         var waroeng = $('.filter_waroeng').val();
         var gudang  = $('.filter_gudang').val();
-        // var bb      = $('.filter_bb').val();
+        var bb      = $('.filter_bb').val();
 
     $('#tampil_rekap').DataTable({
         buttons: [],
@@ -189,7 +190,7 @@ $(document).ready(function() {
                 area: area,
                 waroeng: waroeng,
                 gudang: gudang,
-                // bb: bb,
+                bb: bb,
             },
             type : "GET",
             },
