@@ -95,5 +95,8 @@ class RusakController extends Controller
         }
         return redirect()->back()->with('success', 'your message,here'); 
     }
+    public function rusak_daily_list($id) {
+        
+    }
 
 }
