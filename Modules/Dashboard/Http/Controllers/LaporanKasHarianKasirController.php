@@ -489,22 +489,24 @@ class LaporanKasHarianKasirController extends Controller
             $tgl = tgl_indo($request->tanggal);
             $w_nama = strtoupper($this->getNamaW($request->waroeng));
             // $nama_user = DB::table('users')->where('users_id',$request->opr)->get()->name();
-            $kacab = DB::table('history_jabatan')
-            ->where('history_jabatan_m_w_code',$request->waroeng)
-            ->first();
-            $modal1 = DB::table('users')
+            // $kacab = DB::table('history_jabatan')
+            // ->where('history_jabatan_m_w_code',$request->waroeng)
+            // ->first();
+            $nama_kasir = DB::table('users')
+                ->join('rekap_modal', 'rekap_modal_created_by', 'users_id')
                 ->where('waroeng_id', $request->waroeng)
+                ->where('rekap_modal_id', $request->id)
                 ->first();
-            $modal2 = DB::table('rekap_modal')
+            $sesi_kasir = DB::table('rekap_modal')
                 ->where('rekap_modal_m_w_id', $request->waroeng)
                 ->where('rekap_modal_id', $request->id)
                 ->first();
-            $kasir = $modal1->name;
-            $shift = $modal2->rekap_modal_sesi;
+            $kasir = $nama_kasir->name;
+            $shift = $sesi_kasir->rekap_modal_sesi;
             
             // $id2 = [2,3,4,5,6,7];
             //    return view('dashboard::lap_kas_harian_kasir_pdf',compact('data','tgl','w_nama','kacab','kasir','shift'));
-            $pdf = pdf::loadview('dashboard::lap_kas_harian_kasir_pdf',compact('data','tgl','w_nama','kacab','kasir','shift'))->setPaper('a4');
+            $pdf = pdf::loadview('dashboard::lap_kas_harian_kasir_pdf',compact('data','tgl','w_nama','kasir','shift'))->setPaper('a4');
             return $pdf->download('laporan_kas_kasir_'.strtolower($w_nama).'_sesi_'.$shift.'_.pdf');
     }
     
