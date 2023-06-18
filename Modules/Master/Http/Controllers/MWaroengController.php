@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use illuminate\Support\Str;
+use App\Models\MW;
 
 class MWaroengController extends Controller
 {
@@ -110,5 +111,20 @@ class MWaroengController extends Controller
             }
             return response(['type' => 'success', 'messages' => 'Berhasil Update']);
         }
+    }
+    public function get_mw_akses()
+    {
+        $user_id = Auth::user()->users_id;
+        $get_waroeng_akses = DB::table('users')->where('users_id', $user_id)->select('waroeng_akses')->first();
+        $get_waroeng = DB::table('m_w')
+            ->whereIn('m_w_id', json_decode($get_waroeng_akses->waroeng_akses))
+            ->pluck('m_w_nama', 'm_w_id');
+        return response()->json($get_waroeng);
+    }
+
+    public function update_waroeng_id($id){
+        DB::table('users')->where('users_id',Auth::user()->users_id)
+        ->update(['waroeng_id'=>$id]);
+        return response()->json('success');
     }
 }

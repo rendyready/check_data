@@ -19,7 +19,7 @@
             <!-- User Dropdown -->
             <div class="dropdown d-inline-block">
                 <button type="button" class="btn btn-sm btn-alt-secondary" id="page-header-user-dropdown"
-                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                     <i class="fa fa-user d-sm-none"></i>
                     <span class="d-none d-sm-inline-block fw-semibold">{{ strtoupper($waroeng) }}</span>
                     <i class="fa fa-angle-down opacity-50 ms-1"></i>
@@ -33,34 +33,16 @@
                     </div>
                     <div class="p-2">
                         <a class="dropdown-item d-flex align-items-center justify-content-between space-x-1"
-                            href="javascript:void(0)">
-                            <span>Profile</span>
-                            <i class="fa fa-fw fa-user opacity-25"></i>
-                        </a>
-                        <a class="dropdown-item d-flex align-items-center justify-content-between"
-                            href="javascript:void(0)">
-                            <span>Inbox</span>
-                            <i class="fa fa-fw fa-envelope-open opacity-25"></i>
+                            href="javascript:void(0)" onclick="event.stopPropagation();">
+                            <div class="form-group">
+                                <select class="js-select2-nav" id="waroeng_id" name="waroeng_id" style="width: 100%;"
+                                    data-placeholder="Ganti Waroeng">
+                                    <option></option>
+                                </select>
+                            </div>
                         </a>
                         <a class="dropdown-item d-flex align-items-center justify-content-between space-x-1"
-                            href="javascript:void(0)">
-                            <span>Invoices</span>
-                            <i class="fa fa-fw fa-file opacity-25"></i>
-                        </a>
-                        <div class="dropdown-divider"></div>
-
-                        <!-- Toggle Side Overlay -->
-                        <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
-                        <a class="dropdown-item d-flex align-items-center justify-content-between space-x-1"
-                            href="javascript:void(0)" data-toggle="layout" data-action="side_overlay_toggle">
-                            <span>Settings</span>
-                            <i class="fa fa-fw fa-wrench opacity-25"></i>
-                        </a>
-                        <!-- END Side Overlay -->
-
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item d-flex align-items-center justify-content-between space-x-1"
-                            href="javascript:void(0)">
+                            href="javascript:void(0)" onclick="event.stopPropagation();">
                             <span>Sign Out</span>
                             <i class="fa fa-fw fa-sign-out-alt opacity-25"></i>
                         </a>
@@ -745,133 +727,133 @@
                                         </a>
                                         <ul class="nav-main-submenu">
                                             @can('kartu stok.view')
-                                            <li
-                                                class="nav-main-item{{ request()->is('inventori/kartu_stock') ? ' open' : '' }}">
-                                                <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu"
-                                                    aria-haspopup="true" aria-expanded="true" href="#">
-                                                    <span class="nav-main-link-name">Laporan Stock</span>
-                                                </a>
-                                                <ul class="nav-main-submenu">
-                                                    <li class="nav-main-item">
-                                                        <a class="nav-main-link{{ request()->is('inventori/kartu_stock') ? ' active' : '' }}"
-                                                            href="{{ route('kartu_stock.kartu_stk') }}">
-                                                            <span class="nav-main-link-name">Kartu Stock</span>
-                                                        </a>
-                                                    </li>
-                                                    <li class="nav-main-item">
-                                                        <a class="nav-main-link{{ request()->is('inventori/rekap_stock') ? ' active' : '' }}"
-                                                            href="{{ route('rekap_stock.rekap_stk') }}">
-                                                            <span class="nav-main-link-name">Rekap Stock</span>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </li>
+                                                <li
+                                                    class="nav-main-item{{ request()->is('inventori/kartu_stock') ? ' open' : '' }}">
+                                                    <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu"
+                                                        aria-haspopup="true" aria-expanded="true" href="#">
+                                                        <span class="nav-main-link-name">Laporan Stock</span>
+                                                    </a>
+                                                    <ul class="nav-main-submenu">
+                                                        <li class="nav-main-item">
+                                                            <a class="nav-main-link{{ request()->is('inventori/kartu_stock') ? ' active' : '' }}"
+                                                                href="{{ route('kartu_stock.kartu_stk') }}">
+                                                                <span class="nav-main-link-name">Kartu Stock</span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="nav-main-item">
+                                                            <a class="nav-main-link{{ request()->is('inventori/rekap_stock') ? ' active' : '' }}"
+                                                                href="{{ route('rekap_stock.rekap_stk') }}">
+                                                                <span class="nav-main-link-name">Rekap Stock</span>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </li>
                                             @endcan
                                             @can('laporan rph.view')
-                                            <li class="nav-main-item">
-                                                <a class="nav-main-link{{ request()->is('inventori/lap_rph') ? ' active' : '' }}"
-                                                    href="{{ route('kartu_stock.kartu_stk') }}">
-                                                    <span class="nav-main-link-name">Laporan RPH</span>
-                                                </a>
-                                            </li>
+                                                <li class="nav-main-item">
+                                                    <a class="nav-main-link{{ request()->is('inventori/lap_rph') ? ' active' : '' }}"
+                                                        href="{{ route('kartu_stock.kartu_stk') }}">
+                                                        <span class="nav-main-link-name">Laporan RPH</span>
+                                                    </a>
+                                                </li>
                                             @endcan
                                             @can('laporan pembelian.view')
-                                            <li
-                                                class="nav-main-item{{ request()->is('inventori/lap_pem_harian') ? ' open' : '' }}">
-                                                <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu"
-                                                    aria-haspopup="true" aria-expanded="true" href="#">
-                                                    <span class="nav-main-link-name">Laporan Pembelian</span>
-                                                </a>
-                                                <ul class="nav-main-submenu">
-                                                    <li class="nav-main-item">
-                                                        <a class="nav-main-link{{ request()->is('inventori/lap_pem_detail') ? ' active' : '' }}"
-                                                            href="{{ route('lap_pem_detail.lap_detail') }}">
-                                                            <span class="nav-main-link-name">Detail Pembelian</span>
-                                                        </a>
-                                                    </li>
-                                                    <li class="nav-main-item">
-                                                        <a class="nav-main-link{{ request()->is('inventori/lap_pem_rekap') ? ' active' : '' }}"
-                                                            href="{{ route('lap_pem_rekap.lap_rekap') }}">
-                                                            <span class="nav-main-link-name">Rekap Pembelian</span>
-                                                        </a>
-                                                    </li>
-                                                    <li class="nav-main-item">
-                                                        <a class="nav-main-link{{ request()->is('inventori/lap_pem_harian') ? ' active' : '' }}"
-                                                            href="{{ route('lap_pem_harian.lap_harian') }}">
-                                                            <span class="nav-main-link-name">Rekap Pembelian Harian</span>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </li>
+                                                <li
+                                                    class="nav-main-item{{ request()->is('inventori/lap_pem_harian') ? ' open' : '' }}">
+                                                    <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu"
+                                                        aria-haspopup="true" aria-expanded="true" href="#">
+                                                        <span class="nav-main-link-name">Laporan Pembelian</span>
+                                                    </a>
+                                                    <ul class="nav-main-submenu">
+                                                        <li class="nav-main-item">
+                                                            <a class="nav-main-link{{ request()->is('inventori/lap_pem_detail') ? ' active' : '' }}"
+                                                                href="{{ route('lap_pem_detail.lap_detail') }}">
+                                                                <span class="nav-main-link-name">Detail Pembelian</span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="nav-main-item">
+                                                            <a class="nav-main-link{{ request()->is('inventori/lap_pem_rekap') ? ' active' : '' }}"
+                                                                href="{{ route('lap_pem_rekap.lap_rekap') }}">
+                                                                <span class="nav-main-link-name">Rekap Pembelian</span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="nav-main-item">
+                                                            <a class="nav-main-link{{ request()->is('inventori/lap_pem_harian') ? ' active' : '' }}"
+                                                                href="{{ route('lap_pem_harian.lap_harian') }}">
+                                                                <span class="nav-main-link-name">Rekap Pembelian Harian</span>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </li>
                                             @endcan
                                             @can('laporan cht.view')
-                                            <li class="nav-main-item">
-                                                <a class="nav-main-link{{ request()->is('invetori/lap_cht') ? ' active' : '' }}"
-                                                    href="{{ route('lap_cht.index') }}">
-                                                    <span class="nav-main-link-name">Laporan CHT</span>
-                                                </a>
-                                            </li>
+                                                <li class="nav-main-item">
+                                                    <a class="nav-main-link{{ request()->is('invetori/lap_cht') ? ' active' : '' }}"
+                                                        href="{{ route('lap_cht.index') }}">
+                                                        <span class="nav-main-link-name">Laporan CHT</span>
+                                                    </a>
+                                                </li>
                                             @endcan
                                             @can('keluar masuk gudang.view')
-                                            <li
-                                                class="nav-main-item{{ request()->is('inventori/lap_gudang_rekap') ? ' open' : '' }}">
-                                                <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu"
-                                                    aria-haspopup="true" aria-expanded="true" href="#">
-                                                    <span class="nav-main-link-name">laporan Keluar dan Masuk Gudang</span>
-                                                </a>
-                                                <ul class="nav-main-submenu">
-                                                    <li class="nav-main-item">
-                                                        <a class="nav-main-link{{ request()->is('inventori/lap_gudang_detail') ? ' active' : '' }}"
-                                                            href="{{ route('lap_gudang_detail.lap_detail') }}">
-                                                            <span class="nav-main-link-name">Detail Keluar dan Masuk
-                                                                Gudang</span>
-                                                        </a>
-                                                    </li>
-                                                    <li class="nav-main-item">
-                                                        <a class="nav-main-link{{ request()->is('inventori/lap_gudang_rekap') ? ' active' : '' }}"
-                                                            href="{{ route('lap_gudang_rekap.lap_rekap') }}">
-                                                            <span class="nav-main-link-name">Rekap Keluar dan Masuk
-                                                                Gudang</span>
-                                                        </a>
-                                                    </li>
-                                                    <li class="nav-main-item">
-                                                        <a class="nav-main-link{{ request()->is('inventori/lap_gudang_harian') ? ' active' : '' }}"
-                                                            href="{{ route('lap_gudang_harian.lap_harian') }}">
-                                                            <span class="nav-main-link-name">Rekap Keluar dan Masuk Gudang
-                                                                Harian</span>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </li>
+                                                <li
+                                                    class="nav-main-item{{ request()->is('inventori/lap_gudang_rekap') ? ' open' : '' }}">
+                                                    <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu"
+                                                        aria-haspopup="true" aria-expanded="true" href="#">
+                                                        <span class="nav-main-link-name">laporan Keluar dan Masuk Gudang</span>
+                                                    </a>
+                                                    <ul class="nav-main-submenu">
+                                                        <li class="nav-main-item">
+                                                            <a class="nav-main-link{{ request()->is('inventori/lap_gudang_detail') ? ' active' : '' }}"
+                                                                href="{{ route('lap_gudang_detail.lap_detail') }}">
+                                                                <span class="nav-main-link-name">Detail Keluar dan Masuk
+                                                                    Gudang</span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="nav-main-item">
+                                                            <a class="nav-main-link{{ request()->is('inventori/lap_gudang_rekap') ? ' active' : '' }}"
+                                                                href="{{ route('lap_gudang_rekap.lap_rekap') }}">
+                                                                <span class="nav-main-link-name">Rekap Keluar dan Masuk
+                                                                    Gudang</span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="nav-main-item">
+                                                            <a class="nav-main-link{{ request()->is('inventori/lap_gudang_harian') ? ' active' : '' }}"
+                                                                href="{{ route('lap_gudang_harian.lap_harian') }}">
+                                                                <span class="nav-main-link-name">Rekap Keluar dan Masuk Gudang
+                                                                    Harian</span>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </li>
                                             @endcan
                                             @can('laporan pengiriman.view')
-                                            <li
-                                                class="nav-main-item{{ request()->is('inventori/lap_kirim') ? ' open' : '' }}">
-                                                <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu"
-                                                    aria-haspopup="true" aria-expanded="true" href="#">
-                                                    <span class="nav-main-link-name">Laporan Pengiriman</span>
-                                                </a>
-                                                <ul class="nav-main-submenu">
-                                                    <li class="nav-main-item">
-                                                        <a class="nav-main-link{{ request()->is('inventori/lap_kirim_detail') ? ' active' : '' }}"
-                                                            href="{{ route('lap_kirim_detail.lap_detail') }}">
-                                                            <span class="nav-main-link-name">Detail Pengiriman</span>
-                                                        </a>
-                                                    </li>
-                                                    <li class="nav-main-item">
-                                                        <a class="nav-main-link{{ request()->is('inventori/lap_kirim_rekap') ? ' active' : '' }}"
-                                                            href="{{ route('lap_kirim_rekap.lap_rekap') }}">
-                                                            <span class="nav-main-link-name">Rekap Pengiriman</span>
-                                                        </a>
-                                                    </li>
-                                                    <li class="nav-main-item">
-                                                        <a class="nav-main-link{{ request()->is('inventori/lap_kirim_harian') ? ' active' : '' }}"
-                                                            href="{{ route('lap_kirim_harian.lap_harian') }}">
-                                                            <span class="nav-main-link-name">Rekap Pengiriman Harian</span>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </li>
+                                                <li
+                                                    class="nav-main-item{{ request()->is('inventori/lap_kirim') ? ' open' : '' }}">
+                                                    <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu"
+                                                        aria-haspopup="true" aria-expanded="true" href="#">
+                                                        <span class="nav-main-link-name">Laporan Pengiriman</span>
+                                                    </a>
+                                                    <ul class="nav-main-submenu">
+                                                        <li class="nav-main-item">
+                                                            <a class="nav-main-link{{ request()->is('inventori/lap_kirim_detail') ? ' active' : '' }}"
+                                                                href="{{ route('lap_kirim_detail.lap_detail') }}">
+                                                                <span class="nav-main-link-name">Detail Pengiriman</span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="nav-main-item">
+                                                            <a class="nav-main-link{{ request()->is('inventori/lap_kirim_rekap') ? ' active' : '' }}"
+                                                                href="{{ route('lap_kirim_rekap.lap_rekap') }}">
+                                                                <span class="nav-main-link-name">Rekap Pengiriman</span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="nav-main-item">
+                                                            <a class="nav-main-link{{ request()->is('inventori/lap_kirim_harian') ? ' active' : '' }}"
+                                                                href="{{ route('lap_kirim_harian.lap_harian') }}">
+                                                                <span class="nav-main-link-name">Rekap Pengiriman Harian</span>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </li>
                                             @endcan
                                         </ul>
                                     </li>
@@ -956,28 +938,28 @@
                             </a>
                             <ul class="nav-main-submenu">
                                 @can('user.view')
-                                <li class="nav-main-item">
-                                    <a class="nav-main-link{{ request()->is('users') ? ' active' : '' }}"
-                                        href="{{ route('users.index') }}">
-                                        <span class="nav-main-link-name">User</span>
-                                    </a>
-                                </li>
+                                    <li class="nav-main-item">
+                                        <a class="nav-main-link{{ request()->is('users') ? ' active' : '' }}"
+                                            href="{{ route('users.index') }}">
+                                            <span class="nav-main-link-name">User</span>
+                                        </a>
+                                    </li>
                                 @endcan
                                 @can('hak akses.view')
-                                <li class="nav-main-item">
-                                    <a class="nav-main-link{{ request()->is('users/akses') ? ' active' : '' }}"
-                                        href="{{ route('akses.index') }}">
-                                        <span class="nav-main-link-name">Hak Akses</span>
-                                    </a>
-                                </li>
+                                    <li class="nav-main-item">
+                                        <a class="nav-main-link{{ request()->is('users/akses') ? ' active' : '' }}"
+                                            href="{{ route('akses.index') }}">
+                                            <span class="nav-main-link-name">Hak Akses</span>
+                                        </a>
+                                    </li>
                                 @endcan
                                 @can('permission.view')
-                                <li class="nav-main-item">
-                                    <a class="nav-main-link{{ request()->is('users/permission') ? ' active' : '' }}"
-                                        href="{{ route('permission.index') }}">
-                                        <span class="nav-main-link-name">Permission</span>
-                                    </a>
-                                </li>
+                                    <li class="nav-main-item">
+                                        <a class="nav-main-link{{ request()->is('users/permission') ? ' active' : '' }}"
+                                            href="{{ route('permission.index') }}">
+                                            <span class="nav-main-link-name">Permission</span>
+                                        </a>
+                                    </li>
                                 @endcan
                             </ul>
                         </li>
