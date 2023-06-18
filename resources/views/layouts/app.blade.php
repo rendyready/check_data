@@ -2,10 +2,9 @@
 <!-- Header -->
 @include('layouts.header')
 <!-- END Header -->
-
 <body>
-        <!-- Page Container -->
-        <!--
+    <!-- Page Container -->
+    <!--
           Available classes for #page-container:
       
           SIDEBAR & SIDE OVERLAY
@@ -48,44 +47,46 @@
       
             'sidebar-dark page-header-dark dark-mode'   Enable dark mode (light sidebar/header is not supported with dark mode)
         -->
-        <div id="page-container" class="sidebar-o sidebar-dark enable-page-overlay side-scroll page-header-fixed page-header-modern main-content-boxed">
-          <!-- Side Overlay-->
-          <aside id="side-overlay">
+    <div id="page-container"
+        class="sidebar-o sidebar-dark enable-page-overlay side-scroll page-header-fixed page-header-modern main-content-boxed">
+        <!-- Side Overlay-->
+        <aside id="side-overlay">
             <!-- Side Header -->
             <div class="content-header">
-              <!-- User Avatar -->
-              <a class="img-link me-2" href="javascript:void(0)">
-                <img class="img-avatar img-avatar32" src="{{ asset('media/avatars/avatar15.jpg') }}" alt="">
-              </a>
-              <!-- END User Avatar -->
-      
-              <!-- User Info -->
-              <a class="link-fx text-body-color-dark fw-semibold fs-sm" href="javascript:void(0)">
-                {{Auth::user()->name}}
-              </a>
-              <!-- END User Info -->
-      
-              <!-- Close Side Overlay -->
-              <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
-              <button type="button" class="btn btn-sm btn-alt-danger ms-auto" data-toggle="layout" data-action="side_overlay_close">
-                <i class="fa fa-fw fa-times"></i>
-              </button>
-              <!-- END Close Side Overlay -->
+                <!-- User Avatar -->
+                <a class="img-link me-2" href="javascript:void(0)">
+                    <img class="img-avatar img-avatar32" src="{{ asset('media/avatars/avatar15.jpg') }}" alt="">
+                </a>
+                <!-- END User Avatar -->
+
+                <!-- User Info -->
+                <a class="link-fx text-body-color-dark fw-semibold fs-sm" href="javascript:void(0)">
+                    {{ Auth::user()->name }}
+                </a>
+                <!-- END User Info -->
+
+                <!-- Close Side Overlay -->
+                <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
+                <button type="button" class="btn btn-sm btn-alt-danger ms-auto" data-toggle="layout"
+                    data-action="side_overlay_close">
+                    <i class="fa fa-fw fa-times"></i>
+                </button>
+                <!-- END Close Side Overlay -->
             </div>
             <!-- END Side Header -->
-      
+
             <!-- Side Content -->
             <div class="content-side">
-              <p>
-                Content..
-              </p>
+                <p>
+                    Content..
+                </p>
             </div>
             <!-- END Side Content -->
-          </aside>
-          <!-- END Side Overlay -->
-      
-          <!-- Sidebar -->
-          <!--
+        </aside>
+        <!-- END Side Overlay -->
+
+        <!-- Sidebar -->
+        <!--
             Helper classes
       
             Adding .smini-hide to an element will make it invisible (opacity: 0) when the sidebar is in mini mode
@@ -96,22 +97,23 @@
             Adding .smini-visible to an element will show it only when the sidebar is in mini mode
             Adding 'smini-visible-block' to an element will show it (display: block) only when the sidebar is in mini mode
           -->
-          @include('layouts.nav')
-          <!-- END Sidebar -->
-            
-          <!-- Main Container -->
-          <main id="main-container">
+        @include('layouts.nav')
+        <!-- END Sidebar -->
+
+        <!-- Main Container -->
+        <main id="main-container">
             @yield('content')
-          </main>
-          <!-- END Main Container -->
-      
-          <!-- Footer -->
-          @include('layouts.footer')
-          @yield('script')
-          <!-- END Footer -->
-        </div>
-        <!-- END Page Container -->
-      </body>
-      
+        </main>
+        <!-- END Main Container -->
+
+        <!-- Footer -->
+        @include('layouts.footer')
+        @yield('script')
+        
+        <!-- END Footer -->
+    </div>
+    <!-- END Page Container -->
+</body>
+
 
 </html>

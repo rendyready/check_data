@@ -4,6 +4,7 @@ namespace Modules\Users\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\MArea;
 use Carbon\Carbon;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
@@ -19,22 +20,21 @@ class UsersController extends Controller
      */
     public function index()
     {
-        $data = new \stdClass ();
+        $data = new \stdClass();
         $data->num = 1;
-        $role = Auth::user()->roles[0]->name;
-        $data->waroeng = DB::table('m_w')->select('m_w_id', 'm_w_nama')->get();
+        // $role = Auth::user()->roles[0]->name;
+        $data->waroeng = MArea::with(['m_ws' => function ($query) {
+            $query->whereNull('m_w_deleted_at');
+        }])->whereNull('m_area_deleted_at')
+            ->get();
+        $data->lokasi = DB::table('m_w')->select('m_w_id', 'm_w_nama')->get();
         $data->roles = DB::table('roles')->get();
         $user = DB::table('model_has_roles')
             ->rightjoin('users', 'users.users_id', 'model_id')
             ->leftjoin('roles', 'role_id', 'roles.id')
             ->leftjoin('m_w', 'waroeng_id', 'm_w_id')
             ->select('users.users_id as users_id', 'users.name as username', 'roles.name as rolename', 'email', 'm_w_nama');
-
-        if ($role == 'admin' || 'administrator') {
-            $data->users = $user->orderBy('users.name', 'ASC')->get();
-        } else {
-            $data->users = $user->where('roles.name', '!=', 'admin')->orderBy('users.name', 'ASC')->get();
-        }
+        $data->users = $user->orderBy('users.name', 'ASC')->get();
         return view('users::index', compact('data'));
     }
 
@@ -45,7 +45,7 @@ class UsersController extends Controller
     public function action(Request $request)
     {
         $data = $request->waroeng_akses; // mengambil data dari Select2 dalam format JSON dan mengubahnya menjadi array
-        $waroeng_akses = implode(',',$data); // menggabungkan data menjadi string dengan delimiter koma
+        $waroeng_akses = implode(',', $data); // menggabungkan data menjadi string dengan delimiter koma
 
         if ($request->action == 'add') {
             $data = array(
@@ -54,14 +54,13 @@ class UsersController extends Controller
                 'email' => strtolower($request->email),
                 'password' => Hash::make($request->password),
                 'waroeng_id' => $request->waroeng_id,
-                'waroeng_akses' => '['.$waroeng_akses.']',
+                'waroeng_akses' => '[' . $waroeng_akses . ']',
                 'created_by' => Auth::user()->users_id,
                 'created_at' => Carbon::now(),
             );
             DB::table('users')->insert($data);
             $user = DB::table('users')->max('users_id');
             User::where('users_id', $user)->first()->assignRole($request->roles);
-
         } elseif ($request->action == 'edit') {
             if (!empty($request->password)) {
                 $data = array(
@@ -69,7 +68,7 @@ class UsersController extends Controller
                     'email' => strtolower($request->email),
                     'password' => Hash::make($request->password),
                     'waroeng_id' => $request->waroeng_id,
-                    'waroeng_akses' => '['.$waroeng_akses.']',
+                    'waroeng_akses' => '[' . $waroeng_akses . ']',
                     'updated_by' => Auth::user()->users_id,
                     'updated_at' => Carbon::now(),
                     'users_status_sync' => 'edit',
@@ -79,7 +78,7 @@ class UsersController extends Controller
                     'name' => strtolower($request->name),
                     'email' => strtolower($request->email),
                     'waroeng_id' => $request->waroeng_id,
-                    'waroeng_akses' => '['.$waroeng_akses.']',
+                    'waroeng_akses' => '[' . $waroeng_akses . ']',
                     'updated_by' => Auth::user()->users_id,
                     'updated_at' => Carbon::now(),
                     'users_status_sync' => 'edit',
@@ -100,7 +99,6 @@ class UsersController extends Controller
                 ->update($data);
         }
         return response()->json($request);
-
     }
 
     /**
@@ -121,9 +119,11 @@ class UsersController extends Controller
     {
         DB::table('users')
             ->where('users_id', $id)
-            ->update(['password' => Hash::make(123456),
+            ->update([
+                'password' => Hash::make(123456),
                 'verified' => null,
-                'users_status_sync' => 'edit']);
+                'users_status_sync' => 'edit'
+            ]);
         return response()->json(['success' => 'success']);
     }
 }
