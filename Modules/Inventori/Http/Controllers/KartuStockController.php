@@ -127,7 +127,6 @@ class KartuStockController extends Controller
             ->orderby('m_stok_detail_created_at', 'ASC')
             ->get();
             
-        $previousSoDate = null; 
         $i = 0;    
         $a = 0;
         $stokkeluar = 0;   

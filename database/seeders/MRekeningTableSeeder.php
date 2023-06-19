@@ -18,7 +18,7 @@ class MRekeningTableSeeder extends Seeder
         DB::table('m_rekening')->insert([
             [
                 'm_rekening_id' => 1,
-                'm_rekening_m_waroeng_id'=> '001',
+                'm_rekening_m_waroeng_id'=> 74,
                 'm_rekening_kategori'=>'aktiva lancar',
                 'm_rekening_no_akun'=>'01.01.01',
                 'm_rekening_nama'=>'kas',
@@ -27,7 +27,7 @@ class MRekeningTableSeeder extends Seeder
             ],
             [
                 'm_rekening_id' => 2,
-                'm_rekening_m_waroeng_id'=> '001',
+                'm_rekening_m_waroeng_id'=> 74,
                 'm_rekening_kategori'=>'aktiva lancar',
                 'm_rekening_no_akun'=>'01.02.01',
                 'm_rekening_nama'=>'bank',
@@ -36,7 +36,7 @@ class MRekeningTableSeeder extends Seeder
             ],
             [
                 'm_rekening_id' => 3,
-                'm_rekening_m_waroeng_id'=> '001',
+                'm_rekening_m_waroeng_id'=> 74,
                 'm_rekening_kategori'=>'aktiva lancar',
                 'm_rekening_no_akun'=>'01.11.01',
                 'm_rekening_nama'=>'penjualan menu',
@@ -45,7 +45,7 @@ class MRekeningTableSeeder extends Seeder
             ],
             [
                 'm_rekening_id' => 4,
-                'm_rekening_m_waroeng_id'=> '001',
+                'm_rekening_m_waroeng_id'=> 74,
                 'm_rekening_kategori'=>'aktiva lancar',
                 'm_rekening_no_akun'=>'01.12.01',
                 'm_rekening_nama'=>'biaya bahan baku',
@@ -54,7 +54,7 @@ class MRekeningTableSeeder extends Seeder
             ],
             [
                 'm_rekening_id' => 5,
-                'm_rekening_m_waroeng_id'=> '001',
+                'm_rekening_m_waroeng_id'=> 74,
                 'm_rekening_kategori'=>'aktiva lancar',
                 'm_rekening_no_akun'=>'02.02.01',
                 'm_rekening_nama'=>'biaya bb operasional',
@@ -63,7 +63,7 @@ class MRekeningTableSeeder extends Seeder
             ],
             [
                 'm_rekening_id' => 6,
-                'm_rekening_m_waroeng_id'=> '001',
+                'm_rekening_m_waroeng_id'=> 74,
                 'm_rekening_kategori'=>'aktiva lancar',
                 'm_rekening_no_akun'=>'04.01.01',
                 'm_rekening_nama'=>'biaya peralatan operasional',
@@ -72,7 +72,7 @@ class MRekeningTableSeeder extends Seeder
             ],
             [
                 'm_rekening_id' => 7,
-                'm_rekening_m_waroeng_id'=> '001',
+                'm_rekening_m_waroeng_id'=> 74,
                 'm_rekening_kategori'=>'aktiva lancar',
                 'm_rekening_no_akun'=>'04.02.01',
                 'm_rekening_nama'=>'biaya peralatan produksi',
@@ -81,7 +81,7 @@ class MRekeningTableSeeder extends Seeder
             ],
             [
                 'm_rekening_id' => 8,
-                'm_rekening_m_waroeng_id'=> '001',
+                'm_rekening_m_waroeng_id'=> 74,
                 'm_rekening_kategori'=>'aktiva lancar',
                 'm_rekening_no_akun'=>'05.01.01',
                 'm_rekening_nama'=>'biaya pemeliharaan waroeng',
@@ -90,7 +90,7 @@ class MRekeningTableSeeder extends Seeder
             ],
             [
                 'm_rekening_id' => 9,
-                'm_rekening_m_waroeng_id'=> '001',
+                'm_rekening_m_waroeng_id'=> 74,
                 'm_rekening_kategori'=>'aktiva lancar',
                 'm_rekening_no_akun'=>'05.01.01',
                 'm_rekening_nama'=>'biaya perbaikan waroeng',
@@ -99,7 +99,7 @@ class MRekeningTableSeeder extends Seeder
             ],
             [
                 'm_rekening_id' => 10,
-                'm_rekening_m_waroeng_id'=> '001',
+                'm_rekening_m_waroeng_id'=> 74,
                 'm_rekening_kategori'=>'aktiva lancar',
                 'm_rekening_no_akun'=>'05.01.02',
                 'm_rekening_nama'=>'biaya renovasi waroeng',
@@ -108,7 +108,7 @@ class MRekeningTableSeeder extends Seeder
             ],
             [
                 'm_rekening_id' => 11,
-                'm_rekening_m_waroeng_id'=> '001',
+                'm_rekening_m_waroeng_id'=> 74,
                 'm_rekening_kategori'=>'aktiva lancar',
                 'm_rekening_no_akun'=>'05.01.03',
                 'm_rekening_nama'=>'biaya fasilitas kantor waroeng',
@@ -117,7 +117,7 @@ class MRekeningTableSeeder extends Seeder
             ],
             [
                 'm_rekening_id' => 12,
-                'm_rekening_m_waroeng_id'=> '001',
+                'm_rekening_m_waroeng_id'=> 74,
                 'm_rekening_kategori'=>'aktiva lancar',
                 'm_rekening_no_akun'=>'05.01.04',
                 'm_rekening_nama'=>'biaya listrik, air, telepon waroeng',
@@ -126,7 +126,7 @@ class MRekeningTableSeeder extends Seeder
             ],
             [
                 'm_rekening_id' => 13,
-                'm_rekening_m_waroeng_id'=> '001',
+                'm_rekening_m_waroeng_id'=> 74,
                 'm_rekening_kategori'=>'aktiva lancar',
                 'm_rekening_no_akun'=>'05.01.05',
                 'm_rekening_nama'=>'biaya alat dan jaringan waroeng',
@@ -135,7 +135,7 @@ class MRekeningTableSeeder extends Seeder
             ],
             [
                 'm_rekening_id' => 14,
-                'm_rekening_m_waroeng_id'=> '001',
+                'm_rekening_m_waroeng_id'=> 74,
                 'm_rekening_kategori'=>'aktiva lancar',
                 'm_rekening_no_akun'=>'05.01.06',
                 'm_rekening_nama'=>'lelang',
@@ -144,7 +144,7 @@ class MRekeningTableSeeder extends Seeder
             ],
             [
                 'm_rekening_id' => 15,
-                'm_rekening_m_waroeng_id'=> '001',
+                'm_rekening_m_waroeng_id'=> 74,
                 'm_rekening_kategori'=>'aktiva lancar',
                 'm_rekening_no_akun'=>'05.01.07',
                 'm_rekening_nama'=>'penjualan barang bekas',
@@ -153,7 +153,7 @@ class MRekeningTableSeeder extends Seeder
             ],
             [
                 'm_rekening_id' => 16,
-                'm_rekening_m_waroeng_id'=> '001',
+                'm_rekening_m_waroeng_id'=> 74,
                 'm_rekening_kategori'=>'aktiva lancar',
                 'm_rekening_no_akun'=>'05.01.08',
                 'm_rekening_nama'=>'pendapatan lain-lain',
@@ -162,7 +162,7 @@ class MRekeningTableSeeder extends Seeder
             ],
             [
                 'm_rekening_id' => 17,
-                'm_rekening_m_waroeng_id'=> '001',
+                'm_rekening_m_waroeng_id'=> 74,
                 'm_rekening_kategori'=>'aktiva lancar',
                 'm_rekening_no_akun'=>'05.01.09',
                 'm_rekening_nama'=>'penjualan non menu',
@@ -171,7 +171,7 @@ class MRekeningTableSeeder extends Seeder
             ],
             [
                 'm_rekening_id' => 18,
-                'm_rekening_m_waroeng_id'=> '001',
+                'm_rekening_m_waroeng_id'=> 74,
                 'm_rekening_kategori'=>'aktiva lancar',
                 'm_rekening_no_akun'=>'05.01.10',
                 'm_rekening_nama'=>'penjualan wbd',
