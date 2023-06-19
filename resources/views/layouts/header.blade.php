@@ -67,14 +67,14 @@
             $('.js-select2-nav').select2();
             $.get("/master/m_waroeng/akses", function(data) {
                 $.each(data, function(key, value) {
-                    $('#waroeng_id')
+                    $('#waroeng_default')
                         .append($('<option>', {
                                 value: key
                             })
                             .text(value));
                 });
             });
-            $('#waroeng_id').on('change', function() {
+            $('#waroeng_default').on('change', function() {
                 var id = $(this).val();
                 Swal.fire({
                     title: 'Apakah Anda Yakin Mengganti Waroeng?',

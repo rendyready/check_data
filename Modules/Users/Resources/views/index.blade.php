@@ -90,6 +90,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="mb-4">
+                                                    <label for="waroeng_akses">Waroeng Akses List :</label>
                                                     <div class="multi-column">
                                                         <ul>
                                                             <li class="all">
@@ -112,7 +113,7 @@
                                                                         title="check all"
                                                                         value="area{{ $val->m_area_id }}">
                                                                     <span class="css-control-indicator"></span>
-                                                                    <b class="text-danger">{{ $val->m_area_nama }}</b>
+                                                                    <b class="text-danger">{{ ucwords($val->m_area_nama) }}</b>
                                                                 </label>
                                                                 <ul>
                                                                     @foreach ($val->m_ws as $key2 => $val2)

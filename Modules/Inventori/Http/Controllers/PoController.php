@@ -45,10 +45,10 @@ class PoController extends Controller
         $insert = DB::table('rekap_po')->insert($rekap_po);
         foreach ($request->rekap_po_detail_qty as $key => $value) {
             $produk = DB::table('m_produk')
-            ->where('m_produk_id',$request->rekap_po_detail_m_produk_id[$key])
+            ->where('m_produk_code',$request->rekap_po_detail_m_produk_code[$key])
             ->first();
             $data = array(
-                'rekap_po_detal_rekap_po_code'=> $request->rekap_po_code,
+                'rekap_po_detail_rekap_po_code'=> $request->rekap_po_code,
                 'rekap_po_detail_m_produk_id' => $request->rekap_po_detail_m_produk_id[$key],
                 'rekap_po_detail_m_produk_code' => $produk->m_produk_code,
                 'rekap_po_detail_m_produk_nama' => $produk->m_produk_nama,

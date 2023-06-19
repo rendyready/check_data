@@ -35,7 +35,7 @@
                         <a class="dropdown-item d-flex align-items-center justify-content-between space-x-1"
                             href="javascript:void(0)" onclick="event.stopPropagation();">
                             <div class="form-group">
-                                <select class="js-select2-nav" id="waroeng_id" name="waroeng_id" style="width: 100%;"
+                                <select class="js-select2-nav" id="waroeng_default" name="waroeng_id" style="width: 100%;"
                                     data-placeholder="Ganti Waroeng">
                                     <option></option>
                                 </select>
