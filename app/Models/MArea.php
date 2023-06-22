@@ -53,4 +53,8 @@ class MArea extends Model
 		'm_area_deleted_at',
 		'm_area_status_sync'
 	];
+	public function m_ws()
+	{
+		return $this->hasMany(MW::class, 'm_w_m_area_id');
+	}
 }

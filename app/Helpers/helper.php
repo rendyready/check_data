@@ -174,3 +174,8 @@ function convertindo($number) {
 {
 	return $angka_format = number_format($num, 2, ',', '.');
 }  
+
+function string_num_tofloat($string) {
+	$number = number_format((float)$string, 2);
+	return $number;
+}

@@ -29,9 +29,6 @@ class DetailNotaController extends Controller
         $data->area = DB::table('m_area')
             ->orderby('m_area_id', 'ASC')
             ->get();
-        $data->transaksi_rekap = DB::table('rekap_transaksi')
-            ->orderby('r_t_id', 'ASC')
-            ->get();
         return view('dashboard::detail_nota', compact('data'));
     }
 

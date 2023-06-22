@@ -128,28 +128,47 @@ class RekapNonMenuController extends Controller
        foreach ($sesi as $key => $valSesi) {
             foreach ($typeTransaksi as $key => $valType) {
                #Menu
-               $menu = DB::table('rekap_transaksi')
-                       ->join('rekap_transaksi_detail','r_t_detail_r_t_id','r_t_id')
-                       ->selectRaw('r_t_rekap_modal_id, sum(r_t_detail_reguler_price*r_t_detail_qty) nominal')
-                       ->where([
-                           'r_t_rekap_modal_id' => $valSesi->rekap_modal_id,
-                           'r_t_m_t_t_id' => $valType->m_t_t_id
-                       ])
-                       ->whereIn('r_t_detail_m_produk_id',$listMenu)
-                       ->groupBy('r_t_rekap_modal_id')
-                       ->first();
+                $menu_tot = 0;
+                $nota_menu = 0;
+                $non_menu = 0;
+                $ice_cream = 0;
+                $wbd_bumbu = 0;
+                $wbd_bumbu_grab = 0;
+                $grab_nota = 0;
+                $wbd_frozen = 0;
+                $wbd_frozen_grab = 0;
+                $kerupuk_tot = 0;
+                $mineral_tot = 0;
+                $pajak_tot = 0;
+
+                $menu = DB::table('rekap_transaksi')
+                        ->join('rekap_transaksi_detail','r_t_detail_r_t_id','r_t_id')
+                        ->selectRaw('r_t_rekap_modal_id, sum(r_t_detail_reguler_price*r_t_detail_qty) nominal')
+                        ->where([
+                            'r_t_rekap_modal_id' => $valSesi->rekap_modal_id,
+                            'r_t_m_t_t_id' => $valType->m_t_t_id
+                        ])
+                        ->whereIn('r_t_detail_m_produk_id',$listMenu)
+                        ->groupBy('r_t_rekap_modal_id')
+                        ->first();
+                        
                 $menu_nota = DB::table('rekap_transaksi')
                         ->selectRaw('count(r_t_id) nota')
                         ->where([
                             'r_t_rekap_modal_id' => $valSesi->rekap_modal_id,
                             'r_t_m_t_t_id' => $valType->m_t_t_id
                         ])->first();
-                $menu_tot = 0;
-                $nota_menu = 0;
-               if (!empty($menu)) {
-                   $menu_tot = $menu->nominal;
-                   $nota_menu = $menu_nota->nota;
-               }
+
+                        if (!empty($menu)) {
+                            $menu_tot = $menu->nominal;
+                            $nota_menu = $menu_nota->nota;
+                        }
+                
+                
+                        
+                // if (!empty($nota_menu)) {
+                //     $nota_menu = $menu_nota->nota;
+                // }
             
                #Non-Menu
                $nonMenu = DB::table('rekap_transaksi')
@@ -163,7 +182,7 @@ class RekapNonMenuController extends Controller
                        ->groupBy('r_t_rekap_modal_id', 'r_t_m_t_t_id')
                        ->first();
 
-                $non_menu = 0;
+                
                if (!empty($nonMenu)) {
                    $non_menu = $nonMenu->nominal;
                }
@@ -179,7 +198,7 @@ class RekapNonMenuController extends Controller
                        ->whereIn('r_t_detail_m_produk_id',$listIceCream)
                        ->groupBy('r_t_rekap_modal_id')
                        ->first();
-                $ice_cream = 0;
+                
                if (!empty($iceCream)) {
                    $ice_cream = $iceCream->nominal;
                }
@@ -195,7 +214,8 @@ class RekapNonMenuController extends Controller
                        ->whereNotIn('r_t_detail_m_produk_id',$listWbdFrozen)
                        ->groupBy('r_t_rekap_modal_id')
                        ->first();
-                $wbd_bumbu = 0;
+                
+
                if (!empty($wbdBumbu)) {
                    $wbd_bumbu = $wbdBumbu->nominal;
                }
@@ -218,8 +238,7 @@ class RekapNonMenuController extends Controller
                             'r_t_rekap_modal_id' => $valSesi->rekap_modal_id,
                             'r_t_m_t_t_id' => 5
                         ])->first();
-                $wbd_bumbu_grab = 0;
-                $grab_nota = 0;
+                
                 if (!empty($wbdBumbuGrab) && !empty($menu_grab) && $wbdBumbuGrab->r_t_m_t_t_id == 5) {
                     $wbd_bumbu_grab = $wbdBumbuGrab->nominal;
                     $grab_nota = $menu_grab->nota;
@@ -235,7 +254,7 @@ class RekapNonMenuController extends Controller
                        ->whereIn('r_t_detail_m_produk_id',$listWbdFrozen)
                        ->groupBy('r_t_rekap_modal_id', 'r_t_m_t_t_id')
                        ->first();
-                $wbd_frozen = 0;
+                
                if (!empty($wbdFrozen)) {
                    $wbd_frozen = $wbdFrozen->nominal;
                }
@@ -251,7 +270,7 @@ class RekapNonMenuController extends Controller
                        ->whereIn('r_t_detail_m_produk_id',$listWbdFrozen)
                        ->groupBy('r_t_rekap_modal_id', 'r_t_m_t_t_id')
                        ->first();
-                $wbd_frozen_grab = 0;
+                
                 if (!empty($wbdFrozenGrab)) {
                     $wbd_frozen_grab = $wbdFrozenGrab->nominal;
                }
@@ -266,7 +285,7 @@ class RekapNonMenuController extends Controller
                         ->whereIn('r_t_detail_m_produk_id',$listKerupuk)
                         ->groupBy('r_t_rekap_modal_id')
                         ->first();
-                $kerupuk_tot = 0;
+                
                if (!empty($kerupuk)) {
                    $kerupuk_tot = $kerupuk->nominal;
                }
@@ -281,7 +300,7 @@ class RekapNonMenuController extends Controller
                        ->whereIn('r_t_detail_m_produk_id',$listMineral)
                        ->groupBy('r_t_rekap_modal_id')
                        ->first();
-                $mineral_tot = 0;
+               
                if (!empty($mineral)) {
                    $mineral_tot = $mineral->nominal;
                }  
@@ -294,7 +313,7 @@ class RekapNonMenuController extends Controller
                        ])
                        ->groupBy('r_t_rekap_modal_id')
                        ->first();
-                $pajak_tot = 0;
+                
                if (!empty($pajak)) {
                    $pajak_tot = $pajak->pajak;
                }           
@@ -383,7 +402,7 @@ class RekapNonMenuController extends Controller
                #Menu
                $menu = DB::table('rekap_transaksi')
                        ->join('rekap_transaksi_detail','r_t_detail_r_t_id','r_t_id')
-                       ->selectRaw('r_t_rekap_modal_id, r_t_m_t_t_id, sum(r_t_detail_reguler_price*r_t_detail_qty) nominal')
+                       ->selectRaw('r_t_rekap_modal_id, sum(r_t_detail_reguler_price*r_t_detail_qty) nominal')
                        ->where([
                            'r_t_rekap_modal_id' => $valSesi->rekap_modal_id,
                            'r_t_m_t_t_id' => $valType->m_t_t_id

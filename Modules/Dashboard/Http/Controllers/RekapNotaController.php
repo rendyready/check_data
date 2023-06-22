@@ -31,6 +31,7 @@ class RekapNotaController extends Controller
             ->orderby('id', 'ASC')
             ->get();
         $data->transaksi_rekap = DB::table('rekap_transaksi')
+            ->select('r_t_id')
             ->get();
         return view('dashboard::rekap_nota', compact('data'));
     }
@@ -81,8 +82,18 @@ class RekapNotaController extends Controller
                 ->join('m_payment_method', 'm_payment_method_id', 'r_p_t_m_payment_method_id')
                 ->get();
         $detail = DB::table('rekap_transaksi_detail')
-                ->selectRaw('(SUM(r_t_detail_reguler_price * r_t_detail_qty)) as sum_detail, r_t_detail_r_t_id')
-                ->groupby('r_t_detail_r_t_id')
+                ->join('rekap_transaksi', 'r_t_id', 'r_t_detail_r_t_id')
+                ->selectRaw('(SUM(r_t_detail_reguler_price * r_t_detail_qty)) as sum_detail, r_t_detail_r_t_id');
+                if($request->operator != 'all'){
+                    $detail->where('r_t_created_by', $request->operator);
+                }
+                if (strpos($request->tanggal, 'to') !== false) {
+                    [$start, $end] = explode('to' ,$request->tanggal);
+                    $detail->whereBetween('r_t_tanggal', [$start, $end]);
+                } else {
+                    $detail->where('r_t_tanggal', $request->tanggal);
+                }
+                $detail = $detail->groupby('r_t_detail_r_t_id')
                 ->get();
 
         $get = DB::table('rekap_transaksi')

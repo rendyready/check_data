@@ -124,6 +124,11 @@
         }
        
     }) 
+    $(document).on('click','.detail',function () {
+        var id = $(this).attr('value');
+        console.log(id);
+        window.open("/inventori/stok_so/detail/"+id, "_blank");
+    })
   });
 </script>
 @endsection

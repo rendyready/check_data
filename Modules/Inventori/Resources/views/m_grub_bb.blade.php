@@ -20,6 +20,7 @@
                                 <th>Qty BB Relasi</th>
                                 <th>Porsi Kotor BB Relasi</th>
                                 <th>Satuan</th>
+                                <th>Lokasi</th>
                                 <th>Aksi</th>
                             </thead>
                             <tbody>
@@ -31,6 +32,7 @@
                                 <th>Qty BB Relasi</th>
                                 <th>Porsi Kotor BB Relasi</th>
                                 <th>Satuan</th>
+                                <th>Lokasi</th>
                                 <th>Aksi</th>
                             </tfoot>
                         </table>
@@ -55,7 +57,7 @@
                                                 <div class="mb-4">
                                                     <input name="action" type="hidden" id="action">
                                                     <input type="hidden" id="id" name="id">
-                                                          <div class="form-group">
+                                                    <div class="form-group">
                                                         <label for="m_std_bb_resep_m_produk_code_asal">Produk Asal</label>
                                                         <div>
                                                             <select class="js-select2"
@@ -105,37 +107,35 @@
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
-                                                      <label for="m_std_bb_resep_m_satuan_id">Satuan
-                                                          </label>
-                                                      <div>
-                                                          <select class="js-select2"
-                                                              id="m_std_bb_resep_m_satuan_id"
-                                                              name="m_std_bb_resep_m_satuan_id"
-                                                              style="width: 100%;" data-container="#form_std_bb"
-                                                              data-placeholder="Pilih Satuan">
-                                                              <option></option>
-                                                              @foreach ($satuan as $item)
-                                                                  <option value="{{ $item->m_satuan_id }}">
-                                                                      {{ ucwords($item->m_satuan_kode) }}</option>
-                                                              @endforeach
-                                                          </select>
-                                                      </div>
-                                                  </div>
-                                                  <div class="form-group">
-                                                    <label for="m_std_bb_resep_gudang_status">Gudang Status
+                                                        <label for="m_std_bb_resep_m_satuan_id">Satuan
                                                         </label>
-                                                    <div>
-                                                        <select class="js-select2"
-                                                            id="m_std_bb_resep_gudang_status"
-                                                            name="m_std_bb_resep_gudang_status"
-                                                            style="width: 100%;" data-container="#form_std_bb"
-                                                            data-placeholder="Pilih Status">
-                                                            <option></option>
-                                                          <option value="produksi">Produksi</option>
-                                                          <option value="pengadaan">Pengadaan</option>
-                                                        </select>
+                                                        <div>
+                                                            <select class="js-select2" id="m_std_bb_resep_m_satuan_id"
+                                                                name="m_std_bb_resep_m_satuan_id" style="width: 100%;"
+                                                                data-container="#form_std_bb"
+                                                                data-placeholder="Pilih Satuan">
+                                                                <option></option>
+                                                                @foreach ($satuan as $item)
+                                                                    <option value="{{ $item->m_satuan_id }}">
+                                                                        {{ ucwords($item->m_satuan_kode) }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
                                                     </div>
-                                                </div>
+                                                    <div class="form-group">
+                                                        <label for="m_std_bb_resep_gudang_status">Gudang Status
+                                                        </label>
+                                                        <div>
+                                                            <select class="js-select2" id="m_std_bb_resep_gudang_status"
+                                                                name="m_std_bb_resep_gudang_status" style="width: 100%;"
+                                                                data-container="#form_std_bb"
+                                                                data-placeholder="Pilih Status">
+                                                                <option></option>
+                                                                <option value="produksi">Produksi</option>
+                                                                <option value="pengadaan">Pengadaan</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                         </div>
                                         <div class="block-content block-content-full text-end bg-body">
@@ -157,88 +157,95 @@
     <!-- END Page Content -->
 @endsection
 @section('js')
-    <script type="module">
- $(document).ready(function(){
-  $.ajaxSetup({
-    headers:{
-      'X-CSRF-Token' : $("input[name=_token]").val()
-        }
-      });
-      Codebase.helpersOnLoad(['jq-select2']);
-    var table, save_method;
-        $(function() {
-            table = $('#tb_bb_std').DataTable({
-        "destroy":true,
-        "orderCellsTop": true,
-        "processing": true,
-        "autoWidth": true,
-        "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
-        "pageLength": 10,
-        "ajax": {
-            "url": "{{ route('m_grub_bb.list') }}",
-            "type": "GET"
+    <script>
+        $(document).ready(function() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-Token': $("input[name=_token]").val()
                 }
             });
-        });
-      $(".buttonInsert").on('click', function() {
-            $('[name="action"]').val('add');
-            var id = $(this).attr('value');
-            $('#form_std_bb form')[0].reset();
-            $("#myModalLabel").html('Tambah Grub BB');
-            $("#form_std_bb").modal('show');
-      });
-      $("#tb_bb_std").on('click','.buttonEdit', function() {
+            Codebase.helpersOnLoad(['jq-select2']);
+            var table, save_method;
+            $(function() {
+                table = $('#tb_bb_std').DataTable({
+                    "destroy": true,
+                    "orderCellsTop": true,
+                    "processing": true,
+                    "autoWidth": true,
+                    "lengthMenu": [
+                        [10, 25, 50, 100, -1],
+                        [10, 25, 50, 100, "All"]
+                    ],
+                    "pageLength": 10,
+                    "ajax": {
+                        "url": "{{ route('m_grub_bb.list') }}",
+                        "type": "GET"
+                    }
+                });
+            });
+            $(".buttonInsert").on('click', function() {
+                $('[name="action"]').val('add');
+                var id = $(this).attr('value');
+                $('#form_std_bb form')[0].reset();
+                $("#myModalLabel").html('Tambah Grub BB');
+                $("#form_std_bb").modal('show');
+            });
+            $("#tb_bb_std").on('click', '.buttonEdit', function() {
                 var id = $(this).attr('value');
                 $('[name="action"]').val('edit');
                 $('#form_std_bb form')[0].reset();
                 $("#myModalLabel").html('Ubah Grub BB');
                 $.ajax({
-                    url: "/inventori/m_grub_bb/edit/"+id,
+                    url: "/inventori/m_grub_bb/edit/" + id,
                     type: "GET",
                     dataType: 'json',
                     success: function(respond) {
                         $("#m_supplier_code").val(respond.m_supplier_code).trigger('change');
                         $("#m_supplier_nama").val(respond.m_supplier_nama).trigger('change');
-                        $("#m_supplier_alamat").val(respond.m_supplier_alamat).trigger('change');
+                        $("#m_supplier_alamat").val(respond.m_supplier_alamat).trigger(
+                        'change');
                         $("#m_supplier_kota").val(respond.m_supplier_kota).trigger('change');
                         $("#m_supplier_telp").val(respond.m_supplier_telp).trigger('change');
                         $("#m_supplier_ket").val(respond.m_supplier_ket).trigger('change');
                         $("#m_supplier_rek").val(respond.m_supplier_rek).trigger('change');
-                        $("#m_supplier_rek_nama").val(respond.m_supplier_rek_nama).trigger('change');
-                        $("#m_supplier_bank_nama").val(respond.m_supplier_bank_nama).trigger('change');
-                        $("#m_supplier_saldo_awal").val(respond.m_supplier_saldo_awal).trigger('change');
-                        $("#m_supplier_jth_tempo").val(respond.m_supplier_jth_tempo).trigger('change');
+                        $("#m_supplier_rek_nama").val(respond.m_supplier_rek_nama).trigger(
+                            'change');
+                        $("#m_supplier_bank_nama").val(respond.m_supplier_bank_nama).trigger(
+                            'change');
+                        $("#m_supplier_saldo_awal").val(respond.m_supplier_saldo_awal).trigger(
+                            'change');
+                        $("#m_supplier_jth_tempo").val(respond.m_supplier_jth_tempo).trigger(
+                            'change');
                     },
-                    error: function() {
-                    }
+                    error: function() {}
                 });
                 $("#form_std_bb").modal('show');
-            }); 
-            $('#formAction').submit( function(e){
-                if(!e.isDefaultPrevented()){
+            });
+            $('#formAction').submit(function(e) {
+                if (!e.isDefaultPrevented()) {
                     $.ajax({
-                        url : "{{ route('m_grub_bb.action') }}",
-                        type : "POST",
-                        data : $('#form_std_bb form').serialize(),
-                        success : function(data){
+                        url: "{{ route('m_grub_bb.action') }}",
+                        type: "POST",
+                        data: $('#form_std_bb form').serialize(),
+                        success: function(data) {
                             $('#form_std_bb').modal('hide');
                             Codebase.helpers('jq-notify', {
-                              align: 'right', // 'right', 'left', 'center'
-                              from: 'top', // 'top', 'bottom'
-                              type: data.type, // 'info', 'success', 'warning', 'danger'
-                              icon: 'fa fa-info me-5', // Icon class
-                              message: data.messages
+                                align: 'right', // 'right', 'left', 'center'
+                                from: 'top', // 'top', 'bottom'
+                                type: data
+                                .type, // 'info', 'success', 'warning', 'danger'
+                                icon: 'fa fa-info me-5', // Icon class
+                                message: data.messages
                             });
-                            console.log(data);
                             table.ajax.reload();
                         },
-                        error : function(){
+                        error: function() {
                             alert("Tidak dapat menyimpan data!");
                         }
                     });
                     return false;
                 }
             });
-});
-</script>
+        });
+    </script>
 @endsection

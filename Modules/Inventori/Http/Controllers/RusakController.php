@@ -34,9 +34,9 @@ class RusakController extends Controller
     {
         $waroeng_id = Auth::user()->waroeng_id;
         $rekap_rusak = array(
-            'rekap_rusak_id' => $this->getMasterId('rekap_rusak'),
-            'rekap_rusak_code' => $request->rekap_rusak_code,
+            'rekap_rusak_id' => $request->rekap_rusak_code,
             'rekap_rusak_tgl' => $request->rekap_rusak_tgl,
+            'rekap_rusak_m_gudang_code' => $request->m_gudang_code,
             'rekap_rusak_m_w_id' => $waroeng_id,
             'rekap_rusak_m_w_nama' => $this->get_m_w_nama(),
             'rekap_rusak_created_at' => Carbon::now(),
@@ -50,13 +50,14 @@ class RusakController extends Controller
             ->first();
             $data = array(
                 'rekap_rusak_detail_id' => $this->getNextId('rekap_rusak_detail',$waroeng_id),
-                'rekap_rusak_detail_rekap_rusak_code'=> $request->rekap_rusak_code,
+                'rekap_rusak_detail_rekap_rusak_id'=> $request->rekap_rusak_code,
                 'rekap_rusak_detail_gudang_code' => $request->m_gudang_code,
                 'rekap_rusak_detail_m_produk_code' => $request->rekap_rusak_detail_m_produk_id[$key],
                 'rekap_rusak_detail_m_produk_nama' => $produk->m_produk_nama,
-                'rekap_rusak_detail_qty' => $request->rekap_rusak_detail_qty[$key],
-                'rekap_rusak_detail_hpp' => $request->rekap_rusak_detail_hpp[$key],
-                'rekap_rusak_detail_sub_total' => $request->rekap_rusak_detail_sub_total[$key],
+                'rekap_rusak_detail_qty' => convertfloat($request->rekap_rusak_detail_qty[$key]),
+                'rekap_rusak_detail_hpp' => convertfloat($request->rekap_rusak_detail_hpp[$key]),
+                'rekap_rusak_detail_satuan' => $request->satuan[$key],
+                'rekap_rusak_detail_sub_total' => convertfloat($request->rekap_rusak_detail_sub_total[$key]),
                 'rekap_rusak_detail_catatan' => $request->rekap_rusak_detail_catatan[$key],
                 'rekap_rusak_detail_created_by' => Auth::user()->users_id,
                 'rekap_rusak_detail_created_at' => Carbon::now()
@@ -94,6 +95,27 @@ class RusakController extends Controller
             DB::table('m_stok_detail')->insert($input_detail);
         }
         return redirect()->back()->with('success', 'your message,here'); 
+    }
+    public function rusak_daily_list($id) {
+        $list = DB::table('rekap_rusak')
+        ->join('rekap_rusak_detail','rekap_rusak_id','rekap_rusak_detail_rekap_rusak_id')
+        ->join('users','users_id','rekap_rusak_created_by')
+        ->where('rekap_rusak_m_gudang_code',$id)
+        ->where('rekap_rusak_tgl',Carbon::now())
+        ->get();
+        $data = array();
+        foreach ($list as $value) {
+            $row = array();
+            $row[] = tgl_waktuid($value->rekap_rusak_created_at);
+            $row[] = $value->rekap_rusak_id;
+            $row[] = $value->rekap_rusak_detail_m_produk_nama;
+            $row[] = $value->rekap_rusak_detail_qty;
+            $row[] = $value->rekap_rusak_detail_satuan;
+            $row[] = ucwords($value->name);
+            $data[] = $row;
+        }
+        $output = array("data" => $data);
+        return response()->json($output);
     }
 
 }

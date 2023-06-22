@@ -7,7 +7,11 @@
                 <div class="block block-themed h-100 mb-0">
                     <div class="block-header bg-pulse">
                         <h3 class="block-title">
-                            FORM INPUT STOK OPNAME
+                            @if ($data->aksi == 'detail')
+                                HISTORY INPUT SO
+                            @else
+                                FORM INPUT STOK OPNAME
+                            @endif
                     </div>
                     <div class="block-content text-muted">
                         <form id="myform">
@@ -15,43 +19,76 @@
                                 <div class="col-md-4">
                                     <div class="row mb-1">
                                         <label class="col-sm-3 col-form-label" for="rekap_beli_created_by">Operator</label>
+                                        @if ($data->aksi == 'detail')
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" id="rekap_beli_created_by"
+                                                name="rekap_beli_created_by" value="{{ ucwords($data->operator) }}" readonly>
+                                        </div>
+                                        @else
                                         <div class="col-sm-9">
                                             <input type="text" class="form-control" id="rekap_beli_created_by"
                                                 name="rekap_beli_created_by" value="{{ Auth::user()->name }}" readonly>
                                         </div>
+                                        @endif
+                                        
                                     </div>
                                     <div class="row mb-1">
                                         <label class="col-sm-3 col-form-label" for="example-hf-text">Waroeng</label>
                                         <div class="col-sm-9">
-                                            <input type="hidden" class="nota" name="rekap_so_code"
-                                                value="{{ $data->so_code }}">
-                                            <input type="text" class="form-control nota" id="rekap_so_m_w_nama"
-                                                name="rekap_so_m_w_nama" value="{{ ucwords($data->waroeng->m_w_nama) }}"
-                                                readonly>
-                                            <input type="hidden" name="rekap_so_m_w_code"
-                                                value="{{ $data->waroeng->m_w_code }}">
+                                            @if ($data->aksi == 'detail')
+                                                <input type="text" class="form-control nota" id="rekap_so_m_w_nama"
+                                                    name="rekap_so_m_w_nama"
+                                                    value="{{ ucwords($data->so->rekap_so_m_w_nama) }}" readonly>
+                                            @else
+                                                <input type="hidden" class="nota" name="rekap_so_code"
+                                                    value="{{ $data->so_code }}">
+                                                <input type="text" class="form-control nota" id="rekap_so_m_w_nama"
+                                                    name="rekap_so_m_w_nama" value="{{ ucwords($data->waroeng->m_w_nama) }}"
+                                                    readonly>
+                                                <input type="hidden" name="rekap_so_m_w_code"
+                                                    value="{{ $data->waroeng->m_w_code }}">
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="row mb-1">
-                                        <label class="col-sm-4 col-form-label" for="rekap_so_tgl">Tanggal</label>
-                                        <div class="col-sm-7">
-                                            <input type="text" class="form-control" id="rekap_so_tgl" name="rekap_so_tgl"
-                                                value="{{ $data->tgl_now }}" readonly="readonly">
+                                    @if ($data->aksi == 'detail')
+                                        <div class="row mb-1">
+                                            <label class="col-sm-4 col-form-label" for="rekap_so_tgl">Tanggal</label>
+                                            <div class="col-sm-7">
+                                                <input type="text" class="form-control" id="rekap_so_tgl"
+                                                    name="rekap_so_tgl" value="{{ $data->so->rekap_so_tgl }}"
+                                                    readonly="readonly">
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="row mb-1">
-                                        <label class="col-sm-4 col-form-label" for="example-hf-text">Gudang</label>
-                                        <div class="col-sm-7">
-                                            <input type="text" class="form-control nota" id="gudang_nama"
-                                                name="gudang_nama" value="{{ ucwords($data->gudang_nama) }}" readonly>
-                                            <input type="hidden" name="rekap_so_m_gudang_code"
-                                                value="{{ $data->gudang_code }}">
-                                            <input type="hidden" name="rekap_so_m_klasifikasi_produk_id"
-                                                value="{{ $data->kat_id }}">
+                                        <div class="row mb-1">
+                                            <label class="col-sm-4 col-form-label" for="example-hf-text">Gudang</label>
+                                            <div class="col-sm-7">
+                                                <input type="text" class="form-control nota" id="gudang_nama"
+                                                    name="gudang_nama" value="{{ ucwords($data->gudang_nama) }}" readonly>
+                                            </div>
                                         </div>
-                                    </div>
+                                    @else
+                                        <div class="row mb-1">
+                                            <label class="col-sm-4 col-form-label" for="rekap_so_tgl">Tanggal</label>
+                                            <div class="col-sm-7">
+                                                <input type="text" class="form-control" id="rekap_so_tgl"
+                                                    name="rekap_so_tgl" value="{{ $data->tgl_now }}" readonly="readonly">
+                                            </div>
+                                        </div>
+                                        <div class="row mb-1">
+                                            <label class="col-sm-4 col-form-label" for="example-hf-text">Gudang</label>
+                                            <div class="col-sm-7">
+                                                <input type="text" class="form-control nota" id="gudang_nama"
+                                                    name="gudang_nama" value="{{ ucwords($data->gudang_nama) }}" readonly>
+                                                <input type="hidden" name="rekap_so_m_gudang_code"
+                                                    value="{{ $data->gudang_code }}">
+                                                <input type="hidden" name="rekap_so_m_klasifikasi_produk_id"
+                                                    value="{{ $data->kat_id }}">
+                                            </div>
+                                        </div>
+                                    @endif
+
                                 </div>
                             </div>
                             <br>
@@ -61,40 +98,52 @@
                                         <th>No</th>
                                         <th>Nama Barang</th>
                                         <th>Qty Stok</th>
-                                        <th>Satuan</th>
                                         <th>SO Rill</th>
-                                        <th>Selisih</th>
+                                        <th>Satuan</th>
                                     </thead>
                                     <tbody>
                                         @php
                                             $no = 1;
                                         @endphp
-                                        @foreach ($data->stok as $item)
-                                            <tr>
-                                                <td>{{ $no++ }}</td>
-                                                <td>{{ ucwords($item->m_stok_produk_nama) }}<input type="hidden"
-                                                        name="rekap_so_detail_m_produk_code[]"
-                                                        value="{{ $item->m_stok_m_produk_code }}"></td>
-                                                <td>{{ num_format($item->m_stok_saldo) }} <input type="hidden"
-                                                        name="rekap_so_detail_qty[]" class="qty number"
-                                                        value="{{ $item->m_stok_saldo }}"></td>
-                                                <td>{{ ucwords($item->m_stok_satuan) }} <input type="hidden"
-                                                        name="rekap_so_detail_satuan[]" value="{{ $item->m_stok_satuan }}">
-                                                </td>
-                                                <td>
-                                                    <input type="text" class="form-control number rill"
-                                                        name="rekap_so_detail_qty_riil[]" id="rekap_so_detail_qty_riil">
-                                                </td>
-                                                <td><input id="selisih{{ $no }}"
-                                                        style="background-color: transparent; border: none;" type="text"
-                                                        class="form-control number" name="selisih[]" readonly></td>
-                                            </tr>
-                                        @endforeach
+                                        @if ($data->aksi == 'detail')
+                                            @foreach ($data->so_detail as $item)
+                                                <tr>
+                                                    <td>{{ $no++ }}</td>
+                                                    <td>{{ ucwords($item->rekap_so_detail_m_produk_nama) }}</td>
+                                                    <td>{{ num_format($item->rekap_so_detail_qty) }} </td>
+                                                    <td>{{ num_format($item->rekap_so_detail_qty_riil) }}</td>
+                                                    <td>{{ ucwords($item->rekap_so_detail_satuan) }}</td>
+                                                </tr>
+                                            @endforeach
+                                        @else
+                                            @foreach ($data->stok as $item)
+                                                <tr>
+                                                    <td>{{ $no++ }}</td>
+                                                    <td>{{ ucwords($item->m_stok_produk_nama) }}<input type="hidden"
+                                                            name="rekap_so_detail_m_produk_code[]"
+                                                            value="{{ $item->m_stok_m_produk_code }}"></td>
+                                                    <td>{{ num_format($item->m_stok_saldo) }} <input type="hidden"
+                                                            name="rekap_so_detail_qty[]" class="qty number"
+                                                            value="{{ $item->m_stok_saldo }}"></td>
+                                                    <td>
+                                                        <input type="text" class="form-control number rill"
+                                                            name="rekap_so_detail_qty_riil[]">
+                                                    </td>
+                                                    <td>{{ ucwords($item->m_stok_satuan) }} <input type="hidden"
+                                                            name="rekap_so_detail_satuan[]"
+                                                            value="{{ $item->m_stok_satuan }}">
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        @endif
+
                                     </tbody>
                                 </table>
                             </div>
                         </form>
-                        <a id="simpan" class="btn btn-sm simpan btn-success">Simpan</a>
+                        @if ($data->aksi != 'detail')
+                            <a id="simpan" class="btn btn-sm simpan btn-success">Simpan</a>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -148,9 +197,9 @@
                             icon: 'fa fa-info me-5', // Icon class
                             message: 'Input SO Berhasil Anda Akan Dialihkan Ke Halaman Utama'
                         });
-                        // setTimeout(function() {
-                        //     window.location.href = "{{ route('stok_so.index') }}";
-                        // }, 500);
+                        setTimeout(function() {
+                            window.location.href = "{{ route('stok_so.index') }}";
+                        }, 500);
                     },
                     error: function(xhr, textStatus, errorThrown) {
                         // Tindakan saat terjadi kesalahan
@@ -170,19 +219,6 @@
                 headers: {
                     'X-CSRF-Token': $("input[name=_token]").val()
                 }
-            });
-            $('#tb-so').on('input', '.qty, .rill', function() {
-                table.rows().every(function() {
-                    var row = this.node();
-                    var qty = parseFloat(table.cell(row, 2).nodes().to$().find('input').val());
-                    var rill = parseFloat(table.cell(row, 4).nodes().to$().find('input').val()
-                        .replace(/\./g, '').replace(/\,/g, '.'));
-                    var selisih = qty - rill;
-                    if (!isNaN(selisih)) {
-                        table.cell(row, 5).nodes().to$().find('input').val(selisih.toLocaleString(
-                            "id"));
-                    }
-                });
             });
         });
     </script>

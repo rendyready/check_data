@@ -218,7 +218,8 @@
                                             <label class="col-sm-4 col-form-label" for="rekap_beli_ongkir">Ongkos
                                                 Kirim</label>
                                             <div class="col-sm-6">
-                                                <input type="text" class="form-control form-control-sm number reset ongkir"
+                                                <input type="text"
+                                                    class="form-control form-control-sm number reset ongkir"
                                                     id="rekap_beli_ongkir" name="rekap_beli_ongkir">
                                             </div>
                                         </div>
@@ -344,6 +345,7 @@
             });
         }
         var datas, table, asal;
+        var isConfirmationShown = false;
         $(document).ready(function() {
             get_code();
             $.ajaxSetup({
@@ -352,61 +354,72 @@
                 }
             });
             Codebase.helpersOnLoad(['jq-select2']);
-            $('#rekap_beli_gudang_code').on('change', function() {
+            var getDataAndReloadTable = function() {
+                $('#rekap_beli_detail_m_produk_id1').empty();
+                $('#rekap_beli_detail_m_produk_id1').append('<option></option>');
+                $.get("/inventori/stok/" + asal, function(data) {
+                    datas = data;
+                    $.each(data, function(key, value) {
+                        $('#rekap_beli_detail_m_produk_id1')
+                            .append($('<option>', {
+                                    value: key
+                                })
+                                .text(value));
+                    });
+                });
+
+                table = $('#tb_beli').DataTable({
+                    "destroy": true,
+                    "orderCellsTop": true,
+                    "processing": true,
+                    "autoWidth": true,
+                    "lengthMenu": [
+                        [10, 25, 50, 100, -1],
+                        [10, 25, 50, 100, "All"]
+                    ],
+                    "pageLength": 10,
+                    "ajax": {
+                        "url": "beli/history/" + asal,
+                        "type": "GET"
+                    }
+                });
+            };
+
+            $(document).
+            on("select2:open", '#rekap_beli_gudang_code', function() {
+                $(this).data("id", $(this).val());
+            }).
+            on('change', '#rekap_beli_gudang_code', function() {
                 asal = $(this).val();
-
-                var getDataAndReloadTable = function() {
-                    $('#rekap_beli_detail_m_produk_id1').empty();
-                    $('#rekap_beli_detail_m_produk_id1').append('<option></option>');
-                    $.get("/inventori/stok/" + asal, function(data) {
-                        datas = data;
-                        $.each(data, function(key, value) {
-                            $('#rekap_beli_detail_m_produk_id1')
-                                .append($('<option>', {
-                                        value: key
-                                    })
-                                    .text(value));
+                var id = $(this).data("id");
+                    if ($('.fc').serialize().length > 191) {
+                        if (!isConfirmationShown) {
+                        Swal.fire({
+                            title: 'Apakah Anda Yakin ?',
+                            text: "Hasil Input Akan Hilang Jika Anda Berganti Gudang Tanpa Menyimpanya",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Ya'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                Swal.fire(
+                                    'Berhasil',
+                                    'Gudang Telah Berganti.',
+                                    'success'
+                                );
+                                getDataAndReloadTable();
+                                $('.remove').remove();
+                                $('.reset').trigger('changer').val('');
+                            } else {
+                                isConfirmationShown =
+                                    true; // Set isConfirmationShown kembali ke false agar dialog konfirmasi dapat ditampilkan lagi jika diperlukan
+                                $('#rekap_beli_gudang_code').val(id).trigger('change');
+                                isConfirmationShown = false;
+                            }
                         });
-                    });
-
-                    table = $('#tb_beli').DataTable({
-                        "destroy": true,
-                        "orderCellsTop": true,
-                        "processing": true,
-                        "autoWidth": true,
-                        "lengthMenu": [
-                            [10, 25, 50, 100, -1],
-                            [10, 25, 50, 100, "All"]
-                        ],
-                        "pageLength": 10,
-                        "ajax": {
-                            "url": "beli/history/" + asal,
-                            "type": "GET"
-                        }
-                    });
-                };
-
-                if ($('.fc').serialize().length > 191) {
-                    Swal.fire({
-                        title: 'Apakah Anda Yakin ?',
-                        text: "Hasil Input Akan Hilang Jika Anda Berganti Gudang Tanpa Menyimpanya",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Ya'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            Swal.fire(
-                                'Berhasil',
-                                'Gudang Telah Berganti.',
-                                'success'
-                            );
-                            getDataAndReloadTable();
-                            $('.remove').remove();
-                            $('.reset').trigger('changer').val('');
-                        }
-                    });
+                    }
                 } else {
                     getDataAndReloadTable();
                 }
@@ -421,12 +434,19 @@
                     '<td><select class="js-select2 nama_barang" name="rekap_beli_detail_m_produk_id[]" id="rekap_beli_detail_m_produk_id' +
                     no +
                     '" style="width: 100%;" data-placeholder="Pilih Nama Barang" required > <option></option></select></td>' +
-                    '<td><textarea class="form-control form-control-sm" name="rekap_beli_detail_catatan[]" id="rekap_beli_detail_catatan'+no+'" cols="50" required placeholder="catatan bb atau satuan harus di isi !!"></textarea></td>' +
-                    '<td><input type="text" class="form-control number form-control-sm qty" name="rekap_beli_detail_qty[]" id="rekap_beli_detail_qty'+no+'" required></td>' +
-                    '<td><input type="text" class="form-control number form-control-sm harga" name="rekap_beli_detail_harga[]" id="rekap_beli_detail_harga'+no+'" required></td>' +
-                    '<td><input type="text" class="form-control number form-control-sm persendisc" name="rekap_beli_detail_disc[]" id="rekap_beli_detail_disc'+no+'"></td>' +
-                    '<td><input type="text" class="form-control number form-control-sm rupiahdisc" name="rekap_beli_detail_discrp[]" id="rekap_beli_detail_discrp'+no+'"></td>' +
-                    '<td><input type="text" class="form-control number form-control-sm subtot" name="rekap_beli_detail_subtot[]" id="rekap_beli_detail_subtot'+no+'" readonly></td>' +
+                    '<td><textarea class="form-control form-control-sm" name="rekap_beli_detail_catatan[]" id="rekap_beli_detail_catatan' +
+                    no +
+                    '" cols="50" required placeholder="catatan bb atau satuan harus di isi !!"></textarea></td>' +
+                    '<td><input type="text" class="form-control number form-control-sm qty" name="rekap_beli_detail_qty[]" id="rekap_beli_detail_qty' +
+                    no + '" required></td>' +
+                    '<td><input type="text" class="form-control number form-control-sm harga" name="rekap_beli_detail_harga[]" id="rekap_beli_detail_harga' +
+                    no + '" required></td>' +
+                    '<td><input type="text" class="form-control number form-control-sm persendisc" name="rekap_beli_detail_disc[]" id="rekap_beli_detail_disc' +
+                    no + '"></td>' +
+                    '<td><input type="text" class="form-control number form-control-sm rupiahdisc" name="rekap_beli_detail_discrp[]" id="rekap_beli_detail_discrp' +
+                    no + '"></td>' +
+                    '<td><input type="text" class="form-control number form-control-sm subtot" name="rekap_beli_detail_subtot[]" id="rekap_beli_detail_subtot' +
+                    no + '" readonly></td>' +
                     '<td><button type="button" id="' + no +
                     '" class="btn btn-danger btn_remove"><i class="fa fa-trash"></i></button></td></tr>');
                 Codebase.helpersOnLoad(['jq-select2']);
@@ -498,8 +518,10 @@
                     var disctotrp = $("[name='rekap_beli_disc_rp']").val().replace(/\./g, '').replace(/\,/g,
                         '.');
                     var ppn = $("[name='rekap_beli_ppn']").val();
-                    var bayar = $("[name='rekap_beli_terbayar']").val().replace(/\./g, '').replace(/\,/g, '.')||0;
-                    var ongkir = $("[name='rekap_beli_ongkir']").val().replace(/\./g, '').replace(/\,/g, '.') ||0;
+                    var bayar = $("[name='rekap_beli_terbayar']").val().replace(/\./g, '').replace(/\,/g,
+                        '.') || 0;
+                    var ongkir = $("[name='rekap_beli_ongkir']").val().replace(/\./g, '').replace(/\,/g, '.') ||
+                        0;
                     var grandtotal = grdtot * parseFloat((100 - disc_tot) / 100) - disctotrp;
                     var ppnrp = parseFloat(ppn / 100) * grandtotal;
                     var rekap_beli_tot_nom = parseFloat(grandtotal) + parseFloat(ppnrp) + parseFloat(ongkir);
@@ -581,7 +603,9 @@
                         $('.bayar').val('');
                         $('#form').find('.persendisc').trigger('input');
                         get_code();
-                        $('html, body').animate({ scrollTop: 0 }, 'slow');
+                        $('html, body').animate({
+                            scrollTop: 0
+                        }, 'slow');
                     },
                     error: function() {
                         alert("Tidak dapat menyimpan data!");
