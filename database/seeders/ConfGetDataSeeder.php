@@ -56,7 +56,7 @@ class ConfGetDataSeeder extends Seeder
             $seq = ($valTable == 'app_setting') ? 'off':'on';
             // $trun = ($valTable == 'app_setting') ? 'on':'off';
             $trun = 'off';
-            $limit = ($valTable == 'm_menu_harga' || $valTable == 'users' || $valTable == 'm_meja') ? 5000 : 100;
+            $limit = ($valTable == 'm_menu_harga' || $valTable == 'users' || $valTable == 'm_meja') ? 2000 : 100;
 
             DB::table('config_get_data')->insert([
                 'config_get_data_table_name' => $valTable,
@@ -65,7 +65,7 @@ class ConfGetDataSeeder extends Seeder
                 'config_get_data_limit' => $limit,
                 'config_get_data_truncate' => $trun,
                 'config_get_data_sequence' => $seq,
-                'config_get_data_field_status' => $valTable."_status_sync",
+                'config_get_data_field_status' => $valTable."_client_target",
                 'config_get_data_field_validate1' => $valTable.'_id'
             ]);
         }
@@ -76,7 +76,7 @@ class ConfGetDataSeeder extends Seeder
             'config_get_data_status' => 'on',
             'config_get_data_limit' => 0,
             'config_get_data_sequence' => 'on',
-            'config_get_data_field_status' => 'roles_status_sync',
+            'config_get_data_field_status' => 'roles_client_target',
             'config_get_data_field_validate1' => 'id'
         ]);
         DB::table('config_get_data')->insert([
@@ -85,7 +85,7 @@ class ConfGetDataSeeder extends Seeder
             'config_get_data_status' => 'on',
             'config_get_data_limit' => 0,
             'config_get_data_sequence' => 'on',
-            'config_get_data_field_status' => 'permissions_status_sync',
+            'config_get_data_field_status' => 'permissions_client_target',
             'config_get_data_field_validate1' => 'id'
         ]);
         DB::table('config_get_data')->insert([
@@ -94,7 +94,7 @@ class ConfGetDataSeeder extends Seeder
             'config_get_data_status' => 'on',
             'config_get_data_limit' => 1000,
             'config_get_data_sequence' => 'off',
-            'config_get_data_field_status' => 'r_h_p_status_sync',
+            'config_get_data_field_status' => 'r_h_p_client_target',
             'config_get_data_field_validate1' => 'r_h_p_id',
             // 'config_get_data_field_validate1' => 'permission_id',
             // 'config_get_data_field_validate2' => 'role_id'
@@ -105,7 +105,7 @@ class ConfGetDataSeeder extends Seeder
             'config_get_data_status' => 'on',
             'config_get_data_limit' => 1000,
             'config_get_data_sequence' => 'off',
-            'config_get_data_field_status' => 'm_h_p_status_sync',
+            'config_get_data_field_status' => 'm_h_p_client_target',
             'config_get_data_field_validate1' => 'm_h_p_id',
             // 'config_get_data_field_validate1' => 'model_id',
             // 'config_get_data_field_validate2' => 'permission_id'
@@ -116,7 +116,7 @@ class ConfGetDataSeeder extends Seeder
             'config_get_data_status' => 'on',
             'config_get_data_limit' => 1000,
             'config_get_data_sequence' => 'off',
-            'config_get_data_field_status' => 'm_h_r_status_sync',
+            'config_get_data_field_status' => 'm_h_r_client_target',
             'config_get_data_field_validate1' => 'm_h_r_id'
             // 'config_get_data_field_validate1' => 'model_id'
         ]);
@@ -127,7 +127,7 @@ class ConfGetDataSeeder extends Seeder
             'config_get_data_status' => 'on',
             'config_get_data_limit' => 100,
             'config_get_data_sequence' => 'on',
-            'config_get_data_field_status' => 'm_t_t_status_sync',
+            'config_get_data_field_status' => 'm_t_t_client_target',
             'config_get_data_field_validate1' => 'm_t_t_id'
         ]);
 
