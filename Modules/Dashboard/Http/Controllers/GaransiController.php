@@ -30,7 +30,13 @@ class GaransiController extends Controller
             ->get();
         $data->area = DB::table('m_area')
             ->orderby('m_area_id', 'ASC')
-            ->get();
+            ->get();    
+        // $data->waroeng_akses = DB::table('m_w')
+        //     ->join('users', )
+        //     ->select('waroeng_akses')
+        //     ->where('m_w_m_area_id', $data->area_nama->m_area_id)
+        //     ->orderby('m_w_id', 'ASC')
+        //     ->get();
         return view('dashboard::rekap_garansi', compact('data'));
     }
 

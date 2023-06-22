@@ -63,7 +63,9 @@
                                                 <option value="{{ $waroeng->m_w_id }}"> {{ $waroeng->m_w_nama }} </option>
                                             @endforeach
                                             </select>
-                                        @else
+                                        @elseif (in_array(Auth::user()->waroeng_id, $data->akses_pusar))
+
+                                        {{-- @else --}}
                                             <select id="filter_waroeng2" style="width: 100%;"
                                             class="cari f-area js-select2 form-control filter_waroeng" name="waroeng" disabled>
                                             <option value="{{ ucwords($data->waroeng_nama->m_w_id) }}">{{ ucwords($data->waroeng_nama->m_w_nama) }}</option>
