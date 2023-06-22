@@ -35,6 +35,7 @@ Route::group(['prefix' => 'inventori', 'controller' => SupplierController::class
 Route::group(['prefix' => 'inventori', 'controller' => RusakController::class, 'middleware' => ['auth', 'web']], function () {
     Route::get('rusak', 'index')->name('rusak.index');
     Route::post('rusak/simpan', 'simpan')->name('rusak.simpan');
+    Route::get('rusak/daily/{id}','rusak_daily_list')->name('rusak.daily');
 });
 //Form po Route
 Route::group(['prefix' => 'inventori', 'controller' => PoController::class, 'middleware' => ['auth', 'web']], function () {

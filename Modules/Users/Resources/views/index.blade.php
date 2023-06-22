@@ -81,7 +81,7 @@
                                                                 style="width: 100%;" data-placeholder="Choose one.."
                                                                 required>
                                                                 <option></option>
-                                                                @foreach ($data->waroeng as $item)
+                                                                @foreach ($data->lokasi as $item)
                                                                     <option value="{{ $item->m_w_id }}">
                                                                         {{ $item->m_w_nama }}</option>
                                                                 @endforeach
@@ -90,19 +90,51 @@
                                                     </div>
                                                 </div>
                                                 <div class="mb-4">
-                                                    <div class="form-group">
-                                                        <label for="waroeng_id">Waroeng Akses</label>
-                                                        <div>
-                                                            <select class="js-select2-multi" id="waroeng_akses"
-                                                                name="waroeng_akses[]" style="width: 100%;"
-                                                                data-placeholder="Pilih Waroeng" multiple="multiple"
-                                                                required>
-                                                                @foreach ($data->waroeng as $item)
-                                                                    <option value="{{ $item->m_w_id }}">
-                                                                        {{ $item->m_w_nama }}</option>
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
+                                                    <label for="waroeng_akses">Waroeng Akses List :</label>
+                                                    <div class="multi-column">
+                                                        <ul>
+                                                            <li class="all">
+                                                                <label class="css-control css-control-danger css-checkbox">
+                                                                    <input type="checkbox"
+                                                                        class="css-control-input parentCheckBox"
+                                                                        id="check_all" name="check_all" title="check all"
+                                                                        value="all">
+                                                                    <span class="css-control-indicator"></span>
+                                                                    <b>Tandai Semua</b>
+                                                                </label>
+
+                                                                @foreach ($data->waroeng as $key => $val)
+                                                            <li class="area{{ $val->m_area_id }}">
+                                                                <label class="css-control css-control-danger css-checkbox"
+                                                                    title="click to toggle check group"
+                                                                    data-target=".area{{ $val->m_area_id }}">
+                                                                    <input type="checkbox"
+                                                                        class="css-control-input parentCheckBox pilihSemua"
+                                                                        title="check all"
+                                                                        value="area{{ $val->m_area_id }}">
+                                                                    <span class="css-control-indicator"></span>
+                                                                    <b class="text-danger">{{ ucwords($val->m_area_nama) }}</b>
+                                                                </label>
+                                                                <ul>
+                                                                    @foreach ($val->m_ws as $key2 => $val2)
+                                                                        <li>
+                                                                            <label
+                                                                                class="css-control css-control-danger css-checkbox">
+                                                                                <input type="checkbox"
+                                                                                    class="css-control-input childCheckBox area{{ $val->m_area_id }}"
+                                                                                    name="waroeng_akses[{{ $val2->m_w_id }}]"
+                                                                                    value="{{ $val2->m_w_id }}"
+                                                                                    data-parent="area{{ $val->m_area_id }}">
+                                                                                <span class="css-control-indicator"></span>
+                                                                                {{ $val2->m_w_nama }}
+                                                                            </label>
+                                                                        </li>
+                                                                    @endforeach
+                                                                </ul>
+                                                            </li>
+                                                            @endforeach
+                                                            </li>
+                                                        </ul>
                                                     </div>
                                                 </div>
                                         </div>
@@ -215,7 +247,13 @@
                                 return parseInt(item);
                             });
                         console.log(waroeng_akses);
-                        $("#waroeng_akses").val(waroeng_akses).trigger('change');
+                        waroeng_akses.forEach(function(value) {
+                            var checkbox = document.querySelector('input[value="' +
+                                value + '"]');
+                            if (checkbox) {
+                                checkbox.checked = true;
+                            }
+                        });
                     },
                     error: function() {}
                 });
@@ -271,6 +309,30 @@
                     return false;
                 }
             });
+            $('.pilihSemua').click(function() {
+                var flag = true;
+                $(this).parents('.multi-column').find('.pilihSemua').each(
+                    function() {
+                        if (this.checked == false) {
+                            flag = false;
+                        }
+                    }
+                );
+                $(this).parents('.multi-column').find('#check_all').prop('checked', flag);
+            });
+
+            $('.parentCheckBox').click(function() {
+                var par = $(this).val();
+
+                if (par != 'all') {
+                    $(this).parents('li[class="' + par + '"]').find('input[type=checkbox]').prop('checked',
+                        this.checked);
+                } else {
+                    $('.multi-column').find('input[type=checkbox]').prop('checked', this.checked);
+                }
+
+            });
+
         });
     </script>
 @endsection

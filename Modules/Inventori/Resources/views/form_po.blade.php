@@ -19,12 +19,6 @@
                               <input type="text" class="form-control form-control-sm" id="rekap_po_created_by" name="rekap_po_created_by" value="{{Auth::user()->name}}" readonly>
                             </div>
                         </div>
-                        <div class="row mb-1">
-                            <label class="col-sm-4 col-form-label" for="example-hf-text">Pukul</label>
-                            <div class="col-sm-8">
-                                <h3 id="time">13:00</h3>
-                            </div>
-                        </div>
                     </div>
                     <div class="col-md-4">
                         <div class="row mb-1">
@@ -78,8 +72,8 @@
                     </thead>
                     <tbody>
                         <tr>
-                        <td><select class="js-select2 nama_barang" name="rekap_po_detail_m_produk_id[]" id="rekap_po_detail_m_produk_id" style="width: 100%;"data-placeholder="Pilih Nama Barang" required><option></option></select></td>
-                        <td><input type="number" min="0.01" step="0.01" class="form-control form-control-sm qty" name="rekap_po_detail_qty[]" id="rekap_po_detail_qty" required></td>
+                        <td><select class="js-select2 nama_barang" name="rekap_po_detail_m_produk_code[]" id="rekap_po_detail_m_produk_code" style="width: 100%;"data-placeholder="Pilih Nama Barang" required><option></option></select></td>
+                        <td><input type="number" class="form-control number form-control-sm qty" name="rekap_po_detail_qty[]" id="rekap_po_detail_qty" required></td>
                         <td><textarea class="form-control form-control-sm" name="rekap_po_detail_catatan[]" id="rekap_po_detail_catatan" cols="50" required placeholder="catatan bb atau satuan"></textarea></td>
                       </tr>
                     </tbody>
@@ -119,8 +113,8 @@
 	  $('.tambah').on('click',function(){
 	    no++;
 		$('#form').append('<tr id="row'+no+'">'+
-                        '<td><select class="js-select2 nama_barang" name="rekap_po_detail_m_produk_id[]" id="rekap_po_detail_m_produk_id'+no+'" style="width: 100%;" data-placeholder="Pilih Nama Barang" required><option></option></select></td>'+
-                        '<td><input type="number" min="0.01" step="0.01" class="form-control form-control-sm qty" name="rekap_po_detail_qty[]" id="rekap_po_detail_qty" required></td>'+
+                        '<td><select class="js-select2 nama_barang" name="rekap_po_detail_m_produk_code[]" id="rekap_po_detail_m_produk_code'+no+'" style="width: 100%;" data-placeholder="Pilih Nama Barang" required><option></option></select></td>'+
+                        '<td><input type="number" class="form-control number form-control-sm qty" name="rekap_po_detail_qty[]" id="rekap_po_detail_qty" required></td>'+
                         '<td><textarea class="form-control form-control-sm" name="rekap_po_detail_catatan[]" id="rekap_po_detail_catatan" cols="50" required placeholder="catatan bb atau satuan"></textarea></td>'+
                         '<td><button type="button" id="'+no+'" class="btn btn-danger btn_remove"><i class="fa fa-trash"></i></button></td></tr>');
         
