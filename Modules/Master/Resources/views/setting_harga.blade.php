@@ -125,8 +125,7 @@
                         <div class="block-header block-header-default bg-pulse">
                             <h3 class="block-title" id="myModalLabel2"></h3>
                             <div class="block-options">
-                                <button type="button" class="btn-block-option" data-bs-dismiss="modal"
-                                    aria-label="Close">
+                                <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
                                     <i class="fa fa-fw fa-times"></i>
                                 </button>
                             </div>
@@ -230,7 +229,7 @@
                         </div>
                         <div class="block-content">
                             <!-- Select2 is initialized at the bottom of the page -->
-                            <form method="post" action="" id="formAction3">
+                            <form id="formAction3">
                                 @csrf
                                 <div class="mb-4">
                                     <div class="form-group">
@@ -283,15 +282,17 @@
                                 <div class="mb-4">
                                     <div class="form-group">
                                         <label for="nota a">Harga Nota A</label>
-                                        <input type="hidden" value="nota a" name="nota_kode[]">
-                                        <input type="text" class="form-control number" name="nom_harga[]">
+                                        <input type="hidden" value="nota a" name="nota_kode[]" id="nota_a">
+                                        <input type="text" class="form-control number" name="nom_harga[]" required>
+                                        <span class="danger" id="nota_a_harga"></span>
                                     </div>
                                 </div>
                                 <div class="mb-4">
                                     <div class="form-group">
                                         <label for="nota b">Harga Nota B</label>
-                                        <input type="hidden" value="nota b" name="nota_kode[]">
-                                        <input type="text" class="form-control number" name="nom_harga[]">
+                                        <input type="hidden" value="nota b" name="nota_kode[]" id="nota_b">
+                                        <input type="text" class="form-control number" name="nom_harga[]" required>
+                                        <span class="danger" id="nota_b_harga"></span>
                                     </div>
                                 </div>
                                 <div class="mb-4">
@@ -367,7 +368,6 @@
             });
             $(".buttonUpdate").on('click', function() {
                 $("#myModalLabel3").html('Update Harga Nota');
-                $("#formAction3").attr('action', "/master/m_jenis_nota/update");
                 $("#update_harga").modal('show');
             });
             $(".buttonEdit").on('click', function() {
@@ -392,26 +392,51 @@
             $("#my_table").append(
                 $('<tfoot/>').append($("#my_table thead tr").clone())
             );
-            $('.get_harga').on('change',function () {
+            $('.get_harga').on('change', function() {
                 var m_menu_id = $('#m_produk_id').val();
-                var m_area_id = $('#m_area_id').val();
                 var m_jenis_nota_trans_id = $('#update_m_jenis_nota_trans_id').val();
-                var data = {
-                    m_menu_id:m_menu_id,
-                    m_area_id:m_area_id,
-                    m_jenis_nota_trans_id:m_jenis_nota_trans_id
-                }
-                $.ajax({
-                    url: "/master/m_jenis_nota/get_harga",
-                    type: "GET",
-                    data : data,
-                    success: function(respond) {
-                    console.log(respond);
-                    },
-                    error: function() {
+                if (m_menu_id && m_jenis_nota_trans_id) {
+                    var data = {
+                        m_menu_id: m_menu_id,
+                        m_jenis_nota_trans_id: m_jenis_nota_trans_id
                     }
-                });
-            })
+                    $.ajax({
+                        url: "/master/m_jenis_nota/get_harga",
+                        type: "GET",
+                        data: data,
+                        success: function(respond) {
+                            $('#nota_a_harga').html('harga saat ini : ' + respond.nota_a_harga)
+                            $('#nota_b_harga').html('harga saat ini : ' + respond.nota_b_harga)
+                        },
+                        error: function() {}
+                    });
+                }
+            });
+            $('#formAction3').submit(function(e) {
+                if (!e.isDefaultPrevented()) {
+                    $.ajax({
+                        url: "/master/m_jenis_nota/update",
+                        type: "POST",
+                        data: $('form').serialize(),
+                        success: function(data) {
+                            $("#update_harga").modal('hide');
+                            Codebase.helpers('jq-notify', {
+                                align: 'right', // 'right', 'left', 'center'
+                                from: 'top', // 'top', 'bottom'
+                                type: data
+                                .type, // 'info', 'success', 'warning', 'danger'
+                                icon: 'fa fa-info me-5', // Icon class
+                                message: data.messages
+                            });
+                            window.location.reload();
+                        },
+                        error: function() {
+                            alert("Tidak dapat menyimpan data!");
+                        }
+                    });
+                    return false;
+                }
+            });
         });
     </script>
 @endsection
