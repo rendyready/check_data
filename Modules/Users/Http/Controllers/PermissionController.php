@@ -47,16 +47,17 @@ class PermissionController extends Controller
                         'name'	=>	$request->name,
                         'guard_name' =>'web',
                         'updated_at' => Carbon::now(),
-                        'permissions_status_sync' => 'send'
+                        'permissions_status_sync' => 'send',
+                        'permissions_client_target' => DB::raw('DEFAULT')
                     );
                     DB::table('permissions')->where('id',$request->id)
                     ->update($data);
                 }
                 return response(['messages' => 'Berhasil Tambah Permission','type' => 'success','action' => 'add']);
             }
-    		
+
     	}
     }
 
-    
+
 }

@@ -43,6 +43,7 @@ class SCController extends Controller
                     $data = array(
                         'm_sc_value'    =>    $request->m_sc_value,
                         'm_sc_status_sync' => 'send',
+                        'm_sc_client_target' => DB::raw('DEFAULT'),
                         'm_sc_updated_by' => Auth::user()->users_id,
                         'm_sc_updated_at' => Carbon::now(),
                     );

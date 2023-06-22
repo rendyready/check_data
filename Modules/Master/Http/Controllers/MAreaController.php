@@ -69,6 +69,7 @@ class MAreaController extends Controller
                 $data = array(
                     'm_area_nama'    => Str::lower($trim),
                     'm_area_status_sync' => 'send',
+                    'm_area_client_target' => DB::raw('DEFAULT'),
                     'm_area_updated_by' => Auth::user()->users_id,
                     'm_area_updated_at' => Carbon::now(),
                 );

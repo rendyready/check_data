@@ -56,6 +56,7 @@ class JenisMejaController extends Controller
                         'm_meja_jenis_space' =>    $request->m_meja_jenis_space,
                         'm_meja_jenis_status' =>    strtolower($request->m_meja_jenis_status),
                         'm_meja_jenis_status_sync' => 'send',
+                        'm_meja_client_target' => DB::raw('DEFAULT'),
                         'm_meja_jenis_updated_by' => Auth::user()->users_id,
                         'm_meja_jenis_updated_at' => Carbon::now(),
                     );

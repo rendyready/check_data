@@ -69,6 +69,7 @@ class RelasiKatMenuController extends Controller
             "config_sub_jenis_produk_m_produk_id" => $request->config_sub_jenis_produk_m_produk_id,
             "config_sub_jenis_produk_m_sub_jenis_produk_id" => $request->config_sub_jenis_produk_m_kategori_id,
             "config_sub_jenis_produk_status_sync" => "send",
+            'config_sub_jenis_produk_client_target' => DB::raw('DEFAULT'),
             "config_sub_jenis_produk_updated_by" => Auth::user()->users_id,
             "config_sub_jenis_produk_updated_at" => Carbon::now(),
         ]);

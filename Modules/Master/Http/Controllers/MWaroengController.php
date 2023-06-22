@@ -103,6 +103,7 @@ class MWaroengController extends Controller
                     'm_w_decimal' => $request->m_w_decimal,
                     'm_w_pembulatan' => $request->m_w_pembulatan,
                     'm_w_status_sync' => 'send',
+                    'm_w_client_target' => DB::raw('DEFAULT'),
                     'm_w_updated_by' => Auth::user()->users_id,
                     'm_w_updated_at' => Carbon::now(),
                 );

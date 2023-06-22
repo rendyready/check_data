@@ -62,6 +62,7 @@ class MJenisMenuController extends Controller
                     'm_jenis_produk_nama' => $request->m_jenis_produk_nama,
                     'm_jenis_produk_odcr55' => $request->m_jenis_produk_odcr55,
                     'm_jenis_produk_status_sync' => 'send',
+                    'm_jenis_produk_client_target' => DB::raw('DEFAULT'),
                     'm_jenis_produk_updated_by' => Auth::user()->users_id,
                     'm_jenis_produk_updated_at' => Carbon::now(),
                 );

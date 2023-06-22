@@ -59,6 +59,7 @@ class WJenisController extends Controller
                     $data = array(
                         'm_w_jenis_nama' => $nameDatap,
                         'm_w_jenis_status_sync' => 'send',
+                        'm_w_jenis_client_target' => DB::raw('DEFAULT'),
                         'm_w_jenis_updated_by' => Auth::user()->users_id,
                         'm_w_jenis_updated_at' => Carbon::now(),
                     );

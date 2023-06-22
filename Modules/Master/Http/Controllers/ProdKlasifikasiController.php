@@ -43,6 +43,7 @@ class ProdKlasifikasiController extends Controller
                 $data = array(
                     'm_klasifikasi_produk_nama'    =>    $request->m_klasifikasi_produk_nama,
                     'm_klasifikasi_produk_status_sync' => 'send',
+                    'm_klasifikasi_produk_client_target' => DB::raw('DEFAULT'),
                     'm_klasifikasi_produk_updated_by' => Auth::user()->users_id,
                     'm_klasifikasi_produk_updated_at' => Carbon::now(),
                 );

@@ -62,6 +62,7 @@ class TransTipeController extends Controller
                         'm_t_t_name' => $request->m_t_t_name,
                         'm_t_t_profit_price' => $request->m_t_t_profit_price,
                         'm_t_t_status_sync' => 'send',
+                        'm_t_t_client_target' => DB::raw('DEFAULT'),
                         'm_t_t_updated_by' => Auth::user()->users_id,
                         'm_t_t_updated_at' => Carbon::now(),
                     );
