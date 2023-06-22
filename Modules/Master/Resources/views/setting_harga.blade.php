@@ -236,7 +236,7 @@
                                     <div class="form-group">
                                         <label for="m_produk_id">Nama Menu</label>
                                         <div>
-                                            <select class="js-select2" id="m_produk_id" name="m_produk_id"
+                                            <select class="js-select2 get_harga" id="m_produk_id" name="m_produk_id"
                                                 style="width: 100%;" data-placeholder="Choose one..">
                                                 <option></option>
                                                 @foreach ($produk as $val)
@@ -251,7 +251,7 @@
                                     <div class="form-group">
                                         <label for="m_area_id">Area</label>
                                         <div>
-                                            <select class="js-select2" id="m_area_id" name="m_area_id"
+                                            <select class="js-select2 get_harga" id="m_area_id" name="m_area_id"
                                                 style="width: 100%;" data-placeholder="Choose one..">
                                                 <option></option>
                                                 <option value="0">All Area</option>
@@ -267,7 +267,7 @@
                                     <div class="form-group">
                                         <label for="update_m_jenis_nota_trans_id">Jenis Transaksi</label>
                                         <div>
-                                            <select class="js-select2" id="update_m_jenis_nota_trans_id"
+                                            <select class="js-select2 get_harga" id="update_m_jenis_nota_trans_id"
                                                 name="update_m_jenis_nota_trans_id[]" style="width: 100%;"
                                                 data-placeholder="Pilih Jenis Transaksi" multiple>
                                                 <option></option>
@@ -392,6 +392,26 @@
             $("#my_table").append(
                 $('<tfoot/>').append($("#my_table thead tr").clone())
             );
+            $('.get_harga').on('change',function () {
+                var m_menu_id = $('#m_produk_id').val();
+                var m_area_id = $('#m_area_id').val();
+                var m_jenis_nota_trans_id = $('#update_m_jenis_nota_trans_id').val();
+                var data = {
+                    m_menu_id:m_menu_id,
+                    m_area_id:m_area_id,
+                    m_jenis_nota_trans_id:m_jenis_nota_trans_id
+                }
+                $.ajax({
+                    url: "/master/m_jenis_nota/get_harga",
+                    type: "GET",
+                    data : data,
+                    success: function(respond) {
+                    console.log(respond);
+                    },
+                    error: function() {
+                    }
+                });
+            })
         });
     </script>
 @endsection

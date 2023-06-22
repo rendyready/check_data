@@ -50,11 +50,14 @@
                                                             <tr>
                                                                 <td>{{ $no++ }}</td>
                                                                 <td>{{ $item->m_produk_nama }}</td>
-                                                                <td> <input type="hidden" name="m_menu_harga_id_edit[]"
-                                                                        value="{{ $item->m_menu_harga_id }}"> <input
-                                                                        value="{{ $item->m_menu_harga_nominal }}"
+                                                                <td>
+                                                                    <input type="hidden" name="m_menu_harga_id_edit[]"
+                                                                        value="{{ $item->m_menu_harga_id }}">
+                                                                    {{-- <input value="{{ $item->m_menu_harga_nominal }}"
                                                                         type="text" class="form-control number"
-                                                                        name="m_menu_harga_nominal_edit[]"></td>
+                                                                        name="m_menu_harga_nominal_edit[]"> --}}
+                                                                    {{ rupiah($item->m_menu_harga_nominal) }}
+                                                                </td>
                                                                 @php
                                                                     $statusHarga = 'Aktif';
                                                                     $statusPajak = 'Aktif';
@@ -136,7 +139,7 @@
                                             <label for="m_menu_harga_nominal">Harga</label>
                                             <div>
                                                 <input type="number" id="m_menu_harga_nominal" name="m_menu_harga_nominal"
-                                                    class="form-control">
+                                                    class="form-control" readonly>
                                             </div>
                                         </div>
                                     </div>
@@ -251,7 +254,8 @@
                             window.location.reload();
                         }
                     });
-      }) 
+      })
+       
       $("#my_table").append(
           $('<tfoot/>').append( $("#my_table thead tr").clone() )
       );

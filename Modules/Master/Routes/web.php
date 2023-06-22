@@ -81,6 +81,7 @@ Route::group(['prefix' => 'master', 'controller' => MJenisNotaController::class,
     Route::post('m_jenis_nota/copy','copy_nota')->name('m_jenis_nota.copy');
     Route::post('m_jenis_nota/update','update_harga')->name('m_jenis_nota.update');
     Route::post('m_jenis_nota/save_update_harga','simpanUpdateHarga')->name('m_jenis_nota.save_update_harga');
+    Route::get('m_jenis_nota/get_harga','get_harga')->name('m_jenis_nota');
 });
 
 

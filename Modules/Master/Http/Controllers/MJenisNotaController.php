@@ -237,4 +237,12 @@ class MJenisNotaController extends Controller
         }
     }
 
+    public function get_harga(Request $request){
+        $get_harga_a = DB::table('m_w');
+ 
+        $get_harga_a->where('m_w_m_area_id',$request->m_area_id);
+        $get_harga = DB::table('m_menu_harga')->where('m_menu_harga_m_produk_id',$request->m_menu_id)->get();
+        return response()->json($get_harga);
+    }
+
 }
