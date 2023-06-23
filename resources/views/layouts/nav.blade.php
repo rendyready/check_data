@@ -318,6 +318,14 @@
                                                     </a>
                                                 </li>
                                             @endcan
+                                            @can('tipe nota.view')
+                                                <li class="nav-main-item">
+                                                    <a class="nav-main-link{{ request()->is('master/m_tipe_nota') ? ' active' : '' }}"
+                                                        href="{{ route('m_tipe_nota.index') }}">
+                                                        <span class="nav-main-link-name">Tipe Nota</span>
+                                                    </a>
+                                                </li>
+                                            @endcan
                                             @can('pajak.view')
                                                 <li class="nav-main-item">
                                                     <a class="nav-main-link{{ request()->is('master/m_pajak') ? ' active' : '' }}"

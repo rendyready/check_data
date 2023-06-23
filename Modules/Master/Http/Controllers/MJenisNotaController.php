@@ -8,7 +8,6 @@ use App\Models\MMenuHarga;
 use App\Models\MProduk;
 use App\Models\MTransaksiTipe;
 use App\Models\MW;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -44,6 +43,7 @@ class MJenisNotaController extends Controller
             ->get();
         $data['area'] = DB::table('m_area')->get();
         $data['produk'] = DB::table('m_produk')->where('m_produk_m_klasifikasi_produk_id', 4)->get();
+        $data['m_tipe_nota'] = DB::table('m_tipe_nota')->orderBy('m_tipe_nota_id', 'asc')->get();
         return view('master::setting_harga', $data);
     }
 
@@ -153,7 +153,7 @@ class MJenisNotaController extends Controller
                                 'm_menu_harga_status' => $request->m_menu_harga_status,
                                 'm_menu_harga_tax_status' => $request->m_menu_harga_tax_status,
                                 'm_menu_harga_sc_status' => $request->m_menu_harga_sc_status,
-                                'm_menu_harga_status_sync' => 'send'
+                                'm_menu_harga_status_sync' => 'send',
                             ]);
                     } else {
                         DB::table('m_menu_harga')->insert([
@@ -171,7 +171,7 @@ class MJenisNotaController extends Controller
             }
         }
 
-        return response()->json(['type' => 'success','messages' => 'Update Harga Berhasil']);
+        return response()->json(['type' => 'success', 'messages' => 'Update Harga Berhasil']);
     }
 
     public function show($id)
@@ -238,35 +238,30 @@ class MJenisNotaController extends Controller
                 ->where('m_menu_harga_id', $request->m_menu_harga_id_edit[$key])
                 ->update([
                     'm_menu_harga_nominal' => convertfloat($request->m_menu_harga_nominal_edit[$key]),
-                    'm_menu_harga_status_sync' => 'send'
+                    'm_menu_harga_status_sync' => 'send',
                 ]);
         }
     }
 
     public function get_harga(Request $request)
     {
-        // Query untuk nota A
-        $queryNotaA = DB::table('m_jenis_nota')
-            ->join('m_menu_harga', 'm_menu_harga_m_jenis_nota_id', 'm_jenis_nota_id')
-            ->where('m_jenis_nota_m_w_id', 6)
-            ->whereIn('m_jenis_nota_m_t_t_id', $request->m_jenis_nota_trans_id)
-            ->where('m_menu_harga_m_produk_id', $request->m_menu_id);
+        $data = [];
 
-        // Query untuk nota B
-        $queryNotaB = DB::table('m_jenis_nota')
-            ->join('m_menu_harga', 'm_menu_harga_m_jenis_nota_id', 'm_jenis_nota_id')
-            ->where('m_jenis_nota_m_w_id', 1)
-            ->whereIn('m_jenis_nota_m_t_t_id', $request->m_jenis_nota_trans_id)
-            ->where('m_menu_harga_m_produk_id', $request->m_menu_id);
+        foreach ($request->m_tipe_nota as $key => $tipeNota) {
+            $get_m_w = DB::table('m_w')
+                ->where('m_w_m_kode_nota', $tipeNota)
+                ->select(DB::raw('MIN(m_w_id) as m_w_id'))
+                ->value('m_w_id');
 
-        // Ambil harga dari nota A
-        $notaAHarga = $queryNotaA->pluck('m_menu_harga_nominal')->toArray();
-        $data['nota_a_harga'] = implode(', ', $notaAHarga);
+            $queryNota = DB::table('m_jenis_nota')
+                ->join('m_menu_harga', 'm_menu_harga_m_jenis_nota_id', 'm_jenis_nota_id')
+                ->where('m_jenis_nota_m_w_id', $get_m_w)
+                ->whereIn('m_jenis_nota_m_t_t_id', $request->m_jenis_nota_trans_id)
+                ->where('m_menu_harga_m_produk_id', $request->m_menu_id);
 
-        // Ambil harga dari nota B
-        $notaBHarga = $queryNotaB->pluck('m_menu_harga_nominal')->toArray();
-        $data['nota_b_harga'] = implode(', ', $notaBHarga);
-
+            $notaHarga = $queryNota->pluck('m_menu_harga_nominal')->toArray();
+            $data['nota_' . substr($tipeNota,5) . '_harga'] = implode(', ', $notaHarga);
+        }
         return response()->json($data);
     }
 }

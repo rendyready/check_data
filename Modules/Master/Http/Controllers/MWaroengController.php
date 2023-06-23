@@ -38,7 +38,8 @@ class MWaroengController extends Controller
         $modaltipe = DB::table('m_modal_tipe')->select('m_modal_tipe_id', 'm_modal_tipe_nama')->get();
         $pajak = DB::table('m_pajak')->select('m_pajak_id', 'm_pajak_value')->get();
         $sc = DB::table('m_sc')->select('m_sc_id', 'm_sc_value')->get();
-        return view('master::m_waroeng', compact('data', 'area', 'waroeng_jenis', 'pajak', 'sc', 'modaltipe'));
+        $m_tipe_nota = DB::table('m_tipe_nota')->select('m_tipe_nota_nama')->get();
+        return view('master::m_waroeng', compact('data', 'area', 'waroeng_jenis', 'pajak', 'sc', 'modaltipe','m_tipe_nota'));
     }
     public function edit($id)
     {

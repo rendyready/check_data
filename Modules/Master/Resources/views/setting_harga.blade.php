@@ -234,6 +234,22 @@
                                 @csrf
                                 <div class="mb-4">
                                     <div class="form-group">
+                                        <label for="m_tipe_nota">Tipe Nota</label>
+                                        <div>
+                                            <select class="js-select2" id="m_tipe_nota" name="m_tipe_nota[]"
+                                                style="width: 100%;" data-placeholder="Pilih Tipe Nota" multiple>
+                                                <option></option>
+                                                @foreach ($m_tipe_nota as $tipen)
+                                                    <option value="{{ $tipen->m_tipe_nota_nama }}">
+                                                        {{ ucwords($tipen->m_tipe_nota_nama) }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-4">
+                                    <div class="form-group">
                                         <label for="m_produk_id">Nama Menu</label>
                                         <div>
                                             <select class="js-select2 get_harga" id="m_produk_id" name="m_produk_id"
@@ -280,21 +296,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="mb-4">
-                                    <div class="form-group">
-                                        <label for="nota a">Harga Nota A</label>
-                                        <input type="hidden" value="nota a" name="nota_kode[]" id="nota_a">
-                                        <input type="text" class="form-control number" name="nom_harga[]" required>
-                                        <span class="danger" id="nota_a_harga"></span>
-                                    </div>
-                                </div>
-                                <div class="mb-4">
-                                    <div class="form-group">
-                                        <label for="nota b">Harga Nota B</label>
-                                        <input type="hidden" value="nota b" name="nota_kode[]" id="nota_b">
-                                        <input type="text" class="form-control number" name="nom_harga[]" required>
-                                        <span class="danger" id="nota_b_harga"></span>
-                                    </div>
+                                <div class="harga_nota">
+
                                 </div>
                                 <div class="mb-4">
                                     <div class="form-group">
@@ -349,6 +352,30 @@
 @endsection
 @section('js')
     <script>
+        function get_harga() {
+            var m_menu_id = $('#m_produk_id').val();
+            var m_jenis_nota_trans_id = $('#update_m_jenis_nota_trans_id').val();
+            var m_tipe_nota = $('#m_tipe_nota').val();
+            if (m_menu_id && m_jenis_nota_trans_id) {
+                var data = {
+                    m_menu_id: m_menu_id,
+                    m_tipe_nota: m_tipe_nota,
+                    m_jenis_nota_trans_id: m_jenis_nota_trans_id
+                }
+                $.ajax({
+                    url: "/master/m_jenis_nota/get_harga",
+                    type: "GET",
+                    data: data,
+                    success: function(respond) {
+                        for (var nota in respond) {
+                            var harga = respond[nota];
+                            $('#' + nota).html('harga saat ini : ' + harga);
+                        }
+                    },
+                    error: function() {}
+                });
+            }
+        }
         $(document).ready(function() {
             Codebase.helpersOnLoad(['jq-rangeslider']);
             $('.js-select2').select2({
@@ -394,24 +421,7 @@
                 $('<tfoot/>').append($("#my_table thead tr").clone())
             );
             $('.get_harga').on('change', function() {
-                var m_menu_id = $('#m_produk_id').val();
-                var m_jenis_nota_trans_id = $('#update_m_jenis_nota_trans_id').val();
-                if (m_menu_id && m_jenis_nota_trans_id) {
-                    var data = {
-                        m_menu_id: m_menu_id,
-                        m_jenis_nota_trans_id: m_jenis_nota_trans_id
-                    }
-                    $.ajax({
-                        url: "/master/m_jenis_nota/get_harga",
-                        type: "GET",
-                        data: data,
-                        success: function(respond) {
-                            $('#nota_a_harga').html('harga saat ini : ' + respond.nota_a_harga)
-                            $('#nota_b_harga').html('harga saat ini : ' + respond.nota_b_harga)
-                        },
-                        error: function() {}
-                    });
-                }
+                get_harga();
             });
             $('#formAction3').submit(function(e) {
                 if (!e.isDefaultPrevented()) {
@@ -438,6 +448,26 @@
                     return false;
                 }
             });
+            $('#m_tipe_nota').on('change', function() {
+                var selectedTipe = $(this).val();
+                $('.harga_nota').empty();
+                for (var i = 0; i < selectedTipe.length; i++) {
+                    var formGroup = $('<div class="mb-4">' +
+                        '<div class="form-group">' +
+                        '<label for="nota_' + i + '">Harga ' + selectedTipe[i].toUpperCase() +
+                        '</label>' +
+                        '<input type="hidden" value="' + selectedTipe[i] +
+                        '" name="nota_kode[]" id="nota_' + selectedTipe[i].substring(5) + '">' +
+                        '<input type="text" class="form-control number" name="nom_harga[]" required>' +
+                        '<span class="danger" id="nota_' + selectedTipe[i].substring(5) +
+                        '_harga"></span>' +
+                        '</div>' +
+                        '</div>');
+                    $('.harga_nota').append(formGroup);
+                }
+                get_harga();
+            });
+
         });
     </script>
 @endsection
