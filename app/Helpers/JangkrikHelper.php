@@ -15,7 +15,7 @@ class JangkrikHelper
 
         #Get Last Increment Used
         $maxId = DB::select("SELECT MAX(id) FROM {$table};")[0]->max;
-        
+
         #GET Current Increment of table (Recomended method)
         $currentId = DB::select("SELECT last_value FROM {$table}_id_seq;")[0]->last_value;
         $nextId = $currentId;
@@ -26,9 +26,10 @@ class JangkrikHelper
             }
             $nextId = $currentId+1;
         }
-        
+
         return $nextId;
     }
+
     public static function getNextIdCron($table,$waroengId,$user_id)
     {
         #Get Last Increment Used
@@ -95,5 +96,16 @@ class JangkrikHelper
                 ->where('m_stok_m_produk_code',$p_id)
                 ->first();
         return $stok;
+    }
+
+    public static function convertTarget($target)
+    {
+        $data = '';
+        foreach ($target as $keyT => $valT) {
+            $data .= ':'.$valT.':';
+            // array_push($data,':'.$valT.':');
+        }
+
+        return $data;
     }
 }

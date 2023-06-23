@@ -21,10 +21,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4 text-end" id="button_non_menu" width=100%>
-                                <button type="button" id="non_menu"
-                                    class="btn btn-primary mt-0 mb-2">Lihat Rekap Non Menu</button>
-                            </div>
                         </div> 
 
                         <div class="row">
@@ -106,7 +102,8 @@
                         <th colspan="3" class="text-center">Shopee</th>
                         <th colspan="3" class="text-center">Grab Mart</th>
                         <th colspan="5" class="text-center">Rincian</th>
-                        <th rowspan="2" class="text-center">Pajak (Dine In & Take Away)</th>
+                        <th rowspan="2" class="text-center">Pajak Reguler</th>
+                        <th rowspan="2" class="text-center">Pajak Ojol</th>
                     </tr>
                     <tr>
                         <th rowspan="1" class="text-center">Menu</th>
@@ -160,40 +157,7 @@ $(document).ready(function() {
     var HakAksesArea = userInfo.dataset.hasAccess === 'true';
     var HakAksesPusat = userInfoPusat.dataset.hasAccess === 'true';
 
-    $("#button_non_menu").hide();
     $("#tampil").hide();
-
-    if(HakAksesArea){
-        $('.filter_waroeng').on('change', function() {
-        var waroeng  = $('.filter_waroeng').val();
-        var tanggal  = $('.filter_tanggal').val(); 
-        if(waroeng != 'all' && tanggal){
-            $("#button_non_menu").show();  
-        }
-    });
-    } else {
-        $('.filter_tanggal').on('change', function() {
-        var waroeng  = $('.filter_waroeng').val();
-        var tanggal  = $('.filter_tanggal').val(); 
-        if(waroeng != 'all' && tanggal){
-            $("#button_non_menu").show();  
-        }
-    });
-    }
-
-    $('#non_menu').on('click', function() {
-        var waroeng  = $('.filter_waroeng').val();
-        var tanggal  = $('.filter_tanggal').val(); 
-        var url = 'non_menu/rekap_non_menu?waroeng='+waroeng+'&tanggal='+tanggal;
-        window.open(url,'lap_non_menu.blade.php');
-    });
-
-    // $('#export_excel').on('click', function() {
-    //     var waroeng  = $('.filter_waroeng').val();
-    //     var tanggal  = $('.filter_tanggal').val(); 
-    //     var url = 'non_menu/export_excel?waroeng='+waroeng+'&tanggal='+tanggal;
-    //     window.open(url,'rekap_non_menu_excel.blade.php');
-    // });
 
     $('#cari').on('click', function() {
         var area     = $('.filter_area').val();
