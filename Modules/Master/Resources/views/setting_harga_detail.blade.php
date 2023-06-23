@@ -53,10 +53,10 @@
                                                                 <td>
                                                                     <input type="hidden" name="m_menu_harga_id_edit[]"
                                                                         value="{{ $item->m_menu_harga_id }}">
-                                                                    {{-- <input value="{{ $item->m_menu_harga_nominal }}"
+                                                                    <input value="{{ $item->m_menu_harga_nominal }}"
                                                                         type="text" class="form-control number"
-                                                                        name="m_menu_harga_nominal_edit[]"> --}}
-                                                                    {{ rupiah($item->m_menu_harga_nominal) }}
+                                                                        name="m_menu_harga_nominal_edit[]">
+                                                                    {{-- {{ rupiah($item->m_menu_harga_nominal) }} --}}
                                                                 </td>
                                                                 @php
                                                                     $statusHarga = 'Aktif';
@@ -245,6 +245,7 @@
           });
           $("#modal-block-select2").modal('show');
       });
+      
       $(".updateharga").on('click',function () {
         $.ajax({
                 type: "post",

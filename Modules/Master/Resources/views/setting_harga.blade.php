@@ -15,8 +15,8 @@
                                 class="fa fa-copy mr-5"></i> Copy Nota</a>
                         <a class="btn btn-warning mr-5 mb-5 buttonUpdate" value="" title="update"
                             style="color: #fff"><i class="fa fa-refresh mr-5"></i> Update Harga/Status</a>
-                        <a class="btn btn-success mr-5 mb-5 buttonWbd" value="" title="Edit" style="color: #fff"><i
-                                class="fa fa-plus mr-5"></i> Update WDB Perwaroeng</a>
+                        <a class="btn btn-success mr-5 mb-5 buttonMenu" value="" title="Edit" style="color: #fff"><i
+                                class="fa fa-plus mr-5"></i> Status Menu</a>
                         @csrf
                         <table id="my_table" class="table table-bordered table-striped table-vcenter js-dataTable-full">
                             <thead>
@@ -68,21 +68,19 @@
                         </div>
                         <div class="block-content">
                             <!-- Select2 is initialized at the bottom of the page -->
-                            <form method="post" action="" id="formAction">
+                            <form id="formAction">
                                 @csrf
-                                <div class="mb-4">
-                                    <input name="m_jenis_nota_id" type="hidden" id="m_jenis_nota_id">
-                                </div>
+                                <input type="hidden" id="action1" value="status_menu" name="action">
                                 <div class="mb-4">
                                     <div class="form-group">
-                                        <label for="m_jenis_nota_m_w_id">Nama Waroeng</label>
+                                        <label for="m_tipe_nota">Tipe Nota</label>
                                         <div>
-                                            <select class="js-select2" id="m_jenis_nota_m_w_id" name="m_jenis_nota_m_w_id"
-                                                style="width: 100%;" data-container="#modal-block-select2"
-                                                data-placeholder="Choose one..">
+                                            <select class="js-select2" id="m_tipe_nota_id" name="nota_kode[]"
+                                                style="width: 100%;" data-placeholder="Pilih Tipe Nota" multiple>
                                                 <option></option>
-                                                @foreach ($listWaroeng as $wr)
-                                                    <option value="{{ $wr->m_w_id }}">{{ ucwords($wr->m_w_nama) }}
+                                                @foreach ($m_tipe_nota as $tipen)
+                                                    <option value="{{ $tipen->m_tipe_nota_nama }}">
+                                                        {{ ucwords($tipen->m_tipe_nota_nama) }}
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -91,16 +89,67 @@
                                 </div>
                                 <div class="mb-4">
                                     <div class="form-group">
-                                        <label for="m_jenis_nota_m_t_t_id">Jenis Transaksi</label>
+                                        <label for="m_produk_id">Nama Menu</label>
                                         <div>
-                                            <select class="js-select2" id="m_jenis_nota_m_t_t_id"
-                                                name="m_jenis_nota_m_t_t_id" style="width: 100%;"
-                                                data-container="#modal-block-select2" data-placeholder="Choose one..">
+                                            <select class="js-select2" id="menu_id" name="m_produk_id"
+                                                style="width: 100%;" data-placeholder="Choose one..">
+                                                <option></option>
+                                                @foreach ($produk as $val)
+                                                    <option value="{{ $val->m_produk_id }}">
+                                                        {{ ucwords($val->m_produk_nama) }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-4">
+                                    <div class="form-group">
+                                        <label for="jenis_nota">Jenis Transaksi</label>
+                                        <div>
+                                            <select class="js-select2" id="jenis_nota" name="update_m_jenis_nota_trans_id[]"
+                                                style="width: 100%;" data-placeholder="Pilih Jenis Transaksi" multiple>
                                                 <option></option>
                                                 @foreach ($listTipeTransaksi as $tipe)
-                                                    <option value="{{ $tipe->m_t_t_id }}">{{ ucwords($tipe->m_t_t_name) }}
+                                                    <option value="{{ $tipe->m_t_t_id }}">
+                                                        {{ ucwords($tipe->m_t_t_name) }}
                                                     </option>
                                                 @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-4">
+                                    <div class="form-group">
+                                        <label for="m_menu_harga_status">Status Harga</label>
+                                        <div>
+                                            <select class="js-select2" id="m_menu_harga_status" name="m_menu_harga_status"
+                                                style="width: 100%;">
+                                                <option value="1">Aktif</option>
+                                                <option value="0">Non Aktif</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-4">
+                                    <div class="form-group">
+                                        <label for="m_menu_harga_tax_status">Status Pajak</label>
+                                        <div>
+                                            <select class="js-select2" id="m_menu_harga_tax_status"
+                                                name="m_menu_harga_tax_status" style="width: 100%;">
+                                                <option value="1">Aktif</option>
+                                                <option value="0">Non Aktif</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-4">
+                                    <div class="form-group">
+                                        <label for="m_menu_harga_sc_status">Status Service Charge</label>
+                                        <div>
+                                            <select class="js-select2" id="m_menu_harga_sc_status"
+                                                name="m_menu_harga_sc_status" style="width: 100%;">
+                                                <option value="0">Non Aktif</option>
+                                                <option value="1">Aktif</option>
                                             </select>
                                         </div>
                                     </div>
@@ -118,7 +167,8 @@
         </div>
         <!-- END Select2 in a modal tambah nota-->
         <!-- Select2 in a modal copy nota -->
-        <div class="modal" id="copy_nota" tabindex="-1" role="dialog" aria-labelledby="copy_nota" aria-hidden="true">
+        <div class="modal" id="copy_nota" tabindex="-1" role="dialog" aria-labelledby="copy_nota"
+            aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="block block-themed shadow-none mb-0">
@@ -145,7 +195,8 @@
                                                 <option></option>
 
                                                 @foreach ($listTipeTransaksi as $tipe)
-                                                    <option value="{{ $tipe->m_t_t_id }}">{{ ucwords($tipe->m_t_t_name) }}
+                                                    <option value="{{ $tipe->m_t_t_id }}">
+                                                        {{ ucwords($tipe->m_t_t_name) }}
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -299,42 +350,6 @@
                                 <div class="harga_nota">
 
                                 </div>
-                                <div class="mb-4">
-                                    <div class="form-group">
-                                        <label for="m_menu_harga_status">Status Harga</label>
-                                        <div>
-                                            <select class="js-select2" id="m_menu_harga_status"
-                                                name="m_menu_harga_status" style="width: 100%;">
-                                                <option value="1">Aktif</option>
-                                                <option value="0">Non Aktif</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="mb-4">
-                                    <div class="form-group">
-                                        <label for="m_menu_harga_tax_status">Status Pajak</label>
-                                        <div>
-                                            <select class="js-select2" id="m_menu_harga_tax_status"
-                                                name="m_menu_harga_tax_status" style="width: 100%;">
-                                                <option value="1">Aktif</option>
-                                                <option value="0">Non Aktif</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="mb-4">
-                                    <div class="form-group">
-                                        <label for="m_menu_harga_sc_status">Status Service Charge</label>
-                                        <div>
-                                            <select class="js-select2" id="m_menu_harga_sc_status"
-                                                name="m_menu_harga_sc_status" style="width: 100%;">
-                                                <option value="0">Non Aktif</option>
-                                                <option value="1">Aktif</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
                                 <div class="block-content block-content-full text-end bg-transparent">
                                     <button type="button" class="btn btn-sm btn-alt-secondary me-1"
                                         data-bs-dismiss="modal">Close</button>
@@ -376,6 +391,29 @@
                 });
             }
         }
+
+        function submit_update(form) {
+            $.ajax({
+                url: "/master/m_jenis_nota/update",
+                type: "POST",
+                data: $(form).serialize(),
+                success: function(data) {
+                    $(".modal").modal('hide');
+                    Codebase.helpers('jq-notify', {
+                        align: 'right', // 'right', 'left', 'center'
+                        from: 'top', // 'top', 'bottom'
+                        type: data
+                            .type, // 'info', 'success', 'warning', 'danger'
+                        icon: 'fa fa-info me-5', // Icon class
+                        message: data.messages
+                    });
+                    window.location.reload();
+                },
+                error: function() {
+                    alert("Tidak dapat menyimpan data!");
+                }
+            });
+        }
         $(document).ready(function() {
             Codebase.helpersOnLoad(['jq-rangeslider']);
             $('.js-select2').select2({
@@ -384,10 +422,12 @@
             $('.js-select2-copy').select2({
                 dropdownParent: $('#formAction2')
             });
-            $(".buttonWbd").on('click', function() {
-                $("#myModalLabel").html('Update Harga WBD Perwaroeng');
-                $("#formAction").attr('action', "/master/m_jenis_nota/store");
+            $(".buttonMenu").on('click', function() {
+                $("#myModalLabel").html('Update Status Menu');
                 $("#modal-block-select2").modal('show');
+                $('.js-select2').select2({
+                    dropdownParent: $('#formAction')
+                });
             });
             $(".buttonCopy").on('click', function() {
                 $("#myModalLabel2").html('Copy Harga Nota');
@@ -425,26 +465,13 @@
             });
             $('#formAction3').submit(function(e) {
                 if (!e.isDefaultPrevented()) {
-                    $.ajax({
-                        url: "/master/m_jenis_nota/update",
-                        type: "POST",
-                        data: $('form').serialize(),
-                        success: function(data) {
-                            $("#update_harga").modal('hide');
-                            Codebase.helpers('jq-notify', {
-                                align: 'right', // 'right', 'left', 'center'
-                                from: 'top', // 'top', 'bottom'
-                                type: data
-                                    .type, // 'info', 'success', 'warning', 'danger'
-                                icon: 'fa fa-info me-5', // Icon class
-                                message: data.messages
-                            });
-                            window.location.reload();
-                        },
-                        error: function() {
-                            alert("Tidak dapat menyimpan data!");
-                        }
-                    });
+                        submit_update('#formAction3');
+                    return false;
+                }
+            });
+            $('#formAction').submit(function(e) {
+                if (!e.isDefaultPrevented()) {
+                        submit_update('#formAction');
                     return false;
                 }
             });
