@@ -43,6 +43,7 @@ class PajakController extends Controller
                         $data = array(
                             'm_pajak_value'    =>    $request->m_pajak_value,
                             'm_pajak_status_sync' => 'send',
+                            'm_pajak_client_target' => DB::raw('DEFAULT'),
                             'm_pajak_updated_by' => Auth::user()->users_id,
                             'm_pajak_updated_at' => Carbon::now(),
                         );
@@ -58,6 +59,6 @@ class PajakController extends Controller
                 }
                 return response(['messages' => 'Berhasil Menghapus !','type' => 'success','request'=>$request->all()]);
             }
-        
+
     }
 }

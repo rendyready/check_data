@@ -78,7 +78,7 @@ class ProdukController extends Controller
                         "m_produk_created_at" => Carbon::now(),
                     ]);
                     DB::table('m_klasifikasi_produk')->where('m_klasifikasi_produk_id',$kat)->update(['m_klasifikasi_produk_last_id'=>$num]);
-                  
+
                   if ($request->m_produk_m_jenis_produk_id == 11 ) {
                     $get_gudang = DB::table('m_gudang')->whereIn('m_gudang_nama',['gudang wbd waroeng'])->get();
                     foreach ($get_gudang as $key) {
@@ -98,7 +98,7 @@ class ProdukController extends Controller
                         );
                         DB::table('m_stok')->insert($data_bb);
                     }
-                  }  
+                  }
                     return response(['messages' => 'Berhasil Tambah Produk !', 'type' => 'success']);
                 }
             } else {
@@ -121,6 +121,7 @@ class ProdukController extends Controller
                             "m_produk_scp" => $request->m_produk_scp,
                             "m_produk_hpp" => $request->m_produk_hpp,
                             "m_produk_status_sync" => 'send',
+                            "m_produk_client_target" => DB::raw('DEFAULT'),
                             "m_produk_updated_by" => Auth::user()->users_id,
                             "m_produk_updated_at" => Carbon::now(),
                         ]);
@@ -139,7 +140,7 @@ class ProdukController extends Controller
     {
         $data = DB::table('m_produk')->where('m_produk_id', $id)->first();
         return response()->json($data, 200);
-    } 
+    }
     public function get_prod_sat($id)
     {
         $satuan_bb = DB::table('m_produk')->where('m_produk_code',$id)

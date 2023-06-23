@@ -61,6 +61,7 @@ class FooterController extends Controller
                         'm_footer_updated_by' => Auth::user()->users_id,
                         'm_footer_updated_at' => Carbon::now(),
                         'm_footer_status_sync' => 'send',
+                        'm_footer_client_target' => DB::raw('DEFAULT')
                     );
                     DB::table('m_footer')->where('m_footer_id', $request->m_footer_id)
                         ->update($data);

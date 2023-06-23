@@ -72,6 +72,7 @@ class UsersController extends Controller
                     'updated_by' => Auth::user()->users_id,
                     'updated_at' => Carbon::now(),
                     'users_status_sync' => 'edit',
+                    'users_client_target' => DB::raw('DEFAULT'),
                 );
             } else {
                 $data = array(
@@ -82,6 +83,7 @@ class UsersController extends Controller
                     'updated_by' => Auth::user()->users_id,
                     'updated_at' => Carbon::now(),
                     'users_status_sync' => 'edit',
+                    'users_client_target' => DB::raw('DEFAULT')
                 );
             }
 
