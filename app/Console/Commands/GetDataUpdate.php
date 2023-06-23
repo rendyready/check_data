@@ -154,8 +154,6 @@ class GetDataUpdate extends Command
                 exit();
             }
 
-            // $except = array('app_setting','role_has_permissions','model_has_permissions','model_has_roles');
-            // if (!in_array($valTab->config_get_data_table_name,$except)) {
             if ($valTab->config_get_data_sequence == 'on') {
                 #Get Last Increment Used
                 $maxId = $DbDest->select("SELECT MAX(id) FROM {$valTab->config_get_data_table_name};")[0]->max;
@@ -173,22 +171,30 @@ class GetDataUpdate extends Command
                 }
             }
 
-            #Cek Last Sync
-            // $lastId = DB::table('log_data_sync')
-            //             ->where('log_data_sync_cron','getdataupdate:cron')
-            //             ->where('log_data_sync_table',$valTab->config_get_data_table_name)
-            //             ->first();
-
-            // $statusCheck1 = "send";
-            // $statusCheck2 = "edit";
             $fieldStatus = $valTab->config_get_data_field_status;
+            $priorityList = [];
+            if ($valTab->config_get_data_table_name == "m_menu_harga") {
+                $prioritySource = $DbSource->table($valTab->config_get_data_table_name)
+                    ->join('m_jenis_nota','m_jenis_nota_id','=','m_menu_harga_m_jenis_nota_id')
+                    ->where('m_jenis_nota_m_w_id',$dest->db_con_m_w_id)
+                    ->where($fieldStatus,"LIKE","%{$serverCode}%")
+                    ->orderBy($valTab->config_get_data_field_validate1,'asc');
+                    if ($valTab->config_get_data_limit > 0) {
+                        $prioritySource->limit($valTab->config_get_data_limit);
+                    }
+
+                if ($prioritySource->get()->count() > 0) {
+                    foreach ($prioritySource->get() as $keyP => $valP) {
+                        array_push($priorityList,$valP->m_menu_harga_id);
+                    }
+                }
+            }
             $getDataSource = $DbSource->table($valTab->config_get_data_table_name);
-            // if (!empty($lastId)) {
-            //     $getDataSource->where($valTab->config_get_data_field_validate1,'>',$lastId->log_data_sync_last);
-            // }
+            if (count($priorityList) > 0) {
+                $getDataSource->whereIn('m_menu_harga_id',$priorityList);
+            }
             if ($valTab->config_get_data_truncate == "off") {
                 $getDataSource->where($fieldStatus,"LIKE","%{$serverCode}%");
-                // $getDataSource->orWhere($fieldStatus,"{$statusCheck2}");
                 $getDataSource->orderBy($valTab->config_get_data_field_validate1,'asc');
                 if ($valTab->config_get_data_limit > 0) {
                     $getDataSource->limit($valTab->config_get_data_limit);
@@ -200,7 +206,6 @@ class GetDataUpdate extends Command
             }
 
             #PUSH data to Destination
-            // $nextLast = 0;
             if ($getDataSource->get()->count() > 0) {
                 foreach ($getDataSource->get() as $keyDataSource => $valDataSource) {
                     $newDestStatus = "";
@@ -215,7 +220,6 @@ class GetDataUpdate extends Command
                         }
                     }
                     try {
-                        // $validateField = $valTab->config_get_data_field_validate1;
                         $validationField = [];
                         for ($i=1; $i <= 4; $i++) {
                             $validate = "config_get_data_field_validate{$i}";
@@ -239,8 +243,6 @@ class GetDataUpdate extends Command
                                 $replace
                             );
                         }
-                        // $validateField1 = $valTab->config_get_data_field_validate1;
-                        // $nextLast = $valDataSource->$validateField1;
 
                     } catch (\Throwable $th) {
                         Log::alert("Can't insert/update to {$valTab->config_get_data_table_name}");
@@ -248,41 +250,6 @@ class GetDataUpdate extends Command
                     }
                 }
             }
-            // if ($nextLast == 0) {
-            //     $validateField = $valTab->config_get_data_field_validate1;
-            //     $data = $DbSource->table($valTab->config_get_data_table_name)
-            //         ->orderBy($valTab->config_get_data_field_validate1,'asc')
-            //         ->first();
-            //     if (!empty($data)) {
-            //         $nextLast = $data->$validateField;
-            //     }
-            // }
-            // if ($nextLast != 0) {
-            //     DB::table('log_data_sync')
-            //         ->updateOrInsert(
-            //         [
-            //             'log_data_sync_cron' => 'getdataupdate:cron',
-            //             'log_data_sync_table' => $valTab->config_get_data_table_name,
-            //         ],
-            //         [
-            //             'log_data_sync_cron' => 'getdataupdate:cron',
-            //             'log_data_sync_table' => $valTab->config_get_data_table_name,
-            //             'log_data_sync_last' => $nextLast,
-            //             'log_data_sync_note' => 'ok'
-            //         ]
-            //     );
-                #Local Log
-                DB::table('log_cronjob')
-                ->insert([
-                    'log_cronjob_name' => 'getdataupdate:cron',
-                    'log_cronjob_from_server_id' => $getSourceConn->db_con_m_w_id,
-                    'log_cronjob_from_server_name' => $getSourceConn->db_con_location_name,
-                    'log_cronjob_to_server_id' => $dest->db_con_m_w_id,
-                    'log_cronjob_to_server_name' => $dest->db_con_location_name,
-                    'log_cronjob_datetime' => Carbon::now(),
-                    'log_cronjob_note' => $valTab->config_get_data_table_name.'-UPDATED!',
-                ]);
-            // }
         }
 
         Log::info("Cronjob GET Data FINISH at ". Carbon::now()->format('Y-m-d H:i:s'));

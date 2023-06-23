@@ -1523,10 +1523,31 @@ class CronjobController extends Controller
             // $statusCheck1 = "send";
             // $statusCheck2 = "edit";
             $fieldStatus = $valTab->config_get_data_field_status;
+            $priorityList = [];
+            if ($valTab->config_get_data_table_name == "m_menu_harga") {
+                $prioritySource = $DbSource->table($valTab->config_get_data_table_name)
+                    ->join('m_jenis_nota','m_jenis_nota_id','=','m_menu_harga_m_jenis_nota_id')
+                    ->where('m_jenis_nota_m_w_id',$dest->db_con_m_w_id)
+                    ->where($fieldStatus,"LIKE","%{$serverCode}%")
+                    ->orderBy($valTab->config_get_data_field_validate1,'asc');
+                    if ($valTab->config_get_data_limit > 0) {
+                        $prioritySource->limit($valTab->config_get_data_limit);
+                    }
+
+                if ($prioritySource->get()->count() > 0) {
+                    foreach ($prioritySource->get() as $keyP => $valP) {
+                        array_push($priorityList,$valP->m_menu_harga_id);
+                    }
+                }
+            }
+
             $getDataSource = $DbSource->table($valTab->config_get_data_table_name);
             // if (!empty($lastId)) {
             //     $getDataSource->where($valTab->config_get_data_field_validate1,'>',$lastId->log_data_sync_last);
             // }
+            if (count($priorityList) > 0) {
+                $getDataSource->whereIn('m_menu_harga_id',$priorityList);
+            }
             if ($valTab->config_get_data_truncate == "off") {
                 $getDataSource->where($fieldStatus,"LIKE","%{$serverCode}%");
                 // $getDataSource->orWhere($fieldStatus,"{$statusCheck2}");
@@ -1543,6 +1564,7 @@ class CronjobController extends Controller
             #PUSH data to Destination
             // $nextLast = 0;
             if ($getDataSource->get()->count() > 0) {
+                // return $getDataSource->get();
                 foreach ($getDataSource->get() as $keyDataSource => $valDataSource) {
                     $newDestStatus = "";
                     $data = [];

@@ -56,7 +56,7 @@ class ConfGetDataSeeder extends Seeder
             $seq = ($valTable == 'app_setting') ? 'off':'on';
             // $trun = ($valTable == 'app_setting') ? 'on':'off';
             $trun = 'off';
-            $limit = ($valTable == 'm_menu_harga' || $valTable == 'users' || $valTable == 'm_meja') ? 2000 : 100;
+            $limit = ($valTable == 'm_menu_harga' || $valTable == 'users' || $valTable == 'm_meja') ? 100 : 100;
 
             DB::table('config_get_data')->insert([
                 'config_get_data_table_name' => $valTable,
@@ -92,7 +92,7 @@ class ConfGetDataSeeder extends Seeder
             'config_get_data_table_name' => 'role_has_permissions',
             'config_get_data_table_tipe' => 'master',
             'config_get_data_status' => 'on',
-            'config_get_data_limit' => 1000,
+            'config_get_data_limit' => 100,
             'config_get_data_sequence' => 'off',
             'config_get_data_field_status' => 'r_h_p_client_target',
             'config_get_data_field_validate1' => 'r_h_p_id',
@@ -103,7 +103,7 @@ class ConfGetDataSeeder extends Seeder
             'config_get_data_table_name' => 'model_has_permissions',
             'config_get_data_table_tipe' => 'master',
             'config_get_data_status' => 'on',
-            'config_get_data_limit' => 1000,
+            'config_get_data_limit' => 100,
             'config_get_data_sequence' => 'off',
             'config_get_data_field_status' => 'm_h_p_client_target',
             'config_get_data_field_validate1' => 'm_h_p_id',
@@ -114,7 +114,7 @@ class ConfGetDataSeeder extends Seeder
             'config_get_data_table_name' => 'model_has_roles',
             'config_get_data_table_tipe' => 'master',
             'config_get_data_status' => 'on',
-            'config_get_data_limit' => 1000,
+            'config_get_data_limit' => 100,
             'config_get_data_sequence' => 'off',
             'config_get_data_field_status' => 'm_h_r_client_target',
             'config_get_data_field_validate1' => 'm_h_r_id'

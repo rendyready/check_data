@@ -16,7 +16,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('datasync:cron')->everyMinute()->withoutOverlapping();
-        $schedule->command('getdata:cron')->everyMinute()->withoutOverlapping();
+        // $schedule->command('getdata:cron')->everyMinute()->withoutOverlapping();
         $schedule->command('getdataupdate:cron')->everyMinute()->withoutOverlapping();
         $schedule->command('sendcloud:cron')->everyTwoMinutes()->withoutOverlapping();
         $schedule->command('mastercontrol:cron')->dailyAt('22:00')->withoutOverlapping();
