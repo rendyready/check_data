@@ -10,12 +10,13 @@
                             Setting Harga Nota
                     </div>
                     <div class="block-content text-muted">
-                        {{-- <a class="btn btn-success mr-5 mb-5 buttonInsert" value="" title="Edit" style="color: #fff"><i
-                                class="fa fa-plus mr-5"></i> Harga Nota</a> --}}
+
                         <a class="btn btn-info mr-5 mb-5 buttonCopy" value="" title="copy" style="color: #fff"><i
                                 class="fa fa-copy mr-5"></i> Copy Nota</a>
                         <a class="btn btn-warning mr-5 mb-5 buttonUpdate" value="" title="update"
                             style="color: #fff"><i class="fa fa-refresh mr-5"></i> Update Harga/Status</a>
+                        <a class="btn btn-success mr-5 mb-5 buttonWbd" value="" title="Edit" style="color: #fff"><i
+                                class="fa fa-plus mr-5"></i> Update WDB Perwaroeng</a>
                         @csrf
                         <table id="my_table" class="table table-bordered table-striped table-vcenter js-dataTable-full">
                             <thead>
@@ -96,7 +97,6 @@
                                                 name="m_jenis_nota_m_t_t_id" style="width: 100%;"
                                                 data-container="#modal-block-select2" data-placeholder="Choose one..">
                                                 <option></option>
-
                                                 @foreach ($listTipeTransaksi as $tipe)
                                                     <option value="{{ $tipe->m_t_t_id }}">{{ ucwords($tipe->m_t_t_name) }}
                                                     </option>
@@ -125,7 +125,8 @@
                         <div class="block-header block-header-default bg-pulse">
                             <h3 class="block-title" id="myModalLabel2"></h3>
                             <div class="block-options">
-                                <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
+                                <button type="button" class="btn-block-option" data-bs-dismiss="modal"
+                                    aria-label="Close">
                                     <i class="fa fa-fw fa-times"></i>
                                 </button>
                             </div>
@@ -356,8 +357,8 @@
             $('.js-select2-copy').select2({
                 dropdownParent: $('#formAction2')
             });
-            $(".buttonInsert").on('click', function() {
-                $("#myModalLabel").html('Tambah Harga Nota');
+            $(".buttonWbd").on('click', function() {
+                $("#myModalLabel").html('Update Harga WBD Perwaroeng');
                 $("#formAction").attr('action', "/master/m_jenis_nota/store");
                 $("#modal-block-select2").modal('show');
             });
@@ -424,7 +425,7 @@
                                 align: 'right', // 'right', 'left', 'center'
                                 from: 'top', // 'top', 'bottom'
                                 type: data
-                                .type, // 'info', 'success', 'warning', 'danger'
+                                    .type, // 'info', 'success', 'warning', 'danger'
                                 icon: 'fa fa-info me-5', // Icon class
                                 message: data.messages
                             });
