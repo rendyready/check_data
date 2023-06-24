@@ -24,6 +24,7 @@
                                     <th>ID</th>
                                     <th>Waroeng</th>
                                     <th>Jenis Transaksi</th>
+                                    <th>Tipe Nota</th>
                                     <th>AKSI</th>
                                 </tr>
                             </thead>
@@ -36,6 +37,7 @@
                                         <td>{{ $no++ }}</td>
                                         <td>{{ $item->m_w_nama }}</td>
                                         <td>{{ $item->m_t_t_name }}</td>
+                                        <td>{{ ucwords($item->m_w_m_kode_nota) }}</td>
                                         <td> <a class="btn btn-info buttonEdit" value="{{ $item->m_jenis_nota_id }}"
                                                 title="Edit"><i class="fa fa-edit"></i></a>
                                             <a href="{{ route('m_jenis_nota.detail_harga', $item->m_jenis_nota_id) }}"
@@ -285,14 +287,31 @@
                                 @csrf
                                 <div class="mb-4">
                                     <div class="form-group">
-                                        <label for="m_tipe_nota">Tipe Nota</label>
+                                        <label for="m_area_id">Area</label>
                                         <div>
-                                            <select class="js-select2" id="m_tipe_nota" name="m_tipe_nota[]"
-                                                style="width: 100%;" data-placeholder="Pilih Tipe Nota" multiple>
+                                            <select class="js-select2 get_harga get_nota" id="m_area_id" name="m_area_id"
+                                                style="width: 100%;" data-placeholder="Choose one..">
                                                 <option></option>
-                                                @foreach ($m_tipe_nota as $tipen)
-                                                    <option value="{{ $tipen->m_tipe_nota_nama }}">
-                                                        {{ ucwords($tipen->m_tipe_nota_nama) }}
+                                                <option value="0">All Area</option>
+                                                @foreach ($area as $val)
+                                                    <option value="{{ $val->m_area_id }}">
+                                                        {{ ucwords($val->m_area_nama) }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-4">
+                                    <div class="form-group">
+                                        <label for="update_m_jenis_nota_trans_id">Jenis Transaksi</label>
+                                        <div>
+                                            <select class="js-select2 get_harga get_nota"
+                                                id="update_m_jenis_nota_trans_id" name="update_m_jenis_nota_trans_id[]"
+                                                style="width: 100%;" data-placeholder="Pilih Jenis Transaksi" multiple>
+                                                <option></option>
+                                                @foreach ($listTipeTransaksi as $tipe)
+                                                    <option value="{{ $tipe->m_t_t_id }}">
+                                                        {{ ucwords($tipe->m_t_t_name) }}
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -316,33 +335,12 @@
                                 </div>
                                 <div class="mb-4">
                                     <div class="form-group">
-                                        <label for="m_area_id">Area</label>
+                                        <label for="m_tipe_nota">Tipe Nota</label>
                                         <div>
-                                            <select class="js-select2 get_harga" id="m_area_id" name="m_area_id"
-                                                style="width: 100%;" data-placeholder="Choose one..">
+                                            <select class="js-select2" id="m_tipe_nota" name="m_tipe_nota[]"
+                                                style="width: 100%;" data-placeholder="Pilih Tipe Nota" multiple>
                                                 <option></option>
-                                                <option value="0">All Area</option>
-                                                @foreach ($area as $val)
-                                                    <option value="{{ $val->m_area_id }}">
-                                                        {{ ucwords($val->m_area_nama) }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="mb-4">
-                                    <div class="form-group">
-                                        <label for="update_m_jenis_nota_trans_id">Jenis Transaksi</label>
-                                        <div>
-                                            <select class="js-select2 get_harga" id="update_m_jenis_nota_trans_id"
-                                                name="update_m_jenis_nota_trans_id[]" style="width: 100%;"
-                                                data-placeholder="Pilih Jenis Transaksi" multiple>
-                                                <option></option>
-                                                @foreach ($listTipeTransaksi as $tipe)
-                                                    <option value="{{ $tipe->m_t_t_id }}">
-                                                        {{ ucwords($tipe->m_t_t_name) }}
-                                                    </option>
-                                                @endforeach
+
                                             </select>
                                         </div>
                                     </div>
@@ -375,7 +373,8 @@
                 var data = {
                     m_menu_id: m_menu_id,
                     m_tipe_nota: m_tipe_nota,
-                    m_jenis_nota_trans_id: m_jenis_nota_trans_id
+                    m_jenis_nota_trans_id: m_jenis_nota_trans_id,
+                    get_tipe:'get_harga'
                 }
                 $.ajax({
                     url: "/master/m_jenis_nota/get_harga",
@@ -465,13 +464,13 @@
             });
             $('#formAction3').submit(function(e) {
                 if (!e.isDefaultPrevented()) {
-                        submit_update('#formAction3');
+                    submit_update('#formAction3');
                     return false;
                 }
             });
             $('#formAction').submit(function(e) {
                 if (!e.isDefaultPrevented()) {
-                        submit_update('#formAction');
+                    submit_update('#formAction');
                     return false;
                 }
             });
@@ -494,7 +493,24 @@
                 }
                 get_harga();
             });
-
+            $('.get_nota').on('change', function() {
+                var area_id = $('#m_area_id').val();
+                var tipe_trans_id = $('#update_m_jenis_nota_trans_id').val();
+                var data = {
+                    area_id: area_id,
+                    tipe_trans_id: tipe_trans_id,
+                    get_tipe:'get_nota',
+                }
+                $.ajax({
+                    url: "/master/m_jenis_nota/get_harga",
+                    type: "GET",
+                    data: data,
+                    success: function(respond) {
+                        
+                    },
+                    error: function() {}
+                });
+            });
         });
     </script>
 @endsection

@@ -10,8 +10,8 @@
                             Detail Harga {{ ucwords($m_t_t_name) }}
                     </div>
                     <div class="block-content text-muted">
-                        <a class="btn btn-success mr-5 mb-5 buttonInsert" value="" title="Edit" style="color: #fff"><i
-                                class="fa fa-plus mr-5"></i> Harga</a>
+                        {{-- <a class="btn btn-success mr-5 mb-5 buttonInsert" value="" title="Edit" style="color: #fff"><i
+                                class="fa fa-plus mr-5"></i> Harga</a> --}}
                         @csrf
                         <div id="tabpane" class="block block-rounded overflow-hidden">
                             <ul class="nav nav-tabs nav-tabs-block nav-tabs-alt align-items-center" role="tablist">
@@ -51,12 +51,17 @@
                                                                 <td>{{ $no++ }}</td>
                                                                 <td>{{ $item->m_produk_nama }}</td>
                                                                 <td>
-                                                                    <input type="hidden" name="m_menu_harga_id_edit[]"
-                                                                        value="{{ $item->m_menu_harga_id }}">
-                                                                    <input value="{{ $item->m_menu_harga_nominal }}"
-                                                                        type="text" class="form-control number"
-                                                                        name="m_menu_harga_nominal_edit[]">
-                                                                    {{-- {{ rupiah($item->m_menu_harga_nominal) }} --}}
+                                                                    @if ($item->m_menu_harga_id == 2367 || $item->m_menu_harga_id == 8675 || $item->m_menu_harga_id == 59376)
+                                                                        <input type="hidden" name="m_menu_harga_id_edit[]"
+                                                                            value="{{ $item->m_menu_harga_id }}">
+                                                                        <input value="{{ $item->m_menu_harga_nominal }}"
+                                                                            type="text" class="form-control number"
+                                                                            name="m_menu_harga_nominal_edit[]">
+                                                                    @else
+                                                                        <input type="hidden" name="m_menu_harga_id_edit[]"
+                                                                            value="{{ $item->m_menu_harga_id }}">
+                                                                        {{ rupiah($item->m_menu_harga_nominal) }}
+                                                                    @endif
                                                                 </td>
                                                                 @php
                                                                     $statusHarga = 'Aktif';
