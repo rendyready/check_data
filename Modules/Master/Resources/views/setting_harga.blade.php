@@ -38,8 +38,9 @@
                                         <td>{{ $item->m_w_nama }}</td>
                                         <td>{{ $item->m_t_t_name }}</td>
                                         <td>{{ ucwords($item->m_w_m_kode_nota) }}</td>
-                                        <td> <a class="btn btn-info buttonEdit" value="{{ $item->m_jenis_nota_id }}"
-                                                title="Edit"><i class="fa fa-edit"></i></a>
+                                        <td> 
+                                            {{-- <a class="btn btn-info buttonEdit" value="{{ $item->m_jenis_nota_id }}"
+                                                title="Edit"><i class="fa fa-edit"></i></a> --}}
                                             <a href="{{ route('m_jenis_nota.detail_harga', $item->m_jenis_nota_id) }}"
                                                 class="btn btn-warning" title="Detail">
                                                 <i class="fa fa-eye"></i>
@@ -320,6 +321,18 @@
                                 </div>
                                 <div class="mb-4">
                                     <div class="form-group">
+                                        <label for="m_tipe_nota">Tipe Nota</label>
+                                        <div>
+                                            <select class="js-select2" id="m_tipe_nota" name="m_tipe_nota[]"
+                                                style="width: 100%;" data-placeholder="Pilih Tipe Nota" multiple>
+                                                <option></option>
+
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-4">
+                                    <div class="form-group">
                                         <label for="m_produk_id">Nama Menu</label>
                                         <div>
                                             <select class="js-select2 get_harga" id="m_produk_id" name="m_produk_id"
@@ -329,18 +342,6 @@
                                                     <option value="{{ $val->m_produk_id }}">
                                                         {{ ucwords($val->m_produk_nama) }}</option>
                                                 @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="mb-4">
-                                    <div class="form-group">
-                                        <label for="m_tipe_nota">Tipe Nota</label>
-                                        <div>
-                                            <select class="js-select2" id="m_tipe_nota" name="m_tipe_nota[]"
-                                                style="width: 100%;" data-placeholder="Pilih Tipe Nota" multiple>
-                                                <option></option>
-
                                             </select>
                                         </div>
                                     </div>
@@ -374,7 +375,7 @@
                     m_menu_id: m_menu_id,
                     m_tipe_nota: m_tipe_nota,
                     m_jenis_nota_trans_id: m_jenis_nota_trans_id,
-                    get_tipe:'get_harga'
+                    get_tipe: 'get_harga'
                 }
                 $.ajax({
                     url: "/master/m_jenis_nota/get_harga",
@@ -412,6 +413,14 @@
                     alert("Tidak dapat menyimpan data!");
                 }
             });
+        }
+
+        function capitalizeEachWord(text) {
+            var words = text.split(" ");
+            for (var i = 0; i < words.length; i++) {
+                words[i] = words[i].charAt(0).toUpperCase() + words[i].slice(1);
+            }
+            return words.join(" ");
         }
         $(document).ready(function() {
             Codebase.helpersOnLoad(['jq-rangeslider']);
@@ -493,20 +502,32 @@
                 }
                 get_harga();
             });
+            $('#m_area_id').on('change',function () {
+                $('.harga_nota').empty(); 
+            });
             $('.get_nota').on('change', function() {
                 var area_id = $('#m_area_id').val();
                 var tipe_trans_id = $('#update_m_jenis_nota_trans_id').val();
                 var data = {
                     area_id: area_id,
                     tipe_trans_id: tipe_trans_id,
-                    get_tipe:'get_nota',
+                    get_tipe: 'get_nota',
                 }
                 $.ajax({
                     url: "/master/m_jenis_nota/get_harga",
                     type: "GET",
                     data: data,
                     success: function(respond) {
-                        
+                        $('#m_tipe_nota').empty();
+                        $('#m_tipe_nota').append('<option></option>');
+                        respond.forEach(function(option) {
+                            var capitalizedOption = capitalizeEachWord(option);
+                            var $option = $('<option>', {
+                                value: option,
+                                text: capitalizedOption
+                            });
+                            $('#m_tipe_nota').append($option);
+                        });
                     },
                     error: function() {}
                 });

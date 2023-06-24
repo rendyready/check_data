@@ -289,7 +289,20 @@ class MJenisNotaController extends Controller
                 $data['nota_' . substr($tipeNota, 5) . '_harga'] = implode(', ', $notaHarga);
             }
         } else {
-            $get_nota = DB::table('');
+            if ($request->area_id == '0') {
+                $mAreaId = Null;
+            } else {
+                $mAreaId = $request->area_id;
+            }
+            $trans_tipe = $request->tipe_trans_id;
+            $get_nota = DB::table('m_w')->when($mAreaId, function ($query) use ($mAreaId) {
+                return $query->where('m_w_m_area_id', $mAreaId);
+            })
+            ->join('m_jenis_nota','m_jenis_nota_m_w_id','m_w_id')
+            ->whereIn('m_jenis_nota_m_t_t_id',$trans_tipe)
+            ->groupBy('m_w_m_kode_nota')
+            ->pluck('m_w_m_kode_nota')->toArray();
+            $data = $get_nota;
         }
 
         return response()->json($data);
