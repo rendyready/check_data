@@ -31,12 +31,6 @@ class GaransiController extends Controller
         $data->area = DB::table('m_area')
             ->orderby('m_area_id', 'ASC')
             ->get();    
-        // $data->waroeng_akses = DB::table('m_w')
-        //     ->join('users', )
-        //     ->select('waroeng_akses')
-        //     ->where('m_w_m_area_id', $data->area_nama->m_area_id)
-        //     ->orderby('m_w_id', 'ASC')
-        //     ->get();
         return view('dashboard::rekap_garansi', compact('data'));
     }
 
@@ -50,6 +44,7 @@ class GaransiController extends Controller
         $data = array();
         foreach ($waroeng as $val) {
             $data[$val->m_w_id] = [$val->m_w_nama];
+            $data['all'] = ['all waroeng'];
         }
         return response()->json($data);
     }
@@ -81,52 +76,35 @@ class GaransiController extends Controller
         return response()->json($data);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     * @param Request $request
-     * @return Renderable
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Show the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
     public function show(Request $request)
     {
-        if (strpos($request->tanggal, 'to') !== false) {
-        $dates = explode('to' ,$request->tanggal);
-        $get2 = DB::table('rekap_garansi')
+        $get = DB::table('rekap_garansi')
                 ->join('rekap_transaksi', 'r_t_id', 'rekap_garansi_r_t_id')
-                ->join('users', 'users_id', 'rekap_garansi_created_by')
-                ->where('r_t_m_w_id', $request->waroeng)
-                ->whereBetween('r_t_tanggal', $dates);
-                if($request->operator != 'all'){
-                    $get2->where('rekap_garansi_created_by', $request->operator);
+                ->join('users', 'users_id', 'rekap_garansi_created_by');
+                if (strpos($request->tanggal, 'to') !== false) {
+                    $dates = explode('to' ,$request->tanggal);
+                    $get->whereBetween('r_t_tanggal', $dates);
+                } else {
+                    $get->where('r_t_tanggal', $request->tanggal);
                 }
-                $get = $get2->orderBy('r_t_tanggal', 'ASC')
+                if($request->area != 'all'){
+                    $get->where('r_t_m_area_id', $request->area);
+                    if($request->waroeng != 'all') {
+                        $get->where('r_t_m_w_id', $request->waroeng);
+                        if($request->operator != 'all'){
+                            $get->where('rekap_garansi_created_by', $request->operator);
+                        }
+                    }
+                }
+                $get = $get->orderBy('r_t_tanggal', 'ASC')
                 ->orderBy('r_t_nota_code', 'ASC')
                 ->get();
-        } else {
-        $get2 = DB::table('rekap_garansi')
-            ->join('rekap_transaksi', 'r_t_id', 'rekap_garansi_r_t_id')
-            ->join('users', 'users_id', 'rekap_garansi_created_by')
-            ->where('r_t_m_w_id', $request->waroeng)
-            ->where('r_t_tanggal', $request->tanggal);
-            if($request->operator != 'all'){
-                $get2->where('rekap_garansi_created_by', $request->operator);
-            }
-            $get = $get2->orderBy('r_t_tanggal', 'ASC')
-            ->orderBy('r_t_nota_code', 'ASC')
-            ->get(); 
-        }
+        
         $data = array();
         foreach ($get as $value) {
             $row = array();
+            $row[] = $value->r_t_m_area_nama;
+            $row[] = $value->r_t_m_w_nama;
             $row[] = date('d-m-Y', strtotime($value->r_t_tanggal));
             $row[] = $value->r_t_nota_code;
             $row[] = $value->name;

@@ -21,10 +21,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4 text-end" id="button_non_menu" width=100%>
+                            {{-- <div class="col-md-4 text-end" id="button_non_menu" width=100%>
                                 <button type="button" id="non_menu"
                                     class="btn btn-primary mt-0 mb-2">Lihat Rekap Non Menu</button>
-                            </div>
+                            </div> --}}
                         </div> 
 
                         <div class="row">
@@ -39,6 +39,7 @@
                                             @foreach ($data->area as $area)
                                                 <option value="{{ $area->m_area_id }}"> {{ $area->m_area_nama }} </option>
                                             @endforeach
+                                            <option value="all">all area</option>
                                             </select>
                                         @else
                                             <select id="filter_area" data-placeholder="Pilih Area" style="width: 100%;"
@@ -51,7 +52,7 @@
                             </div>
 
                             <div class="col-sm-5">
-                                <div class="row mb-2">
+                                <div class="row mb-2" id="select_waroeng">
                                     <label class="col-sm-3 col-form-label">Waroeng</label>
                                     <div class="col-sm-9">
                                         @if (in_array(Auth::user()->waroeng_id, $data->akses_pusat))
@@ -87,9 +88,66 @@
                         </div>
 
                     </form>      
-             
+            <div class="table-responsive">
             <table id="tampil_rekap" class="table table-sm table-bordered table-hover table-striped table-vcenter js-dataTable-full nowrap">
                 <thead id="head_data">
+                    <tr>
+                        <th rowspan="2" class="text-center">Area</th>
+                        <th rowspan="2" class="text-center">Waroeng</th>
+                        <th rowspan="2" class="text-center">Tanggal</th>
+                        <th rowspan="2" class="text-center">Sesi</th>
+                        <th rowspan="2" class="text-center">Operator</th>
+                        <th colspan="5" class="text-center">Dine In</th>
+                        <th colspan="5" class="text-center">Take Away</th>
+                        <th colspan="5" class="text-center">Grab</th>
+                        <th colspan="5" class="text-center">Gojek</th>
+                        <th colspan="5" class="text-center">Grab Mart</th>
+                        <th colspan="5" class="text-center">Shopeefood</th>
+                        <th colspan="5" class="text-center">Maxim</th>
+                    </tr>
+                    <tr>
+                        <th rowspan="1" class="text-center">Nota</th>
+                        <th rowspan="1" class="text-center">Tunai</th>
+                        <th rowspan="1" class="text-center">Pajak Tunai</th>
+                        <th rowspan="1" class="text-center">Transfer</th>
+                        <th rowspan="1" class="text-center">Pajak Transfer</th>
+
+                        <th rowspan="1" class="text-center">Nota</th>
+                        <th rowspan="1" class="text-center">Tunai</th>
+                        <th rowspan="1" class="text-center">Pajak Tunai</th>
+                        <th rowspan="1" class="text-center">Transfer</th>
+                        <th rowspan="1" class="text-center">Pajak Transfer</th>
+
+                        <th rowspan="1" class="text-center">Nota</th>
+                        <th rowspan="1" class="text-center">Tunai</th>
+                        <th rowspan="1" class="text-center">Pajak Tunai</th>
+                        <th rowspan="1" class="text-center">Transfer</th>
+                        <th rowspan="1" class="text-center">Pajak Transfer</th>
+
+                        <th rowspan="1" class="text-center">Nota</th>
+                        <th rowspan="1" class="text-center">Tunai</th>
+                        <th rowspan="1" class="text-center">Pajak Tunai</th>
+                        <th rowspan="1" class="text-center">Transfer</th>
+                        <th rowspan="1" class="text-center">Pajak Transfer</th>
+
+                        <th rowspan="1" class="text-center">Nota</th>
+                        <th rowspan="1" class="text-center">Tunai</th>
+                        <th rowspan="1" class="text-center">Pajak Tunai</th>
+                        <th rowspan="1" class="text-center">Transfer</th>
+                        <th rowspan="1" class="text-center">Pajak Transfer</th>
+
+                        <th rowspan="1" class="text-center">Nota</th>
+                        <th rowspan="1" class="text-center">Tunai</th>
+                        <th rowspan="1" class="text-center">Pajak Tunai</th>
+                        <th rowspan="1" class="text-center">Transfer</th>
+                        <th rowspan="1" class="text-center">Pajak Transfer</th>
+
+                        <th rowspan="1" class="text-center">Nota</th>
+                        <th rowspan="1" class="text-center">Tunai</th>
+                        <th rowspan="1" class="text-center">Pajak Tunai</th>
+                        <th rowspan="1" class="text-center">Transfer</th>
+                        <th rowspan="1" class="text-center">Pajak Transfer</th>
+                    </tr>
                 </thead>
             </table>
           </div>
@@ -110,73 +168,38 @@ $(document).ready(function() {
     var HakAksesArea = userInfo.dataset.hasAccess === 'true';
     var HakAksesPusat = userInfoPusat.dataset.hasAccess === 'true';
 
-    $("#button_non_menu").hide();
+    // $("#button_non_menu").hide();
 
-    if(HakAksesArea){
-        $('.filter_waroeng').on('change', function() {
-        var waroeng  = $('.filter_waroeng').val();
-        var tanggal  = $('.filter_tanggal').val(); 
-        if(waroeng && tanggal){
-            $("#button_non_menu").show();  
-        }
-    });
-    } else {
-        $('.filter_tanggal').on('change', function() {
-        var waroeng  = $('.filter_waroeng').val();
-        var tanggal  = $('.filter_tanggal').val(); 
-        if(waroeng && tanggal){
-            $("#button_non_menu").show();  
-        }
-    });
-    }
+    // if(HakAksesArea){
+    //     $('.filter_waroeng').on('change', function() {
+    //     var waroeng  = $('.filter_waroeng').val();
+    //     var tanggal  = $('.filter_tanggal').val(); 
+    //     if(waroeng && tanggal){
+    //         $("#button_non_menu").show();  
+    //     }
+    // });
+    // } else {
+    //     $('.filter_tanggal').on('change', function() {
+    //     var waroeng  = $('.filter_waroeng').val();
+    //     var tanggal  = $('.filter_tanggal').val(); 
+    //     if(waroeng && tanggal){
+    //         $("#button_non_menu").show();  
+    //     }
+    // });
+    // }
 
-    $('#non_menu').on('click', function() {
-        var waroeng  = $('.filter_waroeng').val();
-        var tanggal  = $('.filter_tanggal').val(); 
-        var url = 'rekap_kategori/rekap_non_menu?waroeng='+waroeng+'&tanggal='+tanggal;
-        window.open(url,'lap_non_menu.blade.php');
-    });
+    // $('#non_menu').on('click', function() {
+    //     var waroeng  = $('.filter_waroeng').val();
+    //     var tanggal  = $('.filter_tanggal').val(); 
+    //     var url = 'rekap_kategori/rekap_non_menu?waroeng='+waroeng+'&tanggal='+tanggal;
+    //     window.open(url,'lap_non_menu.blade.php');
+    // });
 
-    let isClicked = false;
 
     $('#cari').on('click', function() {
-        if (!isClicked) {
-            isClicked = true;
         var area     = $('.filter_area').val();
         var waroeng  = $('.filter_waroeng').val();
         var tanggal  = $('.filter_tanggal').val(); 
-        
-        $.ajax({
-        url: '{{route("rekap_kategori.tanggal_rekap")}}',
-        type: 'GET',
-        dataType: 'Json',
-        data : {
-            tanggal: tanggal,
-            waroeng: waroeng,
-        },
-        success: function(data) {
-            console.log(data);
-            $('#head_data').empty();
-            var html = '<tr>';
-            html += '<th class="text-center" rowspan="2">Area</th>';
-            html += '<th class="text-center" rowspan="2">Waroeng</th>';
-            html += '<th class="text-center" rowspan="2">Tanggal</th>';
-            html += '<th class="text-center" rowspan="2">Operator</th>';
-            for (var i = 0; i < 7; i++) {
-                    html += '<th class="text-center" colspan="5">' + data[i] + '</th>';
-            }
-            html += '</tr>';
-            html += '<tr>';
-            var jenis_transaksi = ['Jumlah Nota', 'tunai', 'pajak tunai', 'transfer', 'pajak transfer'];
-            var jumlah_transaksi = jenis_transaksi.length;
-            
-            for (var i = 0; i < 7; i++) {
-                for (var j = 0; j < jumlah_transaksi; j++) {
-                    html += '<th class="text-center">' + jenis_transaksi[j] + '</th>';
-                }
-            }
-            html += '</tr>';
-            $('#head_data').append(html);
 
         $('#tampil_rekap').DataTable({
             button: [],
@@ -193,6 +216,15 @@ $(document).ready(function() {
                         className: 'dt-body-center'
                     },
                 ],
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    text: 'Export Excel',
+                    title: 'Laporan Summary Penjualan - ' + tanggal,
+                    pageSize: 'A4',
+                    pageOrientation: 'potrait',
+                }
+            ],
             lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
             pageLength: 10,
             ajax: {
@@ -208,19 +240,20 @@ $(document).ready(function() {
                     console.log(data);
                 }
         });    
-        
-        }
-        });
-    } else {
-        location.reload();
-    }
-});
+    });
 
-if(HakAksesPusat){
+    if(HakAksesPusat){
       $('.filter_area').on('select2:select', function(){
         var id_area = $(this).val();
         var tanggal  = $('.filter_tanggal').val();
         var prev = $(this).data('previous-value');
+
+        if (id_area == 'all'){
+            $("#select_waroeng").hide();
+        } else {
+            $("#select_waroeng").show();
+        }
+
         if(id_area && tanggal){
             $.ajax({
             type:"GET",
@@ -248,27 +281,27 @@ if(HakAksesPusat){
             $(".filter_waroeng").empty();
             $(".filter_area").val(prev).trigger('change');
         }      
-        $("#button_non_menu").hide();
-    });
-  } 
+        // $("#button_non_menu").hide();
+        });
+    } 
 
-  if(HakAksesArea){
-    $('.filter_waroeng').on('select2:select', function(){
-        var id_waroeng = $(this).val();   
-        var tanggal  = $('.filter_tanggal').val(); 
-        var prev = $(this).data('previous-value');
-        if(!id_waroeng || !tanggal){
-            alert('Harap lengkapi kolom tanggal');
-            $(".filter_waroeng").val(prev).trigger('change');
-        }  
-    });
-  }
+    if(HakAksesArea){
+        $('.filter_waroeng').on('select2:select', function(){
+            var id_waroeng = $(this).val();   
+            var tanggal  = $('.filter_tanggal').val(); 
+            var prev = $(this).data('previous-value');
+            if(!id_waroeng || !tanggal){
+                alert('Harap lengkapi kolom tanggal');
+                $(".filter_waroeng").val(prev).trigger('change');
+            }  
+        });
+    }
 
-    $('#filter_tanggal').flatpickr({
-            // mode: "range",
-            dateFormat: 'Y-m-d',         
-    });
+        $('#filter_tanggal').flatpickr({
+                mode: "range",
+                dateFormat: 'Y-m-d',         
+        });
 
-});
+    });
 </script>
 @endsection

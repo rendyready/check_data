@@ -21,10 +21,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4 text-end" id="button_non_menu" width=100%>
+                            {{-- <div class="col-md-4 text-end" id="button_non_menu" width=100%>
                                 <button type="button" id="non_menu"
                                     class="btn btn-primary mt-0 mb-2">Lihat Rekap Non Menu</button>
-                            </div>
+                            </div> --}}
                         </div> 
 
                         <div class="row">
@@ -39,6 +39,7 @@
                                             @foreach ($data->area as $area)
                                                 <option value="{{ $area->m_area_id }}"> {{ $area->m_area_nama }} </option>
                                             @endforeach
+                                            <option value="all">all area</option>
                                             </select>
                                         @else
                                             <select id="filter_area" data-placeholder="Pilih Area" style="width: 100%;"
@@ -50,7 +51,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-sm-5">
+                            <div class="col-sm-5" id="select_waroeng">
                                 <div class="row mb-2">
                                     <label class="col-sm-3 col-form-label">Waroeng</label>
                                     <div class="col-sm-9">
@@ -78,7 +79,7 @@
                             </div>
                         </div>
 
-                        <div class="row">
+                        <div class="row" id="select_operator">
                             <div class="col-8 mb-2">
                                 <label class="col-form-label text-dark" style="font-size: 15px"> Tampilkan Performa Operator? </label>
                                         <select id="operator_select" style="width : 15%" class="cari f-wrg js-select2 form-control" name="r_t_m_w_id">
@@ -88,7 +89,7 @@
                             </div>
                             <div class="col-sm-5" id="operator">
                                 <div class="row mb-2">
-                                    <div class="col-sm-9">
+                                    <div class="col-sm-9" id="opr_tampil">
                                         <select id="filter_operator" style="width: 100%;"
                                             class="cari f-wrg js-select2 form-control filter_operator" data-placeholder="Pilih Nama Operator" name="r_t_created_by">
                                             <option></option>
@@ -134,6 +135,7 @@
                       <th class="text-center">Waroeng</th>
                       <th class="text-center">Tanggal</th>
                       <th class="text-center">Operator</th>
+                      <th class="text-center">Sesi</th>
                       @foreach ($data->payment as $payment)
                       <th class="text-center">{{ $payment->m_jenis_produk_nama }}</th>
                       @endforeach
@@ -167,70 +169,70 @@ $(document).ready(function() {
     $("#tampil2").hide();
     $("#operator").hide();
 
-    $("#button_non_menu").hide();
+    // $("#button_non_menu").hide();
 
-    if(HakAksesArea){
-        $('.filter_waroeng').on('change', function() {
-            var waroeng = $('.filter_waroeng').val();
-            var tanggal = $('.filter_tanggal').val();
-            var isRange = tanggal.includes('to'); 
+    // if(HakAksesArea){
+    //     $('.filter_waroeng').on('change', function() {
+    //         var waroeng = $('.filter_waroeng').val();
+    //         var tanggal = $('.filter_tanggal').val();
+    //         var isRange = tanggal.includes('to'); 
 
-            if (waroeng && isRange) {    
-                $("#button_non_menu").hide();
-            } else {
-                $("#button_non_menu").show();
-            }
-        });
+    //         if (waroeng && isRange) {    
+    //             $("#button_non_menu").hide();
+    //         } else {
+    //             $("#button_non_menu").show();
+    //         }
+    //     });
 
-    } else if (HakAksesPusat) {
-        $('.filter_area').on('change', function() {
-            var area = $('.filter_area').val();
-            var tanggal = $('.filter_tanggal').val();
-            var isRange = tanggal.includes('to'); 
+    // } else if (HakAksesPusat) {
+    //     $('.filter_area').on('change', function() {
+    //         var area = $('.filter_area').val();
+    //         var tanggal = $('.filter_tanggal').val();
+    //         var isRange = tanggal.includes('to'); 
 
-            if (area && isRange) {    
-                $("#button_non_menu").hide();
-            } else {
-                $("#button_non_menu").show();
-            }
-        });
+    //         if (area && isRange) {    
+    //             $("#button_non_menu").hide();
+    //         } else {
+    //             $("#button_non_menu").show();
+    //         }
+    //     });
 
-    } else {
+    // } else {
     
-        $('.filter_tanggal').on('change', function() {
-            var waroeng = $('.filter_waroeng').val();
-            var tanggal = $('.filter_tanggal').val();
-            var isRange = tanggal.includes('to'); 
+    //     $('.filter_tanggal').on('change', function() {
+    //         var waroeng = $('.filter_waroeng').val();
+    //         var tanggal = $('.filter_tanggal').val();
+    //         var isRange = tanggal.includes('to'); 
 
-            if (waroeng && isRange) {    
-                $("#button_non_menu").hide();
-            } else {
-                $("#button_non_menu").show();
-            }
-            if(isRange){
-                $("#button_non_menu").hide();
-            }
-        });
-    }
+    //         if (waroeng && isRange) {    
+    //             $("#button_non_menu").hide();
+    //         } else {
+    //             $("#button_non_menu").show();
+    //         }
+    //         if(isRange){
+    //             $("#button_non_menu").hide();
+    //         }
+    //     });
+    // }
 
-    $('.filter_tanggal').on('change', function() {
-        var tanggal = $('.filter_tanggal').val();
-        var isRange = tanggal.includes('to'); 
-        var waroeng = $('.filter_waroeng').val();
-        if(isRange){
-            $("#button_non_menu").hide();
-        } else if (!isRange && waroeng){
-            $("#button_non_menu").show();
-        }
-    });
+    // $('.filter_tanggal').on('change', function() {
+    //     var tanggal = $('.filter_tanggal').val();
+    //     var isRange = tanggal.includes('to'); 
+    //     var waroeng = $('.filter_waroeng').val();
+    //     if(isRange){
+    //         $("#button_non_menu").hide();
+    //     } else if (!isRange && waroeng){
+    //         $("#button_non_menu").show();
+    //     }
+    // });
 
-    $('#non_menu').on('click', function() {
-        var waroeng  = $('.filter_waroeng').val();
-        var tanggal  = $('.filter_tanggal').val(); 
-        var url = 'rekap_penj_kat/rekap_non_menu?waroeng='+waroeng+'&tanggal='+tanggal;
-        // window.open(url, '_blank');
-        window.open(url,'lap_non_menu.blade.php');
-    });
+    // $('#non_menu').on('click', function() {
+    //     var waroeng  = $('.filter_waroeng').val();
+    //     var tanggal  = $('.filter_tanggal').val(); 
+    //     var url = 'rekap_penj_kat/rekap_non_menu?waroeng='+waroeng+'&tanggal='+tanggal;
+    //     // window.open(url, '_blank');
+    //     window.open(url,'lap_non_menu.blade.php');
+    // });
 
     $('#operator_select').on('select2:select', function() {
         var cek = $(this).val();
@@ -285,6 +287,15 @@ $(document).ready(function() {
                     className: 'dt-body-center'
                 },
             ],
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    text: 'Export Excel',
+                    title: 'Laporan Penjualan Menu Per Kategori - ' + tanggal,
+                    pageSize: 'A4',
+                    pageOrientation: 'potrait',
+                }
+            ],
             lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
             pageLength: 10,
             ajax: {
@@ -312,17 +323,22 @@ $(document).ready(function() {
             orderCellsTop: true,
             processing: true,
             autoWidth: true,
-            scrollY: "300px",
+            // scrollY: "300px",
             scrollX: true,
             scrollCollapse: true,
             columnDefs: [
                 {
-                    targets: [0],
+                    targets: '_all',
                     className: 'dt-body-center'
-                },
+                }
+            ],
+            buttons: [
                 {
-                    targets: [1, 2, 3, 4, 5, 6, 7, 8],
-                    className: 'dt-body-right'
+                    extend: 'excelHtml5',
+                    text: 'Export Excel',
+                    title: 'Laporan Penjualan Menu Per Kategori - ' + tanggal,
+                    pageSize: 'A4',
+                    pageOrientation: 'potrait',
                 }
             ],
             lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
@@ -349,6 +365,15 @@ $(document).ready(function() {
         var id_area = $(this).val();
         var tanggal  = $('.filter_tanggal').val();
         var prev = $(this).data('previous-value');
+
+        if (id_area == 'all'){
+            $("#select_waroeng").hide();
+            $("#select_operator").hide();
+        } else {
+            $("#select_waroeng").show();
+            $("#select_operator").show();
+        }
+
         if(id_area && tanggal){
             $.ajax({
             type:"GET",
@@ -377,7 +402,7 @@ $(document).ready(function() {
             $(".filter_area").val(prev).trigger('change');
         }     
         $(".filter_operator").empty();
-        $("#button_non_menu").hide();
+        // $("#button_non_menu").hide();
         $("#operator_select").val("tidak").trigger('change');
         $("#operator").hide();
     });
@@ -388,6 +413,15 @@ $(document).ready(function() {
         var id_waroeng = $(this).val();   
         var tanggal  = $('.filter_tanggal').val(); 
         var prev = $(this).data('previous-value');
+
+        if (id_waroeng == 'all'){
+            $("#select_operator").hide();
+            $("#operator_select").val('tidak').trigger('change');
+            $("#operator").hide();
+        } else {
+            $("#select_operator").show();
+        }
+
         if(id_waroeng && tanggal){
             $.ajax({
             type:"GET",
@@ -414,6 +448,7 @@ $(document).ready(function() {
           alert('Harap lengkapi kolom tanggal');
             $(".filter_operator").empty();
             $(".filter_waroeng").val(prev).trigger('change');
+
         }      
     });
 

@@ -201,6 +201,7 @@ $(document).ready(function() {
     var HakAksesPusat = userInfoPusat.dataset.hasAccess === 'true';
 
       $('#cari').on('click', function(e) {
+      var area   = $('.filter_area').val();  
       var waroeng   = $('.filter_waroeng').val();
       var tanggal   = $('.filter_tanggal').val();
 
@@ -210,7 +211,7 @@ $(document).ready(function() {
           orderCellsTop: true,
           processing: true,
           scrollX: true,
-          scrollY: '300px',
+        //   scrollY: '300px',
           autoWidth: false,
           columnDefs: [ 
                     {
@@ -218,36 +219,29 @@ $(document).ready(function() {
                         className: 'dt-body-center'
                     },
                 ],
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    text: 'Export Excel',
+                    title: 'Laporan Kas Harian Kasir - ' + tanggal,
+                    pageSize: 'A4',
+                    pageOrientation: 'potrait',
+                }
+            ],
           lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
           pageLength: 10,
           ajax: {
               url: '{{route("kas_kasir.show")}}',
               data: {
-                  waroeng: waroeng,
-                  tanggal: tanggal,
+                    area: area,
+                    waroeng: waroeng,
+                    tanggal: tanggal,
               },
               type: "GET",
           },
           success: function(data) {
               console.log(data);
           },
-          footer: true,
-            drawCallback: function(settings) {
-                var api = this.api();
-                var totalSaldoAkhir = api.column(6, { page: 'current' }).data().reduce(function(a, b) {
-                    var val = parseFloat(b.replace(/[^0-9.-]/g, ''));
-                    return a + val;
-                }, 0);
-
-                $(api.column(6).footer()).html('Total: ' + totalSaldoAkhir);
-                $(api.table().footer()).find('tr').addClass('footer');
-            },
-            rowCallback: function(row, data) {
-                if ($(row).hasClass('footer')) {
-                    $(row).css('background-color', 'red');
-                    $(row).css('color', 'white');
-                }
-            }
       });
   });
 

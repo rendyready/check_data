@@ -35,6 +35,7 @@
                                             @foreach ($data->area as $area)
                                                 <option value="{{ $area->m_area_id }}"> {{ $area->m_area_nama }} </option>
                                             @endforeach
+                                            <option value="all">all area</option>
                                             </select>
                                         @else
                                             <select id="filter_area" data-placeholder="Pilih Area" style="width: 100%;"
@@ -47,7 +48,7 @@
                             </div>
 
                             <div class="col-sm-5">
-                                <div class="row mb-2">
+                                <div class="row mb-2" id="select_waroeng">
                                     <label class="col-sm-3 col-form-label">Waroeng</label>
                                     <div class="col-sm-9">
                                         @if (in_array(Auth::user()->waroeng_id, $data->akses_pusat))
@@ -64,8 +65,6 @@
                                             @endforeach
                                             </select>
                                         @elseif (in_array(Auth::user()->waroeng_id, $data->akses_pusar))
-
-                                        {{-- @else --}}
                                             <select id="filter_waroeng2" style="width: 100%;"
                                             class="cari f-area js-select2 form-control filter_waroeng" name="waroeng" disabled>
                                             <option value="{{ ucwords($data->waroeng_nama->m_w_id) }}">{{ ucwords($data->waroeng_nama->m_w_nama) }}</option>
@@ -77,7 +76,7 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-md-5">
+                            <div class="col-md-5" id="select_operator">
                                 <div class="row mb-3">
                                     <label class="col-sm-3 col-form-label" for="rekap_inv_penjualan_created_by">Operator</label>
                                     <div class="col-sm-9">
@@ -102,15 +101,17 @@
             <table id="tampil_rekap" class="table table-sm table-bordered table-striped table-vcenter nowrap table-hover js-dataTable-full" style="width:100%">
               <thead>
                 <tr>
-                  <th>Tanggal</th>
-                  <th>No. Nota</th>
-                  <th>Operator</th>
-                  <th>Big Bos</th>
-                  <th>Menu</th>
-                  <th>Qty</th>
-                  <th>Harga</th>
-                  <th>Total Garansi</th>
-                  <th>Keterangan</th>
+                  <th class="text_center">Area</th>
+                  <th class="text_center">Waroeng</th>
+                  <th class="text_center">Tanggal</th>
+                  <th class="text_center">No. Nota</th>
+                  <th class="text_center">Operator</th>
+                  <th class="text_center">Big Bos</th>
+                  <th class="text_center">Menu</th>
+                  <th class="text_center">Qty</th>
+                  <th class="text_center">Harga</th>
+                  <th class="text_center">Total Garansi</th>
+                  <th class="text_center">Keterangan</th>
                 </tr>
               </thead>
               <tbody id="show_data">
@@ -141,6 +142,7 @@ $(document).ready(function() {
 
     //eksekusi filter
     $('#cari').on('click', function() {
+        var area     = $('.filter_area').val();
         var waroeng  = $('.filter_waroeng').val();
         var tanggal  = $('.filter_tanggal').val();
         var operator = $('.filter_operator').val();
@@ -153,9 +155,25 @@ $(document).ready(function() {
         // scrollY: '300px',
         lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
         pageLength: 10,
+        columnDefs: [ 
+                    {
+                        targets: '_all',
+                        className: 'dt-body-center'
+                    },
+                ],
+        buttons: [
+                {
+                    extend: 'excelHtml5',
+                    text: 'Export Excel',
+                    title: 'Rekap Garansi - ' + tanggal,
+                    pageSize: 'A4',
+                    pageOrientation: 'potrait',
+                }
+            ],
         ajax: {
             url: '{{route("rekap_garansi.show")}}',
             data : {
+                area: area,
                 waroeng: waroeng,
                 tanggal: tanggal,
                 operator: operator,
@@ -173,6 +191,15 @@ $(document).ready(function() {
         var id_area = $(this).val();
         var tanggal  = $('.filter_tanggal').val();
         var prev = $(this).data('previous-value');
+
+        if (id_area == 'all'){
+            $("#select_waroeng").hide();
+            $("#select_operator").hide();
+        } else {
+            $("#select_waroeng").show();
+            $("#select_operator").show();
+        }
+
         if(id_area && tanggal){
             $.ajax({
             type:"GET",
@@ -209,6 +236,13 @@ $(document).ready(function() {
         var id_waroeng = $(this).val();   
         var tanggal  = $('.filter_tanggal').val(); 
         var prev = $(this).data('previous-value');
+
+        if (id_waroeng == 'all'){
+            $("#select_operator").hide();
+        } else {
+            $("#select_operator").show();
+        }
+
         if(id_waroeng && tanggal){
             $.ajax({
             type:"GET",

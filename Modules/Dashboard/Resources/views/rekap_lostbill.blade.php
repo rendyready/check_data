@@ -35,6 +35,7 @@
                                           @foreach ($data->area as $area)
                                               <option value="{{ $area->m_area_id }}"> {{ $area->m_area_nama }} </option>
                                           @endforeach
+                                          <option value="all">all area</option>
                                           </select>
                                       @else
                                           <select id="filter_area" data-placeholder="Pilih Area" style="width: 100%;"
@@ -47,7 +48,7 @@
                             </div>
 
                             <div class="col-sm-5">
-                                <div class="row mb-2">
+                                <div class="row mb-2" id="select_waroeng">
                                     <label class="col-sm-3 col-form-label">Waroeng</label>
                                     <div class="col-sm-9">
                                       @if (in_array(Auth::user()->waroeng_id, $data->akses_pusat))
@@ -75,7 +76,7 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-md-5">
+                            <div class="col-md-5" id="select_operator">
                                 <div class="row mb-3">
                                     <label class="col-sm-3 col-form-label" for="rekap_inv_penjualan_created_by">Operator</label>
                                     <div class="col-sm-9">
@@ -100,16 +101,19 @@
             <table id="tampil_rekap" class="table table-sm table-bordered table-striped table-vcenter nowrap table-hover js-dataTable-full" style="width:100%">
               <thead>
                 <tr>
-                  <th>Tanggal</th>
-                  <th>Jam</th>
-                  <th>Operator</th>
-                  <th>Big Bos</th>
-                  <th>Approve</th>
-                  <th>No. Nota</th>
-                  <th>Total</th>
-                  <th>Tax</th>
-                  <th>SC</th>
-                  <th>Total Lostbill</th>
+                  <th class="text-center">Area</th>
+                  <th class="text-center">Waroeng</th>
+                  <th class="text-center">Tanggal</th>
+                  <th class="text-center">Jam</th>
+                  <th class="text-center">Operator</th>
+                  <th class="text-center">Sesi</th>
+                  <th class="text-center">Big Bos</th>
+                  <th class="text-center">Approve</th>
+                  <th class="text-center">No. Nota</th>
+                  <th class="text-center">Total</th>
+                  <th class="text-center">Tax</th>
+                  <th class="text-center">SC</th>
+                  <th class="text-center">Total Lostbill</th>
                   <th></th>
                 </tr>
               </thead>
@@ -166,8 +170,8 @@
                             </tr>
                             
                             <tr style="background-color: white;" class="text-end fw-semibold">
-                              <td>Total Bayar (<small id="pembayaran"></small>)</td>
-                              <td id="bayar">
+                              <td>Total Lostbill</td>
+                              <td id="tot_lost">
                               </td>
                             </tr>
                           </tbody>
@@ -202,6 +206,7 @@ $(document).ready(function() {
 
     //eksekusi filter
     $('#cari').on('click', function() {
+        var area     = $('.filter_area').val();
         var waroeng  = $('.filter_waroeng').val();
         var tanggal  = $('.filter_tanggal').val();
         var operator = $('.filter_operator').val();
@@ -214,9 +219,25 @@ $(document).ready(function() {
         // scrollY: '300px',
         lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
         pageLength: 10,
+        columnDefs: [ 
+                    {
+                        targets: '_all',
+                        className: 'dt-body-center'
+                    },
+                ],
+        buttons: [
+                {
+                    extend: 'excelHtml5',
+                    text: 'Export Excel',
+                    title: 'Rekap Lostbill - ' + tanggal,
+                    pageSize: 'A4',
+                    pageOrientation: 'potrait',
+                }
+            ],
         ajax: {
             url: '{{route("rekap_lostbill.show")}}',
             data : {
+                area: area,
                 waroeng: waroeng,
                 tanggal: tanggal,
                 operator: operator,
@@ -234,6 +255,15 @@ $(document).ready(function() {
         var id_area = $(this).val();
         var tanggal  = $('.filter_tanggal').val();
         var prev = $(this).data('previous-value');
+
+        if (id_area == 'all'){
+            $("#select_waroeng").hide();
+            $("#select_operator").hide();
+        } else {
+            $("#select_waroeng").show();
+            $("#select_operator").show();
+        }
+        
         if(id_area && tanggal){
             $.ajax({
             type:"GET",
@@ -270,6 +300,13 @@ $(document).ready(function() {
         var id_waroeng = $(this).val();   
         var tanggal  = $('.filter_tanggal').val(); 
         var prev = $(this).data('previous-value');
+
+        if (id_waroeng == 'all'){
+            $("#select_operator").hide();
+        } else {
+            $("#select_operator").show();
+        }
+
         if(id_waroeng && tanggal){
             $.ajax({
             type:"GET",
@@ -354,7 +391,7 @@ $(document).ready(function() {
                         $('#nama_kons').html(data.transaksi_rekap.r_l_b_bigboss);
                         $('#total').html(formatNumber(Number(data.transaksi_rekap.r_l_b_nominal)));
                         $('#pajak').html(formatNumber(Number(data.transaksi_rekap.r_l_b_nominal_pajak)));
-                        $('#bayar').html(formatNumber(Number()));
+                        $('#tot_lost').html(formatNumber(Number(data.transaksi_rekap.r_l_b_nominal) + Number(data.transaksi_rekap.r_l_b_nominal_pajak) + Number(data.transaksi_rekap.r_l_b_nominal_sc)));
                         $('#sc').html(formatNumber(Number(data.transaksi_rekap.r_l_b_nominal_sc)));
                              
                     $('.sub_sub_nota').remove();

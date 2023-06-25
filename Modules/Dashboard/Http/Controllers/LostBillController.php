@@ -50,6 +50,7 @@ class LostBillController extends Controller
         $data = array();
         foreach ($waroeng as $val) {
             $data[$val->m_w_id] = [$val->m_w_nama];
+            $data['all'] = ['all waroeng'];
         }
         return response()->json($data);
     }
@@ -80,47 +81,47 @@ class LostBillController extends Controller
         return response()->json($data);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     * @param Request $request
-     * @return Renderable
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Show the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
     public function show(Request $request)
     {
-        $get2 = DB::table('rekap_lost_bill')
+        $lostbill = DB::table('rekap_lost_bill')
                 ->join('users', 'users_id', 'r_l_b_created_by')
-                ->where('r_l_b_m_w_id', $request->waroeng);
+                ->join('rekap_modal', 'rekap_modal_id', 'r_l_b_rekap_modal_id');
                 if (strpos($request->tanggal, 'to') !== false) {
                     $dates = explode('to' ,$request->tanggal);
-                    $get2->whereBetween('r_l_b_tanggal', $dates);
+                    $lostbill->whereBetween('r_l_b_tanggal', $dates);
                 } else {
-                    $get2->where('r_l_b_tanggal', $request->tanggal);
+                    $lostbill->where('r_l_b_tanggal', $request->tanggal);
                 }
-                if($request->operator != 'all'){
-                    $get2->where('r_l_b_created_by', $request->operator);
+                if($request->area != 'all'){
+                    $lostbill->where('r_l_b_m_area_id', $request->area);
+                    if($request->waroeng != 'all') {
+                        $lostbill->where('r_l_b_m_w_id', $request->waroeng);
+                        if($request->operator != 'all'){
+                            $lostbill->where('r_l_b_created_by', $request->operator);
+                        }
+                    }
                 }
-                $get = $get2->orderBy('r_l_b_tanggal', 'ASC')
+                $lostbill = $lostbill->orderBy('r_l_b_tanggal', 'ASC')
                 ->orderBy('r_l_b_nota_code', 'ASC')
                 ->get();
-        
+
         $data = array();
-        foreach ($get as $value) {
+        foreach ($lostbill as $value) {
+            $approve = DB::table('rekap_lost_bill')
+                ->leftjoin('users', 'users_id', 'r_l_b_approved_by')
+                ->select('name')
+                ->where('r_l_b_id', $value->r_l_b_id)
+                ->first();
+
             $row = array();
+            $row[] = $value->r_l_b_m_area_nama;
+            $row[] = $value->r_l_b_m_w_nama;
             $row[] = date('d-m-Y', strtotime($value->r_l_b_tanggal));
             $row[] = $value->r_l_b_jam;
             $row[] = $value->name;
+            $row[] = $value->rekap_modal_sesi;
             $row[] = $value->r_l_b_bigboss;
-            $row[] = $value->name;
+            $row[] = $approve->name;
             $row[] = $value->r_l_b_nota_code;
             $row[] = number_format($value->r_l_b_nominal);
             $row[] = number_format($value->r_l_b_nominal_pajak);
@@ -129,6 +130,7 @@ class LostBillController extends Controller
             $row[] ='<a id="button_detail" class="btn btn-sm button_detail btn-info" value="'.$value->r_l_b_id.'" title="Detail Lost Bill"><i class="fa-sharp fa-solid fa-file"></i></a>';
             $data[] = $row;
         }
+        // return $approve;
         $output = array("data" => $data);
         return response()->json($output);
     }
@@ -146,29 +148,4 @@ class LostBillController extends Controller
         return response()->json($data);
     }
 
-    public function edit($id)
-    {
-        return view('dashboard::edit');
-    }
-
-    /**
-     * Update the specified resource in storage.
-     * @param Request $request
-     * @param int $id
-     * @return Renderable
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     * @param int $id
-     * @return Renderable
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }
