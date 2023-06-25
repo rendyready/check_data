@@ -51,7 +51,7 @@
                                                                 <td>{{ $no++ }}</td>
                                                                 <td>{{ $item->m_produk_nama }}</td>
                                                                 <td>
-                                                                    @if ($item->m_menu_harga_id == 2367 || $item->m_menu_harga_id == 8675 || $item->m_menu_harga_id == 59376)
+                                                                    @if ($item->m_produk_code == 'mn-400354' || $item->m_produk_code == 'mn-400355' || $item->m_produk_code == 'mn-400327')
                                                                         <input type="hidden" name="m_menu_harga_id_edit[]"
                                                                             value="{{ $item->m_menu_harga_id }}">
                                                                         <input value="{{ $item->m_menu_harga_nominal }}"
@@ -129,7 +129,7 @@
                                             <div>
                                                 <select class="js-select2" id="m_menu_harga_m_produk_id"
                                                     name="m_menu_harga_m_produk_id" style="width: 100%;"
-                                                    data-container="#modal-block-select2" data-placeholder="Choose one..">
+                                                    data-container="#modal-block-select2" data-placeholder="Choose one.." disabled>
                                                     <option></option>
                                                     @foreach ($listProduk as $pr)
                                                         <option value="{{ $pr->m_produk_id }}">

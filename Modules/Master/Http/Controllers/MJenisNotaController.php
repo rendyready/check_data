@@ -32,17 +32,15 @@ class MJenisNotaController extends Controller
             ->get();
         $nota_ids = $get_list_nota->pluck('m_jenis_nota_id')->toArray();
 
-        $data['data'] = MJenisNotum::select('m_jenis_nota_id', 'm_w_id', 'm_w_nama', 'm_t_t_id', 'm_t_t_name', 'm_w_m_kode_nota')
+        $data['data'] = MJenisNotum::select('m_jenis_nota_id', 'm_w_id', 'm_w_nama', 'm_t_t_id', 'm_t_t_name')
             ->join('m_w', 'm_jenis_nota_m_w_id', 'm_w_id')
             ->leftJoin('m_transaksi_tipe', 'm_jenis_nota_m_t_t_id', 'm_t_t_id')
-            ->whereNotIn('m_t_t_id', [2])
             ->orderby('m_w_id', 'asc')
             ->orderby('m_t_t_name', 'asc')
             ->get();
         $data['listWaroeng'] = MW::all();
         $data['listTipeTransaksi'] = MTransaksiTipe::orderBy('m_t_t_group', 'desc')
             ->orderBy('m_t_t_name', 'asc')
-            ->whereNotIn('m_t_t_id', [2])
             ->get();
         $data['area'] = DB::table('m_area')->get();
         $data['produk'] = DB::table('m_produk')->where('m_produk_m_klasifikasi_produk_id', 4)->get();
@@ -160,10 +158,10 @@ class MJenisNotaController extends Controller
 
                     $data = [
                         'm_menu_harga_updated_at' => Carbon::now(),
-                        'm_menu_harga_updated_by' => $user->users_id,
+                        'm_menu_harga_updated_by' => $user->users_id
                     ];
 
-                    if ($request->action == 'status_menu') {
+                    if ($request->action=='status_menu') {
                         $data['m_menu_harga_status'] = $request->m_menu_harga_status;
                         $data['m_menu_harga_tax_status'] = $request->m_menu_harga_tax_status;
                         $data['m_menu_harga_sc_status'] = $request->m_menu_harga_sc_status;
@@ -196,6 +194,8 @@ class MJenisNotaController extends Controller
         return response()->json(['type' => 'success', 'messages' => 'Update Harga Berhasil']);
     }
 
+
+
     public function show($id)
     {
         return response(MJenisNotum::where('m_jenis_nota_id', $id)->first(), 200);
@@ -222,7 +222,10 @@ class MJenisNotaController extends Controller
         }
         $data['listProduk'] = MProduk::where('m_produk_jual', 'ya')->get();
         // ->whereNotIn('m_produk_id',$filterProdukArr)->get();
-        $data['jenis_produk'] = DB::table('m_jenis_produk')->get();
+        $data['jenis_produk'] = DB::table('m_jenis_produk')
+        ->whereNotIn('m_jenis_produk_id',[12,13])
+        ->orderBy('m_jenis_produk_id','asc')
+        ->get();
         $data['num'] = 1;
         $data['n'] = 1;
         $data['s'] = 1;
@@ -247,7 +250,7 @@ class MJenisNotaController extends Controller
                     ->update($request->except('m_menu_harga_id', '_token') + [
                         'm_menu_harga_status_sync' => 'send',
                         'm_menu_harga_updated_at' => Carbon::now(),
-                        'm_menu_harga_updated_by' => Auth::user()->users_id,
+                        'm_menu_harga_updated_by' => Auth::user()->users_id
                     ]);
             }
         }
@@ -264,7 +267,7 @@ class MJenisNotaController extends Controller
                     'm_menu_harga_nominal' => convertfloat($request->m_menu_harga_nominal_edit[$key]),
                     'm_menu_harga_status_sync' => 'send',
                     'm_menu_harga_updated_at' => Carbon::now(),
-                    'm_menu_harga_updated_by' => Auth::user()->users_id,
+                    'm_menu_harga_updated_by' => Auth::user()->users_id
                 ]);
         }
     }
@@ -272,39 +275,22 @@ class MJenisNotaController extends Controller
     public function get_harga(Request $request)
     {
         $data = [];
-        if ($request->get_tipe == 'get_harga') {
-            foreach ($request->m_tipe_nota as $key => $tipeNota) {
-                $get_m_w = DB::table('m_w')
-                    ->where('m_w_m_kode_nota', $tipeNota)
-                    ->select(DB::raw('MIN(m_w_id) as m_w_id'))
-                    ->value('m_w_id');
 
-                $queryNota = DB::table('m_jenis_nota')
-                    ->join('m_menu_harga', 'm_menu_harga_m_jenis_nota_id', 'm_jenis_nota_id')
-                    ->where('m_jenis_nota_m_w_id', $get_m_w)
-                    ->whereIn('m_jenis_nota_m_t_t_id', $request->m_jenis_nota_trans_id)
-                    ->where('m_menu_harga_m_produk_id', $request->m_menu_id);
+        foreach ($request->m_tipe_nota as $key => $tipeNota) {
+            $get_m_w = DB::table('m_w')
+                ->where('m_w_m_kode_nota', $tipeNota)
+                ->select(DB::raw('MIN(m_w_id) as m_w_id'))
+                ->value('m_w_id');
 
-                $notaHarga = $queryNota->pluck('m_menu_harga_nominal')->toArray();
-                $data['nota_' . substr($tipeNota, 5) . '_harga'] = implode(', ', $notaHarga);
-            }
-        } else {
-            if ($request->area_id == '0') {
-                $mAreaId = Null;
-            } else {
-                $mAreaId = $request->area_id;
-            }
-            $trans_tipe = $request->tipe_trans_id;
-            $get_nota = DB::table('m_w')->when($mAreaId, function ($query) use ($mAreaId) {
-                return $query->where('m_w_m_area_id', $mAreaId);
-            })
-            ->join('m_jenis_nota','m_jenis_nota_m_w_id','m_w_id')
-            ->whereIn('m_jenis_nota_m_t_t_id',$trans_tipe)
-            ->groupBy('m_w_m_kode_nota')
-            ->pluck('m_w_m_kode_nota')->toArray();
-            $data = $get_nota;
+            $queryNota = DB::table('m_jenis_nota')
+                ->join('m_menu_harga', 'm_menu_harga_m_jenis_nota_id', 'm_jenis_nota_id')
+                ->where('m_jenis_nota_m_w_id', $get_m_w)
+                ->whereIn('m_jenis_nota_m_t_t_id', $request->m_jenis_nota_trans_id)
+                ->where('m_menu_harga_m_produk_id', $request->m_menu_id);
+
+            $notaHarga = $queryNota->pluck('m_menu_harga_nominal')->toArray();
+            $data['nota_' . substr($tipeNota, 5) . '_harga'] = implode(', ', $notaHarga);
         }
-
         return response()->json($data);
     }
 }
