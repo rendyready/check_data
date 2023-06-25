@@ -134,12 +134,13 @@ class Controller extends BaseController
 
     public function coba()
     {
-        return JangkrikHelper::convertTarget([21,13]);
-        return DB::select('select list_waroeng()');
-        DB::table('m_area')->where('m_area_id','11')
+        // return JangkrikHelper::convertTarget([21,13]);
+        // return DB::select('select list_waroeng()');
+        DB::table('m_area')->where('m_area_id','10')
             ->update([
                 // 'm_area_client_target' => DB::raw('(select list_waroeng())')
-                'm_area_client_target' => JangkrikHelper::convertTarget([21,13])
+                'm_area_client_target' => DB::raw('DEFAULT')
+                // 'm_area_client_target' => JangkrikHelper::convertTarget([21,13])
             ]);
         return "ok";
     }

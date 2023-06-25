@@ -39,7 +39,7 @@ class MejaController extends Controller
             } else {
                 $nama = 'Express '.str_pad($i, 2, '0', STR_PAD_LEFT);
             }
-            
+
             $data = DB::table('m_meja')->insert([
                 "m_meja_id" => $this->getMasterId('m_meja'),
                 "m_meja_nama" => $nama,
@@ -60,6 +60,7 @@ class MejaController extends Controller
                 "m_meja_m_meja_jenis_id" => $request->jenis_meja,
                 "m_meja_m_w_id" => $request->waroeng,
                 "m_meja_status_sync" =>'send',
+                'm_meja_client_target' => DB::raw('DEFAULT'),
                 "m_meja_updated_by" => Auth::user()->users_id,
                 "m_meja_updated_at" => Carbon::now(),
             ]);

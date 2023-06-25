@@ -13,6 +13,7 @@
 
 //Master Area Route
 use illuminate\Support\Facades\Route;
+use Modules\Master\Http\Controllers\MTipeNotaController;
 use Modules\Master\Http\Controllers\MWaroengController;
 
 Route::group(['prefix' => 'master', 'controller' => MAreaController::class, 'middleware' => ['auth', 'web']], function () {
@@ -81,6 +82,7 @@ Route::group(['prefix' => 'master', 'controller' => MJenisNotaController::class,
     Route::post('m_jenis_nota/copy','copy_nota')->name('m_jenis_nota.copy');
     Route::post('m_jenis_nota/update','update_harga')->name('m_jenis_nota.update');
     Route::post('m_jenis_nota/save_update_harga','simpanUpdateHarga')->name('m_jenis_nota.save_update_harga');
+    Route::get('m_jenis_nota/get_harga','get_harga')->name('m_jenis_nota');
 });
 
 
@@ -134,4 +136,9 @@ Route::group(['prefix' => 'master', 'controller' => ResepController::class, 'mid
     Route::get('m_resep/detail/{id}', 'detail')->name('detail.m_resep');
     Route::post('m_resep/action/{id}', 'action')->name('action.m_resep');
     Route::get('m_resep_detail_edit/{id}', 'list_detail')->name('resep_detail_edit.m_resep');
+});
+//Master Tipe Waroeng
+Route::group(['prefix' => 'master', 'controller' => MTipeNotaController::class, 'middleware' => ['auth', 'web']], function () {
+    Route::get('m_tipe_nota', 'index')->name('m_tipe_nota.index');
+    Route::post('m_tipe_nota/action', 'action')->name('action.m_tipe_nota');
 });

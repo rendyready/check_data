@@ -47,6 +47,7 @@ class SubJenisMController extends Controller
                     'm_sub_jenis_produk_nama'    =>    $request->m_sub_jenis_produk_nama,
                     'm_sub_jenis_produk_m_jenis_produk_id' => $request->m_sub_jenis_produk_m_jenis_produk_id,
                     'm_sub_jenis_produk_status_sync' => 'send',
+                    'm_sub_jenis_produk_client_target' => DB::raw('DEFAULT'),
                     'm_sub_jenis_produk_updated_by' => Auth::user()->users_id,
                     'm_sub_jenis_produk_updated_at' => Carbon::now(),
                 );

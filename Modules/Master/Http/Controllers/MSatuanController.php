@@ -49,6 +49,7 @@ class MSatuanController extends Controller
                         'm_satuan_kode' => $request->m_satuan_kode,
                         'm_satuan_keterangan' => $request->m_satuan_keterangan,
                         'm_satuan_status_sync' => 'send',
+                        'm_satuan_client_target' => DB::raw('DEFAULT'),
                         'm_satuan_updated_by' => Auth::user()->users_id,
                         'm_satuan_updated_at' => Carbon::now(),
                     );

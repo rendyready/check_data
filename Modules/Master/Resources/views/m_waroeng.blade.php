@@ -134,8 +134,9 @@
                                                 <select class="js-select2" id="m_w_m_kode_nota" name="m_w_m_kode_nota"
                                                     style="width: 100%;" data-placeholder="Pilih Kode Nota" required>
                                                     <option></option>
-                                                    <option value="nota a">Nota A</option>
-                                                    <option value="nota b">Nota B</option>
+                                                    @foreach ($m_tipe_nota as $item)
+                                                        <option value="{{$item->m_tipe_nota_nama}}">{{$item->m_tipe_nota_nama}}</option>
+                                                    @endforeach
                                                 </select>
                                             </div>
                                         </div>

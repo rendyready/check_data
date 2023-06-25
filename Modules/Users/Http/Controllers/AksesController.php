@@ -55,6 +55,7 @@ class AksesController extends Controller
                             'guard_name' => 'web',
                             'updated_at' => Carbon::now(),
                             'roles_status_sync' => 'send',
+                            'roles_client_target' => DB::raw('DEFAULT'),
                         );
                         DB::table('roles')->where('id', $request->id)
                             ->update($data);
@@ -62,7 +63,7 @@ class AksesController extends Controller
                     }
                 }
             }
-           
+
         }
     }
     public function edit($id)

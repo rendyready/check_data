@@ -10,8 +10,8 @@
                             Detail Harga {{ ucwords($m_t_t_name) }}
                     </div>
                     <div class="block-content text-muted">
-                        <a class="btn btn-success mr-5 mb-5 buttonInsert" value="" title="Edit" style="color: #fff"><i
-                                class="fa fa-plus mr-5"></i> Harga</a>
+                        {{-- <a class="btn btn-success mr-5 mb-5 buttonInsert" value="" title="Edit" style="color: #fff"><i
+                                class="fa fa-plus mr-5"></i> Harga</a> --}}
                         @csrf
                         <div id="tabpane" class="block block-rounded overflow-hidden">
                             <ul class="nav nav-tabs nav-tabs-block nav-tabs-alt align-items-center" role="tablist">
@@ -50,11 +50,17 @@
                                                             <tr>
                                                                 <td>{{ $no++ }}</td>
                                                                 <td>{{ $item->m_produk_nama }}</td>
-                                                                <td> <input type="hidden" name="m_menu_harga_id_edit[]"
-                                                                        value="{{ $item->m_menu_harga_id }}"> <input
-                                                                        value="{{ $item->m_menu_harga_nominal }}"
-                                                                        type="text" class="form-control number"
-                                                                        name="m_menu_harga_nominal_edit[]"></td>
+                                                                <td>
+                                                                    @if ($item->m_produk_code == 'mn-400354' || $item->m_produk_code == 'mn-400355' || $item->m_produk_code == 'mn-400327')
+                                                                        <input type="hidden" name="m_menu_harga_id_edit[]"
+                                                                            value="{{ $item->m_menu_harga_id }}">
+                                                                        <input value="{{ $item->m_menu_harga_nominal }}"
+                                                                            type="text" class="form-control number"
+                                                                            name="m_menu_harga_nominal_edit[]">
+                                                                    @else
+                                                                        {{ rupiah($item->m_menu_harga_nominal) }}
+                                                                    @endif
+                                                                </td>
                                                                 @php
                                                                     $statusHarga = 'Aktif';
                                                                     $statusPajak = 'Aktif';
@@ -121,7 +127,7 @@
                                             <div>
                                                 <select class="js-select2" id="m_menu_harga_m_produk_id"
                                                     name="m_menu_harga_m_produk_id" style="width: 100%;"
-                                                    data-container="#modal-block-select2" data-placeholder="Choose one..">
+                                                    data-container="#modal-block-select2" data-placeholder="Choose one.." disabled>
                                                     <option></option>
                                                     @foreach ($listProduk as $pr)
                                                         <option value="{{ $pr->m_produk_id }}">
@@ -136,7 +142,7 @@
                                             <label for="m_menu_harga_nominal">Harga</label>
                                             <div>
                                                 <input type="number" id="m_menu_harga_nominal" name="m_menu_harga_nominal"
-                                                    class="form-control">
+                                                    class="form-control" readonly>
                                             </div>
                                         </div>
                                     </div>
@@ -242,6 +248,7 @@
           });
           $("#modal-block-select2").modal('show');
       });
+      
       $(".updateharga").on('click',function () {
         $.ajax({
                 type: "post",
@@ -251,7 +258,8 @@
                             window.location.reload();
                         }
                     });
-      }) 
+      })
+       
       $("#my_table").append(
           $('<tfoot/>').append( $("#my_table thead tr").clone() )
       );
