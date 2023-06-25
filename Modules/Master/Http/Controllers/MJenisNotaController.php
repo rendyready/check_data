@@ -275,21 +275,37 @@ class MJenisNotaController extends Controller
     public function get_harga(Request $request)
     {
         $data = [];
+        if ($request->get_tipe == 'get_harga') {
+            foreach ($request->m_tipe_nota as $key => $tipeNota) {
+                $get_m_w = DB::table('m_w')
+                    ->where('m_w_m_kode_nota', $tipeNota)
+                    ->select(DB::raw('MIN(m_w_id) as m_w_id'))
+                    ->value('m_w_id');
 
-        foreach ($request->m_tipe_nota as $key => $tipeNota) {
-            $get_m_w = DB::table('m_w')
-                ->where('m_w_m_kode_nota', $tipeNota)
-                ->select(DB::raw('MIN(m_w_id) as m_w_id'))
-                ->value('m_w_id');
+                $queryNota = DB::table('m_jenis_nota')
+                    ->join('m_menu_harga', 'm_menu_harga_m_jenis_nota_id', 'm_jenis_nota_id')
+                    ->where('m_jenis_nota_m_w_id', $get_m_w)
+                    ->whereIn('m_jenis_nota_m_t_t_id', $request->m_jenis_nota_trans_id)
+                    ->where('m_menu_harga_m_produk_id', $request->m_menu_id);
 
-            $queryNota = DB::table('m_jenis_nota')
-                ->join('m_menu_harga', 'm_menu_harga_m_jenis_nota_id', 'm_jenis_nota_id')
-                ->where('m_jenis_nota_m_w_id', $get_m_w)
-                ->whereIn('m_jenis_nota_m_t_t_id', $request->m_jenis_nota_trans_id)
-                ->where('m_menu_harga_m_produk_id', $request->m_menu_id);
-
-            $notaHarga = $queryNota->pluck('m_menu_harga_nominal')->toArray();
-            $data['nota_' . substr($tipeNota, 5) . '_harga'] = implode(', ', $notaHarga);
+                $notaHarga = $queryNota->pluck('m_menu_harga_nominal')->toArray();
+                $data['nota_' . substr($tipeNota, 5) . '_harga'] = implode(', ', $notaHarga);
+            }
+        } else {
+            if ($request->area_id == '0') {
+                $mAreaId = Null;
+            } else {
+                $mAreaId = $request->area_id;
+            }
+            $trans_tipe = $request->tipe_trans_id;
+            $get_nota = DB::table('m_w')->when($mAreaId, function ($query) use ($mAreaId) {
+                return $query->where('m_w_m_area_id', $mAreaId);
+            })
+            ->join('m_jenis_nota','m_jenis_nota_m_w_id','m_w_id')
+            ->whereIn('m_jenis_nota_m_t_t_id',$trans_tipe)
+            ->groupBy('m_w_m_kode_nota')
+            ->pluck('m_w_m_kode_nota')->toArray();
+            $data = $get_nota;
         }
         return response()->json($data);
     }

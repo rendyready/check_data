@@ -58,8 +58,6 @@
                                                                             type="text" class="form-control number"
                                                                             name="m_menu_harga_nominal_edit[]">
                                                                     @else
-                                                                        <input type="hidden" name="m_menu_harga_id_edit[]"
-                                                                            value="{{ $item->m_menu_harga_id }}">
                                                                         {{ rupiah($item->m_menu_harga_nominal) }}
                                                                     @endif
                                                                 </td>
