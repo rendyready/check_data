@@ -117,11 +117,11 @@ class Controller extends BaseController
     }
     public function get_akses_area()
     {
-        return $akses_area = [1, 2, 3, 4, 5, 6, 27, 36, 52, 70, 84, 102, 111, 117];
+        return $akses_area = [1, 2, 3, 4, 5, 6, 27, 36, 52, 70, 83, 101, 110, 116];
     }
     public function get_akses_pusar()
     {
-        return $akses_pusat = [6, 27, 36, 52, 70, 84, 102, 111, 117];
+        return $akses_pusat = [6, 27, 36, 52, 70, 83, 101, 110, 116];
     }
     public function get_akses_pusat()
     {
