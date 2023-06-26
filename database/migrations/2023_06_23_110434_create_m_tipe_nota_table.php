@@ -13,6 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
+        Schema::dropIfExists('m_tipe_nota');
         Schema::create('m_tipe_nota', function (Blueprint $table) {
             $table->id('id');
             $table->bigInteger('m_tipe_nota_id')->unsigned();

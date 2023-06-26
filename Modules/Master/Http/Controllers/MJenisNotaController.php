@@ -18,28 +18,16 @@ class MJenisNotaController extends Controller
 {
     public function index()
     {
-        $get_waroeng = DB::table('m_w')
-            ->join('m_area', 'm_area_id', 'm_w_m_area_id')
-            ->where('m_w_m_kode_nota', 'nota b')
-            ->where('m_area_id', 5)
-            ->get();
-
-        $m_w_ids = $get_waroeng->pluck('m_w_id')->toArray();
-
-        $get_list_nota = DB::table('m_jenis_nota')
-            ->whereIn('m_jenis_nota_m_w_id', $m_w_ids)
-            ->where('m_jenis_nota_m_t_t_id', 1)
-            ->get();
-        $nota_ids = $get_list_nota->pluck('m_jenis_nota_id')->toArray();
-
-        $data['data'] = MJenisNotum::select('m_jenis_nota_id', 'm_w_id', 'm_w_nama', 'm_t_t_id', 'm_t_t_name')
+        $data['data'] = MJenisNotum::select('m_jenis_nota_id', 'm_w_id', 'm_w_nama', 'm_t_t_id', 'm_t_t_name', 'm_w_m_kode_nota')
             ->join('m_w', 'm_jenis_nota_m_w_id', 'm_w_id')
             ->leftJoin('m_transaksi_tipe', 'm_jenis_nota_m_t_t_id', 'm_t_t_id')
+            ->whereNotIn('m_t_t_id', [2])
             ->orderby('m_w_id', 'asc')
             ->orderby('m_t_t_name', 'asc')
             ->get();
         $data['listWaroeng'] = MW::all();
         $data['listTipeTransaksi'] = MTransaksiTipe::orderBy('m_t_t_group', 'desc')
+            ->whereNotIn('m_t_t_id', [2])
             ->orderBy('m_t_t_name', 'asc')
             ->get();
         $data['area'] = DB::table('m_area')->get();
@@ -66,6 +54,7 @@ class MJenisNotaController extends Controller
                     ->update($request->only('m_jenis_nota_m_w_id', 'm_jenis_nota_m_t_t_id') + [
                         'm_jenis_nota_updated_by' => Auth::user()->users_id,
                         'm_jenis_nota_status_sync' => 'send',
+                        'm_jenis_nota_client_target' => DB::raw('DEFAULT'),
                     ]);
             }
         }
@@ -145,56 +134,99 @@ class MJenisNotaController extends Controller
 
             $updateData = [];
             foreach ($request->update_m_jenis_nota_trans_id as $mTTId) {
-                $getListaNota = DB::table('m_jenis_nota')
-                    ->whereIn('m_jenis_nota_m_w_id', $mWIds)
-                    ->where('m_jenis_nota_m_t_t_id', $mTTId)
-                    ->get();
+                if ($mTTId == 1) {
+                    $getListaNota = DB::table('m_jenis_nota')
+                        ->whereIn('m_jenis_nota_m_w_id', $mWIds)
+                        ->whereIn('m_jenis_nota_m_t_t_id', [1, 2])
+                        ->get();
 
-                foreach ($getListaNota as $nota) {
-                    $hargaMenu = DB::table('m_menu_harga')
-                        ->where('m_menu_harga_m_jenis_nota_id', $nota->m_jenis_nota_id)
-                        ->where('m_menu_harga_m_produk_id', $request->m_produk_id)
-                        ->first();
+                    foreach ($getListaNota as $nota) {
+                        $hargaMenu = DB::table('m_menu_harga')
+                            ->where('m_menu_harga_m_jenis_nota_id', $nota->m_jenis_nota_id)
+                            ->where('m_menu_harga_m_produk_id', $request->m_produk_id)
+                            ->first();
 
-                    $data = [
-                        'm_menu_harga_updated_at' => Carbon::now(),
-                        'm_menu_harga_updated_by' => $user->users_id
-                    ];
+                        $data = [
+                            'm_menu_harga_updated_at' => Carbon::now(),
+                            'm_menu_harga_updated_by' => $user->users_id,
+                            'm_menu_harga_client_target' => DB::raw('DEFAULT'),
+                        ];
 
-                    if ($request->action=='status_menu') {
-                        $data['m_menu_harga_status'] = $request->m_menu_harga_status;
-                        $data['m_menu_harga_tax_status'] = $request->m_menu_harga_tax_status;
-                        $data['m_menu_harga_sc_status'] = $request->m_menu_harga_sc_status;
-                    } else {
-                        $data['m_menu_harga_nominal'] = convertfloat($request->nom_harga[$key]);
-                        $data['m_menu_harga_status_sync'] = 'send';
+                        if ($request->action == 'status_menu') {
+                            $data['m_menu_harga_status'] = $request->m_menu_harga_status;
+                            $data['m_menu_harga_tax_status'] = $request->m_menu_harga_tax_status;
+                            $data['m_menu_harga_sc_status'] = $request->m_menu_harga_sc_status;
+                        } else {
+                            $data['m_menu_harga_nominal'] = convertfloat($request->nom_harga[$key]);
+                            $data['m_menu_harga_status_sync'] = 'send';
+                        }
+
+                        if ($hargaMenu) {
+                            DB::table('m_menu_harga')
+                                ->where('m_menu_harga_id', $hargaMenu->m_menu_harga_id)
+                                ->update($data);
+                        } else {
+                            $data['m_menu_harga_id'] = $this->getMasterId('m_menu_harga');
+                            $data['m_menu_harga_m_jenis_nota_id'] = $nota->m_jenis_nota_id;
+                            $data['m_menu_harga_m_produk_id'] = $request->m_produk_id;
+                            $data['m_menu_harga_created_by'] = $user->users_id;
+                            $data['m_menu_harga_created_at'] = Carbon::now();
+                            $data['m_menu_harga_client_target'] = DB::raw('DEFAULT');
+                            $updateData[] = $data;
+                        }
                     }
+                    if (!empty($updateData)) {
+                        DB::table('m_menu_harga')->insert($updateData);
+                    }
+                } else {
+                    $getListaNota = DB::table('m_jenis_nota')
+                        ->whereIn('m_jenis_nota_m_w_id', $mWIds)
+                        ->where('m_jenis_nota_m_t_t_id', $mTTId)
+                        ->get();
 
-                    if ($hargaMenu) {
-                        DB::table('m_menu_harga')
-                            ->where('m_menu_harga_id', $hargaMenu->m_menu_harga_id)
-                            ->update($data);
-                    } else {
-                        $data['m_menu_harga_id'] = $this->getMasterId('m_menu_harga');
-                        $data['m_menu_harga_m_jenis_nota_id'] = $nota->m_jenis_nota_id;
-                        $data['m_menu_harga_m_produk_id'] = $request->m_produk_id;
-                        $data['m_menu_harga_created_by'] = $user->users_id;
-                        $data['m_menu_harga_created_at'] = Carbon::now();
+                    foreach ($getListaNota as $nota) {
+                        $hargaMenu = DB::table('m_menu_harga')
+                            ->where('m_menu_harga_m_jenis_nota_id', $nota->m_jenis_nota_id)
+                            ->where('m_menu_harga_m_produk_id', $request->m_produk_id)
+                            ->first();
 
-                        $updateData[] = $data;
+                        $data = [
+                            'm_menu_harga_updated_at' => Carbon::now(),
+                            'm_menu_harga_updated_by' => $user->users_id,
+                            'm_menu_harga_client_target' => DB::raw('DEFAULT'),
+                        ];
+
+                        if ($request->action == 'status_menu') {
+                            $data['m_menu_harga_status'] = $request->m_menu_harga_status;
+                            $data['m_menu_harga_tax_status'] = $request->m_menu_harga_tax_status;
+                            $data['m_menu_harga_sc_status'] = $request->m_menu_harga_sc_status;
+                        } else {
+                            $data['m_menu_harga_nominal'] = convertfloat($request->nom_harga[$key]);
+                            $data['m_menu_harga_status_sync'] = 'send';
+                        }
+                        if ($hargaMenu) {
+                            DB::table('m_menu_harga')
+                                ->where('m_menu_harga_id', $hargaMenu->m_menu_harga_id)
+                                ->update($data);
+                        } else {
+                            $data['m_menu_harga_id'] = $this->getMasterId('m_menu_harga');
+                            $data['m_menu_harga_m_jenis_nota_id'] = $nota->m_jenis_nota_id;
+                            $data['m_menu_harga_m_produk_id'] = $request->m_produk_id;
+                            $data['m_menu_harga_created_by'] = $user->users_id;
+                            $data['m_menu_harga_created_at'] = Carbon::now();
+                            $data['m_menu_harga_client_target'] = DB::raw('DEFAULT');
+                            $updateData[] = $data;
+                        }
+                    }
+                    if (!empty($updateData)) {
+                        DB::table('m_menu_harga')->insert($updateData);
                     }
                 }
-            }
-
-            if (!empty($updateData)) {
-                DB::table('m_menu_harga')->insert($updateData);
             }
         }
 
         return response()->json(['type' => 'success', 'messages' => 'Update Harga Berhasil']);
     }
-
-
 
     public function show($id)
     {
@@ -213,7 +245,11 @@ class MJenisNotaController extends Controller
         $data['m_t_t_name'] = $info->m_t_t_name;
         $data['m_menu_harga_m_jenis_nota_id'] = $id;
         $data['data'] = MMenuHarga::join('m_produk', 'm_produk_id', '=', 'm_menu_harga_m_produk_id')
-            ->where('m_menu_harga_m_jenis_nota_id', $id)->orderBy('m_menu_harga_m_produk_id', 'asc')->get();
+            ->join('m_jenis_nota', 'm_menu_harga_m_jenis_nota_id', 'm_jenis_nota_id')
+            ->where('m_menu_harga_m_jenis_nota_id', $id)->orderBy('m_menu_harga_m_produk_id', 'asc')
+            ->select('m_produk_nama', 'm_produk_m_jenis_produk_id', 'm_produk_code',
+                'm_menu_harga_id', 'm_menu_harga_nominal', 'm_jenis_nota_m_w_id', 'm_jenis_nota_m_t_t_id', 'm_produk_id')
+            ->get();
         $filterProduk = MMenuHarga::select('m_menu_harga_m_produk_id')
             ->where('m_menu_harga_m_jenis_nota_id', $id)->get();
         $filterProdukArr = [];
@@ -223,9 +259,9 @@ class MJenisNotaController extends Controller
         $data['listProduk'] = MProduk::where('m_produk_jual', 'ya')->get();
         // ->whereNotIn('m_produk_id',$filterProdukArr)->get();
         $data['jenis_produk'] = DB::table('m_jenis_produk')
-        ->whereNotIn('m_jenis_produk_id',[12,13])
-        ->orderBy('m_jenis_produk_id','asc')
-        ->get();
+            ->whereNotIn('m_jenis_produk_id', [12, 13])
+            ->orderBy('m_jenis_produk_id', 'asc')
+            ->get();
         $data['num'] = 1;
         $data['n'] = 1;
         $data['s'] = 1;
@@ -250,7 +286,8 @@ class MJenisNotaController extends Controller
                     ->update($request->except('m_menu_harga_id', '_token') + [
                         'm_menu_harga_status_sync' => 'send',
                         'm_menu_harga_updated_at' => Carbon::now(),
-                        'm_menu_harga_updated_by' => Auth::user()->users_id
+                        'm_menu_harga_updated_by' => Auth::user()->users_id,
+                        'm_menu_harga_client_target' => DB::raw('DEFAULT'),
                     ]);
             }
         }
@@ -261,14 +298,31 @@ class MJenisNotaController extends Controller
     public function simpanUpdateHarga(Request $request)
     {
         foreach ($request->m_menu_harga_id_edit as $key => $value) {
+            $updateData = [
+                'm_menu_harga_nominal' => convertfloat($request->m_menu_harga_nominal_edit[$key]),
+                'm_menu_harga_status_sync' => 'send',
+                'm_menu_harga_updated_at' => Carbon::now(),
+                'm_menu_harga_updated_by' => Auth::user()->users_id,
+                'm_menu_harga_client_target' => DB::raw('DEFAULT'),
+            ];
+
+            if ($request->m_t_t_id[$key] == 1) {
+                $get_jenis_nota_id = DB::table('m_jenis_nota')
+                    ->where('m_jenis_nota_m_t_t_id', 2)
+                    ->where('m_jenis_nota_m_w_id', $request->m_w_id[$key])
+                    ->value('m_jenis_nota_id');
+
+                if ($get_jenis_nota_id) {
+                    DB::table('m_menu_harga')
+                        ->where('m_menu_harga_m_jenis_nota_id', $get_jenis_nota_id)
+                        ->where('m_menu_harga_m_produk_id', $request->m_produk_id[$key])
+                        ->update($updateData);
+                }
+            }
+
             DB::table('m_menu_harga')
                 ->where('m_menu_harga_id', $request->m_menu_harga_id_edit[$key])
-                ->update([
-                    'm_menu_harga_nominal' => convertfloat($request->m_menu_harga_nominal_edit[$key]),
-                    'm_menu_harga_status_sync' => 'send',
-                    'm_menu_harga_updated_at' => Carbon::now(),
-                    'm_menu_harga_updated_by' => Auth::user()->users_id
-                ]);
+                ->update($updateData);
         }
     }
 
@@ -293,7 +347,7 @@ class MJenisNotaController extends Controller
             }
         } else {
             if ($request->area_id == '0') {
-                $mAreaId = Null;
+                $mAreaId = null;
             } else {
                 $mAreaId = $request->area_id;
             }
@@ -301,10 +355,10 @@ class MJenisNotaController extends Controller
             $get_nota = DB::table('m_w')->when($mAreaId, function ($query) use ($mAreaId) {
                 return $query->where('m_w_m_area_id', $mAreaId);
             })
-            ->join('m_jenis_nota','m_jenis_nota_m_w_id','m_w_id')
-            ->whereIn('m_jenis_nota_m_t_t_id',$trans_tipe)
-            ->groupBy('m_w_m_kode_nota')
-            ->pluck('m_w_m_kode_nota')->toArray();
+                ->join('m_jenis_nota', 'm_jenis_nota_m_w_id', 'm_w_id')
+                ->whereIn('m_jenis_nota_m_t_t_id', $trans_tipe)
+                ->groupBy('m_w_m_kode_nota')
+                ->pluck('m_w_m_kode_nota')->toArray();
             $data = $get_nota;
         }
         return response()->json($data);

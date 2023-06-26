@@ -54,6 +54,12 @@
                                                                     @if ($item->m_produk_code == 'mn-400354' || $item->m_produk_code == 'mn-400355' || $item->m_produk_code == 'mn-400327')
                                                                         <input type="hidden" name="m_menu_harga_id_edit[]"
                                                                             value="{{ $item->m_menu_harga_id }}">
+                                                                        <input type="hidden" name="m_w_id[]"
+                                                                            value="{{ $item->m_jenis_nota_m_w_id }}">
+                                                                        <input type="hidden" name="m_t_t_id[]"
+                                                                            value="{{ $item->m_jenis_nota_m_t_t_id }}">
+                                                                        <input type="hidden" name="m_produk_id[]"
+                                                                            value="{{ $item->m_produk_id }}">
                                                                         <input value="{{ $item->m_menu_harga_nominal }}"
                                                                             type="text" class="form-control number"
                                                                             name="m_menu_harga_nominal_edit[]">
@@ -127,7 +133,8 @@
                                             <div>
                                                 <select class="js-select2" id="m_menu_harga_m_produk_id"
                                                     name="m_menu_harga_m_produk_id" style="width: 100%;"
-                                                    data-container="#modal-block-select2" data-placeholder="Choose one.." disabled>
+                                                    data-container="#modal-block-select2" data-placeholder="Choose one.."
+                                                    disabled>
                                                     <option></option>
                                                     @foreach ($listProduk as $pr)
                                                         <option value="{{ $pr->m_produk_id }}">
@@ -204,65 +211,79 @@
         <!-- END Page Content -->
     @endsection
     @section('js')
-        <script type="module">
-  $(document).ready(function(){
-      $('.table').dataTable({
+        <script>
+            $(document).ready(function() {
+                $('.table').dataTable({
                     destroy: true,
                     paging: false,
-                    buttons:false,
+                    buttons: false,
                 });
-      $('ul.nav-tabs').children().first().children().addClass('active');
-      $('div.tab-pane').first().addClass('active');
-      Codebase.helpersOnLoad(['jq-select2', 'jq-rangeslider']);
-      $(".buttonInsert").on('click', function() {
-            var id = $(this).attr('value');
-            $("#myModalLabel").html('Tambah Harga');
-            $("#m_menu_harga_id").val('').trigger('change');
-            $("#m_menu_harga_m_produk_id").val('').trigger('change');
-            $("#m_menu_harga_nominal").val('').trigger('change');
-            $("#m_menu_harga_status").val('').trigger('change');
-            $("#m_menu_harga_tax_status").val('').trigger('change');
-            $("#m_menu_harga_sc_status").val('').trigger('change');
-            $("#formAction").attr('action',"/master/m_jenis_nota/simpan_harga");
-            $("#modal-block-select2").modal('show');
-      });
-      $(".buttonEdit").on('click', function() {
-          var id = $(this).attr('value');
-          $("#myModalLabel").html('Ubah Harga');
-          $("#formAction").attr('action','/master/m_jenis_nota/simpan_harga');
-          $.ajax({
-              url: "/master/m_jenis_nota/show_harga/"+id,
-              type: "GET",
-              dataType: 'json',
-              success: function(respond) {
-                console.log(respond)
-                  $("#m_menu_harga_id").val(respond.m_menu_harga_id).trigger('change');
-                  $("#m_menu_harga_m_produk_id").val(respond.m_menu_harga_m_produk_id).trigger('change');
-                  $("#m_menu_harga_nominal").val(respond.m_menu_harga_nominal).trigger('change');
-                  $("#m_menu_harga_status").val(respond.m_menu_harga_status).trigger('change');
-                  $("#m_menu_harga_tax_status").val(respond.m_menu_harga_tax_status).trigger('change');
-                  $("#m_menu_harga_sc_status").val(respond.m_menu_harga_sc_status).trigger('change');
-              },
-              error: function() {
-              }
-          });
-          $("#modal-block-select2").modal('show');
-      });
-      
-      $(".updateharga").on('click',function () {
-        $.ajax({
-                type: "post",
-                  url: "{{ route('m_jenis_nota.save_update_harga') }}",
-                    data: $('input').serialize(),
+                $('ul.nav-tabs').children().first().children().addClass('active');
+                $('div.tab-pane').first().addClass('active');
+                Codebase.helpersOnLoad(['jq-select2', 'jq-rangeslider']);
+                $(".buttonInsert").on('click', function() {
+                    var id = $(this).attr('value');
+                    $("#myModalLabel").html('Tambah Harga');
+                    $("#m_menu_harga_id").val('').trigger('change');
+                    $("#m_menu_harga_m_produk_id").val('').trigger('change');
+                    $("#m_menu_harga_nominal").val('').trigger('change');
+                    $("#m_menu_harga_status").val('').trigger('change');
+                    $("#m_menu_harga_tax_status").val('').trigger('change');
+                    $("#m_menu_harga_sc_status").val('').trigger('change');
+                    $("#formAction").attr('action', "/master/m_jenis_nota/simpan_harga");
+                    $("#modal-block-select2").modal('show');
+                });
+                $(".buttonEdit").on('click', function() {
+                    var id = $(this).attr('value');
+                    $("#myModalLabel").html('Ubah Harga');
+                    $("#formAction").attr('action', '/master/m_jenis_nota/simpan_harga');
+                    $.ajax({
+                        url: "/master/m_jenis_nota/show_harga/" + id,
+                        type: "GET",
+                        dataType: 'json',
+                        success: function(respond) {
+                            console.log(respond)
+                            $("#m_menu_harga_id").val(respond.m_menu_harga_id).trigger('change');
+                            $("#m_menu_harga_m_produk_id").val(respond.m_menu_harga_m_produk_id)
+                                .trigger('change');
+                            $("#m_menu_harga_nominal").val(respond.m_menu_harga_nominal).trigger(
+                                'change');
+                            $("#m_menu_harga_status").val(respond.m_menu_harga_status).trigger(
+                                'change');
+                            $("#m_menu_harga_tax_status").val(respond.m_menu_harga_tax_status)
+                                .trigger('change');
+                            $("#m_menu_harga_sc_status").val(respond.m_menu_harga_sc_status)
+                                .trigger('change');
+                        },
+                        error: function() {}
+                    });
+                    $("#modal-block-select2").modal('show');
+                });
+
+                $(".updateharga").on('click', function() {
+                    $.ajax({
+                        type: "post",
+                        url: "{{ route('m_jenis_nota.save_update_harga') }}",
+                        data: $('input').serialize(),
                         success: function(data) {
-                            window.location.reload();
+                            Codebase.helpers('jq-notify', {
+                                align: 'right', // 'right', 'left', 'center'
+                                from: 'top', // 'top', 'bottom'
+                                type: 'success', // 'info', 'success', 'warning', 'danger'
+                                icon: 'fa fa-info me-5', // Icon class
+                                message: 'Update Harga Berhasil'
+                            });
+                            setTimeout(function() {
+                                window.location.reload();
+                            }, 750);
+
                         }
                     });
-      })
-       
-      $("#my_table").append(
-          $('<tfoot/>').append( $("#my_table thead tr").clone() )
-      );
-  });
-  </script>
+                })
+
+                $("#my_table").append(
+                    $('<tfoot/>').append($("#my_table thead tr").clone())
+                );
+            });
+        </script>
     @endsection
