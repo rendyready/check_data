@@ -73,8 +73,13 @@ class RekapNonMenuController extends Controller
                     ->join('rekap_transaksi','r_t_detail_r_t_id','r_t_id')
                     ->join('rekap_modal','rekap_modal_id','r_t_rekap_modal_id')
                     ->join('users','users_id','rekap_modal_created_by')
-                    ->join('m_transaksi_tipe','m_t_t_id','r_t_m_t_t_id')
-                    ->where(DB::raw('DATE(rekap_modal_tanggal)'), $request->tanggal);
+                    ->join('m_transaksi_tipe','m_t_t_id','r_t_m_t_t_id');
+                    if (strpos($request->tanggal, 'to') !== false) {
+                        $dates = explode('to' ,$request->tanggal);
+                        $rekap->whereBetween(DB::raw('DATE(rekap_modal_tanggal)'), $dates);
+                    } else {
+                        $rekap->where(DB::raw('DATE(rekap_modal_tanggal)'), $request->tanggal);
+                    }
                     if($request->area != 'all'){
                         $rekap->where('r_t_m_area_id', $request->area);
                         if($request->waroeng != 'all') {
@@ -91,8 +96,13 @@ class RekapNonMenuController extends Controller
         $countNota = DB::table('rekap_transaksi')
                     ->selectRaw('r_t_m_t_t_id type_id, r_t_rekap_modal_id modal_id, COUNT(r_t_id) jml')
                     ->join('m_transaksi_tipe','m_t_t_id','r_t_m_t_t_id')
-                    ->join('rekap_modal','rekap_modal_id','r_t_rekap_modal_id')
-                    ->where(DB::raw('DATE(rekap_modal_tanggal)'), $request->tanggal);
+                    ->join('rekap_modal','rekap_modal_id','r_t_rekap_modal_id');
+                    if (strpos($request->tanggal, 'to') !== false) {
+                        $dates = explode('to' ,$request->tanggal);
+                        $rekap->whereBetween(DB::raw('DATE(rekap_modal_tanggal)'), $dates);
+                    } else {
+                        $rekap->where(DB::raw('DATE(rekap_modal_tanggal)'), $request->tanggal);
+                    }
                     if($request->area != 'all'){
                         $countNota->where('r_t_m_area_id', $request->area);
                         if($request->waroeng != 'all') {

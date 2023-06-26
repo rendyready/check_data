@@ -44,10 +44,10 @@ class RekapMenuController extends Controller
 
     public function tanggal_rekap(Request $request)
     {
-        $dates = explode('to', $request->tanggal);
         $tanggal = DB::table('rekap_transaksi')
                 ->select('r_t_tanggal');
                 if (strpos($request->tanggal, 'to') !== false) {
+                    $dates = explode('to', $request->tanggal);
                     $tanggal->whereBetween('r_t_tanggal', $dates);
                 } else {
                     $tanggal->where('r_t_tanggal', $request->tanggal);

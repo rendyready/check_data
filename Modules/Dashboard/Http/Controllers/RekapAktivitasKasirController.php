@@ -52,6 +52,7 @@ class RekapAktivitasKasirController extends Controller
         $data = array();
         foreach ($waroeng as $val) {
             $data[$val->m_w_id] = [$val->m_w_nama];
+            $data['all'] = 'all waroeng';
         }
         return response()->json($data);
     }
@@ -77,7 +78,7 @@ class RekapAktivitasKasirController extends Controller
         $data = array();
         foreach ($user1 as $val) {
             $data[$val->users_id] = [$val->name];
-            $data['all'] = 'All Operator';
+            $data['all'] = 'all operator';
         }
         return response()->json($data);
     }
@@ -86,7 +87,8 @@ class RekapAktivitasKasirController extends Controller
     {
         $buka_laci = DB::table('rekap_buka_laci')
             ->join('users', 'users_id', 'r_b_l_created_by')
-            ->selectRaw('r_b_l_rekap_modal_id, r_b_l_tanggal, name, sum(r_b_l_qty) as laci');
+            ->join('rekap_modal', 'rekap_modal_id', 'r_b_l_rekap_modal_id')
+            ->selectRaw('r_b_l_rekap_modal_id, r_b_l_tanggal, name, sum(r_b_l_qty) as laci, r_b_l_m_area_nama, r_b_l_m_w_nama, rekap_modal_sesi');
             if (strpos($request->tanggal, 'to') !== false) {
                 [$start, $end] = explode('to', $request->tanggal);
                 $buka_laci->whereBetween('r_b_l_tanggal', [$start, $end]);
@@ -97,21 +99,25 @@ class RekapAktivitasKasirController extends Controller
                 $buka_laci->where('r_b_l_m_area_id', $request->area);
                 if($request->waroeng != 'all'){
                     $buka_laci->where('r_b_l_m_w_id', $request->waroeng);
+                    if($request->operator != 'all'){
+                        $buka_laci->where('r_b_l_created_by', $request->operator);
+                    }
                 }
             }
-            if($request->operator != 'all'){
-                $buka_laci->where('r_b_l_created_by', $request->operator);
-            }
-            $buka_laci = $buka_laci->groupby('r_b_l_tanggal', 'name', 'r_b_l_rekap_modal_id')
+            $buka_laci = $buka_laci->groupby('r_b_l_tanggal', 'name', 'r_b_l_rekap_modal_id', 'r_b_l_m_area_nama', 'r_b_l_m_area_id', 'r_b_l_m_w_nama', 'rekap_modal_sesi')
+                ->orderby('r_b_l_m_area_id', 'ASC')
                 ->orderby('r_b_l_tanggal', 'ASC')
+                ->orderby('rekap_modal_sesi', 'ASC')
                 ->get();
         
         $data = array();
         foreach ($buka_laci as $laci){
             $row = array();
+            $row[] = $laci->r_b_l_m_area_nama;
+            $row[] = $laci->r_b_l_m_w_nama;
             $row[] = date('d-m-Y', strtotime($laci->r_b_l_tanggal));
-            // $row[] = date('d-m-Y H:i', strtotime($laci->r_b_l_tanggal));
             $row[] = $laci->name;
+            $row[] = $laci->rekap_modal_sesi;
             $row[] = $laci->laci;
             $row[] ='<a id="button_detail" class="btn btn-sm button_detail btn-info" value="'.$laci->r_b_l_rekap_modal_id.'" title="Detail Nota"><i class="fa-sharp fa-solid fa-eye"></i></a>';
             $data[] = $row;
@@ -146,7 +152,6 @@ class RekapAktivitasKasirController extends Controller
                     'keterangan' => $laci->r_b_l_keterangan,
                 );
             }
-
             $output = array('data' => $data);
             return response()->json($output);    
     }
@@ -192,7 +197,7 @@ class RekapAktivitasKasirController extends Controller
         $data = array();
         foreach ($user1 as $val) {
             $data[$val->users_id] = [$val->name];
-            $data['all'] = 'All Operator';
+            $data['all'] = 'all operator';
         }
         return response()->json($data);
     }
@@ -200,7 +205,8 @@ class RekapAktivitasKasirController extends Controller
     public function tampil_hps_menu(Request $request)
     {
         $hps_menu = DB::table('rekap_hapus_menu')
-            ->join('users', 'users_id', 'r_h_m_created_by');
+            ->join('users', 'users_id', 'r_h_m_created_by')
+            ->join('rekap_modal', 'rekap_modal_id', 'r_h_m_rekap_modal_id');
             if (strpos($request->tanggal, 'to') !== false) {
                 [$start, $end] = explode('to', $request->tanggal);
                 $hps_menu->whereBetween('r_h_m_tanggal', [$start, $end]);
@@ -211,12 +217,14 @@ class RekapAktivitasKasirController extends Controller
                 $hps_menu->where('r_h_m_m_area_id', $request->area);
                 if($request->waroeng != 'all'){
                     $hps_menu->where('r_h_m_m_w_id', $request->waroeng);
+                    if($request->operator != 'all'){
+                        $hps_menu->where('r_h_m_created_by', $request->operator);
+                    }
                 }
             }
-            if($request->operator != 'all'){
-                $hps_menu->where('r_h_m_created_by', $request->operator);
-            }
-            $hps_menu = $hps_menu->orderby('r_h_m_tanggal', 'ASC')
+            $hps_menu = $hps_menu->orderby('r_h_m_m_area_id', 'ASC')
+            ->orderby('r_h_m_tanggal', 'ASC')
+            ->orderby('rekap_modal_sesi', 'ASC')
             ->get();
         
         $data = array();
@@ -225,6 +233,7 @@ class RekapAktivitasKasirController extends Controller
             $row[] = $menu->r_h_m_m_area_nama;
             $row[] = $menu->r_h_m_m_w_nama;
             $row[] = $menu->name;
+            $row[] = $menu->rekap_modal_sesi;
             $row[] = date('d-m-Y', strtotime($menu->r_h_m_tanggal));
             $row[] = date('H:i', strtotime($menu->r_h_m_jam));
             $row[] = $menu->r_h_m_nota_code;
@@ -283,7 +292,7 @@ class RekapAktivitasKasirController extends Controller
         $data = array();
         foreach ($user1 as $val) {
             $data[$val->users_id] = [$val->name];
-            $data['all'] = 'All Operator';
+            $data['all'] = 'all operator';
         }
         return response()->json($data);
     }
@@ -291,7 +300,8 @@ class RekapAktivitasKasirController extends Controller
     public function tampil_hps_nota(Request $request)
     {
         $hps_nota = DB::table('rekap_hapus_transaksi')
-            ->join('users', 'users_id', 'r_h_t_created_by');
+            ->join('users', 'users_id', 'r_h_t_created_by')
+            ->join('rekap_modal', 'rekap_modal_id', 'r_h_t_rekap_modal_id');
             if (strpos($request->tanggal, 'to') !== false) {
                 [$start, $end] = explode('to', $request->tanggal);
                 $hps_nota->whereBetween('r_h_t_tanggal', [$start, $end]);
@@ -302,29 +312,38 @@ class RekapAktivitasKasirController extends Controller
                 $hps_nota->where('r_h_t_m_area_id', $request->area);
                 if($request->waroeng != 'all'){
                     $hps_nota->where('r_h_t_m_w_id', $request->waroeng);
+                    if($request->operator != 'all'){
+                        $hps_nota->where('r_h_t_created_by', $request->operator);
+                    }
                 }
             }
-            if($request->operator != 'all'){
-                $hps_nota->where('r_h_t_created_by', $request->operator);
-            }
-            $hps_nota = $hps_nota->orderby('r_h_t_tanggal', 'ASC')
+            $hps_nota = $hps_nota->orderby('r_h_t_m_area_id', 'ASC')
+            ->orderby('r_h_t_tanggal', 'ASC')
+            ->orderby('rekap_modal_sesi', 'ASC')
             ->get();
         
         $data = array();
         foreach ($hps_nota as $nota){
+            $approve = DB::table('rekap_hapus_transaksi')
+                ->leftjoin('users', 'users_id', 'r_h_t_approved_by')
+                ->select('name')
+                ->where('r_h_t_id', $nota->r_h_t_id)
+                ->first();
+
             $row = array();
             $row[] = $nota->r_h_t_m_area_nama;
             $row[] = $nota->r_h_t_m_w_nama;
             $row[] = $nota->name;
+            $row[] = $nota->rekap_modal_sesi;
             $row[] = date('d-m-Y', strtotime($nota->r_h_t_tanggal));
             $row[] = date('H:i', strtotime($nota->r_h_t_jam));
             $row[] = $nota->r_h_t_nota_code;
             $row[] = $nota->r_h_t_bigboss;
-            $row[] = $nota->r_h_t_approved_by;
+            $row[] = $approve->name;
             $row[] = number_format($nota->r_h_t_nominal);
             $row[] = number_format($nota->r_h_t_nominal_pajak);
-            $row[] = number_format($nota->r_h_m_nominal_sc);
-            $row[] = number_format($nota->r_h_t_nominal + $nota->r_h_t_nominal_pajak + $nota->r_h_m_nominal_sc);
+            $row[] = number_format($nota->r_h_t_nominal_sc);
+            $row[] = number_format($nota->r_h_t_nominal + $nota->r_h_t_nominal_pajak + $nota->r_h_t_nominal_sc);
             $data[] = $row;
         }
 

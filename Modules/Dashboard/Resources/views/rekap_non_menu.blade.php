@@ -47,7 +47,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-sm-5">
+                            <div class="col-sm-5" id="select_waroeng">
                                 <div class="row mb-2">
                                     <label class="col-sm-3 col-form-label">Waroeng</label>
                                     <div class="col-sm-9">
@@ -184,9 +184,6 @@ $(document).ready(function() {
                     extend: 'excelHtml5',
                     text: 'Export Excel',
                     title: 'Laporan Rekap Non Menu - ' + tanggal,
-                    // exportOptions: {
-                    //     columns: [1, 2, 3, 4, 5]
-                    // },
                     pageSize: 'A4',
                     pageOrientation: 'potrait',
                 }
@@ -213,6 +210,13 @@ if(HakAksesPusat){
         var id_area = $(this).val();
         var tanggal  = $('.filter_tanggal').val();
         var prev = $(this).data('previous-value');
+
+        if (id_area == 'all'){
+            $("#select_waroeng").hide();
+        } else {
+            $("#select_waroeng").show();
+        }
+
         if(id_area && tanggal){
             $.ajax({
             type:"GET",
@@ -260,7 +264,7 @@ if(HakAksesPusat){
   }
 
     $('.filter_tanggal').flatpickr({
-            // mode: "range",
+            mode: "range",
             dateFormat: 'Y-m-d',         
     });
 

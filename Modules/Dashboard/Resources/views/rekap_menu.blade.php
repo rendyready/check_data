@@ -35,6 +35,7 @@
                                             @foreach ($data->area as $area)
                                                 <option value="{{ $area->m_area_id }}"> {{ $area->m_area_nama }} </option>
                                             @endforeach
+                                            <option value="all">all area</option>
                                             <option value="all">All Area</option>
                                             </select>
                                         @else
@@ -48,7 +49,7 @@
                             </div>
 
                             <div class="col-sm-5">
-                                <div class="row mb-2">
+                                <div class="row mb-2" id="select_waroeng">
                                     <label class="col-sm-3 col-form-label">Waroeng</label>
                                     <div class="col-sm-9">
                                         @if (in_array(Auth::user()->waroeng_id, $data->akses_pusat))
@@ -76,7 +77,7 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-md-5">
+                            <div class="col-md-5" id="select_operator">
                                 <div class="row mb-1">
                                     <label class="col-sm-3 col-form-label" >Transaksi</label>
                                     <div class="col-sm-9">
@@ -218,6 +219,15 @@ if(HakAksesPusat){
         var id_area = $(this).val();
         var tanggal  = $('.filter_tanggal').val();
         var prev = $(this).data('previous-value');
+
+        if (id_area == 'all'){
+            $("#select_waroeng").hide();
+            $("#select_operator").hide();
+        } else {
+            $("#select_waroeng").show();
+            $("#select_operator").show();
+        }
+
         if(id_area && tanggal){
             $.ajax({
             type:"GET",
@@ -254,6 +264,13 @@ if(HakAksesPusat){
         var id_waroeng = $(this).val();   
         var tanggal  = $('.filter_tanggal').val(); 
         var prev = $(this).data('previous-value');
+
+        if (id_waroeng == 'all'){
+            $("#select_operator").hide();
+        } else {
+            $("#select_operator").show();
+        }
+        
         if(id_waroeng && tanggal){
             $.ajax({
             type:"GET",

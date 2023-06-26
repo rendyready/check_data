@@ -35,6 +35,7 @@
                                             @foreach ($data->area as $area)
                                                 <option value="{{ $area->m_area_id }}"> {{ $area->m_area_nama }} </option>
                                             @endforeach
+                                            <option value="all">all area</option>
                                             </select>
                                         @else
                                             <select id="filter_area" data-placeholder="Pilih Area" style="width: 100%;"
@@ -47,7 +48,7 @@
                             </div>
 
                             <div class="col-sm-5">
-                                <div class="row mb-2">
+                                <div class="row mb-2" id="select_waroeng">
                                     <label class="col-sm-3 col-form-label">Waroeng</label>
                                     <div class="col-sm-9">
                                         @if (in_array(Auth::user()->waroeng_id, $data->akses_pusat))
@@ -74,7 +75,7 @@
                             </div>
                         </div>
 
-                        <div class="row">
+                        <div class="row" id="select_operator">
                             <div class="col-8 mb-2">
                                 <label class="col-form-label text-dark" style="font-size: 15px"> Tampilkan Performa Operator? </label>
                                         <select id="operator_select" style="width : 15%" class="cari f-wrg js-select2 form-control" name="r_t_m_w_id">
@@ -130,6 +131,7 @@
                       <th class="text-center">Waroeng</th>
                       <th class="text-center">Tanggal</th>
                       <th class="text-center">Operator</th>
+                      <th class="text-center">Sesi</th>
                       <th class="text-center">Total Penjualan</th>
                       @foreach ($data->payment as $payment)
                       <th class="text-center">{{ $payment->m_payment_method_name }}</th>
@@ -211,16 +213,21 @@ $(document).ready(function() {
             scrollCollapse: true,
             columnDefs: [
                 {
-                    targets: [0],
+                    targets: '_all',
                     className: 'dt-body-center'
-                },
-                {
-                    targets: [1, 2, 3, 4, 5, 6, 7, 8],
-                    className: 'dt-body-right'
                 }
             ],
             lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
             pageLength: 10,
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    text: 'Export Excel',
+                    title: 'Rekap Penjualan Per Nota Harian - ' + tanggal,
+                    pageSize: 'A4',
+                    pageOrientation: 'potrait',
+                }
+            ],
             ajax: {
                 url: '{{route("harian.show")}}',
                 data : {
@@ -251,12 +258,17 @@ $(document).ready(function() {
             scrollCollapse: true,
             columnDefs: [
                 {
-                    targets: [0],
+                    targets: '_all',
                     className: 'dt-body-center'
-                },
+                }
+            ],
+            buttons: [
                 {
-                    targets: [1, 2, 3, 4, 5, 6, 7, 8],
-                    className: 'dt-body-right'
+                    extend: 'excelHtml5',
+                    text: 'Export Excel',
+                    title: 'Rekap Penjualan Per Nota Harian - ' + tanggal,
+                    pageSize: 'A4',
+                    pageOrientation: 'potrait',
                 }
             ],
             lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
@@ -283,6 +295,15 @@ $(document).ready(function() {
         var id_area = $(this).val();
         var tanggal  = $('.filter_tanggal').val();
         var prev = $(this).data('previous-value');
+
+        if (id_area == 'all'){
+            $("#select_waroeng").hide();
+            $("#select_operator").hide();
+        } else {
+            $("#select_waroeng").show();
+            $("#select_operator").show();
+        }
+
         if(id_area && tanggal){
             $.ajax({
             type:"GET",
@@ -311,7 +332,7 @@ $(document).ready(function() {
             $(".filter_area").val(prev).trigger('change');
         }      
         $(".filter_operator").empty();
-        $("#button_non_menu").hide();
+        // $("#button_non_menu").hide();
         $("#operator_select").val("tidak").trigger('change');
         $("#operator").hide();
     });
@@ -323,6 +344,15 @@ $(document).ready(function() {
         var tanggal  = $('.filter_tanggal').val(); 
         var waroeng  = $('.filter_waroeng').val();
         var prev = $(this).data('previous-value');
+
+        if (id_waroeng == 'all'){
+            $("#select_operator").hide();
+            $("#operator_select").val('tidak').trigger('change');
+            $("#operator").hide();
+        } else {
+            $("#select_operator").show();
+        }
+
         if(id_waroeng && tanggal){
             $.ajax({
             type:"GET",
