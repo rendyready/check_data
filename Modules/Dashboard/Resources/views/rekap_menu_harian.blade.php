@@ -116,9 +116,11 @@
                             <th class="text-center">Waroeng</th>
                             <th class="text-center">Nama Menu</th>
                             <th class="text-center">Qty</th>
-                            <th class="text-center">Nominal</th>
+                            <th class="text-center">Nominal Reguler</th>
                             <th class="text-center">Transaksi</th>
                             <th class="text-center">Kategori Menu</th>
+                            <th class="text-center">Nominal Nota</th>
+                            <th class="text-center">Selisih</th>
                         </tr>
                     </thead>
                     <tbody>

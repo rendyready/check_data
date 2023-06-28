@@ -127,8 +127,8 @@ class RekapMenuHarianController extends Controller
                         $get->where('m_t_t_name', $request->trans);
                     }
                 
-            $get = $get->selectRaw('sum(r_t_detail_qty) as qty, r_t_detail_reguler_price, r_t_tanggal, r_t_detail_m_produk_nama, r_t_detail_m_produk_id, m_w_nama, m_jenis_produk_id, m_jenis_produk_nama, m_t_t_name, rekap_modal_sesi')
-                    ->groupBy('r_t_tanggal', 'r_t_detail_m_produk_nama', 'r_t_detail_m_produk_id', 'm_w_nama', 'r_t_detail_reguler_price', 'm_jenis_produk_nama', 'm_jenis_produk_id', 'm_t_t_name', 'rekap_modal_sesi')
+            $get = $get->selectRaw('sum(r_t_detail_qty) as qty, r_t_detail_reguler_price, r_t_tanggal, r_t_detail_m_produk_nama, r_t_detail_m_produk_id, m_w_nama, m_jenis_produk_id, m_jenis_produk_nama, m_t_t_name, rekap_modal_sesi, r_t_detail_price')
+                    ->groupBy('r_t_tanggal', 'r_t_detail_m_produk_nama', 'r_t_detail_m_produk_id', 'm_w_nama', 'r_t_detail_reguler_price', 'm_jenis_produk_nama', 'm_jenis_produk_id', 'm_t_t_name', 'rekap_modal_sesi', 'r_t_detail_price')
                     ->orderby('m_jenis_produk_id', 'ASC')
                     ->orderby('r_t_detail_m_produk_nama', 'ASC')
                     ->get();
@@ -140,19 +140,25 @@ class RekapMenuHarianController extends Controller
                 $row[] = $val_menu->m_w_nama;
                 $row[] = $val_menu->r_t_detail_m_produk_nama;
                 $qty = $val_menu->qty;
-                $nominal = number_format($val_menu->r_t_detail_reguler_price * $val_menu->qty);
+                $nominal = $val_menu->r_t_detail_reguler_price * $val_menu->qty;
                 if (!empty($refund2)){
                     foreach ($refund as $key => $valRef) {
                         if ($val_menu->r_t_detail_m_produk_id == $valRef->r_r_detail_m_produk_id && $val_menu->r_t_tanggal == $valRef->r_r_tanggal && $val_menu->rekap_modal_sesi == $valRef->rekap_modal_sesi && $val_menu->m_t_t_name == $valRef->m_t_t_name) {
                             $qty = $val_menu->qty - $valRef->r_r_detail_qty;
-                            $nominal = number_format($val_menu->r_t_detail_reguler_price * $qty);
+                            $nominal = $val_menu->r_t_detail_reguler_price * $qty;
                         }
                     }
                 }
                 $row[] = $qty;
-                $row[] = $nominal;
+                $row[] = number_format($nominal);
                 $row[] = $val_menu->m_jenis_produk_nama;
                 $row[] = $val_menu->m_t_t_name;
+                $nominal_trans = $val_menu->r_t_detail_price * $qty;
+                if ($val_menu->m_t_t_name != 'dine in' && $val_menu->m_t_t_name != 'take away'){
+                    $nominal_trans = $nominal;
+                }
+                $row[] = number_format($nominal_trans);
+                $row[] = number_format($nominal - $nominal_trans);
                 $data[] = $row;
             }
 
