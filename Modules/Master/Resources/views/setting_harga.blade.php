@@ -76,16 +76,43 @@
                                 <input type="hidden" id="action1" value="status_menu" name="action">
                                 <div class="mb-4">
                                     <div class="form-group">
+                                        <label for="m_area_id2">Area</label>
+                                        <div>
+                                            <select class="js-select2 get_nota" id="m_area_id2" name="m_area_id"
+                                                style="width: 100%;" data-placeholder="Choose one..">
+                                                <option></option>
+                                                <option value="0">All Area</option>
+                                                @foreach ($area as $val)
+                                                    <option value="{{ $val->m_area_id }}">
+                                                        {{ ucwords($val->m_area_nama) }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-4">
+                                    <div class="form-group">
+                                        <label for="jenis_nota">Jenis Transaksi</label>
+                                        <div>
+                                            <select class="js-select2 get_nota" id="jenis_nota" name="update_m_jenis_nota_trans_id[]"
+                                                style="width: 100%;" data-placeholder="Pilih Jenis Transaksi" multiple>
+                                                <option></option>
+                                                @foreach ($listTipeTransaksi as $tipe)
+                                                    <option value="{{ $tipe->m_t_t_id }}">
+                                                        {{ ucwords($tipe->m_t_t_name) }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-4">
+                                    <div class="form-group">
                                         <label for="m_tipe_nota">Tipe Nota</label>
                                         <div>
                                             <select class="js-select2" id="m_tipe_nota_id" name="nota_kode[]"
                                                 style="width: 100%;" data-placeholder="Pilih Tipe Nota" multiple>
                                                 <option></option>
-                                                @foreach ($m_tipe_nota as $tipen)
-                                                    <option value="{{ $tipen->m_tipe_nota_nama }}">
-                                                        {{ ucwords($tipen->m_tipe_nota_nama) }}
-                                                    </option>
-                                                @endforeach
                                             </select>
                                         </div>
                                     </div>
@@ -100,22 +127,6 @@
                                                 @foreach ($produk as $val)
                                                     <option value="{{ $val->m_produk_id }}">
                                                         {{ ucwords($val->m_produk_nama) }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="mb-4">
-                                    <div class="form-group">
-                                        <label for="jenis_nota">Jenis Transaksi</label>
-                                        <div>
-                                            <select class="js-select2" id="jenis_nota" name="update_m_jenis_nota_trans_id[]"
-                                                style="width: 100%;" data-placeholder="Pilih Jenis Transaksi" multiple>
-                                                <option></option>
-                                                @foreach ($listTipeTransaksi as $tipe)
-                                                    <option value="{{ $tipe->m_t_t_id }}">
-                                                        {{ ucwords($tipe->m_t_t_name) }}
-                                                    </option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -506,8 +517,9 @@
                 $('.harga_nota').empty(); 
             });
             $('.get_nota').on('change', function() {
-                var area_id = $('#m_area_id').val();
-                var tipe_trans_id = $('#update_m_jenis_nota_trans_id').val();
+                var area_id = $('select[name="m_area_id"]').val();
+                var tipe_trans_id = $('select[name="update_m_jenis_nota_trans_id[]"]').val();
+                console.log(area_id);
                 var data = {
                     area_id: area_id,
                     tipe_trans_id: tipe_trans_id,
@@ -518,15 +530,15 @@
                     type: "GET",
                     data: data,
                     success: function(respond) {
-                        $('#m_tipe_nota').empty();
-                        $('#m_tipe_nota').append('<option></option>');
+                        $('#m_tipe_nota,#m_tipe_nota_id').empty();
+                        $('#m_tipe_nota,#m_tipe_nota_id').append('<option></option>');
                         respond.forEach(function(option) {
                             var capitalizedOption = capitalizeEachWord(option);
                             var $option = $('<option>', {
                                 value: option,
                                 text: capitalizedOption
                             });
-                            $('#m_tipe_nota').append($option);
+                            $('#m_tipe_nota,#m_tipe_nota_id').append($option);
                         });
                     },
                     error: function() {}
