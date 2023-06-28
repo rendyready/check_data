@@ -134,7 +134,7 @@
                                                 <select class="js-select2" id="m_menu_harga_m_produk_id"
                                                     name="m_menu_harga_m_produk_id" style="width: 100%;"
                                                     data-container="#modal-block-select2" data-placeholder="Choose one.."
-                                                    disabled>
+                                                    >
                                                     <option></option>
                                                     @foreach ($listProduk as $pr)
                                                         <option value="{{ $pr->m_produk_id }}">
@@ -242,7 +242,6 @@
                         type: "GET",
                         dataType: 'json',
                         success: function(respond) {
-                            console.log(respond)
                             $("#m_menu_harga_id").val(respond.m_menu_harga_id).trigger('change');
                             $("#m_menu_harga_m_produk_id").val(respond.m_menu_harga_m_produk_id)
                                 .trigger('change');

@@ -63,63 +63,84 @@ class MJenisNotaController extends Controller
 
     public function copy_nota(Request $request)
     {
+        $trans_id_tujuan = $request->m_jenis_nota_trans_id_tujuan;
+        $trans_id_tujuan = ($trans_id_tujuan == 1) ? [1, 2] : [$trans_id_tujuan];
+        $created_at = Carbon::now();
+        $user_id = Auth::user()->users_id;
         $cek_duplicate = DB::table('m_jenis_nota')
             ->where('m_jenis_nota_m_w_id', $request->m_jenis_nota_waroeng_tujuan_id)
-            ->where('m_jenis_nota_m_t_t_id', $request->m_jenis_nota_trans_id_tujuan)->first();
-        if (empty($cek_duplicate)) {
-            DB::table('m_jenis_nota')->insert([
-                'm_jenis_nota_id' => $this->getMasterId('m_jenis_nota'),
-                'm_jenis_nota_m_w_id' => $request->m_jenis_nota_waroeng_tujuan_id,
-                'm_jenis_nota_m_t_t_id' => $request->m_jenis_nota_trans_id_tujuan,
-                'm_jenis_nota_created_by' => Auth::user()->users_id,
-            ]);
-            $last_nota_id = MJenisNotum::latest('m_jenis_nota_created_at')->first()->m_jenis_nota_id;
+            ->whereIn('m_jenis_nota_m_t_t_id', $trans_id_tujuan)
+            ->get();
+
+        if ($cek_duplicate->isEmpty()) {
+            $last_nota_ids = [];
+            foreach ($trans_id_tujuan as $trans_id) {
+                $last_nota_id = $this->getMasterId('m_jenis_nota');
+                $data = [
+                    'm_jenis_nota_id' => $last_nota_id,
+                    'm_jenis_nota_m_w_id' => $request->m_jenis_nota_waroeng_tujuan_id,
+                    'm_jenis_nota_m_t_t_id' => $trans_id,
+                    'm_jenis_nota_created_by' => $user_id,
+                ];
+                DB::table('m_jenis_nota')->insert($data);
+                $last_nota_ids[] = $last_nota_id;
+            }
         } else {
-            $last_nota_id = $cek_duplicate->m_jenis_nota_id;
+            $last_nota_ids = $cek_duplicate->pluck('m_jenis_nota_id')->toArray();
         }
+
         $asal_nota_id = MJenisNotum::where('m_jenis_nota_m_w_id', $request->m_jenis_nota_waroeng_sumber_id)
-            ->where('m_jenis_nota_m_t_t_id', $request->m_jenis_nota_trans_id_asal)->first()->m_jenis_nota_id;
+            ->where('m_jenis_nota_m_t_t_id', $request->m_jenis_nota_trans_id_asal)
+            ->first()->m_jenis_nota_id;
+
         $harga = MMenuHarga::where('m_menu_harga_m_jenis_nota_id', $asal_nota_id)->get();
         foreach ($harga as $key) {
-            $cek = MMenuHarga::where('m_menu_harga_m_jenis_nota_id', $last_nota_id)
-                ->where('m_menu_harga_m_produk_id', $key->m_menu_harga_m_produk_id)
-                ->first();
-            if (empty($cek)) {
-                $data_harga = array(
-                    'm_menu_harga_id' => $this->getMasterId('m_menu_harga'),
-                    'm_menu_harga_nominal' => $key->m_menu_harga_nominal,
-                    'm_menu_harga_m_jenis_nota_id' => $last_nota_id,
-                    'm_menu_harga_m_produk_id' => $key->m_menu_harga_m_produk_id,
-                    'm_menu_harga_status' => $key->m_menu_harga_status,
-                    'm_menu_harga_tax_status' => $key->m_menu_harga_tax_status,
-                    'm_menu_harga_sc_status' => $key->m_menu_harga_sc_status,
-                    'm_menu_harga_status_sync' => 'send',
-                    'm_menu_harga_created_by' => Auth::user()->users_id,
-                );
-                MMenuHarga::insert($data_harga);
-            } else {
-                $data_harga = array(
-                    'm_menu_harga_nominal' => $key->m_menu_harga_nominal,
-                    'm_menu_harga_m_jenis_nota_id' => $last_nota_id,
-                    'm_menu_harga_m_produk_id' => $key->m_menu_harga_m_produk_id,
-                    'm_menu_harga_status' => $key->m_menu_harga_status,
-                    'm_menu_harga_tax_status' => $key->m_menu_harga_tax_status,
-                    'm_menu_harga_sc_status' => $key->m_menu_harga_sc_status,
-                    'm_menu_harga_status_sync' => 'send',
-                    'm_menu_harga_client_target' => DB::raw('DEFAULT'),
-                    'm_menu_harga_created_by' => Auth::user()->users_id,
-                );
-                MMenuHarga::where('m_menu_harga_id', $cek->m_menu_harga_id)->update($data_harga);
+            foreach ($last_nota_ids as $last_nota_id) {
+                $cek = MMenuHarga::where('m_menu_harga_m_jenis_nota_id', $last_nota_id)
+                    ->where('m_menu_harga_m_produk_id', $key->m_menu_harga_m_produk_id)
+                    ->first();
+
+                if (empty($cek)) {
+                    $hargaData  = [
+                        'm_menu_harga_id' => $this->getMasterId('m_menu_harga'),
+                        'm_menu_harga_nominal' => $key->m_menu_harga_nominal,
+                        'm_menu_harga_m_jenis_nota_id' => $last_nota_id,
+                        'm_menu_harga_m_produk_id' => $key->m_menu_harga_m_produk_id,
+                        'm_menu_harga_status' => $key->m_menu_harga_status,
+                        'm_menu_harga_tax_status' => $key->m_menu_harga_tax_status,
+                        'm_menu_harga_sc_status' => $key->m_menu_harga_sc_status,
+                        'm_menu_harga_status_sync' => 'send',
+                        'm_menu_harga_created_by' => $user_id,
+                    ];
+
+                    MMenuHarga::insert($hargaData);
+                } else {
+                    $data_harga = [
+                        'm_menu_harga_nominal' => $key->m_menu_harga_nominal,
+                        'm_menu_harga_m_jenis_nota_id' => $last_nota_id,
+                        'm_menu_harga_m_produk_id' => $key->m_menu_harga_m_produk_id,
+                        'm_menu_harga_status' => $key->m_menu_harga_status,
+                        'm_menu_harga_tax_status' => $key->m_menu_harga_tax_status,
+                        'm_menu_harga_sc_status' => $key->m_menu_harga_sc_status,
+                        'm_menu_harga_status_sync' => 'send',
+                        'm_menu_harga_client_target' => DB::raw('DEFAULT'),
+                        'm_menu_harga_updated_by' => $user_id,
+                        'm_menu_harga_updated_at' => $created_at
+                    ];
+
+                    MMenuHarga::where('m_menu_harga_id', $cek->m_menu_harga_id)->update($data_harga);
+                }
             }
         }
+
         return Redirect::route('m_jenis_nota.index');
     }
 
     public function update_harga(Request $request)
     {
         $user = Auth::user();
-        $notaKode = $request->nota_kode;
-        $mAreaId = ($request->m_area_id == 0) ? Null : $request->m_area_id;
+        $notaKode = $request->m_tipe_nota;
+        $mAreaId = ($request->m_area_id == 0) ? null : $request->m_area_id;
 
         foreach ($notaKode as $key => $kode) {
             $getWaroeng = DB::table('m_w')
@@ -208,9 +229,9 @@ class MJenisNotaController extends Controller
             ->join('m_jenis_nota', 'm_menu_harga_m_jenis_nota_id', 'm_jenis_nota_id')
             ->where('m_menu_harga_m_jenis_nota_id', $id)->orderBy('m_menu_harga_m_produk_id', 'asc')
             ->select('m_produk_nama', 'm_produk_m_jenis_produk_id', 'm_produk_code',
-                'm_menu_harga_id', 'm_menu_harga_nominal', 
-                'm_jenis_nota_m_w_id', 'm_jenis_nota_m_t_t_id', 
-                'm_menu_harga_status','m_menu_harga_tax_status','m_menu_harga_sc_status','m_produk_id')
+                'm_menu_harga_id', 'm_menu_harga_nominal',
+                'm_jenis_nota_m_w_id', 'm_jenis_nota_m_t_t_id',
+                'm_menu_harga_status', 'm_menu_harga_tax_status', 'm_menu_harga_sc_status', 'm_produk_id')
             ->get();
         $filterProduk = MMenuHarga::select('m_menu_harga_m_produk_id')
             ->where('m_menu_harga_m_jenis_nota_id', $id)->get();
@@ -295,8 +316,9 @@ class MJenisNotaController extends Controller
             foreach ($request->m_tipe_nota as $key => $tipeNota) {
                 $get_m_w = DB::table('m_w')
                     ->where('m_w_m_kode_nota', $tipeNota)
-                    ->select(DB::raw('MIN(m_w_id) as m_w_id'))
-                    ->value('m_w_id');
+                    ->join('m_jenis_nota','m_w_id','m_jenis_nota_m_w_id')
+                    ->whereNotNull('m_jenis_nota_id')
+                    ->first()->m_w_id;
 
                 $queryNota = DB::table('m_jenis_nota')
                     ->join('m_menu_harga', 'm_menu_harga_m_jenis_nota_id', 'm_jenis_nota_id')
