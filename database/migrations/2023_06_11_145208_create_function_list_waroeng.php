@@ -20,7 +20,7 @@ return new class extends Migration
             DECLARE
                 waroeng TEXT;
             BEGIN
-            SELECT REPLACE(array_agg('."':'||m_w_id||':'".')::TEXT,'."',',''".') FROM m_w INTO waroeng;
+            SELECT REPLACE(array_agg('."':'||new_cab.m_w_id||':'".')::TEXT,'."',',''".') FROM (SELECT * FROM m_w ORDER BY m_w_id ASC) AS new_cab INTO waroeng;
             RETURN waroeng;
             END;
             $waroeng$ LANGUAGE plpgsql;
