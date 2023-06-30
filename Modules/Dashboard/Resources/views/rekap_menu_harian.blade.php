@@ -108,7 +108,8 @@
                         </div> 
                         {{-- <div class="text-center mt-2 mb-2">
                             <button id="export_excel" class="btn btn-primary btn-sm">Export Excel</button> --}}
-                                    
+                       
+                <div class="table-responsive">
                     <table id="tampil_rekap" class="table table-sm table-bordered table-hover table-striped table-vcenter js-dataTable-full nowrap">
                         <thead>
                         <tr>
@@ -128,7 +129,7 @@
                     <tbody>
                     </tbody>
               </table>
-            {{-- </div>    --}}
+            </div>   
             </form>
             
           </div>
