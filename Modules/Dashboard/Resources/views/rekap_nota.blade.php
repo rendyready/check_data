@@ -86,6 +86,19 @@
                                   </div>
                               </div>
                           </div>
+                          <div class="col-md-5">
+                            <div class="row mb-3">
+                                <label class="col-sm-3 col-form-label" for="rekap_inv_penjualan_created_by">Status</label>
+                                <div class="col-sm-9">
+                                    <select id="filter_status" style="width: 100%;"
+                                    class="cari f-wrg js-select2 form-control filter_status" data-placeholder="Pilih Status Ditampilkan" name="r_t_created_by">
+                                    <option></option>
+                                    <option value="all">Tampilkan Semua</option>
+                                    <option value="ojol">Hanya Tampilkan Selisih Ojol</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
                       </div> 
 
                       <div id="user-info" data-waroeng-id="{{ Auth::user()->waroeng_id }}" data-has-access="{{ in_array(Auth::user()->waroeng_id, $data->akses_area) ? 'true' : 'false' }}"></div>
@@ -117,6 +130,7 @@
                   <th>Total Reguler</th>
                   <th>Metode</th>
                   <th>Jenis Payment</th>
+                  <th>Selisih Ojol</th>
                   <th></th>
                 </tr>
               </thead>
@@ -235,6 +249,7 @@ $(document).ready(function() {
         var waroeng  = $('.filter_waroeng').val();
         var tanggal  = $('.filter_tanggal').val();
         var operator = $('.filter_operator').val();
+        var status   = $('.filter_status').val();
     $('#tampil_rekap').DataTable({
         button: [],
         destroy: true,
@@ -256,6 +271,7 @@ $(document).ready(function() {
                 waroeng: waroeng,
                 tanggal: tanggal,
                 operator: operator,
+                status: status,
             },
             type : "GET",
             },

@@ -54,8 +54,8 @@
                                     <option></option>
                                 </select>
                                 </div>
-                            </div>
-                        </div>
+                              </div>
+                          </div>
                         </div>
 
                       <div id="user-info-pusat" data-waroeng-id="{{ Auth::user()->waroeng_id }}" data-has-access="{{ in_array(Auth::user()->waroeng_id, $data->suplay_pusat) ? 'true' : 'false' }}"></div>
@@ -66,6 +66,9 @@
                 </form>
               <div id="show_nota" class="row">       
           </div>
+    </div>
+</div>
+      </div>
     </div>
 </div>
 @endsection
@@ -80,7 +83,7 @@ $(document).ready(function() {
     }
 
     var userInfoPusat = document.getElementById('user-info-pusat');
-    var waroengId = userInfo.dataset.waroengId;
+    var waroengId = userInfoPusat.dataset.waroengId;
     var HakAksesPusat = userInfoPusat.dataset.hasAccess === 'true';
 
     $('#cari').click(function(){
@@ -207,10 +210,10 @@ $(document).ready(function() {
         }      
     });
 
-    $('#filter_tanggal').flatpickr({
-            mode: "range",
-            dateFormat: 'Y-m-d',   
-    });
+    // $('#filter_tanggal').flatpickr({
+    //         mode: "range",
+    //         dateFormat: 'Y-m-d',   
+    // });
 
     $('#filter_waroeng').change(function(){
         var id_waroeng = $(this).val();    
@@ -237,6 +240,11 @@ $(document).ready(function() {
         }else{
             $("#filter_pengadaan").empty();
         }      
+    });
+
+    $(".filter_tanggal").flatpickr({
+            mode: "range",
+            dateFormat: 'Y-m-d',   
     });
 
 });

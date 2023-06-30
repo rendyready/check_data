@@ -127,7 +127,7 @@ class RekapMenuHarianController extends Controller
                         $get->where('m_t_t_name', $request->trans);
                     }
                 
-            $get = $get->selectRaw('sum(r_t_detail_qty) as qty, r_t_detail_reguler_price, r_t_tanggal, r_t_detail_m_produk_nama, r_t_detail_m_produk_id, m_w_nama, m_jenis_produk_id, m_jenis_produk_nama, m_t_t_name, rekap_modal_sesi, r_t_detail_price')
+            $get = $get->selectRaw('sum(r_t_detail_qty) as qty, r_t_detail_reguler_price, r_t_tanggal, r_t_detail_m_produk_nama, r_t_detail_m_produk_id, m_w_nama, m_jenis_produk_id, m_jenis_produk_nama, m_t_t_name, rekap_modal_sesi, r_t_detail_price, sum(r_t_detail_nominal) as nominal_nota')
                     ->groupBy('r_t_tanggal', 'r_t_detail_m_produk_nama', 'r_t_detail_m_produk_id', 'm_w_nama', 'r_t_detail_reguler_price', 'm_jenis_produk_nama', 'm_jenis_produk_id', 'm_t_t_name', 'rekap_modal_sesi', 'r_t_detail_price')
                     ->orderby('m_jenis_produk_id', 'ASC')
                     ->orderby('r_t_detail_m_produk_nama', 'ASC')
@@ -159,6 +159,12 @@ class RekapMenuHarianController extends Controller
                 }
                 $row[] = number_format($nominal_trans);
                 $row[] = number_format($nominal - $nominal_trans);
+                $row[] = number_format($val_menu->nominal_nota);
+                $nominal_trans2 = $nominal - $val_menu->nominal_nota;
+                if ($val_menu->m_t_t_name != 'dine in' && $val_menu->m_t_t_name != 'take away'){
+                    $nominal_trans2 = 0;
+                }
+                $row[] = number_format($nominal_trans2);
                 $data[] = $row;
             }
 
