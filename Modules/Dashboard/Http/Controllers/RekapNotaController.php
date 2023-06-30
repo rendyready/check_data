@@ -87,25 +87,27 @@ class RekapNotaController extends Controller
     {
         $payment = DB::table('rekap_payment_transaksi')
                 ->join('m_payment_method', 'm_payment_method_id', 'r_p_t_m_payment_method_id')
-                ->get();
-        $detail = DB::table('rekap_transaksi_detail')
-                ->join('rekap_transaksi', 'r_t_id', 'r_t_detail_r_t_id')
-                ->selectRaw('(SUM(r_t_detail_reguler_price * r_t_detail_qty)) as sum_detail, r_t_detail_r_t_id');
+                ->join('rekap_transaksi', 'r_t_id', 'r_p_t_r_t_id')
+                ->select('m_payment_method_type', 'm_payment_method_name', 'r_p_t_r_t_id');
                 if($request->operator != 'all'){
-                    $detail->where('r_t_created_by', $request->operator);
+                    $payment->where('r_t_created_by', $request->operator);
                 }
                 if (strpos($request->tanggal, 'to') !== false) {
                     [$start, $end] = explode('to' ,$request->tanggal);
-                    $detail->whereBetween('r_t_tanggal', [$start, $end]);
+                    $payment->whereBetween('r_t_tanggal', [$start, $end]);
                 } else {
-                    $detail->where('r_t_tanggal', $request->tanggal);
+                    $payment->where('r_t_tanggal', $request->tanggal);
                 }
-                $detail = $detail->groupby('r_t_detail_r_t_id')
-                ->get();
+                if($request->operator != 'all'){
+                    $payment->where('r_t_created_by', $request->operator);
+                }
+                $payment = $payment->get();
 
         $get = DB::table('rekap_transaksi')
+                ->join('rekap_transaksi_detail', 'r_t_detail_r_t_id', 'r_t_id')
                 ->join('users', 'users_id', 'r_t_created_by')
                 ->join('m_transaksi_tipe', 'm_t_t_id', 'r_t_m_t_t_id')
+                ->selectRaw('(SUM(r_t_detail_reguler_price * r_t_detail_qty)) as sum_detail, r_t_tanggal, r_t_jam, name, r_t_nota_code, r_t_bigboss, r_t_nominal_pajak, r_t_nominal, r_t_nominal_sc, r_t_nominal_diskon, r_t_nominal_voucher, r_t_nominal_tarik_tunai, r_t_nominal_pembulatan, r_t_nominal_free_kembalian, r_t_nominal_total_bayar, r_t_nominal_free_kembalian, r_t_nominal_pembulatan, r_t_nominal_selisih, r_t_id, m_t_t_group, r_t_status')
                 ->where('r_t_m_w_id', $request->waroeng);
                 if($request->operator != 'all'){
                     $get->where('r_t_created_by', $request->operator);
@@ -122,7 +124,8 @@ class RekapNotaController extends Controller
                 if($request->status != 'all'){
                     $get->whereNot('r_t_nominal_selisih', 0);
                 }
-                $get2 = $get->orderBy('r_t_tanggal', 'ASC')
+                $get2 = $get->groupby('r_t_tanggal', 'r_t_jam', 'name', 'r_t_nota_code', 'r_t_bigboss', 'r_t_nominal_pajak', 'r_t_nominal', 'r_t_nominal_sc', 'r_t_nominal_diskon', 'r_t_nominal_voucher', 'r_t_nominal_tarik_tunai', 'r_t_nominal_pembulatan', 'r_t_nominal_free_kembalian', 'r_t_nominal_total_bayar', 'r_t_nominal_free_kembalian', 'r_t_nominal_pembulatan', 'r_t_nominal_selisih', 'r_t_id', 'm_t_t_group', 'r_t_status')
+                ->orderBy('r_t_tanggal', 'ASC')
                 ->orderBy('r_t_nota_code', 'ASC')
                 ->get();
 
@@ -143,22 +146,18 @@ class RekapNotaController extends Controller
                 $row[] = number_format($value->r_t_nominal_pembulatan);
                 $row[] = number_format($value->r_t_nominal_free_kembalian);   
                 $row[] = number_format($value->r_t_nominal_total_bayar - $value->r_t_nominal_free_kembalian - $value->r_t_nominal_pembulatan);
-                foreach ($detail as $key => $valDetail) {
-                    if($value->r_t_id == $valDetail->r_t_detail_r_t_id){
-                        $row[] = number_format($valDetail->sum_detail);
-                    }
-                }
+                $row[] = number_format($value->sum_detail);
                 if($value->r_t_status == "unpaid"){
                     $row[] = 'Lostbill';
                     $row[] = 'Lostbill';
                 } else {
-                foreach ($payment as $key => $valpay) {
-                    if($valpay->r_p_t_r_t_id == $value->r_t_id){
-                        $row[] = ($value->m_t_t_group == 'ojol') ? $value->m_t_t_group : $valpay->m_payment_method_type;
-                        $row[] = $valpay->m_payment_method_name;
+                    foreach ($payment as $key => $valpay) {
+                        if($valpay->r_p_t_r_t_id == $value->r_t_id){
+                            $row[] = ($value->m_t_t_group == 'ojol') ? $value->m_t_t_group : $valpay->m_payment_method_type;
+                            $row[] = $valpay->m_payment_method_name;
+                        }
                     }
                 }
-            }
                 $row[] = number_format($value->r_t_nominal_selisih);   
                 $row[] ='<a id="button_detail" class="btn btn-sm button_detail btn-info" value="'.$value->r_t_id.'" title="Detail Nota"><i class="fa-sharp fa-solid fa-file"></i></a>';
                 $data[] = $row;
