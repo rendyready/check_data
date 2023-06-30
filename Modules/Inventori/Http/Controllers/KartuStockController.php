@@ -126,46 +126,96 @@ class KartuStockController extends Controller
             ->where('m_stok_detail_gudang_code', $request->gudang)
             ->orderby('m_stok_detail_created_at', 'ASC')
             ->get();
-            
+
+        $previous_day = date('Y-m-d', strtotime('-1 day', strtotime($request->tanggal))); 
+        
+        $stok_sebelumnya = DB::table('m_stok_detail')
+            ->join('m_gudang', 'm_gudang_code', 'm_stok_detail_gudang_code')
+            ->join('m_w', 'm_w_id', 'm_gudang_m_w_id')
+            ->join('m_area', 'm_area_id', 'm_w_m_area_id')
+            ->where('m_stok_detail_m_produk_code', $request->bb);
+            if (strpos($request->tanggal, 'to') !== false) {
+                [$start, $end] = explode('to',  $request->tanggal);
+                $previous_start = date('Y-m-d', strtotime('-1 day', strtotime($start)));
+                $previous_end = date('Y-m-d', strtotime('-1 day', strtotime($end)));
+                $stok_sebelumnya->whereBetween('m_stok_detail_tgl', [$previous_start, $previous_end]);
+            } else {
+                $stok_sebelumnya->where('m_stok_detail_tgl',  $previous_day);
+            }     
+            $stok_sebelumnya = $stok_sebelumnya->where('m_area_id', $request->area)
+            ->where('m_gudang_m_w_id', $request->waroeng)
+            ->where('m_stok_detail_gudang_code', $request->gudang)
+            ->orderby('m_stok_detail_created_at', 'ASC')
+            ->get();
+            // return $previous_start;
         $i = 0;    
+        $ii = 0;
         $a = 0;
+        $awal1 = 0;
+        $awal2 = 0;
         $stokkeluar = 0;   
         $data = array();
         foreach ($stok as $value) {
-            $row = array();
-            $row[] = date('d-m-Y', strtotime($value->m_stok_detail_tgl));
-            $row[] = $value->m_stok_detail_m_produk_nama;
-            if (is_null($stok_awal) && $a == 0) {
-                $stokawal = $master_stok->m_stok_awal;
-                $a = 1;
-            } elseif ($stok_awal->m_stok_detail_so != null) {
-                $stokawal = $master_stok->m_stok_awal + $stok_awal->m_stok_detail_so; //$stok_awal->m_stok_detail_so ditanggal sebelumnya
-            }  elseif ($stok_awal->m_stok_detail_so == null) {
-                $stokawal = $master_stok->m_stok_awal + $stokkeluar; //$stokkeluar ditanggal sebelumnya
+                
+                $row = array();
+                $row[] = date('d-m-Y', strtotime($value->m_stok_detail_tgl));
+                $row[] = $value->m_stok_detail_m_produk_nama;
+                
+            foreach ($stok_sebelumnya as $valPast){
+                $cek_null = $valPast->m_stok_detail_so ?? 0;
+                if (is_null($stok_awal) && $a == 0) {
+                    $stokawal = $master_stok->m_stok_awal;
+                    $a = 1;
+                } elseif ($cek_null != 0 || $valPast->m_stok_detail_so != null) {
+                    // if ($awal1 == 0 || $cek_null != 0){
+                        // $cek_null = $valPast->m_stok_detail_so ?? 0;
+                    //     $stokawal = $master_stok->m_stok_awal + $cek_null; 
+                    //     $awal1 = 1;
+                    // } elseif ($awal1 == 1) {
+                        $stokawal = $cek_null; 
+                    //     return $stokawal;
+                    // }
+                }  elseif ($cek_null == 0 || $valPast->m_stok_detail_so == null) {
+
+                    if($ii == 0){
+                        $stokakhir = $stokawal + $valPast->m_stok_detail_masuk - $valPast->m_stok_detail_keluar;
+                        $row[] = $stokakhir;
+                        $ii = 1;
+                    } else {
+                        $row[] = $stokakhir + $valPast->m_stok_detail_masuk - $valPast->m_stok_detail_keluar;
+                        $stokakhir = $stokakhir + $valPast->m_stok_detail_masuk - $valPast->m_stok_detail_keluar;
+                    }
+
+                    // if ($awal2 == 0){
+                    //     $stokawal = $master_stok->m_stok_awal + $stokakhir; 
+                    // $awal2 = 1;
+                    // } else {
+                    //     $stokawal = $stokakhir; 
+                    // }
+                    
+                }
             }
-            // } elseif (is_null($value->m_stok_detail_so) && is_null($previousSoDate) || $previousSoDate != date('Y-m-d', strtotime($value->m_stok_detail_tgl))) {
-            //     $stokawal = $stokkeluar;
-            //     $previousSoDate = date('Y-m-d', strtotime('-1 day', strtotime($value->m_stok_detail_tgl)));
-            // } elseif (!is_null($value->m_stok_detail_so) && is_null($previousSoDate) || $previousSoDate != date('Y-m-d', strtotime($value->m_stok_detail_tgl))) {
-            //     $stokawal = $value->m_stok_detail_so;
-            //     $previousSoDate = date('Y-m-d', strtotime('-1 day', strtotime($value->m_stok_detail_tgl)));
-            // }
+
             $row[] = $stokawal;
             $row[] = $value->m_stok_detail_masuk ?? 0;
             $row[] = $value->m_stok_detail_keluar ?? 0;
-            if($i == 0){
+            // if($i == 0){ //kurang jumlah tanggal yang diselect
                 $stokkeluar = $stokawal + $value->m_stok_detail_masuk - $value->m_stok_detail_keluar;
                 $row[] = $stokkeluar;
-                $i = 1;
-            } else {
-                $row[] = $stokkeluar + $value->m_stok_detail_masuk - $value->m_stok_detail_keluar;
-                $stokkeluar = $stokkeluar + $value->m_stok_detail_masuk - $value->m_stok_detail_keluar;
-            }
+            //     $i = 1;
+            //     // return $stokkeluar;
+            // } else {
+            //     $row[] = $stokkeluar + $value->m_stok_detail_masuk - $value->m_stok_detail_keluar;
+            //     $stokkeluar = $stokkeluar + $value->m_stok_detail_masuk - $value->m_stok_detail_keluar;
+            //      return $stokkeluar;
+            // }
             $row[] = $value->m_stok_detail_so ?? 0;
             $row[] = $value->m_stok_detail_satuan;
             $row[] = rupiah($value->m_stok_detail_hpp, 0);
             $row[] = $value->m_stok_detail_catatan;
             $data[] = $row;
+
+            
         }
         $output = array("data" => $data);
         return response()->json($output);

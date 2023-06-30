@@ -116,11 +116,13 @@
                             <th class="text-center">Waroeng</th>
                             <th class="text-center">Nama Menu</th>
                             <th class="text-center">Qty</th>
-                            <th class="text-center">Nominal Reguler</th>
+                            <th class="text-center">Nominal Reguler (R)</th>
                             <th class="text-center">Transaksi</th>
                             <th class="text-center">Kategori Menu</th>
-                            <th class="text-center">Nominal Nota</th>
-                            <th class="text-center">Selisih</th>
+                            <th class="text-center">Nominal Trans * Qty  (A)</th>
+                            <th class="text-center">Selisih (R - A)</th>
+                            <th class="text-center">Nominal Trans (B)</th>
+                            <th class="text-center">Selisih (R - B)</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -174,6 +176,12 @@ $(document).ready(function() {
                 pageOrientation: 'potrait',
             }
         ],
+        columnDefs: [ 
+                    {
+                        targets: '_all',
+                        className: 'dt-body-center'
+                    },
+                ],
         lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
         pageLength: 10,
         ajax: {

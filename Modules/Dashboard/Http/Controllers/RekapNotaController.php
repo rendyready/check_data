@@ -32,6 +32,7 @@ class RekapNotaController extends Controller
             ->get();
         $data->transaksi_rekap = DB::table('rekap_transaksi')
             ->select('r_t_id')
+            ->where('r_t_m_w_id', $waroeng_id)
             ->get();
         return view('dashboard::rekap_nota', compact('data'));
     }
@@ -109,6 +110,12 @@ class RekapNotaController extends Controller
                 } else {
                     $get->where('r_t_tanggal', $request->tanggal);
                 }
+                if($request->operator != 'all'){
+                    $get->where('r_t_created_by', $request->operator);
+                }
+                if($request->status != 'all'){
+                    $get->whereNot('r_t_nominal_selisih', 0);
+                }
                 $get2 = $get->orderBy('r_t_tanggal', 'ASC')
                 ->orderBy('r_t_nota_code', 'ASC')
                 ->get();
@@ -146,6 +153,7 @@ class RekapNotaController extends Controller
                     }
                 }
             }
+                $row[] = number_format($value->r_t_nominal_selisih);   
                 $row[] ='<a id="button_detail" class="btn btn-sm button_detail btn-info" value="'.$value->r_t_id.'" title="Detail Nota"><i class="fa-sharp fa-solid fa-file"></i></a>';
                 $data[] = $row;
             }
