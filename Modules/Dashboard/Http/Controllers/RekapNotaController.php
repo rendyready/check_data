@@ -10,7 +10,7 @@ use Illuminate\Contracts\Support\Renderable;
 
 class RekapNotaController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $waroeng_id = Auth::user()->waroeng_id;
         $data = new \stdClass();
@@ -30,10 +30,16 @@ class RekapNotaController extends Controller
         $data->user = DB::table('users')
             ->orderby('id', 'ASC')
             ->get();
-        $data->transaksi_rekap = DB::table('rekap_transaksi')
+        $transaksi_rekap = DB::table('rekap_transaksi')
             ->select('r_t_id')
-            ->where('r_t_m_w_id', $waroeng_id)
-            ->get();
+            ->where('r_t_m_w_id', $request->waroeng);
+            if (strpos($request->tanggal, 'to') !== false) {
+                [$start, $end] = explode('to' ,$request->tanggal);
+                $transaksi_rekap->whereBetween('r_t_tanggal', [$start, $end]);
+            } else {
+                $transaksi_rekap->where('r_t_tanggal', $request->tanggal);
+            }
+            $data->transaksi_rekap = $transaksi_rekap->get();
         return view('dashboard::rekap_nota', compact('data'));
     }
 
