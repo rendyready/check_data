@@ -219,20 +219,30 @@ class GetDataUpdate extends Command
                             }
                         }
                     }
-                    try {
-                        $validationField = [];
-                        for ($i=1; $i <= 4; $i++) {
-                            $validate = "config_get_data_field_validate{$i}";
-                            $validateField = $valTab->$validate;
-                            if (!empty($validateField)) {
-                                $validationField[$validateField] = $valDataSource->$validateField;
-                            }
+                    $validationField = [];
+                    for ($i=1; $i <= 4; $i++) {
+                        $validate = "config_get_data_field_validate{$i}";
+                        $validateField = $valTab->$validate;
+                        if (!empty($validateField)) {
+                            $validationField[$validateField] = $valDataSource->$validateField;
                         }
-                        $save = $DbDest->table($valTab->config_get_data_table_name)
-                            ->updateOrInsert(
-                                $validationField,
-                                $data
-                            );
+                    }
+
+                    try {
+                        // $save = $DbDest->table($valTab->config_get_data_table_name)
+                        //     ->updateOrInsert(
+                        //         $validationField,
+                        //         $data
+                        //     );
+                        $cekReady = $DbDest->table($valTab->config_get_data_table_name)
+                        ->where($validationField)->count();
+
+                        $save = $DbDest->table($valTab->config_get_data_table_name);
+                        if ($cekReady == 0) {
+                            $save->insert($data);
+                        }else{
+                            $save->where($validationField)->update($data);
+                        }
 
                         if ($save) {
                             $replace = [];
@@ -243,7 +253,6 @@ class GetDataUpdate extends Command
                                 $replace
                             );
                         }
-
                     } catch (\Throwable $th) {
                         Log::alert("Can't insert/update to {$valTab->config_get_data_table_name}");
                         Log::info($th);
