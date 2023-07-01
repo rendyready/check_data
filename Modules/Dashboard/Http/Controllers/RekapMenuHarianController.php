@@ -29,10 +29,7 @@ class RekapMenuHarianController extends Controller
         $data->user = DB::table('users')
             ->orderby('id', 'ASC')
             ->get();
-        $data->tanggal = DB::table('rekap_transaksi')
-            ->select('r_t_tanggal')
-            ->orderBy('r_t_tanggal', 'asc')
-            ->get();
+
         return view('dashboard::rekap_menu_harian', compact('data'));
     }
 

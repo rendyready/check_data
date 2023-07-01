@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 class RekapNotaController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $waroeng_id = Auth::user()->waroeng_id;
         $data = new \stdClass();
@@ -29,10 +29,7 @@ class RekapNotaController extends Controller
         $data->user = DB::table('users')
             ->orderby('id', 'ASC')
             ->get();
-        $data->transaksi = DB::table('rekap_transaksi')
-            ->select('r_t_id')
-        // ->where('r_t_id', $id)
-            ->get();
+
         return view('dashboard::rekap_nota', compact('data'));
     }
 
