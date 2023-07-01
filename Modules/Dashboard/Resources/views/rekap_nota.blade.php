@@ -185,13 +185,7 @@
                             </div>
                             <div class="block-content mb-4" style="background-color: rgba(224, 224, 224, 0.5)">
                                 <table class="table table-border" style="font-size: 13px;">
-                                    @foreach ($data->transaksi as $rekap)
-                                        @php
-                                            $rekapId = str_replace('.', '', $rekap->r_t_id);
-                                        @endphp
-                                        <thead class="sub_nota" id="sub_nota{{ $rekapId }}">
-                                        </thead>
-                                    @endforeach
+                                    <thead id="sub_nota"></thead>
                                     <tbody>
                                         <tr style="background-color: white;" class="text-end fw-semibold">
                                             <td>Total</td>
@@ -437,7 +431,7 @@ $(document).ready(function() {
                     $.each(data.detail_nota, function (key, item) {
                       var rekap_id = item.r_t_detail_r_t_id.toString().replace(/\./g,'');
                         console.log(item.r_t_detail_m_produk_nama);
-                        $('#sub_nota'+rekap_id).append(
+                        $('#sub_nota').append(
                                 '<tr class="sub_sub_nota" style="background-color: white;">'+
                                   '<td>'+
                                     '<small class="fw-semibold" style="font-size: 15px;" id="produk">'+ item.r_t_detail_m_produk_nama +'</small> <br>'+
