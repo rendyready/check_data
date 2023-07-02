@@ -102,7 +102,6 @@
                                                                     <span class="css-control-indicator"></span>
                                                                     <b>Tandai Semua</b>
                                                                 </label>
-
                                                                 @foreach ($data->waroeng as $key => $val)
                                                             <li class="area{{ $val->m_area_id }}">
                                                                 <label class="css-control css-control-danger css-checkbox"
@@ -110,10 +109,10 @@
                                                                     data-target=".area{{ $val->m_area_id }}">
                                                                     <input type="checkbox"
                                                                         class="css-control-input parentCheckBox pilihSemua"
-                                                                        title="check all"
-                                                                        value="area{{ $val->m_area_id }}">
+                                                                        title="check all" value="area{{ $val->m_area_id }}">
                                                                     <span class="css-control-indicator"></span>
-                                                                    <b class="text-danger">{{ ucwords($val->m_area_nama) }}</b>
+                                                                    <b
+                                                                        class="text-danger">{{ ucwords($val->m_area_nama) }}</b>
                                                                 </label>
                                                                 <ul>
                                                                     @foreach ($val->m_ws as $key2 => $val2)
@@ -166,22 +165,6 @@
                                 </tr>
                             </thead>
                             <tbody id="tablecontents">
-                                @php
-                                    $no = 1;
-                                @endphp
-                                @foreach ($data->users as $item)
-                                    <tr>
-                                        <td>{{ $no++ }}</td>
-                                        <td>{{ $item->username }}</td>
-                                        <td>{{ $item->email }}</td>
-                                        <td>{{ $item->m_w_nama }}</td>
-                                        <td>{{ $item->rolename }}</td>
-                                        <td><a id="buttonEdit" class="btn btn-sm btn-warning buttonEdit"
-                                                value="{{ $item->users_id }}"><i class="fa fa-pencil"></i></a>
-                                            <a class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>
-                                        </td>
-                                    </tr>
-                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -207,12 +190,20 @@
                 dropdownPosition: 'below',
                 tags: true,
             });
-            var t = $('#user').DataTable({
-                processing: false,
-                serverSide: false,
-                destroy: true,
-                pageLength: 10,
-                order: [0, 'asc']
+            $('#user').DataTable({
+                "destroy": true,
+                "orderCellsTop": true,
+                "processing": true,
+                "autoWidth": true,
+                "lengthMenu": [
+                    [10, 25, 50, 100, -1],
+                    [10, 25, 50, 100, "All"]
+                ],
+                "pageLength": 10,
+                "ajax": {
+                    "url": "{{route('users.list')}}",
+                    "type": "GET"
+                }
             });
             $("#user").append(
                 $('<tfoot/>').append($("#user thead tr").clone())
@@ -237,8 +228,8 @@
                     type: "GET",
                     dataType: 'json',
                     success: function(respond) {
-                        $("#id").val(respond.id).trigger('change');
-                        $("#name").val(respond.name).trigger('change');
+                        $("#id").val(respond.users_id).trigger('change');
+                        $("#name").val(respond.username).trigger('change');
                         $("#email").val(respond.email).trigger('change');
                         $("#roles").val(respond.roles).trigger('change');
                         $("#waroeng_id").val(respond.waroeng_id).trigger('change');
@@ -246,7 +237,6 @@
                             .map(function(item) {
                                 return parseInt(item);
                             });
-                        console.log(waroeng_akses);
                         waroeng_akses.forEach(function(value) {
                             var checkbox = document.querySelector('input[value="' +
                                 value + '"]');
@@ -323,16 +313,13 @@
 
             $('.parentCheckBox').click(function() {
                 var par = $(this).val();
-
                 if (par != 'all') {
                     $(this).parents('li[class="' + par + '"]').find('input[type=checkbox]').prop('checked',
                         this.checked);
                 } else {
                     $('.multi-column').find('input[type=checkbox]').prop('checked', this.checked);
                 }
-
             });
-
         });
     </script>
 @endsection

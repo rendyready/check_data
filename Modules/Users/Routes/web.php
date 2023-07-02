@@ -13,6 +13,7 @@
 //Users Route
 Route::group(['prefix' => 'users', 'controller' => UsersController::class, 'middleware' => ['auth', 'web']], function () {
     Route::get('/', 'index')->name('users.index');
+    Route::get('/users_list','list_users')->name('users.list');
     Route::get('/edit/{id}', 'edit')->name('users.edit');
     Route::post('users/action', 'action')->name('users.action');
     Route::post('/reset/{id}', 'reset_pass')->name('password.reset');
