@@ -6,15 +6,15 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Sipedas V4</title>
 
-    <meta name="description" content="Sipedas V4 &amp; UI Framework created by pixelcave and published on Themeforest">
-    <meta name="author" content="pixelcave">
+    <meta name="description" content="Sipedas V4 &amp; Made With Love By IT @WaroengSS">
+    <meta name="author" content="IT WaroengSS">
     <meta name="robots" content="noindex, nofollow">
 
     <!-- Open Graph Meta -->
-    <meta property="og:title" content="Sipedas V4 &amp; UI Framework">
-    <meta property="og:site_name" content="Codebase">
+    <meta property="og:title" content="Sipedas V4 &amp;">
+    <meta property="og:site_name" content="WaroengSS">
     <meta property="og:description"
-        content="Sipedas V4 &amp; UI Framework created by pixelcave and published on Themeforest">
+        content="Sipedas V4 &amp; Made With Love By IT @WaroengSS">
     <meta property="og:type" content="website">
     <meta property="og:url" content="">
     <meta property="og:image" content="">

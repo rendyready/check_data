@@ -195,15 +195,19 @@ class MJenisNotaController extends Controller
                             })
                             ->update($data);
                     } else {
-                        $data['m_menu_harga_id'] = $this->getMasterId('m_menu_harga');
-                        $data['m_menu_harga_m_jenis_nota_id'] = $nota->m_jenis_nota_id;
-                        $data['m_menu_harga_m_produk_id'] = $request->m_produk_id;
-                        $data['m_menu_harga_status'] = 1;
-                        $data['m_menu_harga_tax_status'] = 1;
-                        $data['m_menu_harga_created_by'] = $user->users_id;
-                        $data['m_menu_harga_created_at'] = Carbon::now();
-                        $data['m_menu_harga_client_target'] = DB::raw('DEFAULT');
-                        DB::table('m_menu_harga')->insert($data);
+                        if ($request->action == 'status_menu') {
+                            return response()->json(['type' => 'danger', 'messages' => 'Menu Belum Ditambahkan ke Nota']);
+                        } else {
+                            $data['m_menu_harga_id'] = $this->getMasterId('m_menu_harga');
+                            $data['m_menu_harga_m_jenis_nota_id'] = $nota->m_jenis_nota_id;
+                            $data['m_menu_harga_m_produk_id'] = $request->m_produk_id;
+                            $data['m_menu_harga_status'] = 1;
+                            $data['m_menu_harga_tax_status'] = 1;
+                            $data['m_menu_harga_created_by'] = $user->users_id;
+                            $data['m_menu_harga_created_at'] = Carbon::now();
+                            $data['m_menu_harga_client_target'] = DB::raw('DEFAULT');
+                            DB::table('m_menu_harga')->insert($data);
+                        }
                     }
                 }
             }
@@ -223,7 +227,7 @@ class MJenisNotaController extends Controller
                 ->where('m_menu_harga_id', $id)->orderBy('m_menu_harga_m_produk_id', 'asc')
                 ->select('m_jenis_nota_id', 'm_jenis_nota_m_t_t_id', 'm_jenis_nota_m_w_id',
                     'm_menu_harga_id', 'm_menu_harga_m_produk_id', 'm_menu_harga_nominal', 'm_menu_harga_sc_status',
-                    'm_menu_harga_status', 'm_menu_harga_tax_status','m_menu_harga_m_jenis_nota_id')
+                    'm_menu_harga_status', 'm_menu_harga_tax_status', 'm_menu_harga_m_jenis_nota_id')
                 ->first(), 200);
     }
 
@@ -263,7 +267,7 @@ class MJenisNotaController extends Controller
     {
         $get_nota = DB::table('m_jenis_nota')
             ->whereIn('m_jenis_nota_m_t_t_id', $request->m_jenis_nota_m_t_t_id == 1 ? [1, 2] : [$request->m_jenis_nota_m_t_t_id])
-            ->where('m_jenis_nota_m_w_id',$request->m_jenis_nota_m_w_id)
+            ->where('m_jenis_nota_m_w_id', $request->m_jenis_nota_m_w_id)
             ->get();
 
         foreach ($get_nota as $key) {
