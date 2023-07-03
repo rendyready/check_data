@@ -1,117 +1,136 @@
 @extends('layouts.app')
 @section('content')
-<div class="content">
-    <div class="row items-push">
-      <div class="col-md-12 col-xl-12">
-        <div class="block block-themed h-100 mb-0">
-          <div class="block-header bg-pulse">
-            <h3 class="block-title">
-              Detail Nota Penjualan
-            </h3>
-              </div>
-                <div class="block-content text-muted">
-                    <form id="rekap_insert">
-                      <div class="row">
-                        <div class="col-md-5">
-                            <div class="row mb-1">
-                                <label class="col-sm-3 col-form-label" >Tanggal</label>
-                                <div class="col-sm-9">
-                                    <input name="r_t_tanggal" class="cari form-control form-control filter_tanggal" type="text" placeholder="Pilih Tanggal.." id="filter_tanggal" readonly/>
+    <div class="content">
+        <div class="row items-push">
+            <div class="col-md-12 col-xl-12">
+                <div class="block block-themed h-100 mb-0">
+                    <div class="block-header bg-pulse">
+                        <h3 class="block-title">
+                            Detail Nota Penjualan
+                        </h3>
+                    </div>
+                    <div class="block-content text-muted">
+                        <form id="rekap_insert">
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <div class="row mb-1">
+                                        <label class="col-sm-3 col-form-label">Tanggal</label>
+                                        <div class="col-sm-9">
+                                            <input name="r_t_tanggal" class="cari form-control form-control filter_tanggal"
+                                                type="text" placeholder="Pilih Tanggal.." id="filter_tanggal" readonly />
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <div class="row mb-2">
+                                        <label class="col-sm-3 col-form-label">Area</label>
+                                        <div class="col-sm-9">
+                                            @if (in_array(Auth::user()->waroeng_id, $data->akses_pusat))
+                                                <select id="filter_area2" data-placeholder="Pilih Area" style="width: 100%;"
+                                                    class="cari f-area js-select2 form-control filter_area"
+                                                    name="m_w_m_area_id">
+                                                    <option></option>
+                                                    @foreach ($data->area as $area)
+                                                        <option value="{{ $area->m_area_id }}"> {{ $area->m_area_nama }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            @else
+                                                <select id="filter_area" data-placeholder="Pilih Area" style="width: 100%;"
+                                                    class="cari f-area js-select2 form-control filter_area"
+                                                    name="m_w_m_area_id" disabled>
+                                                    <option value="{{ ucwords($data->area_nama->m_area_id) }}">
+                                                        {{ ucwords($data->area_nama->m_area_nama) }}</option>
+                                                </select>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-5">
+                                    <div class="row mb-2">
+                                        <label class="col-sm-3 col-form-label">Waroeng</label>
+                                        <div class="col-sm-9">
+                                            @if (in_array(Auth::user()->waroeng_id, $data->akses_pusat))
+                                                <select id="filter_waroeng1" style="width: 100%;"
+                                                    class="cari f-wrg js-select2 form-control filter_waroeng"
+                                                    data-placeholder="Pilih Waroeng" name="m_w_id">
+                                                    <option></option>
+                                                </select>
+                                            @elseif (in_array(Auth::user()->waroeng_id, $data->akses_pusar))
+                                                <select id="filter_waroeng3" style="width: 100%;"
+                                                    data-placeholder="Pilih Waroeng"
+                                                    class="cari f-area js-select2 form-control filter_waroeng"
+                                                    name="waroeng">
+                                                    <option></option>
+                                                    @foreach ($data->waroeng as $waroeng)
+                                                        <option value="{{ $waroeng->m_w_id }}"> {{ $waroeng->m_w_nama }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            @else
+                                                <select id="filter_waroeng2" style="width: 100%;"
+                                                    class="cari f-area js-select2 form-control filter_waroeng"
+                                                    name="waroeng" disabled>
+                                                    <option value="{{ ucwords($data->waroeng_nama->m_w_id) }}">
+                                                        {{ ucwords($data->waroeng_nama->m_w_nama) }}</option>
+                                                </select>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <div class="row mb-3">
+                                        <label class="col-sm-3 col-form-label"
+                                            for="rekap_inv_penjualan_created_by">Operator</label>
+                                        <div class="col-sm-9">
+                                            <select id="filter_operator" style="width: 100%;"
+                                                class="cari f-wrg js-select2 form-control filter_operator"
+                                                data-placeholder="Pilih Operator" name="r_t_created_by">
+                                                <option></option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="row mb-3">
+                                        <label class="col-sm-3 col-form-label" for="status">Status</label>
+                                        <div class="col-sm-9">
+                                            <select id="filter_status" style="width: 100%;"
+                                                class="cari f-wrg2 js-select2 form-control filter_status"
+                                                data-placeholder="Pilih Status Pembayaran" name="r_t_created_by">
+                                                <option></option>
+                                                <option value="paid">Terbayar</option>
+                                                <option value="unpaid">Tidak Terbayar</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="user-info" data-waroeng-id="{{ Auth::user()->waroeng_id }}"
+                                data-has-access="{{ in_array(Auth::user()->waroeng_id, $data->akses_area) ? 'true' : 'false' }}">
+                            </div>
+                            <div id="user-info-pusat" data-waroeng-id="{{ Auth::user()->waroeng_id }}"
+                                data-has-access="{{ in_array(Auth::user()->waroeng_id, $data->akses_pusat) ? 'true' : 'false' }}">
+                            </div>
+
+                            <div class="col-sm-8">
+                                <button type="button" id="cari"
+                                    class="btn btn-primary btn-sm col-1 mt-2 mb-5">Cari</button>
+                            </div>
+                        </form>
+                        <div id="show_nota" class="row">
                         </div>
                     </div>
-                      <div class="row">
-                            <div class="col-md-5">
-                                <div class="row mb-2">
-                                    <label class="col-sm-3 col-form-label">Area</label>
-                                    <div class="col-sm-9">
-                                      @if (in_array(Auth::user()->waroeng_id, $data->akses_pusat))
-                                            <select id="filter_area2" data-placeholder="Pilih Area" style="width: 100%;"
-                                            class="cari f-area js-select2 form-control filter_area" name="m_w_m_area_id">
-                                            <option></option>
-                                            @foreach ($data->area as $area)
-                                                <option value="{{ $area->m_area_id }}"> {{ $area->m_area_nama }} </option>
-                                            @endforeach
-                                            </select>
-                                        @else
-                                            <select id="filter_area" data-placeholder="Pilih Area" style="width: 100%;"
-                                            class="cari f-area js-select2 form-control filter_area" name="m_w_m_area_id" disabled>
-                                            <option value="{{ ucwords($data->area_nama->m_area_id) }}">{{ ucwords($data->area_nama->m_area_nama) }}</option>
-                                            </select>
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-5">
-                                <div class="row mb-2">
-                                    <label class="col-sm-3 col-form-label">Waroeng</label>
-                                    <div class="col-sm-9">
-                                      @if (in_array(Auth::user()->waroeng_id, $data->akses_pusat))
-                                        <select id="filter_waroeng1" style="width: 100%;"
-                                        class="cari f-wrg js-select2 form-control filter_waroeng" data-placeholder="Pilih Waroeng" name="m_w_id">
-                                        <option></option>
-                                        </select>
-                                      @elseif (in_array(Auth::user()->waroeng_id, $data->akses_pusar))
-                                          <select id="filter_waroeng3" style="width: 100%;" data-placeholder="Pilih Waroeng"
-                                          class="cari f-area js-select2 form-control filter_waroeng" name="waroeng">
-                                          <option></option>
-                                            @foreach ($data->waroeng as $waroeng)
-                                                <option value="{{ $waroeng->m_w_id }}"> {{ $waroeng->m_w_nama }} </option>
-                                            @endforeach
-                                          </select>
-                                      @else
-                                          <select id="filter_waroeng2" style="width: 100%;"
-                                          class="cari f-area js-select2 form-control filter_waroeng" name="waroeng" disabled>
-                                          <option value="{{ ucwords($data->waroeng_nama->m_w_id) }}">{{ ucwords($data->waroeng_nama->m_w_nama) }}</option>
-                                          </select>
-                                      @endif
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-5">
-                                <div class="row mb-3">
-                                    <label class="col-sm-3 col-form-label" for="rekap_inv_penjualan_created_by">Operator</label>
-                                    <div class="col-sm-9">
-                                        <select id="filter_operator" style="width: 100%;"
-                                        class="cari f-wrg js-select2 form-control filter_operator" data-placeholder="Pilih Operator" name="r_t_created_by">
-                                        <option></option>
-                                    </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-5">
-                              <div class="row mb-3">
-                                  <label class="col-sm-3 col-form-label" for="status">Status</label>
-                                  <div class="col-sm-9">
-                                      <select id="filter_status" style="width: 100%;"
-                                      class="cari f-wrg2 js-select2 form-control filter_status" data-placeholder="Pilih Status Pembayaran" name="r_t_created_by">
-                                      <option></option>
-                                      <option value="paid">Terbayar</option>
-                                      <option value="unpaid">Tidak Terbayar</option>
-                                  </select>
-                                  </div>
-                              </div>
-                          </div>
-                        </div> 
-
-                        <div id="user-info" data-waroeng-id="{{ Auth::user()->waroeng_id }}" data-has-access="{{ in_array(Auth::user()->waroeng_id, $data->akses_area) ? 'true' : 'false' }}"></div>
-                      <div id="user-info-pusat" data-waroeng-id="{{ Auth::user()->waroeng_id }}" data-has-access="{{ in_array(Auth::user()->waroeng_id, $data->akses_pusat) ? 'true' : 'false' }}"></div>
-
-                        <div class="col-sm-8">
-                            <button type="button" id="cari" class="btn btn-primary btn-sm col-1 mt-2 mb-5">Cari</button>
-                    </div>
-                </form>
-              <div id="show_nota" class="row">       
-          </div>
-    </div>
-</div>
-@endsection
-@section('js')
-    <!-- js -->
-    <script type="module">
+                </div>
+            @endsection
+            @section('js')
+                <!-- js -->
+                <script type="module">
 $(document).ready(function() {
     Codebase.helpersOnLoad(['jq-select2']);
 
@@ -161,7 +180,7 @@ $(document).ready(function() {
                           '<div class="block-content mb-4" style="background-color: rgba(224, 224, 224, 0.5)">'+
                             '<table class="table table-border table-striped table-vcenter js-dataTable-full" style="font-size: 13px;">'+
                               '<thead id="sub_nota'+ id +'">'+
-                                '</thead>'+
+                                '</thead>'+ 
                               '<tbody>'+
                                 '<tr style="background-color: white;" class="text-end fw-semibold">'+
                                   '<td>Total</td>'+
@@ -225,7 +244,7 @@ $(document).ready(function() {
                         '</div>'+
                       '</div>');
                   });
-
+                 
                     $.each(data.detail_nota, function (key, item) {
                       var id = item.r_t_detail_r_t_id.toString().replace(/\./g,'');
                         // console.log(item.r_t_detail_r_t_id);
@@ -411,4 +430,4 @@ $(document).ready(function() {
 
 });
 </script>
-@endsection
+            @endsection

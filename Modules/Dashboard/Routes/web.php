@@ -1,14 +1,14 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\Dashboard\Http\Controllers\RefundController;
+use Modules\Dashboard\Http\Controllers\DetailNotaController;
 use Modules\Dashboard\Http\Controllers\GaransiController;
+use Modules\Dashboard\Http\Controllers\LaporanKasHarianKasirController;
 use Modules\Dashboard\Http\Controllers\LostBillController;
+use Modules\Dashboard\Http\Controllers\RefundController;
 use Modules\Dashboard\Http\Controllers\RekapMenuController;
 use Modules\Dashboard\Http\Controllers\RekapNotaController;
-use Modules\Dashboard\Http\Controllers\DetailNotaController;
 use Modules\Dashboard\Http\Controllers\RekapNotaHarianController;
-use Modules\Dashboard\Http\Controllers\LaporanKasHarianKasirController;
 use Modules\Dashboard\Http\Controllers\RekapNotaHarianKategoriController;
 
 // Dashboard Route
@@ -142,4 +142,4 @@ Route::prefix('dashboard')->middleware('auth', 'web')
             Route::get('non_menu/rekap_non_menu', 'rekap_non_menu')->name('non_menu.rekap_non_menu');
             Route::get('non_menu/export_excel', 'export_excel')->name('non_menu.export_excel');
         });
-});
+    });
