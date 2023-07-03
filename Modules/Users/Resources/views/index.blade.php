@@ -102,7 +102,6 @@
                                                                     <span class="css-control-indicator"></span>
                                                                     <b>Tandai Semua</b>
                                                                 </label>
-
                                                                 @foreach ($data->waroeng as $key => $val)
                                                             <li class="area{{ $val->m_area_id }}">
                                                                 <label class="css-control css-control-danger css-checkbox"
@@ -229,7 +228,7 @@
                     type: "GET",
                     dataType: 'json',
                     success: function(respond) {
-                        $("#id").val(respond.id).trigger('change');
+                        $("#id").val(respond.users_id).trigger('change');
                         $("#name").val(respond.username).trigger('change');
                         $("#email").val(respond.email).trigger('change');
                         $("#roles").val(respond.roles).trigger('change');
@@ -238,7 +237,6 @@
                             .map(function(item) {
                                 return parseInt(item);
                             });
-                        // console.log(waroeng_akses);
                         waroeng_akses.forEach(function(value) {
                             var checkbox = document.querySelector('input[value="' +
                                 value + '"]');
@@ -315,16 +313,13 @@
 
             $('.parentCheckBox').click(function() {
                 var par = $(this).val();
-
                 if (par != 'all') {
                     $(this).parents('li[class="' + par + '"]').find('input[type=checkbox]').prop('checked',
                         this.checked);
                 } else {
                     $('.multi-column').find('input[type=checkbox]').prop('checked', this.checked);
                 }
-
             });
-
         });
     </script>
 @endsection

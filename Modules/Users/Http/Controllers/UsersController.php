@@ -20,7 +20,7 @@ class UsersController extends Controller
      */
     public function index()
     {
-        $data = new \stdClass ();
+        $data = new \stdClass();
         $data->num = 1;
 
         $data->waroeng = MArea::with(['m_ws' => function ($query) {
@@ -37,13 +37,13 @@ class UsersController extends Controller
 
     public function list_users()
     {
-        $data = new \stdClass ();
+        $data = new \stdClass();
         $userRoles = DB::table('model_has_roles')
             ->rightJoin('users', 'users.users_id', 'model_id')
             ->leftJoin('roles', 'role_id', 'roles.id')
             ->leftJoin('m_w', 'waroeng_id', 'm_w_id')
             ->select('users.users_id as users_id', 'users.name as username', 'email', 'm_w_nama', 'roles.name as rolename')
-            ->orderBy('waroeng_id','asc')
+            ->orderBy('waroeng_id', 'asc')
             ->get();
 
         $userArray = [];
@@ -77,7 +77,7 @@ class UsersController extends Controller
             $row[] = $value['m_w_nama'];
             $row[] = implode(', ', $value['roles']);
             $row[] = '<a id="buttonEdit" class="btn btn-sm btn-warning buttonEdit"
-            value="'.$value['users_id'].'"><i class="fa fa-pencil"></i></a>';
+            value="' . $value['users_id'] . '"><i class="fa fa-pencil"></i></a>';
             $data2[] = $row;
         }
 
@@ -139,18 +139,10 @@ class UsersController extends Controller
             }
 
             DB::table('model_has_roles')->where('model_id', $request->id)->delete();
-            DB::table('users')->where('id', $request->id)
-                ->update($data);
+            DB::table('users')->where('users_id', $request->id)->update($data);
             User::where('users_id', $request->id)->first()->assignRole($request->roles);
-        } else {
-            $data = array(
-                'deleted_at' => Carbon::now(),
-                'deleted_by' => Auth::user()->users_id,
-            );
-            DB::table('users')
-                ->where('users_id', $request->id)
-                ->update($data);
         }
+
         return response()->json($request);
     }
 
@@ -169,7 +161,7 @@ class UsersController extends Controller
             ->where('users.users_id', $id)
             ->get();
 
-        $userData = new \stdClass ();
+        $userData = new \stdClass();
 
         foreach ($userRoles as $userRole) {
             $userData->users_id = $userRole->users_id;
@@ -196,7 +188,8 @@ class UsersController extends Controller
             ->update([
                 'password' => Hash::make(123456),
                 'verified' => null,
-                'users_status_sync' => 'edit',
+                'users_status_sync' => 'send',
+                'users_client_target' => DB::raw('DEFAULT'),
             ]);
         return response()->json(['success' => 'success']);
     }

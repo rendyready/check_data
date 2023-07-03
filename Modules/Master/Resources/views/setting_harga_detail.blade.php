@@ -125,7 +125,9 @@
                                     <div class="mb-4">
                                         <input name="m_menu_harga_id" type="hidden" id="m_menu_harga_id">
                                         <input name="m_menu_harga_m_jenis_nota_id" type="hidden"
-                                            id="m_menu_harga_m_jenis_nota_id" value="{{ $m_menu_harga_m_jenis_nota_id }}">
+                                            id="m_menu_harga_m_jenis_nota_id">
+                                        <input type="hidden" name="m_jenis_nota_m_t_t_id" id="m_jenis_nota_m_t_t_id">
+                                        <input type="hidden" name="m_jenis_nota_m_w_id" id="m_jenis_nota_m_w_id">
                                     </div>
                                     <div class="mb-4">
                                         <div class="form-group">
@@ -133,9 +135,7 @@
                                             <div>
                                                 <select class="js-select2" id="m_menu_harga_m_produk_id"
                                                     name="m_menu_harga_m_produk_id" style="width: 100%;"
-                                                    data-container="#modal-block-select2" data-placeholder="Choose one.."
-                                                    >
-                                                    <option></option>
+                                                    data-container="#modal-block-select2">
                                                     @foreach ($listProduk as $pr)
                                                         <option value="{{ $pr->m_produk_id }}">
                                                             {{ ucwords($pr->m_produk_nama) }}</option>
@@ -148,8 +148,8 @@
                                         <div class="form-group">
                                             <label for="m_menu_harga_nominal">Harga</label>
                                             <div>
-                                                <input type="number" id="m_menu_harga_nominal" name="m_menu_harga_nominal"
-                                                    class="form-control" readonly>
+                                                <input type="number" id="m_menu_harga_nominal"
+                                                    name="m_menu_harga_nominal" class="form-control" readonly>
                                             </div>
                                         </div>
                                     </div>
@@ -221,6 +221,9 @@
                 $('ul.nav-tabs').children().first().children().addClass('active');
                 $('div.tab-pane').first().addClass('active');
                 Codebase.helpersOnLoad(['jq-select2', 'jq-rangeslider']);
+                $('#m_menu_harga_m_produk_id').select2({
+                    dropdownParent: $('#invalidDropdownParent')
+                });
                 $(".buttonInsert").on('click', function() {
                     var id = $(this).attr('value');
                     $("#myModalLabel").html('Tambah Harga');
@@ -242,6 +245,10 @@
                         type: "GET",
                         dataType: 'json',
                         success: function(respond) {
+                            $('#m_menu_harga_m_jenis_nota_id').val(respond
+                                .m_menu_harga_m_jenis_nota_id);
+                            $('#m_jenis_nota_m_t_t_id').val(respond.m_jenis_nota_m_t_t_id);
+                            $('#m_jenis_nota_m_w_id').val(respond.m_jenis_nota_m_w_id);
                             $("#m_menu_harga_id").val(respond.m_menu_harga_id).trigger('change');
                             $("#m_menu_harga_m_produk_id").val(respond.m_menu_harga_m_produk_id)
                                 .trigger('change');

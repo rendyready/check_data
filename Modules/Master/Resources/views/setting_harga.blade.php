@@ -14,7 +14,7 @@
                         <a class="btn btn-info mr-5 mb-5 buttonCopy" value="" title="copy" style="color: #fff"><i
                                 class="fa fa-copy mr-5"></i> Copy Nota</a>
                         <a class="btn btn-warning mr-5 mb-5 buttonUpdate" value="" title="update"
-                            style="color: #fff"><i class="fa fa-refresh mr-5"></i> Update Harga/Status</a>
+                            style="color: #fff"><i class="fa fa-refresh mr-5"></i> Update Harga/Tambah Menu</a>
                         <a class="btn btn-success mr-5 mb-5 buttonMenu" value="" title="Edit" style="color: #fff"><i
                                 class="fa fa-plus mr-5"></i> Status Menu</a>
                         @csrf
@@ -410,15 +410,27 @@
                 data: $(form).serialize(),
                 success: function(data) {
                     $(".modal").modal('hide');
-                    Codebase.helpers('jq-notify', {
-                        align: 'right', // 'right', 'left', 'center'
-                        from: 'top', // 'top', 'bottom'
-                        type: data
-                            .type, // 'info', 'success', 'warning', 'danger'
-                        icon: 'fa fa-info me-5', // Icon class
-                        message: data.messages
-                    });
-                    window.location.reload();
+                    if (data.type == 'success') {
+                        Codebase.helpers('jq-notify', {
+                            align: 'right', // 'right', 'left', 'center'
+                            from: 'top', // 'top', 'bottom'
+                            type: data
+                                .type, // 'info', 'success', 'warning', 'danger'
+                            icon: 'fa fa-info me-5', // Icon class
+                            message: data.messages
+                        });
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1500);
+                    }
+                    if (data.type == 'danger') {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Update Status Gagal',
+                            text: 'Menu Belum Ditambahkan Ke Nota',
+                            footer: 'Tambahkan Menu Ke Nota Dahulu Sebelum Mengulang'
+                        })
+                    }
                 },
                 error: function() {
                     alert("Tidak dapat menyimpan data!");
