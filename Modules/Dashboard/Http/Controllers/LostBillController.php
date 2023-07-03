@@ -2,11 +2,11 @@
 
 namespace Modules\Dashboard\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class LostBillController extends Controller
 {
@@ -20,8 +20,8 @@ class LostBillController extends Controller
         $data = new \stdClass();
         $data->waroeng_nama = DB::table('m_w')->select('m_w_nama', 'm_w_id')->where('m_w_id', $waroeng_id)->first();
         $data->area_nama = DB::table('m_area')->join('m_w', 'm_w_m_area_id', 'm_area_id')->select('m_area_nama', 'm_area_id')->where('m_w_id', $waroeng_id)->first();
-        $data->akses_area = $this->get_akses_area();//mulai dari 1 - akhir
-        $data->akses_pusat = $this->get_akses_pusat();//1,2,3,4,5
+        $data->akses_area = $this->get_akses_area(); //mulai dari 1 - akhir
+        $data->akses_pusat = $this->get_akses_pusat(); //1,2,3,4,5
         $data->akses_pusar = $this->get_akses_pusar(); //mulai dari 6 - akhir
 
         $data->waroeng = DB::table('m_w')
@@ -34,8 +34,7 @@ class LostBillController extends Controller
         $data->user = DB::table('users')
             ->orderby('id', 'ASC')
             ->get();
-        $data->transaksi_rekap = DB::table('rekap_lost_bill')
-            ->get();
+
         return view('dashboard::rekap_lostbill', compact('data'));
     }
 
@@ -60,18 +59,18 @@ class LostBillController extends Controller
         $user = DB::table('users')
             ->join('rekap_lost_bill', 'r_l_b_created_by', 'users_id')
             ->select('users_id', 'name');
-            if(in_array(Auth::user()->waroeng_id, $this->get_akses_area())){
-                $user->where('waroeng_id', $request->id_waroeng);
-            } else {
-                $user->where('waroeng_id', Auth::user()->waroeng_id);
-            }
-            if (strpos($request->tanggal, 'to') !== false) {
-                [$start, $end] = explode('to' ,$request->tanggal);
-                $user->whereBetween('r_l_b_tanggal', [$start, $end]);
-            } else {
-                $user->where('r_l_b_tanggal', $request->tanggal);
-            }
-            $user1 = $user->orderBy('users_id', 'asc')
+        if (in_array(Auth::user()->waroeng_id, $this->get_akses_area())) {
+            $user->where('waroeng_id', $request->id_waroeng);
+        } else {
+            $user->where('waroeng_id', Auth::user()->waroeng_id);
+        }
+        if (strpos($request->tanggal, 'to') !== false) {
+            [$start, $end] = explode('to', $request->tanggal);
+            $user->whereBetween('r_l_b_tanggal', [$start, $end]);
+        } else {
+            $user->where('r_l_b_tanggal', $request->tanggal);
+        }
+        $user1 = $user->orderBy('users_id', 'asc')
             ->get();
         $data = array();
         foreach ($user1 as $val) {
@@ -84,26 +83,26 @@ class LostBillController extends Controller
     public function show(Request $request)
     {
         $lostbill = DB::table('rekap_lost_bill')
-                ->join('users', 'users_id', 'r_l_b_created_by')
-                ->join('rekap_modal', 'rekap_modal_id', 'r_l_b_rekap_modal_id');
-                if (strpos($request->tanggal, 'to') !== false) {
-                    $dates = explode('to' ,$request->tanggal);
-                    $lostbill->whereBetween('r_l_b_tanggal', $dates);
-                } else {
-                    $lostbill->where('r_l_b_tanggal', $request->tanggal);
+            ->join('users', 'users_id', 'r_l_b_created_by')
+            ->join('rekap_modal', 'rekap_modal_id', 'r_l_b_rekap_modal_id');
+        if (strpos($request->tanggal, 'to') !== false) {
+            $dates = explode('to', $request->tanggal);
+            $lostbill->whereBetween('r_l_b_tanggal', $dates);
+        } else {
+            $lostbill->where('r_l_b_tanggal', $request->tanggal);
+        }
+        if ($request->area != 'all') {
+            $lostbill->where('r_l_b_m_area_id', $request->area);
+            if ($request->waroeng != 'all') {
+                $lostbill->where('r_l_b_m_w_id', $request->waroeng);
+                if ($request->operator != 'all') {
+                    $lostbill->where('r_l_b_created_by', $request->operator);
                 }
-                if($request->area != 'all'){
-                    $lostbill->where('r_l_b_m_area_id', $request->area);
-                    if($request->waroeng != 'all') {
-                        $lostbill->where('r_l_b_m_w_id', $request->waroeng);
-                        if($request->operator != 'all'){
-                            $lostbill->where('r_l_b_created_by', $request->operator);
-                        }
-                    }
-                }
-                $lostbill = $lostbill->orderBy('r_l_b_tanggal', 'ASC')
-                ->orderBy('r_l_b_nota_code', 'ASC')
-                ->get();
+            }
+        }
+        $lostbill = $lostbill->orderBy('r_l_b_tanggal', 'ASC')
+            ->orderBy('r_l_b_nota_code', 'ASC')
+            ->get();
 
         $data = array();
         foreach ($lostbill as $value) {
@@ -127,10 +126,10 @@ class LostBillController extends Controller
             $row[] = number_format($value->r_l_b_nominal_pajak);
             $row[] = number_format($value->r_l_b_nominal_sc);
             $row[] = number_format($value->r_l_b_nominal + $value->r_l_b_nominal_pajak + $value->r_l_b_nominal_sc);
-            $row[] ='<a id="button_detail" class="btn btn-sm button_detail btn-info" value="'.$value->r_l_b_id.'" title="Detail Lost Bill"><i class="fa-sharp fa-solid fa-file"></i></a>';
+            $row[] = '<a id="button_detail" class="btn btn-sm button_detail btn-info" value="' . $value->r_l_b_id . '" title="Detail Lost Bill"><i class="fa-sharp fa-solid fa-file"></i></a>';
             $data[] = $row;
         }
-        // return $approve;
+
         $output = array("data" => $data);
         return response()->json($output);
     }
@@ -139,9 +138,9 @@ class LostBillController extends Controller
     {
         $data = new \stdClass();
         $data->transaksi_rekap = DB::table('rekap_lost_bill')
-                ->join('users', 'users_id', 'r_l_b_created_by')
-                ->where('r_l_b_id', $id)
-                ->first();
+            ->join('users', 'users_id', 'r_l_b_created_by')
+            ->where('r_l_b_id', $id)
+            ->first();
         $data->detail_nota = DB::table('rekap_lost_bill_detail')
             ->where('r_l_b_detail_r_l_b_id', $id)
             ->get();

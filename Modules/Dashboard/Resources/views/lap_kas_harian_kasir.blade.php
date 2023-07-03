@@ -17,8 +17,9 @@
                                     <div class="row mb-1">
                                         <label class="col-sm-3 col-form-label">Tanggal</label>
                                         <div class="col-sm-9">
-                                            <input name="r_t_tanggal" class="cari form-control filter_tanggal" type="text"
-                                                placeholder="Pilih Tanggal.." id="filter_tanggal" tabindex="-1" />
+                                            <input name="r_t_tanggal" class="cari form-control filter_tanggal"
+                                                type="text" placeholder="Pilih Tanggal.." id="filter_tanggal"
+                                                tabindex="-1" />
                                         </div>
                                     </div>
                                 </div>
@@ -29,18 +30,22 @@
                                     <div class="row mb-2">
                                         <label class="col-sm-3 col-form-label">Area</label>
                                         <div class="col-sm-9">
-                                            @if (in_array(Auth::user()->waroeng_id, $data->akses_pusat ))
+                                            @if (in_array(Auth::user()->waroeng_id, $data->akses_pusat))
                                                 <select id="filter_area2" data-placeholder="Pilih Area" style="width: 100%;"
-                                                class="cari f-area js-select2 form-control filter_area" name="m_w_m_area_id">
-                                                <option></option>
-                                                @foreach ($data->area as $area)
-                                                    <option value="{{ $area->m_area_id }}"> {{ $area->m_area_nama }} </option>
-                                                @endforeach
+                                                    class="cari f-area js-select2 form-control filter_area"
+                                                    name="m_w_m_area_id">
+                                                    <option></option>
+                                                    @foreach ($data->area as $area)
+                                                        <option value="{{ $area->m_area_id }}"> {{ $area->m_area_nama }}
+                                                        </option>
+                                                    @endforeach
                                                 </select>
                                             @else
                                                 <select id="filter_area" data-placeholder="Pilih Area" style="width: 100%;"
-                                                class="cari f-area js-select2 form-control filter_area" name="m_w_m_area_id" disabled>
-                                                <option value="{{ ucwords($data->area_nama->m_area_id) }}">{{ ucwords($data->area_nama->m_area_nama) }}</option>
+                                                    class="cari f-area js-select2 form-control filter_area"
+                                                    name="m_w_m_area_id" disabled>
+                                                    <option value="{{ ucwords($data->area_nama->m_area_id) }}">
+                                                        {{ ucwords($data->area_nama->m_area_nama) }}</option>
                                                 </select>
                                             @endif
                                         </div>
@@ -53,21 +58,27 @@
                                         <div class="col-sm-9">
                                             @if (in_array(Auth::user()->waroeng_id, $data->akses_pusat))
                                                 <select id="filter_waroeng1" style="width: 100%;"
-                                                class="cari f-wrg js-select2 form-control filter_waroeng" data-placeholder="Pilih Waroeng" name="m_w_id">
-                                                <option></option>
+                                                    class="cari f-wrg js-select2 form-control filter_waroeng"
+                                                    data-placeholder="Pilih Waroeng" name="m_w_id">
+                                                    <option></option>
                                                 </select>
                                             @elseif (in_array(Auth::user()->waroeng_id, $data->akses_pusar))
-                                                <select id="filter_waroeng3" style="width: 100%;" data-placeholder="Pilih Waroeng"
-                                                class="cari f-area js-select2 form-control filter_waroeng" name="waroeng">
-                                                <option></option>
-                                                @foreach ($data->waroeng as $waroeng)
-                                                    <option value="{{ $waroeng->m_w_id }}"> {{ $waroeng->m_w_nama }} </option>
-                                                @endforeach
+                                                <select id="filter_waroeng3" style="width: 100%;"
+                                                    data-placeholder="Pilih Waroeng"
+                                                    class="cari f-area js-select2 form-control filter_waroeng"
+                                                    name="waroeng">
+                                                    <option></option>
+                                                    @foreach ($data->waroeng as $waroeng)
+                                                        <option value="{{ $waroeng->m_w_id }}"> {{ $waroeng->m_w_nama }}
+                                                        </option>
+                                                    @endforeach
                                                 </select>
                                             @else
                                                 <select id="filter_waroeng2" style="width: 100%;"
-                                                class="cari f-area js-select2 form-control filter_waroeng" name="waroeng" disabled>
-                                                <option value="{{ ucwords($data->waroeng_nama->m_w_id) }}">{{ ucwords($data->waroeng_nama->m_w_nama) }}</option>
+                                                    class="cari f-area js-select2 form-control filter_waroeng"
+                                                    name="waroeng" disabled>
+                                                    <option value="{{ ucwords($data->waroeng_nama->m_w_id) }}">
+                                                        {{ ucwords($data->waroeng_nama->m_w_nama) }}</option>
                                                 </select>
                                             @endif
                                         </div>
@@ -75,8 +86,12 @@
                                 </div>
                             </div>
 
-                            <div id="user-info" data-waroeng-id="{{ Auth::user()->waroeng_id }}" data-has-access="{{ in_array(Auth::user()->waroeng_id, $data->akses_area) ? 'true' : 'false' }}"></div>
-                            <div id="user-info-pusat" data-waroeng-id="{{ Auth::user()->waroeng_id }}" data-has-access="{{ in_array(Auth::user()->waroeng_id, $data->akses_pusat) ? 'true' : 'false' }}"></div>
+                            <div id="user-info" data-waroeng-id="{{ Auth::user()->waroeng_id }}"
+                                data-has-access="{{ in_array(Auth::user()->waroeng_id, $data->akses_area) ? 'true' : 'false' }}">
+                            </div>
+                            <div id="user-info-pusat" data-waroeng-id="{{ Auth::user()->waroeng_id }}"
+                                data-has-access="{{ in_array(Auth::user()->waroeng_id, $data->akses_pusat) ? 'true' : 'false' }}">
+                            </div>
 
                             <div class="col-sm-8">
                                 <button type="button" id="cari"
@@ -273,7 +288,15 @@ $(document).ready(function() {
             }
             });
         }else{
-          alert('Harap lengkapi kolom tanggal');
+            Swal.fire({
+                    title: 'Informasi',
+                    text: "Harap lengkapi kolom tanggal",
+                    confirmButtonColor: '#d33',
+                    confirmButtonText: 'OK',
+                    customClass: {
+                        confirmButton: 'bg-red-500',
+                    },
+                });
             $(".filter_waroeng").empty();
             $(".filter_area").val(prev).trigger('change');
         }      
@@ -286,7 +309,15 @@ $(document).ready(function() {
         var tanggal  = $('.filter_tanggal').val(); 
         var prev = $(this).data('previous-value');
         if(!id_waroeng || !tanggal){
-            alert('Harap lengkapi kolom tanggal');
+            Swal.fire({
+                    title: 'Informasi',
+                    text: "Harap lengkapi kolom tanggal",
+                    confirmButtonColor: '#d33',
+                    confirmButtonText: 'OK',
+                    customClass: {
+                        confirmButton: 'bg-red-500',
+                    },
+                });
             $(".filter_waroeng").val(prev).trigger('change');
         }  
     });

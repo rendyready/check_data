@@ -35,8 +35,8 @@
                         <a class="dropdown-item d-flex align-items-center justify-content-between space-x-1"
                             href="javascript:void(0)" onclick="event.stopPropagation();">
                             <div class="form-group">
-                                <select class="js-select2-nav" id="waroeng_default" name="waroeng_id" style="width: 100%;"
-                                    data-placeholder="Ganti Waroeng">
+                                <select class="js-select2-nav" id="waroeng_default" name="waroeng_id"
+                                    style="width: 100%;" data-placeholder="Ganti Waroeng">
                                     <option></option>
                                 </select>
                             </div>
@@ -429,7 +429,9 @@
                                     <li class="nav-main-item{{ request()->is('dashboard/*') ? ' open' : '' }}">
                                         <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu"
                                             aria-haspopup="true" aria-expanded="true" href="#">
-                                            <span class="nav-main-link-name">Laporan CR55</span>
+                                            <span class="nav-main-link-name">Laporan CR55 <span
+                                                    style="color: rgb(223, 108, 108); font-size:12px;">
+                                                    v1.0</span></span>
                                         </a>
                                         <ul class="nav-main-submenu">
                                             @can('detail nota.view')

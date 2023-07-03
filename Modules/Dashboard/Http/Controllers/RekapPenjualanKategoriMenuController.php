@@ -141,8 +141,8 @@ class RekapPenjualanKategoriMenuController extends Controller
                     $transaksi2->selectRaw('m_produk_m_jenis_produk_id, r_t_tanggal, r_t_detail_reguler_price, SUM(r_t_detail_qty) as total, r_t_created_by, m_w_id, m_area_id')
                     ->groupBy('r_t_tanggal', 'm_produk_m_jenis_produk_id', 'r_t_detail_reguler_price', 'r_t_created_by', 'm_w_id', 'm_area_id');
                 } else {
-                    $transaksi2->selectRaw('m_produk_m_jenis_produk_id, r_t_tanggal, r_t_detail_reguler_price, SUM(r_t_detail_qty) as total, m_w_id, m_area_id')
-                    ->groupBy('r_t_tanggal', 'm_produk_m_jenis_produk_id', 'r_t_detail_reguler_price', 'm_w_id', 'm_area_id');
+                    $transaksi2->selectRaw('m_produk_m_jenis_produk_id, r_t_tanggal, r_t_detail_reguler_price, SUM(r_t_detail_qty) as total')
+                    ->groupBy('r_t_tanggal', 'm_produk_m_jenis_produk_id', 'r_t_detail_reguler_price');
                 }
                 $trans2 = $transaksi2->orderBy('m_produk_m_jenis_produk_id', 'ASC')->get();
         
@@ -165,7 +165,7 @@ class RekapPenjualanKategoriMenuController extends Controller
                                 $total += $valTrans2->total * $valTrans2->r_t_detail_reguler_price;
                             }
                         } else {
-                            if ($valPay->m_jenis_produk_id == $valTrans2->m_produk_m_jenis_produk_id && $valTrans2->r_t_tanggal == $valTrans->r_t_tanggal && $valTrans2->m_w_id == $valTrans->m_w_id) {
+                            if ($valPay->m_jenis_produk_id == $valTrans2->m_produk_m_jenis_produk_id && $valTrans2->r_t_tanggal == $valTrans->r_t_tanggal) {
                                 $total += $valTrans2->total * $valTrans2->r_t_detail_reguler_price;
                             }
                         } 
@@ -279,4 +279,3 @@ class RekapPenjualanKategoriMenuController extends Controller
     //     return response()->json($output);
     // }
 }
-

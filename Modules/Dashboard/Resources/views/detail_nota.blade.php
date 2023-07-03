@@ -348,7 +348,15 @@ $(document).ready(function() {
             }
             });
         }else{
-          alert('Harap lengkapi kolom tanggal');
+          Swal.fire({
+                    title: 'Informasi',
+                    text: "Harap lengkapi kolom tanggal",
+                    confirmButtonColor: '#d33',
+                    confirmButtonText: 'OK',
+                    customClass: {
+                        confirmButton: 'bg-red-500',
+                    },
+                });
             $(".filter_waroeng").empty();
             $(".filter_waroeng").val(prev).trigger('change');
         }  
@@ -390,7 +398,15 @@ $(document).ready(function() {
             }
             });
         }else{
-          alert('Harap lengkapi kolom tanggal');
+          Swal.fire({
+                    title: 'Informasi',
+                    text: "Harap lengkapi kolom tanggal",
+                    confirmButtonColor: '#d33',
+                    confirmButtonText: 'OK',
+                    customClass: {
+                        confirmButton: 'bg-red-500',
+                    },
+                });
             $(".filter_operator").empty();
             $(".filter_waroeng").val(prev).trigger('change');
         }   
