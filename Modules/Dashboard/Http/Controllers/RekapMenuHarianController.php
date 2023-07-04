@@ -174,11 +174,7 @@ class RekapMenuHarianController extends Controller
             $row[] = number_format($selisihMath);
             if ($request->status == 'all') {
                 $data[] = $row;
-            } elseif ($request->status == 'trans' && $selisihPrice != 0) {
-                $data[] = $row;
-            } elseif ($request->status == 'cr' && $selisihMath != 0) {
-                $data[] = $row;
-            } elseif ($request->status == 'allselisih' && $selisihPrice != 0 || $selisihMath != 0) {
+            } elseif ($request->status == 'selisih' && $selisihPrice != 0 || $selisihMath != 0) {
                 $data[] = $row;
             }
         }

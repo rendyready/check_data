@@ -32,9 +32,7 @@
                                                 data-placeholder="Pilih Status Ditampilkan" name="r_t_created_by">
                                                 <option></option>
                                                 <option value="all">Tampilkan Semua</option>
-                                                <option value="trans">Hanya Tampilkan Selisih Transaksi</option>
-                                                <option value="cr">Hanya Tampilkan Selisih CR</option>
-                                                <option value="allselisih">Hanya Tampilkan Selisih Transaksi & CR</option>
+                                                <option value="selisih">Hanya Tampilkan Data Selisih</option>
                                             </select>
                                         </div>
                                     </div>
