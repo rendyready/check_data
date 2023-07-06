@@ -99,6 +99,7 @@ class UsersController extends Controller
         $waroeng_akses = implode(',', $data); // menggabungkan data menjadi string dengan delimiter koma
 
         if ($request->action == 'add') {
+            // Kode untuk menambah pengguna baru
             $data = array(
                 'users_id' => $this->getMasterId('users'),
                 'name' => strtolower($request->name),
@@ -113,6 +114,7 @@ class UsersController extends Controller
             $user = DB::table('users')->max('users_id');
             User::where('users_id', $user)->first()->assignRole($request->roles);
         } elseif ($request->action == 'edit') {
+            // Kode untuk mengedit pengguna
             if (!empty($request->password)) {
                 $data = array(
                     'name' => strtolower($request->name),
@@ -122,7 +124,7 @@ class UsersController extends Controller
                     'waroeng_akses' => '[' . $waroeng_akses . ']',
                     'updated_by' => Auth::user()->users_id,
                     'updated_at' => Carbon::now(),
-                    'users_status_sync' => 'edit',
+                    'users_status_sync' => 'send',
                     'users_client_target' => DB::raw('DEFAULT'),
                 );
             } else {
@@ -133,14 +135,17 @@ class UsersController extends Controller
                     'waroeng_akses' => '[' . $waroeng_akses . ']',
                     'updated_by' => Auth::user()->users_id,
                     'updated_at' => Carbon::now(),
-                    'users_status_sync' => 'edit',
+                    'users_status_sync' => 'send',
                     'users_client_target' => DB::raw('DEFAULT'),
                 );
             }
 
-            DB::table('model_has_roles')->where('model_id', $request->id)->delete();
+            // Mengupdate data pengguna
             DB::table('users')->where('users_id', $request->id)->update($data);
-            User::where('users_id', $request->id)->first()->assignRole($request->roles);
+
+            // Mengassign role baru tanpa menghapus data sebelumnya
+            $user = User::where('users_id', $request->id)->first();
+            $user->syncRoles($request->roles);
         }
 
         return response()->json($request);

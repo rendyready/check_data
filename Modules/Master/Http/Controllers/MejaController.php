@@ -17,14 +17,34 @@ class MejaController extends Controller
     {
         $data = new \stdClass();
         $data->no = 1;
-        $data->meja = DB::table('m_meja')
-            ->leftjoin('m_meja_jenis', 'm_meja_m_meja_jenis_id', 'm_meja_jenis_id')
-            ->leftjoin('m_w', 'm_w_id', 'm_meja_m_w_id')->get();
         $data->jenis_meja = DB::table('m_meja_jenis')->get();
         $data->waroeng = DB::table('m_w')->get();
         return view('master::m_meja', compact('data'));
     }
-    public function list($id)
+    public function list_meja(){
+        $meja = DB::table('m_meja')
+        ->leftjoin('m_meja_jenis', 'm_meja_m_meja_jenis_id', 'm_meja_jenis_id')
+        ->leftjoin('m_w', 'm_w_id', 'm_meja_m_w_id')
+        ->select('m_meja_id','m_meja_nama','m_meja_jenis_nama','m_w_nama')
+        ->get();
+        $data = [];
+        $no =1;
+        foreach ($meja as $value) {
+            $row = [];
+            $row[] = $no++;
+            $row[] = $value->m_meja_nama;
+            $row[] = $value->m_meja_jenis_nama;
+            $row[] = $value->m_w_nama;
+            $row[] = '<a class="btn btn-info buttonEdit" value="'.$value->m_meja_id.'" title="Edit"><i class="fa fa-edit"></i></a>
+            <a href="'.route("hapus.meja", $value->m_meja_id).'" class="btn btn-danger" title="Delete"><i class="fa fa-trash"></i></a>';
+            $data[] = $row;
+        }
+        
+        $output = array("data" => $data);
+        return response()->json($output);
+    }
+
+    public function find($id)
     {
         $data = DB::table('m_meja')->where('m_meja_id', $id)->first();
         return response()->json($data, 200);

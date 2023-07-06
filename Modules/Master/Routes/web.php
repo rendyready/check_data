@@ -85,11 +85,11 @@ Route::group(['prefix' => 'master', 'controller' => MJenisNotaController::class,
     Route::get('m_jenis_nota/get_harga','get_harga')->name('m_jenis_nota');
 });
 
-
 //Master Meja
 Route::group(['prefix' => 'master', 'controller' => MejaController::class, 'middleware' => ['auth', 'web']], function () {
     Route::get('meja', 'index')->name('meja.index');
-    Route::get('meja/list/{id}', 'list')->name('meja.list');
+    Route::get('meja/list_meja','list_meja')->name('meja.list');
+    Route::get('meja/find/{id}', 'find')->name('meja.find');
     Route::post('meja/simpan', 'simpan')->name('simpan.meja');
     Route::get('meja/hapus/{id}', 'hapus')->name('hapus.meja');
     Route::post('meja/edit', 'edit')->name('edit.meja');
