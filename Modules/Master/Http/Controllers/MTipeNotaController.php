@@ -2,8 +2,8 @@
 
 namespace Modules\Master\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -25,7 +25,7 @@ class MTipeNotaController extends Controller
                 ->whereRaw('LOWER(m_tipe_nota_nama)' . '=' . "'$jenisNama'")->first();
             if ($request->action == 'add') {
                 if (!empty($DBjenisNama == null)) {
-                    return response(['Messages' => 'Data Tidak Boleh Kosong !' , 'type' => 'danger']);
+                    return response(['Messages' => 'Data Tidak Boleh Kosong !', 'type' => 'danger']);
                 } elseif ($DBJenisWaroeng == true) {
                     return response(['Messages' => 'Data Duplicate !', 'type' => 'danger']);
                 } else {
@@ -50,7 +50,7 @@ class MTipeNotaController extends Controller
                         'm_tipe_nota_updated_by' => Auth::user()->users_id,
                         'm_tipe_nota_updated_at' => Carbon::now(),
                     );
-                    DB::table('m_tipe_nota')->where('m_tipe_nota_id',$request->m_tipe_nota_id)->update($data);
+                    DB::table('m_tipe_nota')->where('m_tipe_nota_id', $request->m_tipe_nota_id)->update($data);
                     return response(['Messages' => 'Data Tipe Nota Update !', 'type' => 'success']);
                 }
             }

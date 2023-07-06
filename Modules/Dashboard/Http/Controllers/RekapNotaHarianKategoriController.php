@@ -2,14 +2,12 @@
 
 namespace Modules\Dashboard\Http\Controllers;
 
-use Carbon\Carbon;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Barryvdh\DomPDF\Facade\Pdf;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Carbon as crbn;
+use Carbon\Carbon;
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class RekapNotaHarianKategoriController extends Controller
 {
@@ -23,8 +21,8 @@ class RekapNotaHarianKategoriController extends Controller
         $data = new \stdClass();
         $data->waroeng_nama = DB::table('m_w')->select('m_w_nama', 'm_w_id')->where('m_w_id', $waroeng_id)->first();
         $data->area_nama = DB::table('m_area')->join('m_w', 'm_w_m_area_id', 'm_area_id')->select('m_area_nama', 'm_area_id')->where('m_w_id', $waroeng_id)->first();
-        $data->akses_area = $this->get_akses_area();//mulai dari 1 - akhir
-        $data->akses_pusat = $this->get_akses_pusat();//1,2,3,4,5
+        $data->akses_area = $this->get_akses_area(); //mulai dari 1 - akhir
+        $data->akses_pusat = $this->get_akses_pusat(); //1,2,3,4,5
         $data->akses_pusar = $this->get_akses_pusar(); //mulai dari 6 - akhir
 
         $data->waroeng = DB::table('m_w')
@@ -57,10 +55,10 @@ class RekapNotaHarianKategoriController extends Controller
 
     public function tanggal_rekap(Request $request)
     {
-            $tanggal = DB::table('m_transaksi_tipe')
-                ->select('m_t_t_id', 'm_t_t_name')
-                ->orderby('m_t_t_id','ASC')
-                ->get();
+        $tanggal = DB::table('m_transaksi_tipe')
+            ->select('m_t_t_id', 'm_t_t_name')
+            ->orderby('m_t_t_id', 'ASC')
+            ->get();
 
         $data = [];
         foreach ($tanggal as $val) {
@@ -71,31 +69,31 @@ class RekapNotaHarianKategoriController extends Controller
 
     public function show(Request $request)
     {
-        $tipeTransaksi = DB::table('m_transaksi_tipe')->orderBy('m_t_t_id','asc')->get();
-        $groupPay = ['cash','transfer'];
+        $tipeTransaksi = DB::table('m_transaksi_tipe')->orderBy('m_t_t_id', 'asc')->get();
+        $groupPay = ['cash', 'transfer'];
         $operator = DB::table('rekap_modal');
-            // ->whereRaw("to_char(rekap_modal_tanggal,'YYYY-MM-DD') = '{$request->tanggal}'")
-            // ->where('rekap_modal_m_w_id', $request->waroeng)
-            // ->where(DB::raw('DATE(rekap_modal_tanggal)'), $request->tanggal);
-            if (strpos($request->tanggal, 'to') !== false) {
-                [$start, $end] = explode('to', $request->tanggal);
-                $operator->whereBetween(DB::raw('DATE(rekap_modal_tanggal)'), [$start, $end]);
-            } else {
-                $operator->where(DB::raw('DATE(rekap_modal_tanggal)'), $request->tanggal);
+        // ->whereRaw("to_char(rekap_modal_tanggal,'YYYY-MM-DD') = '{$request->tanggal}'")
+        // ->where('rekap_modal_m_w_id', $request->waroeng)
+        // ->where(DB::raw('DATE(rekap_modal_tanggal)'), $request->tanggal);
+        if (strpos($request->tanggal, 'to') !== false) {
+            [$start, $end] = explode('to', $request->tanggal);
+            $operator->whereBetween(DB::raw('DATE(rekap_modal_tanggal)'), [$start, $end]);
+        } else {
+            $operator->where(DB::raw('DATE(rekap_modal_tanggal)'), $request->tanggal);
+        }
+        if ($request->area != 'all') {
+            $operator->where('rekap_modal_m_area_id', $request->area);
+            if ($request->waroeng != 'all') {
+                $operator->where('rekap_modal_m_w_id', $request->waroeng);
             }
-            if($request->area != 'all'){
-                $operator->where('rekap_modal_m_area_id', $request->area);
-                if($request->waroeng != 'all') {
-                    $operator->where('rekap_modal_m_w_id', $request->waroeng);
-                }
-            }
-            $operator = $operator->orderby('rekap_modal_tanggal', 'asc')->get();
+        }
+        $operator = $operator->orderby('rekap_modal_tanggal', 'asc')->get();
 
         $data = [];
         foreach ($operator as $key => $valOp) {
             $date = Carbon::parse($valOp->rekap_modal_tanggal)->format('Y-m-d');
             $salesByMethodPay = DB::table('m_transaksi_tipe')
-                        ->selectraw('MAX(m_t_t_name) name, MAX(users.name) username,
+                ->selectraw('MAX(m_t_t_name) name, MAX(users.name) username,
                             m_t_t_id, m_payment_method_type, rekap_modal_sesi,
                             r_t_m_w_nama,r_t_m_area_nama,r_t_tanggal,
                             COUNT(r_t_id) jml,
@@ -105,24 +103,24 @@ class RekapNotaHarianKategoriController extends Controller
                             COALESCE(SUM(r_t_nominal_kembalian),0) as kembalian,
                             COALESCE(SUM(r_p_t_nominal),0) as pay
                         ')
-                        ->join('rekap_transaksi','r_t_m_t_t_id','=','m_t_t_id')
-                        ->join('rekap_payment_transaksi','r_p_t_r_t_id','=','r_t_id')
-                        ->join('m_payment_method','m_payment_method_id','=','r_p_t_m_payment_method_id')
-                        ->join('rekap_modal','rekap_modal_id','r_t_rekap_modal_id')
-                        ->join('users','users_id','rekap_modal_created_by')
-                        ->where('r_t_status','paid')
-                        ->groupby('m_t_t_id','m_payment_method_type','r_t_m_w_nama','r_t_m_area_nama','r_t_tanggal', 'rekap_modal_sesi');
-                        // ->whereRaw("to_char(rekap_modal_tanggal,'YYYY-MM-DD') = '{$request->tanggal}'")
-                        if (strpos($request->tanggal, 'to') !== false) {
-                            [$start, $end] = explode('to', $request->tanggal);
-                            $salesByMethodPay->whereBetween(DB::raw('DATE(rekap_modal_tanggal)'), [$start, $end]);
-                        } else {
-                            $salesByMethodPay->where(DB::raw('DATE(rekap_modal_tanggal)'), $request->tanggal);
-                        }
-                        $salesByMethodPay = $salesByMethodPay->where('rekap_modal_id',$valOp->rekap_modal_id)
-                        ->orderby('r_t_tanggal','asc')
-                        // ->orderby('m_t_t_id','asc')
-                        ->get();
+                ->join('rekap_transaksi', 'r_t_m_t_t_id', '=', 'm_t_t_id')
+                ->join('rekap_payment_transaksi', 'r_p_t_r_t_id', '=', 'r_t_id')
+                ->join('m_payment_method', 'm_payment_method_id', '=', 'r_p_t_m_payment_method_id')
+                ->join('rekap_modal', 'rekap_modal_id', 'r_t_rekap_modal_id')
+                ->join('users', 'users_id', 'rekap_modal_created_by')
+                ->where('r_t_status', 'paid')
+                ->groupby('m_t_t_id', 'm_payment_method_type', 'r_t_m_w_nama', 'r_t_m_area_nama', 'r_t_tanggal', 'rekap_modal_sesi');
+            // ->whereRaw("to_char(rekap_modal_tanggal,'YYYY-MM-DD') = '{$request->tanggal}'")
+            if (strpos($request->tanggal, 'to') !== false) {
+                [$start, $end] = explode('to', $request->tanggal);
+                $salesByMethodPay->whereBetween(DB::raw('DATE(rekap_modal_tanggal)'), [$start, $end]);
+            } else {
+                $salesByMethodPay->where(DB::raw('DATE(rekap_modal_tanggal)'), $request->tanggal);
+            }
+            $salesByMethodPay = $salesByMethodPay->where('rekap_modal_id', $valOp->rekap_modal_id)
+                ->orderby('r_t_tanggal', 'asc')
+            // ->orderby('m_t_t_id','asc')
+                ->get();
             foreach ($tipeTransaksi as $key => $valTrans) {
                 $jmlNota = 0;
                 foreach ($salesByMethodPay as $key => $valMpay) {
@@ -134,23 +132,23 @@ class RekapNotaHarianKategoriController extends Controller
                     if ($valTrans->m_t_t_id == $valMpay->m_t_t_id) {
                         $jmlNota += $valMpay->jml;
                     }
-                    $data[$valOp->rekap_modal_id]['jml_nota-'.$valTrans->m_t_t_name] = $jmlNota;
+                    $data[$valOp->rekap_modal_id]['jml_nota-' . $valTrans->m_t_t_name] = $jmlNota;
                 }
                 foreach ($groupPay as $key => $valGroup) {
                     $nominal = 0;
                     $pajak = 0;
                     foreach ($salesByMethodPay as $key => $valMpay) {
-                            if ($valTrans->m_t_t_id == $valMpay->m_t_t_id && $valMpay->m_payment_method_type == $valGroup) {
-                                // $nominal = $valMpay->pay;
-                                $nominal = $valMpay->nominal;
-                                $pajak = $valMpay->pajak;
+                        if ($valTrans->m_t_t_id == $valMpay->m_t_t_id && $valMpay->m_payment_method_type == $valGroup) {
+                            // $nominal = $valMpay->pay;
+                            $nominal = $valMpay->nominal;
+                            $pajak = $valMpay->pajak;
 
-                                // if ($valMpay->m_payment_method_type == 'cash') {
-                                //     $nominal = $valMpay->pay - $valMpay->kembalian;
-                                // }
-                            }
-                            $data[$valOp->rekap_modal_id][$valTrans->m_t_t_name.'-'.$valGroup] = number_format($nominal);
-                            $data[$valOp->rekap_modal_id][$valTrans->m_t_t_name.'-'.$valGroup.'-pajak'] = number_format($pajak);
+                            // if ($valMpay->m_payment_method_type == 'cash') {
+                            //     $nominal = $valMpay->pay - $valMpay->kembalian;
+                            // }
+                        }
+                        $data[$valOp->rekap_modal_id][$valTrans->m_t_t_name . '-' . $valGroup] = number_format($nominal);
+                        $data[$valOp->rekap_modal_id][$valTrans->m_t_t_name . '-' . $valGroup . '-pajak'] = number_format($pajak);
                     }
                 }
             }
@@ -363,4 +361,3 @@ class RekapNotaHarianKategoriController extends Controller
     // }
 
 }
-

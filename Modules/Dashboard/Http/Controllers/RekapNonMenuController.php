@@ -2,28 +2,22 @@
 
 namespace Modules\Dashboard\Http\Controllers;
 
-use Carbon\Carbon;
-use Illuminate\Http\Request;
-use Barryvdh\DomPDF\Facade\Pdf;
-use App\Exports\RekapNonMenuExcel;
-use Illuminate\Support\Facades\DB;
-use App\Exports\RekapNonMenuExport;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Maatwebsite\Excel\Facades\Excel;
-use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Support\Facades\DB;
 
 class RekapNonMenuController extends Controller
 {
-    
+
     public function index()
     {
         $waroeng_id = Auth::user()->waroeng_id;
         $data = new \stdClass();
         $data->waroeng_nama = DB::table('m_w')->select('m_w_nama', 'm_w_id')->where('m_w_id', $waroeng_id)->first();
         $data->area_nama = DB::table('m_area')->join('m_w', 'm_w_m_area_id', 'm_area_id')->select('m_area_nama', 'm_area_id')->where('m_w_id', $waroeng_id)->first();
-        $data->akses_area = $this->get_akses_area();//mulai dari 1 - akhir
-        $data->akses_pusat = $this->get_akses_pusat();//1,2,3,4,5
+        $data->akses_area = $this->get_akses_area(); //mulai dari 1 - akhir
+        $data->akses_pusat = $this->get_akses_pusat(); //1,2,3,4,5
         $data->akses_pusar = $this->get_akses_pusar(); //mulai dari 6 - akhir
 
         $data->waroeng = DB::table('m_w')
@@ -54,7 +48,7 @@ class RekapNonMenuController extends Controller
     public function show(Request $request)
     {
         $rekap = DB::table('rekap_transaksi_detail')
-                    ->selectRaw('
+            ->selectRaw('
                         rekap_modal_id,
                         MAX(r_t_m_area_id) m_area_id,
                         MAX(r_t_m_area_nama) m_area_nama,
@@ -70,117 +64,117 @@ class RekapNonMenuController extends Controller
                         SUM(r_t_detail_reguler_price*r_t_detail_qty) nominal,
                         SUM(r_t_detail_nominal_pajak) pajak
                     ')
-                    ->join('rekap_transaksi','r_t_detail_r_t_id','r_t_id')
-                    ->join('rekap_modal','rekap_modal_id','r_t_rekap_modal_id')
-                    ->join('users','users_id','rekap_modal_created_by')
-                    ->join('m_transaksi_tipe','m_t_t_id','r_t_m_t_t_id');
-                    if (strpos($request->tanggal, 'to') !== false) {
-                        $dates = explode('to' ,$request->tanggal);
-                        $rekap->whereBetween(DB::raw('DATE(rekap_modal_tanggal)'), $dates);
-                    } else {
-                        $rekap->where(DB::raw('DATE(rekap_modal_tanggal)'), $request->tanggal);
-                    }
-                    if($request->area != 'all'){
-                        $rekap->where('r_t_m_area_id', $request->area);
-                        if($request->waroeng != 'all') {
-                            $rekap->where('r_t_m_w_id', $request->waroeng);
-                        }
-                    }
-                    $rekap = $rekap->where('r_t_detail_status','paid')
-                    ->groupBy('rekap_modal_id','r_t_detail_m_produk_id','r_t_m_w_id','m_t_t_id')
-                    ->orderBy('tanggal','asc')
-                    ->orderBy('m_w_nama','asc')
-                    ->orderBy('sesi','asc')
-                    ->get();
+            ->join('rekap_transaksi', 'r_t_detail_r_t_id', 'r_t_id')
+            ->join('rekap_modal', 'rekap_modal_id', 'r_t_rekap_modal_id')
+            ->join('users', 'users_id', 'rekap_modal_created_by')
+            ->join('m_transaksi_tipe', 'm_t_t_id', 'r_t_m_t_t_id');
+        if (strpos($request->tanggal, 'to') !== false) {
+            $dates = explode('to', $request->tanggal);
+            $rekap->whereBetween(DB::raw('DATE(rekap_modal_tanggal)'), $dates);
+        } else {
+            $rekap->where(DB::raw('DATE(rekap_modal_tanggal)'), $request->tanggal);
+        }
+        if ($request->area != 'all') {
+            $rekap->where('r_t_m_area_id', $request->area);
+            if ($request->waroeng != 'all') {
+                $rekap->where('r_t_m_w_id', $request->waroeng);
+            }
+        }
+        $rekap = $rekap->where('r_t_detail_status', 'paid')
+            ->groupBy('rekap_modal_id', 'r_t_detail_m_produk_id', 'r_t_m_w_id', 'm_t_t_id')
+            ->orderBy('tanggal', 'asc')
+            ->orderBy('m_w_nama', 'asc')
+            ->orderBy('sesi', 'asc')
+            ->get();
 
         $countNota = DB::table('rekap_transaksi')
-                    ->selectRaw('r_t_m_t_t_id type_id, r_t_rekap_modal_id modal_id, COUNT(r_t_id) jml')
-                    ->join('m_transaksi_tipe','m_t_t_id','r_t_m_t_t_id')
-                    ->join('rekap_modal','rekap_modal_id','r_t_rekap_modal_id');
-                    if (strpos($request->tanggal, 'to') !== false) {
-                        $dates = explode('to' ,$request->tanggal);
-                        $rekap->whereBetween(DB::raw('DATE(rekap_modal_tanggal)'), $dates);
-                    } else {
-                        $rekap->where(DB::raw('DATE(rekap_modal_tanggal)'), $request->tanggal);
-                    }
-                    if($request->area != 'all'){
-                        $countNota->where('r_t_m_area_id', $request->area);
-                        if($request->waroeng != 'all') {
-                            $countNota->where('r_t_m_w_id', $request->waroeng);
-                        }
-                    }
-                    $countNota = $countNota->where('r_t_status','paid')
-                    ->groupBy('r_t_rekap_modal_id','r_t_m_t_t_id')
-                    ->get();
+            ->selectRaw('r_t_m_t_t_id type_id, r_t_rekap_modal_id modal_id, COUNT(r_t_id) jml')
+            ->join('m_transaksi_tipe', 'm_t_t_id', 'r_t_m_t_t_id')
+            ->join('rekap_modal', 'rekap_modal_id', 'r_t_rekap_modal_id');
+        if (strpos($request->tanggal, 'to') !== false) {
+            $dates = explode('to', $request->tanggal);
+            $rekap->whereBetween(DB::raw('DATE(rekap_modal_tanggal)'), $dates);
+        } else {
+            $rekap->where(DB::raw('DATE(rekap_modal_tanggal)'), $request->tanggal);
+        }
+        if ($request->area != 'all') {
+            $countNota->where('r_t_m_area_id', $request->area);
+            if ($request->waroeng != 'all') {
+                $countNota->where('r_t_m_w_id', $request->waroeng);
+            }
+        }
+        $countNota = $countNota->where('r_t_status', 'paid')
+            ->groupBy('r_t_rekap_modal_id', 'r_t_m_t_t_id')
+            ->get();
 
         $countNotaArray = [];
         foreach ($countNota as $keyNot => $valNot) {
-            $countNotaArray[$valNot->type_id."-".$valNot->modal_id] = $valNot->jml;
+            $countNotaArray[$valNot->type_id . "-" . $valNot->modal_id] = $valNot->jml;
         }
 
         $getMenu = DB::table('m_produk')
-                    ->select('m_produk_id')
-                    ->whereNotIn('m_produk_m_jenis_produk_id',[9,11,12,13])->get();
+            ->select('m_produk_id')
+            ->whereNotIn('m_produk_m_jenis_produk_id', [9, 11, 12, 13])->get();
 
         $listMenu = [];
         foreach ($getMenu as $key => $valMenu) {
-            array_push($listMenu,$valMenu->m_produk_id);
+            array_push($listMenu, $valMenu->m_produk_id);
         }
 
         $getNonMenu = DB::table('m_produk')
-                ->select('m_produk_id')
-                ->whereIn('m_produk_m_jenis_produk_id',[9,11])->get();
+            ->select('m_produk_id')
+            ->whereIn('m_produk_m_jenis_produk_id', [9, 11])->get();
         $listNonMenu = [];
         foreach ($getNonMenu as $key => $valMenu) {
-            array_push($listNonMenu,$valMenu->m_produk_id);
+            array_push($listNonMenu, $valMenu->m_produk_id);
         }
 
         $arrayListRekap = [];
         foreach ($rekap as $keyRekap => $valRekap) {
-            array_push($arrayListRekap,$valRekap->rekap_modal_id);
+            array_push($arrayListRekap, $valRekap->rekap_modal_id);
         }
 
         $listRekap = array_unique($arrayListRekap);
 
         $getIceCream = DB::table('m_produk')
-                ->join('config_sub_jenis_produk','config_sub_jenis_produk_m_produk_id','=','m_produk_id')
-                ->select('m_produk_id')
-                ->whereIn('config_sub_jenis_produk_m_sub_jenis_produk_id',[20,22,23,24,25])->get();
+            ->join('config_sub_jenis_produk', 'config_sub_jenis_produk_m_produk_id', '=', 'm_produk_id')
+            ->select('m_produk_id')
+            ->whereIn('config_sub_jenis_produk_m_sub_jenis_produk_id', [20, 22, 23, 24, 25])->get();
         $listIceCream = [];
         foreach ($getIceCream as $key => $valMenu) {
-            array_push($listIceCream,$valMenu->m_produk_id);
+            array_push($listIceCream, $valMenu->m_produk_id);
         }
         $getMineral = DB::table('m_produk')
-            ->join('config_sub_jenis_produk','config_sub_jenis_produk_m_produk_id','=','m_produk_id')
+            ->join('config_sub_jenis_produk', 'config_sub_jenis_produk_m_produk_id', '=', 'm_produk_id')
             ->select('m_produk_id')
-            ->whereIn('config_sub_jenis_produk_m_sub_jenis_produk_id',[12])->get();
+            ->whereIn('config_sub_jenis_produk_m_sub_jenis_produk_id', [12])->get();
         $listMineral = [];
         foreach ($getMineral as $key => $valMenu) {
-            array_push($listMineral,$valMenu->m_produk_id);
+            array_push($listMineral, $valMenu->m_produk_id);
         }
 
         $getKerupuk = DB::table('m_produk')
-            ->join('config_sub_jenis_produk','config_sub_jenis_produk_m_produk_id','=','m_produk_id')
+            ->join('config_sub_jenis_produk', 'config_sub_jenis_produk_m_produk_id', '=', 'm_produk_id')
             ->select('m_produk_id')
-            ->whereIn('config_sub_jenis_produk_m_sub_jenis_produk_id',[47])->get();
+            ->whereIn('config_sub_jenis_produk_m_sub_jenis_produk_id', [47])->get();
         $listKerupuk = [];
         foreach ($getKerupuk as $key => $valMenu) {
-            array_push($listKerupuk,$valMenu->m_produk_id);
+            array_push($listKerupuk, $valMenu->m_produk_id);
         }
 
         $getWbdFrozen = DB::table('m_produk')
-                    ->join('config_sub_jenis_produk','config_sub_jenis_produk_m_produk_id','=','m_produk_id')
-                    ->select('m_produk_id')
-                    ->whereIn('config_sub_jenis_produk_m_sub_jenis_produk_id',[45])->get();
+            ->join('config_sub_jenis_produk', 'config_sub_jenis_produk_m_produk_id', '=', 'm_produk_id')
+            ->select('m_produk_id')
+            ->whereIn('config_sub_jenis_produk_m_sub_jenis_produk_id', [45])->get();
         $listWbdFrozen = [];
         foreach ($getWbdFrozen as $key => $valMenu) {
-            array_push($listWbdFrozen,$valMenu->m_produk_id);
+            array_push($listWbdFrozen, $valMenu->m_produk_id);
         }
 
         $getKbd = DB::table('m_produk')
-               ->select('m_produk_id')
-               ->whereIn('m_produk_m_jenis_produk_id',[11])
-               ->get();
+            ->select('m_produk_id')
+            ->whereIn('m_produk_m_jenis_produk_id', [11])
+            ->get();
         $listKbd = [];
         foreach ($getKbd as $key => $valMenu) {
             array_push($listKbd, $valMenu->m_produk_id);
@@ -191,18 +185,18 @@ class RekapNonMenuController extends Controller
 
         $data = [];
         foreach ($listRekap as $keyListRekap => $valListRekap) {
-            ${$valListRekap.'-icecream'} = 0;
-            ${$valListRekap.'-mineral'} = 0;
-            ${$valListRekap.'-krupuk'} = 0;
-            ${$valListRekap.'-wbdbb'} = 0;
-            ${$valListRekap.'-wbdfrozen'} = 0;
-            ${$valListRekap.'-pajakreguler'} = 0;
-            ${$valListRekap.'-pajakojol'} = 0;
+            ${$valListRekap . '-icecream'} = 0;
+            ${$valListRekap . '-mineral'} = 0;
+            ${$valListRekap . '-krupuk'} = 0;
+            ${$valListRekap . '-wbdbb'} = 0;
+            ${$valListRekap . '-wbdfrozen'} = 0;
+            ${$valListRekap . '-pajakreguler'} = 0;
+            ${$valListRekap . '-pajakojol'} = 0;
 
             foreach ($tipe as $keyTipe => $valTipe) {
-                ${$valListRekap.'-'.$valTipe.'-menu'} = 0;
-                ${$valListRekap.'-'.$valTipe.'-nonmenu'} = 0;
-                ${$valListRekap.'-'.$valTipe.'-jmlnota'} = 0;
+                ${$valListRekap . '-' . $valTipe . '-menu'} = 0;
+                ${$valListRekap . '-' . $valTipe . '-nonmenu'} = 0;
+                ${$valListRekap . '-' . $valTipe . '-jmlnota'} = 0;
 
                 foreach ($rekap as $keyRekap => $valRekap) {
                     if ($valRekap->rekap_modal_id == $valListRekap) {
@@ -212,59 +206,59 @@ class RekapNonMenuController extends Controller
                         $data[$valListRekap]['sesi'] = $valRekap->sesi;
                         $data[$valListRekap]['operator'] = $valRekap->kasir;
                         if ($valRekap->type_name == $valTipe) {
-                            if (in_array($valRekap->m_produk_id,$listMenu)) {
-                               ${$valListRekap.'-'.$valTipe . '-menu'} += $valRekap->nominal;
+                            if (in_array($valRekap->m_produk_id, $listMenu)) {
+                                ${$valListRekap . '-' . $valTipe . '-menu'} += $valRekap->nominal;
                             }
-                            if (in_array($valRekap->m_produk_id,$listNonMenu)) {
-                               ${$valListRekap.'-'.$valTipe . '-nonmenu'} += $valRekap->nominal;
+                            if (in_array($valRekap->m_produk_id, $listNonMenu)) {
+                                ${$valListRekap . '-' . $valTipe . '-nonmenu'} += $valRekap->nominal;
                             }
 
-                            if (isset($countNotaArray[$valRekap->type_id.'-'.$valListRekap])) {
-                                ${$valListRekap.'-'.$valTipe . '-jmlnota'} = $countNotaArray[$valRekap->type_id.'-'.$valListRekap];
+                            if (isset($countNotaArray[$valRekap->type_id . '-' . $valListRekap])) {
+                                ${$valListRekap . '-' . $valTipe . '-jmlnota'} = $countNotaArray[$valRekap->type_id . '-' . $valListRekap];
                             }
                         }
-                        $data[$valListRekap][$valTipe.'-menu'] = number_format(${$valListRekap.'-'.$valTipe . '-menu'});
-                        $data[$valListRekap][$valTipe.'-nonmenu'] = number_format(${$valListRekap.'-'.$valTipe . '-nonmenu'});
-                        $data[$valListRekap][$valTipe.'-jmlnota'] = ${$valRekap->rekap_modal_id.'-'.$valTipe . '-jmlnota'};
+                        $data[$valListRekap][$valTipe . '-menu'] = number_format(${$valListRekap . '-' . $valTipe . '-menu'});
+                        $data[$valListRekap][$valTipe . '-nonmenu'] = number_format(${$valListRekap . '-' . $valTipe . '-nonmenu'});
+                        $data[$valListRekap][$valTipe . '-jmlnota'] = ${$valRekap->rekap_modal_id . '-' . $valTipe . '-jmlnota'};
                     }
                 }
             }
             // return $data;
             foreach ($rekap as $keyRekap => $valRekap) {
                 if ($valRekap->rekap_modal_id == $valListRekap) {
-                    if (in_array($valRekap->m_produk_id,$listIceCream)) {
-                        ${$valListRekap.'-icecream'} += $valRekap->nominal;
+                    if (in_array($valRekap->m_produk_id, $listIceCream)) {
+                        ${$valListRekap . '-icecream'} += $valRekap->nominal;
                     }
-                    $data[$valListRekap]['icecream'] = number_format(${$valListRekap.'-icecream'});
+                    $data[$valListRekap]['icecream'] = number_format(${$valListRekap . '-icecream'});
 
-                    if (in_array($valRekap->m_produk_id,$listMineral)) {
-                        ${$valListRekap.'-mineral'} += $valRekap->nominal;
+                    if (in_array($valRekap->m_produk_id, $listMineral)) {
+                        ${$valListRekap . '-mineral'} += $valRekap->nominal;
                     }
-                    $data[$valListRekap]['mineral'] = number_format(${$valListRekap.'-mineral'});
+                    $data[$valListRekap]['mineral'] = number_format(${$valListRekap . '-mineral'});
 
-                    if (in_array($valRekap->m_produk_id,$listKerupuk)) {
-                        ${$valListRekap.'-krupuk'} += $valRekap->nominal;
+                    if (in_array($valRekap->m_produk_id, $listKerupuk)) {
+                        ${$valListRekap . '-krupuk'} += $valRekap->nominal;
                     }
-                    $data[$valListRekap]['krupuk'] = number_format(${$valListRekap.'-krupuk'});
+                    $data[$valListRekap]['krupuk'] = number_format(${$valListRekap . '-krupuk'});
 
-                    if (in_array($valRekap->m_produk_id,$listKbd) && !in_array($valRekap->m_produk_id, $listWbdFrozen)) {
-                        ${$valListRekap.'-wbdbb'} += $valRekap->nominal;
+                    if (in_array($valRekap->m_produk_id, $listKbd) && !in_array($valRekap->m_produk_id, $listWbdFrozen)) {
+                        ${$valListRekap . '-wbdbb'} += $valRekap->nominal;
                     }
-                    $data[$valListRekap]['wbdbb'] = number_format(${$valListRekap.'-wbdbb'});
+                    $data[$valListRekap]['wbdbb'] = number_format(${$valListRekap . '-wbdbb'});
 
-                    if (in_array($valRekap->m_produk_id,$listWbdFrozen)) {
-                        ${$valListRekap.'-wbdfrozen'} += $valRekap->nominal;
+                    if (in_array($valRekap->m_produk_id, $listWbdFrozen)) {
+                        ${$valListRekap . '-wbdfrozen'} += $valRekap->nominal;
                     }
-                    $data[$valListRekap]['wbdfrozen'] = number_format(${$valListRekap.'-wbdfrozen'});
+                    $data[$valListRekap]['wbdfrozen'] = number_format(${$valListRekap . '-wbdfrozen'});
 
-                    if (in_array($valRekap->type_name,['dine in', 'take away'])) {
-                        ${$valListRekap.'-pajakreguler'} += $valRekap->pajak;
-                    }else{
+                    if (in_array($valRekap->type_name, ['dine in', 'take away'])) {
+                        ${$valListRekap . '-pajakreguler'} += $valRekap->pajak;
+                    } else {
                         $nominalPajak = $valRekap->nominal * 0.10;
-                        ${$valListRekap.'-pajakojol'} += $nominalPajak;
+                        ${$valListRekap . '-pajakojol'} += $nominalPajak;
                     }
-                    $data[$valListRekap]['pajakreguler'] = number_format(${$valListRekap.'-pajakreguler'});
-                    $data[$valListRekap]['pajakojol'] = number_format(${$valListRekap.'-pajakojol'});
+                    $data[$valListRekap]['pajakreguler'] = number_format(${$valListRekap . '-pajakreguler'});
+                    $data[$valListRekap]['pajakojol'] = number_format(${$valListRekap . '-pajakojol'});
                 }
             }
         }
@@ -272,9 +266,9 @@ class RekapNonMenuController extends Controller
         foreach ($data as $row) {
             $convert[] = array_values($row);
         }
-       
+
         $output = array("data" => $convert);
         return response()->json($output);
     }
-    
+
 }

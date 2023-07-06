@@ -2,11 +2,11 @@
 
 namespace Modules\Dashboard\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class RekapAktivitasKasirController extends Controller
 {
@@ -16,7 +16,7 @@ class RekapAktivitasKasirController extends Controller
      */
     public function index()
     {
-        
+
     }
 
     public function rekap_laci()
@@ -25,8 +25,8 @@ class RekapAktivitasKasirController extends Controller
         $data = new \stdClass();
         $data->waroeng_nama = DB::table('m_w')->select('m_w_nama', 'm_w_id')->where('m_w_id', $waroeng_id)->first();
         $data->area_nama = DB::table('m_area')->join('m_w', 'm_w_m_area_id', 'm_area_id')->select('m_area_nama', 'm_area_id')->where('m_w_id', $waroeng_id)->first();
-        $data->akses_area = $this->get_akses_area();//mulai dari 1 - akhir
-        $data->akses_pusat = $this->get_akses_pusat();//1,2,3,4,5
+        $data->akses_area = $this->get_akses_area(); //mulai dari 1 - akhir
+        $data->akses_pusat = $this->get_akses_pusat(); //1,2,3,4,5
         $data->akses_pusar = $this->get_akses_pusar(); //mulai dari 6 - akhir
 
         $data->waroeng = DB::table('m_w')
@@ -62,18 +62,18 @@ class RekapAktivitasKasirController extends Controller
         $user = DB::table('users')
             ->join('rekap_buka_laci', 'r_b_l_created_by', 'users_id')
             ->select('users_id', 'name');
-            if(in_array(Auth::user()->waroeng_id, $this->get_akses_area())){
-                $user->where('waroeng_id', $request->id_waroeng);
-            } else {
-                $user->where('waroeng_id', Auth::user()->waroeng_id);
-            }
-            if (strpos($request->tanggal, 'to') !== false) {
-                [$start, $end] = explode('to' ,$request->tanggal);
-                $user->whereBetween('r_b_l_tanggal', [$start, $end]);
-            } else {
-                $user->where('r_b_l_tanggal', $request->tanggal);
-            }
-            $user1 = $user->orderBy('users_id', 'asc')->get();
+        if (in_array(Auth::user()->waroeng_id, $this->get_akses_area())) {
+            $user->where('waroeng_id', $request->id_waroeng);
+        } else {
+            $user->where('waroeng_id', Auth::user()->waroeng_id);
+        }
+        if (strpos($request->tanggal, 'to') !== false) {
+            [$start, $end] = explode('to', $request->tanggal);
+            $user->whereBetween('r_b_l_tanggal', [$start, $end]);
+        } else {
+            $user->where('r_b_l_tanggal', $request->tanggal);
+        }
+        $user1 = $user->orderBy('users_id', 'asc')->get();
 
         $data = array();
         foreach ($user1 as $val) {
@@ -89,29 +89,29 @@ class RekapAktivitasKasirController extends Controller
             ->join('users', 'users_id', 'r_b_l_created_by')
             ->join('rekap_modal', 'rekap_modal_id', 'r_b_l_rekap_modal_id')
             ->selectRaw('r_b_l_rekap_modal_id, r_b_l_tanggal, name, sum(r_b_l_qty) as laci, r_b_l_m_area_nama, r_b_l_m_w_nama, rekap_modal_sesi');
-            if (strpos($request->tanggal, 'to') !== false) {
-                [$start, $end] = explode('to', $request->tanggal);
-                $buka_laci->whereBetween('r_b_l_tanggal', [$start, $end]);
-            } else {
-                $buka_laci->where('r_b_l_tanggal', $request->tanggal);
-            }
-            if($request->area != 'all'){
-                $buka_laci->where('r_b_l_m_area_id', $request->area);
-                if($request->waroeng != 'all'){
-                    $buka_laci->where('r_b_l_m_w_id', $request->waroeng);
-                    if($request->operator != 'all'){
-                        $buka_laci->where('r_b_l_created_by', $request->operator);
-                    }
+        if (strpos($request->tanggal, 'to') !== false) {
+            [$start, $end] = explode('to', $request->tanggal);
+            $buka_laci->whereBetween('r_b_l_tanggal', [$start, $end]);
+        } else {
+            $buka_laci->where('r_b_l_tanggal', $request->tanggal);
+        }
+        if ($request->area != 'all') {
+            $buka_laci->where('r_b_l_m_area_id', $request->area);
+            if ($request->waroeng != 'all') {
+                $buka_laci->where('r_b_l_m_w_id', $request->waroeng);
+                if ($request->operator != 'all') {
+                    $buka_laci->where('r_b_l_created_by', $request->operator);
                 }
             }
-            $buka_laci = $buka_laci->groupby('r_b_l_tanggal', 'name', 'r_b_l_rekap_modal_id', 'r_b_l_m_area_nama', 'r_b_l_m_area_id', 'r_b_l_m_w_nama', 'rekap_modal_sesi')
-                ->orderby('r_b_l_m_area_id', 'ASC')
-                ->orderby('r_b_l_tanggal', 'ASC')
-                ->orderby('rekap_modal_sesi', 'ASC')
-                ->get();
-        
+        }
+        $buka_laci = $buka_laci->groupby('r_b_l_tanggal', 'name', 'r_b_l_rekap_modal_id', 'r_b_l_m_area_nama', 'r_b_l_m_area_id', 'r_b_l_m_w_nama', 'rekap_modal_sesi')
+            ->orderby('r_b_l_m_area_id', 'ASC')
+            ->orderby('r_b_l_tanggal', 'ASC')
+            ->orderby('rekap_modal_sesi', 'ASC')
+            ->get();
+
         $data = array();
-        foreach ($buka_laci as $laci){
+        foreach ($buka_laci as $laci) {
             $row = array();
             $row[] = $laci->r_b_l_m_area_nama;
             $row[] = $laci->r_b_l_m_w_nama;
@@ -119,7 +119,7 @@ class RekapAktivitasKasirController extends Controller
             $row[] = $laci->name;
             $row[] = $laci->rekap_modal_sesi;
             $row[] = $laci->laci;
-            $row[] ='<a id="button_detail" class="btn btn-sm button_detail btn-info" value="'.$laci->r_b_l_rekap_modal_id.'" title="Detail Nota"><i class="fa-sharp fa-solid fa-eye"></i></a>';
+            $row[] = '<a id="button_detail" class="btn btn-sm button_detail btn-info" value="' . $laci->r_b_l_rekap_modal_id . '" title="Detail Nota"><i class="fa-sharp fa-solid fa-eye"></i></a>';
             $data[] = $row;
         }
 
@@ -145,15 +145,15 @@ class RekapAktivitasKasirController extends Controller
             ->orderby('r_b_l_created_at', 'ASC')
             ->get();
 
-            foreach ($buka_laci as $laci) {
-                $data[] = array(
-                    'waktu' => date('H:i', strtotime($laci->r_b_l_created_at)),
-                    'intensitas' => $laci->r_b_l_qty,
-                    'keterangan' => $laci->r_b_l_keterangan,
-                );
-            }
-            $output = array('data' => $data);
-            return response()->json($output);    
+        foreach ($buka_laci as $laci) {
+            $data[] = array(
+                'waktu' => date('H:i', strtotime($laci->r_b_l_created_at)),
+                'intensitas' => $laci->r_b_l_qty,
+                'keterangan' => $laci->r_b_l_keterangan,
+            );
+        }
+        $output = array('data' => $data);
+        return response()->json($output);
     }
 
     public function rekap_hps_menu()
@@ -162,8 +162,8 @@ class RekapAktivitasKasirController extends Controller
         $data = new \stdClass();
         $data->waroeng_nama = DB::table('m_w')->select('m_w_nama', 'm_w_id')->where('m_w_id', $waroeng_id)->first();
         $data->area_nama = DB::table('m_area')->join('m_w', 'm_w_m_area_id', 'm_area_id')->select('m_area_nama', 'm_area_id')->where('m_w_id', $waroeng_id)->first();
-        $data->akses_area = $this->get_akses_area();//mulai dari 1 - akhir
-        $data->akses_pusat = $this->get_akses_pusat();//1,2,3,4,5
+        $data->akses_area = $this->get_akses_area(); //mulai dari 1 - akhir
+        $data->akses_pusat = $this->get_akses_pusat(); //1,2,3,4,5
         $data->akses_pusar = $this->get_akses_pusar(); //mulai dari 6 - akhir
 
         $data->waroeng = DB::table('m_w')
@@ -181,18 +181,18 @@ class RekapAktivitasKasirController extends Controller
         $user = DB::table('users')
             ->join('rekap_hapus_menu', 'r_h_m_created_by', 'users_id')
             ->select('users_id', 'name');
-            if(in_array(Auth::user()->waroeng_id, $this->get_akses_area())){
-                $user->where('waroeng_id', $request->id_waroeng);
-            } else {
-                $user->where('waroeng_id', Auth::user()->waroeng_id);
-            }
-            if (strpos($request->tanggal, 'to') !== false) {
-                [$start, $end] = explode('to' ,$request->tanggal);
-                $user->whereBetween('r_h_m_tanggal', [$start, $end]);
-            } else {
-                $user->where('r_h_m_tanggal', $request->tanggal);
-            }
-            $user1 = $user->orderBy('users_id', 'asc')->get();
+        if (in_array(Auth::user()->waroeng_id, $this->get_akses_area())) {
+            $user->where('waroeng_id', $request->id_waroeng);
+        } else {
+            $user->where('waroeng_id', Auth::user()->waroeng_id);
+        }
+        if (strpos($request->tanggal, 'to') !== false) {
+            [$start, $end] = explode('to', $request->tanggal);
+            $user->whereBetween('r_h_m_tanggal', [$start, $end]);
+        } else {
+            $user->where('r_h_m_tanggal', $request->tanggal);
+        }
+        $user1 = $user->orderBy('users_id', 'asc')->get();
 
         $data = array();
         foreach ($user1 as $val) {
@@ -207,28 +207,28 @@ class RekapAktivitasKasirController extends Controller
         $hps_menu = DB::table('rekap_hapus_menu')
             ->join('users', 'users_id', 'r_h_m_created_by')
             ->join('rekap_modal', 'rekap_modal_id', 'r_h_m_rekap_modal_id');
-            if (strpos($request->tanggal, 'to') !== false) {
-                [$start, $end] = explode('to', $request->tanggal);
-                $hps_menu->whereBetween('r_h_m_tanggal', [$start, $end]);
-            } else {
-                $hps_menu->where('r_h_m_tanggal', $request->tanggal);
-            }
-            if($request->area != 'all'){
-                $hps_menu->where('r_h_m_m_area_id', $request->area);
-                if($request->waroeng != 'all'){
-                    $hps_menu->where('r_h_m_m_w_id', $request->waroeng);
-                    if($request->operator != 'all'){
-                        $hps_menu->where('r_h_m_created_by', $request->operator);
-                    }
+        if (strpos($request->tanggal, 'to') !== false) {
+            [$start, $end] = explode('to', $request->tanggal);
+            $hps_menu->whereBetween('r_h_m_tanggal', [$start, $end]);
+        } else {
+            $hps_menu->where('r_h_m_tanggal', $request->tanggal);
+        }
+        if ($request->area != 'all') {
+            $hps_menu->where('r_h_m_m_area_id', $request->area);
+            if ($request->waroeng != 'all') {
+                $hps_menu->where('r_h_m_m_w_id', $request->waroeng);
+                if ($request->operator != 'all') {
+                    $hps_menu->where('r_h_m_created_by', $request->operator);
                 }
             }
-            $hps_menu = $hps_menu->orderby('r_h_m_m_area_id', 'ASC')
+        }
+        $hps_menu = $hps_menu->orderby('r_h_m_m_area_id', 'ASC')
             ->orderby('r_h_m_tanggal', 'ASC')
             ->orderby('rekap_modal_sesi', 'ASC')
             ->get();
-        
+
         $data = array();
-        foreach ($hps_menu as $menu){
+        foreach ($hps_menu as $menu) {
             $row = array();
             $row[] = $menu->r_h_m_m_area_nama;
             $row[] = $menu->r_h_m_m_w_nama;
@@ -257,8 +257,8 @@ class RekapAktivitasKasirController extends Controller
         $data = new \stdClass();
         $data->waroeng_nama = DB::table('m_w')->select('m_w_nama', 'm_w_id')->where('m_w_id', $waroeng_id)->first();
         $data->area_nama = DB::table('m_area')->join('m_w', 'm_w_m_area_id', 'm_area_id')->select('m_area_nama', 'm_area_id')->where('m_w_id', $waroeng_id)->first();
-        $data->akses_area = $this->get_akses_area();//mulai dari 1 - akhir
-        $data->akses_pusat = $this->get_akses_pusat();//1,2,3,4,5
+        $data->akses_area = $this->get_akses_area(); //mulai dari 1 - akhir
+        $data->akses_pusat = $this->get_akses_pusat(); //1,2,3,4,5
         $data->akses_pusar = $this->get_akses_pusar(); //mulai dari 6 - akhir
 
         $data->waroeng = DB::table('m_w')
@@ -276,18 +276,18 @@ class RekapAktivitasKasirController extends Controller
         $user = DB::table('users')
             ->join('rekap_hapus_transaksi', 'r_h_t_created_by', 'users_id')
             ->select('users_id', 'name');
-            if(in_array(Auth::user()->waroeng_id, $this->get_akses_area())){
-                $user->where('waroeng_id', $request->id_waroeng);
-            } else {
-                $user->where('waroeng_id', Auth::user()->waroeng_id);
-            }
-            if (strpos($request->tanggal, 'to') !== false) {
-                [$start, $end] = explode('to' ,$request->tanggal);
-                $user->whereBetween('r_h_t_tanggal', [$start, $end]);
-            } else {
-                $user->where('r_h_t_tanggal', $request->tanggal);
-            }
-            $user1 = $user->orderBy('users_id', 'asc')->get();
+        if (in_array(Auth::user()->waroeng_id, $this->get_akses_area())) {
+            $user->where('waroeng_id', $request->id_waroeng);
+        } else {
+            $user->where('waroeng_id', Auth::user()->waroeng_id);
+        }
+        if (strpos($request->tanggal, 'to') !== false) {
+            [$start, $end] = explode('to', $request->tanggal);
+            $user->whereBetween('r_h_t_tanggal', [$start, $end]);
+        } else {
+            $user->where('r_h_t_tanggal', $request->tanggal);
+        }
+        $user1 = $user->orderBy('users_id', 'asc')->get();
 
         $data = array();
         foreach ($user1 as $val) {
@@ -302,28 +302,28 @@ class RekapAktivitasKasirController extends Controller
         $hps_nota = DB::table('rekap_hapus_transaksi')
             ->join('users', 'users_id', 'r_h_t_created_by')
             ->join('rekap_modal', 'rekap_modal_id', 'r_h_t_rekap_modal_id');
-            if (strpos($request->tanggal, 'to') !== false) {
-                [$start, $end] = explode('to', $request->tanggal);
-                $hps_nota->whereBetween('r_h_t_tanggal', [$start, $end]);
-            } else {
-                $hps_nota->where('r_h_t_tanggal', $request->tanggal);
-            }
-            if($request->area != 'all'){
-                $hps_nota->where('r_h_t_m_area_id', $request->area);
-                if($request->waroeng != 'all'){
-                    $hps_nota->where('r_h_t_m_w_id', $request->waroeng);
-                    if($request->operator != 'all'){
-                        $hps_nota->where('r_h_t_created_by', $request->operator);
-                    }
+        if (strpos($request->tanggal, 'to') !== false) {
+            [$start, $end] = explode('to', $request->tanggal);
+            $hps_nota->whereBetween('r_h_t_tanggal', [$start, $end]);
+        } else {
+            $hps_nota->where('r_h_t_tanggal', $request->tanggal);
+        }
+        if ($request->area != 'all') {
+            $hps_nota->where('r_h_t_m_area_id', $request->area);
+            if ($request->waroeng != 'all') {
+                $hps_nota->where('r_h_t_m_w_id', $request->waroeng);
+                if ($request->operator != 'all') {
+                    $hps_nota->where('r_h_t_created_by', $request->operator);
                 }
             }
-            $hps_nota = $hps_nota->orderby('r_h_t_m_area_id', 'ASC')
+        }
+        $hps_nota = $hps_nota->orderby('r_h_t_m_area_id', 'ASC')
             ->orderby('r_h_t_tanggal', 'ASC')
             ->orderby('rekap_modal_sesi', 'ASC')
             ->get();
-        
+
         $data = array();
-        foreach ($hps_nota as $nota){
+        foreach ($hps_nota as $nota) {
             $approve = DB::table('rekap_hapus_transaksi')
                 ->leftjoin('users', 'users_id', 'r_h_t_approved_by')
                 ->select('name')

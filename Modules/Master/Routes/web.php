@@ -9,7 +9,7 @@
 | routes are loaded by the RouteServiceProvider within a group which
 | contains the "web" middleware group. Now create something great!
 |
-*/
+ */
 
 //Master Area Route
 use illuminate\Support\Facades\Route;
@@ -67,8 +67,8 @@ Route::group(['prefix' => 'master', 'controller' => MWaroengController::class, '
     Route::get('m_waroeng', 'index')->name('m_waroeng.index');
     Route::get('m_waroeng/edit/{id}', 'edit')->name('m_waroeng.edit');
     Route::post('m_waroeng/action', 'action')->name('action.m_waroeng');
-    Route::get('m_waroeng/akses','get_mw_akses');
-    Route::get('m_waroeng/waroeng_update/{id}','update_waroeng_id');
+    Route::get('m_waroeng/akses', 'get_mw_akses');
+    Route::get('m_waroeng/waroeng_update/{id}', 'update_waroeng_id');
 });
 //Master Jenis Nota
 Route::group(['prefix' => 'master', 'controller' => MJenisNotaController::class, 'middleware' => ['auth', 'web']], function () {
@@ -79,12 +79,11 @@ Route::group(['prefix' => 'master', 'controller' => MJenisNotaController::class,
     Route::get('m_jenis_nota/detail_harga/{id}', 'detailHarga')->name('m_jenis_nota.detail_harga');
     Route::get('m_jenis_nota/show_harga/{id}', 'showHarga')->name('m_jenis_nota.show_harga');
     Route::post('m_jenis_nota/simpan_harga', 'simpanHarga')->name('m_jenis_nota.simpan_harga');
-    Route::post('m_jenis_nota/copy','copy_nota')->name('m_jenis_nota.copy');
-    Route::post('m_jenis_nota/update','update_harga')->name('m_jenis_nota.update');
-    Route::post('m_jenis_nota/save_update_harga','simpanUpdateHarga')->name('m_jenis_nota.save_update_harga');
-    Route::get('m_jenis_nota/get_harga','get_harga')->name('m_jenis_nota');
+    Route::post('m_jenis_nota/copy', 'copy_nota')->name('m_jenis_nota.copy');
+    Route::post('m_jenis_nota/update', 'update_harga')->name('m_jenis_nota.update');
+    Route::post('m_jenis_nota/save_update_harga', 'simpanUpdateHarga')->name('m_jenis_nota.save_update_harga');
+    Route::get('m_jenis_nota/get_harga', 'get_harga')->name('m_jenis_nota');
 });
-
 
 //Master Meja
 Route::group(['prefix' => 'master', 'controller' => MejaController::class, 'middleware' => ['auth', 'web']], function () {
@@ -98,7 +97,7 @@ Route::group(['prefix' => 'master', 'controller' => MejaController::class, 'midd
 Route::group(['prefix' => 'master', 'controller' => MSatuanController::class, 'middleware' => ['auth', 'web']], function () {
     Route::get('m_satuan', 'index')->name('m_satuan.index');
     Route::post('m_satuan/action', 'action')->name('action.m_satuan');
-    Route::get('m_satuan/{id}','satuan_kode_produk');
+    Route::get('m_satuan/{id}', 'satuan_kode_produk');
 });
 //Master Klasifikasi
 Route::group(['prefix' => 'master', 'controller' => ProdKlasifikasiController::class, 'middleware' => ['auth', 'web']], function () {
@@ -116,7 +115,7 @@ Route::group(['prefix' => 'master', 'controller' => ProdukController::class, 'mi
     Route::get('m_produk', 'index')->name('m_produk.index');
     Route::post('produk/simpan', 'simpan')->name('simpan.m_produk');
     Route::get('produk/list/{id}', 'list')->name('m_produk.list');
-    Route::get('m_produk_satuan/{id}','get_prod_sat');
+    Route::get('m_produk_satuan/{id}', 'get_prod_sat');
 
 });
 //Master Produk Relasi
@@ -141,4 +140,9 @@ Route::group(['prefix' => 'master', 'controller' => ResepController::class, 'mid
 Route::group(['prefix' => 'master', 'controller' => MTipeNotaController::class, 'middleware' => ['auth', 'web']], function () {
     Route::get('m_tipe_nota', 'index')->name('m_tipe_nota.index');
     Route::post('m_tipe_nota/action', 'action')->name('action.m_tipe_nota');
+});
+//Master Pajak
+Route::group(['prefix' => 'master', 'controller' => PajakCollectionController::class, 'middleware' => ['auth', 'web']], function () {
+    Route::get('pajak', 'index')->name('pajak.index');
+    Route::post('pajak/action', 'action')->name('action.pajak_collection');
 });

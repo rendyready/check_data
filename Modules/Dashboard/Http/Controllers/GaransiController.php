@@ -2,11 +2,11 @@
 
 namespace Modules\Dashboard\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class GaransiController extends Controller
 {
@@ -20,8 +20,8 @@ class GaransiController extends Controller
         $data = new \stdClass();
         $data->waroeng_nama = DB::table('m_w')->select('m_w_nama', 'm_w_id')->where('m_w_id', $waroeng_id)->first();
         $data->area_nama = DB::table('m_area')->join('m_w', 'm_w_m_area_id', 'm_area_id')->select('m_area_nama', 'm_area_id')->where('m_w_id', $waroeng_id)->first();
-        $data->akses_area = $this->get_akses_area();//mulai dari 1 - akhir
-        $data->akses_pusat = $this->get_akses_pusat();//1,2,3,4,5
+        $data->akses_area = $this->get_akses_area(); //mulai dari 1 - akhir
+        $data->akses_pusat = $this->get_akses_pusat(); //1,2,3,4,5
         $data->akses_pusar = $this->get_akses_pusar(); //mulai dari 6 - akhir
 
         $data->waroeng = DB::table('m_w')
@@ -30,7 +30,7 @@ class GaransiController extends Controller
             ->get();
         $data->area = DB::table('m_area')
             ->orderby('m_area_id', 'ASC')
-            ->get();    
+            ->get();
         return view('dashboard::rekap_garansi', compact('data'));
     }
 
@@ -55,18 +55,18 @@ class GaransiController extends Controller
             ->join('rekap_garansi', 'rekap_garansi_created_by', 'users_id')
             ->join('rekap_transaksi', 'r_t_id', 'rekap_garansi_r_t_id')
             ->select('users_id', 'name');
-            if(in_array(Auth::user()->waroeng_id, $this->get_akses_area())){
-                $user->where('waroeng_id', $request->id_waroeng);
-            } else {
-                $user->where('waroeng_id', Auth::user()->waroeng_id);
-            }
-            if (strpos($request->tanggal, 'to') !== false) {
-                [$start, $end] = explode('to' ,$request->tanggal);
-                $user->whereBetween('r_t_tanggal', [$start, $end]);
-            } else {
-                $user->where('r_t_tanggal', $request->tanggal);
-            }
-            $user1 = $user->orderBy('users_id', 'asc')
+        if (in_array(Auth::user()->waroeng_id, $this->get_akses_area())) {
+            $user->where('waroeng_id', $request->id_waroeng);
+        } else {
+            $user->where('waroeng_id', Auth::user()->waroeng_id);
+        }
+        if (strpos($request->tanggal, 'to') !== false) {
+            [$start, $end] = explode('to', $request->tanggal);
+            $user->whereBetween('r_t_tanggal', [$start, $end]);
+        } else {
+            $user->where('r_t_tanggal', $request->tanggal);
+        }
+        $user1 = $user->orderBy('users_id', 'asc')
             ->get();
         $data = array();
         foreach ($user1 as $val) {
@@ -79,27 +79,27 @@ class GaransiController extends Controller
     public function show(Request $request)
     {
         $get = DB::table('rekap_garansi')
-                ->join('rekap_transaksi', 'r_t_id', 'rekap_garansi_r_t_id')
-                ->join('users', 'users_id', 'rekap_garansi_created_by');
-                if (strpos($request->tanggal, 'to') !== false) {
-                    $dates = explode('to' ,$request->tanggal);
-                    $get->whereBetween('r_t_tanggal', $dates);
-                } else {
-                    $get->where('r_t_tanggal', $request->tanggal);
+            ->join('rekap_transaksi', 'r_t_id', 'rekap_garansi_r_t_id')
+            ->join('users', 'users_id', 'rekap_garansi_created_by');
+        if (strpos($request->tanggal, 'to') !== false) {
+            $dates = explode('to', $request->tanggal);
+            $get->whereBetween('r_t_tanggal', $dates);
+        } else {
+            $get->where('r_t_tanggal', $request->tanggal);
+        }
+        if ($request->area != 'all') {
+            $get->where('r_t_m_area_id', $request->area);
+            if ($request->waroeng != 'all') {
+                $get->where('r_t_m_w_id', $request->waroeng);
+                if ($request->operator != 'all') {
+                    $get->where('rekap_garansi_created_by', $request->operator);
                 }
-                if($request->area != 'all'){
-                    $get->where('r_t_m_area_id', $request->area);
-                    if($request->waroeng != 'all') {
-                        $get->where('r_t_m_w_id', $request->waroeng);
-                        if($request->operator != 'all'){
-                            $get->where('rekap_garansi_created_by', $request->operator);
-                        }
-                    }
-                }
-                $get = $get->orderBy('r_t_tanggal', 'ASC')
-                ->orderBy('r_t_nota_code', 'ASC')
-                ->get();
-        
+            }
+        }
+        $get = $get->orderBy('r_t_tanggal', 'ASC')
+            ->orderBy('r_t_nota_code', 'ASC')
+            ->get();
+
         $data = array();
         foreach ($get as $value) {
             $row = array();

@@ -429,9 +429,7 @@
                                     <li class="nav-main-item{{ request()->is('dashboard/*') ? ' open' : '' }}">
                                         <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu"
                                             aria-haspopup="true" aria-expanded="true" href="#">
-                                            <span class="nav-main-link-name">Laporan CR55 <span
-                                                    style="color: rgb(223, 108, 108); font-size:12px;">
-                                                    v1.0</span></span>
+                                            <span class="nav-main-link-name">Laporan CR55</span>
                                         </a>
                                         <ul class="nav-main-submenu">
                                             @can('detail nota.view')
@@ -938,6 +936,23 @@
                             </ul>
                         </li>
                     @endcan
+
+                    <li class="nav-main-item{{ request()->is('keuangan/*') ? ' open' : '' }}">
+                        <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true"
+                            aria-expanded="true" href="#">
+                            <i class="nav-main-link-icon fa fa-coins"></i>
+                            <span class="nav-main-link-name">Keuangan</span>
+                        </a>
+                        <ul class="nav-main-submenu">
+                            <li class="nav-main-item">
+                                <a class="nav-main-link{{ request()->is('keuangan/pajak') ? ' active' : '' }}"
+                                    href="{{ route('pajak.index') }}">
+                                    <span class="nav-main-link-name">Pajak</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
                     @can('module user.view')
                         <li class="nav-main-heading">Pengaturan</li>
                         <li class="nav-main-item{{ request()->is('users/*') ? ' open' : '' }}">

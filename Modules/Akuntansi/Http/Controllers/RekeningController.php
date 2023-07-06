@@ -2,12 +2,13 @@
 
 namespace Modules\Akuntansi\Http\Controllers;
 
+use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-use Carbon\Carbon;
-use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
+
 class RekeningController extends Controller
 {
     /**
@@ -15,7 +16,7 @@ class RekeningController extends Controller
      * @return Renderable
      */
     public function index(Request $request)
-    {       
+    {
         $data = new \stdClass();
         $data->waroeng = DB::table('m_w')
             ->orderby('m_w_id', 'ASC')
@@ -31,11 +32,11 @@ class RekeningController extends Controller
     public function tampil(Request $request)
     {
         $get = DB::table('m_rekening')
-                ->join('m_w', 'm_w_code', 'm_rekening_m_waroeng_id')
-                ->where('m_rekening_kategori', $request->m_rekening_kategori)
-                ->where('m_rekening_m_waroeng_id', $request->m_rekening_m_waroeng_id)
-                ->orderBy('m_rekening_no_akun', 'ASC')
-                ->get();
+            ->join('m_w', 'm_w_code', 'm_rekening_m_waroeng_id')
+            ->where('m_rekening_kategori', $request->m_rekening_kategori)
+            ->where('m_rekening_m_waroeng_id', $request->m_rekening_m_waroeng_id)
+            ->orderBy('m_rekening_no_akun', 'ASC')
+            ->get();
         $data = array();
         foreach ($get as $value) {
             $row = array();
@@ -43,7 +44,7 @@ class RekeningController extends Controller
             $row[] = $value->m_rekening_no_akun;
             $row[] = $value->m_rekening_nama;
             $row[] = rupiah($value->m_rekening_saldo);
-            $row[] = '<a id="buttonEdit" class="btn btn-sm buttonEdit btn-success" value="'.$value->m_rekening_no_akun.'" title="Edit"><i class="fa fa-pencil"></i></a> <a id="buttonHapus" class="btn btn-sm buttonHapus btn-warning" value="'.$value->m_rekening_no_akun.'" title="Hapus"><i class="fa fa-trash"></i></a>';
+            $row[] = '<a id="buttonEdit" class="btn btn-sm buttonEdit btn-success" value="' . $value->m_rekening_no_akun . '" title="Edit"><i class="fa fa-pencil"></i></a> <a id="buttonHapus" class="btn btn-sm buttonHapus btn-warning" value="' . $value->m_rekening_no_akun . '" title="Hapus"><i class="fa fa-trash"></i></a>';
             $data[] = $row;
         }
         $output = array("data" => $data);
@@ -80,7 +81,7 @@ class RekeningController extends Controller
                 'm_rekening_nama' => strtolower($request->m_rekening_nama[$key]),
                 'm_rekening_saldo' => str_replace(',', '.', $str1),
                 'm_rekening_created_by' => Auth::user()->users_id,
-                'm_rekening_created_at' => Carbon::now()
+                'm_rekening_created_at' => Carbon::now(),
             );
             DB::table('m_rekening')->insert($data);
         }
@@ -101,7 +102,7 @@ class RekeningController extends Controller
                 ->where('m_rekening_nama', $key->m_rekening_nama)
                 ->first();
             if (empty($get_data2)) {
-                $saldo = ($request->m_rekening_copy_saldo == 'tidak') ? 0 : $key->m_rekening_saldo ;
+                $saldo = ($request->m_rekening_copy_saldo == 'tidak') ? 0 : $key->m_rekening_saldo;
                 $data = array(
                     'm_rekening_id' => $this->getMasterId('m_rekening'),
                     'm_rekening_m_waroeng_id' => $request->waroeng_tujuan,
@@ -110,7 +111,7 @@ class RekeningController extends Controller
                     'm_rekening_nama' => $key->m_rekening_nama,
                     'm_rekening_saldo' => $saldo,
                     'm_rekening_created_by' => Auth::user()->users_id,
-                    'm_rekening_created_at' => Carbon::now()
+                    'm_rekening_created_at' => Carbon::now(),
                 );
                 DB::table('m_rekening')->insert($data);
             }
@@ -120,7 +121,7 @@ class RekeningController extends Controller
 
     public function edit($id)
     {
-        $data = DB::table('m_rekening')->where('m_rekening_no_akun',$id)->first();
+        $data = DB::table('m_rekening')->where('m_rekening_no_akun', $id)->first();
         return response()->json($data);
     }
 
@@ -128,69 +129,69 @@ class RekeningController extends Controller
     {
         $rekening_old = $request->m_rekening_id;
         $validasi1 = DB::table('rekap_jurnal_kas')
-                    ->select('rekap_jurnal_kas_m_rekening_no_akun')
-                    ->where('rekap_jurnal_kas_m_rekening_no_akun', $request->m_rekening_no_akun)
-                    ->count();
+            ->select('rekap_jurnal_kas_m_rekening_no_akun')
+            ->where('rekap_jurnal_kas_m_rekening_no_akun', $request->m_rekening_no_akun)
+            ->count();
 
         $validasi2 = DB::table('rekap_jurnal_bank')
-                    ->select('rekap_jurnal_bank_m_rekening_no_akun')
-                    ->where('rekap_jurnal_bank_m_rekening_no_akun', $request->m_rekening_no_akun)
-                    ->count();
+            ->select('rekap_jurnal_bank_m_rekening_no_akun')
+            ->where('rekap_jurnal_bank_m_rekening_no_akun', $request->m_rekening_no_akun)
+            ->count();
 
         $validasi3 = DB::table('rekap_jurnal_umum')
-                    ->select('rekap_jurnal_umum_m_rekening_no_akun')
-                    ->where('rekap_jurnal_umum_m_rekening_no_akun', $request->m_rekening_no_akun)
-                    ->count();
+            ->select('rekap_jurnal_umum_m_rekening_no_akun')
+            ->where('rekap_jurnal_umum_m_rekening_no_akun', $request->m_rekening_no_akun)
+            ->count();
 
         $validasi4 = DB::table('rekap_link_akuntansi')
-                    ->select('rekap_link_akuntansi_m_rekening_id')
-                    ->where('rekap_link_akuntansi_m_rekening_id', $request->m_rekening_no_akun)
-                    ->count();
+            ->select('rekap_link_akuntansi_m_rekening_id')
+            ->where('rekap_link_akuntansi_m_rekening_id', $request->m_rekening_no_akun)
+            ->count();
 
         $validasi = $validasi1 + $validasi2 + $validasi3 + $validasi4;
-        if($validasi == 0){
-        $str1 = str_replace('.', '', $request->m_rekening_saldo);
-        $data = array(
-            'm_rekening_no_akun'	=>	$request->m_rekening_no_akun,
-            'm_rekening_nama'	    =>	$request->m_rekening_nama,
-            'm_rekening_saldo'	    =>	str_replace(',', '.', $str1),
-            'm_rekening_updated_by' => Auth::user()->users_id,
-            'm_rekening_updated_at' => Carbon::now(),
-        );
-       return $update = DB::table('m_rekening')->where('m_rekening_no_akun', $rekening_old)
-        ->update($data);
+        if ($validasi == 0) {
+            $str1 = str_replace('.', '', $request->m_rekening_saldo);
+            $data = array(
+                'm_rekening_no_akun' => $request->m_rekening_no_akun,
+                'm_rekening_nama' => $request->m_rekening_nama,
+                'm_rekening_saldo' => str_replace(',', '.', $str1),
+                'm_rekening_updated_by' => Auth::user()->users_id,
+                'm_rekening_updated_at' => Carbon::now(),
+            );
+            return $update = DB::table('m_rekening')->where('m_rekening_no_akun', $rekening_old)
+                ->update($data);
 
-        return response()->json($update); 
-    } 
-    return response()->json($validasi);
+            return response()->json($update);
+        }
+        return response()->json($validasi);
     }
 
     public function delete(Request $request, $id)
     {
         $validasi1 = DB::table('rekap_jurnal_kas')
-                    ->select('rekap_jurnal_kas_m_rekening_no_akun')
-                    ->where('rekap_jurnal_kas_m_rekening_no_akun', $request->m_rekening_no_akun)
-                    ->count();
+            ->select('rekap_jurnal_kas_m_rekening_no_akun')
+            ->where('rekap_jurnal_kas_m_rekening_no_akun', $request->m_rekening_no_akun)
+            ->count();
 
         $validasi2 = DB::table('rekap_jurnal_bank')
-                    ->select('rekap_jurnal_bank_m_rekening_no_akun')
-                    ->where('rekap_jurnal_bank_m_rekening_no_akun', $request->m_rekening_no_akun)
-                    ->count();
+            ->select('rekap_jurnal_bank_m_rekening_no_akun')
+            ->where('rekap_jurnal_bank_m_rekening_no_akun', $request->m_rekening_no_akun)
+            ->count();
 
         $validasi3 = DB::table('rekap_jurnal_umum')
-                    ->select('rekap_jurnal_umum_m_rekening_no_akun')
-                    ->where('rekap_jurnal_umum_m_rekening_no_akun', $request->m_rekening_no_akun)
-                    ->count();
+            ->select('rekap_jurnal_umum_m_rekening_no_akun')
+            ->where('rekap_jurnal_umum_m_rekening_no_akun', $request->m_rekening_no_akun)
+            ->count();
 
         $validasi4 = DB::table('rekap_link_akuntansi')
-                    ->select('rekap_link_akuntansi_m_rekening_id')
-                    ->where('rekap_link_akuntansi_m_rekening_id', $request->m_rekening_no_akun)
-                    ->count();
+            ->select('rekap_link_akuntansi_m_rekening_id')
+            ->where('rekap_link_akuntansi_m_rekening_id', $request->m_rekening_no_akun)
+            ->count();
         $validasi = $validasi1 + $validasi2 + $validasi3 + $validasi4;
-        if($validasi === 0){
-        $delete = DB::table('m_rekening')
-            ->where('m_rekening_no_akun', $id)
-            ->delete();
+        if ($validasi === 0) {
+            $delete = DB::table('m_rekening')
+                ->where('m_rekening_no_akun', $id)
+                ->delete();
             return response()->json($delete);
         }
         return response()->json($validasi);
