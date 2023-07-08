@@ -141,7 +141,7 @@ class MJenisNotaController extends Controller
         $user = Auth::user();
         $notaKode = $request->m_tipe_nota;
         $mAreaId = ($request->m_area_id == 0) ? null : $request->m_area_id;
-
+        $time = Carbon::now();
         foreach ($notaKode as $key => $kode) {
             $getWaroeng = DB::table('m_w')
                 ->where('m_w_m_kode_nota', $kode)
@@ -170,7 +170,7 @@ class MJenisNotaController extends Controller
                         ->first();
 
                     $data = [
-                        'm_menu_harga_updated_at' => Carbon::now(),
+                        'm_menu_harga_updated_at' => $time,
                         'm_menu_harga_updated_by' => $user->users_id,
                         'm_menu_harga_client_target' => DB::raw('DEFAULT'),
                     ];
@@ -204,7 +204,7 @@ class MJenisNotaController extends Controller
                             $data['m_menu_harga_status'] = 1;
                             $data['m_menu_harga_tax_status'] = 1;
                             $data['m_menu_harga_created_by'] = $user->users_id;
-                            $data['m_menu_harga_created_at'] = Carbon::now();
+                            $data['m_menu_harga_created_at'] = $time;
                             $data['m_menu_harga_client_target'] = DB::raw('DEFAULT');
                             DB::table('m_menu_harga')->insert($data);
                         }
