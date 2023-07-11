@@ -107,7 +107,6 @@
                                             <select id="filter_status" style="width: 100%;"
                                                 class="cari f-wrg js-select2 form-control filter_status"
                                                 data-placeholder="Pilih Status Ditampilkan" name="r_t_created_by">
-                                                <option></option>
                                                 <option value="all">Tampilkan Semua</option>
                                                 <option value="ojol">Hanya Tampilkan Selisih Ojol</option>
                                             </select>
@@ -264,10 +263,23 @@ $(document).ready(function() {
     var HakAksesPusat = userInfoPusat.dataset.hasAccess === 'true';
 
     $('#cari').on('click', function() {
-        var waroeng  = $('.filter_waroeng').val();
+        var waroeng  = $('.filter_waroeng option:selected').val();
         var tanggal  = $('.filter_tanggal').val();
-        var operator = $('.filter_operator').val();
+        var operator = $('.filter_operator option:selected').val();
         var status   = $('.filter_status').val();
+
+        if (tanggal === "" || operator === "" || waroeng === "") {
+            Swal.fire({
+            title: 'Informasi',
+            text: 'Silahkan lengkapi semua kolom',
+            confirmButtonColor: '#d33',
+            confirmButtonText: 'OK',
+            customClass: {
+                confirmButton: 'bg-red-500',
+            },
+            });
+          } else {
+
     $('#tampil_rekap').DataTable({
         button: [],
         destroy: true,
@@ -297,6 +309,7 @@ $(document).ready(function() {
                 console.log(data);
             }
       });
+    }
     });
 
     if(HakAksesPusat){

@@ -90,12 +90,16 @@ class RekapMenuHarianController extends Controller
     public function show(Request $request)
     {
         $get_modal_id = DB::table('rekap_modal')
-            ->select('rekap_modal_id')
+            ->select('rekap_modal_id', 'rekap_modal_status')
             ->where(DB::raw('DATE(rekap_modal_tanggal)'), $request->tanggal)
             ->where('rekap_modal_m_area_id', $request->area)
             ->where('rekap_modal_m_w_id', $request->waroeng)
             ->where('rekap_modal_sesi', $request->sesi)
             ->first();
+
+        if ($get_modal_id && $get_modal_id->rekap_modal_status != 'close') {
+            return response()->json(['messages' => 'Sesi ' . $request->sesi . ' belum melakukan tutup saldo/ tarikan. Transaksi dapat ditampilkan setelah kasir melakukan tutup saldo/ tarikan', 'type' => 'error']);
+        }
 
         $refundM = DB::table('rekap_refund_detail')
             ->join('rekap_refund', 'r_r_id', 'r_r_detail_r_r_id')
@@ -127,17 +131,6 @@ class RekapMenuHarianController extends Controller
             ->orderBy('m_jenis_produk_id', 'ASC')
             ->orderBy('r_t_detail_m_produk_nama', 'ASC')
             ->get();
-
-        // if ($request->status != 'all') {
-        //     if ($request->status == 'trans') {
-        //         $get->havingRaw('SUM(r_t_detail_price * r_t_detail_qty) <> 0');
-        //     } elseif ($request->status == 'cr') {
-        //         $get->whereRaw('SUM(r_t_detail_nominal) - (SUM(r_t_detail_reguler_price * r_t_detail_qty)) <> 0');
-        //     } elseif ($request->status == 'allselisih') {
-        //         $get->whereRaw('(SUM(r_t_detail_price * r_t_detail_qty)) <> 0')
-        //             ->whereRaw('SUM(r_t_detail_nominal) - (SUM(r_t_detail_reguler_price * r_t_detail_qty)) <> 0');
-        //     }
-        // }
 
         $data = array();
         foreach ($get as $key => $val_menu) {

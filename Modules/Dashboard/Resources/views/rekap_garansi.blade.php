@@ -74,7 +74,7 @@
                                                         </option>
                                                     @endforeach
                                                 </select>
-                                            @elseif (in_array(Auth::user()->waroeng_id, $data->akses_pusar))
+                                            @else
                                                 <select id="filter_waroeng2" style="width: 100%;"
                                                     class="cari f-area js-select2 form-control filter_waroeng"
                                                     name="waroeng" disabled>

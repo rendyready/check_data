@@ -145,11 +145,22 @@ $(document).ready(function() {
     }
 
     $('#cari').click(function(){
-        var waroeng  = $('.filter_waroeng').val();
+        var waroeng  = $('.filter_waroeng option:selected').val();
         var tanggal  = $('.filter_tanggal').val();
-        var operator = $('.filter_operator').val(); 
-        var status   = $('.filter_status').val();  
-        
+        var operator = $('.filter_operator option:selected').val(); 
+        var status   = $('.filter_status option:selected').val();  
+
+        if (tanggal === "" || operator === "" || waroeng === "" || status === "") {
+            Swal.fire({
+            title: 'Informasi',
+            text: 'Silahkan lengkapi semua kolom',
+            confirmButtonColor: '#d33',
+            confirmButtonText: 'OK',
+            customClass: {
+                confirmButton: 'bg-red-500',
+            },
+            });
+          } else {
         $('.show_nota').remove(); 
             $.ajax({
             type:"GET",
@@ -318,6 +329,7 @@ $(document).ready(function() {
           }
         }         
     });
+    }
   });
 
   if(HakAksesPusat){

@@ -29,8 +29,7 @@
                                         <div class="col-sm-9">
                                             <select id="filter_status" style="width: 100%;"
                                                 class="cari f-wrg js-select2 form-control filter_status"
-                                                data-placeholder="Pilih Status Ditampilkan" name="r_t_created_by">
-                                                <option></option>
+                                                name="r_t_created_by">
                                                 <option value="all">Tampilkan Semua</option>
                                                 <option value="selisih">Hanya Tampilkan Data Selisih</option>
                                             </select>
@@ -184,55 +183,89 @@ $(document).ready(function() {
     var HakAksesArea = userInfo.dataset.hasAccess === 'true';
     var HakAksesPusat = userInfoPusat.dataset.hasAccess === 'true';
 
-    $('#cari').on('click', function(e) {
-    var area     = $('.filter_area').val();
-    var waroeng  = $('.filter_waroeng').val();
-    var tanggal  = $('.filter_tanggal').val();
-    var trans    = $('.filter_trans').val();
-    var sesi     = $('.filter_sif').val();
-    var status     = $('.filter_status').val();
+    $('#cari').on('click', function (e) {
+        var area = $('.filter_area option:selected').val();
+        var waroeng = $('.filter_waroeng option:selected').val();
+        var tanggal = $('.filter_tanggal').val();
+        var trans = $('.filter_trans option:selected').val();
+        var sesi = $('.filter_sif option:selected').val();
+        var status = $('.filter_status').val();
 
-    $('#tampil_rekap').DataTable({
-        destroy: true,
-        orderCellsTop: true,
-        processing: true,
-        scrollX: true,
-        autoWidth: true,
-        scrollCollapse: true,
-        buttons: [
-            {
-                extend: 'excelHtml5',
-                text: 'Export Excel',
-                title: 'Rekap Menu - ' + trans + ' Sesi - ' + sesi + ' - ' + tanggal,
-                // exportOptions: {
-                //     columns: [1, 2, 3, 4, 5]
-                // },
-                pageSize: 'A4',
-                pageOrientation: 'potrait',
-            }
-        ],
-        columnDefs: [ 
-                    {
-                        targets: '_all',
-                        className: 'dt-body-center'
-                    },
-                ],
-        lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
-        pageLength: 10,
-        ajax: {
+        if (tanggal === "" || area === "" || waroeng === "" || sesi === "" || trans === "") {
+            Swal.fire({
+            title: 'Informasi',
+            text: 'Silahkan lengkapi semua kolom',
+            confirmButtonColor: '#d33',
+            confirmButtonText: 'OK',
+            customClass: {
+                confirmButton: 'bg-red-500',
+            },
+            });
+        } else {
+            $.ajax({
+            type: "GET",
             url: '{{route("menu_harian.show")}}',
-            data : {
-                    area: area,
-                    waroeng: waroeng,
-                    tanggal: tanggal,
-                    trans: trans,
-                    sesi: sesi,
-                    status: status,
+            dataType: 'JSON',
+            destroy: true,
+            data: {
+                area: area,
+                waroeng: waroeng,
+                tanggal: tanggal,
+                trans: trans,
+                sesi: sesi,
+                status: status,
+            },
+            success: function (res) {
+                if (res.type != 'error') {
+                $('#tampil_rekap').DataTable({
+                    destroy: true,
+                    orderCellsTop: true,
+                    processing: true,
+                    scrollX: true,
+                    autoWidth: true,
+                    scrollCollapse: true,
+                    buttons: [{
+                    extend: 'excelHtml5',
+                    text: 'Export Excel',
+                    title: 'Rekap Menu - ' + trans + ' Sesi - ' + sesi + ' - ' + tanggal,
+                    pageSize: 'A4',
+                    pageOrientation: 'potrait',
+                    }],
+                    columnDefs: [{
+                    targets: '_all',
+                    className: 'dt-body-center'
+                    }],
+                    lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+                    pageLength: 10,
+                    ajax: {
+                    url: '{{route("menu_harian.show")}}',
+                    data: {
+                        area: area,
+                        waroeng: waroeng,
+                        tanggal: tanggal,
+                        trans: trans,
+                        sesi: sesi,
+                        status: status,
                     },
-                type : "GET",
-                },
+                    type: "GET",
+                    dataType: "json",
+                    },
+                });
+                } else {
+                Swal.fire({
+                    title: 'Informasi',
+                    text: res.messages,
+                    confirmButtonColor: '#d33',
+                    confirmButtonText: 'OK',
+                    customClass: {
+                    confirmButton: 'bg-red-500',
+                    },
+                });
+                }
+            }
+            });
+        }
         });
-    });
 
     if(HakAksesPusat){
       $('.filter_area').on('select2:select', function(){

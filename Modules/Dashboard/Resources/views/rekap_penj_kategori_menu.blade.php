@@ -300,55 +300,80 @@ $(document).ready(function() {
     });
 
     $('#cari').on('click', function() {
-        var area     = $('.filter_area').val();
-        var waroeng  = $('.filter_waroeng').val();
+        var area     = $('.filter_area option:selected').val();
+        var waroeng  = $('.filter_waroeng option:selected').val();
         var tanggal  = $('.filter_tanggal').val(); 
-        var operator  = $('.filter_operator').val();  
-        var show_operator = $("#operator_select").val();      
+        var operator  = $('.filter_operator option:selected').val();  
+        var show_operator = $("#operator_select").val();    
+        
+        if (tanggal === "" || area === "" || waroeng === "") {
+            Swal.fire({
+            title: 'Informasi',
+            text: 'Silahkan lengkapi semua kolom',
+            confirmButtonColor: '#d33',
+            confirmButtonText: 'OK',
+            customClass: {
+                confirmButton: 'bg-red-500',
+            },
+            });
+          } else {
+
     if(show_operator == 'ya'){
-        $("#tampil1").hide();
-        $("#tampil2").show();
-        $('#tampil_rekap2').DataTable({
-            button: [],
-            destroy: true,
-            orderCellsTop: true,
-            processing: true,
-            autoWidth: true,
-            // scrollY: "300px",
-            scrollX: true,
-            scrollCollapse: true,
-            columnDefs: [
-                {
-                    targets: '_all',
-                    className: 'dt-body-center'
-                },
-            ],
-            buttons: [
-                {
-                    extend: 'excelHtml5',
-                    text: 'Export Excel',
-                    title: 'Laporan Penjualan Menu Per Kategori - ' + tanggal,
-                    pageSize: 'A4',
-                    pageOrientation: 'potrait',
-                }
-            ],
-            lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
-            pageLength: 10,
-            ajax: {
-                url: '{{route("rekap_penj_kat.show")}}',
-                data : {
-                    area: area,
-                    waroeng: waroeng,
-                    tanggal: tanggal,
-                    operator: operator,
-                    show_operator: show_operator,
-                },
-                type : "GET",
-                },
-                success:function(data){ 
-                    console.log(data);
-                }
-        });
+        if (operator != ""){
+            $("#tampil1").hide();
+            $("#tampil2").show();
+            $('#tampil_rekap2').DataTable({
+                button: [],
+                destroy: true,
+                orderCellsTop: true,
+                processing: true,
+                autoWidth: true,
+                // scrollY: "300px",
+                scrollX: true,
+                scrollCollapse: true,
+                columnDefs: [
+                    {
+                        targets: '_all',
+                        className: 'dt-body-center'
+                    },
+                ],
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: 'Export Excel',
+                        title: 'Laporan Penjualan Menu Per Kategori - ' + tanggal,
+                        pageSize: 'A4',
+                        pageOrientation: 'potrait',
+                    }
+                ],
+                lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+                pageLength: 10,
+                ajax: {
+                    url: '{{route("rekap_penj_kat.show")}}',
+                    data : {
+                        area: area,
+                        waroeng: waroeng,
+                        tanggal: tanggal,
+                        operator: operator,
+                        show_operator: show_operator,
+                    },
+                    type : "GET",
+                    },
+                    success:function(data){ 
+                        console.log(data);
+                    }
+            });
+        } else {
+            Swal.fire({
+            title: 'Informasi',
+            text: 'Pilih operator terlebih dahulu',
+            confirmButtonColor: '#d33',
+            confirmButtonText: 'OK',
+            customClass: {
+                confirmButton: 'bg-red-500',
+            },
+            });
+        }
 
     } else {
         $("#tampil2").hide();
@@ -394,6 +419,7 @@ $(document).ready(function() {
                 }
         });    
         }
+    }
     });
 
     if(HakAksesPusat){

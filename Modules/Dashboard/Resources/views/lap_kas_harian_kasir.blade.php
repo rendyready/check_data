@@ -216,9 +216,21 @@ $(document).ready(function() {
     var HakAksesPusat = userInfoPusat.dataset.hasAccess === 'true';
 
       $('#cari').on('click', function(e) {
-      var area   = $('.filter_area').val();  
-      var waroeng   = $('.filter_waroeng').val();
+      var area      = $('.filter_area option:selected').val();  
+      var waroeng   = $('.filter_waroeng option:selected').val();
       var tanggal   = $('.filter_tanggal').val();
+
+      if (tanggal === "" || area === "" || waroeng === "") {
+            Swal.fire({
+            title: 'Informasi',
+            text: 'Silahkan lengkapi semua kolom',
+            confirmButtonColor: '#d33',
+            confirmButtonText: 'OK',
+            customClass: {
+                confirmButton: 'bg-red-500',
+            },
+            });
+          } else {
 
       $('#tampil_rekap').DataTable({
           button: [],
@@ -258,6 +270,7 @@ $(document).ready(function() {
               console.log(data);
           },
       });
+    }
   });
 
   if(HakAksesPusat){

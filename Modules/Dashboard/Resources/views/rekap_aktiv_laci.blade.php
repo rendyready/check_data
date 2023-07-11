@@ -235,48 +235,62 @@ $(document).ready(function() {
 
     //eksekusi filter
     $('#cari').on('click', function() {
-        var area  = $('.filter_area').val();
-        var waroeng  = $('.filter_waroeng').val();
+        var area  = $('.filter_area option:selected').val();
+        var waroeng  = $('.filter_waroeng option:selected').val();
         var tanggal  = $('.filter_tanggal').val();
-        var operator = $('.filter_operator').val();
-    $('#tampil_rekap').DataTable({
-        button: [],
-        destroy: true,
-        orderCellsTop: true,
-        processing: true,
-        scrollX: true,
-        // scrollY: '300px',
-        columnDefs: [ 
-                        {
-                            targets: '_all',
-                            className: 'dt-body-center'
-                        },
-                    ],
-        buttons: [
-                {
-                    extend: 'excelHtml5',
-                    text: 'Export Excel',
-                    title: 'Rekap Buka Laci - ' + tanggal,
-                    pageSize: 'A4',
-                    pageOrientation: 'potrait',
+        var operator = $('.filter_operator option:selected').val();
+
+        if (tanggal === "" || area === "" || waroeng === "" || operator === "") {
+            Swal.fire({
+            title: 'Informasi',
+            text: 'Silahkan lengkapi semua kolom',
+            confirmButtonColor: '#d33',
+            confirmButtonText: 'OK',
+            customClass: {
+                confirmButton: 'bg-red-500',
+            },
+            });
+          } else {
+
+        $('#tampil_rekap').DataTable({
+            button: [],
+            destroy: true,
+            orderCellsTop: true,
+            processing: true,
+            scrollX: true,
+            // scrollY: '300px',
+            columnDefs: [ 
+                            {
+                                targets: '_all',
+                                className: 'dt-body-center'
+                            },
+                        ],
+            buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: 'Export Excel',
+                        title: 'Rekap Buka Laci - ' + tanggal,
+                        pageSize: 'A4',
+                        pageOrientation: 'potrait',
+                    }
+                ],
+            lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+            pageLength: 10,
+            ajax: {
+                url: '{{route("rekap_aktiv_laci.tampil_laci")}}',
+                data : {
+                    area: area,
+                    waroeng: waroeng,
+                    tanggal: tanggal,
+                    operator: operator,
+                },
+                type : "GET",
+                },
+                success:function(data){ 
+                    console.log(data);
                 }
-            ],
-        lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
-        pageLength: 10,
-        ajax: {
-            url: '{{route("rekap_aktiv_laci.tampil_laci")}}',
-            data : {
-                area: area,
-                waroeng: waroeng,
-                tanggal: tanggal,
-                operator: operator,
-            },
-            type : "GET",
-            },
-            success:function(data){ 
-                console.log(data);
-            }
       });
+    }
     });
 
     if(HakAksesPusat){
