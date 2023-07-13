@@ -41,6 +41,8 @@ class SendCloud extends Command
         if (!empty($cronStatus)) {
             if ($cronStatus->cronjob_status == 'open') {
                 info("Cronjob SEND CLOUD START at ". Carbon::now()->format('Y-m-d H:i:s'));
+            }else{
+                return Command::SUCCESS;
             }
         }else{
             return Command::SUCCESS;
