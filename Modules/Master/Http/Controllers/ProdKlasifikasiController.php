@@ -29,7 +29,8 @@ class ProdKlasifikasiController extends Controller
                     return response(['Messages' => 'Data Duplicate !']);
                 } else {
                     $data = array(
-                        'm_klasifikasi_produk_id' => $this->getMasterId('m_klasifikasi_produk'),
+                        // 'm_klasifikasi_produk_id' => $this->getMasterId('m_klasifikasi_produk'),
+                        'm_klasifikasi_produk_id' => '1',
                         'm_klasifikasi_produk_prefix' => Str::lower($request->m_klasifikasi_produk_prefix),
                         'm_klasifikasi_produk_nama'    =>   Str::lower($request->m_klasifikasi_produk_nama),
                         'm_klasifikasi_produk_last_id' => '1',

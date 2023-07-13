@@ -37,7 +37,8 @@ class MSatuanController extends Controller
             if ($request->ajax()) {
                 if ($request->action == 'add') {
                     $data = array(
-                        'm_satuan_id' => $this->getMasterId('m_satuan'),
+                        // 'm_satuan_id' => $this->getMasterId('m_satuan'),
+                        'm_satuan_id' => '1',
                         'm_satuan_kode'=>   $m_satuan_kode,
                         'm_satuan_keterangan'    =>    $request->m_satuan_keterangan,
                         'm_satuan_created_by' => Auth::user()->users_id,

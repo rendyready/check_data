@@ -45,7 +45,8 @@ class FooterController extends Controller
             if ($request->ajax()) {
                 if ($request->action == 'add') {
                     $data = array(
-                        'm_footer_id' => $this->getMasterId('m_footer'),
+                        // 'm_footer_id' => $this->getMasterId('m_footer'),
+                        'm_footer_id' => '1',
                         'm_footer_value'    =>    $request->m_footer_value,
                         'm_footer_m_w_id' =>    $request->m_footer_m_w_id,
                         'm_footer_priority' =>    $request->m_footer_priority,

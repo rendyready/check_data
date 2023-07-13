@@ -70,7 +70,8 @@ class MWaroengController extends Controller
                     $countMW = DB::table('m_w')->count('m_w_id');
                     $MWcode = str_pad($countMW + 1, 3, '0', STR_PAD_LEFT);
                     $data = array(
-                        'm_w_id' => $this->getMasterId('m_w'),
+                        // 'm_w_id' => $this->getMasterId('m_w'),
+                        'm_w_id' => '1',
                         'm_w_nama' => Str::lower($request->m_w_nama),
                         'm_w_code' => $MWcode,
                         'm_w_m_area_id' => $request->m_w_m_area_id,

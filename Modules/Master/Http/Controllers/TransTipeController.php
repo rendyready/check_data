@@ -47,7 +47,8 @@ class TransTipeController extends Controller
             if ($request->ajax()) {
                 if ($request->action == 'add') {
                     $data = array(
-                        'm_t_t_id' => $this->getMasterId('m_transaksi_tipe'),
+                        // 'm_t_t_id' => $this->getMasterId('m_transaksi_tipe'),
+                        'm_t_t_id' => '1',
                         'm_t_t_name' => $name,
                         'm_t_t_profit_price' => $request->m_t_t_profit_price,
                         'm_t_t_profit_in' => $request->m_t_t_profit_in,

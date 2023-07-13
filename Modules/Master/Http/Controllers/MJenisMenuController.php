@@ -47,7 +47,8 @@ class MJenisMenuController extends Controller
                     return response(['Messages' => 'Data Duplidate']);
                 } else {
                     $data = array(
-                        'm_jenis_produk_id' => $this->getMasterId('m_jenis_produk'),
+                        // 'm_jenis_produk_id' => $this->getMasterId('m_jenis_produk'),
+                        'm_jenis_produk_id' => '1',
                         'm_jenis_produk_nama' => Str::lower($request->m_jenis_produk_nama),
                         'm_jenis_produk_odcr55' => $request->m_jenis_produk_odcr55,
                         'm_jenis_produk_urut' => $count + 1,
