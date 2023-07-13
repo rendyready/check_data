@@ -44,6 +44,8 @@ class GetDataUpdate extends Command
             return Command::SUCCESS;
         }
 
+        info("Cronjob GET Data-Cek Connection");
+
         #get source
         $getSourceConn = DB::table('db_con')
             ->where('db_con_location','pusat')
@@ -138,13 +140,15 @@ class GetDataUpdate extends Command
         }
 
         $serverCode = ":{$dest->db_con_m_w_id}:";
-
+        info("Cronjob GET Data - Get List Table");
         $getTableList = DB::table('config_get_data')
                         ->where('config_get_data_status','on')
                         ->orderBy('config_get_data_id','asc')
                         ->get();
 
         foreach ($getTableList as $key => $valTab) {
+            info("Cronjob GET Data - Get Data ".$valTab->config_get_data_table_name);
+
             #get Schema Table From resource
             $sourceSchema = Schema::connection('source')->getColumnListing($valTab->config_get_data_table_name);
             $destSchema = Schema::connection('destination')->getColumnListing($valTab->config_get_data_table_name);
