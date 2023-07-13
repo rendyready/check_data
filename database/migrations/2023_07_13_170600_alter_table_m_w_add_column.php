@@ -17,6 +17,18 @@ return new class extends Migration
             $table->timestampTz('m_w_server_status')->nullable();
             $table->timestampTz('m_w_mikrotik_status')->nullable();
         });
+
+        Schema::dropIfExists('log_data_count');
+        Schema::create('log_data_count', function (Blueprint $table) {
+            $table->id('id');
+            $table->string('log_data_count_m_w_id');
+            $table->string('log_data_count_m_w_nama');
+            $table->string('log_data_count_tabel_nama');
+            $table->string('log_data_count_pusat');
+            $table->string('log_data_count_waroeng');
+            $table->date('log_data_count_tanggal');
+            $table->timestampTz('log_data_count_created_at')->useCurrent();
+        });
     }
 
     /**
@@ -30,5 +42,7 @@ return new class extends Migration
             $table->dropColumn('m_w_server_status');
             $table->dropColumn('m_w_mikrotik_status');
         });
+
+        Schema::dropIfExists('log_data_count');
     }
 };
