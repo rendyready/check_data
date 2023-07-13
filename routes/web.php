@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\{
     CronjobController,
+    ServerStatusController,
     VersionController
 };
 
@@ -30,3 +31,4 @@ Route::get('/getdataupdate', [CronjobController::class, 'getdataupdate']);
 Route::get('/sendcloud', [CronjobController::class, 'sendcloud']);
 
 Route::get('/upgrade', [VersionController::class, 'upgrade']);
+Route::get('/server',[ServerStatusController::class,'server']);

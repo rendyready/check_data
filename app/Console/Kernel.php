@@ -22,6 +22,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('mastercontrol:cron')->hourly()->withoutOverlapping();
         $schedule->command('autoshutdown:cron')->dailyAt('23:59')->withoutOverlapping();
         $schedule->command('resetlog:cron')->monthly()->withoutOverlapping();
+        $schedule->command('sendserverstatus:cron')->everyMinute()->withoutOverlapping();
     }
 
     /**
