@@ -11,7 +11,22 @@ class VersionController extends Controller
 {
     public function upgrade()
     {
-        # code...
+        $path = base_path();
+        $path= "/home/admin/web/cronjob.wss/public_html";
+        $appPath = 'cr55.wss';
+        $replace = explode('/',$path);
+        $newPath = '';
+        foreach ($replace as $keyW => $valW) {
+            if ($keyW > 0) {
+                if ($keyW == 4) {
+                    $newPath .= '/'.$appPath;
+                } else {
+                    $newPath .= '/'.$valW;
+                }
+
+            }
+        }
+        return $newPath;
     }
     public function tes(){
         #/home/admin/web/cronjob.wss/public_html
