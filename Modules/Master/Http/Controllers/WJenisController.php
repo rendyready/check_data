@@ -32,7 +32,8 @@ class WJenisController extends Controller
                     return response(['Messages' => 'Data Duplicate !']);
                 } else {
                     $data = array(
-                        'm_w_jenis_id' => $this->getMasterId('m_w_jenis'),
+                        // 'm_w_jenis_id' => $this->getMasterId('m_w_jenis'),
+                        'm_w_jenis_id' => '1',
                         'm_w_jenis_nama'    =>  $DBjenisNama,
                         'm_w_jenis_created_by' => Auth::user()->users_id,
                         'm_w_jenis_created_at' => Carbon::now(),

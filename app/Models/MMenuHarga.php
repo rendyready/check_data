@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class MMenuHarga
- * 
+ *
  * @property int $id
  * @property int $m_menu_harga_id
  * @property float $m_menu_harga_nominal
@@ -62,6 +62,7 @@ class MMenuHarga extends Model
 		'm_menu_harga_created_at',
 		'm_menu_harga_updated_at',
 		'm_menu_harga_deleted_at',
-		'm_menu_harga_status_sync'
+		'm_menu_harga_status_sync',
+        'm_menu_harga_client_target'
 	];
 }

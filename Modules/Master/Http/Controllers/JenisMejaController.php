@@ -42,7 +42,8 @@ class JenisMejaController extends Controller
             if ($request->ajax()) {
                 if ($request->action == 'add') {
                     $data = array(
-                        'm_meja_jenis_id' => $this->getMasterId('m_meja_jenis'),
+                        // 'm_meja_jenis_id' => $this->getMasterId('m_meja_jenis'),
+                        'm_meja_jenis_id' => '1',
                         'm_meja_jenis_nama'  =>  $m_meja_jenis_nama,
                         'm_meja_jenis_space' =>  $request->m_meja_jenis_space,
                         'm_meja_jenis_status' => strtolower($request->m_meja_jenis_status),

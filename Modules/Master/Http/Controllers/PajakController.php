@@ -28,7 +28,8 @@ class PajakController extends Controller
                         return response(['messages' => 'Pajak Duplikat !','type' => 'danger']);
                     } else {
                         $data = array(
-                            'm_pajak_id' => $this->getMasterId('m_pajak'),
+                            // 'm_pajak_id' => $this->getMasterId('m_pajak'),
+                            'm_pajak_id' => '1',
                             'm_pajak_value'    =>    $request->m_pajak_value,
                             'm_pajak_created_by' => Auth::user()->users_id,
                             'm_pajak_created_at' => Carbon::now(),

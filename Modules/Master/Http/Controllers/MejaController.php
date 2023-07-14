@@ -39,7 +39,7 @@ class MejaController extends Controller
             <a href="'.route("hapus.meja", $value->m_meja_id).'" class="btn btn-danger" title="Delete"><i class="fa fa-trash"></i></a>';
             $data[] = $row;
         }
-        
+
         $output = array("data" => $data);
         return response()->json($output);
     }
@@ -61,7 +61,8 @@ class MejaController extends Controller
             }
 
             $data = DB::table('m_meja')->insert([
-                "m_meja_id" => $this->getMasterId('m_meja'),
+                // "m_meja_id" => $this->getMasterId('m_meja'),
+                "m_meja_id" => '1',
                 "m_meja_nama" => $nama,
                 "m_meja_m_meja_jenis_id" => $request->jenis_meja,
                 "m_meja_m_w_id" => $request->waroeng,

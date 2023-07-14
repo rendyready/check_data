@@ -58,7 +58,8 @@ class ProdukController extends Controller
                     $num = $produk_code->m_klasifikasi_produk_last_id+1;
                     $code = $produk_code->m_klasifikasi_produk_prefix.'-'.$kat. str_pad($num, 5, "0", STR_PAD_LEFT);
                     DB::table('m_produk')->insert([
-                        "m_produk_id" => $this->getMasterId('m_produk'),
+                        // "m_produk_id" => $this->getMasterId('m_produk'),
+                        "m_produk_id" => '1',
                         "m_produk_code" => $code,
                         "m_produk_nama" => $request->m_produk_nama,
                         "m_produk_urut" => $request->m_produk_urut,
@@ -85,7 +86,8 @@ class ProdukController extends Controller
                         $satuan_id = $request->m_produk_utama_m_satuan_id;
                         $satuan = DB::table('m_satuan')->where('m_satuan_id',$satuan_id)->first();
                         $data_bb = array(
-                            'm_stok_id' => $this->getMasterId('m_stok'),
+                            // 'm_stok_id' => $this->getMasterId('m_stok'),
+                            'm_stok_id' => '1',
                             'm_stok_m_produk_code' => $code,
                             'm_stok_produk_nama' => strtolower($request->m_produk_nama),
                             'm_stok_gudang_code' => $key->m_gudang_code,

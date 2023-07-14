@@ -51,7 +51,8 @@ class MAreaController extends Controller
                 } else {
                     if ($tb == null) {
                         DB::table('m_area')->insert([
-                            'm_area_id' => $this->getMasterId('m_area'),
+                            // 'm_area_id' => $this->getMasterId('m_area'),
+                            'm_area_id' => '1',
                             'm_area_nama'    => Str::lower(trim($request->m_area_nama)),
                             'm_area_code'    => $DBCount,
                             'm_area_created_by' => Auth::user()->users_id,

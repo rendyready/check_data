@@ -45,7 +45,8 @@ class MJenisNotaController extends Controller
             if ($cek->count() <= 0) {
                 MJenisNotum::insert($request->only('m_jenis_nota_m_w_id', 'm_jenis_nota_m_t_t_id') + [
                     'm_jenis_nota_created_by' => Auth::user()->users_id,
-                    'm_jenis_nota_id' => $this->getMasterId('m_jenis_nota'),
+                    // 'm_jenis_nota_id' => $this->getMasterId('m_jenis_nota'),
+                    'm_jenis_nota_id' => '1',
                 ]);
             }
         } else {
@@ -75,15 +76,15 @@ class MJenisNotaController extends Controller
         if ($cek_duplicate->isEmpty()) {
             $last_nota_ids = [];
             foreach ($trans_id_tujuan as $trans_id) {
-                $last_nota_id = $this->getMasterId('m_jenis_nota');
+                // $last_nota_id = $this->getMasterId('m_jenis_nota');
                 $data = [
-                    'm_jenis_nota_id' => $last_nota_id,
+                    'm_jenis_nota_id' => '1',
                     'm_jenis_nota_m_w_id' => $request->m_jenis_nota_waroeng_tujuan_id,
                     'm_jenis_nota_m_t_t_id' => $trans_id,
                     'm_jenis_nota_created_by' => $user_id,
                 ];
-                DB::table('m_jenis_nota')->insert($data);
-                $last_nota_ids[] = $last_nota_id;
+                $id = DB::table('m_jenis_nota')->insertGetId($data);
+                $last_nota_ids[] = $id;
             }
         } else {
             $last_nota_ids = $cek_duplicate->pluck('m_jenis_nota_id')->toArray();
@@ -102,7 +103,8 @@ class MJenisNotaController extends Controller
 
                 if (empty($cek)) {
                     $hargaData = [
-                        'm_menu_harga_id' => $this->getMasterId('m_menu_harga'),
+                        // 'm_menu_harga_id' => $this->getMasterId('m_menu_harga'),
+                        'm_menu_harga_id' => '1',
                         'm_menu_harga_nominal' => $key->m_menu_harga_nominal,
                         'm_menu_harga_m_jenis_nota_id' => $last_nota_id,
                         'm_menu_harga_m_produk_id' => $key->m_menu_harga_m_produk_id,
@@ -198,7 +200,8 @@ class MJenisNotaController extends Controller
                         if ($request->action == 'status_menu') {
                             return response()->json(['type' => 'danger', 'messages' => 'Menu Belum Ditambahkan ke Nota']);
                         } else {
-                            $data['m_menu_harga_id'] = $this->getMasterId('m_menu_harga');
+                            // $data['m_menu_harga_id'] = $this->getMasterId('m_menu_harga');
+                            $data['m_menu_harga_id'] = '1';
                             $data['m_menu_harga_m_jenis_nota_id'] = $nota->m_jenis_nota_id;
                             $data['m_menu_harga_m_produk_id'] = $request->m_produk_id;
                             $data['m_menu_harga_status'] = 1;

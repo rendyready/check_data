@@ -34,7 +34,8 @@ class RelasiKatMenuController extends Controller
      * @return Renderable
      */
     public function simpan(Request $request)
-    {   $dt = array( "config_sub_jenis_produk_id" => $this->getMasterId('config_sub_jenis_produk'),
+    // {   $dt = array( "config_sub_jenis_produk_id" => $this->getMasterId('config_sub_jenis_produk'),
+    {   $dt = array( "config_sub_jenis_produk_id" => '1',
         "config_sub_jenis_produk_m_produk_id" => $request->config_sub_jenis_produk_m_produk_id,
         "config_sub_jenis_produk_m_sub_jenis_produk_id" => $request->config_sub_jenis_produk_m_kategori_id,
         "config_sub_jenis_produk_created_by" => Auth::user()->users_id,

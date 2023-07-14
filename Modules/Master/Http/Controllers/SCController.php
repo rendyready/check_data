@@ -33,7 +33,8 @@ class SCController extends Controller
             if ($validate->ajax()) {
                 if ($request->action == 'add') {
                     $data = array(
-                        'm_sc_id' => $this->getMasterId('m_sc'),
+                        // 'm_sc_id' => $this->getMasterId('m_sc'),
+                        'm_sc_id' => '1',
                         'm_sc_value'    =>    $request->m_sc_value,
                         'm_sc_created_by' => Auth::user()->users_id,
                         'm_sc_created_at' => Carbon::now(),

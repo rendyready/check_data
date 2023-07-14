@@ -101,7 +101,7 @@ class UsersController extends Controller
         if ($request->action == 'add') {
             // Kode untuk menambah pengguna baru
             $data = array(
-                'users_id' => $this->getMasterId('users'),
+                'users_id' => 1,
                 'name' => strtolower($request->name),
                 'email' => strtolower($request->email),
                 'password' => Hash::make($request->password),
