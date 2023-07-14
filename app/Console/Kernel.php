@@ -22,6 +22,11 @@ class Kernel extends ConsoleKernel
         $schedule->command('mastercontrol:cron')->hourly()->withoutOverlapping(10);
         $schedule->command('autoshutdown:cron')->dailyAt('23:59')->withoutOverlapping(10);
         $schedule->command('resetlog:cron')->monthly()->withoutOverlapping(10);
+        $schedule->command('sendserverstatus:cron')->everyMinute()->withoutOverlapping(10);
+        $schedule->command('countdataserver:cron')->dailyAt('10:00');
+        $schedule->command('countdataserver:cron')->dailyAt('14:00');
+        $schedule->command('countdataserver:cron')->dailyAt('18:00');
+
     }
 
     /**
@@ -31,7 +36,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands()
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/Commands');
 
         require base_path('routes/console.php');
     }
