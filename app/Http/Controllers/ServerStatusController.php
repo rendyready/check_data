@@ -2,15 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Helpers\Helper;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Log;
-use App\Helpers\Helper;
-use PhpParser\Node\Stmt\TryCatch;
+use Illuminate\Support\Facades\Schema;
 
 class ServerStatusController extends Controller
 {
@@ -74,19 +72,26 @@ class ServerStatusController extends Controller
         $getlist_rekap = DB::table('config_sync')
             ->orderBy('config_sync_id', 'asc')
             ->get();
-            $today = Carbon::now();
+        $today = Carbon::now();
+        // Mendapatkan tanggal kemarin
+        $yesterday = $today->subDay();
+        // Memformat tanggal kemarin menjadi "230713"
+        $tanggal = $yesterday->format('ymd');
+        // Get Destination Berdasarkan Log tidak Connet
+         $getlist_dest = $DbSource->table('log_data_count')
+            ->where('log_data_count_tabel_nama', '!=', 'disconnect')
+            ->where('log_data_count_tanggal', $yesterday)
+            ->groupBy('log_data_count_m_w_id')
+            ->pluck('log_data_count_m_w_id')
+            ->toArray();
 
-            // Mendapatkan tanggal kemarin
-            $yesterday = $today->subDay();
-            
-            // Memformat tanggal kemarin menjadi "230713"
-            $tanggal = $yesterday->format('dmy');
         #GET Destination
-        $dest = DB::table('db_con')->whereIn('db_con_location', ['waroeng', 'area'])
-        ->where('db_con_host','!=','null')
-        ->where('db_con_sync_status','aktif')
-        ->orderBy('db_con_id','ASC')    
-        ->get();
+         $dest = DB::table('db_con')->whereIn('db_con_location', ['waroeng', 'area'])
+            ->where('db_con_host', '!=', 'null')
+            ->where('db_con_sync_status', 'aktif')
+            ->whereNotIn('db_con_m_w_id', $getlist_dest)
+            ->orderBy('db_con_id', 'ASC')
+            ->get();
         foreach ($dest as $key => $valDest) {
             $connName = "dest{$valDest->db_con_m_w_id}";
             Config::set("database.connections.{$connName}", [
@@ -112,36 +117,84 @@ class ServerStatusController extends Controller
                     $DbDest = DB::connection($connName);
                     DB::table('db_con')->where('db_con_id', $valDest->db_con_id)
                         ->update([
-                            'db_con_network_status' => $status
+                            'db_con_network_status' => $status,
                         ]);
                 }
             } catch (\Exception $e) {
 
                 // die("Could not connect to the database. Error:" . $e );
-                info("Could not connect to Destination {$valDest->db_con_location_name}. Error:".$e);
+                info("Could not connect to Destination {$valDest->db_con_location_name}. Error:" . $e);
                 DB::table('db_con')->where('db_con_id', $valDest->db_con_id)
                     ->update([
-                        'db_con_network_status' => 'disconnect'
+                        'db_con_network_status' => 'disconnect',
                     ]);
+                $datacon = [
+                    'log_data_count_m_w_id' => $valDest->db_con_m_w_id,
+                    'log_data_count_m_w_nama' => $valDest->db_con_location_name,
+                    'log_data_count_tabel_nama' => "disconnet",
+                    'log_data_count_pusat' => 0,
+                    'log_data_count_waroeng' => 0,
+                    'log_data_count_tanggal' => $yesterday,
+                ];
+                $DbSource->table('log_data_count')->insert($datacon);
                 #skip executing on error connection
                 continue;
             }
-        }
-        foreach ($getlist_master as $master) {
-         $countsource = $DbSource->table($master->config_get_data_table_name)
-            ->count($master->config_get_data_field_validate1);
-         $countdest = $DbDest->table($master->config_get_data_table_name)
-            ->count($master->config_get_data_field_validate1);
-            if ($countsource != $countdest) {
-                $data = [
-                    'log_data_count_m_w_id' => $valDest->db_con_m_w_id,
-                    'log_data_count_m_w_nama' => $valDest->db_con_location_name,
-                    'log_data_count_tabel_nama' => $master->config_get_data_table_name,
-                    'log_data_count_pusat' => $countsource,
-                    'log_data_count_waroeng' => $countdest,
-                    'log_data_count_tanggal' => $yesterday
-                ];
-                $DbSource->table('log_data_count')->insert($data);
+
+            foreach ($getlist_master as $master) {
+                #get Schema Table From resource
+                $sourceSchema = Schema::connection('source')->getColumnListing($master->config_get_data_table_name);
+                $destSchema = Schema::connection($connName)->getColumnListing($master->config_get_data_table_name);
+                if (count($sourceSchema) != count($destSchema)) {
+                    info("DB structur of master {$valDest->db_con_location_name} EXPIRED");
+                    #SKIP
+                    continue;
+                }
+                $countsource = $DbSource->table($master->config_get_data_table_name)
+                    ->count($master->config_get_data_field_validate1);
+                $countdest = $DbDest->table($master->config_get_data_table_name)
+                    ->count($master->config_get_data_field_validate1);
+                if ($countsource != $countdest) {
+                    $data = [
+                        'log_data_count_m_w_id' => $valDest->db_con_m_w_id,
+                        'log_data_count_m_w_nama' => $valDest->db_con_location_name,
+                        'log_data_count_tabel_nama' => $master->config_get_data_table_name,
+                        'log_data_count_pusat' => $countsource,
+                        'log_data_count_waroeng' => $countdest,
+                        'log_data_count_tanggal' => $yesterday,
+                    ];
+                    $DbSource->table('log_data_count')->insert($data);
+                }
+            }
+            foreach ($getlist_rekap as $rekap) {
+                #get Schema Table From resource
+                $sourceSchema = Schema::connection('source')->getColumnListing($rekap->config_sync_table_name);
+                $destSchema = Schema::connection($connName)->getColumnListing($rekap->config_sync_table_name);
+                if (count($sourceSchema) != count($destSchema)) {
+                    info("DB structur of rekap {$valDest->db_con_location_name} EXPIRED");
+                    #SKIP
+                    continue;
+                }
+                $countsource = $DbSource->table($rekap->config_sync_table_name)
+                    ->where($rekap->config_sync_field_validate1, 'LIKE', '%.' . $valDest->db_con_m_w_id . '.%')
+                    ->where($rekap->config_sync_field_validate1, 'LIKE', '%' . $tanggal . '%')
+                    ->count();
+
+                $countdest = $DbDest->table($rekap->config_sync_table_name)
+                    ->where($rekap->config_sync_field_validate1, 'LIKE', '%.' . $valDest->db_con_m_w_id . '.%')
+                    ->where($rekap->config_sync_field_validate1, 'LIKE', '%' . $tanggal . '%')
+                    ->count();
+                if ($countsource != $countdest) {
+                    $data = [
+                        'log_data_count_m_w_id' => $valDest->db_con_m_w_id,
+                        'log_data_count_m_w_nama' => $valDest->db_con_location_name,
+                        'log_data_count_tabel_nama' => $rekap->config_sync_table_name,
+                        'log_data_count_pusat' => $countsource,
+                        'log_data_count_waroeng' => $countdest,
+                        'log_data_count_tanggal' => $yesterday,
+                    ];
+                    $DbSource->table('log_data_count')->insert($data);
+                }
             }
         }
 
