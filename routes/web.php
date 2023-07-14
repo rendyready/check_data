@@ -16,6 +16,7 @@ Auth::routes();
 
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/coba/{table}', [App\Http\Controllers\Controller::class, 'getMasterId']);
+Route::get('/sendmaster/{target}', [App\Http\Controllers\MyController::class, 'sendMaster']);
 Route::get('/updateclient', [App\Http\Controllers\Controller::class, 'coba']);
 Route::get('/nonmenu', [App\Http\Controllers\Controller::class, 'non_menu']);
 Route::get('/update/pass',[App\Http\Controllers\Auth\LoginController::class, 'change_pass'])->name('update.pass');
