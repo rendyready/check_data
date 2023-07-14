@@ -23,9 +23,9 @@ class Kernel extends ConsoleKernel
         $schedule->command('autoshutdown:cron')->dailyAt('23:59')->withoutOverlapping(10);
         $schedule->command('resetlog:cron')->monthly()->withoutOverlapping(10);
         $schedule->command('sendserverstatus:cron')->everyMinute()->withoutOverlapping(10);
-        $schedule->command('countdataserver:cron')->dailyAt('10:00');
-        $schedule->command('countdataserver:cron')->dailyAt('14:00');
-        $schedule->command('countdataserver:cron')->dailyAt('18:00');
+        $schedule->command('countdataserver:cron')->dailyAt('10:00')->withoutOverlapping(10);
+        $schedule->command('countdataserver:cron')->dailyAt('14:00')->withoutOverlapping(10);
+        $schedule->command('countdataserver:cron')->dailyAt('20:00')->withoutOverlapping(10);
 
     }
 
