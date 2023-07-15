@@ -2,13 +2,14 @@
 
 namespace App\Console\Commands;
 
+use App\Helpers\Helper;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
-use App\Helpers\Helper;
-use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Schema;
+
 class CountDataServer extends Command
 {
     /**
@@ -95,7 +96,7 @@ class CountDataServer extends Command
         // Memformat tanggal kemarin menjadi "230713"
         $tanggal = $yesterday->format('ymd');
         // Get Destination Berdasarkan Log tidak Connet
-         $getlist_dest = $DbSource->table('log_data_count')
+        $getlist_dest = $DbSource->table('log_data_count')
             ->where('log_data_count_tabel_nama', '!=', 'disconnect')
             ->where('log_data_count_tanggal', $yesterday)
             ->groupBy('log_data_count_m_w_id')
@@ -103,7 +104,7 @@ class CountDataServer extends Command
             ->toArray();
 
         #GET Destination
-         $dest = DB::table('db_con')->whereIn('db_con_location', ['waroeng', 'area'])
+        $dest = DB::table('db_con')->whereIn('db_con_location', ['waroeng', 'area'])
             ->where('db_con_host', '!=', 'null')
             ->where('db_con_sync_status', 'aktif')
             ->whereNotIn('db_con_m_w_id', $getlist_dest)
@@ -192,14 +193,14 @@ class CountDataServer extends Command
                     #SKIP
                     continue;
                 }
-                $countsource = $DbSource->table($rekap->config_sync_table_name)
-                    ->where($rekap->config_sync_field_validate1, 'LIKE', '%.' . $valDest->db_con_m_w_id . '.%')
-                    ->where($rekap->config_sync_field_validate1, 'LIKE', '%' . $tanggal . '%')
-                    ->count();
 
+                $countsource = $DbSource->table($rekap->config_sync_table_name)
+                    ->where(DB::raw("SPLIT_PART(" . $rekap->config_sync_field_validate1 . ", '.', 2)"), '=', $valDest->db_con_m_w_id)
+                    ->where(DB::raw("LEFT(SPLIT_PART(" . $rekap->config_sync_field_validate1 . ", '.', 5), 6)"), '=', $tanggal)
+                    ->count();
                 $countdest = $DbDest->table($rekap->config_sync_table_name)
-                    ->where($rekap->config_sync_field_validate1, 'LIKE', '%.' . $valDest->db_con_m_w_id . '.%')
-                    ->where($rekap->config_sync_field_validate1, 'LIKE', '%' . $tanggal . '%')
+                    ->where(DB::raw("SPLIT_PART(" . $rekap->config_sync_field_validate1 . ", '.', 2)"), '=', $valDest->db_con_m_w_id)
+                    ->where(DB::raw("LEFT(SPLIT_PART(" . $rekap->config_sync_field_validate1 . ", '.', 5), 6)"), '=', $tanggal)
                     ->count();
                 if ($countsource != $countdest) {
                     $data = [
