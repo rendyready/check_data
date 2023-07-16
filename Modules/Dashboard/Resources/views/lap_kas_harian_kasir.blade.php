@@ -403,6 +403,11 @@ $(document).ready(function() {
                 window.open(url,'_blank');
             });
 
+            $("#tampil_rekap").on('click', '#button_tarikan', function() {
+                var id = $(this).attr('value');
+                var url = 'http://api.sipedas.wss/api/cashier/closing-jpeg/' + id + '/1';
+                window.open(url, '_blank');
+            });
 
 });
 </script>
