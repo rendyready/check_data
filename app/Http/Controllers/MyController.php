@@ -8,17 +8,6 @@ use Illuminate\Support\Facades\DB;
 class MyController extends Controller
 {
     function sendMaster($target){
-        if ($target != "all") {
-            $expTarget = explode("-",$target);
-            $newTarget = '';
-            foreach ($expTarget as $key => $valTarget) {
-                $newTarget .= ':'.(INT)$valTarget.':';
-            }
-            $target = $newTarget;
-        } else {
-            $target = DB::raw('DEFAULT');
-        }
-
         $table[1] = 'users';
         $table[2] = 'm_area';
         $table[3] = 'm_pajak';
@@ -54,43 +43,54 @@ class MyController extends Controller
         // $table[33] = 'm_stok_detail';
         // $table[34] = 'm_gudang';
         // $table[35] = 'm_gudang_nama';
-
         foreach ($table as $key => $valTable) {
+
+            if ($target != "all") {
+                $expTarget = explode("-",$target);
+                $newTarget = '';
+                foreach ($expTarget as $key => $valTarget) {
+                    $newTarget .= ':'.$valTarget.':';
+                }
+                $finalTarget = DB::raw($valTable."_client_target||'{$newTarget}'");
+            } else {
+                $finalTarget = DB::raw('DEFAULT');
+            }
+
             $fieldName = $valTable."_client_target";
             DB::table($valTable)
             ->update([
-                $fieldName => $target
+                $fieldName => $finalTarget
             ]);
         }
-
+// return 'ok';
         DB::table('roles')
             ->update([
-                'roles_client_target' => $target
+                'roles_client_target' => ($target != "all") ? DB::raw("roles_client_target||'{$newTarget}'") : DB::raw('DEFAULT')
             ]);
 
         DB::table('permissions')
             ->update([
-                'permissions_client_target' => $target
+                'permissions_client_target' => ($target != "all") ? DB::raw("permissions_client_target||'{$newTarget}'") : DB::raw('DEFAULT')
             ]);
 
         DB::table('role_has_permissions')
             ->update([
-                'r_h_p_client_target' => $target
+                'r_h_p_client_target' => ($target != "all") ? DB::raw("r_h_p_client_target||'{$newTarget}'") : DB::raw('DEFAULT')
             ]);
 
         DB::table('model_has_permissions')
             ->update([
-                'm_h_p_client_target' => $target
+                'm_h_p_client_target' => ($target != "all") ? DB::raw("m_h_p_client_target||'{$newTarget}'") : DB::raw('DEFAULT')
             ]);
 
         DB::table('model_has_roles')
             ->update([
-                'm_h_r_client_target' => $target
+                'm_h_r_client_target' => ($target != "all") ? DB::raw("m_h_r_client_target||'{$newTarget}'") : DB::raw('DEFAULT')
             ]);
 
         DB::table('m_transaksi_tipe')
             ->update([
-                'm_t_t_client_target' => $target
+                'm_t_t_client_target' => ($target != "all") ? DB::raw("m_t_t_client_target||'{$newTarget}'") : DB::raw('DEFAULT')
             ]);
 
         return "DONE";
