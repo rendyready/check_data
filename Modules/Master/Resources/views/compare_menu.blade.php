@@ -6,7 +6,7 @@
                 <div class="block block-themed h-100 mb-0">
                     <div class="block-header bg-pulse">
                         <h3 class="block-title">
-                            Monitoring Master Menu
+                            Monitoring Master Jumlah Menu
                         </h3>
                     </div>
                     <div class="block-content text-muted">
@@ -96,13 +96,11 @@
                                 <tr>
                                     <th class="text_center">Area</th>
                                     <th class="text_center">Waroeng</th>
-                                    <th class="text_center">Menu</th>
-                                    <th class="text_center">Harga</th>
+                                    <th class="text_center">Jenis Menu</th>
                                     <th class="text_center">Jenis Transaksi</th>
-                                    <th class="text_center">Jenis Nota</th>
-                                    <th class="text_center">Status Menu</th>
-                                    <th class="text_center">Pajak</th>
-                                    <th class="text_center">Service Charge</th>
+                                    <th class="text_center">Data Waroeng</th>
+                                    <th class="text_center">Data Pusat</th>
+                                    <th class="text_center">Selisih</th>
                                 </tr>
                             </thead>
                             <tbody id="show_data">
@@ -153,7 +151,7 @@ $(document).ready(function() {
                 }
             ],
         ajax: {
-            url: '{{route("status_menu.show")}}',
+            url: '{{route("compare_menu.show")}}',
             data : {
                 area: area,
                 waroeng: waroeng,
@@ -182,7 +180,7 @@ $(document).ready(function() {
         if(area){
             $.ajax({
             type:"GET",
-            url: '{{route("status_menu.select_waroeng")}}',
+            url: '{{route("compare_menu.select_waroeng")}}',
             dataType: 'JSON',
             destroy: true,    
             data : {

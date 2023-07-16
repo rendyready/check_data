@@ -32,44 +32,16 @@ class StatusMenuController extends Controller
         return response()->json($data);
     }
 
-    public function select_menu(Request $request)
-    {
-        $menu = DB::table('m_jenis_produk')
-            ->select('m_jenis_produk_id', 'm_jenis_produk_nama')
-            ->orderBy('m_jenis_produk_id', 'asc')
-            ->get();
-        $data = array();
-        foreach ($menu as $val) {
-            // $data['all'] = ['all jenis produk'];
-            $data[$val->m_jenis_produk_id] = [$val->m_jenis_produk_nama];
-        }
-        return response()->json($data);
-    }
-
-    public function select_transaksi(Request $request)
-    {
-        $menu = DB::table('m_transaksi_tipe')
-            ->select('m_t_t_id', 'm_t_t_name')
-            ->orderBy('m_t_t_id', 'asc')
-            ->get();
-        $data = array();
-        foreach ($menu as $val) {
-            $data['all'] = ['all jenis transaksi'];
-            $data[$val->m_t_t_id] = [$val->m_t_t_name];
-        }
-        return $data;
-        return response()->json($data);
-    }
-
     public function show(Request $request)
     {
-        $menu = DB::table('m_menu_harga')
-            ->join('m_jenis_nota', 'm_jenis_nota_id', 'm_menu_harga_m_jenis_nota_id')
-            ->join('m_w', 'm_w_id', 'm_jenis_nota_m_w_id')
-            ->join('m_area', 'm_area_id', 'm_w_m_area_id')
-            ->join('m_transaksi_tipe', 'm_t_t_id', 'm_jenis_nota_m_t_t_id')
-            ->join('m_produk', 'm_produk_id', 'm_menu_harga_m_produk_id')
-            ->join('m_jenis_produk', 'm_jenis_produk_id', 'm_produk_m_jenis_produk_id');
+        $menu = DB::table('m_w')
+            ->leftjoin('m_jenis_nota', 'm_jenis_nota_m_w_id', 'm_w_id')
+            ->leftjoin('m_menu_harga', 'm_menu_harga_m_jenis_nota_id', 'm_jenis_nota_id')
+            ->leftjoin('m_area', 'm_area_id', 'm_w_m_area_id')
+            ->leftjoin('m_transaksi_tipe', 'm_t_t_id', 'm_jenis_nota_m_t_t_id')
+            ->leftjoin('m_produk', 'm_produk_id', 'm_menu_harga_m_produk_id')
+            ->leftjoin('m_jenis_produk', 'm_jenis_produk_id', 'm_produk_m_jenis_produk_id')
+            ->select('m_area_nama', 'm_w_nama', 'm_produk_nama', 'm_menu_harga_nominal', 'm_t_t_name', 'm_w_m_kode_nota', 'm_menu_harga_status', 'm_menu_harga_tax_status', 'm_menu_harga_sc_status', 'm_w_m_area_id', 'm_w_id', 'm_produk_id', 'm_t_t_id', 'm_w_m_kode_nota');
         if ($request->area != 'all') {
             $menu->where('m_w_m_area_id', $request->area);
             if ($request->waroeng != 'all') {
@@ -79,6 +51,7 @@ class StatusMenuController extends Controller
         if ($request->menu != 'all') {
             $menu->where('m_jenis_produk_id', $request->menu);
         }
+
         if ($request->trans != 'all') {
             $menu->where('m_jenis_nota_m_t_t_id', $request->trans);
         }
@@ -88,7 +61,8 @@ class StatusMenuController extends Controller
             ->orderBy('m_t_t_id', 'ASC')
             ->orderBy('m_w_m_kode_nota', 'ASC')
             ->get();
-        // return $menu;
+
+        $status = 'Tidak Aktif';
         $pajak = 'Tidak Aktif';
         $sc = 'Tidak Aktif';
         $data = array();
@@ -100,6 +74,111 @@ class StatusMenuController extends Controller
             $row[] = number_format($value->m_menu_harga_nominal);
             $row[] = $value->m_t_t_name;
             $row[] = $value->m_w_m_kode_nota;
+            if ($value->m_menu_harga_status != 0) {
+                $status = 'Aktif';
+            }
+            $row[] = $status;
+            if ($value->m_menu_harga_tax_status != 0) {
+                $pajak = 'Aktif';
+            }
+            $row[] = $pajak;
+            if ($value->m_menu_harga_sc_status != 0) {
+                $sc = 'Aktif';
+            }
+            $row[] = $sc;
+            $data[] = $row;
+        }
+        $output = array("data" => $data);
+        return response()->json($output);
+    }
+
+    public function showxx(Request $request)
+    {
+        $menu = DB::table('m_w')
+            ->leftJoin('m_jenis_nota', 'm_jenis_nota_m_w_id', 'm_w_id')
+            ->leftJoin('m_menu_harga', 'm_menu_harga_m_jenis_nota_id', 'm_jenis_nota_id')
+            ->leftJoin('m_area', 'm_area_id', 'm_w_m_area_id')
+            ->leftJoin('m_transaksi_tipe', 'm_t_t_id', 'm_jenis_nota_m_t_t_id')
+            ->leftJoin('m_produk', 'm_produk_id', 'm_menu_harga_m_produk_id')
+            ->leftjoin('m_jenis_produk', 'm_jenis_produk_id', 'm_produk_m_jenis_produk_id')
+            ->selectRaw(
+                'm_area_nama,
+                m_w_nama,
+                m_w_m_kode_nota,
+                COALESCE(m_produk_nama, \'0\') as m_produk_nama,
+                COALESCE(m_t_t_name, \'0\') as m_t_t_name,
+                COALESCE(m_menu_harga_nominal, 0) as m_menu_harga_nominal,
+                COALESCE(m_menu_harga_status, \'0\') as m_menu_harga_status,
+                COALESCE(m_menu_harga_tax_status, \'0\') as m_menu_harga_tax_status,
+                COALESCE(m_menu_harga_sc_status, \'0\') as m_menu_harga_sc_status'
+
+            );
+        if ($request->area != 'all') {
+            $menu->where('m_w_m_area_id', $request->area);
+            if ($request->waroeng != 'all') {
+                $menu->where('m_jenis_nota_m_w_id', $request->waroeng);
+            }
+        }
+        if ($request->menu != 'all') {
+            $menu->where('m_jenis_produk_id', $request->menu);
+            if ($menu->count() == 0) {
+                // $menu->orWhereNull('m_jenis_produk_id');
+            }
+        }
+
+        if ($request->trans != 'all') {
+            $menu->where('m_jenis_nota_m_t_t_id', $request->trans);
+            if ($menu->count() == 0) {
+                // $menu->orWhereNull('m_jenis_nota_m_t_t_id');
+            }
+        }
+        $menu = $menu
+        // ->orderBy('m_w_m_area_id', 'ASC')
+        //     ->orderBy('m_w_id', 'ASC')
+        //     ->orderBy('m_produk_id', 'ASC')
+        //     ->orderBy('m_t_t_id', 'ASC')
+        //     ->orderBy('m_w_m_kode_nota', 'ASC')
+            ->groupby('m_produk_nama', 'm_menu_harga_nominal', 'm_menu_harga_status', 'm_menu_harga_tax_status', 'm_menu_harga_sc_status', 'm_t_t_name', 'm_area_nama', 'm_w_nama', 'm_w_m_kode_nota')
+            ->get();
+
+        $status = 'Tidak Aktif';
+        $pajak = 'Tidak Aktif';
+        $sc = 'Tidak Aktif';
+        $data = array();
+        foreach ($menu as $value) {
+
+            // $produk = null;
+            // $area = null;
+            // $waroeng = null;
+            // $harga = 0;
+            // $tipeProd = null;
+            // $nota = null;
+
+            $area = $value->m_area_nama;
+            $waroeng = $value->m_w_nama;
+            $row = array();
+            // if ($value->m_w_id == $value->m_jenis_nota_m_w_id) {
+            $nota = $value->m_w_m_kode_nota;
+            // }
+            $row[] = $area;
+            $row[] = $waroeng;
+            // if ($value->m_produk_id == $value->m_jenis_produk_id) {
+            $produk = $value->m_produk_nama;
+            // }
+            // if ($value->m_produk_id == $value->m_menu_harga_m_produk_id) {
+            $harga = number_format($value->m_menu_harga_nominal);
+            // }
+            $row[] = $produk;
+            $row[] = $harga;
+            // if ($value->m_jenis_nota_m_t_t_id == $value->m_t_t_id) {
+            $tipeProd = $value->m_t_t_name;
+            // }
+            $row[] = $tipeProd;
+            $row[] = $nota;
+            if ($value->m_menu_harga_status != 0) {
+                $status = 'Aktif';
+            }
+            $row[] = $status;
             if ($value->m_menu_harga_tax_status != 0) {
                 $pajak = 'Aktif';
             }
