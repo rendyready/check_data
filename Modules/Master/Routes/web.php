@@ -88,7 +88,7 @@ Route::group(['prefix' => 'master', 'controller' => MJenisNotaController::class,
 //Master Meja
 Route::group(['prefix' => 'master', 'controller' => MejaController::class, 'middleware' => ['auth', 'web']], function () {
     Route::get('meja', 'index')->name('meja.index');
-    Route::get('meja/list_meja','list_meja')->name('meja.list');
+    Route::get('meja/list_meja', 'list_meja')->name('meja.list');
     Route::get('meja/find/{id}', 'find')->name('meja.find');
     Route::post('meja/simpan', 'simpan')->name('simpan.meja');
     Route::get('meja/hapus/{id}', 'hapus')->name('hapus.meja');
@@ -146,4 +146,16 @@ Route::group(['prefix' => 'master', 'controller' => MTipeNotaController::class, 
 Route::group(['prefix' => 'master', 'controller' => PajakCollectionController::class, 'middleware' => ['auth', 'web']], function () {
     Route::get('pajak', 'index')->name('pajak.index');
     Route::post('pajak/action', 'action')->name('action.pajak_collection');
+});
+//Status Menu
+Route::group(['prefix' => 'master', 'controller' => StatusMenuController::class, 'middleware' => ['auth', 'web']], function () {
+    Route::get('status_menu', 'index')->name('status_menu.index');
+    Route::get('status_menu/select_waroeng', 'select_waroeng')->name('status_menu.select_waroeng');
+    Route::get('status_menu/show', 'show')->name('status_menu.show');
+});
+//Compare Menu
+Route::group(['prefix' => 'master', 'controller' => CompareMenuController::class, 'middleware' => ['auth', 'web']], function () {
+    Route::get('compare_menu', 'index')->name('compare_menu.index');
+    Route::get('compare_menu/select_waroeng', 'select_waroeng')->name('compare_menu.select_waroeng');
+    Route::get('compare_menu/show', 'show')->name('compare_menu.show');
 });
