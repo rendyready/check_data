@@ -246,7 +246,7 @@
                             </a>
                             <ul class="nav-main-submenu">
                                 @can('setting cr.view')
-                                    <li class="nav-main-item{{ request()->is('master/*') ? ' open' : '' }}">
+                                    <li class="nav-main-item{{ request()->is('setting_cr/*') ? ' open' : '' }}">
                                         <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu"
                                             aria-haspopup="true" aria-expanded="true" href="#">
                                             <span class="nav-main-link-name">Setting CR</span>
@@ -254,7 +254,7 @@
                                         <ul class="nav-main-submenu">
                                             @can('daftar produk.view')
                                                 <li class="nav-main-item">
-                                                    <a class="nav-main-link{{ request()->is('master/m_produk') ? ' active' : '' }}"
+                                                    <a class="nav-main-link{{ request()->is('setting_cr/m_produk') ? ' active' : '' }}"
                                                         href="{{ route('m_produk.index') }}">
                                                         <span class="nav-main-link-name">Daftar Produk</span>
                                                     </a>
@@ -262,7 +262,7 @@
                                             @endcan
                                             @can('subjenis produk.view')
                                                 <li class="nav-main-item">
-                                                    <a class="nav-main-link{{ request()->is('master/m_produk_relasi') ? ' active' : '' }}"
+                                                    <a class="nav-main-link{{ request()->is('setting_cr/m_produk_relasi') ? ' active' : '' }}"
                                                         href="{{ route('m_produk_relasi.index') }}">
                                                         <span class="nav-main-link-name">Set. Sub Jenis Produk</span>
                                                     </a>
@@ -270,7 +270,7 @@
                                             @endcan
                                             @can('setting harga.view')
                                                 <li class="nav-main-item">
-                                                    <a class="nav-main-link{{ request()->is('master/m_jenis_nota') ? ' active' : '' }}"
+                                                    <a class="nav-main-link{{ request()->is('setting_cr/m_jenis_nota') ? ' active' : '' }}"
                                                         href="{{ route('m_jenis_nota.index') }}">
                                                         <span class="nav-main-link-name">Setting Harga</span>
                                                     </a>
@@ -278,7 +278,7 @@
                                             @endcan
                                             @can('setting meja.view')
                                                 <li class="nav-main-item">
-                                                    <a class="nav-main-link{{ request()->is('master/meja') ? ' active' : '' }}"
+                                                    <a class="nav-main-link{{ request()->is('setting_cr/meja') ? ' active' : '' }}"
                                                         href="{{ route('meja.index') }}">
                                                         <span class="nav-main-link-name">Setting Meja</span>
                                                     </a>
@@ -286,7 +286,7 @@
                                             @endcan
                                             @can('seting footer.view')
                                                 <li class="nav-main-item">
-                                                    <a class="nav-main-link{{ request()->is('master/conf_footer') ? ' active' : '' }}"
+                                                    <a class="nav-main-link{{ request()->is('setting_cr/conf_footer') ? ' active' : '' }}"
                                                         href="{{ route('conf_footer.index') }}">
                                                         <span class="nav-main-link-name">Footer Waroeng</span>
                                                     </a>
@@ -419,6 +419,14 @@
                                                     <a class="nav-main-link{{ request()->is('master/level-jabatan') ? ' active' : '' }}"
                                                         href="{{ route('level-jabatan.index') }}">
                                                         <span class="nav-main-link-name">Level jabatan</span>
+                                                    </a>
+                                                </li>
+                                            @endcan
+                                            @can('status menu.view')
+                                                <li class="nav-main-item">
+                                                    <a class="nav-main-link{{ request()->is('master/status_menu') ? ' active' : '' }}"
+                                                        href="{{ route('status_menu.index') }}">
+                                                        <span class="nav-main-link-name">Monitoring Master Menu</span>
                                                     </a>
                                                 </li>
                                             @endcan
@@ -936,23 +944,23 @@
                             </ul>
                         </li>
                     @endcan
-
-                    <li class="nav-main-item{{ request()->is('keuangan/*') ? ' open' : '' }}">
-                        <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true"
-                            aria-expanded="true" href="#">
-                            <i class="nav-main-link-icon fa fa-coins"></i>
-                            <span class="nav-main-link-name">Keuangan</span>
-                        </a>
-                        <ul class="nav-main-submenu">
-                            <li class="nav-main-item">
-                                <a class="nav-main-link{{ request()->is('keuangan/pajak') ? ' active' : '' }}"
-                                    href="{{ route('pajak.index') }}">
-                                    <span class="nav-main-link-name">Pajak</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-
+                    @can('module keuangan.view')
+                        <li class="nav-main-item{{ request()->is('keuangan/*') ? ' open' : '' }}">
+                            <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true"
+                                aria-expanded="true" href="#">
+                                <i class="nav-main-link-icon fa fa-coins"></i>
+                                <span class="nav-main-link-name">Keuangan</span>
+                            </a>
+                            <ul class="nav-main-submenu">
+                                <li class="nav-main-item">
+                                    <a class="nav-main-link{{ request()->is('keuangan/pajak') ? ' active' : '' }}"
+                                        href="{{ route('pajak.index') }}">
+                                        <span class="nav-main-link-name">Pajak</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    @endcan
                     @can('module user.view')
                         <li class="nav-main-heading">Pengaturan</li>
                         <li class="nav-main-item{{ request()->is('users/*') ? ' open' : '' }}">

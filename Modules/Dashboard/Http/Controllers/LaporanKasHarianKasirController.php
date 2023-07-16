@@ -779,12 +779,6 @@ class LaporanKasHarianKasirController extends Controller
             ->selectRaw('rekap_modal_id, rekap_modal_tanggal, rekap_modal_sesi, name, max(rekap_modal_nominal) rekap_modal_nominal, max(rekap_modal_cash_in) rekap_modal_cash_in, max(rekap_modal_cash_out) rekap_modal_cash_out, max(rekap_modal_cash_real) rekap_modal_cash_real, sum(r_t_nominal_free_kembalian) free, sum(r_t_nominal_pembulatan) bulat')
             ->where('rekap_modal_m_area_id', $request->area)
             ->where('rekap_modal_m_w_id', $request->waroeng);
-        // if($request->area != 'all'){
-        //     $saldoIn->where('rekap_modal_m_area_id', $request->area);
-        //     if($request->waroeng != 'all') {
-        //         $saldoIn->where('rekap_modal_m_w_id', $request->waroeng);
-        //     }
-        // }
         if (strpos($request->tanggal, 'to') !== false) {
             [$start, $end] = explode('to', $request->tanggal);
             $saldoIn->whereBetween(DB::raw('DATE(rekap_modal_tanggal)'), [$start, $end]);
@@ -817,7 +811,8 @@ class LaporanKasHarianKasirController extends Controller
             $row[] = number_format($val_in->free);
             $row[] = number_format($val_in->bulat);
             $row[] = '<a id="button_detail" class="btn btn-sm button_detail btn-info" value="' . $val_in->rekap_modal_id . '" title="Detail Nota"><i class="fa-sharp fa-solid fa-eye"></i></a>
-                        <a id="button_pdf" value="' . $val_in->rekap_modal_id . '" class="btn btn-sm btn-warning" title="Export PDF"><i class="fa-sharp fa-solid fa-file"></i></a>';
+                        <a id="button_pdf" value="' . $val_in->rekap_modal_id . '" class="btn btn-sm btn-warning" title="Export PDF"><i class="fa-sharp fa-solid fa-file"></i></a>
+                        <a id="button_tarikan" value="' . $val_in->rekap_modal_id . '" class="btn btn-sm btn-success" title="Lihat Tarikan"><i class="fa-sharp fa-solid fa-print"></i></a>';
             $data[] = $row;
 
             $totalSelisih += $val_in->rekap_modal_cash_real - $saldoAkhir;
