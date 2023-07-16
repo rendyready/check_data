@@ -26,6 +26,7 @@ class MJenisNotaController extends Controller
             ->orderby('m_t_t_name', 'asc')
             ->get();
         $data['listWaroeng'] = MW::all();
+        $data['listWaroengSumber'] = MW::whereIn('m_w_id',['119','120'])->get();
         $data['listTipeTransaksi'] = MTransaksiTipe::orderBy('m_t_t_group', 'desc')
             ->whereNotIn('m_t_t_id', [2])
             ->orderBy('m_t_t_name', 'asc')
