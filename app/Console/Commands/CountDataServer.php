@@ -89,6 +89,7 @@ class CountDataServer extends Command
             ->get();
         $getlist_rekap = DB::table('config_sync')
             ->orderBy('config_sync_id', 'asc')
+            ->where('config_sync_table_tipe','transaksi')
             ->get();
         $today = Carbon::now();
         // Mendapatkan tanggal kemarin
@@ -195,12 +196,12 @@ class CountDataServer extends Command
                 }
 
                 $countsource = $DbSource->table($rekap->config_sync_table_name)
-                    ->where(DB::raw("SPLIT_PART(" . $rekap->config_sync_field_validate1 . ", '.', 2)"), '=', $valDest->db_con_m_w_id)
-                    ->where(DB::raw("LEFT(SPLIT_PART(" . $rekap->config_sync_field_validate1 . ", '.', 5), 6)"), '=', $tanggal)
+                    ->where(DB::raw("SPLIT_PART(" . $rekap->config_sync_field_validate1 . ", '.', 2)"), '=', "$valDest->db_con_m_w_id")
+                    ->where(DB::raw("LEFT(SPLIT_PART(" . $rekap->config_sync_field_validate1 . ", '.', 5), 6)"), '=', "$tanggal")
                     ->count();
                 $countdest = $DbDest->table($rekap->config_sync_table_name)
-                    ->where(DB::raw("SPLIT_PART(" . $rekap->config_sync_field_validate1 . ", '.', 2)"), '=', $valDest->db_con_m_w_id)
-                    ->where(DB::raw("LEFT(SPLIT_PART(" . $rekap->config_sync_field_validate1 . ", '.', 5), 6)"), '=', $tanggal)
+                    ->where(DB::raw("SPLIT_PART(" . $rekap->config_sync_field_validate1 . ", '.', 2)"), '=', "$valDest->db_con_m_w_id")
+                    ->where(DB::raw("LEFT(SPLIT_PART(" . $rekap->config_sync_field_validate1 . ", '.', 5), 6)"), '=', "$tanggal")
                     ->count();
                 if ($countsource != $countdest) {
                     $data = [

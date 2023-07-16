@@ -71,6 +71,7 @@ class ServerStatusController extends Controller
             ->get();
         $getlist_rekap = DB::table('config_sync')
             ->orderBy('config_sync_id', 'asc')
+            ->where('config_sync_table_tipe','transaksi')
             ->get();
         $today = Carbon::now();
         // Mendapatkan tanggal kemarin
