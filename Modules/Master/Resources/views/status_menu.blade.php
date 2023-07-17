@@ -54,6 +54,7 @@
                                                 class="cari f-wrg js-select2 form-control filter_menu"
                                                 data-placeholder="Pilih Jenis Menu" name="r_t_created_by">
                                                 <option></option>
+                                                <option value="all">all jenis menu</option>
                                                 @foreach ($data->menu as $menu)
                                                     <option value="{{ $menu->m_jenis_produk_id }}">
                                                         {{ $menu->m_jenis_produk_nama }}
