@@ -188,7 +188,7 @@
                                                 name="m_jenis_nota_waroeng_sumber_id" style="width: 100%;"
                                                 data-container="#copy_nota" data-placeholder="Choose one..">
                                                 <option></option>
-                                                @foreach ($listWaroeng as $wr)
+                                                @foreach ($listSumberNota as $wr)
                                                     <option value="{{ $wr->m_w_id }}">{{ ucwords($wr->m_w_nama) }}
                                                     </option>
                                                 @endforeach
