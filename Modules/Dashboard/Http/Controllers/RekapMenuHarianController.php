@@ -170,8 +170,8 @@ class RekapMenuHarianController extends Controller
                 $pajak = $nominal;
             }
             $row[] = number_format($pajak);
-            $selisihTax = ($pajak - $val_menu->pajak);
-            if ($val_menu->m_t_t_name != 'dine in' && $val_menu->m_t_t_name != 'take away') {
+            $selisihTax = $pajak - $val_menu->pajak;
+            if ($val_menu->pajak == 0) {
                 $selisihTax = 0;
             }
             $row[] = number_format($selisihTax);
