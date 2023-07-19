@@ -430,6 +430,14 @@
                                                     </a>
                                                 </li>
                                             @endcan
+                                            @can('compare menu.view')
+                                                <li class="nav-main-item">
+                                                    <a class="nav-main-link{{ request()->is('master/compare_menu') ? ' active' : '' }}"
+                                                        href="{{ route('compare_menu.index') }}">
+                                                        <span class="nav-main-link-name">Monitoring Master Jumlah Menu</span>
+                                                    </a>
+                                                </li>
+                                            @endcan
                                         </ul>
                                     </li>
                                 @endcan
