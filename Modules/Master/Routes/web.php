@@ -151,7 +151,11 @@ Route::group(['prefix' => 'master', 'controller' => PajakCollectionController::c
 Route::group(['prefix' => 'master', 'controller' => StatusMenuController::class, 'middleware' => ['auth', 'web']], function () {
     Route::get('status_menu', 'index')->name('status_menu.index');
     Route::get('status_menu/select_waroeng', 'select_waroeng')->name('status_menu.select_waroeng');
-    Route::get('status_menu/select_menu', 'select_menu')->name('status_menu.select_menu');
-    Route::get('status_menu/select_transaksi', 'select_transaksi')->name('status_menu.select_transaksi');
     Route::get('status_menu/show', 'show')->name('status_menu.show');
+});
+//Compare Menu
+Route::group(['prefix' => 'master', 'controller' => CompareMenuController::class, 'middleware' => ['auth', 'web']], function () {
+    Route::get('compare_menu', 'index')->name('compare_menu.index');
+    Route::get('compare_menu/select_waroeng', 'select_waroeng')->name('compare_menu.select_waroeng');
+    Route::get('compare_menu/show', 'show')->name('compare_menu.show');
 });

@@ -126,7 +126,7 @@ class RekapMenuHarianController extends Controller
         if ($request->trans != 'all') {
             $get->where('m_t_t_name', $request->trans);
         }
-        $get = $get->selectRaw('SUM(r_t_detail_qty) AS qty, r_t_detail_reguler_price, r_t_tanggal, r_t_detail_m_produk_nama, r_t_detail_m_produk_id, m_w_nama, m_jenis_produk_id, m_jenis_produk_nama, m_t_t_name, rekap_modal_sesi, r_t_detail_price, SUM(r_t_detail_nominal) AS nominal_nota, SUM(r_t_detail_price * r_t_detail_qty) as trans, SUM(r_t_detail_nominal) - (SUM(r_t_detail_reguler_price * r_t_detail_qty)) cr_trans')
+        $get = $get->selectRaw('SUM(r_t_detail_qty) AS qty, r_t_detail_reguler_price, r_t_tanggal, r_t_detail_m_produk_nama, r_t_detail_m_produk_id, m_w_nama, m_jenis_produk_id, m_jenis_produk_nama, m_t_t_name, rekap_modal_sesi, r_t_detail_price, SUM(r_t_detail_nominal) AS nominal_nota, SUM(r_t_detail_price * r_t_detail_qty) as trans, SUM(r_t_detail_nominal) - (SUM(r_t_detail_reguler_price * r_t_detail_qty)) cr_trans, sum(r_t_detail_nominal_pajak) pajak')
             ->groupBy('r_t_tanggal', 'r_t_detail_m_produk_nama', 'r_t_detail_m_produk_id', 'm_w_nama', 'r_t_detail_reguler_price', 'm_jenis_produk_nama', 'm_jenis_produk_id', 'm_t_t_name', 'rekap_modal_sesi', 'r_t_detail_price')
             ->orderBy('m_jenis_produk_id', 'ASC')
             ->orderBy('r_t_detail_m_produk_nama', 'ASC')
@@ -165,11 +165,22 @@ class RekapMenuHarianController extends Controller
                 $selisihMath = 0;
             }
             $row[] = number_format($selisihMath);
+            $pajak = $nominal * 0.1;
+            if ($val_menu->m_t_t_name != 'dine in' && $val_menu->m_t_t_name != 'take away') {
+                $pajak = $nominal;
+            }
+            $row[] = number_format($pajak);
+            $selisihTax = $pajak - $val_menu->pajak;
+            if ($val_menu->pajak == 0) {
+                $selisihTax = 0;
+            }
+            $row[] = number_format($selisihTax);
             if ($request->status == 'all') {
                 $data[] = $row;
             } elseif ($request->status == 'selisih' && $selisihPrice != 0 || $selisihMath != 0) {
                 $data[] = $row;
             }
+            // return $val_menu->pajak;
         }
 
         $output = array("data" => $data);
