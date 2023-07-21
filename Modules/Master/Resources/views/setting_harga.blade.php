@@ -72,18 +72,15 @@
                         </div>
                         <div class="block-content">
                             <!-- Select2 is initialized at the bottom of the page -->
-                            <form method="post" action="" id="formAction">
+                            <form id="formAction">
                                 @csrf
-                                <div class="mb-4">
-                                    <input name="m_jenis_nota_id" type="hidden" id="m_jenis_nota_id">
-                                </div>
                                 <div class="mb-4">
                                     <div class="form-group">
                                         <label for="m_jenis_nota_master_id">Nama Master</label>
                                         <div>
-                                            <select class="js-select2-nota" id="m_jenis_nota_master_id" name="m_jenis_nota_master_id"
-                                                style="width: 100%;" data-container="#modal-block-select2"
-                                                data-placeholder="Choose one..">
+                                            <select class="js-select2-nota" id="m_jenis_nota_master_id"
+                                                name="m_jenis_nota_master_id" style="width: 100%;"
+                                                data-container="#modal-block-select2" data-placeholder="Choose one..">
                                                 <option></option>
                                                 @foreach ($listSumberNota as $wr)
                                                     <option value="{{ $wr->m_w_id }}">{{ ucwords($wr->m_w_nama) }}
@@ -435,7 +432,6 @@
             });
             $(".tambahNota").on('click', function() {
                 $("#myModalLabel").html('Tambah Master Nota');
-                $("#formAction").attr('action', "/master/m_jenis_nota/copy");
                 $("#modal-block-select2").modal('show');
             });
             $(".buttonMenu").on('click', function() {
@@ -495,7 +491,38 @@
             });
             $('#formAction').submit(function(e) {
                 if (!e.isDefaultPrevented()) {
-                    submit_update('#formAction');
+                    $.ajax({
+                        url: "/master/m_jenis_nota/store",
+                        type: "POST",
+                        data: $('#formAction').serialize(),
+                        success: function(data) {
+                            $(".modal").modal('hide');
+                            if (data.type == 'success') {
+                                Codebase.helpers('jq-notify', {
+                                    align: 'right', // 'right', 'left', 'center'
+                                    from: 'top', // 'top', 'bottom'
+                                    type: data
+                                        .type, // 'info', 'success', 'warning', 'danger'
+                                    icon: 'fa fa-info me-5', // Icon class
+                                    message: data.messages
+                                });
+                                setTimeout(() => {
+                                    window.location.reload();
+                                }, 1500);
+                            }
+                            if (data.type == 'danger') {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Tambah Nota Master Gagal',
+                                    text: 'Silahkan Masuk Ke Master Nota dan Menambahkan Menu',
+                                    footer: 'Nota Sudah Tersedia'
+                                })
+                            }
+                        },
+                        error: function() {
+                            alert("Tidak dapat menyimpan data!");
+                        }
+                    });
                     return false;
                 }
             });

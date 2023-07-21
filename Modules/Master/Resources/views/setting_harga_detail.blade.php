@@ -10,8 +10,8 @@
                             Detail Harga {{ ucwords($m_t_t_name) }}
                     </div>
                     <div class="block-content text-muted">
-                        {{-- <a class="btn btn-success mr-5 mb-5 buttonInsert" value="" title="Edit" style="color: #fff"><i
-                                class="fa fa-plus mr-5"></i> Harga</a> --}}
+                        <a class="btn btn-success mr-5 mb-5 buttonInsert" value="" title="Edit" style="color: #fff"><i
+                                class="fa fa-plus mr-5"></i> Harga</a>
                         @csrf
                         <div id="tabpane" class="block block-rounded overflow-hidden">
                             <ul class="nav nav-tabs nav-tabs-block nav-tabs-alt align-items-center" role="tablist">
@@ -148,8 +148,8 @@
                                         <div class="form-group">
                                             <label for="m_menu_harga_nominal">Harga</label>
                                             <div>
-                                                <input type="number" id="m_menu_harga_nominal"
-                                                    name="m_menu_harga_nominal" class="form-control" readonly>
+                                                <input type="text" id="m_menu_harga_nominal"
+                                                    name="m_menu_harga_nominal" class="form-control number" readonly>
                                             </div>
                                         </div>
                                     </div>
@@ -225,6 +225,9 @@
                     dropdownParent: $('#invalidDropdownParent')
                 });
                 $(".buttonInsert").on('click', function() {
+                    $('#m_menu_harga_m_produk_id').select2({
+                        dropdownParent: $('#modal-block-select2')
+                    });
                     var id = $(this).attr('value');
                     $("#myModalLabel").html('Tambah Harga');
                     $("#m_menu_harga_id").val('').trigger('change');
@@ -235,6 +238,19 @@
                     $("#m_menu_harga_sc_status").val('').trigger('change');
                     $("#formAction").attr('action', "/master/m_jenis_nota/simpan_harga");
                     $("#modal-block-select2").modal('show');
+                    $("#m_menu_harga_nominal").prop('readonly',false);
+                    $.ajax({
+                        url: "/master/m_jenis_nota/show_harga/" + id,
+                        type: "GET",
+                        dataType: 'json',
+                        success: function(respond) {
+                            $('#m_jenis_nota_m_t_t_id').val(respond.m_jenis_nota_m_t_t_id);
+                            $('#m_jenis_nota_m_w_id').val(respond.m_jenis_nota_m_w_id);
+                            $('#m_menu_harga_m_jenis_nota_id').val(respond
+                                .m_menu_harga_m_jenis_nota_id);
+                        },
+                        error: function() {}
+                    });
                 });
                 $(".buttonEdit").on('click', function() {
                     var id = $(this).attr('value');
