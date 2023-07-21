@@ -10,7 +10,8 @@
                             Setting Harga Nota
                     </div>
                     <div class="block-content text-muted">
-
+                        <a class="btn btn-danger mr-5 mb-5 tambahNota" value="" title="tambah" style="color: #fff"><i
+                                class="fa fa-plus mr-5"></i>Tambah Nota Master</a>
                         <a class="btn btn-info mr-5 mb-5 buttonCopy" value="" title="copy" style="color: #fff"><i
                                 class="fa fa-copy mr-5"></i> Copy Nota</a>
                         <a class="btn btn-warning mr-5 mb-5 buttonUpdate" value="" title="update"
@@ -56,7 +57,7 @@
             </div>
         </div>
         <!-- Select2 in a modal Status Menu Harga-->
-        {{-- <div class="modal" id="modal-block-select2" tabindex="-1" role="dialog" aria-labelledby="modal-block-select2"
+        <div class="modal" id="modal-block-select2" tabindex="-1" role="dialog" aria-labelledby="modal-block-select2"
             aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -71,36 +72,21 @@
                         </div>
                         <div class="block-content">
                             <!-- Select2 is initialized at the bottom of the page -->
-                            <form id="formAction">
+                            <form method="post" action="" id="formAction">
                                 @csrf
-                                <input type="hidden" id="action1" value="status_menu" name="action">
                                 <div class="mb-4">
-                                    <div class="form-group">
-                                        <label for="m_area_id2">Area</label>
-                                        <div>
-                                            <select class="js-select2 get_nota" id="m_area_id2" name="m_area_id"
-                                                style="width: 100%;" data-placeholder="Choose one..">
-                                                <option></option>
-                                                <option value="0">All Area</option>
-                                                @foreach ($area as $val)
-                                                    <option value="{{ $val->m_area_id }}">
-                                                        {{ ucwords($val->m_area_nama) }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
+                                    <input name="m_jenis_nota_id" type="hidden" id="m_jenis_nota_id">
                                 </div>
                                 <div class="mb-4">
                                     <div class="form-group">
-                                        <label for="jenis_nota">Jenis Transaksi</label>
+                                        <label for="m_jenis_nota_master_id">Nama Master</label>
                                         <div>
-                                            <select class="js-select2 get_nota" id="jenis_nota2"
-                                                name="update_m_jenis_nota_trans_id[]" style="width: 100%;"
-                                                data-placeholder="Pilih Jenis Transaksi" multiple>
+                                            <select class="js-select2-nota" id="m_jenis_nota_master_id" name="m_jenis_nota_master_id"
+                                                style="width: 100%;" data-container="#modal-block-select2"
+                                                data-placeholder="Choose one..">
                                                 <option></option>
-                                                @foreach ($listTipeTransaksi as $tipe)
-                                                    <option value="{{ $tipe->m_t_t_id }}">
-                                                        {{ ucwords($tipe->m_t_t_name) }}
+                                                @foreach ($listSumberNota as $wr)
+                                                    <option value="{{ $wr->m_w_id }}">{{ ucwords($wr->m_w_nama) }}
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -109,25 +95,15 @@
                                 </div>
                                 <div class="mb-4">
                                     <div class="form-group">
-                                        <label for="m_tipe_nota">Tipe Nota</label>
+                                        <label for="m_jenis_nota_m_t_t_id">Jenis Transaksi</label>
                                         <div>
-                                            <select class="js-select2" id="m_tipe_nota_id2" name="nota_kode[]"
-                                                style="width: 100%;" data-placeholder="Pilih Tipe Nota" multiple>
+                                            <select class="js-select2-nota" id="m_jenis_nota_m_t_t_id"
+                                                name="m_jenis_nota_m_t_t_id" style="width: 100%;"
+                                                data-container="#modal-block-select2" data-placeholder="Choose one..">
                                                 <option></option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="mb-4">
-                                    <div class="form-group">
-                                        <label for="m_produk_id">Nama Menu</label>
-                                        <div>
-                                            <select class="js-select2" id="menu_id" name="m_produk_id"
-                                                style="width: 100%;" data-placeholder="Choose one..">
-                                                <option></option>
-                                                @foreach ($produk as $val)
-                                                    <option value="{{ $val->m_produk_id }}">
-                                                        {{ ucwords($val->m_produk_nama) }}</option>
+                                                @foreach ($listTipeTransaksi as $tipe)
+                                                    <option value="{{ $tipe->m_t_t_id }}">{{ ucwords($tipe->m_t_t_name) }}
+                                                    </option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -143,7 +119,7 @@
                     </div>
                 </div>
             </div>
-        </div> --}}
+        </div>
         <!-- END Select2 in a modal tambah nota-->
         <!-- Select2 in a modal copy nota -->
         <div class="modal" id="copy_nota" tabindex="-1" role="dialog" aria-labelledby="copy_nota" aria-hidden="true">
@@ -153,7 +129,8 @@
                         <div class="block-header block-header-default bg-pulse">
                             <h3 class="block-title" id="myModalLabel2"></h3>
                             <div class="block-options">
-                                <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
+                                <button type="button" class="btn-block-option" data-bs-dismiss="modal"
+                                    aria-label="Close">
                                     <i class="fa fa-fw fa-times"></i>
                                 </button>
                             </div>
@@ -452,6 +429,14 @@
             });
             $('.js-select2-copy').select2({
                 dropdownParent: $('#formAction2')
+            });
+            $('.js-select2-nota').select2({
+                dropdownParent: $('#formAction')
+            });
+            $(".tambahNota").on('click', function() {
+                $("#myModalLabel").html('Tambah Master Nota');
+                $("#formAction").attr('action', "/master/m_jenis_nota/copy");
+                $("#modal-block-select2").modal('show');
             });
             $(".buttonMenu").on('click', function() {
                 $("#myModalLabel3").html('Update Status Menu');
