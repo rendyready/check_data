@@ -149,7 +149,7 @@ class RekapMenuHarianController extends Controller
             $crRef = $val_menu->nominal_nota;
             $qty = $val_menu->qty;
             $nominal = $val_menu->r_t_detail_reguler_price * $val_menu->qty;
-            $pajak = $nominal * 0.1;
+            // $pajak = $nominal * 0.1;
             $pajakMenu = $val_menu->pajak;
             if (!empty($refund2)) {
                 foreach ($refund as $key => $valRef) {
@@ -157,7 +157,7 @@ class RekapMenuHarianController extends Controller
                         $qty = $val_menu->qty - $valRef->r_r_detail_qty;
                         $nominal = $val_menu->r_t_detail_reguler_price * $qty;
                         $crRef = $val_menu->nominal_nota - ($val_menu->r_t_detail_reguler_price * $valRef->r_r_detail_qty);
-                        $pajak = $nominal * 0.1;
+                        // $pajak = $nominal * 0.1;
                         $pajakMenu = $val_menu->pajak - (($val_menu->r_t_detail_reguler_price * $valRef->r_r_detail_qty) * 0.1);
                     }
                 }
@@ -180,15 +180,17 @@ class RekapMenuHarianController extends Controller
                 $selisihCR = 0;
             }
             $row[] = number_format($selisihCR);
+            $pajak = $nominal * 0.1;
             if ($val_menu->m_t_t_name != 'dine in' && $val_menu->m_t_t_name != 'take away') {
                 $pajak = $nominal;
             }
-            if ($val_menu->pajak == 0 || $qty == 0) {
-                $pajak = 0;
-            }
+            // if ($val_menu->pajak == 0 || $qty == 0) {
+            //     $pajak = 0;
+            // }
+
             $row[] = number_format($pajak);
             $row[] = number_format($pajakMenu);
-            $selisihTax = $pajak - $pajakMenu;
+            $selisihTax = $pajak - $val_menu->pajak;
             if ($val_menu->pajak == 0 || $qty == 0) {
                 $selisihTax = 0;
             }

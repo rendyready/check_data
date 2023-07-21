@@ -47,6 +47,7 @@ class RekapNonMenuController extends Controller
 
     public function show(Request $request)
     {
+        // $refund = DB::table
         $rekap = DB::table('rekap_transaksi_detail')
             ->selectRaw('
                         rekap_modal_id,
