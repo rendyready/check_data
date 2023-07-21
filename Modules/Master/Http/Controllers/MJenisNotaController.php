@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 
 class MJenisNotaController extends Controller
-{
+{ 
     public function index()
     {
         $data['data'] = MJenisNotum::select('m_jenis_nota_id', 'm_w_id', 'm_w_nama', 'm_t_t_id', 'm_t_t_name', 'm_w_m_kode_nota')
@@ -26,7 +26,7 @@ class MJenisNotaController extends Controller
             ->orderby('m_t_t_name', 'asc')
             ->get();
         $data['listWaroeng'] = MW::all();
-        $data['listWaroengSumber'] = MW::whereIn('m_w_id',['119','120'])->get();
+        $data['listSumberNota'] = MW::whereIn('m_w_m_w_jenis_id',[8])->get();
         $data['listTipeTransaksi'] = MTransaksiTipe::orderBy('m_t_t_group', 'desc')
             ->whereNotIn('m_t_t_id', [2])
             ->orderBy('m_t_t_name', 'asc')
