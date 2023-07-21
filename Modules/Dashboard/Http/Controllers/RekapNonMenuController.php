@@ -135,7 +135,7 @@ class RekapNonMenuController extends Controller
         }
 
         $listRekap = array_unique($arrayListRekap);
-
+        // return $listRekap;
         $getIceCream = DB::table('m_produk')
             ->join('config_sub_jenis_produk', 'config_sub_jenis_produk_m_produk_id', '=', 'm_produk_id')
             ->select('m_produk_id')
