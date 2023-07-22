@@ -157,7 +157,6 @@
                                             <th class="text-center">Nominal CR </th>
                                             <th class="text-center">Selisih Reg vs CR</th>
                                             <th class="text-center">Nominal Pajak</th>
-                                            <th class="text-center">Pajak Menu</th>
                                             <th class="text-center">Selisih Reg vs Pajak</th>
                                         </tr>
                                     </thead>

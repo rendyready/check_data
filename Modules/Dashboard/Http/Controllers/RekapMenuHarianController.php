@@ -138,7 +138,6 @@ class RekapMenuHarianController extends Controller
         $totalCR = 0;
         $totalselisihCR = 0;
         $totalPajak = 0;
-        $totalPajakMenu = 0;
         $totalselisihTax = 0;
         $data = array();
         foreach ($get as $key => $val_menu) {
@@ -165,12 +164,19 @@ class RekapMenuHarianController extends Controller
             $row[] = $val_menu->m_jenis_produk_nama;
             $row[] = $val_menu->m_t_t_name;
             $nominal_trans = $val_menu->r_t_detail_price * $qty;
-            if ($val_menu->m_t_t_name != 'dine in' && $val_menu->m_t_t_name != 'take away') {
-                $nominal_trans = $nominal;
-            }
             $selisihTrans = $nominal - $nominal_trans;
+            if ($val_menu->m_t_t_name != 'dine in' && $val_menu->m_t_t_name != 'take away') {
+                if ($nominal == $nominal_trans) {
+                    $selisihTrans = 'Harga Sama';
+                } else {
+                    $selisihTrans = 0;
+                }
+            }
             $row[] = number_format($nominal_trans);
-            $row[] = number_format($selisihTrans);
+            if (!is_string($selisihTrans)) {
+                $selisihTrans = number_format($selisihTrans);
+            }
+            $row[] = $selisihTrans;
             $cr = $qty != 0 ? $crRef : 0;
             $row[] = number_format($cr);
             $selisihCR = $nominal - $cr;
@@ -182,13 +188,12 @@ class RekapMenuHarianController extends Controller
             if ($val_menu->m_t_t_name != 'dine in' && $val_menu->m_t_t_name != 'take away') {
                 $pajak = $nominal;
             }
-            if ($val_menu->pajak == 0 || $qty != 0) {
+            if ($val_menu->pajak == 0) {
                 $pajak = 0;
             }
             $row[] = number_format($pajak);
-            $row[] = number_format($pajakMenu);
-            $selisihTax = $pajak - $val_menu->pajak;
-            if ($val_menu->pajak == 0 || $qty != 0) {
+            $selisihTax = $pajak - $pajakMenu;
+            if ($val_menu->pajak == 0) {
                 $selisihTax = 0;
             }
             $row[] = number_format($selisihTax);
@@ -199,11 +204,12 @@ class RekapMenuHarianController extends Controller
             }
             $totalNominal += $nominal;
             $totalNominal_trans += $nominal_trans;
-            $totalSelisihTrans += $selisihTrans;
+            if (!is_string($selisihTrans)) {
+                $totalSelisihTrans += $selisihTrans;
+            }
             $totalCR += $cr;
             $totalselisihCR += $selisihCR;
             $totalPajak += $pajak;
-            $totalPajakMenu += $val_menu->pajak;
             $totalselisihTax += $selisihTax;
         }
         $totalRow = array();
@@ -219,7 +225,6 @@ class RekapMenuHarianController extends Controller
         $totalRow[] = number_format($totalCR);
         $totalRow[] = number_format($totalselisihCR);
         $totalRow[] = number_format($totalPajak);
-        $totalRow[] = number_format($totalPajakMenu);
         $totalRow[] = number_format($totalselisihTax);
         if ($request->status == 'all') {
             $data[] = $totalRow;
