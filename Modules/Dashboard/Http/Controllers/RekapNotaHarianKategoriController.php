@@ -71,7 +71,8 @@ class RekapNotaHarianKategoriController extends Controller
     {
         $tipeTransaksi = DB::table('m_transaksi_tipe')->orderBy('m_t_t_id', 'asc')->get();
         $groupPay = ['cash', 'transfer'];
-        $operator = DB::table('rekap_modal');
+        $operator = DB::table('rekap_modal')
+            ->where('rekap_modal_status', 'close');
         // ->whereRaw("to_char(rekap_modal_tanggal,'YYYY-MM-DD') = '{$request->tanggal}'")
         // ->where('rekap_modal_m_w_id', $request->waroeng)
         // ->where(DB::raw('DATE(rekap_modal_tanggal)'), $request->tanggal);

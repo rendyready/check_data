@@ -125,7 +125,8 @@ class RekapMenuController extends Controller
             ->join('m_produk', 'm_produk_id', 'r_t_detail_m_produk_id')
             ->join('m_jenis_produk', 'm_jenis_produk_id', 'm_produk_m_jenis_produk_id')
             ->join('m_transaksi_tipe', 'm_t_t_id', 'r_t_m_t_t_id')
-            ->join('rekap_modal', 'rekap_modal_id', 'r_t_rekap_modal_id');
+            ->join('rekap_modal', 'rekap_modal_id', 'r_t_rekap_modal_id')
+            ->where('rekap_modal_status', 'close');
         if (strpos($request->tanggal, 'to') !== false) {
             [$start, $end] = explode('to', $request->tanggal);
             $get->whereBetween('r_t_tanggal', [$start, $end]);

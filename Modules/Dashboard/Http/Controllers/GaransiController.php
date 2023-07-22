@@ -80,7 +80,9 @@ class GaransiController extends Controller
     {
         $get = DB::table('rekap_garansi')
             ->join('rekap_transaksi', 'r_t_id', 'rekap_garansi_r_t_id')
-            ->join('users', 'users_id', 'rekap_garansi_created_by');
+            ->join('users', 'users_id', 'rekap_garansi_created_by')
+            ->join('rekap_modal', 'rekap_modal_id', 'r_t_rekap_modal_id')
+            ->where('rekap_modal_status', 'close');
         if (strpos($request->tanggal, 'to') !== false) {
             $dates = explode('to', $request->tanggal);
             $get->whereBetween('r_t_tanggal', $dates);

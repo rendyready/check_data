@@ -230,6 +230,8 @@ class RekapNonMenuController extends Controller
 
             foreach ($tipe as $keyTipe => $valTipe) {
                 ${$valListRekap . '-' . $valTipe . '-menu'} = 0;
+                ${$valListRekap . '-' . $valTipe . '-menupajak'} = 0;
+                ${$valListRekap . '-' . $valTipe . '-menunonpajak'} = 0;
                 ${$valListRekap . '-' . $valTipe . '-nonmenu'} = 0;
                 ${$valListRekap . '-' . $valTipe . '-jmlnota'} = 0;
 
@@ -252,6 +254,28 @@ class RekapNonMenuController extends Controller
                                 }
                                 ${$valListRekap . '-' . $valTipe . '-menu'} += $valMenu;
                             }
+                            if (in_array($valRekap->m_produk_id, $listMenu) && $valRekap->pajak != 0) {
+                                $valMenu = $valRekap->nominal;
+                                if (!empty($refundCek)) {
+                                    foreach ($refund as $valRefund) {
+                                        if ($valRekap->m_produk_id == $valRefund->r_r_detail_m_produk_id && $valRekap->tanggal == $valRefund->tanggal && $valRekap->sesi == $valRefund->sesi && $valRekap->type_id == $valRefund->r_t_m_t_t_id) {
+                                            $valMenu = $valRekap->nominal - $valRefund->nom_refund;
+                                        }
+                                    }
+                                }
+                                ${$valListRekap . '-' . $valTipe . '-menupajak'} += $valMenu;
+                            }
+                            if (in_array($valRekap->m_produk_id, $listMenu) && $valRekap->pajak == 0) {
+                                $valMenu = $valRekap->nominal;
+                                if (!empty($refundCek)) {
+                                    foreach ($refund as $valRefund) {
+                                        if ($valRekap->m_produk_id == $valRefund->r_r_detail_m_produk_id && $valRekap->tanggal == $valRefund->tanggal && $valRekap->sesi == $valRefund->sesi && $valRekap->type_id == $valRefund->r_t_m_t_t_id) {
+                                            $valMenu = $valRekap->nominal - $valRefund->nom_refund;
+                                        }
+                                    }
+                                }
+                                ${$valListRekap . '-' . $valTipe . '-menunonpajak'} += $valMenu;
+                            }
                             if (in_array($valRekap->m_produk_id, $listNonMenu)) {
                                 $valNonMenu = $valRekap->nominal;
                                 if (!empty($refundCek)) {
@@ -269,6 +293,8 @@ class RekapNonMenuController extends Controller
                             }
                         }
                         $data[$valListRekap][$valTipe . '-menu'] = number_format(${$valListRekap . '-' . $valTipe . '-menu'});
+                        $data[$valListRekap][$valTipe . '-menupajak'] = number_format(${$valListRekap . '-' . $valTipe . '-menupajak'});
+                        $data[$valListRekap][$valTipe . '-menunonpajak'] = number_format(${$valListRekap . '-' . $valTipe . '-menunonpajak'});
                         $data[$valListRekap][$valTipe . '-nonmenu'] = number_format(${$valListRekap . '-' . $valTipe . '-nonmenu'});
                         $data[$valListRekap][$valTipe . '-jmlnota'] = ${$valRekap->rekap_modal_id . '-' . $valTipe . '-jmlnota'};
                     }
@@ -279,39 +305,39 @@ class RekapNonMenuController extends Controller
                 if ($valRekap->rekap_modal_id == $valListRekap) {
                     if (in_array($valRekap->m_produk_id, $listIceCream)) {
                         $valIceCream = $valRekap->nominal;
-                                if (!empty($refundCek)) {
-                                    foreach ($refund as $valRefund) {
-                                        if ($valRekap->m_produk_id == $valRefund->r_r_detail_m_produk_id && $valRekap->tanggal == $valRefund->tanggal && $valRekap->sesi == $valRefund->sesi && $valRekap->type_id == $valRefund->r_t_m_t_t_id) {
-                                            $valIceCream = $valRekap->nominal - $valRefund->nom_refund;
-                                        }
-                                    }
+                        if (!empty($refundCek)) {
+                            foreach ($refund as $valRefund) {
+                                if ($valRekap->m_produk_id == $valRefund->r_r_detail_m_produk_id && $valRekap->tanggal == $valRefund->tanggal && $valRekap->sesi == $valRefund->sesi && $valRekap->type_id == $valRefund->r_t_m_t_t_id) {
+                                    $valIceCream = $valRekap->nominal - $valRefund->nom_refund;
                                 }
+                            }
+                        }
                         ${$valListRekap . '-icecream'} += $valIceCream;
                     }
                     $data[$valListRekap]['icecream'] = number_format(${$valListRekap . '-icecream'});
 
                     if (in_array($valRekap->m_produk_id, $listMineral)) {
                         $valMineral = $valRekap->nominal;
-                                if (!empty($refundCek)) {
-                                    foreach ($refund as $valRefund) {
-                                        if ($valRekap->m_produk_id == $valRefund->r_r_detail_m_produk_id && $valRekap->tanggal == $valRefund->tanggal && $valRekap->sesi == $valRefund->sesi && $valRekap->type_id == $valRefund->r_t_m_t_t_id) {
-                                            $valMineral = $valRekap->nominal - $valRefund->nom_refund;
-                                        }
-                                    }
+                        if (!empty($refundCek)) {
+                            foreach ($refund as $valRefund) {
+                                if ($valRekap->m_produk_id == $valRefund->r_r_detail_m_produk_id && $valRekap->tanggal == $valRefund->tanggal && $valRekap->sesi == $valRefund->sesi && $valRekap->type_id == $valRefund->r_t_m_t_t_id) {
+                                    $valMineral = $valRekap->nominal - $valRefund->nom_refund;
                                 }
+                            }
+                        }
                         ${$valListRekap . '-mineral'} += $valMineral;
                     }
                     $data[$valListRekap]['mineral'] = number_format(${$valListRekap . '-mineral'});
 
                     if (in_array($valRekap->m_produk_id, $listKerupuk)) {
                         $valKerupuk = $valRekap->nominal;
-                                if (!empty($refundCek)) {
-                                    foreach ($refund as $valRefund) {
-                                        if ($valRekap->m_produk_id == $valRefund->r_r_detail_m_produk_id && $valRekap->tanggal == $valRefund->tanggal && $valRekap->sesi == $valRefund->sesi && $valRekap->type_id == $valRefund->r_t_m_t_t_id) {
-                                            $valKerupuk = $valRekap->nominal - $valRefund->nom_refund;
-                                        }
-                                    }
+                        if (!empty($refundCek)) {
+                            foreach ($refund as $valRefund) {
+                                if ($valRekap->m_produk_id == $valRefund->r_r_detail_m_produk_id && $valRekap->tanggal == $valRefund->tanggal && $valRekap->sesi == $valRefund->sesi && $valRekap->type_id == $valRefund->r_t_m_t_t_id) {
+                                    $valKerupuk = $valRekap->nominal - $valRefund->nom_refund;
                                 }
+                            }
+                        }
                         ${$valListRekap . '-krupuk'} += $valKerupuk;
                     }
                     $data[$valListRekap]['krupuk'] = number_format(${$valListRekap . '-krupuk'});

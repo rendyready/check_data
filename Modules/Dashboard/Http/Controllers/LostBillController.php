@@ -84,7 +84,8 @@ class LostBillController extends Controller
     {
         $lostbill = DB::table('rekap_lost_bill')
             ->join('users', 'users_id', 'r_l_b_created_by')
-            ->join('rekap_modal', 'rekap_modal_id', 'r_l_b_rekap_modal_id');
+            ->join('rekap_modal', 'rekap_modal_id', 'r_l_b_rekap_modal_id')
+            ->where('rekap_modal_status', 'close');
         if (strpos($request->tanggal, 'to') !== false) {
             $dates = explode('to', $request->tanggal);
             $lostbill->whereBetween('r_l_b_tanggal', $dates);

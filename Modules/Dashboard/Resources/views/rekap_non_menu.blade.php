@@ -111,38 +111,50 @@
                                         <th rowspan="2" class="text-center">Tanggal</th>
                                         <th rowspan="2" class="text-center">Sesi</th>
                                         <th rowspan="2" class="text-center">Operator</th>
-                                        <th colspan="3" class="text-center">Dine In</th>
-                                        <th colspan="3" class="text-center">Take Away</th>
-                                        <th colspan="3" class="text-center">Grab</th>
-                                        <th colspan="3" class="text-center">Gojek</th>
-                                        <th colspan="3" class="text-center">Shopee</th>
-                                        <th colspan="3" class="text-center">Grab Mart</th>
+                                        <th colspan="5" class="text-center">Dine In</th>
+                                        <th colspan="5" class="text-center">Take Away</th>
+                                        <th colspan="5" class="text-center">Grab</th>
+                                        <th colspan="5" class="text-center">Gojek</th>
+                                        <th colspan="5" class="text-center">Shopee</th>
+                                        <th colspan="5" class="text-center">Grab Mart</th>
                                         <th colspan="5" class="text-center">Rincian</th>
                                         <th rowspan="2" class="text-center">Pajak Reguler</th>
                                         <th rowspan="2" class="text-center">Pajak Ojol</th>
                                     </tr>
                                     <tr>
                                         <th rowspan="1" class="text-center">Menu</th>
+                                        <th rowspan="1" class="text-center">Menu (P)</th>
+                                        <th rowspan="1" class="text-center">Menu (TP)</th>
                                         <th rowspan="1" class="text-center">Non Menu</th>
                                         <th rowspan="1" class="text-center">Nota</th>
 
                                         <th rowspan="1" class="text-center">Menu</th>
+                                        <th rowspan="1" class="text-center">Menu (P)</th>
+                                        <th rowspan="1" class="text-center">Menu (TP)</th>
                                         <th rowspan="1" class="text-center">Non Menu</th>
                                         <th rowspan="1" class="text-center">Nota</th>
 
                                         <th rowspan="1" class="text-center">Menu</th>
+                                        <th rowspan="1" class="text-center">Menu (P)</th>
+                                        <th rowspan="1" class="text-center">Menu (TP)</th>
                                         <th rowspan="1" class="text-center">Non Menu</th>
                                         <th rowspan="1" class="text-center">Nota</th>
 
                                         <th rowspan="1" class="text-center">Menu</th>
+                                        <th rowspan="1" class="text-center">Menu (P)</th>
+                                        <th rowspan="1" class="text-center">Menu (TP)</th>
                                         <th rowspan="1" class="text-center">Non Menu</th>
                                         <th rowspan="1" class="text-center">Nota</th>
 
                                         <th rowspan="1" class="text-center">Menu</th>
+                                        <th rowspan="1" class="text-center">Menu (P)</th>
+                                        <th rowspan="1" class="text-center">Menu (TP)</th>
                                         <th rowspan="1" class="text-center">Non Menu</th>
                                         <th rowspan="1" class="text-center">Nota</th>
 
                                         <th rowspan="1" class="text-center">WBD BB</th>
+                                        <th rowspan="1" class="text-center">WBD (P)</th>
+                                        <th rowspan="1" class="text-center">WBD (TP)</th>
                                         <th rowspan="1" class="text-center">WBD Frozen</th>
                                         <th rowspan="1" class="text-center">Nota</th>
 
@@ -206,13 +218,16 @@ $(document).ready(function() {
                         className: 'dt-body-center'
                     },
                 ],
-            buttons: [
+                buttons: [
                 {
                     extend: 'excelHtml5',
                     text: 'Export Excel',
                     title: 'Laporan Rekap Non Menu - ' + tanggal,
                     pageSize: 'A4',
-                    pageOrientation: 'potrait',
+                    pageOrientation: 'portrait',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 8, 9, 10, 13, 14, 15, 18, 19, 20, 23, 24, 25, 28, 29, 30, 33, 34, 35, 36, 37, 38, 39, 40, 41],
+                    },
                 }
             ],
             lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
