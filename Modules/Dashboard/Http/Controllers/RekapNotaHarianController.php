@@ -88,7 +88,8 @@ class RekapNotaHarianController extends Controller
             ->join('rekap_transaksi', 'r_t_id', 'r_p_t_r_t_id')
             ->join('m_area', 'm_area_id', 'r_t_m_area_id')
             ->join('m_w', 'm_w_id', 'r_t_m_w_id')
-            ->join('rekap_modal', 'rekap_modal_id', 'r_t_rekap_modal_id');
+            ->join('rekap_modal', 'rekap_modal_id', 'r_t_rekap_modal_id')
+            ->where('rekap_modal_status', 'close');
         if (strpos($request->tanggal, 'to') !== false) {
             $dates = explode('to', $request->tanggal);
             $trans->whereBetween('r_t_tanggal', $dates);

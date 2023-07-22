@@ -78,7 +78,8 @@ class RefundController extends Controller
         $refund = DB::table('rekap_refund')
             ->join('users', 'users_id', 'r_r_created_by')
             ->join('rekap_modal', 'rekap_modal_id', 'r_r_rekap_modal_id')
-            ->join('rekap_transaksi', 'r_t_id', 'r_r_r_t_id');
+            ->join('rekap_transaksi', 'r_t_id', 'r_r_r_t_id')
+            ->where('rekap_modal_status', 'close');
         if (strpos($request->tanggal, 'to') !== false) {
             $dates = explode('to', $request->tanggal);
             $refund->whereBetween('r_r_tanggal', $dates);

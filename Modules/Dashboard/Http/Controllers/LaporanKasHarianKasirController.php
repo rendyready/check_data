@@ -777,6 +777,7 @@ class LaporanKasHarianKasirController extends Controller
             ->join('users', 'users_id', 'rekap_modal_created_by')
             ->join('rekap_transaksi', 'r_t_rekap_modal_id', 'rekap_modal_id')
             ->selectRaw('rekap_modal_id, rekap_modal_tanggal, rekap_modal_sesi, name, max(rekap_modal_nominal) rekap_modal_nominal, max(rekap_modal_cash_in) rekap_modal_cash_in, max(rekap_modal_cash_out) rekap_modal_cash_out, max(rekap_modal_cash_real) rekap_modal_cash_real, sum(r_t_nominal_free_kembalian) free, sum(r_t_nominal_pembulatan) bulat')
+            ->where('rekap_modal_status', 'close')
             ->where('rekap_modal_m_area_id', $request->area)
             ->where('rekap_modal_m_w_id', $request->waroeng);
         if (strpos($request->tanggal, 'to') !== false) {
@@ -785,9 +786,9 @@ class LaporanKasHarianKasirController extends Controller
         } else {
             $saldoIn->where(DB::raw('DATE(rekap_modal_tanggal)'), $request->tanggal);
         }
-        if (!in_array(Auth::user()->waroeng_id, $this->get_akses_area())) {
-            $saldoIn->where('rekap_modal_status', 'close');
-        }
+        // if (!in_array(Auth::user()->waroeng_id, $this->get_akses_area())) {
+        //     $saldoIn->where('rekap_modal_status', 'close');
+        // }
         $saldoIn1 = $saldoIn->groupby('rekap_modal_id', 'rekap_modal_tanggal', 'rekap_modal_sesi', 'name')
             ->orderBy('rekap_modal_tanggal', 'ASC')
             ->get();

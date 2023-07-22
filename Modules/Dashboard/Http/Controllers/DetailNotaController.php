@@ -79,6 +79,8 @@ class DetailNotaController extends Controller
                 ->join('m_transaksi_tipe', 'm_t_t_id', 'r_t_m_t_t_id')
                 ->join('rekap_payment_transaksi', 'r_p_t_r_t_id', 'r_t_id')
                 ->join('m_payment_method', 'm_payment_method_id', 'r_p_t_m_payment_method_id')
+                ->join('rekap_modal', 'rekap_modal_id', 'r_t_rekap_modal_id')
+                ->where('rekap_modal_status', 'close')
                 ->where('r_t_m_w_id', $request->waroeng)
                 ->where('r_t_status', 'paid')
                 ->select('r_t_nota_code'
@@ -135,6 +137,8 @@ class DetailNotaController extends Controller
 
             $data->transaksi_rekap2 = DB::table('rekap_lost_bill')
                 ->join('users', 'users_id', 'r_l_b_created_by')
+                ->join('rekap_modal', 'rekap_modal_id', 'r_l_b_rekap_modal_id')
+                ->where('rekap_modal_status', 'close')
                 ->where('r_l_b_m_w_id', $request->waroeng);
             if (strpos($request->tanggal, 'to') !== false) {
                 $dates = explode('to', $request->tanggal);
