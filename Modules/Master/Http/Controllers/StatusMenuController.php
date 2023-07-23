@@ -263,7 +263,7 @@ class StatusMenuController extends Controller
                 $sc = 'Aktif';
             }
             $row[] = $sc;
-            $client = stripos($value->m_menu_harga_client_target, $value->m_w_id) !== false ? 'belum terikirim' : 'terikirim';
+            $client = stripos($value->m_menu_harga_client_target, ':' . $value->m_w_id . ':') !== false ? 'belum terkirim' : 'terkirim';
             $row[] = $client;
             $data[] = $row;
         }
