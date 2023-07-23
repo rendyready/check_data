@@ -152,6 +152,9 @@ Route::group(['prefix' => 'master', 'controller' => StatusMenuController::class,
     Route::get('status_menu', 'index')->name('status_menu.index');
     Route::get('status_menu/select_waroeng', 'select_waroeng')->name('status_menu.select_waroeng');
     Route::get('status_menu/show', 'show')->name('status_menu.show');
+    Route::get('status_menu/client_target/{id}', 'client_target')->name('status_menu.client_target');
+    Route::get('status_menu/client_target_show/{id}', 'client_target_show')->name('client_target_show.detail_show_laci');
+
 });
 //Compare Menu
 Route::group(['prefix' => 'master', 'controller' => CompareMenuController::class, 'middleware' => ['auth', 'web']], function () {

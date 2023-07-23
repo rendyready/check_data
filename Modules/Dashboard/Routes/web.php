@@ -116,6 +116,7 @@ Route::prefix('dashboard')->middleware('auth', 'web')
             Route::post('menu_harian/simpan_tgl', 'simpan_tgl')->name('menu_harian.simpan_tgl');
             Route::get('menu_harian/select_trans', 'select_trans')->name('menu_harian.select_trans');
             Route::get('menu_harian/select_sif', 'select_sif')->name('menu_harian.select_sif');
+            Route::get('menu_harian/export_excel', 'export_excel')->name('menu_harian.export_excel');
         });
 
         Route::controller(RekapAktivitasKasirController::class)->group(function () {

@@ -137,8 +137,10 @@
                                 <button type="button" id="cari"
                                     class="btn btn-primary btn-sm col-1 mt-2 mb-3">Cari</button>
                             </div>
+
                             {{-- <div class="text-center mt-2 mb-2">
-                            <button id="export_excel" class="btn btn-primary btn-sm">Export Excel</button> --}}
+                                <button id="export_excel" class="btn btn-primary btn-sm">Export Excel</button>
+                            </div> --}}
 
                             <div class="table-responsive">
                                 <table id="tampil_rekap"
@@ -227,15 +229,15 @@ $(document).ready(function() {
                     autoWidth: true,
                     scrollCollapse: true,
                     buttons: [{
-                    extend: 'excelHtml5',
-                    text: 'Export Excel',
-                    title: 'Rekap Menu - ' + trans + ' Sesi - ' + sesi + ' - ' + tanggal,
-                    pageSize: 'A4',
-                    pageOrientation: 'potrait',
+                        extend: 'excelHtml5',
+                        text: 'Export Excel',
+                        title: 'Rekap Menu - ' + trans + ' Sesi - ' + sesi + ' - ' + tanggal,
+                        pageSize: 'A4',
+                        pageOrientation: 'potrait',
                     }],
                     columnDefs: [{
-                    targets: '_all',
-                    className: 'dt-body-center'
+                        targets: '_all',
+                        className: 'dt-body-center'
                     }],
                     lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
                     pageLength: 10,
@@ -425,15 +427,17 @@ $(document).ready(function() {
             dateFormat: 'Y-m-d',           
     });
 
-    // $('#export_excel').on('click', function() {
-    //             var id = $(this).attr('value');
-    //             var waroeng = $('#filter_waroeng').val();
-    //             var tanggal = $('#filter_tanggal').val();
-    //             var operator = $('#filter_operator').val();
-    //             var sesi = $('#filter_sif').val();
-    //             var url = 'rekap_menu/export_excel?waroeng='+waroeng+'&tanggal='+tanggal+'&operator='+operator+'&sesi='+sesi;
-    //             window.open(url,'_blank');
-    //         });
+    $('#export_excel').on('click', function() {
+                var area = $('.filter_area option:selected').val();
+                var waroeng = $('.filter_waroeng option:selected').val();
+                var tanggal = $('.filter_tanggal').val();
+                var trans = $('.filter_trans option:selected').val();
+                var sesi = $('.filter_sif option:selected').val();
+                var status = $('.filter_status').val();
+                var url = 'menu_harian/export_excel?area='+area+'&waroeng='+waroeng+'&tanggal='+tanggal+'&sesi='+sesi+'&trans='+trans+'&status='+status;
+                window.open(url, '_blank');
+               
+            });
 
 });
 </script>

@@ -104,6 +104,7 @@
                                     <th class="text_center">Status Menu</th>
                                     <th class="text_center">Pajak</th>
                                     <th class="text_center">Service Charge</th>
+                                    <th class="text_center">Status Kirim</th>
                                 </tr>
                             </thead>
                             <tbody id="show_data">
@@ -204,7 +205,7 @@ $(document).ready(function() {
             });
         }     
     });
-
+    
 });
 </script>
 @endsection

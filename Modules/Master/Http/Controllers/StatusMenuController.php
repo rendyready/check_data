@@ -219,7 +219,7 @@ class StatusMenuController extends Controller
             ->leftjoin('m_transaksi_tipe', 'm_t_t_id', 'm_jenis_nota_m_t_t_id')
             ->leftjoin('m_produk', 'm_produk_id', 'm_menu_harga_m_produk_id')
             ->leftjoin('m_jenis_produk', 'm_jenis_produk_id', 'm_produk_m_jenis_produk_id')
-            ->select('m_area_nama', 'm_w_nama', 'm_produk_nama', 'm_menu_harga_nominal', 'm_t_t_name', 'm_w_m_kode_nota', 'm_menu_harga_status', 'm_menu_harga_tax_status', 'm_produk_tax', 'm_w_m_pajak_id', 'm_menu_harga_sc_status', 'm_produk_sc', 'm_w_m_sc_id', 'm_w_m_area_id', 'm_w_id', 'm_produk_id', 'm_t_t_id', 'm_w_m_kode_nota');
+            ->select('m_area_nama', 'm_w_nama', 'm_produk_nama', 'm_menu_harga_nominal', 'm_t_t_name', 'm_w_m_kode_nota', 'm_menu_harga_status', 'm_menu_harga_tax_status', 'm_produk_tax', 'm_w_m_pajak_id', 'm_menu_harga_sc_status', 'm_produk_sc', 'm_w_m_sc_id', 'm_w_m_area_id', 'm_w_id', 'm_produk_id', 'm_t_t_id', 'm_w_m_kode_nota', 'm_menu_harga_id', 'm_menu_harga_client_target');
         if ($request->area != 'all') {
             $menu->where('m_w_m_area_id', $request->area);
             if ($request->waroeng != 'all') {
@@ -263,6 +263,8 @@ class StatusMenuController extends Controller
                 $sc = 'Aktif';
             }
             $row[] = $sc;
+            $client = stripos($value->m_menu_harga_client_target, $value->m_w_id) !== false ? 'belum terikirim' : 'terikirim';
+            $row[] = $client;
             $data[] = $row;
         }
         $output = array("data" => $data);
