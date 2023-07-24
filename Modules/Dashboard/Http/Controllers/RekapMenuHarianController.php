@@ -88,6 +88,156 @@ class RekapMenuHarianController extends Controller
         return response()->json($data);
     }
 
+    // public function show(Request $request)
+    // {
+    //     $get_modal_id = DB::table('rekap_modal')
+    //         ->select('rekap_modal_id', 'rekap_modal_status')
+    //         ->where(DB::raw('DATE(rekap_modal_tanggal)'), $request->tanggal)
+    //         ->where('rekap_modal_m_area_id', $request->area)
+    //         ->where('rekap_modal_m_w_id', $request->waroeng)
+    //         ->where('rekap_modal_sesi', $request->sesi)
+    //         ->first();
+
+    //     if ($get_modal_id && $get_modal_id->rekap_modal_status != 'close') {
+    //         return response()->json(['messages' => 'Sesi ' . $request->sesi . ' belum melakukan tutup saldo/ tarikan. Transaksi dapat ditampilkan setelah kasir melakukan tutup saldo/ tarikan', 'type' => 'error']);
+    //     }
+
+    //     $refundM = DB::table('rekap_refund_detail')
+    //         ->join('rekap_refund', 'r_r_id', 'r_r_detail_r_r_id')
+    //         ->join('rekap_modal', 'rekap_modal_id', 'r_r_rekap_modal_id')
+    //         ->join('rekap_transaksi', 'r_t_id', 'r_r_r_t_id')
+    //         ->join('m_transaksi_tipe', 'm_t_t_id', 'r_t_m_t_t_id')
+    //         ->where('rekap_modal_id', $get_modal_id->rekap_modal_id);
+    //     $refund = $refundM->get();
+
+    //     $refund2 = $refundM->first();
+
+    //     $get = DB::table('rekap_transaksi_detail')
+    //         ->leftJoin('rekap_transaksi', 'r_t_id', 'r_t_detail_r_t_id')
+    //         ->leftJoin('m_w', 'm_w_id', 'r_t_m_w_id')
+    //         ->leftJoin('m_produk', 'm_produk_id', 'r_t_detail_m_produk_id')
+    //         ->leftJoin('m_jenis_produk', 'm_jenis_produk_id', 'm_produk_m_jenis_produk_id')
+    //         ->leftJoin('m_transaksi_tipe', 'm_t_t_id', 'r_t_m_t_t_id')
+    //         ->leftJoin('rekap_modal', 'rekap_modal_id', 'r_t_rekap_modal_id')
+    //         ->whereDate('rekap_modal_tanggal', $request->tanggal)
+    //         ->where('rekap_modal_m_area_id', $request->area)
+    //         ->where('rekap_modal_m_w_id', $request->waroeng)
+    //         ->where('rekap_modal_id', $get_modal_id->rekap_modal_id)
+    //         ->where('r_t_detail_status', 'paid');
+    //     if ($request->trans != 'all') {
+    //         $get->where('m_t_t_name', $request->trans);
+    //     }
+    //     $get = $get->selectRaw('SUM(r_t_detail_qty) AS qty, r_t_detail_reguler_price, r_t_tanggal, r_t_detail_m_produk_nama, r_t_detail_m_produk_id, m_w_nama, m_jenis_produk_id, m_jenis_produk_nama, m_t_t_name, rekap_modal_sesi, r_t_detail_price, SUM(r_t_detail_nominal) AS nominal_nota, SUM(r_t_detail_price * r_t_detail_qty) as trans, SUM(r_t_detail_nominal) - (SUM(r_t_detail_reguler_price * r_t_detail_qty)) cr_trans, sum(r_t_detail_nominal_pajak) pajak')
+    //         ->groupBy('r_t_tanggal', 'r_t_detail_m_produk_nama', 'r_t_detail_m_produk_id', 'm_w_nama', 'r_t_detail_reguler_price', 'm_jenis_produk_nama', 'm_jenis_produk_id', 'm_t_t_name', 'rekap_modal_sesi', 'r_t_detail_price')
+    //         ->orderBy('m_jenis_produk_id', 'ASC')
+    //         ->orderBy('r_t_detail_m_produk_nama', 'ASC')
+    //         ->get();
+
+    //     $totalNominal = 0;
+    //     $totalNominal_trans = 0;
+    //     $totalSelisihTrans = 0;
+    //     $totalCR = 0;
+    //     $totalselisihCR = 0;
+    //     $totalPajak = 0;
+    //     $totalselisihTax = 0;
+    //     $data = array();
+    //     foreach ($get as $key => $val_menu) {
+    //         $row = array();
+    //         $row[] = date('d-m-Y', strtotime($val_menu->r_t_tanggal));
+    //         $row[] = $val_menu->m_w_nama;
+    //         $row[] = $val_menu->r_t_detail_m_produk_nama;
+    //         $crRef = $val_menu->nominal_nota;
+    //         $qty = $val_menu->qty;
+    //         $nominal = $val_menu->r_t_detail_reguler_price * $val_menu->qty;
+    //         $pajakMenu = $val_menu->pajak;
+    //         if (!empty($refund2)) {
+    //             foreach ($refund as $key => $valRef) {
+    //                 if ($val_menu->r_t_detail_m_produk_id == $valRef->r_r_detail_m_produk_id && $val_menu->r_t_tanggal == $valRef->r_r_tanggal && $val_menu->rekap_modal_sesi == $valRef->rekap_modal_sesi && $val_menu->m_t_t_name == $valRef->m_t_t_name) {
+    //                     $qty = $val_menu->qty - $valRef->r_r_detail_qty;
+    //                     $nominal = $val_menu->r_t_detail_reguler_price * $qty;
+    //                     $crRef = $val_menu->nominal_nota - ($val_menu->r_t_detail_reguler_price * $valRef->r_r_detail_qty);
+    //                     $pajakMenu = $val_menu->pajak - (($val_menu->r_t_detail_reguler_price * $valRef->r_r_detail_qty) * 0.1);
+    //                 }
+    //             }
+    //         }
+    //         $row[] = $qty;
+    //         $row[] = number_format($nominal);
+    //         $row[] = $val_menu->m_jenis_produk_nama;
+    //         $row[] = $val_menu->m_t_t_name;
+    //         $nominal_trans = $val_menu->r_t_detail_price * $qty;
+    //         $selisihTrans = $nominal - $nominal_trans;
+    //         if ($val_menu->m_t_t_name != 'dine in' && $val_menu->m_t_t_name != 'take away') {
+    //             if ($nominal == $nominal_trans) {
+    //                 $selisihTrans = 'Harga Sama';
+    //             } else {
+    //                 $selisihTrans = 0;
+    //             }
+    //         }
+    //         $row[] = number_format($nominal_trans);
+    //         if (!is_string($selisihTrans)) {
+    //             $row[] = number_format($selisihTrans);
+    //         } else {
+    //             $row[] = $selisihTrans;
+    //         }
+    //         $cr = $qty != 0 ? $crRef : 0;
+    //         $row[] = number_format($cr);
+    //         $selisihCR = $nominal - $cr;
+    //         if ($val_menu->m_t_t_name != 'dine in' && $val_menu->m_t_t_name != 'take away') {
+    //             $selisihCR = 0;
+    //         }
+    //         $row[] = number_format($selisihCR);
+    //         $pajak = $nominal * 0.1;
+    //         if ($val_menu->m_t_t_name != 'dine in' && $val_menu->m_t_t_name != 'take away') {
+    //             $pajak = $nominal;
+    //         }
+    //         if ($val_menu->pajak == 0) {
+    //             $pajak = 0;
+    //         }
+    //         $row[] = number_format($pajak);
+    //         $selisihTax = $pajak - $pajakMenu;
+    //         if ($val_menu->pajak == 0) {
+    //             $selisihTax = 0;
+    //         }
+    //         $row[] = number_format($selisihTax);
+    //         if ($request->status == 'all') {
+    //             $data[] = $row;
+    //         } elseif ($request->status == 'selisih' && $selisihTrans != 0 || $selisihCR != 0 || $selisihTax != 0) {
+    //             $data[] = $row;
+    //         }
+    //         $totalNominal += $nominal;
+    //         $totalNominal_trans += $nominal_trans;
+    //         if (is_numeric($selisihTrans)) {
+    //             $totalSelisihTrans += floatval($selisihTrans);
+    //         }
+    //         $totalCR += $cr;
+    //         $totalselisihCR += $selisihCR;
+    //         $totalPajak += $pajak;
+    //         $totalselisihTax += $selisihTax;
+    //     }
+    //     $totalRow = array();
+    //     $totalRow[] = '';
+    //     $totalRow[] = '';
+    //     $totalRow[] = 'Total';
+    //     $totalRow[] = '';
+    //     $totalRow[] = number_format($totalNominal);
+    //     $totalRow[] = '';
+    //     $totalRow[] = '';
+    //     $totalRow[] = number_format($totalNominal_trans);
+    //     $totalRow[] = number_format($totalSelisihTrans);
+    //     $totalRow[] = number_format($totalCR);
+    //     $totalRow[] = number_format($totalselisihCR);
+    //     $totalRow[] = number_format($totalPajak);
+    //     $totalRow[] = number_format($totalselisihTax);
+    //     if ($request->status == 'all') {
+    //         $data[] = $totalRow;
+    //     } elseif ($request->status == 'selisih' && $totalSelisihTrans != 0 || $totalselisihCR != 0 || $totalselisihTax != 0) {
+    //         $data[] = $totalRow;
+    //     }
+
+    //     $output = array("data" => $data);
+    //     return response()->json($output);
+    // }
+
     public function show(Request $request)
     {
         $get_modal_id = DB::table('rekap_modal')
@@ -112,25 +262,57 @@ class RekapMenuHarianController extends Controller
 
         $refund2 = $refundM->first();
 
-        $get = DB::table('rekap_transaksi_detail')
+        $area = $request->area;
+        $waroeng = $request->waroeng;
+        $tanggal = $request->tanggal;
+        $trans = $request->trans;
+        $sesi = $request->sesi;
+        $status = 'paid'; // Tetapkan status yang sesuai, dalam contoh ini, 'paid'
+
+        $query = DB::table('rekap_transaksi_detail')
             ->leftJoin('rekap_transaksi', 'r_t_id', 'r_t_detail_r_t_id')
             ->leftJoin('m_w', 'm_w_id', 'r_t_m_w_id')
             ->leftJoin('m_produk', 'm_produk_id', 'r_t_detail_m_produk_id')
             ->leftJoin('m_jenis_produk', 'm_jenis_produk_id', 'm_produk_m_jenis_produk_id')
             ->leftJoin('m_transaksi_tipe', 'm_t_t_id', 'r_t_m_t_t_id')
             ->leftJoin('rekap_modal', 'rekap_modal_id', 'r_t_rekap_modal_id')
-            ->whereDate('rekap_modal_tanggal', $request->tanggal)
-            ->where('rekap_modal_m_area_id', $request->area)
-            ->where('rekap_modal_m_w_id', $request->waroeng)
+            ->whereDate('rekap_modal_tanggal', $tanggal)
+            ->where('rekap_modal_m_area_id', $area)
+            ->where('rekap_modal_m_w_id', $waroeng)
             ->where('rekap_modal_id', $get_modal_id->rekap_modal_id)
-            ->where('r_t_detail_status', 'paid');
-        if ($request->trans != 'all') {
-            $get->where('m_t_t_name', $request->trans);
+            ->where('r_t_detail_status', $status);
+
+        if ($trans !== 'all') {
+            $query->where('m_t_t_name', $trans);
         }
-        $get = $get->selectRaw('SUM(r_t_detail_qty) AS qty, r_t_detail_reguler_price, r_t_tanggal, r_t_detail_m_produk_nama, r_t_detail_m_produk_id, m_w_nama, m_jenis_produk_id, m_jenis_produk_nama, m_t_t_name, rekap_modal_sesi, r_t_detail_price, SUM(r_t_detail_nominal) AS nominal_nota, SUM(r_t_detail_price * r_t_detail_qty) as trans, SUM(r_t_detail_nominal) - (SUM(r_t_detail_reguler_price * r_t_detail_qty)) cr_trans, sum(r_t_detail_nominal_pajak) pajak')
+
+        // Hitung total data tanpa pagination
+        $totalData = $query->count();
+
+        // Tetapkan jumlah data per halaman
+        $length = 10; // Ganti dengan jumlah data per halaman yang Anda inginkan
+
+        // Hitung total halaman yang mungkin
+        $totalPages = ceil($totalData / $length);
+
+        // Ambil nomor halaman dari permintaan
+        $currentPage = $request->input('page', 1);
+
+        // Pastikan nomor halaman berada dalam rentang yang benar
+        $currentPage = max($currentPage, 1);
+        $currentPage = min($currentPage, $totalPages);
+
+        // Hitung offset (mulai dari mana data akan diambil) berdasarkan halaman saat ini dan jumlah data per halaman
+        $offset = ($currentPage - 1) * $length;
+
+        // Ambil data yang sesuai dengan batasan pagination
+        $get = $query
+            ->selectRaw('SUM(r_t_detail_qty) AS qty, r_t_detail_reguler_price, r_t_tanggal, r_t_detail_m_produk_nama, r_t_detail_m_produk_id, m_w_nama, m_jenis_produk_id, m_jenis_produk_nama, m_t_t_name, rekap_modal_sesi, r_t_detail_price, SUM(r_t_detail_nominal) AS nominal_nota, SUM(r_t_detail_price * r_t_detail_qty) as trans, SUM(r_t_detail_nominal) - (SUM(r_t_detail_reguler_price * r_t_detail_qty)) cr_trans, sum(r_t_detail_nominal_pajak) pajak')
             ->groupBy('r_t_tanggal', 'r_t_detail_m_produk_nama', 'r_t_detail_m_produk_id', 'm_w_nama', 'r_t_detail_reguler_price', 'm_jenis_produk_nama', 'm_jenis_produk_id', 'm_t_t_name', 'rekap_modal_sesi', 'r_t_detail_price')
             ->orderBy('m_jenis_produk_id', 'ASC')
             ->orderBy('r_t_detail_m_produk_nama', 'ASC')
+            ->skip($offset)
+            ->take($length)
             ->get();
 
         $totalNominal = 0;
@@ -234,7 +416,11 @@ class RekapMenuHarianController extends Controller
             $data[] = $totalRow;
         }
 
-        $output = array("data" => $data);
+        $output = array(
+            "data" => $data,
+            'current_page' => $currentPage,
+            'total_pages' => $totalPages,
+        );
         return response()->json($output);
     }
 
