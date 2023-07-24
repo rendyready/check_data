@@ -2,13 +2,11 @@
 
 namespace Modules\Dashboard\Http\Controllers;
 
-use Carbon\Carbon;
-use Barryvdh\DomPDF\Facade\Pdf;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class RekapPenjualanKategoriMenuController extends Controller
 {
@@ -22,8 +20,8 @@ class RekapPenjualanKategoriMenuController extends Controller
         $data = new \stdClass();
         $data->waroeng_nama = DB::table('m_w')->select('m_w_nama', 'm_w_id')->where('m_w_id', $waroeng_id)->first();
         $data->area_nama = DB::table('m_area')->join('m_w', 'm_w_m_area_id', 'm_area_id')->select('m_area_nama', 'm_area_id')->where('m_w_id', $waroeng_id)->first();
-        $data->akses_area = $this->get_akses_area();//mulai dari 1 - akhir
-        $data->akses_pusat = $this->get_akses_pusat();//1,2,3,4,5
+        $data->akses_area = $this->get_akses_area(); //mulai dari 1 - akhir
+        $data->akses_pusat = $this->get_akses_pusat(); //1,2,3,4,5
         $data->akses_pusar = $this->get_akses_pusar(); //mulai dari 6 - akhir
 
         $data->waroeng = DB::table('m_w')
@@ -56,7 +54,7 @@ class RekapPenjualanKategoriMenuController extends Controller
 
     public function select_user(Request $request)
     {
-         $user = DB::table('rekap_modal')
+        $user = DB::table('rekap_modal')
             ->join('users', 'users_id', 'rekap_modal_created_by')
             ->select('users_id', 'name');
         if (in_array(Auth::user()->waroeng_id, $this->get_akses_area())) {
@@ -83,105 +81,106 @@ class RekapPenjualanKategoriMenuController extends Controller
     public function show(Request $request)
     {
         $methodPay = DB::table('m_jenis_produk')
-                ->orderBy('m_jenis_produk_id', 'ASC')
-                ->get();
-        
+            ->orderBy('m_jenis_produk_id', 'ASC')
+            ->get();
+
         $transaksi = DB::table('rekap_transaksi')
-                ->join('m_area', 'm_area_code', 'r_t_m_area_code')
-                ->join('m_w', 'm_w_code', 'r_t_m_w_code')
-                ->join('rekap_modal', 'rekap_modal_id', 'r_t_rekap_modal_id');
-                if (strpos($request->tanggal, 'to') !== false) {
-                    $dates = explode('to' ,$request->tanggal);
-                    $transaksi->whereBetween('r_t_tanggal', $dates);
-                } else {
-                    $transaksi->where('r_t_tanggal', $request->tanggal);
-                }
-                if($request->area != 'all'){
-                    $transaksi->where('r_t_m_area_id', $request->area);
-                    if($request->waroeng != 'all') {
-                        $transaksi->where('r_t_m_w_id', $request->waroeng);
-                    }
-                }
-                if($request->show_operator == 'ya'){
-                    if($request->operator != 'all'){
-                        $transaksi->where('r_t_created_by', $request->operator)
-                            ->join('users', 'users_id', 'r_t_created_by')
-                            ->select('r_t_tanggal', 'name', 'm_area_nama', 'm_w_nama', 'm_w_id', 'r_t_created_by', 'rekap_modal_sesi', 'm_area_id')
-                            ->groupBy('r_t_tanggal', 'name', 'm_area_nama', 'm_w_nama', 'm_w_id', 'r_t_created_by', 'rekap_modal_sesi', 'm_area_id');
-                    } else {
-                        $transaksi ->join('users', 'users_id', 'r_t_created_by')
-                        ->select('r_t_tanggal', 'name', 'm_area_nama', 'm_w_nama', 'm_w_id', 'r_t_created_by', 'rekap_modal_sesi', 'm_area_id')
-                        ->groupBy('r_t_tanggal', 'name', 'm_area_nama', 'm_w_nama', 'm_w_id', 'r_t_created_by', 'rekap_modal_sesi', 'm_area_id');
-                    }
-                } else {
-                    $transaksi->select('r_t_tanggal', 'm_area_nama', 'm_w_nama', 'm_w_id', 'm_area_id')
-                    ->groupBy('r_t_tanggal', 'm_area_nama', 'm_w_nama', 'm_w_id', 'm_area_id');
-                }
-        $trans = $transaksi->orderBy('r_t_tanggal', 'ASC')->orderBy('m_area_id', 'ASC')->get(); 
-         
+            ->join('m_area', 'm_area_code', 'r_t_m_area_code')
+            ->join('m_w', 'm_w_code', 'r_t_m_w_code')
+            ->join('rekap_modal', 'rekap_modal_id', 'r_t_rekap_modal_id')
+            ->where('rekap_modal_status', 'close');
+        if (strpos($request->tanggal, 'to') !== false) {
+            $dates = explode('to', $request->tanggal);
+            $transaksi->whereBetween('r_t_tanggal', $dates);
+        } else {
+            $transaksi->where('r_t_tanggal', $request->tanggal);
+        }
+        if ($request->area != 'all') {
+            $transaksi->where('r_t_m_area_id', $request->area);
+            if ($request->waroeng != 'all') {
+                $transaksi->where('r_t_m_w_id', $request->waroeng);
+            }
+        }
+        if ($request->show_operator == 'ya') {
+            if ($request->operator != 'all') {
+                $transaksi->where('r_t_created_by', $request->operator)
+                    ->join('users', 'users_id', 'r_t_created_by')
+                    ->select('r_t_tanggal', 'name', 'm_area_nama', 'm_w_nama', 'm_w_id', 'r_t_created_by', 'rekap_modal_sesi', 'm_area_id')
+                    ->groupBy('r_t_tanggal', 'name', 'm_area_nama', 'm_w_nama', 'm_w_id', 'r_t_created_by', 'rekap_modal_sesi', 'm_area_id');
+            } else {
+                $transaksi->join('users', 'users_id', 'r_t_created_by')
+                    ->select('r_t_tanggal', 'name', 'm_area_nama', 'm_w_nama', 'm_w_id', 'r_t_created_by', 'rekap_modal_sesi', 'm_area_id')
+                    ->groupBy('r_t_tanggal', 'name', 'm_area_nama', 'm_w_nama', 'm_w_id', 'r_t_created_by', 'rekap_modal_sesi', 'm_area_id');
+            }
+        } else {
+            $transaksi->select('r_t_tanggal', 'm_area_nama', 'm_w_nama', 'm_w_id', 'm_area_id')
+                ->groupBy('r_t_tanggal', 'm_area_nama', 'm_w_nama', 'm_w_id', 'm_area_id');
+        }
+        $trans = $transaksi->orderBy('r_t_tanggal', 'ASC')->orderBy('m_area_id', 'ASC')->get();
+
         $transaksi2 = DB::table('rekap_transaksi')
-                ->join('m_area', 'm_area_code', 'r_t_m_area_code')
-                ->join('m_w', 'm_w_code', 'r_t_m_w_code')
-                ->join('rekap_modal', 'rekap_modal_id', 'r_t_rekap_modal_id')
-                ->join('rekap_transaksi_detail', 'r_t_detail_r_t_id', 'r_t_id')
-                ->join('m_produk', 'm_produk_id', 'r_t_detail_m_produk_id');
-                if (strpos($request->tanggal, 'to') !== false) {
-                    $dates = explode('to' ,$request->tanggal);
-                    $transaksi2->whereBetween('r_t_tanggal', $dates);
-                } else {
-                    $transaksi2->where('r_t_tanggal', $request->tanggal);
-                }
-                if($request->area != 'all'){
-                    $transaksi2->where('r_t_m_area_id', $request->area);
-                    if($request->waroeng != 'all') {
-                        $transaksi2->where('r_t_m_w_id', $request->waroeng);
+            ->join('m_area', 'm_area_code', 'r_t_m_area_code')
+            ->join('m_w', 'm_w_code', 'r_t_m_w_code')
+            ->join('rekap_modal', 'rekap_modal_id', 'r_t_rekap_modal_id')
+            ->join('rekap_transaksi_detail', 'r_t_detail_r_t_id', 'r_t_id')
+            ->join('m_produk', 'm_produk_id', 'r_t_detail_m_produk_id');
+        if (strpos($request->tanggal, 'to') !== false) {
+            $dates = explode('to', $request->tanggal);
+            $transaksi2->whereBetween('r_t_tanggal', $dates);
+        } else {
+            $transaksi2->where('r_t_tanggal', $request->tanggal);
+        }
+        if ($request->area != 'all') {
+            $transaksi2->where('r_t_m_area_id', $request->area);
+            if ($request->waroeng != 'all') {
+                $transaksi2->where('r_t_m_w_id', $request->waroeng);
+            }
+        }
+        if ($request->show_operator == 'ya') {
+            $transaksi2->selectRaw('m_produk_m_jenis_produk_id, r_t_tanggal, r_t_detail_reguler_price, SUM(r_t_detail_qty) as total, r_t_created_by, m_w_id, m_area_id')
+                ->groupBy('r_t_tanggal', 'm_produk_m_jenis_produk_id', 'r_t_detail_reguler_price', 'r_t_created_by', 'm_w_id', 'm_area_id');
+        } else {
+            $transaksi2->selectRaw('m_produk_m_jenis_produk_id, r_t_tanggal, r_t_detail_reguler_price, SUM(r_t_detail_qty) as total')
+                ->groupBy('r_t_tanggal', 'm_produk_m_jenis_produk_id', 'r_t_detail_reguler_price');
+        }
+        $trans2 = $transaksi2->orderBy('m_produk_m_jenis_produk_id', 'ASC')->get();
+
+        $data = [];
+        $i = 1;
+        foreach ($trans as $key => $valTrans) {
+            $data[$i]['area'] = $valTrans->m_area_nama;
+            $data[$i]['waroeng'] = $valTrans->m_w_nama;
+            $data[$i]['tanggal'] = date('d-m-Y', strtotime($valTrans->r_t_tanggal));
+            if ($request->show_operator == 'ya') {
+                $data[$i]['operator'] = $valTrans->name;
+                $data[$i]['sesi'] = $valTrans->rekap_modal_sesi;
+            }
+            $grandTotal = 0;
+            foreach ($methodPay as $key => $valPay) {
+                $total = 0;
+                foreach ($trans2 as $key2 => $valTrans2) {
+                    if ($request->show_operator == 'ya') {
+                        if ($valPay->m_jenis_produk_id == $valTrans2->m_produk_m_jenis_produk_id && $valTrans2->r_t_tanggal == $valTrans->r_t_tanggal && $valTrans2->r_t_created_by == $valTrans->r_t_created_by) {
+                            $total += $valTrans2->total * $valTrans2->r_t_detail_reguler_price;
+                        }
+                    } else {
+                        if ($valPay->m_jenis_produk_id == $valTrans2->m_produk_m_jenis_produk_id && $valTrans2->r_t_tanggal == $valTrans->r_t_tanggal) {
+                            $total += $valTrans2->total * $valTrans2->r_t_detail_reguler_price;
+                        }
                     }
                 }
-                if($request->show_operator == 'ya'){
-                    $transaksi2->selectRaw('m_produk_m_jenis_produk_id, r_t_tanggal, r_t_detail_reguler_price, SUM(r_t_detail_qty) as total, r_t_created_by, m_w_id, m_area_id')
-                    ->groupBy('r_t_tanggal', 'm_produk_m_jenis_produk_id', 'r_t_detail_reguler_price', 'r_t_created_by', 'm_w_id', 'm_area_id');
-                } else {
-                    $transaksi2->selectRaw('m_produk_m_jenis_produk_id, r_t_tanggal, r_t_detail_reguler_price, SUM(r_t_detail_qty) as total')
-                    ->groupBy('r_t_tanggal', 'm_produk_m_jenis_produk_id', 'r_t_detail_reguler_price');
-                }
-                $trans2 = $transaksi2->orderBy('m_produk_m_jenis_produk_id', 'ASC')->get();
-        
-            $data =[];
-            $i =1;
-            foreach ($trans as $key => $valTrans) {
-                $data[$i]['area'] = $valTrans->m_area_nama;
-                $data[$i]['waroeng'] = $valTrans->m_w_nama;
-                $data[$i]['tanggal'] = date('d-m-Y', strtotime($valTrans->r_t_tanggal));
-                if($request->show_operator == 'ya'){
-                    $data[$i]['operator'] = $valTrans->name;
-                    $data[$i]['sesi'] = $valTrans->rekap_modal_sesi;
-                }
-                $grandTotal = 0;
-                foreach ($methodPay as $key => $valPay) {
-                    $total = 0;
-                    foreach ($trans2 as $key2 => $valTrans2) {
-                        if($request->show_operator == 'ya'){
-                            if ($valPay->m_jenis_produk_id == $valTrans2->m_produk_m_jenis_produk_id && $valTrans2->r_t_tanggal == $valTrans->r_t_tanggal && $valTrans2->r_t_created_by == $valTrans->r_t_created_by) {
-                                $total += $valTrans2->total * $valTrans2->r_t_detail_reguler_price;
-                            }
-                        } else {
-                            if ($valPay->m_jenis_produk_id == $valTrans2->m_produk_m_jenis_produk_id && $valTrans2->r_t_tanggal == $valTrans->r_t_tanggal) {
-                                $total += $valTrans2->total * $valTrans2->r_t_detail_reguler_price;
-                            }
-                        } 
-                    }
-                    $data[$i][$valPay->m_jenis_produk_nama] = number_format($total);
-                    $grandTotal += $total;
-                }
-                $data[$i]['Total'] = number_format($grandTotal);
-                $i++; 
+                $data[$i][$valPay->m_jenis_produk_nama] = number_format($total);
+                $grandTotal += $total;
             }
-            
-            $length = count($data);
-            $convert = array();
-            for ($i=1; $i <= $length ; $i++) { 
-                array_push($convert,array_values($data[$i]));
-            }
+            $data[$i]['Total'] = number_format($grandTotal);
+            $i++;
+        }
+
+        $length = count($data);
+        $convert = array();
+        for ($i = 1; $i <= $length; $i++) {
+            array_push($convert, array_values($data[$i]));
+        }
         $output = array("data" => $convert);
         return response()->json($output);
     }
@@ -191,7 +190,7 @@ class RekapPenjualanKategoriMenuController extends Controller
     //     $methodPay = DB::table('m_jenis_produk')
     //             ->orderBy('m_jenis_produk_id', 'ASC')
     //             ->get();
-        
+
     //     $transaksi = DB::table('rekap_transaksi')
     //             ->join('m_area', 'm_area_code', 'r_t_m_area_code')
     //             ->join('m_w', 'm_w_code', 'r_t_m_w_code')
@@ -219,8 +218,8 @@ class RekapPenjualanKategoriMenuController extends Controller
     //             } else {
     //                 $transaksi->where('r_t_tanggal', $request->tanggal);
     //             }
-    //     $trans = $transaksi->orderBy('r_t_tanggal', 'ASC')->get(); 
-         
+    //     $trans = $transaksi->orderBy('r_t_tanggal', 'ASC')->get();
+
     //     $transaksi->join('rekap_transaksi_detail', 'r_t_detail_r_t_id', 'r_t_id')
     //             ->join('m_produk', 'm_produk_id', 'r_t_detail_m_produk_id');
     //             if (strpos($request->tanggal, 'to') !== false) {
@@ -238,7 +237,7 @@ class RekapPenjualanKategoriMenuController extends Controller
     //                 ->groupBy('r_t_tanggal', 'm_produk_m_jenis_produk_id', 'r_t_detail_reguler_price');
     //             }
     //             $trans2 = $transaksi->get();
-        
+
     //         $data =[];
     //         $i =1;
     //         foreach ($trans as $key => $valTrans) {
@@ -267,12 +266,12 @@ class RekapPenjualanKategoriMenuController extends Controller
     //                 $grandTotal += $total;
     //             }
     //             $data[$i]['Total'] = number_format($grandTotal);
-    //             $i++; 
+    //             $i++;
     //         }
-            
+
     //         $length = count($data);
     //         $convert = array();
-    //         for ($i=1; $i <= $length ; $i++) { 
+    //         for ($i=1; $i <= $length ; $i++) {
     //             array_push($convert,array_values($data[$i]));
     //         }
     //     $output = array("data" => $convert);
