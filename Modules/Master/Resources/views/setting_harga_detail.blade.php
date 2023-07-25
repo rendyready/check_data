@@ -10,8 +10,10 @@
                             Detail Harga {{ ucwords($m_t_t_name) }}
                     </div>
                     <div class="block-content text-muted">
-                        {{-- <a class="btn btn-success mr-5 mb-5 buttonInsert" value="" title="Edit" style="color: #fff"><i
-                                class="fa fa-plus mr-5"></i> Harga</a> --}}
+                        @if ($status == 'master')
+                        <a class="btn btn-success mr-5 mb-5 buttonInsert" value="" title="Edit" style="color: #fff"><i
+                            class="fa fa-plus mr-5"></i> Harga</a>
+                        @endif
                         @csrf
                         <div id="tabpane" class="block block-rounded overflow-hidden">
                             <ul class="nav nav-tabs nav-tabs-block nav-tabs-alt align-items-center" role="tablist">
@@ -123,9 +125,10 @@
                                 <form method="post" action="" id="formAction">
                                     @csrf
                                     <div class="mb-4">
+                                        <input type="hidden" name="action" id="action">
                                         <input name="m_menu_harga_id" type="hidden" id="m_menu_harga_id">
                                         <input name="m_menu_harga_m_jenis_nota_id" type="hidden"
-                                            id="m_menu_harga_m_jenis_nota_id">
+                                            id="m_menu_harga_m_jenis_nota_id" value="{{$m_menu_harga_m_jenis_nota_id }}">
                                         <input type="hidden" name="m_jenis_nota_m_t_t_id" id="m_jenis_nota_m_t_t_id">
                                         <input type="hidden" name="m_jenis_nota_m_w_id" id="m_jenis_nota_m_w_id">
                                     </div>
@@ -148,8 +151,8 @@
                                         <div class="form-group">
                                             <label for="m_menu_harga_nominal">Harga</label>
                                             <div>
-                                                <input type="number" id="m_menu_harga_nominal"
-                                                    name="m_menu_harga_nominal" class="form-control" readonly>
+                                                <input type="text" id="m_menu_harga_nominal"
+                                                    name="m_menu_harga_nominal" class="form-control number" readonly>
                                             </div>
                                         </div>
                                     </div>
@@ -225,6 +228,9 @@
                     dropdownParent: $('#invalidDropdownParent')
                 });
                 $(".buttonInsert").on('click', function() {
+                    $('#m_menu_harga_m_produk_id').select2({
+                        dropdownParent: $('#modal-block-select2')
+                    });
                     var id = $(this).attr('value');
                     $("#myModalLabel").html('Tambah Harga');
                     $("#m_menu_harga_id").val('').trigger('change');
@@ -235,6 +241,8 @@
                     $("#m_menu_harga_sc_status").val('').trigger('change');
                     $("#formAction").attr('action', "/master/m_jenis_nota/simpan_harga");
                     $("#modal-block-select2").modal('show');
+                    $("#m_menu_harga_nominal").prop('readonly',false);
+                    $('#action').val('add_harga');
                 });
                 $(".buttonEdit").on('click', function() {
                     var id = $(this).attr('value');
@@ -260,6 +268,7 @@
                                 .trigger('change');
                             $("#m_menu_harga_sc_status").val(respond.m_menu_harga_sc_status)
                                 .trigger('change');
+                                $("#m_menu_harga_nominal").prop('readonly',true);
                         },
                         error: function() {}
                     });
