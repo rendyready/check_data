@@ -105,6 +105,7 @@
                                     <th class="text_center">Pajak</th>
                                     <th class="text_center">Service Charge</th>
                                     <th class="text_center">Status Kirim</th>
+                                    <th class="text_center">Last Update</th>
                                 </tr>
                             </thead>
                             <tbody id="show_data">
