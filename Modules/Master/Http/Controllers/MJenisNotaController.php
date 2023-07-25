@@ -93,9 +93,9 @@ class MJenisNotaController extends Controller
             foreach ($last_nota_ids as $last_nota_id) {
                 $cek = MMenuHarga::where('m_menu_harga_m_jenis_nota_id', $last_nota_id)
                     ->where('m_menu_harga_m_produk_id', $key->m_menu_harga_m_produk_id)
-                    ->count();
+                    ->first();
 
-                if ($cek <= 0) {
+                if (!empty($cek)) {
                     $hargaData = [
                         'm_menu_harga_id' => '1',
                         'm_menu_harga_nominal' => $key->m_menu_harga_nominal,
