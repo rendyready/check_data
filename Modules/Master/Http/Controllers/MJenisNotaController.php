@@ -95,7 +95,7 @@ class MJenisNotaController extends Controller
                     ->where('m_menu_harga_m_produk_id', $key->m_menu_harga_m_produk_id)
                     ->first();
 
-                if (!empty($cek)) {
+                if (empty($cek)) {
                     $hargaData = [
                         'm_menu_harga_id' => '1',
                         'm_menu_harga_nominal' => $key->m_menu_harga_nominal,
