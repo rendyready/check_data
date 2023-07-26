@@ -3,6 +3,7 @@
 namespace Modules\Master\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -212,42 +213,45 @@ class StatusMenuController extends Controller
 
     public function show(Request $request)
     {
+        $start = carbon::now();
         $databaseHost = env('DB_HOST');
         try {
-            if ($databaseHost == '192.168.50.2') {
-                $koneksiPusat = [
-                    'driver' => 'pgsql',
-                    'host' => '10.20.30.21',
-                    'port' => '5884',
-                    'database' => 'admin_sipedas_v4',
-                    'username' => 'admin_spesialw55',
-                    'password' => 'yoyokHW55',
-                    'charset' => 'utf8',
-                    'prefix' => '',
-                    'prefix_indexes' => true,
-                    'search_path' => 'public',
-                    'sslmode' => 'prefer',
-                ];
-            } else {
-                $koneksiPusat = [
-                    'driver' => 'pgsql',
-                    'host' => '192.168.88.4',
-                    'port' => '5432',
-                    'database' => 'admin_sipedas_v4',
-                    'username' => 'admin_spesialw55',
-                    'password' => 'yoyokHW55',
-                    'charset' => 'utf8',
-                    'prefix' => '',
-                    'prefix_indexes' => true,
-                    'search_path' => 'public',
-                    'sslmode' => 'prefer',
-                ];
-            }
+            // if ($databaseHost == '192.168.50.2') {
+            //     $koneksiPusat = [
+            //         'driver' => 'pgsql',
+            //         'host' => '10.20.30.21',
+            //         'port' => '5884',
+            //         'database' => 'admin_sipedas_v4',
+            //         'username' => 'admin_spesialw55',
+            //         'password' => 'yoyokHW55',
+            //         'charset' => 'utf8',
+            //         'prefix' => '',
+            //         'prefix_indexes' => true,
+            //         'search_path' => 'public',
+            //         'sslmode' => 'prefer',
+            //     ];
+            // }
+            // else {
+            $koneksiPusat = [
+                'driver' => 'pgsql',
+                'host' => '192.168.88.4',
+                'port' => '5432',
+                'database' => 'admin_sipedas_v4',
+                'username' => 'admin_spesialw55',
+                'password' => 'yoyokHW55',
+                'charset' => 'utf8',
+                'prefix' => '',
+                'prefix_indexes' => true,
+                'search_path' => 'public',
+                'sslmode' => 'prefer',
+            ];
+            // }
             config(['database.connections.db_connection2' => $koneksiPusat]);
         } catch (QueryException $e) {
             $client = 'Kesalahan koneksi';
             $dateTime = 'Kesalahan koneksi';
         }
+        $start1 = carbon::now();
         $menu = DB::table('m_w')
             ->leftjoin('m_jenis_nota', 'm_jenis_nota_m_w_id', 'm_w_id')
             ->leftjoin('m_menu_harga', 'm_menu_harga_m_jenis_nota_id', 'm_jenis_nota_id')
@@ -274,7 +278,7 @@ class StatusMenuController extends Controller
             ->orderBy('m_t_t_id', 'ASC')
             ->orderBy('m_w_m_kode_nota', 'ASC')
             ->get();
-
+        $start2 = carbon::now();
         $data = array();
         foreach ($menu as $value) {
             $menuPusat = DB::connection('db_connection2')->table('m_menu_harga')
@@ -319,7 +323,14 @@ class StatusMenuController extends Controller
             $row[] = $dateTime;
             $data[] = $row;
         }
-        $output = array("data" => $data);
+        $end = carbon::now();
+        $output = array(
+            "start" => $start,
+            "start1" => $start1,
+            "start2" => $start2,
+            "end" => $end,
+            "data" => $data,
+        );
         return response()->json($output);
     }
 
