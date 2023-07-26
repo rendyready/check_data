@@ -3,7 +3,6 @@
 namespace Modules\Master\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -213,7 +212,6 @@ class StatusMenuController extends Controller
 
     public function show(Request $request)
     {
-        $start = carbon::now();
         $databaseHost = env('DB_HOST');
         if ($databaseHost == '192.168.50.2') {
             try {
@@ -281,10 +279,7 @@ class StatusMenuController extends Controller
                 ->orderBy('m_t_t_id', 'ASC')
                 ->orderBy('m_w_m_kode_nota', 'ASC')
                 ->get();
-
         } else {
-
-            $start1 = carbon::now();
             $menu = DB::table('m_w')
                 ->leftjoin('m_jenis_nota', 'm_jenis_nota_m_w_id', 'm_w_id')
                 ->leftjoin('m_menu_harga', 'm_menu_harga_m_jenis_nota_id', 'm_jenis_nota_id')
@@ -313,7 +308,6 @@ class StatusMenuController extends Controller
                 ->get();
         }
 
-        $start2 = carbon::now();
         $data = array();
         foreach ($menu as $value) {
             $status = 'Tidak Aktif';
@@ -361,12 +355,8 @@ class StatusMenuController extends Controller
             $row[] = $dateTime;
             $data[] = $row;
         }
-        $end = carbon::now();
+
         $output = array(
-            "start" => $start,
-            "start1" => $start1,
-            "start2" => $start2,
-            "end" => $end,
             "data" => $data,
         );
         return response()->json($output);
