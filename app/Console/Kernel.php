@@ -15,13 +15,18 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('datasync:cron')->everyMinute()->withoutOverlapping();
-        // $schedule->command('getdata:cron')->everyMinute()->withoutOverlapping();
-        $schedule->command('getdataupdate:cron')->everyMinute()->withoutOverlapping();
-        $schedule->command('sendcloud:cron')->everyTwoMinutes()->withoutOverlapping();
-        $schedule->command('mastercontrol:cron')->hourly()->withoutOverlapping();
-        $schedule->command('autoshutdown:cron')->dailyAt('23:59')->withoutOverlapping();
-        $schedule->command('resetlog:cron')->monthly()->withoutOverlapping();
+        $schedule->command('datasync:cron')->everyMinute()->withoutOverlapping(10);
+        // $schedule->command('getdata:cron')->everyMinute()->withoutOverlapping(10);
+        $schedule->command('getdataupdate:cron')->everyMinute()->withoutOverlapping(10);
+        $schedule->command('sendcloud:cron')->everyTwoMinutes()->withoutOverlapping(10);
+        $schedule->command('mastercontrol:cron')->hourly()->withoutOverlapping(10);
+        $schedule->command('autoshutdown:cron')->dailyAt('23:59')->withoutOverlapping(10);
+        $schedule->command('resetlog:cron')->monthly()->withoutOverlapping(10);
+        $schedule->command('sendserverstatus:cron')->everyMinute()->withoutOverlapping(10);
+        $schedule->command('countdataserver:cron')->dailyAt('10:00')->withoutOverlapping(10);
+        $schedule->command('countdataserver:cron')->dailyAt('14:00')->withoutOverlapping(10);
+        $schedule->command('countdataserver:cron')->dailyAt('20:00')->withoutOverlapping(10);
+
     }
 
     /**
@@ -31,7 +36,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands()
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/Commands');
 
         require base_path('routes/console.php');
     }
