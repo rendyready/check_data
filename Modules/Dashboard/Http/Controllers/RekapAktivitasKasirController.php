@@ -87,8 +87,7 @@ class RekapAktivitasKasirController extends Controller
     {
         $buka_laci = DB::table('rekap_buka_laci')
             ->join('users', 'users_id', 'r_b_l_created_by')
-            ->join('rekap_modal', 'rekap_modal_id', 'r_b_l_rekap_modal_id')
-            ->selectRaw('r_b_l_rekap_modal_id, r_b_l_tanggal, name, sum(r_b_l_qty) as laci, r_b_l_m_area_nama, r_b_l_m_w_nama, rekap_modal_sesi');
+            ->join('rekap_modal', 'rekap_modal_id', 'r_b_l_rekap_modal_id');
         if (strpos($request->tanggal, 'to') !== false) {
             [$start, $end] = explode('to', $request->tanggal);
             $buka_laci->whereBetween('r_b_l_tanggal', [$start, $end]);
@@ -104,10 +103,14 @@ class RekapAktivitasKasirController extends Controller
                 }
             }
         }
-        $buka_laci = $buka_laci->groupby('r_b_l_tanggal', 'name', 'r_b_l_rekap_modal_id', 'r_b_l_m_area_nama', 'r_b_l_m_area_id', 'r_b_l_m_w_nama', 'rekap_modal_sesi')
+        // $buka_laci_count->select('r_b_l_id')->get();
+
+        $buka_laci = $buka_laci->selectRaw('r_b_l_rekap_modal_id, r_b_l_tanggal, name, sum(r_b_l_qty) as laci, r_b_l_m_area_nama, r_b_l_m_w_nama, rekap_modal_sesi')
+            ->groupby('r_b_l_tanggal', 'name', 'r_b_l_rekap_modal_id', 'r_b_l_m_area_nama', 'r_b_l_m_area_id', 'r_b_l_m_w_nama', 'rekap_modal_sesi')
             ->orderby('r_b_l_m_area_id', 'ASC')
             ->orderby('r_b_l_tanggal', 'ASC')
             ->orderby('rekap_modal_sesi', 'ASC')
+        // ->limit(10)
             ->get();
 
         $data = array();
@@ -123,7 +126,10 @@ class RekapAktivitasKasirController extends Controller
             $data[] = $row;
         }
 
-        $output = array("data" => $data);
+        $output = [
+            // "pagging" => $buka_laci_count,
+            "data" => $data,
+        ];
         return response()->json($output);
     }
 

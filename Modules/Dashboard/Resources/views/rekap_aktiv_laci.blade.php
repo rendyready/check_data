@@ -131,7 +131,7 @@
                                 </tr>
                             </thead>
                             <tbody id="show_data">
-                            </tbody>
+                            </tbody>>
                         </table>
                     </div>
                 </div>
@@ -251,14 +251,12 @@ $(document).ready(function() {
             },
             });
           } else {
-
-        $('#tampil_rekap').DataTable({
+            $('#tampil_rekap').DataTable({
             button: [],
             destroy: true,
             orderCellsTop: true,
             processing: true,
             scrollX: true,
-            // scrollY: '300px',
             columnDefs: [ 
                             {
                                 targets: '_all',
@@ -279,6 +277,7 @@ $(document).ready(function() {
             ajax: {
                 url: '{{route("rekap_aktiv_laci.tampil_laci")}}',
                 data : {
+                    // length: lengthMenu,
                     area: area,
                     waroeng: waroeng,
                     tanggal: tanggal,
@@ -288,8 +287,9 @@ $(document).ready(function() {
                 },
                 success:function(data){ 
                     console.log(data);
-                }
+                },
       });
+    //   draw++;
     }
     });
 
