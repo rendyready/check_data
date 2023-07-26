@@ -116,23 +116,33 @@
                             </div>
                         </form>
 
-                        <table id="tampil_rekap"
+                        {{-- <table id="tampil_rekap"
                             class="table table-sm table-bordered table-striped table-vcenter nowrap table-hover js-dataTable-full"
-                            style="width:100%">
-                            <thead>
-                                <tr>
-                                    <th class="text-center">Area</th>
-                                    <th class="text-center">Waroeng</th>
-                                    <th class="text-center">Tanggal</th>
-                                    <th class="text-center">Kasir</th>
-                                    <th class="text-center">Sesi</th>
-                                    <th class="text-center">Intensitas Buka Laci</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody id="show_data">
-                            </tbody>>
-                        </table>
+                            style="width:100%"> --}}
+                        <div class="table-responsive">
+                            <table id="tampil_rekap" class="table table-striped table-bordered table-hover" width="100%"
+                                cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">Area</th>
+                                        <th class="text-center">Waroeng</th>
+                                        <th class="text-center">Tanggal</th>
+                                        <th class="text-center">Kasir</th>
+                                        <th class="text-center">Sesi</th>
+                                        <th class="text-center">Intensitas Buka Laci</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="show_data">
+                                </tbody>>
+                            </table>
+                        </div>
+                        <div id="pagination-info" class="mt-2">Menampilkan 0 hingga 0 dari 0 data</div>
+                        <div class="mt-2">
+                            <ul class="pagination">
+                                <!-- Anda dapat membuat tombol-tombol paginasi secara dinamis menggunakan JavaScript -->
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -233,6 +243,87 @@ $(document).ready(function() {
     var HakAksesArea = userInfo.dataset.hasAccess === 'true';
     var HakAksesPusat = userInfoPusat.dataset.hasAccess === 'true';
 
+    // var dataTable = null;
+
+    // function fetchTableData(page) {
+    //     var area  = $('.filter_area option:selected').val();
+    //     var waroeng  = $('.filter_waroeng option:selected').val();
+    //     var tanggal  = $('.filter_tanggal').val();
+    //     var operator = $('.filter_operator option:selected').val();
+
+    //     $.ajax({
+    //         url: '{{route("rekap_aktiv_laci.tampil_laci")}}',
+    //         type: 'GET',
+    //         data: {
+    //             area: area,
+    //             waroeng: waroeng,
+    //             tanggal: tanggal,
+    //             operator: operator,
+    //             page: page // Kirim nomor halaman saat ini ke server
+    //         },
+    //         success: function(data) {
+    //             if (dataTable) {
+    //                 dataTable.destroy();
+    //             }
+
+    //             dataTable = $('#tampil_rekap').DataTable({
+    //                 button: [],
+    //                 destroy: true,
+    //                 orderCellsTop: true,
+    //                 processing: true,
+    //                 scrollX: true,
+    //                 columnDefs: [ 
+    //                                 {
+    //                                     targets: '_all',
+    //                                     className: 'dt-body-center'
+    //                                 },
+    //                             ],
+    //                 buttons: [
+    //                         {
+    //                             extend: 'excelHtml5',
+    //                             text: 'Export Excel',
+    //                             title: 'Rekap Buka Laci - ' + tanggal,
+    //                             pageSize: 'A4',
+    //                             pageOrientation: 'potrait',
+    //                         }
+    //                     ],
+    //                 lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+    //                 pageLength: 10,
+    //                 ajax: {
+    //                     url: '{{route("rekap_aktiv_laci.tampil_laci")}}',
+    //                     data : {
+    //                         area: area,
+    //                         waroeng: waroeng,
+    //                         tanggal: tanggal,
+    //                         operator: operator,
+    //                     },
+    //                     type : "GET",
+    //                     },
+    //                     success:function(data){ 
+    //                         console.log(data);
+    //                     },
+    //                     });
+
+    //                     // Perbarui tombol-tombol paginasi
+    //                     var pagination = data.pagination;
+    //                     $('#pagination-info').html('Menampilkan ' + (pagination.current_page - 1) * pagination.per_page + 1 + ' hingga ' + (pagination.current_page * pagination.per_page) + ' dari ' + pagination.total + ' data');
+    //                 },
+    //                 error: function() {
+    //                     // Tangani error jika diperlukan
+    //                 }
+    //     });
+    // }
+
+    // $('#cari').on('click', function() {
+    //     fetchTableData(1); // Ambil halaman pertama data saat pencarian pertama kali dilakukan
+    // });
+
+    // // Tangani klik tombol paginasi
+    // $(document).on('click', '.custom-pagination-link', function() {
+    //     var page = $(this).data('page');
+    //     fetchTableData(page);
+    // });
+
     //eksekusi filter
     $('#cari').on('click', function() {
         var area  = $('.filter_area option:selected').val();
@@ -277,7 +368,6 @@ $(document).ready(function() {
             ajax: {
                 url: '{{route("rekap_aktiv_laci.tampil_laci")}}',
                 data : {
-                    // length: lengthMenu,
                     area: area,
                     waroeng: waroeng,
                     tanggal: tanggal,
@@ -289,7 +379,6 @@ $(document).ready(function() {
                     console.log(data);
                 },
       });
-    //   draw++;
     }
     });
 
