@@ -277,31 +277,11 @@ class StatusMenuController extends Controller
 
         $data = array();
         foreach ($menu as $value) {
-            $menuPusat = DB::connection('db_connection2')->table('m_w')
-                ->leftjoin('m_jenis_nota', 'm_jenis_nota_m_w_id', 'm_w_id')
-                ->leftjoin('m_menu_harga', 'm_menu_harga_m_jenis_nota_id', 'm_jenis_nota_id')
-                ->leftjoin('m_area', 'm_area_id', 'm_w_m_area_id')
-                ->leftjoin('m_transaksi_tipe', 'm_t_t_id', 'm_jenis_nota_m_t_t_id')
-                ->leftjoin('m_produk', 'm_produk_id', 'm_menu_harga_m_produk_id')
-                ->leftjoin('m_jenis_produk', 'm_jenis_produk_id', 'm_produk_m_jenis_produk_id')
-                ->select('m_w_id', 'm_menu_harga_updated_at', 'm_menu_harga_client_target');
-            if ($request->area != 'all') {
-                $menuPusat->where('m_w_m_area_id', $request->area);
-                if ($request->waroeng != 'all') {
-                    $menuPusat->where('m_jenis_nota_m_w_id', $request->waroeng);
-                }
-            }
-            if ($request->menu != 'all') {
-                $menuPusat->where('m_jenis_produk_id', $request->menu);
-            }
-            if ($request->trans != 'all') {
-                $menuPusat->where('m_jenis_nota_m_t_t_id', $request->trans);
-            }
-            $menuPusat = $menuPusat->orderBy('m_w_m_area_id', 'ASC')
-                ->orderBy('m_w_id', 'ASC')
-                ->orderBy('m_produk_id', 'ASC')
-                ->orderBy('m_t_t_id', 'ASC')
-                ->orderBy('m_w_m_kode_nota', 'ASC')
+            $menuPusat = DB::connection('db_connection2')->table('m_menu_harga')
+                ->leftjoin('m_jenis_nota', 'm_jenis_nota_id', 'm_menu_harga_m_jenis_nota_id')
+                ->leftjoin('m_w', 'm_w_id', 'm_jenis_nota_m_w_id')
+                ->select('m_w_id', 'm_menu_harga_updated_at', 'm_menu_harga_client_target')
+                ->where('m_menu_harga_id', $value->m_menu_harga_id)
                 ->first();
 
             $status = 'Tidak Aktif';
@@ -319,11 +299,11 @@ class StatusMenuController extends Controller
                 $status = 'Aktif';
             }
             $row[] = $status;
-            if ($value->m_menu_harga_tax_status != 0 && $value->m_produk_tax != 0 && $value->m_w_m_pajak_id != 1) {
+            if ($value->m_menu_harga_tax_status != 0 && $value->m_produk_tax != 0) {
                 $pajak = 'Aktif';
             }
             $row[] = $pajak;
-            if ($value->m_menu_harga_sc_status != 0 && $value->m_produk_sc != 0 && $value->m_w_m_sc_id != 1) {
+            if ($value->m_menu_harga_sc_status != 0 && $value->m_produk_sc != 0) {
                 $sc = 'Aktif';
             }
             $row[] = $sc;
