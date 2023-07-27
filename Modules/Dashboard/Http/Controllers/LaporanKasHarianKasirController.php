@@ -113,6 +113,15 @@ class LaporanKasHarianKasirController extends Controller
             $diskon = 0;
             $voucher = 0;
             $prevSaldo = $valModal->rekap_modal_nominal;
+            $saldoAkhir = $valModal->rekap_modal_nominal + $valModal->rekap_modal_cash_in - $valModal->rekap_modal_cash_out;
+            $data[] = array(
+                'no_nota' => number_format($valModal->rekap_modal_nominal),
+                'transaksi' => number_format($valModal->rekap_modal_cash_in),
+                'masuk' => number_format($valModal->rekap_modal_cash_out),
+                'keluar' => number_format($saldoAkhir),
+                'saldo' => number_format($valModal->rekap_modal_cash_real - $saldoAkhir),
+                'payment' => 22,
+            );
             foreach ($mutasi as $row) {
                 if ($row->r_m_m_debit != 0) {
                     $masuk = $row->r_m_m_debit;
