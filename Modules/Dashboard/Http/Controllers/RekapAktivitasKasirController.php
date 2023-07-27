@@ -83,59 +83,70 @@ class RekapAktivitasKasirController extends Controller
         return response()->json($data);
     }
 
-    // public function tampil_laci(Request $request)
-    // {
-    //     $buka_laci = DB::table('rekap_buka_laci')
-    //         ->join('users', 'users_id', 'r_b_l_created_by')
-    //         ->join('rekap_modal', 'rekap_modal_id', 'r_b_l_rekap_modal_id');
-    //     if (strpos($request->tanggal, 'to') !== false) {
-    //         [$start, $end] = explode('to', $request->tanggal);
-    //         $buka_laci->whereBetween('r_b_l_tanggal', [$start, $end]);
-    //     } else {
-    //         $buka_laci->where('r_b_l_tanggal', $request->tanggal);
-    //     }
-    //     if ($request->area != 'all') {
-    //         $buka_laci->where('r_b_l_m_area_id', $request->area);
-    //         if ($request->waroeng != 'all') {
-    //             $buka_laci->where('r_b_l_m_w_id', $request->waroeng);
-    //             if ($request->operator != 'all') {
-    //                 $buka_laci->where('r_b_l_created_by', $request->operator);
-    //             }
-    //         }
-    //     }
-
-    //     $buka_laci = $buka_laci->selectRaw('r_b_l_rekap_modal_id, r_b_l_tanggal, name, sum(r_b_l_qty) as laci, r_b_l_m_area_nama, r_b_l_m_w_nama, rekap_modal_sesi')
-    //         ->groupby('r_b_l_tanggal', 'name', 'r_b_l_rekap_modal_id', 'r_b_l_m_area_nama', 'r_b_l_m_area_id', 'r_b_l_m_w_nama', 'rekap_modal_sesi')
-    //         ->orderby('r_b_l_m_area_id', 'ASC')
-    //         ->orderby('r_b_l_tanggal', 'ASC')
-    //         ->orderby('rekap_modal_sesi', 'ASC')
-    //         ->get();
-
-    //     $data = array();
-    //     foreach ($buka_laci as $laci) {
-    //         $row = array();
-    //         $row[] = $laci->r_b_l_m_area_nama;
-    //         $row[] = $laci->r_b_l_m_w_nama;
-    //         $row[] = date('d-m-Y', strtotime($laci->r_b_l_tanggal));
-    //         $row[] = $laci->name;
-    //         $row[] = $laci->rekap_modal_sesi;
-    //         $row[] = $laci->laci;
-    //         $row[] = '<a id="button_detail" class="btn btn-sm button_detail btn-info" value="' . $laci->r_b_l_rekap_modal_id . '" title="Detail Nota"><i class="fa-sharp fa-solid fa-eye"></i></a>';
-    //         $data[] = $row;
-    //     }
-
-    //     $output = [
-    //         "data" => $data,
-    //         "pagination" => [
-    //             "current_page" => 1, // Halaman saat ini diatur sebagai 1
-    //             "per_page" => 10, // Jumlah data per halaman diatur sebagai 10
-    //             "total" => count($data), // Total jumlah data
-    //         ],
-    //     ];
-    //     return response()->json($output);
-    // }
-
     public function tampil_laci(Request $request)
+    {
+
+        $buka_laci = DB::table('rekap_buka_laci')
+            ->join('users', 'users_id', 'r_b_l_created_by')
+            ->join('rekap_modal', 'rekap_modal_id', 'r_b_l_rekap_modal_id');
+
+        if (strpos($request->tanggal, 'to') !== false) {
+            [$start, $end] = explode('to', $request->tanggal);
+            $buka_laci->whereBetween('r_b_l_tanggal', [$start, $end]);
+        } else {
+            $buka_laci->where('r_b_l_tanggal', $request->tanggal);
+        }
+
+        if ($request->area != 'all') {
+            $buka_laci->where('r_b_l_m_area_id', $request->area);
+            if ($request->waroeng != 'all') {
+                $buka_laci->where('r_b_l_m_w_id', $request->waroeng);
+                if ($request->operator != 'all') {
+                    $buka_laci->where('r_b_l_created_by', $request->operator);
+                }
+            }
+        }
+
+        // Menghitung total data yang cocok dengan filter
+        $totalData = $buka_laci->count();
+        // Menentukan halaman saat ini dan jumlah data per halaman
+        $currentPage = $request->page ?? 1;
+        $dataPerPage = 10; // Jumlah data per halaman
+        // Mengambil data pengguna dengan manual pagination menggunakan Query Builder
+        $offset = ($currentPage - 1) * $dataPerPage;
+        $buka_laci->selectRaw('r_b_l_rekap_modal_id, r_b_l_tanggal, name, sum(r_b_l_qty) as laci, r_b_l_m_area_nama, r_b_l_m_w_nama, rekap_modal_sesi')
+            ->groupBy('r_b_l_tanggal', 'name', 'r_b_l_rekap_modal_id', 'r_b_l_m_area_nama', 'r_b_l_m_area_id', 'r_b_l_m_w_nama', 'rekap_modal_sesi')
+            ->orderBy('r_b_l_m_area_id', 'ASC')
+            ->orderBy('r_b_l_tanggal', 'ASC')
+            ->orderBy('rekap_modal_sesi', 'ASC')
+            ->offset($offset)
+            ->limit($dataPerPage);
+
+        $buka_laci = $buka_laci->get();
+
+        $data = array();
+        foreach ($buka_laci as $laci) {
+            $row = array();
+            $row[] = $laci->r_b_l_m_area_nama;
+            $row[] = $laci->r_b_l_m_w_nama;
+            $row[] = date('d-m-Y', strtotime($laci->r_b_l_tanggal));
+            $row[] = $laci->name;
+            $row[] = $laci->rekap_modal_sesi;
+            $row[] = $laci->laci;
+            $row[] = '<a id="button_detail" class="btn btn-sm button_detail btn-info" value="' . $laci->r_b_l_rekap_modal_id . '" title="Detail Nota"><i class="fa-sharp fa-solid fa-eye"></i></a>';
+            $data[] = $row;
+        }
+
+        $output = [
+            "data" => $data,
+            "totalData" => $totalData,
+            "currentPage" => $currentPage,
+        ];
+
+        return response()->json($output);
+    }
+
+    public function tampil_lacixxx(Request $request)
     {
         $buka_laci = DB::table('rekap_buka_laci')
             ->join('users', 'users_id', 'r_b_l_created_by')

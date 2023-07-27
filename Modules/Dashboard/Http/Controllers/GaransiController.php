@@ -51,8 +51,8 @@ class GaransiController extends Controller
 
     public function select_user(Request $request)
     {
-        $user = DB::table('users')
-            ->join('rekap_garansi', 'rekap_garansi_created_by', 'users_id')
+        $user = DB::table('rekap_garansi')
+            ->join('users', 'rekap_garansi_created_by', 'users_id')
             ->join('rekap_transaksi', 'r_t_id', 'rekap_garansi_r_t_id')
             ->select('users_id', 'name');
         if (in_array(Auth::user()->waroeng_id, $this->get_akses_area())) {

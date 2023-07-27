@@ -238,7 +238,6 @@ $(document).ready(function() {
           orderCellsTop: true,
           processing: true,
           scrollX: true,
-        //   scrollY: '300px',
           autoWidth: false,
           columnDefs: [ 
                     {
@@ -383,11 +382,11 @@ $(document).ready(function() {
                               type : "GET",
                               },
                               columns: [
-                              { data: 'no_nota' },
-                              { data: 'transaksi' },
-                              { data: 'masuk', class: 'text-end' },
-                              { data: 'keluar', class: 'text-end' },
-                              { data: 'saldo', class: 'text-end' },
+                              { data: 'no_nota', class: 'text-center' },
+                              { data: 'transaksi', class: 'text-center' },
+                              { data: 'masuk', class: 'text-center' },
+                              { data: 'keluar', class: 'text-center' },
+                              { data: 'saldo', class: 'text-center' },
                             ],
                       });
                     },

@@ -104,253 +104,278 @@ class LaporanKasHarianKasirController extends Controller
                 'transaksi' => 'Modal awal',
                 'masuk' => 0,
                 'keluar' => 0,
-                'saldo' => rupiah($valModal->rekap_modal_nominal, 0),
+                'saldo' => number_format($valModal->rekap_modal_nominal),
                 'payment' => 1,
             );
             $totalKeluar = 0;
             $totalMasuk = 0;
-            $prevSaldoMut = 0;
-            $saldoAkhir = $valModal->rekap_modal_nominal + $valModal->rekap_modal_cash_in - $valModal->rekap_modal_cash_out;
-            $data[] = array(
-                'no_nota' => number_format($valModal->rekap_modal_nominal),
-                'transaksi' => number_format($valModal->rekap_modal_cash_in),
-                'masuk' => number_format($valModal->rekap_modal_cash_out),
-                'keluar' => number_format($saldoAkhir),
-                'saldo' => number_format($valModal->rekap_modal_cash_real - $saldoAkhir),
-                'payment' => 22,
-            );
+            $pembulatan = 0;
+            $diskon = 0;
+            $voucher = 0;
+            $prevSaldo = $valModal->rekap_modal_nominal;
             foreach ($mutasi as $row) {
                 if ($row->r_m_m_debit != 0) {
                     $masuk = $row->r_m_m_debit;
-                    $modal = $valModal->rekap_modal_nominal - $row->r_m_m_debit;
-                    $tnp_modal = $prevSaldoMut - $row->r_m_m_debit;
-                    $saldo = $prevSaldoMut == 0 ? $modal : $tnp_modal;
+                    $modal = $valModal->rekap_modal_nominal + $row->r_m_m_debit;
+                    $tnp_modal = $prevSaldo + $row->r_m_m_debit;
+                    $saldo = $prevSaldo == 0 ? $modal : $tnp_modal;
                     $data[] = array(
                         'no_nota' => $row->r_m_m_id,
                         'transaksi' => $row->r_m_m_keterangan,
-                        'masuk' => rupiah($masuk, 0),
+                        'masuk' => number_format($masuk),
                         'keluar' => 0,
-                        'saldo' => rupiah($saldo, 0),
+                        'saldo' => number_format($saldo),
                         'payment' => 1,
                     );
                     $totalMasuk += $row->r_m_m_debit;
-                    $prevSaldoMut = $saldo;
+                    $prevSaldo = $saldo;
                 }
                 if ($row->r_m_m_kredit != 0) {
                     $keluar = $row->r_m_m_kredit;
-                    $saldo = $prevSaldoMut + $row->r_m_m_kredit;
+                    $saldo = $prevSaldo - $row->r_m_m_kredit;
                     $data[] = array(
                         'no_nota' => $row->r_m_m_id,
                         'transaksi' => $row->r_m_m_keterangan,
                         'masuk' => 0,
-                        'keluar' => rupiah($keluar, 0),
-                        'saldo' => rupiah($saldo, 0),
+                        'keluar' => number_format($keluar),
+                        'saldo' => number_format($saldo),
                         'payment' => 1,
                     );
                     $totalKeluar += $row->r_m_m_kredit;
-                    $prevSaldoMut = $saldo;
+                    $prevSaldo = $saldo;
                 }
             }
-            $prevSaldo = 0;
             foreach ($transaksi as $row) {
                 if ($row->r_t_nominal != 0) {
-                    $masuk = rupiah($row->r_t_nominal, 0);
-                    $trans_nom_mdl = $valModal->rekap_modal_nominal + $row->r_t_nominal;
-                    $trans_nom = $prevSaldo + $row->r_t_nominal;
-                    $saldo = $prevSaldo == 0 ? $trans_nom_mdl : $trans_nom;
+                    $masuk = number_format($row->r_t_nominal);
+                    $saldo = $prevSaldo + $row->r_t_nominal;
                     $data[] = array(
                         'no_nota' => $row->r_t_nota_code,
                         'transaksi' => 'Transaksi',
                         'masuk' => $masuk,
                         'keluar' => 0,
-                        'saldo' => rupiah($saldo, 0),
+                        'saldo' => number_format($saldo),
                         'payment' => 1,
                     );
                     $prevSaldo = $saldo;
                     $totalMasuk += $row->r_t_nominal;
                 }
                 if ($row->r_t_nominal_pajak != 0) {
-                    $masuk = rupiah($row->r_t_nominal_pajak, 0);
+                    $masuk = number_format($row->r_t_nominal_pajak);
                     $trans_pajak = $prevSaldo + $row->r_t_nominal_pajak;
                     $data[] = array(
                         'no_nota' => $row->r_t_nota_code,
                         'transaksi' => 'Pajak',
                         'masuk' => $masuk,
                         'keluar' => 0,
-                        'saldo' => rupiah($trans_pajak, 0),
+                        'saldo' => number_format($trans_pajak),
                         'payment' => 1,
                     );
                     $prevSaldo = $trans_pajak;
                     $totalMasuk += $row->r_t_nominal_pajak;
                 }
                 if ($row->r_t_nominal_sc != 0) {
-                    $masuk = rupiah($row->r_t_nominal_sc, 0);
+                    $masuk = number_format($row->r_t_nominal_sc);
                     $trans_sc = $prevSaldo + $row->r_t_nominal_sc;
                     $data[] = array(
                         'no_nota' => $row->r_t_nota_code,
                         'transaksi' => 'Servis Charge',
                         'masuk' => $masuk,
                         'keluar' => 0,
-                        'saldo' => rupiah($trans_sc, 0),
+                        'saldo' => number_format($trans_sc),
                         'payment' => 1,
                     );
                     $prevSaldo = $trans_sc;
                     $totalMasuk += $row->r_t_nominal_sc;
                 }
+
                 if ($row->r_t_nominal_diskon != 0) {
-                    $masuk = rupiah($row->r_t_nominal_diskon, 0);
+                    $masuk = number_format($row->r_t_nominal_diskon);
                     $trans_diskon = $prevSaldo + $row->r_t_nominal_diskon;
                     $data[] = array(
                         'no_nota' => $row->r_t_nota_code,
-                        'transaksi' => 'Voucher',
+                        'transaksi' => 'Diskon',
                         'masuk' => $masuk,
                         'keluar' => 0,
-                        'saldo' => rupiah($trans_diskon, 0),
+                        'saldo' => number_format($trans_diskon),
                         'payment' => 1,
                     );
                     $prevSaldo = $trans_diskon;
                     $totalMasuk += $row->r_t_nominal_diskon;
+                    $diskon += $row->r_t_nominal_diskon;
                 }
                 if ($row->r_t_nominal_voucher != 0) {
-                    $masuk = rupiah($row->r_t_nominal_voucher, 0);
+                    $masuk = number_format($row->r_t_nominal_voucher);
                     $trans_voucer = $prevSaldo + $row->r_t_nominal_voucher;
                     $data[] = array(
                         'no_nota' => $row->r_t_nota_code,
                         'transaksi' => 'Voucher',
                         'masuk' => $masuk,
                         'keluar' => 0,
-                        'saldo' => rupiah($trans_voucer, 0),
+                        'saldo' => number_format($trans_voucer),
                         'payment' => 1,
                     );
                     $prevSaldo = $trans_voucer;
                     $totalMasuk += $row->r_t_nominal_voucher;
+                    $voucher += $row->r_t_nominal_voucher;
                 }
+
                 if ($row->r_t_nominal_pembulatan != 0) {
-                    $keluar = rupiah($row->r_t_nominal_pembulatan, 0);
+                    $keluar = number_format($row->r_t_nominal_pembulatan);
                     $trans_bulat = $prevSaldo - $row->r_t_nominal_pembulatan;
                     $data[] = array(
                         'no_nota' => $row->r_t_nota_code,
                         'transaksi' => 'Pembualatan',
                         'masuk' => 0,
                         'keluar' => $keluar,
-                        'saldo' => rupiah($trans_bulat, 0),
+                        'saldo' => number_format($trans_bulat),
                         'payment' => 1,
                     );
                     $prevSaldo = $trans_bulat;
                     $totalKeluar += $row->r_t_nominal_pembulatan;
+                    $pembulatan += $row->r_t_nominal_pembulatan;
                 }
                 if ($row->r_t_nominal_tarik_tunai != 0) {
-                    $keluar = rupiah($row->r_t_nominal_tarik_tunai, 0);
+                    $keluar = number_format($row->r_t_nominal_tarik_tunai);
                     $trans_tarik = $prevSaldo - $row->r_t_nominal_tarik_tunai;
                     $data[] = array(
                         'no_nota' => $row->r_t_nota_code,
                         'transaksi' => 'Tarik Tunai',
                         'masuk' => 0,
                         'keluar' => $keluar,
-                        'saldo' => rupiah($trans_tarik, 0),
+                        'saldo' => number_format($trans_tarik),
                         'payment' => 1,
                     );
                     $prevSaldo = $trans_tarik;
                     $totalKeluar += $row->r_t_nominal_tarik_tunai;
                 }
                 if ($row->r_t_nominal_free_kembalian != 0) {
-                    $keluar = rupiah($row->r_t_nominal_free_kembalian, 0);
+                    $keluar = number_format($row->r_t_nominal_free_kembalian);
                     $trans_free = $prevSaldo - $row->r_t_nominal_free_kembalian;
                     $data[] = array(
                         'no_nota' => $row->r_t_nota_code,
                         'transaksi' => 'Free Kembalian',
                         'masuk' => 0,
                         'keluar' => $keluar,
-                        'saldo' => rupiah($trans_free, 0),
+                        'saldo' => number_format($trans_free),
                         'payment' => 1,
                     );
                     $prevSaldo = $trans_free;
                     $totalKeluar += $row->r_t_nominal_free_kembalian;
                 }
             }
-            $prevSaldoRef = 0;
             foreach ($refund as $row) {
                 if ($row->r_r_nominal_refund != 0) {
-                    $keluar = rupiah($row->r_r_nominal_refund, 0);
-                    $modal = $valModal->rekap_modal_nominal - $row->r_r_nominal_refund;
-                    $tnp_modal = $prevSaldoRef - $row->r_r_nominal_refund;
-                    $saldo = $prevSaldoRef == 0 ? $modal : $tnp_modal;
+                    $keluar = number_format($row->r_r_nominal_refund);
+                    $saldo = $prevSaldo - $row->r_r_nominal_refund;
                     $data[] = array(
                         'no_nota' => $row->r_r_nota_code,
                         'transaksi' => 'Refund Nominal',
                         'masuk' => 0,
                         'keluar' => $keluar,
-                        'saldo' => rupiah($saldo, 0),
+                        'saldo' => number_format($saldo),
                         'payment' => 1,
                     );
-                    $prevSaldoRef = $saldo;
+                    $prevSaldo = $saldo;
                     $totalKeluar += $row->r_r_nominal_refund;
                 }
                 if ($row->r_r_nominal_refund_pajak != 0) {
-                    $keluar = rupiah($row->r_r_nominal_refund_pajak, 0);
-                    $saldo = $prevSaldoRef - $row->r_r_nominal_refund_pajak;
+                    $keluar = number_format($row->r_r_nominal_refund_pajak);
+                    $saldo = $prevSaldo - $row->r_r_nominal_refund_pajak;
                     $data[] = array(
                         'no_nota' => $row->r_r_nota_code,
                         'transaksi' => 'Refund Pajak',
                         'masuk' => 0,
                         'keluar' => $keluar,
-                        'saldo' => rupiah($saldo, 0),
+                        'saldo' => number_format($saldo),
                         'payment' => 1,
                     );
-                    $prevSaldoRef = $saldo;
+                    $prevSaldo = $saldo;
                     $totalKeluar += $row->r_r_nominal_refund_pajak;
                 }
                 if ($row->r_r_nominal_refund_sc != 0) {
-                    $keluar = rupiah($row->r_r_nominal_refund_sc, 0);
-                    $saldo = $prevSaldoRef - $row->r_r_nominal_refund_sc;
+                    $keluar = number_format($row->r_r_nominal_refund_sc);
+                    $saldo = $prevSaldo - $row->r_r_nominal_refund_sc;
                     $data[] = array(
                         'no_nota' => $row->r_r_nota_code,
                         'transaksi' => 'Refund Service Charge',
                         'masuk' => 0,
                         'keluar' => $keluar,
-                        'saldo' => rupiah($saldo, 0),
+                        'saldo' => number_format($saldo),
                         'payment' => 1,
                     );
-                    $prevSaldoRef = $saldo;
+                    $prevSaldo = $saldo;
                     $totalKeluar += $row->r_r_nominal_refund_sc;
                 }
                 if ($row->r_r_nominal_pembulatan_refund != 0) {
-                    $keluar = rupiah($row->r_r_nominal_pembulatan_refund, 0);
-                    $saldo = $prevSaldoRef - $row->r_r_nominal_pembulatan_refund;
+                    $keluar = number_format($row->r_r_nominal_pembulatan_refund);
+                    $saldo = $prevSaldo - $row->r_r_nominal_pembulatan_refund;
                     $data[] = array(
                         'no_nota' => $row->r_r_nota_code,
                         'transaksi' => 'Refund Pembulatan',
                         'masuk' => 0,
                         'keluar' => $keluar,
-                        'saldo' => rupiah($saldo, 0),
+                        'saldo' => number_format($saldo),
                         'payment' => 1,
                     );
-                    $prevSaldoRef = $saldo;
+                    $prevSaldo = $saldo;
                     $totalKeluar += $row->r_r_nominal_pembulatan_refund;
                 }
                 if ($row->r_r_nominal_free_kembalian_refund != 0) {
-                    $keluar = rupiah($row->r_r_nominal_free_kembalian_refund, 0);
-                    $saldo = $prevSaldoRef - $row->r_r_nominal_free_kembalian_refund;
+                    $keluar = number_format($row->r_r_nominal_free_kembalian_refund);
+                    $saldo = $prevSaldo - $row->r_r_nominal_free_kembalian_refund;
                     $data[] = array(
                         'no_nota' => $row->r_r_nota_code,
                         'transaksi' => 'Refund Free Kembalian',
                         'masuk' => 0,
                         'keluar' => $keluar,
-                        'saldo' => rupiah($saldo, 0),
+                        'saldo' => number_format($saldo),
                         'payment' => 1,
                     );
-                    $prevSaldoRef = $saldo;
+                    $prevSaldo = $saldo;
                     $totalKeluar += $row->r_r_nominal_free_kembalian_refund;
                 }
             }
-        } // saldo awal
+        } // saldo awal // saldo awal
         $saldo_terakhir = end($data)['saldo'];
         $data[] = array(
             'no_nota' => 'Total',
             'transaksi' => '',
-            'masuk' => rupiah($totalMasuk, 0),
-            'keluar' => rupiah($totalKeluar, 0),
+            'masuk' => number_format($totalMasuk),
+            'keluar' => number_format($totalKeluar),
             'saldo' => $saldo_terakhir,
+            'payment' => 1,
+        );
+        $data[] = array(
+            'no_nota' => 'Pembulatan',
+            'transaksi' => '',
+            'masuk' => number_format($pembulatan),
+            'keluar' => number_format($pembulatan),
+            'saldo' => '',
+            'payment' => 1,
+        );
+        $data[] = array(
+            'no_nota' => 'Discount',
+            'transaksi' => '',
+            'masuk' => number_format($diskon),
+            'keluar' => number_format($diskon),
+            'saldo' => '',
+            'payment' => 1,
+        );
+        $data[] = array(
+            'no_nota' => 'Voucher',
+            'transaksi' => '',
+            'masuk' => number_format($voucher),
+            'keluar' => number_format($voucher),
+            'saldo' => '',
+            'payment' => 1,
+        );
+        $data[] = array(
+            'no_nota' => 'Grand Total',
+            'transaksi' => '',
+            'masuk' => number_format($totalMasuk - $pembulatan - $diskon - $voucher),
+            'keluar' => number_format($totalKeluar - $pembulatan - $diskon - $voucher),
+            'saldo' => '',
             'payment' => 1,
         );
 
@@ -358,116 +383,120 @@ class LaporanKasHarianKasirController extends Controller
         $totalKeluar = 0;
         $totalMasuk = 0;
         $prevSaldo = 0;
+        $pembulatanTF = 0;
+        $discountTF = 0;
+        $voucherTF = 0;
         foreach ($transaksi2 as $row) {
             if ($row->r_t_nominal != 0) {
-                $masuk = rupiah($row->r_t_nominal, 0);
-                // $trans_nom_mdl = $valModal->rekap_modal_nominal + $row->r_t_nominal;
+                $masuk = number_format($row->r_t_nominal);
                 $saldo = $prevSaldo + $row->r_t_nominal;
-                // $saldo = $prevSaldo == 0 ? $trans_nom_mdl : $trans_nom;
                 $data[] = array(
                     'no_nota' => $row->r_t_nota_code,
                     'transaksi' => 'Transaksi',
                     'masuk' => $masuk,
                     'keluar' => 0,
-                    'saldo' => rupiah($saldo, 0),
+                    'saldo' => number_format($saldo),
                     'payment' => 2, 3, 4, 5, 6, 7, 8, 9,
                 );
                 $prevSaldo = $saldo;
                 $totalMasuk += $row->r_t_nominal;
             }
             if ($row->r_t_nominal_pajak != 0) {
-                $masuk = rupiah($row->r_t_nominal_pajak, 0);
+                $masuk = number_format($row->r_t_nominal_pajak);
                 $trans_pajak = $prevSaldo + $row->r_t_nominal_pajak;
                 $data[] = array(
                     'no_nota' => $row->r_t_nota_code,
                     'transaksi' => 'Pajak',
                     'masuk' => $masuk,
                     'keluar' => 0,
-                    'saldo' => rupiah($trans_pajak, 0),
+                    'saldo' => number_format($trans_pajak),
                     'payment' => 2, 3, 4, 5, 6, 7, 8, 9,
                 );
                 $prevSaldo = $trans_pajak;
                 $totalMasuk += $row->r_t_nominal_pajak;
             }
             if ($row->r_t_nominal_sc != 0) {
-                $masuk = rupiah($row->r_t_nominal_sc, 0);
+                $masuk = number_format($row->r_t_nominal_sc);
                 $trans_sc = $prevSaldo + $row->r_t_nominal_sc;
                 $data[] = array(
                     'no_nota' => $row->r_t_nota_code,
                     'transaksi' => 'Servis Charge',
                     'masuk' => $masuk,
                     'keluar' => 0,
-                    'saldo' => rupiah($trans_sc, 0),
+                    'saldo' => number_format($trans_sc),
                     'payment' => 2, 3, 4, 5, 6, 7, 8, 9,
                 );
                 $prevSaldo = $trans_sc;
                 $totalMasuk += $row->r_t_nominal_sc;
             }
             if ($row->r_t_nominal_diskon != 0) {
-                $masuk = rupiah($row->r_t_nominal_diskon, 0);
+                $masuk = number_format($row->r_t_nominal_diskon);
                 $trans_diskon = $prevSaldo + $row->r_t_nominal_diskon;
                 $data[] = array(
                     'no_nota' => $row->r_t_nota_code,
                     'transaksi' => 'Voucher',
                     'masuk' => $masuk,
                     'keluar' => 0,
-                    'saldo' => rupiah($trans_diskon, 0),
+                    'saldo' => number_format($trans_diskon),
                     'payment' => 2, 3, 4, 5, 6, 7, 8, 9,
                 );
                 $prevSaldo = $trans_diskon;
                 $totalMasuk += $row->r_t_nominal_diskon;
+                $discountTF += $row->r_t_nominal_diskon;
             }
             if ($row->r_t_nominal_voucher != 0) {
-                $masuk = rupiah($row->r_t_nominal_voucher, 0);
+                $masuk = number_format($row->r_t_nominal_voucher);
                 $trans_voucer = $prevSaldo + $row->r_t_nominal_voucher;
                 $data[] = array(
                     'no_nota' => $row->r_t_nota_code,
                     'transaksi' => 'Voucher',
                     'masuk' => $masuk,
                     'keluar' => 0,
-                    'saldo' => rupiah($trans_voucer, 0),
+                    'saldo' => number_format($trans_voucer),
                     'payment' => 2, 3, 4, 5, 6, 7, 8, 9,
                 );
                 $prevSaldo = $trans_voucer;
                 $totalMasuk += $row->r_t_nominal_voucher;
+                $voucherTF += $row->r_t_nominal_voucher;
             }
             if ($row->r_t_nominal_pembulatan != 0) {
-                $keluar = rupiah($row->r_t_nominal_pembulatan, 0);
+                $keluar = number_format($row->r_t_nominal_pembulatan);
                 $trans_bulat = $prevSaldo - $row->r_t_nominal_pembulatan;
                 $data[] = array(
                     'no_nota' => $row->r_t_nota_code,
                     'transaksi' => 'Pembualatan',
                     'masuk' => 0,
                     'keluar' => $keluar,
-                    'saldo' => rupiah($trans_bulat, 0),
+                    'saldo' => number_format($trans_bulat),
                     'payment' => 2, 3, 4, 5, 6, 7, 8, 9,
                 );
                 $prevSaldo = $trans_bulat;
                 $totalKeluar += $row->r_t_nominal_pembulatan;
+                $pembulatanTF += $row->r_t_nominal_pembulatan;
             }
             if ($row->r_t_nominal_tarik_tunai != 0) {
-                $keluar = rupiah($row->r_t_nominal_tarik_tunai, 0);
+                $keluar = number_format($row->r_t_nominal_tarik_tunai);
                 $trans_tarik = $prevSaldo - $row->r_t_nominal_tarik_tunai;
                 $data[] = array(
                     'no_nota' => $row->r_t_nota_code,
                     'transaksi' => 'Tarik Tunai',
                     'masuk' => 0,
                     'keluar' => $keluar,
-                    'saldo' => rupiah($trans_tarik, 0),
+                    'saldo' => number_format($trans_tarik),
                     'payment' => 2, 3, 4, 5, 6, 7, 8, 9,
                 );
                 $prevSaldo = $trans_tarik;
                 $totalKeluar += $row->r_t_nominal_tarik_tunai;
             }
             if ($row->r_t_nominal_free_kembalian != 0) {
-                $keluar = rupiah($row->r_t_nominal_free_kembalian, 0);
+                $keluar = number_format($row->r_t_nominal_free_kembalian);
                 $trans_free = $prevSaldo - $row->r_t_nominal_free_kembalian;
                 $data[] = array(
                     'no_nota' => $row->r_t_nota_code,
                     'transaksi' => 'Free Kembalian',
                     'masuk' => 0,
                     'keluar' => $keluar,
-                    'saldo' => rupiah($trans_free, 0),
+                    'saldo' => number_format($trans_free),
                     'payment' => 2, 3, 4, 5, 6, 7, 8, 9,
                 );
                 $prevSaldo = $trans_free;
@@ -476,20 +505,48 @@ class LaporanKasHarianKasirController extends Controller
         } // saldo awal
         $saldo_terakhir = end($data)['saldo'];
         $data[] = array(
-            'no_nota' => 'Total',
-            'transaksi' => '',
-            'masuk' => rupiah($totalMasuk, 0),
-            'keluar' => rupiah($totalKeluar, 0),
+            'no_nota' => '',
+            'transaksi' => 'Total',
+            'masuk' => number_format($totalMasuk),
+            'keluar' => number_format($totalKeluar),
             'saldo' => $saldo_terakhir,
+            'payment' => 2, 3, 4, 5, 6, 7, 8, 9,
+        );
+        $data[] = array(
+            'no_nota' => '',
+            'transaksi' => 'Pembulatan',
+            'masuk' => number_format($pembulatanTF),
+            'keluar' => number_format($pembulatanTF),
+            'saldo' => '',
+            'payment' => 2, 3, 4, 5, 6, 7, 8, 9,
+        );
+        $data[] = array(
+            'no_nota' => '',
+            'transaksi' => 'Discount',
+            'masuk' => number_format($voucherTF),
+            'keluar' => number_format($voucherTF),
+            'saldo' => '',
+            'payment' => 2, 3, 4, 5, 6, 7, 8, 9,
+        );
+        $data[] = array(
+            'no_nota' => '',
+            'transaksi' => 'Voucher',
+            'masuk' => number_format($discountTF),
+            'keluar' => number_format($discountTF),
+            'saldo' => '',
+            'payment' => 2, 3, 4, 5, 6, 7, 8, 9,
+        );
+        $data[] = array(
+            'no_nota' => '',
+            'transaksi' => 'Grand Total',
+            'masuk' => number_format($totalMasuk - $pembulatanTF - $voucherTF - $discountTF),
+            'keluar' => number_format($totalKeluar - $pembulatanTF - $voucherTF - $discountTF),
+            'saldo' => '',
             'payment' => 2, 3, 4, 5, 6, 7, 8, 9,
         );
 
         $tgl = tgl_indo($request->tanggal);
         $w_nama = strtoupper($this->getNamaW($request->waroeng));
-        // $nama_user = DB::table('users')->where('users_id',$request->opr)->get()->name();
-        // $kacab = DB::table('history_jabatan')
-        // ->where('history_jabatan_m_w_code',$request->waroeng)
-        // ->first();
         $nama_kasir = DB::table('users')
             ->join('rekap_modal', 'rekap_modal_created_by', 'users_id')
             ->where('waroeng_id', $request->waroeng)
@@ -502,8 +559,6 @@ class LaporanKasHarianKasirController extends Controller
         $kasir = $nama_kasir->name;
         $shift = $sesi_kasir->rekap_modal_sesi;
 
-        // $id2 = [2,3,4,5,6,7];
-        //    return view('dashboard::lap_kas_harian_kasir_pdf',compact('data','tgl','w_nama','kacab','kasir','shift'));
         $pdf = pdf::loadview('dashboard::lap_kas_harian_kasir_pdf', compact('data', 'tgl', 'w_nama', 'kasir', 'shift'))->setPaper('a4');
         return $pdf->download('laporan_kas_kasir_' . strtolower($w_nama) . '_sesi_' . $shift . '_.pdf');
     }
@@ -543,217 +598,219 @@ class LaporanKasHarianKasirController extends Controller
                 'transaksi' => 'Modal awal',
                 'masuk' => 0,
                 'keluar' => 0,
-                'saldo' => rupiah($valModal->rekap_modal_nominal, 0),
+                'saldo' => number_format($valModal->rekap_modal_nominal),
             );
             $totalKeluar = 0;
             $totalMasuk = 0;
-            $prevSaldoMut = 0;
+            $pembulatan = 0;
+            $diskon = 0;
+            $voucher = 0;
+            $prevSaldo = $valModal->rekap_modal_nominal;
             foreach ($mutasi as $row) {
                 if ($row->r_m_m_debit != 0) {
                     $masuk = $row->r_m_m_debit;
-                    $modal = $valModal->rekap_modal_nominal - $row->r_m_m_debit;
-                    $tnp_modal = $prevSaldoMut - $row->r_m_m_debit;
-                    $saldo = $prevSaldoMut == 0 ? $modal : $tnp_modal;
+                    $modal = $valModal->rekap_modal_nominal + $row->r_m_m_debit;
+                    $tnp_modal = $prevSaldo + $row->r_m_m_debit;
+                    $saldo = $prevSaldo == 0 ? $modal : $tnp_modal;
                     $data[] = array(
                         'no_nota' => $row->r_m_m_id,
                         'transaksi' => $row->r_m_m_keterangan,
-                        'masuk' => rupiah($masuk, 0),
+                        'masuk' => number_format($masuk),
                         'keluar' => 0,
-                        'saldo' => rupiah($saldo, 0),
+                        'saldo' => number_format($saldo),
                     );
                     $totalMasuk += $row->r_m_m_debit;
-                    $prevSaldoMut = $saldo;
+                    $prevSaldo = $saldo;
                 }
                 if ($row->r_m_m_kredit != 0) {
                     $keluar = $row->r_m_m_kredit;
-                    $saldo = $prevSaldoMut + $row->r_m_m_kredit;
+                    $saldo = $prevSaldo - $row->r_m_m_kredit;
                     $data[] = array(
                         'no_nota' => $row->r_m_m_id,
                         'transaksi' => $row->r_m_m_keterangan,
                         'masuk' => 0,
-                        'keluar' => rupiah($keluar, 0),
-                        'saldo' => rupiah($saldo, 0),
+                        'keluar' => number_format($keluar),
+                        'saldo' => number_format($saldo),
                     );
                     $totalKeluar += $row->r_m_m_kredit;
-                    $prevSaldoMut = $saldo;
+                    $prevSaldo = $saldo;
                 }
             }
-            $prevSaldo = 0;
             foreach ($transaksi as $row) {
                 if ($row->r_t_nominal != 0) {
-                    $masuk = rupiah($row->r_t_nominal, 0);
-                    $trans_nom_mdl = $valModal->rekap_modal_nominal + $row->r_t_nominal;
-                    $trans_nom = $prevSaldo + $row->r_t_nominal;
-                    $saldo = $prevSaldo == 0 ? $trans_nom_mdl : $trans_nom;
+                    $masuk = number_format($row->r_t_nominal);
+                    $saldo = $prevSaldo + $row->r_t_nominal;
                     $data[] = array(
                         'no_nota' => $row->r_t_nota_code,
                         'transaksi' => 'Transaksi',
                         'masuk' => $masuk,
                         'keluar' => 0,
-                        'saldo' => rupiah($saldo, 0),
+                        'saldo' => number_format($saldo),
                     );
                     $prevSaldo = $saldo;
                     $totalMasuk += $row->r_t_nominal;
                 }
                 if ($row->r_t_nominal_pajak != 0) {
-                    $masuk = rupiah($row->r_t_nominal_pajak, 0);
+                    $masuk = number_format($row->r_t_nominal_pajak);
                     $trans_pajak = $prevSaldo + $row->r_t_nominal_pajak;
                     $data[] = array(
                         'no_nota' => $row->r_t_nota_code,
                         'transaksi' => 'Pajak',
                         'masuk' => $masuk,
                         'keluar' => 0,
-                        'saldo' => rupiah($trans_pajak, 0),
+                        'saldo' => number_format($trans_pajak),
                     );
                     $prevSaldo = $trans_pajak;
                     $totalMasuk += $row->r_t_nominal_pajak;
                 }
                 if ($row->r_t_nominal_sc != 0) {
-                    $masuk = rupiah($row->r_t_nominal_sc, 0);
+                    $masuk = number_format($row->r_t_nominal_sc);
                     $trans_sc = $prevSaldo + $row->r_t_nominal_sc;
                     $data[] = array(
                         'no_nota' => $row->r_t_nota_code,
                         'transaksi' => 'Servis Charge',
                         'masuk' => $masuk,
                         'keluar' => 0,
-                        'saldo' => rupiah($trans_sc, 0),
+                        'saldo' => number_format($trans_sc),
                     );
                     $prevSaldo = $trans_sc;
                     $totalMasuk += $row->r_t_nominal_sc;
                 }
+
                 if ($row->r_t_nominal_diskon != 0) {
-                    $masuk = rupiah($row->r_t_nominal_diskon, 0);
+                    $masuk = number_format($row->r_t_nominal_diskon);
                     $trans_diskon = $prevSaldo + $row->r_t_nominal_diskon;
                     $data[] = array(
                         'no_nota' => $row->r_t_nota_code,
-                        'transaksi' => 'Voucher',
+                        'transaksi' => 'Diskon',
                         'masuk' => $masuk,
                         'keluar' => 0,
-                        'saldo' => rupiah($trans_diskon, 0),
+                        'saldo' => number_format($trans_diskon),
                     );
                     $prevSaldo = $trans_diskon;
                     $totalMasuk += $row->r_t_nominal_diskon;
+                    $diskon += $row->r_t_nominal_diskon;
                 }
                 if ($row->r_t_nominal_voucher != 0) {
-                    $masuk = rupiah($row->r_t_nominal_voucher, 0);
+                    $masuk = number_format($row->r_t_nominal_voucher);
                     $trans_voucer = $prevSaldo + $row->r_t_nominal_voucher;
                     $data[] = array(
                         'no_nota' => $row->r_t_nota_code,
                         'transaksi' => 'Voucher',
                         'masuk' => $masuk,
                         'keluar' => 0,
-                        'saldo' => rupiah($trans_voucer, 0),
+                        'saldo' => number_format($trans_voucer),
                     );
                     $prevSaldo = $trans_voucer;
                     $totalMasuk += $row->r_t_nominal_voucher;
+                    $voucher += $row->r_t_nominal_voucher;
                 }
+
                 if ($row->r_t_nominal_pembulatan != 0) {
-                    $keluar = rupiah($row->r_t_nominal_pembulatan, 0);
+                    $keluar = number_format($row->r_t_nominal_pembulatan);
                     $trans_bulat = $prevSaldo - $row->r_t_nominal_pembulatan;
                     $data[] = array(
                         'no_nota' => $row->r_t_nota_code,
                         'transaksi' => 'Pembualatan',
                         'masuk' => 0,
                         'keluar' => $keluar,
-                        'saldo' => rupiah($trans_bulat, 0),
+                        'saldo' => number_format($trans_bulat),
                     );
                     $prevSaldo = $trans_bulat;
                     $totalKeluar += $row->r_t_nominal_pembulatan;
+                    $pembulatan += $row->r_t_nominal_pembulatan;
                 }
                 if ($row->r_t_nominal_tarik_tunai != 0) {
-                    $keluar = rupiah($row->r_t_nominal_tarik_tunai, 0);
+                    $keluar = number_format($row->r_t_nominal_tarik_tunai);
                     $trans_tarik = $prevSaldo - $row->r_t_nominal_tarik_tunai;
                     $data[] = array(
                         'no_nota' => $row->r_t_nota_code,
                         'transaksi' => 'Tarik Tunai',
                         'masuk' => 0,
                         'keluar' => $keluar,
-                        'saldo' => rupiah($trans_tarik, 0),
+                        'saldo' => number_format($trans_tarik),
                     );
                     $prevSaldo = $trans_tarik;
                     $totalKeluar += $row->r_t_nominal_tarik_tunai;
                 }
                 if ($row->r_t_nominal_free_kembalian != 0) {
-                    $keluar = rupiah($row->r_t_nominal_free_kembalian, 0);
+                    $keluar = number_format($row->r_t_nominal_free_kembalian);
                     $trans_free = $prevSaldo - $row->r_t_nominal_free_kembalian;
                     $data[] = array(
                         'no_nota' => $row->r_t_nota_code,
                         'transaksi' => 'Free Kembalian',
                         'masuk' => 0,
                         'keluar' => $keluar,
-                        'saldo' => rupiah($trans_free, 0),
+                        'saldo' => number_format($trans_free),
                     );
                     $prevSaldo = $trans_free;
                     $totalKeluar += $row->r_t_nominal_free_kembalian;
                 }
             }
-            $prevSaldoRef = 0;
             foreach ($refund as $row) {
                 if ($row->r_r_nominal_refund != 0) {
-                    $keluar = rupiah($row->r_r_nominal_refund, 0);
-                    $modal = $valModal->rekap_modal_nominal - $row->r_r_nominal_refund;
-                    $tnp_modal = $prevSaldoRef - $row->r_r_nominal_refund;
-                    $saldo = $prevSaldoRef == 0 ? $modal : $tnp_modal;
+                    $keluar = number_format($row->r_r_nominal_refund);
+                    $saldo = $prevSaldo - $row->r_r_nominal_refund;
                     $data[] = array(
                         'no_nota' => $row->r_r_nota_code,
                         'transaksi' => 'Refund Nominal',
                         'masuk' => 0,
                         'keluar' => $keluar,
-                        'saldo' => rupiah($saldo, 0),
+                        'saldo' => number_format($saldo),
                     );
-                    $prevSaldoRef = $saldo;
+                    $prevSaldo = $saldo;
                     $totalKeluar += $row->r_r_nominal_refund;
                 }
                 if ($row->r_r_nominal_refund_pajak != 0) {
-                    $keluar = rupiah($row->r_r_nominal_refund_pajak, 0);
-                    $saldo = $prevSaldoRef - $row->r_r_nominal_refund_pajak;
+                    $keluar = number_format($row->r_r_nominal_refund_pajak);
+                    $saldo = $prevSaldo - $row->r_r_nominal_refund_pajak;
                     $data[] = array(
                         'no_nota' => $row->r_r_nota_code,
                         'transaksi' => 'Refund Pajak',
                         'masuk' => 0,
                         'keluar' => $keluar,
-                        'saldo' => rupiah($saldo, 0),
+                        'saldo' => number_format($saldo),
                     );
-                    $prevSaldoRef = $saldo;
+                    $prevSaldo = $saldo;
                     $totalKeluar += $row->r_r_nominal_refund_pajak;
                 }
                 if ($row->r_r_nominal_refund_sc != 0) {
-                    $keluar = rupiah($row->r_r_nominal_refund_sc, 0);
-                    $saldo = $prevSaldoRef - $row->r_r_nominal_refund_sc;
+                    $keluar = number_format($row->r_r_nominal_refund_sc);
+                    $saldo = $prevSaldo - $row->r_r_nominal_refund_sc;
                     $data[] = array(
                         'no_nota' => $row->r_r_nota_code,
                         'transaksi' => 'Refund Service Charge',
                         'masuk' => 0,
                         'keluar' => $keluar,
-                        'saldo' => rupiah($saldo, 0),
+                        'saldo' => number_format($saldo),
                     );
-                    $prevSaldoRef = $saldo;
+                    $prevSaldo = $saldo;
                     $totalKeluar += $row->r_r_nominal_refund_sc;
                 }
                 if ($row->r_r_nominal_pembulatan_refund != 0) {
-                    $keluar = rupiah($row->r_r_nominal_pembulatan_refund, 0);
-                    $saldo = $prevSaldoRef - $row->r_r_nominal_pembulatan_refund;
+                    $keluar = number_format($row->r_r_nominal_pembulatan_refund);
+                    $saldo = $prevSaldo - $row->r_r_nominal_pembulatan_refund;
                     $data[] = array(
                         'no_nota' => $row->r_r_nota_code,
                         'transaksi' => 'Refund Pembulatan',
                         'masuk' => 0,
                         'keluar' => $keluar,
-                        'saldo' => rupiah($saldo, 0),
+                        'saldo' => number_format($saldo),
                     );
-                    $prevSaldoRef = $saldo;
+                    $prevSaldo = $saldo;
                     $totalKeluar += $row->r_r_nominal_pembulatan_refund;
                 }
                 if ($row->r_r_nominal_free_kembalian_refund != 0) {
-                    $keluar = rupiah($row->r_r_nominal_free_kembalian_refund, 0);
-                    $saldo = $prevSaldoRef - $row->r_r_nominal_free_kembalian_refund;
+                    $keluar = number_format($row->r_r_nominal_free_kembalian_refund);
+                    $saldo = $prevSaldo - $row->r_r_nominal_free_kembalian_refund;
                     $data[] = array(
                         'no_nota' => $row->r_r_nota_code,
                         'transaksi' => 'Refund Free Kembalian',
                         'masuk' => 0,
                         'keluar' => $keluar,
-                        'saldo' => rupiah($saldo, 0),
+                        'saldo' => number_format($saldo),
                     );
-                    $prevSaldoRef = $saldo;
+                    $prevSaldo = $saldo;
                     $totalKeluar += $row->r_r_nominal_free_kembalian_refund;
                 }
             }
@@ -761,10 +818,38 @@ class LaporanKasHarianKasirController extends Controller
         $saldo_terakhir = end($data)['saldo'];
         $data[] = array(
             'no_nota' => '',
-            'transaksi' => 'Total',
-            'masuk' => rupiah($totalMasuk, 0),
-            'keluar' => rupiah($totalKeluar, 0),
-            'saldo' => $saldo_terakhir,
+            'transaksi' => '<strong> Total </strong>',
+            'masuk' => '<strong>' . number_format($totalMasuk) . '</strong>',
+            'keluar' => '<strong>' . number_format($totalKeluar) . '</strong>',
+            'saldo' => '<strong>' . $saldo_terakhir . '</strong>',
+        );
+        $data[] = array(
+            'no_nota' => '',
+            'transaksi' => '<strong> Pembulatan </strong>',
+            'masuk' => '<strong>' . number_format($pembulatan) . '</strong>',
+            'keluar' => '<strong>' . number_format($pembulatan) . '</strong>',
+            'saldo' => '',
+        );
+        $data[] = array(
+            'no_nota' => '',
+            'transaksi' => '<strong> Discount </strong>',
+            'masuk' => '<strong>' . number_format($diskon) . '</strong>',
+            'keluar' => '<strong>' . number_format($diskon) . '</strong>',
+            'saldo' => '',
+        );
+        $data[] = array(
+            'no_nota' => '',
+            'transaksi' => '<strong> Voucher </strong>',
+            'masuk' => '<strong>' . number_format($voucher) . '</strong>',
+            'keluar' => '<strong>' . number_format($voucher) . '</strong>',
+            'saldo' => '',
+        );
+        $data[] = array(
+            'no_nota' => '',
+            'transaksi' => '<strong> Grand Total </strong>',
+            'masuk' => '<strong>' . number_format($totalMasuk - $pembulatan - $diskon - $voucher) . '</strong>',
+            'keluar' => '<strong>' . number_format($totalKeluar - $pembulatan - $diskon - $voucher) . '</strong>',
+            'saldo' => '',
         );
 
         $output = array('data' => $data);
