@@ -40,17 +40,19 @@ class RekapNotaHarianKategoriController extends Controller
 
     public function select_waroeng(Request $request)
     {
-        $waroeng = DB::table('m_w')
-            ->select('m_w_id', 'm_w_nama', 'm_w_code')
-            ->where('m_w_m_area_id', $request->id_area)
-            ->orderBy('m_w_id', 'asc')
-            ->get();
-        $data = array();
-        foreach ($waroeng as $val) {
-            $data[$val->m_w_id] = [$val->m_w_nama];
-            $data['all'] = ['all waroeng'];
+        if ($request->id_area != 'all') {
+            $waroeng = DB::table('m_w')
+                ->select('m_w_id', 'm_w_nama', 'm_w_code')
+                ->where('m_w_m_area_id', $request->id_area)
+                ->orderBy('m_w_id', 'asc')
+                ->get();
+            $data = array();
+            foreach ($waroeng as $val) {
+                $data[$val->m_w_id] = [$val->m_w_nama];
+                $data['all'] = ['all waroeng'];
+            }
+            return response()->json($data);
         }
-        return response()->json($data);
     }
 
     public function tanggal_rekap(Request $request)

@@ -237,7 +237,7 @@ $(document).ready(function() {
         var operator  = $('.filter_operator option:selected').val();  
         var show_operator = $("#operator_select").val();    
         
-        if (tanggal === "" || area === "" || waroeng === "") {
+        if (tanggal === "" && (area === "" || waroeng === "")) {
             Swal.fire({
             title: 'Informasi',
             text: 'Silahkan lengkapi semua kolom',
@@ -362,6 +362,8 @@ $(document).ready(function() {
         if (id_area == 'all'){
             $("#select_waroeng").hide();
             $("#select_operator").hide();
+            $(".filter_waroeng").empty();
+            $(".filter_operator").empty();
         } else {
             $("#select_waroeng").show();
             $("#select_operator").show();
@@ -420,6 +422,7 @@ $(document).ready(function() {
             $("#select_operator").hide();
             $("#operator_select").val('tidak').trigger('change');
             $("#operator").hide();
+            $(".filter_operator").empty();
         } else {
             $("#select_operator").show();
         }

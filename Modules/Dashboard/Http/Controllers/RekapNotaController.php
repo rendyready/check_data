@@ -49,22 +49,22 @@ class RekapNotaController extends Controller
 
     public function select_user(Request $request)
     {
-        $user = DB::table('rekap_modal')
-            ->join('users', 'users_id', 'rekap_modal_created_by')
+        $user = DB::table('rekap_transaksi')
+            ->join('users', 'r_t_created_by', 'users_id')
             ->select('users_id', 'name');
         if (in_array(Auth::user()->waroeng_id, $this->get_akses_area())) {
-            $user->where('rekap_modal_m_w_id', $request->id_waroeng);
+            $user->where('r_t_m_w_id', $request->id_waroeng);
         } else {
-            $user->where('rekap_modal_m_w_id', Auth::user()->waroeng_id);
+            $user->where('r_t_m_w_id', Auth::user()->waroeng_id);
         }
         if (strpos($request->tanggal, 'to') !== false) {
             [$start, $end] = explode('to', $request->tanggal);
-            $user->whereBetween('rekap_modal_tanggal', [$start, $end]);
+            $user->whereBetween('r_t_tanggal', [$start, $end]);
         } else {
-            $user->whereDate('rekap_modal_tanggal', '=', $request->tanggal);
+            $user->where('r_t_tanggal', $request->tanggal);
         }
-        $user1 = $user->orderBy('users_id', 'asc')
-            ->get();
+        $user1 = $user->orderBy('users_id', 'asc')->get();
+
         $data = array();
         foreach ($user1 as $val) {
             $data[$val->users_id] = [$val->name];

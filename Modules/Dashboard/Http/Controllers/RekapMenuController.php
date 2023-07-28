@@ -64,45 +64,48 @@ class RekapMenuController extends Controller
 
     public function select_waroeng(Request $request)
     {
-        $waroeng = DB::table('m_w')
-            ->select('m_w_id', 'm_w_nama', 'm_w_code');
         if ($request->id_area != 'all') {
-            $waroeng->where('m_w_m_area_id', $request->id_area);
+            $waroeng = DB::table('m_w')
+                ->select('m_w_id', 'm_w_nama', 'm_w_code');
+            if ($request->id_area != 'all') {
+                $waroeng->where('m_w_m_area_id', $request->id_area);
+            }
+            $waroeng = $waroeng->orderBy('m_w_id', 'asc')
+                ->get();
+            $data = array();
+            foreach ($waroeng as $val) {
+                $data[$val->m_w_id] = [$val->m_w_nama];
+                $data['all'] = ['all waroeng'];
+            }
+            return response()->json($data);
         }
-        $waroeng = $waroeng->orderBy('m_w_id', 'asc')
-            ->get();
-        $data = array();
-        foreach ($waroeng as $val) {
-            $data[$val->m_w_id] = [$val->m_w_nama];
-            $data['all'] = ['all waroeng'];
-        }
-        return response()->json($data);
     }
 
     public function select_trans(Request $request)
     {
-        $trans = DB::table('m_transaksi_tipe')
-            ->join('rekap_transaksi', 'r_t_m_t_t_id', 'm_t_t_id')
-            ->select('m_t_t_id', 'm_t_t_name');
-        if (in_array(Auth::user()->waroeng_id, $this->get_akses_area())) {
-            if ($request->id_waroeng != 'all') {
-                $trans->where('r_t_m_w_id', $request->id_waroeng);
+        if ($request->id_waroeng != 'all') {
+            $trans = DB::table('m_transaksi_tipe')
+                ->join('rekap_transaksi', 'r_t_m_t_t_id', 'm_t_t_id')
+                ->select('m_t_t_id', 'm_t_t_name');
+            if (in_array(Auth::user()->waroeng_id, $this->get_akses_area())) {
+                if ($request->id_waroeng != 'all') {
+                    $trans->where('r_t_m_w_id', $request->id_waroeng);
+                }
+            } else {
+                if ($request->id_waroeng != 'all') {
+                    $trans->where('r_t_m_w_id', Auth::user()->waroeng_id);
+                }
             }
-        } else {
-            if ($request->id_waroeng != 'all') {
-                $trans->where('r_t_m_w_id', Auth::user()->waroeng_id);
+            $trans = $trans->orderBy('m_t_t_id', 'asc')
+                ->get();
+
+            $data = array();
+            foreach ($trans as $val) {
+                $data['all'] = ['all transaksi'];
+                $data[$val->m_t_t_name] = [$val->m_t_t_name];
             }
+            return response()->json($data);
         }
-        $trans = $trans->orderBy('m_t_t_id', 'asc')
-            ->get();
-
-        $data = array();
-        foreach ($trans as $val) {
-            $data['all'] = ['all transaksi'];
-            $data[$val->m_t_t_name] = [$val->m_t_t_name];
-        }
-        return response()->json($data);
-
     }
 
     public function show(Request $request)

@@ -39,7 +39,6 @@
                                                         </option>
                                                     @endforeach
                                                     <option value="all">all area</option>
-                                                    <option value="all">All Area</option>
                                                 </select>
                                             @else
                                                 <select id="filter_area" data-placeholder="Pilih Area" style="width: 100%;"
@@ -152,7 +151,7 @@ $(document).ready(function() {
         var tanggal  = $('.filter_tanggal').val();
         var trans    = $('.filter_trans option:selected').val();
 
-        if (tanggal === "" || area === "" || waroeng === "" || trans === "") {
+        if (tanggal === "" && (area === "" || waroeng === "") && trans === "") {
             Swal.fire({
             title: 'Informasi',
             text: 'Silahkan lengkapi semua kolom',
@@ -253,6 +252,8 @@ if(HakAksesPusat){
         if (id_area == 'all'){
             $("#select_waroeng").hide();
             $("#select_operator").hide();
+            $(".filter_waroeng").empty();
+            $(".filter_trans").empty();
         } else {
             $("#select_waroeng").show();
             $("#select_operator").show();
@@ -305,6 +306,7 @@ if(HakAksesPusat){
 
         if (id_waroeng == 'all'){
             $("#select_operator").hide();
+            $(".filter_trans").empty();
         } else {
             $("#select_operator").show();
         }

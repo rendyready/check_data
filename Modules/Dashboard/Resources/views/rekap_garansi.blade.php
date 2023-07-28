@@ -166,44 +166,56 @@ $(document).ready(function() {
         var waroeng  = $('.filter_waroeng').val();
         var tanggal  = $('.filter_tanggal').val();
         var operator = $('.filter_operator').val();
-    $('#tampil_rekap').DataTable({
-        button: [],
-        destroy: true,
-        orderCellsTop: true,
-        processing: true,
-        scrollX: true,
-        // scrollY: '300px',
-        lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
-        pageLength: 10,
-        columnDefs: [ 
+        if (tanggal === "" && (area === "" || waroeng === "") && operator === "") {
+            Swal.fire({
+            title: 'Informasi',
+            text: 'Silahkan lengkapi semua kolom',
+            confirmButtonColor: '#d33',
+            confirmButtonText: 'OK',
+            customClass: {
+                confirmButton: 'bg-red-500',
+            },
+            });
+          } else {
+        $('#tampil_rekap').DataTable({
+            button: [],
+            destroy: true,
+            orderCellsTop: true,
+            processing: true,
+            scrollX: true,
+            // scrollY: '300px',
+            lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+            pageLength: 10,
+            columnDefs: [ 
+                        {
+                            targets: '_all',
+                            className: 'dt-body-center'
+                        },
+                    ],
+            buttons: [
                     {
-                        targets: '_all',
-                        className: 'dt-body-center'
-                    },
+                        extend: 'excelHtml5',
+                        text: 'Export Excel',
+                        title: 'Rekap Garansi - ' + tanggal,
+                        pageSize: 'A4',
+                        pageOrientation: 'potrait',
+                    }
                 ],
-        buttons: [
-                {
-                    extend: 'excelHtml5',
-                    text: 'Export Excel',
-                    title: 'Rekap Garansi - ' + tanggal,
-                    pageSize: 'A4',
-                    pageOrientation: 'potrait',
+            ajax: {
+                url: '{{route("rekap_garansi.show")}}',
+                data : {
+                    area: area,
+                    waroeng: waroeng,
+                    tanggal: tanggal,
+                    operator: operator,
+                },
+                type : "GET",
+                },
+                success:function(data){ 
+                    console.log(data);
                 }
-            ],
-        ajax: {
-            url: '{{route("rekap_garansi.show")}}',
-            data : {
-                area: area,
-                waroeng: waroeng,
-                tanggal: tanggal,
-                operator: operator,
-            },
-            type : "GET",
-            },
-            success:function(data){ 
-                console.log(data);
-            }
-      });
+        });
+        }
     });
 
     if(HakAksesPusat){
@@ -215,6 +227,8 @@ $(document).ready(function() {
         if (id_area == 'all'){
             $("#select_waroeng").hide();
             $("#select_operator").hide();
+            $(".filter_waroeng").empty();
+            $(".filter_operator").empty();
         } else {
             $("#select_waroeng").show();
             $("#select_operator").show();
@@ -259,6 +273,7 @@ $(document).ready(function() {
 
         if (id_waroeng == 'all'){
             $("#select_operator").hide();
+            $(".filter_operator").empty();
         } else {
             $("#select_operator").show();
         }

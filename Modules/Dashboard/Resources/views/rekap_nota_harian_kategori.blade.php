@@ -217,7 +217,7 @@ $(document).ready(function() {
         var waroeng  = $('.filter_waroeng option:selected').val();
         var tanggal  = $('.filter_tanggal').val(); 
 
-        if (tanggal === "" || area === "" || waroeng === "") {
+        if (tanggal === "" && (area === "" || waroeng === "")) {
             Swal.fire({
             title: 'Informasi',
             text: 'Silahkan lengkapi semua kolom',
@@ -279,6 +279,7 @@ $(document).ready(function() {
 
         if (id_area == 'all'){
             $("#select_waroeng").hide();
+            $(".filter_waroeng").empty();
         } else {
             $("#select_waroeng").show();
         }

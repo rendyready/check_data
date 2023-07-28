@@ -129,48 +129,61 @@ $(document).ready(function() {
 
     //tampil data
     $('#cari').on('click', function() {
-        var area     = $('.filter_area').val();
-        var waroeng  = $('.filter_waroeng').val();
-        var menu     = $('.filter_menu').val();
-        var trans    = $('.filter_transaksi').val();
-    $('#tampil_rekap').DataTable({
-        destroy: true,
-        orderCellsTop: true,
-        processing: true,
-        scrollX: true,
-        lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
-        pageLength: 10,
-        columnDefs: [ 
-                    {
-                        targets: '_all',
-                        className: 'dt-body-center'
+        var area     = $('.filter_area option:selected').val();
+        var waroeng  = $('.filter_waroeng option:selected').val();
+        var menu     = $('.filter_menu option:selected').val();
+        var trans    = $('.filter_transaksi option:selected').val();
+        if ((menu === "" || area === "") && waroeng === "" && trans === "") {
+                Swal.fire({
+                    title: 'Informasi',
+                    text: 'Silahkan lengkapi semua kolom',
+                    confirmButtonColor: '#d33',
+                    confirmButtonText: 'OK',
+                    customClass: {
+                        confirmButton: 'bg-red-500',
                     },
+                });
+            } else {
+        $('#tampil_rekap').DataTable({
+            destroy: true,
+            orderCellsTop: true,
+            processing: true,
+            scrollX: true,
+            lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+            pageLength: 10,
+            columnDefs: [ 
+                        {
+                            targets: '_all',
+                            className: 'dt-body-center'
+                        },
+                    ],
+            buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: 'Export Excel',
+                        title: 'Cek Status Menu',
+                        pageSize: 'A4',
+                        pageOrientation: 'potrait',
+                    }
                 ],
-        buttons: [
-                {
-                    extend: 'excelHtml5',
-                    text: 'Export Excel',
-                    title: 'Cek Status Menu',
-                    pageSize: 'A4',
-                    pageOrientation: 'potrait',
-                }
-            ],
-        ajax: {
-            url: '{{route("status_menu.show")}}',
-            data : {
-                area: area,
-                waroeng: waroeng,
-                menu: menu,
-                trans: trans,
-            },
-            type : "GET",
-            },
-            success:function(data){ 
+            ajax: {
+                url: '{{route("status_menu.show")}}',
+                data : {
+                    area: area,
+                    waroeng: waroeng,
+                    menu: menu,
+                    trans: trans,
+                },
+                type : "GET",
+                },
+                success: function(data) {
                 console.log(data);
-            }
+                
+                },
       });
+    }
     });
-
+    
     //filter waroeng
       $('.filter_area').on('select2:select', function(){
         var area = $(this).val();
@@ -178,6 +191,7 @@ $(document).ready(function() {
 
         if (area == 'all'){
             $("#select_waroeng").hide();
+            $(".filter_waroeng").empty();
         } else {
             $("#select_waroeng").show();
         }
