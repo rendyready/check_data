@@ -126,8 +126,7 @@
                         <div class="block-header block-header-default bg-pulse">
                             <h3 class="block-title" id="myModalLabel2"></h3>
                             <div class="block-options">
-                                <button type="button" class="btn-block-option" data-bs-dismiss="modal"
-                                    aria-label="Close">
+                                <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
                                     <i class="fa fa-fw fa-times"></i>
                                 </button>
                             </div>
@@ -296,6 +295,21 @@
                                     </div>
                                 </div>
                                 <div class="harga_nota">
+
+                                </div>
+                                <div class="mb-4">
+                                    <div class="form-group">
+                                        <label for="tambah_kemasan">Tambahkan / Ubah Kemasan</label>
+                                        <div>
+                                            <select class="js-select2" id="tambah_kemasan" name="tambah_kemasan"
+                                                style="width: 100%;">
+                                                <option value="0">Tidak</option>
+                                                <option value="1">Ya</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="kemasan">
 
                                 </div>
                                 <div class="mb-4 status_menu" style="display: none">
@@ -577,6 +591,25 @@
                     },
                     error: function() {}
                 });
+            });
+            $('#tambah_kemasan').on('change', function() {
+                var val = $(this).val();
+                if (val == '0') {
+                    $('.kemasan').empty();
+                } else {
+                    $('.kemasan').append(
+                        '<div class="mb-4">' +
+                        '<div class="form-group">' +
+                        '<label for="m_menu_harga_package">Harga Kemasan</label>' +
+                        '<div>' +
+                        '<input type="text" id="m_menu_harga_package"' +
+                        'name="m_menu_harga_package" class="form-control number">' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>'
+                    );
+
+                }
             });
         });
     </script>

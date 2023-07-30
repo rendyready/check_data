@@ -18,11 +18,11 @@ return new class extends Migration
         });
 
         Schema::table('m_menu_harga', function (Blueprint $table) {
-            $table->decimal('m_menu_harga_package',10,2)->nullable();
+            $table->decimal('m_menu_harga_package',10,2)->default(0);
         });
 
         Schema::table('rekap_transaksi', function (Blueprint $table) {
-            $table->decimal('r_t_detail_package_price',10,2)->nullable();
+            $table->decimal('r_t_detail_package_price',10,2)->default(0);
         });
     }
 

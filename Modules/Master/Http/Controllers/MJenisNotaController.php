@@ -104,6 +104,7 @@ class MJenisNotaController extends Controller
                         'm_menu_harga_status' => $key->m_menu_harga_status,
                         'm_menu_harga_tax_status' => $key->m_menu_harga_tax_status,
                         'm_menu_harga_sc_status' => $key->m_menu_harga_sc_status,
+                        'm_menu_harga_package' => $key->m_menu_harga_package,
                         'm_menu_harga_status_sync' => 'send',
                         'm_menu_harga_created_by' => $user_id,
                     ];
@@ -118,6 +119,7 @@ class MJenisNotaController extends Controller
                         'm_menu_harga_sc_status' => $key->m_menu_harga_sc_status,
                         'm_menu_harga_status_sync' => 'send',
                         'm_menu_harga_client_target' => DB::raw('DEFAULT'),
+                        'm_menu_harga_package' => $key->m_menu_harga_package,
                         'm_menu_harga_updated_by' => $user_id,
                         'm_menu_harga_updated_at' => $created_at,
                     ];
@@ -178,6 +180,9 @@ class MJenisNotaController extends Controller
                     } else {
                         $data['m_menu_harga_nominal'] = convertfloat($request->nom_harga[$key]);
                         $data['m_menu_harga_status_sync'] = 'send';
+                        if ($request->m_menu_harga_package) {
+                            $data['m_menu_harga_package'] = convertfloat($request->m_menu_harga_package);
+                        }
                     }
 
                     if (isset($hargaMenu)) {
@@ -200,6 +205,7 @@ class MJenisNotaController extends Controller
                             $data['m_menu_harga_m_produk_id'] = $request->m_produk_id;
                             $data['m_menu_harga_status'] = 1;
                             $data['m_menu_harga_tax_status'] = 1;
+                            $data['m_menu_harga_package'] = convertfloat($request->m_menu_harga_package);
                             $data['m_menu_harga_created_by'] = $user->users_id;
                             $data['m_menu_harga_created_at'] = $time;
                             $data['m_menu_harga_client_target'] = DB::raw('DEFAULT');
@@ -303,17 +309,17 @@ class MJenisNotaController extends Controller
                 ]);
             } else {
                 MMenuHarga::where('m_menu_harga_m_jenis_nota_id', $request->m_menu_harga_m_jenis_nota_id)
-                ->where('m_menu_harga_m_produk_id', $request->m_menu_harga_m_produk_id)
-                ->update([
-                    'm_menu_harga_nominal' => convertfloat($request->m_menu_harga_nominal),
-                    'm_menu_harga_sc_status' => $request->m_menu_harga_sc_status,
-                    'm_menu_harga_status' => $request->m_menu_harga_status,
-                    'm_menu_harga_tax_status' => $request->m_menu_harga_tax_status,
-                    'm_menu_harga_status_sync' => 'send',
-                    'm_menu_harga_updated_at' => Carbon::now(),
-                    'm_menu_harga_updated_by' => Auth::user()->users_id,
-                    'm_menu_harga_client_target' => DB::raw('DEFAULT'),
-                ]);
+                    ->where('m_menu_harga_m_produk_id', $request->m_menu_harga_m_produk_id)
+                    ->update([
+                        'm_menu_harga_nominal' => convertfloat($request->m_menu_harga_nominal),
+                        'm_menu_harga_sc_status' => $request->m_menu_harga_sc_status,
+                        'm_menu_harga_status' => $request->m_menu_harga_status,
+                        'm_menu_harga_tax_status' => $request->m_menu_harga_tax_status,
+                        'm_menu_harga_status_sync' => 'send',
+                        'm_menu_harga_updated_at' => Carbon::now(),
+                        'm_menu_harga_updated_by' => Auth::user()->users_id,
+                        'm_menu_harga_client_target' => DB::raw('DEFAULT'),
+                    ]);
             }
         } else {
             $get_nota = DB::table('m_jenis_nota')
