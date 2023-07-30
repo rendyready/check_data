@@ -11,7 +11,7 @@ use App\Helpers\Helper;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
-
+use Illuminate\Support\Collection;
 
 
 class CronjobController extends Controller
@@ -1426,16 +1426,37 @@ class CronjobController extends Controller
             ]);
             exit();
         }
+        // return "tes";
+        // $user = $DbSource->table('users')->count();
+        // return response($user);
+        $tab = $DbSource->table('users')->orderBy('users_id','asc')->chunk(500, function($results)
+        {
+            // your logic
+            return $results;
+        });
+
+        return $tab;
+        $usersArray = array();
+        $test = $DbSource->table('users')->orderBy('users_id','asc')->chunk(1000, function ($users) use ($usersArray) {
+
+            foreach ($users as $user) {
+                // echo $user->users_id;
+                // exit;
+                // array_push($usersArray,$user->users_id);
+            }
+            return $users;
+        });
+        return response($test);
 
         #GET Data is open?
-        $getDataOpen = $DbSource->table('cronjob')
-            ->where('cronjob_name','getdataupdate:cron')
-            ->first();
+        // $getDataOpen = $DbSource->table('cronjob')
+        //     ->where('cronjob_name','getdataupdate:cron')
+        //     ->first();
 
-        if ($getDataOpen->cronjob_status == 'close') {
-            Log::alert("GET DATA NOT ALLOWED. SERVER BUSY.");
-            exit();
-        }
+        // if ($getDataOpen->cronjob_status == 'close') {
+        //     Log::alert("GET DATA NOT ALLOWED. SERVER BUSY.");
+        //     exit();
+        // }
 
         #GET Destination
         $dest = DB::table('db_con')->whereIn('db_con_location',['waroeng','area'])

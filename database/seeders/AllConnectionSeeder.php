@@ -857,8 +857,8 @@ class AllConnectionSeeder extends Seeder
                 'db_con_sync_status' => 'tidak',
                 'db_con_host' => $val['host'],
                 'db_con_port' => '5432',
-                'db_con_dbname' => 'admin_sipedas_v4',
-                'db_con_username' => 'admin_root',
+                'db_con_dbname' => 'admin_sipedas',
+                'db_con_username' => 'admin_sipedas55',
                 'db_con_password' => Helper::customCrypt('Waroeng@55'),
             ]);
         }

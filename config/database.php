@@ -78,6 +78,21 @@ return [
             'sslmode' => 'prefer',
         ],
 
+        'cronpusat' => [
+            'driver' => 'pgsql',
+            'url' => env('DATABASE_URL'),
+            'host' => env('DB_PUSAT_HOST', '127.0.0.1'),
+            'port' => env('DB_PUSAT_PORT', '5432'),
+            'database' => env('DB_PUSAT_DATABASE', 'forge'),
+            'username' => env('DB_PUSAT_USERNAME', 'forge'),
+            'password' => env('DB_PUSAT_PASSWORD', ''),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'search_path' => 'public',
+            'sslmode' => 'prefer',
+        ],
+
         'sqlsrv' => [
             'driver' => 'sqlsrv',
             'url' => env('DATABASE_URL'),

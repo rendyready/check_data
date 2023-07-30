@@ -10,14 +10,14 @@ use App\Helpers\Helper;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Log;
 
-class GetData extends Command
+class SendData extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'getdata:cron';
+    protected $signature = 'senddata:cron';
 
     /**
      * The console command description.
@@ -35,29 +35,29 @@ class GetData extends Command
     {
         #Cek cronjob status on Local
         $cronStatus = DB::table('cronjob')
-                    ->where('cronjob_name','getdata:cron')
+                    ->where('cronjob_name','senddata:cron')
                     ->first();
 
         if (!empty($cronStatus)) {
             if ($cronStatus->cronjob_status == 'open') {
-                Log::info("Cronjob GET Data START at ". Carbon::now()->format('Y-m-d H:i:s'));
+                Log::info("Cronjob SEND Data START at ". Carbon::now()->format('Y-m-d H:i:s'));
             }else{
-                Log::info("Cronjob GET Data CLOSED");
+                Log::info("Cronjob SEND Data CLOSED");
                 return Command::SUCCESS;
             }
         }else{
-            Log::info("Cronjob GET Data CLOSED");
+            Log::info("Cronjob SEND Data CLOSED");
             return Command::SUCCESS;
         }
 
         #get source
         $getSourceConn = DB::table('db_con')
             ->where('db_con_sync_status','on')
-            ->where('db_con_getdata_status','source')
+            ->where('db_con_senddata_status','source')
             ->first();
 
         if (empty($getSourceConn)) {
-            Log::info("Cronjob GET Data, SOURCE NOT ACTIVE");
+            Log::info("Cronjob SEND Data, SOURCE NOT ACTIVE");
             return Command::SUCCESS;
         }
 
@@ -101,63 +101,74 @@ class GetData extends Command
         #GET Destination
         $dest = DB::table('db_con')
         ->where('db_con_sync_status','on')
-        ->where('db_con_getdata_status','target')
-        ->first();
+        ->where('db_con_senddata_status','target')
+        ->get();
 
         if (empty($dest)) {
-            Log::info("Cronjob GET Data, ALL Target NOT ACTIVE");
+            Log::info("Cronjob SEND Data, ALL Target NOT ACTIVE");
             return Command::SUCCESS;
         }
 
-        #GET Data is open from this destination?
-        $getDataOpen = DB::connection('cronpusat')
+        foreach ($dest as $keyDest => $valDest) {
+            #GET Data is open from this destination?
+            $getDataOpen = DB::connection('cronpusat')
             ->table('db_con')
-            ->where('db_con_host',$dest->db_con_host)
+            ->where('db_con_host',$valDest->db_con_host)
             ->first();
 
-        if ($getDataOpen->cronjob_status == 'off') {
-            Log::alert("GET DATA NOT ALLOWED FROM PUSAT. SERVER BUSY.");
-            exit();
-        }
-
-        Config::set("database.connections.destination", [
-            'driver' => $dest->db_con_driver,
-            'host' => $dest->db_con_host,
-            'port' => $dest->db_con_port,
-            'database' => $dest->db_con_dbname,
-            'username' => $dest->db_con_username,
-            'password' => Helper::customDecrypt($dest->db_con_password),
-            'charset' => 'utf8',
-            'prefix' => '',
-            'prefix_indexes' => true,
-            'search_path' => 'public',
-            'sslmode' => 'prefer',
-        ]);
-
-        try {
-            $cekConn = Schema::connection('destination')->hasTable('users');
-
-            $status = '';
-            if ($cekConn) {
-                $status = 'connect';
-                $DbDest = DB::connection('destination');
-                DB::table('db_con')->where('db_con_id',$dest->db_con_id)
-                ->update([
-                    'db_con_network_status' => $status
-                ]);
+            if ($getDataOpen->cronjob_status == 'off') {
+                Log::alert("SEND DATA To {$valDest->db_con_location_name} NOT ALLOWED FROM PUSAT.");
+                continue;
             }
 
-        } catch (\Exception $e) {
-            info("Could not connect to Destination. Error:" . $e);
-            DB::table('db_con')->where('db_con_id',$dest->db_con_id)
-                ->update([
-                    'db_con_network_status' => 'disconnect'
-                ]);
-            #skip executing on error connection
-            exit();
+            Config::set("database.connections.destination", [
+                'driver' => $valDest->db_con_driver,
+                'host' => $valDest->db_con_host,
+                'port' => $valDest->db_con_port,
+                'database' => $valDest->db_con_dbname,
+                'username' => $valDest->db_con_username,
+                'password' => Helper::customDecrypt($valDest->db_con_password),
+                'charset' => 'utf8',
+                'prefix' => '',
+                'prefix_indexes' => true,
+                'search_path' => 'public',
+                'sslmode' => 'prefer',
+            ]);
+
+            try {
+                $cekConn = Schema::connection('destination')->hasTable('users');
+
+                $status = '';
+                if ($cekConn) {
+                    $status = 'connect';
+                    $DbDest = DB::connection('destination');
+                    DB::table('db_con')->where('db_con_id',$valDest->db_con_id)
+                    ->update([
+                        'db_con_network_status' => $status
+                    ]);
+                }
+
+            } catch (\Exception $e) {
+                Log::info("Could not connect to Destination. {$valDest->db_con_location_name} OFFLINE ");
+                Log::alert("Error:" . $e);
+                DB::table('db_con')->where('db_con_id',$valDest->db_con_id)
+                    ->update([
+                        'db_con_network_status' => 'disconnect'
+                    ]);
+                #skip executing on error connection
+                continue;
+            }
+
+            $serverCode = ":{$valDest->db_con_m_w_id}:";
+
         }
 
-        $serverCode = ":{$dest->db_con_m_w_id}:";
+
+
+
+
+
+
 
         $getTableList = DB::connection('cronpusat')
             ->where('config_sync_for',env('SERVER_TYPE',''))

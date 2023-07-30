@@ -22,8 +22,9 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         $this->call([
-            DBConnectionSeeder::class,
-            // ConfigSyncSeeder::class,
+            AllConnectionSeeder::class,
+            // DBConnectionSeeder::class,
+            ConfigSyncMasterSeeder::class,
             ConfigSyncRekapSeeder::class,
             CronjobSeeder::class
         ]);
