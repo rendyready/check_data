@@ -237,6 +237,7 @@ class MJenisNotaController extends Controller
                     'm_menu_harga_sc_status',
                     'm_menu_harga_status',
                     'm_menu_harga_tax_status',
+                    'm_menu_harga_package',
                     'm_menu_harga_m_jenis_nota_id'
                 )
                 ->first(), 200);
@@ -267,6 +268,7 @@ class MJenisNotaController extends Controller
                 'm_menu_harga_status',
                 'm_menu_harga_tax_status',
                 'm_menu_harga_sc_status',
+                'm_menu_harga_package',
                 'm_produk_id'
             )
             ->get();
@@ -304,6 +306,7 @@ class MJenisNotaController extends Controller
                     'm_menu_harga_sc_status' => $request->m_menu_harga_sc_status,
                     'm_menu_harga_status' => $request->m_menu_harga_status,
                     'm_menu_harga_tax_status' => $request->m_menu_harga_tax_status,
+                    'm_menu_harga_package' => $request->m_menu_harga_package,
                     'm_menu_harga_created_at' => Carbon::now(),
                     'm_menu_harga_created_by' => Auth::user()->users_id,
                 ]);
@@ -334,6 +337,7 @@ class MJenisNotaController extends Controller
                         'm_menu_harga_sc_status' => $request->m_menu_harga_sc_status,
                         'm_menu_harga_status' => $request->m_menu_harga_status,
                         'm_menu_harga_tax_status' => $request->m_menu_harga_tax_status,
+                        'm_menu_harga_package' => $request->m_menu_harga_package,
                         'm_menu_harga_status_sync' => 'send',
                         'm_menu_harga_updated_at' => Carbon::now(),
                         'm_menu_harga_updated_by' => Auth::user()->users_id,

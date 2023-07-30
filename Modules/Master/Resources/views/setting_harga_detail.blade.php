@@ -11,8 +11,8 @@
                     </div>
                     <div class="block-content text-muted">
                         @if ($status == 'master')
-                        <a class="btn btn-success mr-5 mb-5 buttonInsert" value="" title="Edit" style="color: #fff"><i
-                            class="fa fa-plus mr-5"></i> Harga</a>
+                            <a class="btn btn-success mr-5 mb-5 buttonInsert" value="" title="Edit"
+                                style="color: #fff"><i class="fa fa-plus mr-5"></i> Harga</a>
                         @endif
                         @csrf
                         <div id="tabpane" class="block block-rounded overflow-hidden">
@@ -37,6 +37,7 @@
                                                         <th>No</th>
                                                         <th>Produk</th>
                                                         <th>Harga</th>
+                                                        <th>Harga Kemasan</th>
                                                         <th>Status</th>
                                                         <th>Pajak</th>
                                                         <th>Service</th>
@@ -69,6 +70,7 @@
                                                                         {{ rupiah($item->m_menu_harga_nominal) }}
                                                                     @endif
                                                                 </td>
+                                                                <td>{{ rupiah($item->m_menu_harga_package) }}</td>
                                                                 @php
                                                                     $statusHarga = 'Aktif';
                                                                     $statusPajak = 'Aktif';
@@ -128,7 +130,7 @@
                                         <input type="hidden" name="action" id="action">
                                         <input name="m_menu_harga_id" type="hidden" id="m_menu_harga_id">
                                         <input name="m_menu_harga_m_jenis_nota_id" type="hidden"
-                                            id="m_menu_harga_m_jenis_nota_id" value="{{$m_menu_harga_m_jenis_nota_id }}">
+                                            id="m_menu_harga_m_jenis_nota_id" value="{{ $m_menu_harga_m_jenis_nota_id }}">
                                         <input type="hidden" name="m_jenis_nota_m_t_t_id" id="m_jenis_nota_m_t_t_id">
                                         <input type="hidden" name="m_jenis_nota_m_w_id" id="m_jenis_nota_m_w_id">
                                     </div>
@@ -153,6 +155,15 @@
                                             <div>
                                                 <input type="text" id="m_menu_harga_nominal"
                                                     name="m_menu_harga_nominal" class="form-control number" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-4">
+                                        <div class="form-group">
+                                            <label for="m_menu_harga_package">Harga Kemasan</label>
+                                            <div>
+                                                <input type="text" id="m_menu_harga_package"
+                                                    name="m_menu_harga_package" class="form-control number" readonly>
                                             </div>
                                         </div>
                                     </div>
@@ -241,7 +252,7 @@
                     $("#m_menu_harga_sc_status").val('').trigger('change');
                     $("#formAction").attr('action', "/master/m_jenis_nota/simpan_harga");
                     $("#modal-block-select2").modal('show');
-                    $("#m_menu_harga_nominal").prop('readonly',false);
+                    $("#m_menu_harga_nominal").prop('readonly', false);
                     $('#action').val('add_harga');
                 });
                 $(".buttonEdit").on('click', function() {
@@ -262,13 +273,15 @@
                                 .trigger('change');
                             $("#m_menu_harga_nominal").val(respond.m_menu_harga_nominal).trigger(
                                 'change');
+                            $("#m_menu_harga_package").val(respond.m_menu_harga_package).trigger(
+                                'change');
                             $("#m_menu_harga_status").val(respond.m_menu_harga_status).trigger(
                                 'change');
                             $("#m_menu_harga_tax_status").val(respond.m_menu_harga_tax_status)
                                 .trigger('change');
                             $("#m_menu_harga_sc_status").val(respond.m_menu_harga_sc_status)
                                 .trigger('change');
-                                $("#m_menu_harga_nominal").prop('readonly',true);
+                            $("#m_menu_harga_nominal").prop('readonly', true);
                         },
                         error: function() {}
                     });

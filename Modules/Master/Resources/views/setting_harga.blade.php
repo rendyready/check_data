@@ -297,9 +297,9 @@
                                 <div class="harga_nota">
 
                                 </div>
-                                <div class="mb-4">
+                                <div class="mb-4 tambah_kemasan">
                                     <div class="form-group">
-                                        <label for="tambah_kemasan">Tambahkan / Ubah Kemasan</label>
+                                        <label for="tambah_kemasan">Tambahkan / Ubah Harga Kemasan</label>
                                         <div>
                                             <select class="js-select2" id="tambah_kemasan" name="tambah_kemasan"
                                                 style="width: 100%;">
@@ -457,6 +457,8 @@
                 $('.status_menu').show();
                 $("#update_harga").modal('show');
                 $('#action1').val('status_menu');
+                $('.tambah_kemasan').hide();
+                $('.kemasan').empty();
             });
             $(".buttonCopy").on('click', function() {
                 $("#myModalLabel2").html('Copy Harga Nota');
@@ -468,6 +470,7 @@
                 $("#update_harga").modal('show');
                 $('#action1').val('harga_menu');
                 $('.status_menu').hide();
+                $('.tambah_kemasan').show();
             });
             $(".buttonEdit").on('click', function() {
                 var id = $(this).attr('value');
