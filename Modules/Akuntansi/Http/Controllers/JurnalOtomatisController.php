@@ -2,11 +2,11 @@
 
 namespace Modules\Akuntansi\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class JurnalOtomatisController extends Controller
 {
@@ -16,8 +16,8 @@ class JurnalOtomatisController extends Controller
         $data = new \stdClass();
         $data->waroeng_nama = DB::table('m_w')->select('m_w_nama', 'm_w_id')->where('m_w_id', $waroeng_id)->first();
         $data->area_nama = DB::table('m_area')->join('m_w', 'm_w_m_area_id', 'm_area_id')->select('m_area_nama', 'm_area_id')->where('m_w_id', $waroeng_id)->first();
-        $data->akses_area = $this->get_akses_area();//mulai dari 1 - akhir
-        $data->akses_pusat = $this->get_akses_pusat();//1,2,3,4,5
+        $data->akses_area = $this->get_akses_area(); //mulai dari 1 - akhir
+        $data->akses_pusat = $this->get_akses_pusat(); //1,2,3,4,5
         $data->akses_pusar = $this->get_akses_pusar(); //mulai dari 6 - akhir
 
         $data->waroeng = DB::table('m_w')
@@ -35,17 +35,17 @@ class JurnalOtomatisController extends Controller
         $link = DB::table('m_link_akuntansi')->get();
 
         $jurnal = DB::table('rekap_transaksi')
-                ->selectRaw('r_t_tanggal, SUM(r_t_nominal_total_bayar) as total');
-                if (strpos($request->tanggal, 'to') !== false) {
-                    [$start, $end] = explode('to', $request->tanggal);
-                    $jurnal->whereBetween('r_t_tanggal', [$start, $end]);
-                } else {
-                    $jurnal->where('r_t_tanggal', $request->tanggal);
-                }
-                $jurnal = $jurnal->where('r_t_m_w_id', $request->waroeng)
-                ->groupby('r_t_tanggal')
-                ->orderby('r_t_tanggal', 'ASC')
-                ->get();
+            ->selectRaw('r_t_tanggal, SUM(r_t_nominal_total_bayar) as total');
+        if (strpos($request->tanggal, 'to') !== false) {
+            [$start, $end] = explode('to', $request->tanggal);
+            $jurnal->whereBetween('r_t_tanggal', [$start, $end]);
+        } else {
+            $jurnal->where('r_t_tanggal', $request->tanggal);
+        }
+        $jurnal = $jurnal->where('r_t_m_w_id', $request->waroeng)
+            ->groupby('r_t_tanggal')
+            ->orderby('r_t_tanggal', 'ASC')
+            ->get();
 
         $data = array();
         foreach ($modal as $valModal) {
@@ -57,7 +57,6 @@ class JurnalOtomatisController extends Controller
                 'lokasi' => 'debit',
             );
         }
-
 
         // foreach($jurnal as $valJurnal) {
         //     foreach ($link as $valLink){
