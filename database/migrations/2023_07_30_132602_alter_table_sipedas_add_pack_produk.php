@@ -21,7 +21,7 @@ return new class extends Migration
             $table->decimal('m_menu_harga_package',10,2)->default(0);
         });
 
-        Schema::table('rekap_transaksi', function (Blueprint $table) {
+        Schema::table('rekap_transaksi_detail', function (Blueprint $table) {
             $table->decimal('r_t_detail_package_price',10,2)->default(0);
         });
     }
@@ -33,7 +33,7 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('rekap_transaksi', function (Blueprint $table) {
+        Schema::table('rekap_transaksi_detail', function (Blueprint $table) {
             $table->dropColumn(['r_t_detail_package_price']);
         });
         Schema::table('m_menu_harga', function (Blueprint $table) {
