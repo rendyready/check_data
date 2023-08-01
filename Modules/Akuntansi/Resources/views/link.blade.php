@@ -33,15 +33,15 @@
                                                     <td id="{{ $no }}">
                                                         <select class="js-select2 form-select masterRekening text-center"
                                                             id="m_rekening_no_akun{{ $no }}"
-                                                            name="m_link_akuntansi_m_rekening_id[]" style="width: 100%;">
-                                                            <option
-                                                                value="{{ $items->m_link_akuntansi_m_rekening_no_akun }}">
+                                                            name="m_link_akuntansi_m_rekening_no_akun[]"
+                                                            style="width: 100%;">
+                                                            <option value="{{ $items->m_rekening_no_akun }}">
                                                                 {{ $items->m_rekening_nama }}</option>
                                                         </select>
                                                     </td>
                                                     <td><input type="text" id="fieldName{{ $no }}"
                                                             name="m_rekening_no_akun"
-                                                            value="{{ $items->m_link_akuntansi_m_rekening_no_akun }}"
+                                                            value="{{ $items->m_rekening_no_akun }}"
                                                             class="form-control text-center"
                                                             style="color:aliceblue; background-color: rgba(204,0,0, 0.6); "
                                                             readonly></td>

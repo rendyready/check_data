@@ -20,7 +20,6 @@ return new class extends Migration
             $table->bigInteger('m_link_akuntansi_id');
             $table->string('m_link_akuntansi_nama');
             $table->string('m_link_akuntansi_m_rekening_no_akun')->nullable();
-            $table->json('m_link_akuntansi_field_sync')->nullable();
             $table->bigInteger('m_link_akuntansi_created_by');
             $table->bigInteger('m_link_akuntansi_updated_by')->nullable();
             $table->bigInteger('m_link_akuntansi_deleted_by')->nullable();

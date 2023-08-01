@@ -16,7 +16,7 @@ class LinkAkuntansiController extends Controller
     public function index()
     {
         $list = DB::table('m_link_akuntansi')
-            ->select('m_link_akuntansi_nama', 'm_rekening_nama', 'm_link_akuntansi_id', 'm_link_akuntansi_m_rekening_no_akun')
+            ->select('m_link_akuntansi_nama', 'm_rekening_nama', 'm_link_akuntansi_id', 'm_rekening_no_akun')
             ->leftjoin('m_rekening', 'm_rekening_no_akun', 'm_link_akuntansi_m_rekening_no_akun')
             ->whereNull('m_link_akuntansi_deleted_at')
             ->orderBy('m_link_akuntansi_id', 'asc')

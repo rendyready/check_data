@@ -6,7 +6,7 @@
                 <div class="block block-themed h-100 mb-0">
                     <div class="block-header bg-pulse">
                         <h3 class="block-title">
-                            Jurnal Otomatis</h3>
+                            Laporan Jurnal</h3>
                     </div>
                     <div class="block-content text-muted">
                         <form id="rekap_insert">
@@ -84,6 +84,27 @@
                                 </div>
                             </div>
 
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <div class="row mb-1">
+                                        <label class="col-sm-3 col-form-label">Pembayaran</label>
+                                        <div class="col-sm-9">
+                                            <select id="filter_pembayaran" style="width: 100%;"
+                                                data-placeholder="Pilih Pembayaran"
+                                                class="cari f-area js-select2 form-control filter_pembayaran"
+                                                name="waroeng">
+                                                <option></option>
+                                                @foreach ($data->payment as $payment)
+                                                    <option value="{{ $payment->m_payment_method_id }}">
+                                                        {{ $payment->m_payment_method_name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div id="user-info" data-waroeng-id="{{ Auth::user()->waroeng_id }}"
                                 data-has-access="{{ in_array(Auth::user()->waroeng_id, $data->akses_area) ? 'true' : 'false' }}">
                             </div>
@@ -103,7 +124,9 @@
                                 <thead class="justify-content-center">
                                     <tr>
                                         <th>Tanggal</th>
+                                        <th>Nomor Akun</th>
                                         <th>Akun</th>
+                                        <th>Particul</th>
                                         <th>Debit</th>
                                         <th>Kredit</th>
                                     </tr>
@@ -125,10 +148,17 @@
         $(document).ready(function() {
             Codebase.helpersOnLoad(['jq-select2']);
 
+            var userInfo = document.getElementById('user-info');
+            var userInfoPusat = document.getElementById('user-info-pusat');
+            var waroengId = userInfo.dataset.waroengId;
+            var HakAksesArea = userInfo.dataset.hasAccess === 'true';
+            var HakAksesPusat = userInfoPusat.dataset.hasAccess === 'true';
+
             //filter tampil
             $('#cari').on('click', function() {
                 var waroeng = $('.filter_waroeng').val();
                 var tanggal = $('.filter_tanggal').val();
+                var payment = $('.filter_pembayaran').val();
                 $('#jurnal_tampil').DataTable({
                     buttons: [],
                     destroy: true,
@@ -142,19 +172,93 @@
                         data: {
                             waroeng: waroeng,
                             tanggal: tanggal,
+                            payment: payment,
                         },
                         type: "GET",
                     },
+                    columns: [{
+                            data: 'tanggal',
+                            class: 'text-center'
+                        },
+                        {
+                            data: 'no_akun',
+                            class: 'text-center'
+                        },
+                        {
+                            data: 'akun',
+                            class: 'text-center'
+                        },
+                        {
+                            data: 'particul',
+                            class: 'text-center'
+                        },
+                        {
+                            data: 'debit',
+                            class: 'text-center'
+                        },
+                        {
+                            data: 'kredit',
+                            class: 'text-center'
+                        },
+                    ],
                 });
             });
 
-            $("#jurnal_tampil").on('click', '#button_pdf', function() {
-                var id = $(this).attr('value');
-                var waroeng = $('.filter_waroeng').val();
-                var tanggal = $('.filter_tanggal').val();
-                var url = 'otomatis/export_pdf?id=' + id + '&waroeng=' + waroeng + '&tanggal=' + tanggal;
-                window.open(url, '_blank');
-            });
+            if (HakAksesPusat) {
+                $('.filter_area').on('select2:select', function() {
+                    var id_area = $(this).val();
+                    var tanggal = $('.filter_tanggal').val();
+                    var prev = $(this).data('previous-value');
+
+                    if (id_area == 'all') {
+                        $("#select_waroeng").hide();
+                        $("#select_operator").hide();
+                        $(".filter_waroeng").empty();
+                        $(".filter_operator").empty();
+                    } else {
+                        $("#select_waroeng").show();
+                        $("#select_operator").show();
+                    }
+
+                    if (id_area && tanggal) {
+                        $.ajax({
+                            type: "GET",
+                            url: '{{ route('otomatis.select_waroeng') }}',
+                            dataType: 'JSON',
+                            destroy: true,
+                            data: {
+                                id_area: id_area,
+                            },
+                            success: function(res) {
+                                // console.log(res);           
+                                if (res) {
+                                    $(".filter_waroeng").empty();
+                                    $(".filter_waroeng").append('<option></option>');
+                                    $.each(res, function(key, value) {
+                                        $(".filter_waroeng").append('<option value="' +
+                                            key + '">' + value + '</option>');
+                                    });
+                                } else {
+                                    $(".filter_waroeng").empty();
+                                }
+                            }
+                        });
+                    } else {
+                        alert('Harap lengkapi kolom tanggal');
+                        $(".filter_waroeng").empty();
+                        $(".filter_area").val(prev).trigger('change');
+                    }
+                    $(".filter_operator").empty();
+                });
+            }
+
+            // $("#jurnal_tampil").on('click', '#button_pdf', function() {
+            //     var id = $(this).attr('value');
+            //     var waroeng = $('.filter_waroeng').val();
+            //     var tanggal = $('.filter_tanggal').val();
+            //     var url = 'otomatis/export_pdf?id=' + id + '&waroeng=' + waroeng + '&tanggal=' + tanggal;
+            //     window.open(url, '_blank');
+            // });
 
             $('#filter_tanggal').flatpickr({
                 dateFormat: 'Y-m-d',
