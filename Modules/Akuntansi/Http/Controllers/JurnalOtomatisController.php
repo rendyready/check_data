@@ -50,11 +50,11 @@ class JurnalOtomatisController extends Controller
     {
         $kas = DB::table('m_link_akuntansi')
             ->join('m_rekening', 'm_rekening_no_akun', 'm_link_akuntansi_m_rekening_no_akun')
-            ->where('m_link_akuntansi_nama', 'Kas Transaksi - cash')
+            ->where('m_link_akuntansi_nama', 'Kas Transaksi')
             ->get();
         $nominal = DB::table('m_link_akuntansi')
             ->join('m_rekening', 'm_rekening_no_akun', 'm_link_akuntansi_m_rekening_no_akun')
-            ->where('m_link_akuntansi_nama', 'Nominal Transaksi - cash')
+            ->where('m_link_akuntansi_nama', 'Nominal Transaksi')
             ->get();
         $bank = DB::table('m_link_akuntansi')
             ->join('m_rekening', 'm_rekening_no_akun', 'm_link_akuntansi_m_rekening_no_akun')
@@ -62,39 +62,39 @@ class JurnalOtomatisController extends Controller
             ->get();
         $pajak = DB::table('m_link_akuntansi')
             ->join('m_rekening', 'm_rekening_no_akun', 'm_link_akuntansi_m_rekening_no_akun')
-            ->where('m_link_akuntansi_nama', 'Pajak Transaksi - cash')
+            ->where('m_link_akuntansi_nama', 'Pajak Transaksi')
             ->get();
         $sc = DB::table('m_link_akuntansi')
             ->join('m_rekening', 'm_rekening_no_akun', 'm_link_akuntansi_m_rekening_no_akun')
-            ->where('m_link_akuntansi_nama', 'Service Charge Transaksi - cash')
+            ->where('m_link_akuntansi_nama', 'Service Charge Transaksi')
             ->get();
         $tarik = DB::table('m_link_akuntansi')
             ->join('m_rekening', 'm_rekening_no_akun', 'm_link_akuntansi_m_rekening_no_akun')
-            ->where('m_link_akuntansi_nama', 'Tarik Tunai Transaksi - cash')
+            ->where('m_link_akuntansi_nama', 'Tarik Tunai Transaksi')
             ->get();
         $bulat = DB::table('m_link_akuntansi')
             ->join('m_rekening', 'm_rekening_no_akun', 'm_link_akuntansi_m_rekening_no_akun')
-            ->where('m_link_akuntansi_nama', 'Pembulatan Transaksi - cash')
+            ->where('m_link_akuntansi_nama', 'Pembulatan Transaksi')
             ->get();
         $free = DB::table('m_link_akuntansi')
             ->join('m_rekening', 'm_rekening_no_akun', 'm_link_akuntansi_m_rekening_no_akun')
-            ->where('m_link_akuntansi_nama', 'Free Kembalian Transaksi - cash')
+            ->where('m_link_akuntansi_nama', 'Free Kembalian Transaksi')
             ->get();
         $diskon = DB::table('m_link_akuntansi')
             ->join('m_rekening', 'm_rekening_no_akun', 'm_link_akuntansi_m_rekening_no_akun')
-            ->where('m_link_akuntansi_nama', 'Diskon Transaksi - cash')
+            ->where('m_link_akuntansi_nama', 'Diskon Transaksi')
             ->get();
         $persediaan = DB::table('m_link_akuntansi')
             ->join('m_rekening', 'm_rekening_no_akun', 'm_link_akuntansi_m_rekening_no_akun')
-            ->where('m_link_akuntansi_nama', 'Persediaan Transaksi - cash')
+            ->where('m_link_akuntansi_nama', 'Persediaan Transaksi')
             ->get();
         $biaya_persediaan = DB::table('m_link_akuntansi')
             ->join('m_rekening', 'm_rekening_no_akun', 'm_link_akuntansi_m_rekening_no_akun')
-            ->where('m_link_akuntansi_nama', 'Biaya Persediaan Transaksi - cash')
+            ->where('m_link_akuntansi_nama', 'Biaya Persediaan Transaksi')
             ->get();
         $kas_refund = DB::table('m_link_akuntansi')
             ->join('m_rekening', 'm_rekening_no_akun', 'm_link_akuntansi_m_rekening_no_akun')
-            ->where('m_link_akuntansi_nama', 'Kas Refund - cash')
+            ->where('m_link_akuntansi_nama', 'Kas Refund')
             ->get();
         $nominal_refund = DB::table('m_link_akuntansi')
             ->join('m_rekening', 'm_rekening_no_akun', 'm_link_akuntansi_m_rekening_no_akun')
@@ -102,27 +102,27 @@ class JurnalOtomatisController extends Controller
             ->get();
         $pajak_refund = DB::table('m_link_akuntansi')
             ->join('m_rekening', 'm_rekening_no_akun', 'm_link_akuntansi_m_rekening_no_akun')
-            ->where('m_link_akuntansi_nama', 'Pajak Refund - cash')
+            ->where('m_link_akuntansi_nama', 'Pajak Refund')
             ->get();
         $sc_refund = DB::table('m_link_akuntansi')
             ->join('m_rekening', 'm_rekening_no_akun', 'm_link_akuntansi_m_rekening_no_akun')
-            ->where('m_link_akuntansi_nama', 'Service Charge Refund - cash')
+            ->where('m_link_akuntansi_nama', 'Service Charge Refund')
             ->get();
         $bulat_refund = DB::table('m_link_akuntansi')
             ->join('m_rekening', 'm_rekening_no_akun', 'm_link_akuntansi_m_rekening_no_akun')
-            ->where('m_link_akuntansi_nama', 'Pembulatan Refund - cash')
+            ->where('m_link_akuntansi_nama', 'Pembulatan Refund')
             ->get();
         $free_refund = DB::table('m_link_akuntansi')
             ->join('m_rekening', 'm_rekening_no_akun', 'm_link_akuntansi_m_rekening_no_akun')
-            ->where('m_link_akuntansi_nama', 'Free Kembalian Refund - cash')
+            ->where('m_link_akuntansi_nama', 'Free Kembalian Refund')
             ->get();
         $sedia_refund = DB::table('m_link_akuntansi')
             ->join('m_rekening', 'm_rekening_no_akun', 'm_link_akuntansi_m_rekening_no_akun')
-            ->where('m_link_akuntansi_nama', 'Persediaan Refund - cash')
+            ->where('m_link_akuntansi_nama', 'Persediaan Refund')
             ->get();
         $biaya_sedia_refund = DB::table('m_link_akuntansi')
             ->join('m_rekening', 'm_rekening_no_akun', 'm_link_akuntansi_m_rekening_no_akun')
-            ->where('m_link_akuntansi_nama', 'Biaya Persediaan Refund - cash')
+            ->where('m_link_akuntansi_nama', 'Biaya Persediaan Refund')
             ->get();
         $sedia_lostbill = DB::table('m_link_akuntansi')
             ->join('m_rekening', 'm_rekening_no_akun', 'm_link_akuntansi_m_rekening_no_akun')
@@ -134,11 +134,11 @@ class JurnalOtomatisController extends Controller
             ->get();
         $sedia_garansi = DB::table('m_link_akuntansi')
             ->join('m_rekening', 'm_rekening_no_akun', 'm_link_akuntansi_m_rekening_no_akun')
-            ->where('m_link_akuntansi_nama', 'Persediaan Garansi - cash')
+            ->where('m_link_akuntansi_nama', 'Persediaan Garansi')
             ->get();
         $biaya_sedia_garansi = DB::table('m_link_akuntansi')
             ->join('m_rekening', 'm_rekening_no_akun', 'm_link_akuntansi_m_rekening_no_akun')
-            ->where('m_link_akuntansi_nama', 'Biaya Persediaan Garansi - cash')
+            ->where('m_link_akuntansi_nama', 'Biaya Persediaan Garansi')
             ->get();
 
         $kas_transaksi = DB::table('rekap_transaksi')
