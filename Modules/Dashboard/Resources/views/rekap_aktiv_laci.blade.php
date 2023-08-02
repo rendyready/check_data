@@ -120,8 +120,8 @@
                             {{-- <table id="tampil_rekap"
                             class="table table-sm table-bordered table-striped table-vcenter nowrap table-hover js-dataTable-full"
                             style="width:100%"> --}}
-                            <table id="tampil_rekap" class="table table-striped table-bordered table-hover" width="100%"
-                                cellspacing="0">
+                            <table id="tampil_rekap" class="table table-striped table-bordered nowrap table-hover"
+                                width="100%" cellspacing="0">
                                 <thead>
                                     <tr>
                                         <th class="text-center">Area</th>
@@ -134,15 +134,15 @@
                                     </tr>
                                 </thead>
                                 <tbody id="show_data">
-                                </tbody>>
-                                {{-- </table> --}}
+                                    <!-- Data dari DataTables akan diisi di sini -->
+                                </tbody>
                             </table>
                         </div>
 
-                        <div id="pagination">
-                            <button onclick="loadData(currentPage - 1)">Previous</button>
-                            <button onclick="loadData(currentPage + 1)">Next</button>
-                        </div>
+                        {{-- <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
+                            <button style="margin-left: 5px;" id="prevButton">Previous</button>
+                            <button style="margin-left: 5px;" id="nextButton">Next</button>
+                        </div> --}}
 
                     </div>
                 </div>
@@ -243,102 +243,76 @@ $(document).ready(function() {
     var HakAksesArea = userInfo.dataset.hasAccess === 'true';
     var HakAksesPusat = userInfoPusat.dataset.hasAccess === 'true';
 
-    var currentPage = 1;
-    var totalData = 0;
-    var dataPerPage = 10; // Jumlah data per halaman
-
-        $('#cari').on('click', function() {
-            var area = $('.filter_area option:selected').val();
-            var waroeng = $('.filter_waroeng option:selected').val();
-            var tanggal = $('.filter_tanggal').val();
-            var operator = $('.filter_operator option:selected').val();
-
-            if (tanggal === "" || area === "" || waroeng === "" || operator === "") {
-                Swal.fire({
-                    title: 'Informasi',
-                    text: 'Silahkan lengkapi semua kolom',
-                    confirmButtonColor: '#d33',
-                    confirmButtonText: 'OK',
-                    customClass: {
-                        confirmButton: 'bg-red-500',
-                    },
-                });
-            } else {
-                loadData(1); // Muat data untuk halaman pertama saat tombol "Cari" diklik
-            }
-        });
-
-    function loadData(page) {
+    var table;
+    $('#cari').on('click', function() {
         var area = $('.filter_area option:selected').val();
-            var waroeng = $('.filter_waroeng option:selected').val();
-            var tanggal = $('.filter_tanggal').val();
-            var operator = $('.filter_operator option:selected').val();
-        $.ajax({
-            url: '{{ route("rekap_aktiv_laci.tampil_laci") }}',
-            data: {
-                area: area,
-                waroeng: waroeng,
-                tanggal: tanggal,
-                operator: operator,
-                page: page, // Kirimkan nomor halaman ke server
-            },
-            method: 'GET',
-            dataType: 'json',
-            success: function(response) {
-                var data = response.data;
-                console.log(data);
-                totalData = response.totalData;
-                currentPage = response.currentPage;
-                var totalPages = Math.ceil(totalData / dataPerPage);
+        var waroeng = $('.filter_waroeng option:selected').val();
+        var tanggal = $('.filter_tanggal').val();
+        var operator = $('.filter_operator option:selected').val();
 
-                // Tampilkan data menggunakan fungsi displayData
-                displayData(data);
-
-                // Update tombol pagination manual
-                var paginationDiv = $('#pagination');
-                paginationDiv.empty();
-
-                var prevButton = $('<button>').text('Previous');
-                prevButton.on('click', function() {
-                    if (currentPage > 1) {
-                        loadData(currentPage - 1);
+        if (tanggal === "" || area === "" || waroeng === "" || operator === "") {
+            Swal.fire({
+                title: 'Informasi',
+                text: 'Silahkan lengkapi semua kolom',
+                confirmButtonColor: '#d33',
+                confirmButtonText: 'OK',
+                customClass: {
+                    confirmButton: 'bg-red-500',
+                },
+            });
+        } else {
+         table =   $('#tampil_rekap').DataTable({
+                destroy: true,
+                orderCellsTop: true,
+                processing: true,
+                serverSide: true,
+                pagingType: 'full_numbers',
+                lengthChange: true, 
+                scrollX: true,
+                columnDefs: [
+                    {
+                        targets: '_all',
+                        className: 'dt-body-center'
+                    },
+                ],
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: 'Export Excel',
+                        title: 'Rekap Buka Laci - ' + tanggal,
+                        pageSize: 'A4',
+                        pageOrientation: 'portrait',
                     }
-                });
+                ],
+                lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+                pageLength: 10,
+                ajax: {
+                    url: '{{ route("rekap_aktiv_laci.tampil_laci") }}',
+                    type: 'GET',
+                    data: {
+                        area: area,
+                        waroeng: waroeng,
+                        tanggal: tanggal,
+                        operator: operator,
+                    },
+                },
+                success:function(data){ 
+                    console.log(data);
+                },
+                columns: [
+                    { data: '0' }, // Kolom 1
+                    { data: '1' }, // Kolom 2
+                    { data: '2' }, // Kolom 3
+                    { data: '3' }, // Kolom 4
+                    { data: '4' }, // Kolom 5
+                    { data: '5' }, // Kolom 6
+                    { data: '6' }, // Kolom 7
+                ],
+               
+            });
+        }
+    });
 
-                var nextButton = $('<button>').text('Next');
-                nextButton.on('click', function() {
-                    if (currentPage < totalPages) {
-                        loadData(currentPage + 1);
-                    }
-                });
-
-                paginationDiv.append(prevButton);
-                paginationDiv.append(' Page ' + currentPage + ' of ' + totalPages + ' ');
-                paginationDiv.append(nextButton);
-            },
-            error: function(xhr, status, error) {
-                console.error(error);
-            }
-        });
-    }
-
-    // Function to display data on the table
-    function displayData(data) {
-        var tableBody = $('#show_data');
-        tableBody.empty();
-
-        $.each(data, function(index, laci) {
-            var row = $('<tr>');
-            row.append($('<td>').text(laci.r_b_l_m_area_nama));
-            row.append($('<td>').text(laci.r_b_l_m_w_nama));
-            row.append($('<td>').text(laci.r_b_l_tanggal));
-            row.append($('<td>').text(laci.name));
-            row.append($('<td>').text(laci.rekap_modal_sesi));
-            row.append($('<td>').text(laci.laci));
-            row.append('<td><a id="button_detail" class="btn btn-sm button_detail btn-info" value="' + laci.r_b_l_rekap_modal_id + '" title="Detail Nota"><i class="fa-sharp fa-solid fa-eye"></i></a></td>');
-            tableBody.append(row);
-        });
-    }
 
     //eksekusi filter
     // $('#cari').on('click', function() {

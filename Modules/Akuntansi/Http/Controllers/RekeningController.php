@@ -143,9 +143,9 @@ class RekeningController extends Controller
             ->where('rekap_jurnal_umum_m_rekening_no_akun', $request->m_rekening_no_akun)
             ->count();
 
-        $validasi4 = DB::table('rekap_link_akuntansi')
-            ->select('rekap_link_akuntansi_m_rekening_id')
-            ->where('rekap_link_akuntansi_m_rekening_id', $request->m_rekening_no_akun)
+        $validasi4 = DB::table('m_link_akuntansi')
+            ->select('m_link_akuntansi_m_rekening_no_akun')
+            ->where('m_link_akuntansi_m_rekening_no_akun', $request->m_rekening_no_akun)
             ->count();
 
         $validasi = $validasi1 + $validasi2 + $validasi3 + $validasi4;
