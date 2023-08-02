@@ -893,28 +893,18 @@
                                 <span class="nav-main-link-name">Akuntansi</span>
                             </a>
                             <ul class="nav-main-submenu">
-                                @can('master akuntansi.view')
-                                    <li class="nav-main-item{{ request()->is('akuntansi/master') ? ' open' : '' }}">
-                                        <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu"
-                                            aria-haspopup="true" aria-expanded="true" href="#">
-                                            <span class="nav-main-link-name">Master</span>
-                                        </a>
-                                        <ul class="nav-main-submenu">
-                                            <li class="nav-main-item">
-                                                <a class="nav-main-link{{ request()->is('akuntansi/rekening') ? ' active' : '' }}"
-                                                    href="{{ route('rekening.index') }}">
-                                                    <span class="nav-main-link-name">Rekening Akuntansi</span>
-                                                </a>
-                                            </li>
-                                            <li class="nav-main-item">
-                                                <a class="nav-main-link{{ request()->is('akuntansi/link') ? ' active' : '' }}"
-                                                    href="{{ route('link.index') }}">
-                                                    <span class="nav-main-link-name">Link Akuntansi</span>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                @endcan
+                                <li class="nav-main-item">
+                                    <a class="nav-main-link{{ request()->is('akuntansi/rekening') ? ' active' : '' }}"
+                                        href="{{ route('rekening.index') }}">
+                                        <span class="nav-main-link-name">Rekening Akuntansi</span>
+                                    </a>
+                                </li>
+                                <li class="nav-main-item">
+                                    <a class="nav-main-link{{ request()->is('akuntansi/link') ? ' active' : '' }}"
+                                        href="{{ route('link.index') }}">
+                                        <span class="nav-main-link-name">Link Akuntansi</span>
+                                    </a>
+                                </li>
                                 <li class="nav-main-item">
                                     <a class="nav-main-link{{ request()->is('akuntansi/jurnal_kas') ? ' active' : '' }}"
                                         href="{{ route('jurnal_kas.index') }}">
@@ -933,28 +923,7 @@
                                         <span class="nav-main-link-name">Jurnal Umum</span>
                                     </a>
                                 </li>
-                                @can('laporan akuntansi.view')
-                                    <li class="nav-main-item{{ request()->is('akuntansi/laporan') ? ' open' : '' }}">
-                                        <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu"
-                                            aria-haspopup="true" aria-expanded="true" href="#">
-                                            <span class="nav-main-link-name">Laporan</span>
-                                        </a>
-                                        <ul class="nav-main-submenu">
-                                            <li class="nav-main-item">
-                                                <a class="nav-main-link{{ request()->is('akuntansi/jurnal') ? ' active' : '' }}"
-                                                    href="{{ route('otomatis.index') }}">
-                                                    <span class="nav-main-link-name">Jurnal</span>
-                                                </a>
-                                            </li>
-                                            {{-- <li class="nav-main-item">
-                                            <a class="nav-main-link{{ request()->is('akuntansi/link') ? ' active' : '' }}"
-                                                href="{{ route('link.index') }}">
-                                                <span class="nav-main-link-name">Link Akuntansi</span>
-                                            </a>
-                                        </li> --}}
-                                        </ul>
-                                    </li>
-                                @endcan
+
                             </ul>
                         </li>
                     @endcan
