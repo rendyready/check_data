@@ -116,11 +116,10 @@
                                 <button type="button" id="cari"
                                     class="btn btn-primary btn-sm col-1 mt-2 mb-3">Cari</button>
                             </div>
-
                         </form>
 
                         <div class="table-responsive">
-                            <table id="jurnal_tampil" class="table table-bordered table-striped table-vcenter mb-4 no-wrap">
+                            <table id="jurnal_tampil" class="table table-bordered table-striped table-vcenter nowrap">
                                 <thead class="justify-content-center">
                                     <tr>
                                         <th>Tanggal</th>
@@ -160,13 +159,19 @@
                 var tanggal = $('.filter_tanggal').val();
                 var payment = $('.filter_pembayaran').val();
                 $('#jurnal_tampil').DataTable({
-                    buttons: [],
                     destroy: true,
                     autoWidth: true,
                     lengthMenu: [
                         [10, 25, 50, 100, -1],
                         [10, 25, 50, 100, "All"]
                     ],
+                    buttons: [{
+                        extend: 'excelHtml5',
+                        text: 'Export Excel',
+                        title: 'Laporan Jurnal - ' + tanggal,
+                        pageSize: 'A4',
+                        pageOrientation: 'portrait',
+                    }],
                     ajax: {
                         url: '{{ route('otomatis.tampil_jurnal') }}',
                         data: {
@@ -251,14 +256,6 @@
                     $(".filter_operator").empty();
                 });
             }
-
-            // $("#jurnal_tampil").on('click', '#button_pdf', function() {
-            //     var id = $(this).attr('value');
-            //     var waroeng = $('.filter_waroeng').val();
-            //     var tanggal = $('.filter_tanggal').val();
-            //     var url = 'otomatis/export_pdf?id=' + id + '&waroeng=' + waroeng + '&tanggal=' + tanggal;
-            //     window.open(url, '_blank');
-            // });
 
             $('#filter_tanggal').flatpickr({
                 dateFormat: 'Y-m-d',
