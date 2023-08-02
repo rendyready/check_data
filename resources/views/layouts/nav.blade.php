@@ -164,7 +164,7 @@
                 <a class="link-fx fw-bold tracking-wide mx-auto" href="/">
                     <span class="smini-hidden">
                         <i class="fa fa-fire text-primary"></i>
-                        <span class="fs-4 text-dual">Sipedas</span><span class="fs-4 text-primary">V4.1.5</span>
+                        <span class="fs-4 text-dual">Sipedas</span><span class="fs-4 text-primary">V4.1.6</span>
                     </span>
                 </a>
             </div>
@@ -941,17 +941,17 @@
                                         </a>
                                         <ul class="nav-main-submenu">
                                             <li class="nav-main-item">
-                                                <a class="nav-main-link{{ request()->is('akuntansi/otomatis') ? ' active' : '' }}"
+                                                <a class="nav-main-link{{ request()->is('akuntansi/jurnal') ? ' active' : '' }}"
                                                     href="{{ route('otomatis.index') }}">
                                                     <span class="nav-main-link-name">Jurnal</span>
                                                 </a>
                                             </li>
                                             {{-- <li class="nav-main-item">
-                                                <a class="nav-main-link{{ request()->is('akuntansi/buku_besar') ? ' active' : '' }}"
-                                                    href="{{ route('buku_besar.index') }}">
-                                                    <span class="nav-main-link-name">Buku Besar</span>
-                                                </a>
-                                            </li> --}}
+                                            <a class="nav-main-link{{ request()->is('akuntansi/link') ? ' active' : '' }}"
+                                                href="{{ route('link.index') }}">
+                                                <span class="nav-main-link-name">Link Akuntansi</span>
+                                            </a>
+                                        </li> --}}
                                         </ul>
                                     </li>
                                 @endcan
