@@ -61,4 +61,10 @@ Route::prefix('akuntansi')->middleware('auth', 'web')
             Route::get('otomatis/select_waroeng', 'select_waroeng')->name('otomatis.select_waroeng');
             Route::get('otomatis/export_pdf', 'export_pdf')->name('otomatis.export_pdf');
         });
+
+        Route::controller(BukuBesarController::class)->group(function () {
+            Route::get('buku_besar', 'index')->name('buku_besar.index');
+            Route::get('buku_besar/tampil_buku_besar', 'tampil_buku_besar')->name('buku_besar.tampil_buku_besar');
+            Route::get('buku_besar/select_waroeng', 'select_waroeng')->name('buku_besar.select_waroeng');
+        });
     });

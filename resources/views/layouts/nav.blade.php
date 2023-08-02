@@ -946,12 +946,12 @@
                                                     <span class="nav-main-link-name">Jurnal</span>
                                                 </a>
                                             </li>
-                                            {{-- <li class="nav-main-item">
-                                            <a class="nav-main-link{{ request()->is('akuntansi/link') ? ' active' : '' }}"
-                                                href="{{ route('link.index') }}">
-                                                <span class="nav-main-link-name">Link Akuntansi</span>
-                                            </a>
-                                        </li> --}}
+                                            <li class="nav-main-item">
+                                                <a class="nav-main-link{{ request()->is('akuntansi/buku_besar') ? ' active' : '' }}"
+                                                    href="{{ route('buku_besar.index') }}">
+                                                    <span class="nav-main-link-name">Buku Besar</span>
+                                                </a>
+                                            </li>
                                         </ul>
                                     </li>
                                 @endcan
