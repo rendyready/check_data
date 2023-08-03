@@ -37,6 +37,9 @@ class BukuBesarController extends Controller
             ->orderBy('m_rekening_no_akun', 'ASC')
             ->groupBy('m_rekening_nama', 'm_rekening_no_akun')
             ->get();
+        $data->payment = DB::table('m_payment_method')
+            ->orderby('m_payment_method_id', 'ASC')
+            ->get();
         return view('akuntansi::buku_besar', compact('data'));
     }
 
@@ -170,7 +173,28 @@ class BukuBesarController extends Controller
             $kas_transaksi->where('r_t_tanggal', $request->tanggal);
         }
 
-        $kas_transaksi = $kas_transaksi->where('r_t_m_w_id', $request->waroeng)
+        $kas_transaksi = DB::table('rekap_transaksi')
+            ->join('rekap_payment_transaksi', 'r_p_t_r_t_id', 'r_t_id')
+            ->join('m_payment_method', 'm_payment_method_id', 'r_p_t_m_payment_method_id')
+            ->selectRaw('r_t_tanggal, r_t_id, r_t_nota_code, r_t_m_w_code,
+                                r_p_t_m_payment_method_id,
+                                m_payment_method_name,
+                                r_t_nominal as nominal,
+                                r_t_nominal_pajak as pajak,
+                                r_t_nominal_sc as sc,
+                                r_t_nominal_tarik_tunai as tarik,
+                                r_t_nominal_free_kembalian as free,
+                                r_t_nominal_pembulatan as pembulatan,
+                                r_t_nominal_diskon as diskon');
+        if (strpos($request->tanggal, 'to') !== false) {
+            [$start, $end] = explode('to', $request->tanggal);
+            $kas_transaksi->whereBetween('r_t_tanggal', [$start, $end]);
+        } else {
+            $kas_transaksi->where('r_t_tanggal', $request->tanggal);
+        }
+
+        $kas_transaksi = $kas_transaksi->where('r_p_t_m_payment_method_id', $request->payment)
+            ->where('r_t_m_w_id', $request->waroeng)
             ->orderby('r_t_id', 'ASC')
             ->get();
 
@@ -190,7 +214,8 @@ class BukuBesarController extends Controller
             $refund->where('r_r_tanggal', $request->tanggal);
         }
 
-        $refund = $refund->where('r_r_m_w_id', $request->waroeng)
+        $refund = $refund->where('r_p_t_m_payment_method_id', $request->payment)
+            ->where('r_r_m_w_id', $request->waroeng)
             ->orderby('r_r_id', 'ASC')
             ->get();
 
@@ -222,7 +247,8 @@ class BukuBesarController extends Controller
             $garansi->where('r_t_tanggal', $request->tanggal);
         }
 
-        $garansi = $garansi->where('r_t_m_w_id', $request->waroeng)
+        $garansi = $garansi->where('r_p_t_m_payment_method_id', $request->payment)
+            ->where('r_t_m_w_id', $request->waroeng)
             ->orderby('rekap_garansi_id', 'ASC')
             ->get();
 
@@ -230,7 +256,7 @@ class BukuBesarController extends Controller
         $totalKredit = 0;
         $data = array();
         foreach ($kas_transaksi as $kasTrans) {
-            if ($request->akun == 'Kas Transaksi') {
+            if ($request->akun == 'Kas Transaksi' && $request->payment == 1) {
                 $processed_ids = array();
                 foreach ($kas as $valKas) {
                     $common_id = $kasTrans->r_t_id;
@@ -307,11 +333,12 @@ class BukuBesarController extends Controller
                                 'kredit' => 0,
                             );
                         }
-                        $processed_ids[] = $common_id;
+
                     }
+                    $processed_ids[] = $common_id;
                 }
             }
-            if ($request->akun == 'Bank Transaksi') {
+            if ($request->akun == 'Bank Transaksi' && $request->payment != 1) {
                 $processed_ids = array();
                 foreach ($bank as $valBank) {
                     $common_id = $kasTrans->r_t_id;
@@ -388,8 +415,8 @@ class BukuBesarController extends Controller
                                 'kredit' => 0,
                             );
                         }
-                        $processed_ids[] = $common_id;
                     }
+                    $processed_ids[] = $common_id;
                 }
             }
             if ($request->akun === 'Nominal Transaksi') {
@@ -840,76 +867,8 @@ class BukuBesarController extends Controller
         } //garansi
 
         foreach ($data as $transaction) {
-            if ($request->akun == 'Kas Transaksi') {
-                $totalDebit += str_replace(',', '', $transaction['debit']);
-                $totalKredit += str_replace(',', '', $transaction['kredit']);
-            } elseif ($request->akun == 'Nominal Transaksi') {
-                $totalDebit += str_replace(',', '', $transaction['debit']);
-                $totalKredit += str_replace(',', '', $transaction['kredit']);
-            } elseif ($request->akun == 'Pajak Transaksi') {
-                $totalDebit += str_replace(',', '', $transaction['debit']);
-                $totalKredit += str_replace(',', '', $transaction['kredit']);
-            } elseif ($request->akun == 'Service Charge Transaksi') {
-                $totalDebit += str_replace(',', '', $transaction['debit']);
-                $totalKredit += str_replace(',', '', $transaction['kredit']);
-            } elseif ($request->akun == 'Tarik Tunai Transaksi') {
-                $totalDebit += str_replace(',', '', $transaction['debit']);
-                $totalKredit += str_replace(',', '', $transaction['kredit']);
-            } elseif ($request->akun == 'Free Kembalian Transaksi') {
-                $totalDebit += str_replace(',', '', $transaction['debit']);
-                $totalKredit += str_replace(',', '', $transaction['kredit']);
-            } elseif ($request->akun == 'Pembulatan Transaksi') {
-                $totalDebit += str_replace(',', '', $transaction['debit']);
-                $totalKredit += str_replace(',', '', $transaction['kredit']);
-            } elseif ($request->akun == 'Diskon Transaksi') {
-                $totalDebit += str_replace(',', '', $transaction['debit']);
-                $totalKredit += str_replace(',', '', $transaction['kredit']);
-            } elseif ($request->akun == 'Persediaan Transaksi') {
-                $totalDebit += str_replace(',', '', $transaction['debit']);
-                $totalKredit += str_replace(',', '', $transaction['kredit']);
-            } elseif ($request->akun == 'Biaya Persediaan Transaksi') {
-                $totalDebit += str_replace(',', '', $transaction['debit']);
-                $totalKredit += str_replace(',', '', $transaction['kredit']);
-            } elseif ($request->akun == 'Kas Refund') {
-                $totalDebit += str_replace(',', '', $transaction['debit']);
-                $totalKredit += str_replace(',', '', $transaction['kredit']);
-            } elseif ($request->akun == 'Nominal Refund') {
-                $totalDebit += str_replace(',', '', $transaction['debit']);
-                $totalKredit += str_replace(',', '', $transaction['kredit']);
-            } elseif ($request->akun == 'Pajak Refund') {
-                $totalDebit += str_replace(',', '', $transaction['debit']);
-                $totalKredit += str_replace(',', '', $transaction['kredit']);
-            } elseif ($request->akun == 'Service Charge Refund') {
-                $totalDebit += str_replace(',', '', $transaction['debit']);
-                $totalKredit += str_replace(',', '', $transaction['kredit']);
-            } elseif ($request->akun == 'Pembulatan Refund') {
-                $totalDebit += str_replace(',', '', $transaction['debit']);
-                $totalKredit += str_replace(',', '', $transaction['kredit']);
-            } elseif ($request->akun == 'Free Kembalian Refund') {
-                $totalDebit += str_replace(',', '', $transaction['debit']);
-                $totalKredit += str_replace(',', '', $transaction['kredit']);
-            } elseif ($request->akun == 'Persediaan Refund') {
-                $totalDebit += str_replace(',', '', $transaction['debit']);
-                $totalKredit += str_replace(',', '', $transaction['kredit']);
-            } elseif ($request->akun == 'Biaya Persediaan Refund') {
-                $totalDebit += str_replace(',', '', $transaction['debit']);
-                $totalKredit += str_replace(',', '', $transaction['kredit']);
-            } elseif ($request->akun == 'Persediaan Lostbill') {
-                $totalDebit += str_replace(',', '', $transaction['debit']);
-                $totalKredit += str_replace(',', '', $transaction['kredit']);
-            } elseif ($request->akun == 'Biaya Persediaan Lostbill') {
-                $totalDebit += str_replace(',', '', $transaction['debit']);
-                $totalKredit += str_replace(',', '', $transaction['kredit']);
-            } elseif ($request->akun == 'Persediaan Garansi') {
-                $totalDebit += str_replace(',', '', $transaction['debit']);
-                $totalKredit += str_replace(',', '', $transaction['kredit']);
-            } elseif ($request->akun == 'Biaya Persediaan Garansi') {
-                $totalDebit += str_replace(',', '', $transaction['debit']);
-                $totalKredit += str_replace(',', '', $transaction['kredit']);
-            } elseif ($request->akun == 'Bank Transaksi') {
-                $totalDebit += str_replace(',', '', $transaction['debit']);
-                $totalKredit += str_replace(',', '', $transaction['kredit']);
-            }
+            $totalDebit += str_replace(',', '', $transaction['debit']);
+            $totalKredit += str_replace(',', '', $transaction['kredit']);
         }
 
         $debit = number_format($totalDebit);
@@ -919,9 +878,9 @@ class BukuBesarController extends Controller
             'tanggal' => '',
             'no_akun' => '',
             'akun' => '',
-            'particul' => 'Total',
-            'debit' => $debit,
-            'kredit' => $kredit,
+            'particul' => '<strong> Total </strong>',
+            'debit' => '<strong>' . $debit . '</strong>',
+            'kredit' => '<strong>' . $kredit . '</strong>',
         );
 
         $output = array(

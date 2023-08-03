@@ -301,8 +301,8 @@ class JurnalOtomatisController extends Controller
                                 'kredit' => 0,
                             );
                         }
-                        $processed_ids[] = $common_id;
                     }
+                    $processed_ids[] = $common_id;
                 }
             } else {
                 foreach ($bank as $valBank) {
@@ -801,9 +801,9 @@ class JurnalOtomatisController extends Controller
             'tanggal' => '',
             'no_akun' => '',
             'akun' => '',
-            'particul' => 'Total',
-            'debit' => $debit,
-            'kredit' => $kredit,
+            'particul' => '<strong> Total </strong>',
+            'debit' => '<strong>' . $debit . '</strong>',
+            'kredit' => '<strong>' . $kredit . '</strong>',
         );
 
         $output = array(

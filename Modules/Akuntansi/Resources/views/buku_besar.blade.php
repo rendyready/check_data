@@ -89,6 +89,22 @@
                                     <div class="row mb-1">
                                         <label class="col-sm-3 col-form-label">Pembayaran</label>
                                         <div class="col-sm-9">
+                                            <select id="filter_payment" style="width: 100%;" data-placeholder="Pilih Akun"
+                                                class="cari f-area js-select2 form-control filter_payment" name="waroeng">
+                                                <option></option>
+                                                @foreach ($data->payment as $payment)
+                                                    <option value="{{ $payment->m_payment_method_id }}">
+                                                        {{ $payment->m_payment_method_name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="row mb-1">
+                                        <label class="col-sm-3 col-form-label">Akun</label>
+                                        <div class="col-sm-9">
                                             <select id="filter_akun" style="width: 100%;" data-placeholder="Pilih Akun"
                                                 class="cari f-area js-select2 form-control filter_akun" name="waroeng">
                                                 <option></option>
@@ -156,6 +172,7 @@
                 var waroeng = $('.filter_waroeng').val();
                 var tanggal = $('.filter_tanggal').val();
                 var akun = $('.filter_akun').val();
+                var payment = $('.filter_payment').val();
                 $('#jurnal_tampil').DataTable({
                     destroy: true,
                     autoWidth: true,
@@ -166,7 +183,7 @@
                     buttons: [{
                         extend: 'excelHtml5',
                         text: 'Export Excel',
-                        title: 'Laporan Jurnal - ' + tanggal,
+                        title: 'Buku Besar - ' + tanggal,
                         pageSize: 'A4',
                         pageOrientation: 'portrait',
                     }],
@@ -176,6 +193,7 @@
                             waroeng: waroeng,
                             tanggal: tanggal,
                             akun: akun,
+                            payment: payment,
                         },
                         type: "GET",
                     },

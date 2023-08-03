@@ -131,331 +131,376 @@
             @section('js')
                 <!-- js -->
                 <script type="module">
-$(document).ready(function() {
-    Codebase.helpersOnLoad(['jq-select2']);
+                    $(document).ready(function() {
+                        Codebase.helpersOnLoad(['jq-select2']);
 
-    var userInfo = document.getElementById('user-info');
-    var userInfoPusat = document.getElementById('user-info-pusat');
-    var waroengId = userInfo.dataset.waroengId;
-    var HakAksesArea = userInfo.dataset.hasAccess === 'true';
-    var HakAksesPusat = userInfoPusat.dataset.hasAccess === 'true';
+                        var userInfo = document.getElementById('user-info');
+                        var userInfoPusat = document.getElementById('user-info-pusat');
+                        var waroengId = userInfo.dataset.waroengId;
+                        var HakAksesArea = userInfo.dataset.hasAccess === 'true';
+                        var HakAksesPusat = userInfoPusat.dataset.hasAccess === 'true';
 
-    function formatNumber(number) {
-      return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-    }
+                        function formatNumber(number) {
+                            return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                        }
 
-    $('#cari').click(function(){
-        var waroeng  = $('.filter_waroeng option:selected').val();
-        var tanggal  = $('.filter_tanggal').val();
-        var operator = $('.filter_operator option:selected').val(); 
-        var status   = $('.filter_status option:selected').val();  
+                        $('#cari').click(function() {
+                            var waroeng = $('.filter_waroeng option:selected').val();
+                            var tanggal = $('.filter_tanggal').val();
+                            var operator = $('.filter_operator option:selected').val();
+                            var status = $('.filter_status option:selected').val();
 
-        if (tanggal === "" || operator === "" || waroeng === "" || status === "") {
-            Swal.fire({
-            title: 'Informasi',
-            text: 'Silahkan lengkapi semua kolom',
-            confirmButtonColor: '#d33',
-            confirmButtonText: 'OK',
-            customClass: {
-                confirmButton: 'bg-red-500',
-            },
-            });
-          } else {
-        $('.show_nota').remove(); 
-            $.ajax({
-            type:"GET",
-            url: '{{route("detail.show")}}',
-            dataType: 'JSON',
+                            if (tanggal === "" || operator === "" || waroeng === "" || status === "") {
+                                Swal.fire({
+                                    title: 'Informasi',
+                                    text: 'Silahkan lengkapi semua kolom',
+                                    confirmButtonColor: '#d33',
+                                    confirmButtonText: 'OK',
+                                    customClass: {
+                                        confirmButton: 'bg-red-500',
+                                    },
+                                });
+                            } else {
+                                $('.show_nota').remove();
+                                $.ajax({
+                                    type: "GET",
+                                    url: '{{ route('detail.show') }}',
+                                    dataType: 'JSON',
 
-            data : 
-            {
-              waroeng: waroeng,
-              tanggal: tanggal,
-              operator: operator,
-              status: status,
-            },
-            success:function(data){  
-              if(status == 'paid'){
-              $.each(data.transaksi_rekap, function (key, value) {
-                var id = value.r_t_id.toString().replace(/\./g,'');
-                // console.log(value.r_t_tanggal);
-                  $('#show_nota').append('<div class="col-xl-4 show_nota">'+
-                        '<div class="block block-rounded mb-1">'+
-                          '<div class="block-header block-header-default block-header-rtl bg-pulse">'+
-                            '<h3 class="block-title text-light"><small class="fw-semibold">'+ value.r_t_nota_code +'</small><br><small>'+ value.m_t_t_name +'</small></h3>'+
-                            '<div class="alert alert-warning py-2 mb-0">'+
-                              '<h3 class="block-title text-black"><i class="fa fa-calendar opacity-50 ms-1"></i> <small>'+ value.r_t_tanggal +'</small>'+
-                                '<br><small class="fw-semibold">'+ value.name +'</small></h3>'+
-                            '</div>'+
-                          '</div>'+
-                          '<div class="block-content mb-4" style="background-color: rgba(224, 224, 224, 0.5)">'+
-                            '<table class="table table-border table-striped table-vcenter js-dataTable-full" style="font-size: 13px;">'+
-                              '<thead id="sub_nota'+ id +'">'+
-                                '</thead>'+ 
-                              '<tbody>'+
-                                '<tr style="background-color: white;" class="text-end fw-semibold">'+
-                                  '<td>Total</td>'+
-                                  '<td class="mask">'+
-                                    ''+ formatNumber(Number(value.r_t_nominal)) +''+
-                                  '</td>'+
-                                '</tr>'+
-                                '<tr style="background-color: white;" class="text-end fw-semibold">'+
-                                  '<td>Tax (10%)</td>'+
-                                  '<td class="mask">'+
-                                    ''+ formatNumber(Number(value.r_t_nominal_pajak)) +''+
-                                  '</td>'+
-                                '</tr>'+
+                                    data: {
+                                        waroeng: waroeng,
+                                        tanggal: tanggal,
+                                        operator: operator,
+                                        status: status,
+                                    },
+                                    success: function(data) {
+                                        if (status == 'paid') {
+                                            $.each(data.transaksi_rekap, function(key, value) {
+                                                var id = value.r_t_id.toString().replace(/\./g, '');
+                                                // console.log(value.r_t_tanggal);
+                                                $('#show_nota').append(
+                                                    '<div class="col-xl-4 show_nota">' +
+                                                    '<div class="block block-rounded mb-1">' +
+                                                    '<div class="block-header block-header-default block-header-rtl bg-pulse">' +
+                                                    '<h3 class="block-title text-light"><small class="fw-semibold">' +
+                                                    value.r_t_nota_code +
+                                                    '</small><br><small>' + value.m_t_t_name +
+                                                    '</small></h3>' +
+                                                    '<div class="alert alert-warning py-2 mb-0">' +
+                                                    '<h3 class="block-title text-black"><i class="fa fa-calendar opacity-50 ms-1"></i> <small>' +
+                                                    value.r_t_tanggal + '</small>' +
+                                                    '<br><small class="fw-semibold">' + value
+                                                    .name + '</small></h3>' +
+                                                    '</div>' +
+                                                    '</div>' +
+                                                    '<div class="block-content mb-4" style="background-color: rgba(224, 224, 224, 0.5)">' +
+                                                    '<table class="table table-border table-striped table-vcenter js-dataTable-full" style="font-size: 13px;">' +
+                                                    '<thead id="sub_nota' + id + '">' +
+                                                    '</thead>' +
+                                                    '<tbody>' +
+                                                    '<tr style="background-color: white;" class="text-end fw-semibold">' +
+                                                    '<td>Total</td>' +
+                                                    '<td class="mask">' +
+                                                    '' + formatNumber(Number(value
+                                                    .r_t_nominal)) + '' +
+                                                    '</td>' +
+                                                    '</tr>' +
+                                                    '<tr style="background-color: white;" class="text-end fw-semibold">' +
+                                                    '<td>Tax (10%)</td>' +
+                                                    '<td class="mask">' +
+                                                    '' + formatNumber(Number(value
+                                                        .r_t_nominal_pajak)) + '' +
+                                                    '</td>' +
+                                                    '</tr>' +
 
-                                '<tr style="background-color: white;" class="text-end fw-semibold">'+
-                                  '<td>Service Charge</td>'+
-                                  '<td class="mask">'+
-                                    ''+ formatNumber(Number(value.r_t_nominal_sc)) +''+
-                                  '</td>'+
-                                '</tr>'+
-                                '<tr style="background-color: white;" class="text-end fw-semibold">'+
-                                  '<td>Diskon</td>'+
-                                  '<td class="mask">'+
-                                    ''+ formatNumber(Number(value.r_t_nominal_diskon)) +''+
-                                  '</td>'+
-                                '</tr>'+
-                                '<tr style="background-color: white;" class="text-end fw-semibold">'+
-                                  '<td>Voucher</td>'+
-                                  '<td class="mask">'+
-                                    ''+ formatNumber(Number(value.r_t_nominal_voucher)) +''+
-                                  '</td>'+
-                                '</tr>'+
-                                '<tr style="background-color: white;" class="text-end fw-semibold">'+
-                                  '<td>Tarik Tunai</td>'+
-                                  '<td class="mask">'+
-                                    ''+ formatNumber(Number(value.r_t_nominal_tarik_tunai)) +''+
-                                  '</td>'+
-                                '</tr>'+
-                                '<tr style="background-color: white;" class="text-end fw-semibold">'+
-                                  '<td>Pembulatan</td>'+
-                                  '<td class="mask">'+
-                                    ''+ formatNumber(Number(value.r_t_nominal_pembulatan)) +''+
-                                  '</td>'+
-                                '</tr>'+
-                                '<tr style="background-color: white;" class="text-end fw-semibold">'+
-                                  '<td>Free Kembalian</td>'+
-                                  '<td class="mask">'+
-                                    ''+ formatNumber(Number(value.r_t_nominal_free_kembalian)) +''+
-                                  '</td>'+
-                                '</tr>'+
+                                                    '<tr style="background-color: white;" class="text-end fw-semibold">' +
+                                                    '<td>Service Charge</td>' +
+                                                    '<td class="mask">' +
+                                                    '' + formatNumber(Number(value
+                                                        .r_t_nominal_sc)) + '' +
+                                                    '</td>' +
+                                                    '</tr>' +
+                                                    '<tr style="background-color: white;" class="text-end fw-semibold">' +
+                                                    '<td>Diskon</td>' +
+                                                    '<td class="mask">' +
+                                                    '' + formatNumber(Number(value
+                                                        .r_t_nominal_diskon)) + '' +
+                                                    '</td>' +
+                                                    '</tr>' +
+                                                    '<tr style="background-color: white;" class="text-end fw-semibold">' +
+                                                    '<td>Voucher</td>' +
+                                                    '<td class="mask">' +
+                                                    '' + formatNumber(Number(value
+                                                        .r_t_nominal_voucher)) + '' +
+                                                    '</td>' +
+                                                    '</tr>' +
+                                                    '<tr style="background-color: white;" class="text-end fw-semibold">' +
+                                                    '<td>Tarik Tunai</td>' +
+                                                    '<td class="mask">' +
+                                                    '' + formatNumber(Number(value
+                                                        .r_t_nominal_tarik_tunai)) + '' +
+                                                    '</td>' +
+                                                    '</tr>' +
+                                                    '<tr style="background-color: white;" class="text-end fw-semibold">' +
+                                                    '<td>Pembulatan</td>' +
+                                                    '<td class="mask">' +
+                                                    '' + formatNumber(Number(value
+                                                        .r_t_nominal_pembulatan)) + '' +
+                                                    '</td>' +
+                                                    '</tr>' +
+                                                    '<tr style="background-color: white;" class="text-end fw-semibold">' +
+                                                    '<td>Free Kembalian</td>' +
+                                                    '<td class="mask">' +
+                                                    '' + formatNumber(Number(value
+                                                        .r_t_nominal_free_kembalian)) + '' +
+                                                    '</td>' +
+                                                    '</tr>' +
 
-                                '<tr style="background-color: white;" class="text-end fw-semibold">'+
-                                  '<td>Bayar ('+ value.m_payment_method_type +') </td>'+
-                                  '<td class="mask">'+
-                                    ''+ formatNumber(Number(value.r_t_nominal_total_bayar) - Number(value.r_t_nominal_free_kembalian) - Number(value.r_t_nominal_pembulatan)) +''+
-                                  '</td>'+
-                                '</tr>'+
-                              '</tbody>'+
-                            '</table>'+
-                          '</div>'+
-                        '</div>'+
-                      '</div>');
-                  });
-                 
-                    $.each(data.detail_nota, function (key, item) {
-                      var id = item.r_t_detail_r_t_id.toString().replace(/\./g,'');
-                        // console.log(item.r_t_detail_r_t_id);
-                        $('#sub_nota'+ id).append(
-                                '<tr style="background-color: white;" class="show_nota">'+
-                                  '<td>'+
-                                    '<small class="fw-semibold" style="font-size: 15px;">'+ item.r_t_detail_m_produk_nama +'</small> <br>'+
-                                    '<small>'+ item.r_t_detail_qty +' x '+ formatNumber(Number(item.r_t_detail_price)) +'</small>'+
-                                  '</td>'+
-                                  '<td class="text-end fw-semibold" >'+ formatNumber(Number(item.r_t_detail_nominal)) + ''+
-                                  '</td>'+
-                                '</tr>'
-                          );
-                      });           
+                                                    '<tr style="background-color: white;" class="text-end fw-semibold">' +
+                                                    '<td>Bayar (' + value
+                                                    .m_payment_method_type + ') </td>' +
+                                                    '<td class="mask">' +
+                                                    '' + formatNumber(Number(value
+                                                            .r_t_nominal_total_bayar) - Number(
+                                                            value.r_t_nominal_free_kembalian) -
+                                                        Number(value.r_t_nominal_pembulatan)) +
+                                                    '' +
+                                                    '</td>' +
+                                                    '</tr>' +
+                                                    '</tbody>' +
+                                                    '</table>' +
+                                                    '</div>' +
+                                                    '</div>' +
+                                                    '</div>');
+                                            });
 
-        } else {
+                                            $.each(data.detail_nota, function(key, item) {
+                                                var id = item.r_t_detail_r_t_id.toString().replace(
+                                                    /\./g, '');
+                                                // console.log(item.r_t_detail_r_t_id);
+                                                $('#sub_nota' + id).append(
+                                                    '<tr style="background-color: white;" class="show_nota">' +
+                                                    '<td>' +
+                                                    '<small class="fw-semibold" style="font-size: 15px;">' +
+                                                    item.r_t_detail_m_produk_nama +
+                                                    '</small> <br>' +
+                                                    '<small>' + item.r_t_detail_qty + ' x ' +
+                                                    formatNumber(Number(item
+                                                    .r_t_detail_price)) + '</small>' +
+                                                    '</td>' +
+                                                    '<td class="text-end fw-semibold" >' +
+                                                    formatNumber(Number(item
+                                                        .r_t_detail_nominal)) + '' +
+                                                    '</td>' +
+                                                    '</tr>'
+                                                );
+                                            });
 
-              $.each(data.transaksi_rekap, function (key, value) {
-                // console.log(item.r_t_id);
-                  $('#show_nota').append('<div class="col-xl-4 show_nota">'+
-                        '<div class="block block-rounded mb-1">'+
-                          '<div class="block-header block-header-default block-header-rtl bg-warning">'+
-                            '<h3 class="block-title text-light"><small class="fw-semibold">'+ value.r_l_b_nota_code +'</small><br><small>Approve by <br> '+ value.name +'</small></h3>'+
-                            '<div class="alert alert-warning py-2 mb-0">'+
-                              '<h3 class="block-title text-black"><i class="fa fa-calendar opacity-50 ms-1"></i> <small>'+ value.r_l_b_tanggal +'</small>'+
-                                '<br><small class="fw-semibold">'+ value.name +'</small></h3>'+
-                            '</div>'+
-                          '</div>'+
-                          '<div class="block-content mb-4" style="background-color: rgba(224, 224, 224, 0.5)">'+
-                            '<table class="table table-border table-striped table-vcenter js-dataTable-full" style="font-size: 13px;">'+
-                              '<thead id="sub_nota'+ value.r_l_b_id +'">'+
-                                '</thead>'+
-                              '<tbody>'+
-                                '<tr style="background-color: white;" class="text-end fw-semibold">'+
-                                  '<td>Total</td>'+
-                                  '<td class="mask">'+
-                                    ''+ formatNumber(Number(value.r_l_b_nominal)) +''+
-                                  '</td>'+
-                                '</tr>'+
-                                '<tr style="background-color: white;" class="text-end fw-semibold">'+
-                                  '<td>Tax (10%)</td>'+
-                                  '<td class="mask">'+
-                                    ''+ formatNumber(Number(value.r_l_b_nominal_pajak)) +''+
-                                  '</td>'+
-                                '</tr>'+
-                                '<tr style="background-color: white;" class="text-end fw-semibold">'+
-                                  '<td>Total Lostbill </td>'+
-                                  '<td class="mask">'+
-                                    ''+ formatNumber(Number(value.r_l_b_nominal) + Number(value.r_l_b_nominal_pajak)) +''+
-                                  '</td>'+
-                                '</tr>'+
-                              '</tbody>'+
-                            '</table>'+
-                          '</div>'+
-                        '</div>'+
-                      '</div>');
-                  });
-                    $.each(data.detail_nota, function (key, item) {
-                        // console.log(item.r_t_detail_r_t_id);
-                        $('#sub_nota'+ item.r_l_b_detail_r_l_b_id).append(
-                                '<tr style="background-color: white;" class="show_nota">'+
-                                  '<td>'+
-                                    '<small class="fw-semibold" style="font-size: 15px;">'+ item.r_l_b_detail_m_produk_nama +'</small> <br>'+
-                                    '<small>'+ item.r_l_b_detail_qty +' x '+ formatNumber(Number(item.r_l_b_detail_price)) +'</small>'+
-                                  '</td>'+
-                                  '<td class="text-end fw-semibold" >'+ formatNumber(Number(item.r_l_b_detail_nominal)) + ''+
-                                  '</td>'+
-                                '</tr>'
-                          );
-                      });
-          }
-        }         
-    });
-    }
-  });
+                                        } else {
 
-  if(HakAksesPusat){
-      $('.filter_area').on('select2:select', function(){
-        var id_area = $(this).val();
-        var tanggal  = $('.filter_tanggal').val();
-        var prev = $(this).data('previous-value');
-        if(id_area && tanggal){
-            $.ajax({
-            type:"GET",
-            url: '{{route("detail.select_waroeng")}}',
-            dataType: 'JSON',
-            destroy: true,    
-            data : {
-                id_area: id_area,
-            },
-            success:function(res){    
-              // console.log(res);           
-                if(res){
-                    $(".filter_waroeng").empty();
-                    $(".filter_waroeng").append('<option></option>');
-                    $.each(res,function(key,value){
-                        $(".filter_waroeng").append('<option value="'+key+'">'+value+'</option>');
+                                            $.each(data.transaksi_rekap, function(key, value) {
+                                                // console.log(item.r_t_id);
+                                                $('#show_nota').append(
+                                                    '<div class="col-xl-4 show_nota">' +
+                                                    '<div class="block block-rounded mb-1">' +
+                                                    '<div class="block-header block-header-default block-header-rtl bg-warning">' +
+                                                    '<h3 class="block-title text-light"><small class="fw-semibold">' +
+                                                    value.r_l_b_nota_code +
+                                                    '</small><br><small>Approve by <br> ' +
+                                                    value.name + '</small></h3>' +
+                                                    '<div class="alert alert-warning py-2 mb-0">' +
+                                                    '<h3 class="block-title text-black"><i class="fa fa-calendar opacity-50 ms-1"></i> <small>' +
+                                                    value.r_l_b_tanggal + '</small>' +
+                                                    '<br><small class="fw-semibold">' + value
+                                                    .name + '</small></h3>' +
+                                                    '</div>' +
+                                                    '</div>' +
+                                                    '<div class="block-content mb-4" style="background-color: rgba(224, 224, 224, 0.5)">' +
+                                                    '<table class="table table-border table-striped table-vcenter js-dataTable-full" style="font-size: 13px;">' +
+                                                    '<thead id="sub_nota' + value.r_l_b_id +
+                                                    '">' +
+                                                    '</thead>' +
+                                                    '<tbody>' +
+                                                    '<tr style="background-color: white;" class="text-end fw-semibold">' +
+                                                    '<td>Total</td>' +
+                                                    '<td class="mask">' +
+                                                    '' + formatNumber(Number(value
+                                                        .r_l_b_nominal)) + '' +
+                                                    '</td>' +
+                                                    '</tr>' +
+                                                    '<tr style="background-color: white;" class="text-end fw-semibold">' +
+                                                    '<td>Tax (10%)</td>' +
+                                                    '<td class="mask">' +
+                                                    '' + formatNumber(Number(value
+                                                        .r_l_b_nominal_pajak)) + '' +
+                                                    '</td>' +
+                                                    '</tr>' +
+                                                    '<tr style="background-color: white;" class="text-end fw-semibold">' +
+                                                    '<td>Total Lostbill </td>' +
+                                                    '<td class="mask">' +
+                                                    '' + formatNumber(Number(value
+                                                        .r_l_b_nominal) + Number(value
+                                                        .r_l_b_nominal_pajak)) + '' +
+                                                    '</td>' +
+                                                    '</tr>' +
+                                                    '</tbody>' +
+                                                    '</table>' +
+                                                    '</div>' +
+                                                    '</div>' +
+                                                    '</div>');
+                                            });
+                                            $.each(data.detail_nota, function(key, item) {
+                                                // console.log(item.r_t_detail_r_t_id);
+                                                $('#sub_nota' + item.r_l_b_detail_r_l_b_id).append(
+                                                    '<tr style="background-color: white;" class="show_nota">' +
+                                                    '<td>' +
+                                                    '<small class="fw-semibold" style="font-size: 15px;">' +
+                                                    item.r_l_b_detail_m_produk_nama +
+                                                    '</small> <br>' +
+                                                    '<small>' + item.r_l_b_detail_qty + ' x ' +
+                                                    formatNumber(Number(item
+                                                        .r_l_b_detail_price)) + '</small>' +
+                                                    '</td>' +
+                                                    '<td class="text-end fw-semibold" >' +
+                                                    formatNumber(Number(item
+                                                        .r_l_b_detail_nominal)) + '' +
+                                                    '</td>' +
+                                                    '</tr>'
+                                                );
+                                            });
+                                        }
+                                    }
+                                });
+                            }
+                        });
+
+                        if (HakAksesPusat) {
+                            $('.filter_area').on('select2:select', function() {
+                                var id_area = $(this).val();
+                                var tanggal = $('.filter_tanggal').val();
+                                var prev = $(this).data('previous-value');
+                                if (id_area && tanggal) {
+                                    $.ajax({
+                                        type: "GET",
+                                        url: '{{ route('detail.select_waroeng') }}',
+                                        dataType: 'JSON',
+                                        destroy: true,
+                                        data: {
+                                            id_area: id_area,
+                                        },
+                                        success: function(res) {
+                                            // console.log(res);           
+                                            if (res) {
+                                                $(".filter_waroeng").empty();
+                                                $(".filter_waroeng").append('<option></option>');
+                                                $.each(res, function(key, value) {
+                                                    $(".filter_waroeng").append('<option value="' +
+                                                        key + '">' + value + '</option>');
+                                                });
+                                            } else {
+                                                $(".filter_waroeng").empty();
+                                            }
+                                        }
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        title: 'Informasi',
+                                        text: "Harap lengkapi kolom tanggal",
+                                        confirmButtonColor: '#d33',
+                                        confirmButtonText: 'OK',
+                                        customClass: {
+                                            confirmButton: 'bg-red-500',
+                                        },
+                                    });
+                                    $(".filter_waroeng").empty();
+                                    $(".filter_waroeng").val(prev).trigger('change');
+                                }
+                                $(".filter_operator").empty();
+                                // $(".filter_status").val(prev).trigger('change');   
+                            });
+                        }
+
+                        $('.filter_tanggal').flatpickr({
+                            mode: "range",
+                            dateFormat: 'Y-m-d',
+                        });
+
+                        if (HakAksesArea) {
+                            $('.filter_waroeng').on('select2:select', function() {
+                                var id_waroeng = $(this).val();
+                                var tanggal = $('.filter_tanggal').val();
+                                var prev = $(this).data('previous-value');
+                                if (id_waroeng && tanggal) {
+                                    $.ajax({
+                                        type: "GET",
+                                        url: '{{ route('detail.select_user') }}',
+                                        dataType: 'JSON',
+                                        data: {
+                                            id_waroeng: id_waroeng,
+                                            tanggal: tanggal,
+                                        },
+                                        success: function(res) {
+                                            // console.log(res);       
+                                            if (res) {
+                                                $(".filter_operator").empty();
+                                                $(".filter_operator").append('<option></option>');
+                                                $.each(res, function(key, value) {
+                                                    $(".filter_operator").append('<option value="' +
+                                                        key + '">' + value + '</option>');
+                                                });
+                                            } else {
+                                                $(".filter_operator").empty();
+                                            }
+                                        }
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        title: 'Informasi',
+                                        text: "Harap lengkapi kolom tanggal",
+                                        confirmButtonColor: '#d33',
+                                        confirmButtonText: 'OK',
+                                        customClass: {
+                                            confirmButton: 'bg-red-500',
+                                        },
+                                    });
+                                    $(".filter_operator").empty();
+                                    $(".filter_waroeng").val(prev).trigger('change');
+                                }
+                                // $(".filter_status").val(prev).trigger('change');      
+                            });
+
+                        } else {
+
+                            $('.filter_tanggal').on('change', function() {
+                                var tanggal = $('.filter_tanggal').val();
+                                if (tanggal) {
+                                    $.ajax({
+                                        type: "GET",
+                                        url: '{{ route('detail.select_user') }}',
+                                        dataType: 'JSON',
+                                        data: {
+                                            tanggal: tanggal,
+                                        },
+                                        success: function(res) {
+                                            if (res) {
+                                                $(".filter_operator").empty();
+                                                $(".filter_operator").append('<option></option>');
+                                                $.each(res, function(key, value) {
+                                                    $(".filter_operator").append('<option value="' +
+                                                        key + '">' + value + '</option>');
+                                                });
+                                            } else {
+                                                $(".filter_operator").empty();
+                                            }
+                                        }
+                                    });
+                                } else {
+                                    $(".filter_operator").empty();
+                                }
+                                $(".filter_operator").empty();
+                            });
+                        }
+
                     });
-                }else{
-                $(".filter_waroeng").empty();
-                }
-            }
-            });
-        }else{
-          Swal.fire({
-                    title: 'Informasi',
-                    text: "Harap lengkapi kolom tanggal",
-                    confirmButtonColor: '#d33',
-                    confirmButtonText: 'OK',
-                    customClass: {
-                        confirmButton: 'bg-red-500',
-                    },
-                });
-            $(".filter_waroeng").empty();
-            $(".filter_waroeng").val(prev).trigger('change');
-        }  
-        $(".filter_operator").empty(); 
-        // $(".filter_status").val(prev).trigger('change');   
-    });
-  } 
-
-    $('.filter_tanggal').flatpickr({
-            mode: "range",
-            dateFormat: 'Y-m-d',   
-    });
-
-    if(HakAksesArea){
-    $('.filter_waroeng').on('select2:select', function(){
-        var id_waroeng = $(this).val();   
-        var tanggal  = $('.filter_tanggal').val(); 
-        var prev = $(this).data('previous-value');
-        if(id_waroeng && tanggal){
-            $.ajax({
-            type:"GET",
-            url: '{{route("detail.select_user")}}',
-            dataType: 'JSON',
-            data : {
-              id_waroeng: id_waroeng,
-              tanggal: tanggal,
-            },
-            success:function(res){   
-              // console.log(res);       
-                if(res){
-                    $(".filter_operator").empty();
-                    $(".filter_operator").append('<option></option>');
-                    $.each(res,function(key,value){
-                        $(".filter_operator").append('<option value="'+key+'">'+value+'</option>');
-                    });
-                }else{
-                $(".filter_operator").empty();
-                }
-            }
-            });
-        }else{
-          Swal.fire({
-                    title: 'Informasi',
-                    text: "Harap lengkapi kolom tanggal",
-                    confirmButtonColor: '#d33',
-                    confirmButtonText: 'OK',
-                    customClass: {
-                        confirmButton: 'bg-red-500',
-                    },
-                });
-            $(".filter_operator").empty();
-            $(".filter_waroeng").val(prev).trigger('change');
-        }   
-        // $(".filter_status").val(prev).trigger('change');      
-    });
-
-  } else {
-
-    $('.filter_tanggal').on('change', function(){
-        var tanggal  = $('.filter_tanggal').val(); 
-        if(tanggal){
-            $.ajax({
-            type:"GET",
-            url: '{{route("detail.select_user")}}',
-            dataType: 'JSON',
-            data : {
-              tanggal: tanggal,
-            },
-            success:function(res){               
-                if(res){
-                    $(".filter_operator").empty();
-                    $(".filter_operator").append('<option></option>');
-                    $.each(res,function(key,value){
-                        $(".filter_operator").append('<option value="'+key+'">'+value+'</option>');
-                    });
-                }else{
-                $(".filter_operator").empty();
-                }
-            }
-            });
-        }else{
-            $(".filter_operator").empty();
-        } 
-        $(".filter_operator").empty();   
-    });
-  }
-
-});
-</script>
+                </script>
             @endsection

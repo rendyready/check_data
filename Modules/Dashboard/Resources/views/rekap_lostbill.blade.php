@@ -211,244 +211,258 @@
 @section('js')
     <!-- js -->
     <script type="module">
-$(document).ready(function() {
-    Codebase.helpersOnLoad(['jq-select2']);
-    function formatNumber(number) {
-      return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-    }
+        $(document).ready(function() {
+            Codebase.helpersOnLoad(['jq-select2']);
 
-    var userInfo = document.getElementById('user-info');
-    var userInfoPusat = document.getElementById('user-info-pusat');
-    var waroengId = userInfo.dataset.waroengId;
-    var HakAksesArea = userInfo.dataset.hasAccess === 'true';
-    var HakAksesPusat = userInfoPusat.dataset.hasAccess === 'true';
+            function formatNumber(number) {
+                return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            }
 
-    //eksekusi filter
-    $('#cari').on('click', function() {
-        var area     = $('.filter_area option:selected').val();
-        var waroeng  = $('.filter_waroeng option:selected').val();
-        var tanggal  = $('.filter_tanggal').val();
-        var operator = $('.filter_operator option:selected').val();
+            var userInfo = document.getElementById('user-info');
+            var userInfoPusat = document.getElementById('user-info-pusat');
+            var waroengId = userInfo.dataset.waroengId;
+            var HakAksesArea = userInfo.dataset.hasAccess === 'true';
+            var HakAksesPusat = userInfoPusat.dataset.hasAccess === 'true';
 
-        if (tanggal === "" && (area === "" || waroeng === "") && operator === "") {
-            Swal.fire({
-            title: 'Informasi',
-            text: 'Silahkan lengkapi semua kolom',
-            confirmButtonColor: '#d33',
-            confirmButtonText: 'OK',
-            customClass: {
-                confirmButton: 'bg-red-500',
-            },
-            });
-          } else {
+            //eksekusi filter
+            $('#cari').on('click', function() {
+                var area = $('.filter_area option:selected').val();
+                var waroeng = $('.filter_waroeng option:selected').val();
+                var tanggal = $('.filter_tanggal').val();
+                var operator = $('.filter_operator option:selected').val();
 
-        $('#tampil_rekap').DataTable({
-            button: [],
-            destroy: true,
-            orderCellsTop: true,
-            processing: true,
-            scrollX: true,
-            // scrollY: '300px',
-            lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
-            pageLength: 10,
-            columnDefs: [ 
-                        {
+                if (tanggal === "" && (area === "" || waroeng === "") && operator === "") {
+                    Swal.fire({
+                        title: 'Informasi',
+                        text: 'Silahkan lengkapi semua kolom',
+                        confirmButtonColor: '#d33',
+                        confirmButtonText: 'OK',
+                        customClass: {
+                            confirmButton: 'bg-red-500',
+                        },
+                    });
+                } else {
+
+                    $('#tampil_rekap').DataTable({
+                        button: [],
+                        destroy: true,
+                        orderCellsTop: true,
+                        processing: true,
+                        scrollX: true,
+                        // scrollY: '300px',
+                        lengthMenu: [
+                            [10, 25, 50, 100, -1],
+                            [10, 25, 50, 100, "All"]
+                        ],
+                        pageLength: 10,
+                        columnDefs: [{
                             targets: '_all',
                             className: 'dt-body-center'
+                        }, ],
+                        buttons: [{
+                            extend: 'excelHtml5',
+                            text: 'Export Excel',
+                            title: 'Rekap Lostbill - ' + tanggal,
+                            pageSize: 'A4',
+                            pageOrientation: 'potrait',
+                        }],
+                        ajax: {
+                            url: '{{ route('rekap_lostbill.show') }}',
+                            data: {
+                                area: area,
+                                waroeng: waroeng,
+                                tanggal: tanggal,
+                                operator: operator,
+                            },
+                            type: "GET",
                         },
-                    ],
-            buttons: [
-                    {
-                        extend: 'excelHtml5',
-                        text: 'Export Excel',
-                        title: 'Rekap Lostbill - ' + tanggal,
-                        pageSize: 'A4',
-                        pageOrientation: 'potrait',
+                        success: function(data) {
+                            console.log(data);
+                        }
+                    });
+                }
+            });
+
+            if (HakAksesPusat) {
+                $('.filter_area').on('select2:select', function() {
+                    var id_area = $(this).val();
+                    var tanggal = $('.filter_tanggal').val();
+                    var prev = $(this).data('previous-value');
+
+                    if (id_area == 'all') {
+                        $("#select_waroeng").hide();
+                        $("#select_operator").hide();
+                        $(".filter_waroeng").empty();
+                        $(".filter_operator").empty();
+                    } else {
+                        $("#select_waroeng").show();
+                        $("#select_operator").show();
                     }
-                ],
-            ajax: {
-                url: '{{route("rekap_lostbill.show")}}',
-                data : {
-                    area: area,
-                    waroeng: waroeng,
-                    tanggal: tanggal,
-                    operator: operator,
-                },
-                type : "GET",
-                },
-                success:function(data){ 
-                    console.log(data);
-                }
-        });
-        }
-    });
 
-    if(HakAksesPusat){
-      $('.filter_area').on('select2:select', function(){
-        var id_area = $(this).val();
-        var tanggal  = $('.filter_tanggal').val();
-        var prev = $(this).data('previous-value');
-
-        if (id_area == 'all'){
-            $("#select_waroeng").hide();
-            $("#select_operator").hide();
-            $(".filter_waroeng").empty();
-            $(".filter_operator").empty();
-        } else {
-            $("#select_waroeng").show();
-            $("#select_operator").show();
-        }
-        
-        if(id_area && tanggal){
-            $.ajax({
-            type:"GET",
-            url: '{{route("rekap_lostbill.select_waroeng")}}',
-            dataType: 'JSON',
-            destroy: true,    
-            data : {
-                id_area: id_area,
-            },
-            success:function(res){    
-              // console.log(res);           
-                if(res){
-                    $(".filter_waroeng").empty();
-                    $(".filter_waroeng").append('<option></option>');
-                    $.each(res,function(key,value){
-                        $(".filter_waroeng").append('<option value="'+key+'">'+value+'</option>');
-                    });
-                }else{
-                $(".filter_waroeng").empty();
-                }
-            }
-            });
-        }else{
-          alert('Harap lengkapi kolom tanggal');
-            $(".filter_waroeng").empty();
-            $(".filter_area").val(prev).trigger('change');
-        }      
-        $(".filter_operator").empty();
-    });
-  } 
-
-  if(HakAksesArea){
-    $('.filter_waroeng').on('select2:select', function(){
-        var id_waroeng = $(this).val();   
-        var tanggal  = $('.filter_tanggal').val(); 
-        var prev = $(this).data('previous-value');
-
-        if (id_waroeng == 'all'){
-            $("#select_operator").hide();
-            $(".filter_operator").empty();
-        } else {
-            $("#select_operator").show();
-        }
-
-        if(id_waroeng && tanggal){
-            $.ajax({
-            type:"GET",
-            url: '{{route("rekap_lostbill.select_user")}}',
-            dataType: 'JSON',
-            data : {
-              id_waroeng: id_waroeng,
-              tanggal: tanggal,
-            },
-            success:function(res){   
-              console.log(res);       
-                if(res){
+                    if (id_area && tanggal) {
+                        $.ajax({
+                            type: "GET",
+                            url: '{{ route('rekap_lostbill.select_waroeng') }}',
+                            dataType: 'JSON',
+                            destroy: true,
+                            data: {
+                                id_area: id_area,
+                            },
+                            success: function(res) {
+                                // console.log(res);           
+                                if (res) {
+                                    $(".filter_waroeng").empty();
+                                    $(".filter_waroeng").append('<option></option>');
+                                    $.each(res, function(key, value) {
+                                        $(".filter_waroeng").append('<option value="' +
+                                            key + '">' + value + '</option>');
+                                    });
+                                } else {
+                                    $(".filter_waroeng").empty();
+                                }
+                            }
+                        });
+                    } else {
+                        alert('Harap lengkapi kolom tanggal');
+                        $(".filter_waroeng").empty();
+                        $(".filter_area").val(prev).trigger('change');
+                    }
                     $(".filter_operator").empty();
-                    $(".filter_operator").append('<option></option>');
-                    $.each(res,function(key,value){
-                        $(".filter_operator").append('<option value="'+key+'">'+value+'</option>');
-                    });
-                }else{
-                $(".filter_operator").empty();
-                }
+                });
             }
-            });
-        }else{
-          alert('Harap lengkapi kolom tanggal');
-            $(".filter_operator").empty();
-            $(".filter_waroeng").val(prev).trigger('change');
-        }      
-    });
 
-  } else {
+            if (HakAksesArea) {
+                $('.filter_waroeng').on('select2:select', function() {
+                    var id_waroeng = $(this).val();
+                    var tanggal = $('.filter_tanggal').val();
+                    var prev = $(this).data('previous-value');
 
-    $('.filter_tanggal').on('change', function(){
-        var tanggal  = $('.filter_tanggal').val(); 
-        if(tanggal){
-            $.ajax({
-            type:"GET",
-            url: '{{route("rekap_lostbill.select_user")}}',
-            dataType: 'JSON',
-            data : {
-              tanggal: tanggal,
-            },
-            success:function(res){               
-                if(res){
+                    if (id_waroeng == 'all') {
+                        $("#select_operator").hide();
+                        $(".filter_operator").empty();
+                    } else {
+                        $("#select_operator").show();
+                    }
+
+                    if (id_waroeng && tanggal) {
+                        $.ajax({
+                            type: "GET",
+                            url: '{{ route('rekap_lostbill.select_user') }}',
+                            dataType: 'JSON',
+                            data: {
+                                id_waroeng: id_waroeng,
+                                tanggal: tanggal,
+                            },
+                            success: function(res) {
+                                console.log(res);
+                                if (res) {
+                                    $(".filter_operator").empty();
+                                    $(".filter_operator").append('<option></option>');
+                                    $.each(res, function(key, value) {
+                                        $(".filter_operator").append('<option value="' +
+                                            key + '">' + value + '</option>');
+                                    });
+                                } else {
+                                    $(".filter_operator").empty();
+                                }
+                            }
+                        });
+                    } else {
+                        alert('Harap lengkapi kolom tanggal');
+                        $(".filter_operator").empty();
+                        $(".filter_waroeng").val(prev).trigger('change');
+                    }
+                });
+
+            } else {
+
+                $('.filter_tanggal').on('change', function() {
+                    var tanggal = $('.filter_tanggal').val();
+                    if (tanggal) {
+                        $.ajax({
+                            type: "GET",
+                            url: '{{ route('rekap_lostbill.select_user') }}',
+                            dataType: 'JSON',
+                            data: {
+                                tanggal: tanggal,
+                            },
+                            success: function(res) {
+                                if (res) {
+                                    $(".filter_operator").empty();
+                                    $(".filter_operator").append('<option></option>');
+                                    $.each(res, function(key, value) {
+                                        $(".filter_operator").append('<option value="' +
+                                            key + '">' + value + '</option>');
+                                    });
+                                } else {
+                                    $(".filter_operator").empty();
+                                }
+                            }
+                        });
+                    } else {
+                        $(".filter_operator").empty();
+                    }
                     $(".filter_operator").empty();
-                    $(".filter_operator").append('<option></option>');
-                    $.each(res,function(key,value){
-                        $(".filter_operator").append('<option value="'+key+'">'+value+'</option>');
-                    });
-                }else{
-                $(".filter_operator").empty();
-                }
+                });
             }
+
+            //filter tanggal
+            $('#filter_tanggal').flatpickr({
+                mode: "range",
+                dateFormat: 'Y-m-d',
+
             });
-        }else{
-            $(".filter_operator").empty();
-        }     
-        $(".filter_operator").empty(); 
-    });
-  }
 
-    //filter tanggal
-    $('#filter_tanggal').flatpickr({
-            mode: "range",
-            dateFormat: 'Y-m-d',
-          
-    });
-
-    //detail rekap lostbill
-    $("#tampil_rekap").on('click','#button_detail', function() {
+            //detail rekap lostbill
+            $("#tampil_rekap").on('click', '#button_detail', function() {
                 var id = $(this).attr('value');
                 // console.log(id);
                 $.ajax({
-                    url: "/dashboard/rekap_lostbill/detail/"+id,
+                    url: "/dashboard/rekap_lostbill/detail/" + id,
                     type: "GET",
                     dataType: 'json',
                     destroy: true,
                     success: function(data) {
-                      // console.log(data.detail_nota.r_t_detail_id);
+                        // console.log(data.detail_nota.r_t_detail_id);
                         $('#no_nota').html(data.transaksi_rekap.r_l_b_nota_code);
                         $('#tgl_nota').html(data.transaksi_rekap.r_l_b_tanggal);
                         $('#jam').html(data.transaksi_rekap.r_l_b_jam);
                         $('#nama_kons').html(data.transaksi_rekap.r_l_b_bigboss);
-                        $('#total').html(formatNumber(Number(data.transaksi_rekap.r_l_b_nominal)));
-                        $('#pajak').html(formatNumber(Number(data.transaksi_rekap.r_l_b_nominal_pajak)));
-                        $('#tot_lost').html(formatNumber(Number(data.transaksi_rekap.r_l_b_nominal) + Number(data.transaksi_rekap.r_l_b_nominal_pajak) + Number(data.transaksi_rekap.r_l_b_nominal_sc)));
-                        $('#sc').html(formatNumber(Number(data.transaksi_rekap.r_l_b_nominal_sc)));
-                             
-                    $('.sub_sub_nota').remove();
-                    $.each(data.detail_nota, function (key, item) {
-                        console.log(item.r_l_b_detail_m_produk_nama);
-                        $('#sub_nota').append(
-                                '<tr class="sub_sub_nota" style="background-color: white;">'+
-                                  '<td>'+
-                                    '<small class="fw-semibold" style="font-size: 15px;" id="produk">'+ item.r_l_b_detail_m_produk_nama +'</small> <br>'+
-                                    '<small id="qty">'+ item.r_l_b_detail_qty +'</small> x <small id="price">'+ formatNumber(Number(item.r_l_b_detail_price)) +'</small>'+
-                                  '</td>'+
-                                  '<td class="text-end fw-semibold" id+="sub_total">'+ formatNumber(Number(item.r_l_b_detail_nominal)) + ''+
-                                  '</td>'+
+                        $('#total').html(formatNumber(Number(data.transaksi_rekap
+                            .r_l_b_nominal)));
+                        $('#pajak').html(formatNumber(Number(data.transaksi_rekap
+                            .r_l_b_nominal_pajak)));
+                        $('#tot_lost').html(formatNumber(Number(data.transaksi_rekap
+                            .r_l_b_nominal) + Number(data.transaksi_rekap
+                            .r_l_b_nominal_pajak) + Number(data.transaksi_rekap
+                            .r_l_b_nominal_sc)));
+                        $('#sc').html(formatNumber(Number(data.transaksi_rekap
+                            .r_l_b_nominal_sc)));
+
+                        $('.sub_sub_nota').remove();
+                        $.each(data.detail_nota, function(key, item) {
+                            console.log(item.r_l_b_detail_m_produk_nama);
+                            $('#sub_nota').append(
+                                '<tr class="sub_sub_nota" style="background-color: white;">' +
+                                '<td>' +
+                                '<small class="fw-semibold" style="font-size: 15px;" id="produk">' +
+                                item.r_l_b_detail_m_produk_nama + '</small> <br>' +
+                                '<small id="qty">' + item.r_l_b_detail_qty +
+                                '</small> x <small id="price">' + formatNumber(
+                                    Number(item.r_l_b_detail_price)) + '</small>' +
+                                '</td>' +
+                                '<td class="text-end fw-semibold" id+="sub_total">' +
+                                formatNumber(Number(item.r_l_b_detail_nominal)) +
+                                '' +
+                                '</td>' +
                                 '</tr>'
-                          );
-                      });
+                            );
+                        });
                     },
                 });
                 $("#detail_nota").modal('show');
-            }); 
+            });
 
-});
-</script>
+        });
+    </script>
 @endsection
