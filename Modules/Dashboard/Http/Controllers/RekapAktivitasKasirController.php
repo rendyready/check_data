@@ -118,11 +118,7 @@ class RekapAktivitasKasirController extends Controller
             ->orderBy('r_b_l_tanggal', 'ASC')
             ->orderBy('rekap_modal_sesi', 'ASC');
 
-        $currentPage = $request->input('page', 1);
-        $perPage = 10;
-        $skip = ($currentPage - 1) * $perPage;
-
-        $result = $buka_laci->skip($skip)->take($perPage)->get();
+        $result = $buka_laci->paginate(10);
 
         $data = [];
         foreach ($result as $laci) {
@@ -137,7 +133,7 @@ class RekapAktivitasKasirController extends Controller
             ];
             $data[] = $row;
         }
-        $filterData = $buka_laci->count();
+        $filterData = count($data);
 
         $output = [
             "draw" => intval($request->input('draw', 1)),
@@ -145,6 +141,7 @@ class RekapAktivitasKasirController extends Controller
             "recordsFiltered" => $totalData,
             "data" => $data,
         ];
+
         return response()->json($output);
     }
 

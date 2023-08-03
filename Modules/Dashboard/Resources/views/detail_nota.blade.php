@@ -202,7 +202,7 @@
                                                     '<td>Total</td>' +
                                                     '<td class="mask">' +
                                                     '' + formatNumber(Number(value
-                                                    .r_t_nominal)) + '' +
+                                                        .r_t_nominal)) + '' +
                                                     '</td>' +
                                                     '</tr>' +
                                                     '<tr style="background-color: white;" class="text-end fw-semibold">' +
@@ -286,7 +286,7 @@
                                                     '</small> <br>' +
                                                     '<small>' + item.r_t_detail_qty + ' x ' +
                                                     formatNumber(Number(item
-                                                    .r_t_detail_price)) + '</small>' +
+                                                        .r_t_detail_price)) + '</small>' +
                                                     '</td>' +
                                                     '<td class="text-end fw-semibold" >' +
                                                     formatNumber(Number(item
@@ -300,6 +300,8 @@
 
                                             $.each(data.transaksi_rekap, function(key, value) {
                                                 // console.log(item.r_t_id);
+                                                var ids = value.r_l_b_id.toString()
+                                                    .replace(/\./g, '');
                                                 $('#show_nota').append(
                                                     '<div class="col-xl-4 show_nota">' +
                                                     '<div class="block block-rounded mb-1">' +
@@ -317,7 +319,7 @@
                                                     '</div>' +
                                                     '<div class="block-content mb-4" style="background-color: rgba(224, 224, 224, 0.5)">' +
                                                     '<table class="table table-border table-striped table-vcenter js-dataTable-full" style="font-size: 13px;">' +
-                                                    '<thead id="sub_nota' + value.r_l_b_id +
+                                                    '<thead id="sub_nota' + ids +
                                                     '">' +
                                                     '</thead>' +
                                                     '<tbody>' +
@@ -351,7 +353,9 @@
                                             });
                                             $.each(data.detail_nota, function(key, item) {
                                                 // console.log(item.r_t_detail_r_t_id);
-                                                $('#sub_nota' + item.r_l_b_detail_r_l_b_id).append(
+                                                var id = item.r_l_b_detail_r_l_b_id.toString()
+                                                    .replace(/\./g, '');
+                                                $('#sub_nota' + id).append(
                                                     '<tr style="background-color: white;" class="show_nota">' +
                                                     '<td>' +
                                                     '<small class="fw-semibold" style="font-size: 15px;">' +

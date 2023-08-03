@@ -89,7 +89,8 @@
                                     <div class="row mb-1">
                                         <label class="col-sm-3 col-form-label">Pembayaran</label>
                                         <div class="col-sm-9">
-                                            <select id="filter_payment" style="width: 100%;" data-placeholder="Pilih Akun"
+                                            <select id="filter_payment" style="width: 100%;"
+                                                data-placeholder="Pilih Pembayaran"
                                                 class="cari f-area js-select2 form-control filter_payment" name="waroeng">
                                                 <option></option>
                                                 @foreach ($data->payment as $payment)

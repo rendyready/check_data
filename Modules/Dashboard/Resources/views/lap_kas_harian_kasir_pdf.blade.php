@@ -14,15 +14,18 @@
             padding: 0 !important;
             margin: 0 !important;
         }
+
         .table {
             width: 100%;
             text-align: center;
             border: none;
             border-color: transparent;
         }
-        .table-border th,td{
+
+        .table-border th,
+        td {
             border: 1px solid black;
-        color: black;
+            color: black;
         }
 
         .table td {
@@ -49,15 +52,15 @@
         <tbody>
             {{-- @dump($data) --}}
             @foreach ($data as $item)
-            @if (in_array($item['payment'], [1]))
-                <tr>
-                    <td>{{ $item['no_nota'] }}</td>
-                    <td>{{ $item['transaksi'] }}</td>
-                    <td>{{ $item['masuk'] }}</td>
-                    <td>{{ $item['keluar'] }}</td>
-                    <td>{{ $item['saldo'] }}</td>
-                </tr>
-            @endif
+                @if (in_array($item['payment'], [1]))
+                    <tr>
+                        <td>{{ $item['no_nota'] }}</td>
+                        <td>{{ $item['transaksi'] }}</td>
+                        <td>{{ $item['masuk'] }}</td>
+                        <td>{{ $item['keluar'] }}</td>
+                        <td>{{ $item['saldo'] }}</td>
+                    </tr>
+                @endif
             @endforeach
         </tbody>
     </table>
@@ -76,15 +79,15 @@
         <tbody>
             {{-- @dump($data) --}}
             @foreach ($data as $item)
-            @if (in_array($item['payment'], [22]))
-                <tr>
-                    <td>{{ $item['no_nota'] }}</td>
-                    <td>{{ $item['transaksi'] }}</td>
-                    <td>{{ $item['masuk'] }}</td>
-                    <td>{{ $item['keluar'] }}</td>
-                    <td>{{ $item['saldo'] }}</td>
-                </tr>
-            @endif
+                @if (in_array($item['payment'], [22]))
+                    <tr>
+                        <td>{{ $item['no_nota'] }}</td>
+                        <td>{{ $item['transaksi'] }}</td>
+                        <td>{{ $item['masuk'] }}</td>
+                        <td>{{ $item['keluar'] }}</td>
+                        <td>{{ $item['saldo'] }}</td>
+                    </tr>
+                @endif
             @endforeach
         </tbody>
     </table>
@@ -103,21 +106,21 @@
         <tbody>
             {{-- @dump($data) --}}
             @foreach ($data as $item)
-            @if (in_array($item['payment'], [2,3,4,5,6,7,8,9]))
-                <tr>
-                    <td>{{ $item['no_nota'] }}</td>
-                    <td>{{ $item['transaksi'] }}</td>
-                    <td>{{ $item['masuk'] }}</td>
-                    <td>{{ $item['keluar'] }}</td>
-                    <td>{{ $item['saldo'] }}</td>
-                </tr>
-            @endif
+                @if (in_array($item['payment'], [2, 3, 4, 5, 6, 7, 8, 9]))
+                    <tr>
+                        <td>{{ $item['no_nota'] }}</td>
+                        <td>{{ $item['transaksi'] }}</td>
+                        <td>{{ $item['masuk'] }}</td>
+                        <td>{{ $item['keluar'] }}</td>
+                        <td>{{ $item['saldo'] }}</td>
+                    </tr>
+                @endif
             @endforeach
         </tbody>
     </table>
     <div style="width: 100%; height: 250px; border: 1px solid black;" class="mb-2">
         <p class="ml-2" style="font-size: 14px">Catatan : </p>
-      </div>
+    </div>
     <div class="table-responsive">
         <table class="table table-sm table-borderless">
             <tr>
