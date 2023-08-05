@@ -11,8 +11,20 @@ class VersionController extends Controller
 {
     public function upgrade()
     {
+        #This is Work Fine
+        $path = "/usr/local/var/www/backend-cr-2023";
+        $process = Process::fromShellCommandline('php artisan config:c');
+        // $process->setWorkingDirectory(base_path());
+        $process->setWorkingDirectory($path);
+        $process->run();
+        if (!$process->isSuccessful()) {
+            // throw new ProcessFailedException($process);
+            // return "update gagal";
+        }
+
+        return $process->getOutput();
         $path = base_path();
-        $path= "/home/admin/web/cronjob.wss/public_html";
+        $path= "/home/adminweb/web/cronjob.wss/public_html";
         $appPath = 'cr55.wss';
         $replace = explode('/',$path);
         $newPath = '';

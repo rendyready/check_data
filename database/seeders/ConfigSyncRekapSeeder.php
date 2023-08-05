@@ -25,7 +25,7 @@ class ConfigSyncRekapSeeder extends Seeder
             'config_sync_for' => 'waroeng',
             'config_sync_tipe' => 'send',
             'config_sync_limit' => 100,
-            'config_sync_field_status' => 'r_b_l_status_sync',
+            'config_sync_field_status' => 'r_b_l_client_target',
             'config_sync_field_validate1' => 'r_b_l_id'
         ]);
         DB::table('config_sync')->insert([
@@ -35,7 +35,7 @@ class ConfigSyncRekapSeeder extends Seeder
             'config_sync_for' => 'waroeng',
             'config_sync_tipe' => 'send',
             'config_sync_limit' => 100,
-            'config_sync_field_status' => 'rekap_garansi_status_sync',
+            'config_sync_field_status' => 'rekap_garansi_client_target',
             'config_sync_field_validate1' => 'rekap_garansi_id'
         ]);
         DB::table('config_sync')->insert([
@@ -45,7 +45,7 @@ class ConfigSyncRekapSeeder extends Seeder
             'config_sync_for' => 'waroeng',
             'config_sync_tipe' => 'send',
             'config_sync_limit' => 100,
-            'config_sync_field_status' => 'r_h_m_status_sync',
+            'config_sync_field_status' => 'r_h_m_client_target',
             'config_sync_field_validate1' => 'r_h_m_id'
         ]);
         DB::table('config_sync')->insert([
@@ -55,7 +55,7 @@ class ConfigSyncRekapSeeder extends Seeder
             'config_sync_for' => 'waroeng',
             'config_sync_tipe' => 'send',
             'config_sync_limit' => 100,
-            'config_sync_field_status' => 'r_h_t_status_sync',
+            'config_sync_field_status' => 'r_h_t_client_target',
             'config_sync_field_validate1' => 'r_h_t_id'
         ]);
         DB::table('config_sync')->insert([
@@ -65,7 +65,7 @@ class ConfigSyncRekapSeeder extends Seeder
             'config_sync_for' => 'waroeng',
             'config_sync_tipe' => 'send',
             'config_sync_limit' => 100,
-            'config_sync_field_status' => 'r_h_t_detail_status_sync',
+            'config_sync_field_status' => 'r_h_t_detail_client_target',
             'config_sync_field_validate1' => 'r_h_t_detail_id'
         ]);
         DB::table('config_sync')->insert([
@@ -75,7 +75,7 @@ class ConfigSyncRekapSeeder extends Seeder
             'config_sync_for' => 'waroeng',
             'config_sync_tipe' => 'send',
             'config_sync_limit' => 100,
-            'config_sync_field_status' => 'r_l_b_status_sync',
+            'config_sync_field_status' => 'r_l_b_client_target',
             'config_sync_field_validate1' => 'r_l_b_id'
         ]);
         DB::table('config_sync')->insert([
@@ -85,7 +85,7 @@ class ConfigSyncRekapSeeder extends Seeder
             'config_sync_for' => 'waroeng',
             'config_sync_tipe' => 'send',
             'config_sync_limit' => 100,
-            'config_sync_field_status' => 'r_l_b_detail_status_sync',
+            'config_sync_field_status' => 'r_l_b_detail_client_target',
             'config_sync_field_validate1' => 'r_l_b_detail_id'
         ]);
         DB::table('config_sync')->insert([
@@ -95,7 +95,7 @@ class ConfigSyncRekapSeeder extends Seeder
             'config_sync_for' => 'waroeng',
             'config_sync_tipe' => 'send',
             'config_sync_limit' => 100,
-            'config_sync_field_status' => 'rekap_member_status_sync',
+            'config_sync_field_status' => 'rekap_member_client_target',
             'config_sync_field_validate1' => 'rekap_member_phone'
         ]);
         DB::table('config_sync')->insert([
@@ -105,7 +105,7 @@ class ConfigSyncRekapSeeder extends Seeder
             'config_sync_for' => 'waroeng',
             'config_sync_tipe' => 'send',
             'config_sync_limit' => 100,
-            'config_sync_field_status' => 'rekap_modal_status_sync',
+            'config_sync_field_status' => 'rekap_modal_client_target',
             'config_sync_field_validate1' => 'rekap_modal_id'
         ]);
         DB::table('config_sync')->insert([
@@ -115,7 +115,7 @@ class ConfigSyncRekapSeeder extends Seeder
             'config_sync_for' => 'waroeng',
             'config_sync_tipe' => 'send',
             'config_sync_limit' => 100,
-            'config_sync_field_status' => 'rekap_modal_detail_status_sync',
+            'config_sync_field_status' => 'rekap_modal_detail_client_target',
             'config_sync_field_validate1' => 'rekap_modal_detail_id'
         ]);
         DB::table('config_sync')->insert([
@@ -125,7 +125,7 @@ class ConfigSyncRekapSeeder extends Seeder
             'config_sync_for' => 'waroeng',
             'config_sync_tipe' => 'send',
             'config_sync_limit' => 100,
-            'config_sync_field_status' => 'r_m_m_status_sync',
+            'config_sync_field_status' => 'r_m_m_client_target',
             'config_sync_field_validate1' => 'r_m_m_id'
         ]);
         DB::table('config_sync')->insert([
@@ -135,7 +135,7 @@ class ConfigSyncRekapSeeder extends Seeder
             'config_sync_for' => 'waroeng',
             'config_sync_tipe' => 'send',
             'config_sync_limit' => 100,
-            'config_sync_field_status' => 'r_u_t_status_sync',
+            'config_sync_field_status' => 'r_u_t_client_target',
             'config_sync_field_validate1' => 'r_u_t_id'
         ]);
         DB::table('config_sync')->insert([
@@ -145,7 +145,7 @@ class ConfigSyncRekapSeeder extends Seeder
             'config_sync_for' => 'waroeng',
             'config_sync_tipe' => 'send',
             'config_sync_limit' => 100,
-            'config_sync_field_status' => 'r_t_status_sync',
+            'config_sync_field_status' => 'r_t_client_target',
             'config_sync_field_validate1' => 'r_t_id'
         ]);
         DB::table('config_sync')->insert([
@@ -155,7 +155,7 @@ class ConfigSyncRekapSeeder extends Seeder
             'config_sync_for' => 'waroeng',
             'config_sync_tipe' => 'send',
             'config_sync_limit' => 100,
-            'config_sync_field_status' => 'r_t_detail_status_sync',
+            'config_sync_field_status' => 'r_t_detail_client_target',
             'config_sync_field_validate1' => 'r_t_detail_id'
         ]);
         DB::table('config_sync')->insert([
@@ -165,7 +165,7 @@ class ConfigSyncRekapSeeder extends Seeder
             'config_sync_for' => 'waroeng',
             'config_sync_tipe' => 'send',
             'config_sync_limit' => 100,
-            'config_sync_field_status' => 'r_p_t_status_sync',
+            'config_sync_field_status' => 'r_p_t_client_target',
             'config_sync_field_validate1' => 'r_p_t_id'
         ]);
         DB::table('config_sync')->insert([
@@ -175,7 +175,7 @@ class ConfigSyncRekapSeeder extends Seeder
             'config_sync_for' => 'waroeng',
             'config_sync_tipe' => 'send',
             'config_sync_limit' => 100,
-            'config_sync_field_status' => 'r_r_status_sync',
+            'config_sync_field_status' => 'r_r_client_target',
             'config_sync_field_validate1' => 'r_r_id'
         ]);
         DB::table('config_sync')->insert([
@@ -185,7 +185,7 @@ class ConfigSyncRekapSeeder extends Seeder
             'config_sync_for' => 'waroeng',
             'config_sync_tipe' => 'send',
             'config_sync_limit' => 100,
-            'config_sync_field_status' => 'r_r_detail_status_sync',
+            'config_sync_field_status' => 'r_r_detail_client_target',
             'config_sync_field_validate1' => 'r_r_detail_id'
         ]);
         DB::table('config_sync')->insert([
@@ -195,7 +195,7 @@ class ConfigSyncRekapSeeder extends Seeder
             'config_sync_for' => 'waroeng',
             'config_sync_tipe' => 'send',
             'config_sync_limit' => 100,
-            'config_sync_field_status' => 'users_status_sync',
+            'config_sync_field_status' => 'users_client_target',
             'config_sync_field_validate1' => 'users_id'
         ]);
 

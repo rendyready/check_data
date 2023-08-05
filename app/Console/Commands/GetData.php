@@ -114,11 +114,16 @@ class GetData extends Command
             ->table('db_con')
             ->where('db_con_host',$dest->db_con_host)
             ->first();
-
-        if ($getDataOpen->cronjob_status == 'off') {
-            Log::alert("GET DATA NOT ALLOWED FROM PUSAT. SERVER BUSY.");
+        if (!empty($getDataOpen)) {
+            if ($getDataOpen->db_con_sync_status == 'off') {
+                Log::alert("GET DATA NOT ALLOWED FROM PUSAT. SERVER BUSY.");
+                exit();
+            }
+        }else{
+            Log::alert("GET DATA SETUP NOT FOUND.");
             exit();
         }
+
 
         Config::set("database.connections.destination", [
             'driver' => $dest->db_con_driver,
@@ -160,6 +165,7 @@ class GetData extends Command
         $serverCode = ":{$dest->db_con_m_w_id}:";
 
         $getTableList = DB::connection('cronpusat')
+            ->table('config_sync')
             ->where('config_sync_for',env('SERVER_TYPE',''))
             ->where('config_sync_tipe','get')
             ->where('config_sync_status','on')
@@ -171,9 +177,9 @@ class GetData extends Command
             $sourceSchema = Schema::connection('source')->getColumnListing($valTab->config_sync_table_name);
             $destSchema = Schema::connection('destination')->getColumnListing($valTab->config_sync_table_name);
             if (count($sourceSchema) != count($destSchema)) {
-                info("Table {$valTab->config_sync_table_name} structur of DESTINATION {$dest->db_con_host} EXPIRED");
+                Log::info("Table {$valTab->config_sync_table_name} structur of DESTINATION {$dest->db_con_host} EXPIRED");
                 #SKIP
-                exit();
+                continue;
             }
 
             if ($valTab->config_sync_sequence == 'on') {
@@ -276,7 +282,7 @@ class GetData extends Command
                         #control duplicate
                         if ($cekReady > 1) {
                             $maxId = $DbDest->table($valTab->config_sync_table_name)
-                                ->selectRaw("MAX(id)")
+                                ->selectRaw("MAX(id) as id")
                                 ->where($validationField)
                                 ->orderBy('id','asc')
                                 ->groupBy($groupValidation)
