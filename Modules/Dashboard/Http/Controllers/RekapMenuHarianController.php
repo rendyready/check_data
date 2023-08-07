@@ -126,8 +126,8 @@ class RekapMenuHarianController extends Controller
         if ($request->trans != 'all') {
             $get->where('m_t_t_name', $request->trans);
         }
-        $get = $get->selectRaw('SUM(r_t_detail_qty) AS qty, r_t_detail_reguler_price, r_t_tanggal, r_t_detail_m_produk_nama, r_t_detail_m_produk_id, m_w_nama, m_jenis_produk_id, m_jenis_produk_nama, m_t_t_name, rekap_modal_sesi, r_t_detail_price, SUM(r_t_detail_nominal) AS nominal_nota, SUM(r_t_detail_price * r_t_detail_qty) as trans, SUM(r_t_detail_nominal) - (SUM(r_t_detail_reguler_price * r_t_detail_qty)) cr_trans, sum(r_t_detail_nominal_pajak) pajak')
-            ->groupBy('r_t_tanggal', 'r_t_detail_m_produk_nama', 'r_t_detail_m_produk_id', 'm_w_nama', 'r_t_detail_reguler_price', 'm_jenis_produk_nama', 'm_jenis_produk_id', 'm_t_t_name', 'rekap_modal_sesi', 'r_t_detail_price')
+        $get = $get->selectRaw('SUM(r_t_detail_qty) AS qty, r_t_detail_reguler_price, r_t_tanggal, r_t_detail_m_produk_nama, r_t_detail_m_produk_id, m_w_nama, m_jenis_produk_id, m_jenis_produk_nama, m_t_t_name, rekap_modal_sesi, r_t_detail_price, SUM(r_t_detail_nominal) AS nominal_nota, SUM(r_t_detail_price * r_t_detail_qty) as trans, SUM(r_t_detail_nominal) - (SUM(r_t_detail_reguler_price * r_t_detail_qty)) cr_trans, sum(r_t_detail_nominal_pajak) pajak, r_t_detail_package_price as kemasan')
+            ->groupBy('r_t_tanggal', 'r_t_detail_m_produk_nama', 'r_t_detail_m_produk_id', 'm_w_nama', 'r_t_detail_reguler_price', 'm_jenis_produk_nama', 'm_jenis_produk_id', 'm_t_t_name', 'rekap_modal_sesi', 'r_t_detail_price', 'kemasan')
             ->orderBy('m_jenis_produk_id', 'ASC')
             ->orderBy('r_t_detail_m_produk_nama', 'ASC')
             ->get();
@@ -147,13 +147,13 @@ class RekapMenuHarianController extends Controller
             $row[] = $val_menu->r_t_detail_m_produk_nama;
             $crRef = $val_menu->nominal_nota;
             $qty = $val_menu->qty;
-            $nominal = $val_menu->r_t_detail_reguler_price * $val_menu->qty;
+            $nominal = $val_menu->r_t_detail_reguler_price * $val_menu->qty + ($val_menu->kemasan * $qty);
             $pajakMenu = $val_menu->pajak;
             if (!empty($refund2)) {
                 foreach ($refund as $key => $valRef) {
                     if ($val_menu->r_t_detail_m_produk_id == $valRef->r_r_detail_m_produk_id && $val_menu->r_t_tanggal == $valRef->r_r_tanggal && $val_menu->rekap_modal_sesi == $valRef->rekap_modal_sesi && $val_menu->m_t_t_name == $valRef->m_t_t_name) {
                         $qty = $val_menu->qty - $valRef->r_r_detail_qty;
-                        $nominal = $val_menu->r_t_detail_reguler_price * $qty;
+                        $nominal = $val_menu->r_t_detail_reguler_price * $qty + ($val_menu->kemasan * $qty);
                         $crRef = $val_menu->nominal_nota - ($val_menu->r_t_detail_reguler_price * $valRef->r_r_detail_qty);
                         $pajakMenu = $val_menu->pajak - (($val_menu->r_t_detail_reguler_price * $valRef->r_r_detail_qty) * 0.1);
                     }
@@ -163,7 +163,7 @@ class RekapMenuHarianController extends Controller
             $row[] = number_format($nominal);
             $row[] = $val_menu->m_jenis_produk_nama;
             $row[] = $val_menu->m_t_t_name;
-            $nominal_trans = $val_menu->r_t_detail_price * $qty;
+            $nominal_trans = $val_menu->r_t_detail_price * $qty + ($val_menu->kemasan * $qty);
             $selisihTrans = $nominal - $nominal_trans;
             if ($val_menu->m_t_t_name != 'dine in' && $val_menu->m_t_t_name != 'take away') {
                 if ($nominal == $nominal_trans) {
@@ -193,7 +193,7 @@ class RekapMenuHarianController extends Controller
                 $pajak = 0;
             }
             $row[] = number_format($pajak);
-            $selisihTax = $pajak - $pajakMenu;
+            $selisihTax = $pajakMenu - $pajak;
             if ($val_menu->pajak == 0) {
                 $selisihTax = 0;
             }
