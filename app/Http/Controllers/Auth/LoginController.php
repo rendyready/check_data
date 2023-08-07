@@ -57,6 +57,8 @@ class LoginController extends Controller
         Artisan::call('cache:clear');
         if (!$user->hasVerifiedAccount()) {
             $token = Password::createToken($user);
+            DB::table('users')->where('email',$user->email)->update(['reset_token'=>$token]);
+            auth()->logout();
             return redirect()->route('update.pass', [ 'token' => $token,
             'email' => $request->email]);
         }
@@ -81,9 +83,19 @@ class LoginController extends Controller
     }
     public function update_pass_save(Request $request)
     {
-        DB::table('users')->where('email',$request->email)->update(['password'=> Hash::make($request->password),'verified'=>$request->verified]); 
-        auth()->logout();       
-        return redirect('/login');
+        $user = DB::table('users')->where('email', $request->email)->first();
+    
+        if ($user && $user->reset_token === $request->reset_token) {
+            DB::table('users')->where('email', $request->email)->update([
+                'password' => Hash::make($request->password),
+                'verified' => $request->verified,
+                'reset_token' => null, // Reset token to null after successful reset
+            ]);
+            auth()->logout();
+            return redirect('/login')->with('success', 'Password updated successfully. Please login with your new password.');
+        } else {
+            return redirect()->back()->with('error', 'Invalid reset token.');
+        }
     }
     public function no_akses(Request $request) {
         return view('auth.no_akses');
