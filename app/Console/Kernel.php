@@ -18,6 +18,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('datasync:cron')->everyMinute()->withoutOverlapping(10);
         $schedule->command('getdata:cron')->everyMinute()->withoutOverlapping(10);
         $schedule->command('senddata:cron')->everyMinute()->withoutOverlapping(10);
+        $schedule->command('version:cron')->hourly()->withoutOverlapping(10);
         $schedule->command('getdataupdate:cron')->everyMinute()->withoutOverlapping(10);
         $schedule->command('sendcloud:cron')->everyTwoMinutes()->withoutOverlapping(10);
         $schedule->command('mastercontrol:cron')->hourly()->withoutOverlapping(10);
