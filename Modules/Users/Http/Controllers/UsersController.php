@@ -198,4 +198,7 @@ class UsersController extends Controller
             ]);
         return response()->json(['success' => 'success']);
     }
+    public function noakses() {
+        return view('users::no_akses');
+    }
 }
