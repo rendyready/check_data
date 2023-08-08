@@ -71,21 +71,29 @@ class RekeningController extends Controller
 
     public function simpan(Request $request)
     {
-        foreach ($request->m_rekening_no_akun as $key => $value) {
-            $str1 = str_replace('.', '', $request->m_rekening_saldo[$key]);
-            $data = array(
-                'm_rekening_id' => $this->getMasterId('m_rekening'),
-                'm_rekening_m_waroeng_id' => $request->m_rekening_m_waroeng_id,
-                'm_rekening_kategori' => $request->m_rekening_kategori,
-                'm_rekening_no_akun' => $request->m_rekening_no_akun[$key],
-                'm_rekening_nama' => strtolower($request->m_rekening_nama[$key]),
-                'm_rekening_saldo' => str_replace(',', '.', $str1),
-                'm_rekening_created_by' => Auth::user()->users_id,
-                'm_rekening_created_at' => Carbon::now(),
-            );
-            DB::table('m_rekening')->insert($data);
+        $validasi = DB::table('m_rekening')
+            ->select('m_rekening_no_akun')
+            ->where('m_rekening_no_akun', $request->m_rekening_no_akun)
+            ->count();
+        if ($validasi == 0) {
+            foreach ($request->m_rekening_no_akun as $key => $value) {
+                $str1 = str_replace('.', '', $request->m_rekening_saldo[$key]);
+                $data = array(
+                    'm_rekening_id' => $this->getMasterId('m_rekening'),
+                    'm_rekening_m_waroeng_id' => $request->m_rekening_m_waroeng_id,
+                    'm_rekening_kategori' => $request->m_rekening_kategori,
+                    'm_rekening_no_akun' => $request->m_rekening_no_akun[$key],
+                    'm_rekening_nama' => strtolower($request->m_rekening_nama[$key]),
+                    'm_rekening_saldo' => str_replace(',', '.', $str1),
+                    'm_rekening_created_by' => Auth::user()->users_id,
+                    'm_rekening_created_at' => Carbon::now(),
+                );
+                DB::table('m_rekening')->insert($data);
+            }
+            return response()->json(['messages' => 'Berhasil Menambakan', 'type' => 'success']);
+        } else {
+            return response()->json(['messages' => 'No Akun Sudah Dipakai', 'type' => 'danger']);
         }
-        return response()->json(['messages' => 'Berhasil Menambakan', 'type' => 'success']);
 
     }
 
@@ -143,12 +151,21 @@ class RekeningController extends Controller
             ->where('rekap_jurnal_umum_m_rekening_no_akun', $request->m_rekening_no_akun)
             ->count();
 
-        $validasi4 = DB::table('m_link_akuntansi')
-            ->select('m_link_akuntansi_m_rekening_no_akun')
-            ->where('m_link_akuntansi_m_rekening_no_akun', $request->m_rekening_no_akun)
+        $validasi4 = DB::table('m_rekening')
+            ->select('m_rekening_no_akun')
+            ->where('m_rekening_no_akun', $request->m_rekening_no_akun)
             ->count();
 
-        $validasi = $validasi1 + $validasi2 + $validasi3 + $validasi4;
+        $validasi5 = DB::table('m_rekening')
+            ->select('m_rekening_no_akun')
+            ->where('m_rekening_nama', $request->m_rekening_nama1)
+            ->count();
+        if (($validasi4 != 0 && $validasi5 == 0) || ($validasi4 == 0 && $validasi5 != 0)) {
+            $validasi4 = 0;
+            $validasi5 = 0;
+        }
+
+        $validasi = $validasi1 + $validasi2 + $validasi3 + $validasi4 + $validasi5;
         if ($validasi == 0) {
             $str1 = str_replace('.', '', $request->m_rekening_saldo);
             $data = array(
@@ -158,12 +175,18 @@ class RekeningController extends Controller
                 'm_rekening_updated_by' => Auth::user()->users_id,
                 'm_rekening_updated_at' => Carbon::now(),
             );
-            return $update = DB::table('m_rekening')->where('m_rekening_no_akun', $rekening_old)
+            $update = DB::table('m_rekening')->where('m_rekening_no_akun', $rekening_old)
                 ->update($data);
 
-            return response()->json($update);
+            return response()->json([
+                'type' => 'success',
+                'messages' => 'Data berhasil diupdate',
+            ]);
         }
-        return response()->json($validasi);
+        return response()->json([
+            'type' => 'danger',
+            'messages' => 'No Akun Sudah Dipakai',
+        ]);
     }
 
     public function delete(Request $request, $id)
@@ -183,17 +206,23 @@ class RekeningController extends Controller
             ->where('rekap_jurnal_umum_m_rekening_no_akun', $request->m_rekening_no_akun)
             ->count();
 
-        $validasi4 = DB::table('rekap_link_akuntansi')
-            ->select('rekap_link_akuntansi_m_rekening_id')
-            ->where('rekap_link_akuntansi_m_rekening_id', $request->m_rekening_no_akun)
+        $validasi4 = DB::table('m_link_akuntansi')
+            ->select('m_link_akuntansi_m_rekening_no_akun')
+            ->where('m_link_akuntansi_m_rekening_no_akun', $request->m_rekening_no_akun)
             ->count();
         $validasi = $validasi1 + $validasi2 + $validasi3 + $validasi4;
         if ($validasi === 0) {
             $delete = DB::table('m_rekening')
                 ->where('m_rekening_no_akun', $id)
                 ->delete();
-            return response()->json($delete);
+            return response()->json([
+                'type' => 'success',
+                'messages' => 'Data berhasil diupdate',
+            ]);
         }
-        return response()->json($validasi);
+        return response()->json([
+            'type' => 'danger',
+            'messages' => 'No Akun Sudah Dipakai, tidak bisa dihapus',
+        ]);
     }
 }

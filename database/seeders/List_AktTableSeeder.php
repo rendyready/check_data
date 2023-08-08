@@ -215,19 +215,19 @@ class List_AktTableSeeder extends Seeder
                 'm_link_akuntansi_m_rekening_no_akun' => '',
             ],
             [
-                'm_link_akuntansi_id' => 33,
+                'm_link_akuntansi_id' => 34,
                 'm_link_akuntansi_nama' => 'Biaya Refund',
                 'm_link_akuntansi_created_by' => 1,
                 'm_link_akuntansi_m_rekening_no_akun' => '',
             ],
             [
-                'm_link_akuntansi_id' => 34,
+                'm_link_akuntansi_id' => 35,
                 'm_link_akuntansi_nama' => 'Biaya Lostbill',
                 'm_link_akuntansi_created_by' => 1,
                 'm_link_akuntansi_m_rekening_no_akun' => '',
             ],
             [
-                'm_link_akuntansi_id' => 35,
+                'm_link_akuntansi_id' => 36,
                 'm_link_akuntansi_nama' => 'Biaya Garansi',
                 'm_link_akuntansi_created_by' => 1,
                 'm_link_akuntansi_m_rekening_no_akun' => '',
