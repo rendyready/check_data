@@ -449,54 +449,80 @@ class JurnalOtomatisController extends Controller
             ->orderby('rekap_garansi_id', 'ASC')
             ->get();
 
-        $nominal_menu = 0;
-        $nominal_nonmenu = 0;
-        $nominal_wbd = 0;
-        $nominal_icecream = 0;
-        $totalDebit = 0;
-        $totalKredit = 0;
+        $processed_ids = array();
         $data = array();
-        $kas_foreach = array();
-        $pajak_foreach = array();
-        $persediaan_foreach = array();
-        $biaya_sedia_foreach = array();
+        foreach ($kas_transaksi as $kasTrans) {
 
-        foreach ($kas as $valKas) {
-            $menuIndex = 0;
-            $nonMenuIndex = 0;
-            $isMenuTurn = true;
-            $currentNotaCode = null;
+            ${$kasTrans->r_t_nota_code . '-menu'} = 0;
+            ${$kasTrans->r_t_nota_code . '-nonmenu'} = 0;
+            ${$kasTrans->r_t_nota_code . '-menu'} = 0;
+            ${$kasTrans->r_t_nota_code . '-menu'} = 0;
 
-            while ($menuIndex < count($menu) || $nonMenuIndex < count($nonMenu)) {
-                if ($isMenuTurn && $menuIndex < count($menu)) {
-                    $valData = $menu[$menuIndex];
-                    $menuIndex++;
-                } elseif (!$isMenuTurn && $nonMenuIndex < count($nonMenu)) {
-                    $valData = $nonMenu[$nonMenuIndex];
-                    $nonMenuIndex++;
-                } else {
-                    break;
-                }
-
-                if ($valData->r_p_t_m_payment_method_id == 1 && $valData->nominal != 0) {
-                    $nominal = $valData->nominal;
-                    $particul = $isMenuTurn ? 'nominal menu (nota ' . $valData->r_t_nota_code . ')' : 'nominal non menu (nota ' . $valData->r_t_nota_code . ')';
-
-                    if ($currentNotaCode !== $valData->r_t_nota_code) {
-                        $isMenuTurn = !$isMenuTurn;
-                        $currentNotaCode = $valData->r_t_nota_code;
+            foreach ($kas as $valKas) {
+                $common_id = $kasTrans->r_t_id;
+                if ($kasTrans->nominal != 0) {
+                    if (in_array($valRekap->m_produk_id, $listMenu)) {
+                        if (!in_array($common_id, $processed_ids)) {
+                            $data[] = array(
+                                'tanggal' => $kasTrans->r_t_tanggal,
+                                'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valKas->m_rekening_no_akun,
+                                'akun' => $valKas->m_rekening_nama,
+                                'particul' => 'nominal menu (nota ' . $kasTrans->r_t_nota_code . ')',
+                                'debit' => number_format($kasTrans->nominal),
+                                'kredit' => 0,
+                            );
+                        }
                     }
 
-                    $data[] = array(
-                        'tanggal' => $valData->r_t_tanggal,
-                        'no_akun' => $valData->r_t_m_w_code . '.' . $valKas->m_rekening_no_akun,
-                        'akun' => $valKas->m_rekening_nama,
-                        'particul' => $particul,
-                        'debit' => number_format($nominal),
-                        'kredit' => 0,
-                    );
+                    if ($kasTrans->nominal != 0) {
+                        $data[] = array(
+                            'tanggal' => $kasTrans->r_t_tanggal,
+                            'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valKas->m_rekening_no_akun,
+                            'akun' => $valKas->m_rekening_nama,
+                            'particul' => 'nominal non menu (nota ' . $kasTrans->r_t_nota_code . ')',
+                            'debit' => number_format($kasTrans->nominal),
+                            'kredit' => 0,
+                        );
+                    }
                 }
+                $processed_ids[] = $common_id;
             }
+
+            // $menuIndex = 0;
+            // $nonMenuIndex = 0;
+            // $isMenuTurn = true;
+            // $currentNotaCode = null;
+
+            // while ($menuIndex < count($menu) || $nonMenuIndex < count($nonMenu)) {
+            //     if ($isMenuTurn && $menuIndex < count($menu)) {
+            //         $valData = $menu[$menuIndex];
+            //         $menuIndex++;
+            //     } elseif (!$isMenuTurn && $nonMenuIndex < count($nonMenu)) {
+            //         $valData = $nonMenu[$nonMenuIndex];
+            //         $nonMenuIndex++;
+            //     } else {
+            //         break;
+            //     }
+
+            //     if ($valData->r_p_t_m_payment_method_id == 1 && $valData->nominal != 0) {
+            //         $nominal = $valData->nominal;
+            //         $particul = $isMenuTurn ? 'nominal menu (nota ' . $valData->r_t_nota_code . ')' : 'nominal non menu (nota ' . $valData->r_t_nota_code . ')';
+
+            //         if ($currentNotaCode !== $valData->r_t_nota_code) {
+            //             $isMenuTurn = !$isMenuTurn;
+            //             $currentNotaCode = $valData->r_t_nota_code;
+            //         }
+
+            //         $data[] = array(
+            //             'tanggal' => $valData->r_t_tanggal,
+            //             'no_akun' => $valData->r_t_m_w_code . '.' . $valKas->m_rekening_no_akun,
+            //             'akun' => $valKas->m_rekening_nama,
+            //             'particul' => $particul,
+            //             'debit' => number_format($nominal),
+            //             'kredit' => 0,
+            //         );
+            //     }
+            // }
             // foreach ($wbd as $valWbd) {
             //     if ($valWbd->r_p_t_m_payment_method_id == 1 && $valWbd->nominal != 0) {
             //         $nominal_wbd = $valWbd->nominal;
