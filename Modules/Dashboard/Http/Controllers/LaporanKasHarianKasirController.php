@@ -661,6 +661,7 @@ class LaporanKasHarianKasirController extends Controller
                     $prevSaldo = $saldo;
                     $totalMasuk += $row->r_t_nominal;
                 }
+
                 if ($row->r_t_nominal_pajak != 0) {
                     $masuk = number_format($row->r_t_nominal_pajak);
                     $trans_pajak = $prevSaldo + $row->r_t_nominal_pajak;
