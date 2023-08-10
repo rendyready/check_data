@@ -75,7 +75,7 @@
                 <div class="form-group">
                   <label for="config_sub_jenis_produk_m_kategori_id">Menu Kategori</label>
                   <div>
-                      <select class="js-select2" id="config_sub_jenis_produk_m_kategori_id" name="config_sub_jenis_produk_m_kategori_id" style="width: 100%;" data-container="#modal-block-select2" data-placeholder="Choose one..">
+                      <select class="js-select2" id="config_sub_jenis_produk_m_kategori_id" name="config_sub_jenis_produk_m_kategori_id[]" style="width: 100%;" data-container="#modal-block-select2" data-placeholder="Pilih Sub Kategori" multiple>
                           <option></option>
                           @foreach ($data->kategori as $item)
                               <option value="{{$item->m_sub_jenis_produk_id}}">{{ $item->m_sub_jenis_produk_nama}}</option>

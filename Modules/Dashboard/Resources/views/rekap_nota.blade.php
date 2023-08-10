@@ -250,232 +250,260 @@
 @section('js')
     <!-- js -->
     <script type="module">
-$(document).ready(function() {
-    Codebase.helpersOnLoad(['jq-select2']);
-    function formatNumber(number) {
-      return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-    }
+        $(document).ready(function() {
+            Codebase.helpersOnLoad(['jq-select2']);
 
-    var userInfo = document.getElementById('user-info');
-    var userInfoPusat = document.getElementById('user-info-pusat');
-    var waroengId = userInfo.dataset.waroengId;
-    var HakAksesArea = userInfo.dataset.hasAccess === 'true';
-    var HakAksesPusat = userInfoPusat.dataset.hasAccess === 'true';
-
-    $('#cari').on('click', function() {
-        var waroeng  = $('.filter_waroeng option:selected').val();
-        var tanggal  = $('.filter_tanggal').val();
-        var operator = $('.filter_operator option:selected').val();
-        var status   = $('.filter_status').val();
-
-        if (tanggal === "" || operator === "" || waroeng === "") {
-            Swal.fire({
-            title: 'Informasi',
-            text: 'Silahkan lengkapi semua kolom',
-            confirmButtonColor: '#d33',
-            confirmButtonText: 'OK',
-            customClass: {
-                confirmButton: 'bg-red-500',
-            },
-            });
-          } else {
-
-    $('#tampil_rekap').DataTable({
-        button: [],
-        destroy: true,
-        orderCellsTop: true,
-        processing: true,
-        scrollX: true,
-        // scrollY: '300px',
-        columnDefs: [ 
-                    {
-                        targets: '_all',
-                        className: 'dt-body-center'
-                    },
-                ],
-        lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
-        pageLength: 10,
-        ajax: {
-            url: '{{route("rekap.show")}}',
-            data : {
-                waroeng: waroeng,
-                tanggal: tanggal,
-                operator: operator,
-                status: status,
-            },
-            type : "GET",
-            },
-            success:function(data){ 
-                console.log(data);
+            function formatNumber(number) {
+                return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
             }
-      });
-    }
-    });
 
-    if(HakAksesPusat){
-      $('.filter_area').on('select2:select', function(){
-        var id_area = $(this).val();
-        var tanggal  = $('.filter_tanggal').val();
-        var prev = $(this).data('previous-value');
-        if(id_area && tanggal){
-            $.ajax({
-            type:"GET",
-            url: '{{route("rekap.select_waroeng")}}',
-            dataType: 'JSON',
-            destroy: true,    
-            data : {
-                id_area: id_area,
-            },
-            success:function(res){    
-              // console.log(res);           
-                if(res){
-                    $(".filter_waroeng").empty();
-                    $(".filter_waroeng").append('<option></option>');
-                    $.each(res,function(key,value){
-                        $(".filter_waroeng").append('<option value="'+key+'">'+value+'</option>');
+            var userInfo = document.getElementById('user-info');
+            var userInfoPusat = document.getElementById('user-info-pusat');
+            var waroengId = userInfo.dataset.waroengId;
+            var HakAksesArea = userInfo.dataset.hasAccess === 'true';
+            var HakAksesPusat = userInfoPusat.dataset.hasAccess === 'true';
+
+            $('#cari').on('click', function() {
+                var waroeng = $('.filter_waroeng option:selected').val();
+                var tanggal = $('.filter_tanggal').val();
+                var operator = $('.filter_operator option:selected').val();
+                var status = $('.filter_status').val();
+
+                if (tanggal === "" || operator === "" || waroeng === "") {
+                    Swal.fire({
+                        title: 'Informasi',
+                        text: 'Silahkan lengkapi semua kolom',
+                        confirmButtonColor: '#d33',
+                        confirmButtonText: 'OK',
+                        customClass: {
+                            confirmButton: 'bg-red-500',
+                        },
                     });
-                }else{
-                $(".filter_waroeng").empty();
-                }
-            }
-            });
-        }else{
-            Swal.fire({
-                    title: 'Informasi',
-                    text: "Harap lengkapi kolom tanggal",
-                    confirmButtonColor: '#d33',
-                    confirmButtonText: 'OK',
-                    customClass: {
-                        confirmButton: 'bg-red-500',
-                    },
-                });
-            $(".filter_waroeng").empty();
-            $(".filter_area").val(prev).trigger('change');
-        }     
-        $(".filter_operator").empty(); 
-    });
-  } 
+                } else {
 
-    if(HakAksesArea){
-    $('.filter_waroeng').on('select2:select', function(){
-        var id_waroeng = $(this).val();   
-        var tanggal  = $('.filter_tanggal').val(); 
-        var prev = $(this).data('previous-value');
-        if(id_waroeng && tanggal){
-            $.ajax({
-            type:"GET",
-            url: '{{route("rekap.select_user")}}',
-            dataType: 'JSON',
-            data : {
-              id_waroeng: id_waroeng,
-              tanggal: tanggal,
-            },
-            success:function(res){   
-              console.log(res);       
-                if(res){
+                    $('#tampil_rekap').DataTable({
+                        button: [],
+                        destroy: true,
+                        orderCellsTop: true,
+                        processing: true,
+                        scrollX: true,
+                        // scrollY: '300px',
+                        columnDefs: [{
+                            targets: '_all',
+                            className: 'dt-body-center'
+                        }, ],
+                        buttons: [{
+                            extend: 'excelHtml5',
+                            text: 'Export Excel',
+                            title: 'Rekap Nota - ' + tanggal,
+                            pageSize: 'A4',
+                            pageOrientation: 'potrait',
+                        }],
+                        lengthMenu: [
+                            [10, 25, 50, 100, -1],
+                            [10, 25, 50, 100, "All"]
+                        ],
+                        pageLength: 10,
+                        ajax: {
+                            url: '{{ route('rekap.show') }}',
+                            data: {
+                                waroeng: waroeng,
+                                tanggal: tanggal,
+                                operator: operator,
+                                status: status,
+                            },
+                            type: "GET",
+                        },
+                        success: function(data) {
+                            console.log(data);
+                        }
+                    });
+                }
+            });
+
+            if (HakAksesPusat) {
+                $('.filter_area').on('select2:select', function() {
+                    var id_area = $(this).val();
+                    var tanggal = $('.filter_tanggal').val();
+                    var prev = $(this).data('previous-value');
+                    if (id_area && tanggal) {
+                        $.ajax({
+                            type: "GET",
+                            url: '{{ route('rekap.select_waroeng') }}',
+                            dataType: 'JSON',
+                            destroy: true,
+                            data: {
+                                id_area: id_area,
+                            },
+                            success: function(res) {
+                                // console.log(res);           
+                                if (res) {
+                                    $(".filter_waroeng").empty();
+                                    $(".filter_waroeng").append('<option></option>');
+                                    $.each(res, function(key, value) {
+                                        $(".filter_waroeng").append('<option value="' +
+                                            key + '">' + value + '</option>');
+                                    });
+                                } else {
+                                    $(".filter_waroeng").empty();
+                                }
+                            }
+                        });
+                    } else {
+                        Swal.fire({
+                            title: 'Informasi',
+                            text: "Harap lengkapi kolom tanggal",
+                            confirmButtonColor: '#d33',
+                            confirmButtonText: 'OK',
+                            customClass: {
+                                confirmButton: 'bg-red-500',
+                            },
+                        });
+                        $(".filter_waroeng").empty();
+                        $(".filter_area").val(prev).trigger('change');
+                    }
                     $(".filter_operator").empty();
-                    $(".filter_operator").append('<option></option>');
-                    $.each(res,function(key,value){
-                        $(".filter_operator").append('<option value="'+key+'">'+value+'</option>');
-                    });
-                }else{
-                $(".filter_operator").empty();
-                }
-            }
-            });
-        }else{
-            Swal.fire({
-                    title: 'Informasi',
-                    text: "Harap lengkapi kolom tanggal",
-                    confirmButtonColor: '#d33',
-                    confirmButtonText: 'OK',
-                    customClass: {
-                        confirmButton: 'bg-red-500',
-                    },
                 });
-            $(".filter_operator").empty();
-            $(".filter_waroeng").val(prev).trigger('change');
-        }      
-    });
-
-  } else {
-
-    $('.filter_tanggal').on('change', function(){
-        var tanggal  = $('.filter_tanggal').val(); 
-        if(tanggal){
-            $.ajax({
-            type:"GET",
-            url: '{{route("rekap.select_user")}}',
-            dataType: 'JSON',
-            data : {
-              tanggal: tanggal,
-            },
-            success:function(res){               
-                if(res){
-                    $(".filter_operator").empty();
-                    $(".filter_operator").append('<option></option>');
-                    $.each(res,function(key,value){
-                        $(".filter_operator").append('<option value="'+key+'">'+value+'</option>');
-                    });
-                }else{
-                $(".filter_operator").empty();
-                }
             }
+
+            if (HakAksesArea) {
+                $('.filter_waroeng').on('select2:select', function() {
+                    var id_waroeng = $(this).val();
+                    var tanggal = $('.filter_tanggal').val();
+                    var prev = $(this).data('previous-value');
+                    if (id_waroeng && tanggal) {
+                        $.ajax({
+                            type: "GET",
+                            url: '{{ route('rekap.select_user') }}',
+                            dataType: 'JSON',
+                            data: {
+                                id_waroeng: id_waroeng,
+                                tanggal: tanggal,
+                            },
+                            success: function(res) {
+                                console.log(res);
+                                if (res) {
+                                    $(".filter_operator").empty();
+                                    $(".filter_operator").append('<option></option>');
+                                    $.each(res, function(key, value) {
+                                        $(".filter_operator").append('<option value="' +
+                                            key + '">' + value + '</option>');
+                                    });
+                                } else {
+                                    $(".filter_operator").empty();
+                                }
+                            }
+                        });
+                    } else {
+                        Swal.fire({
+                            title: 'Informasi',
+                            text: "Harap lengkapi kolom tanggal",
+                            confirmButtonColor: '#d33',
+                            confirmButtonText: 'OK',
+                            customClass: {
+                                confirmButton: 'bg-red-500',
+                            },
+                        });
+                        $(".filter_operator").empty();
+                        $(".filter_waroeng").val(prev).trigger('change');
+                    }
+                });
+
+            } else {
+
+                $('.filter_tanggal').on('change', function() {
+                    var tanggal = $('.filter_tanggal').val();
+                    if (tanggal) {
+                        $.ajax({
+                            type: "GET",
+                            url: '{{ route('rekap.select_user') }}',
+                            dataType: 'JSON',
+                            data: {
+                                tanggal: tanggal,
+                            },
+                            success: function(res) {
+                                if (res) {
+                                    $(".filter_operator").empty();
+                                    $(".filter_operator").append('<option></option>');
+                                    $.each(res, function(key, value) {
+                                        $(".filter_operator").append('<option value="' +
+                                            key + '">' + value + '</option>');
+                                    });
+                                } else {
+                                    $(".filter_operator").empty();
+                                }
+                            }
+                        });
+                    } else {
+                        $(".filter_operator").empty();
+                    }
+                });
+            }
+
+            $('.filter_tanggal').flatpickr({
+                mode: "range",
+                dateFormat: 'Y-m-d',
             });
-        }else{
-            $(".filter_operator").empty();
-        }      
-    });
-  }
 
-    $('.filter_tanggal').flatpickr({
-            mode: "range",
-            dateFormat: 'Y-m-d',  
-    });
-
-            $("#tampil_rekap").on('click','#button_detail', function() {
+            $("#tampil_rekap").on('click', '#button_detail', function() {
                 var id = $(this).attr('value');
                 $.ajax({
-                    url: "/dashboard/rekap/detail/"+id,
+                    url: "/dashboard/rekap/detail/" + id,
                     type: "GET",
                     dataType: 'json',
                     destroy: true,
                     success: function(data) {
-                      // console.log(data.detail_nota.r_t_detail_id);
+                        // console.log(data.detail_nota.r_t_detail_id);
                         $('#no_nota').html(data.transaksi_rekap.r_t_nota_code);
                         $('#tgl_nota').html(data.transaksi_rekap.r_t_tanggal);
                         $('#nama_kons').html(data.transaksi_rekap.name);
-                        $('#total').html(formatNumber(Number(data.transaksi_rekap.r_t_nominal)));
-                        $('#pajak').html(formatNumber(Number(data.transaksi_rekap.r_t_nominal_pajak)));
-                        $('#bayar').html(formatNumber(Number(data.transaksi_rekap.r_t_nominal_total_bayar) - Number(data.transaksi_rekap.r_t_nominal_pembulatan) - Number(data.transaksi_rekap.r_t_nominal_free_kembalian)));
+                        $('#total').html(formatNumber(Number(data.transaksi_rekap
+                        .r_t_nominal)));
+                        $('#pajak').html(formatNumber(Number(data.transaksi_rekap
+                            .r_t_nominal_pajak)));
+                        $('#bayar').html(formatNumber(Number(data.transaksi_rekap
+                            .r_t_nominal_total_bayar) - Number(data.transaksi_rekap
+                            .r_t_nominal_pembulatan) - Number(data.transaksi_rekap
+                            .r_t_nominal_free_kembalian)));
                         $('#pembayaran').html(data.transaksi_rekap.m_payment_method_name);
-                        $('#sc').html(formatNumber(Number(data.transaksi_rekap.r_t_nominal_sc)));
-                        $('#diskon').html(formatNumber(Number(data.transaksi_rekap.r_t_nominal_diskon)));
-                        $('#voucher').html(formatNumber(Number(data.transaksi_rekap.r_t_nominal_voucher)));
-                        $('#tarik').html(formatNumber(Number(data.transaksi_rekap.r_t_nominal_tarik_tunai)));
-                        $('#pembulatan').html(formatNumber(Number(data.transaksi_rekap.r_t_nominal_pembulatan)));
-                        $('#free').html(formatNumber(Number(data.transaksi_rekap.r_t_nominal_free_kembalian)));
-                             
-                    $('.sub_sub_nota').remove();
-                    $.each(data.detail_nota, function (key, item) {
-                      var rekap_id = item.r_t_detail_r_t_id.toString().replace(/\./g,'');
-                        console.log(item.r_t_detail_m_produk_nama);
-                        $('#sub_nota').append(
-                                '<tr class="sub_sub_nota" style="background-color: white;">'+
-                                  '<td>'+
-                                    '<small class="fw-semibold" style="font-size: 15px;" id="produk">'+ item.r_t_detail_m_produk_nama +'</small> <br>'+
-                                    '<small id="qty">'+ item.r_t_detail_qty +'</small> x <small id="price">'+ formatNumber(Number(item.r_t_detail_price)) +'</small>'+
-                                  '</td>'+
-                                  '<td class="text-end fw-semibold" id+="sub_total">'+ formatNumber(Number(item.r_t_detail_nominal)) + ''+
-                                  '</td>'+
+                        $('#sc').html(formatNumber(Number(data.transaksi_rekap
+                        .r_t_nominal_sc)));
+                        $('#diskon').html(formatNumber(Number(data.transaksi_rekap
+                            .r_t_nominal_diskon)));
+                        $('#voucher').html(formatNumber(Number(data.transaksi_rekap
+                            .r_t_nominal_voucher)));
+                        $('#tarik').html(formatNumber(Number(data.transaksi_rekap
+                            .r_t_nominal_tarik_tunai)));
+                        $('#pembulatan').html(formatNumber(Number(data.transaksi_rekap
+                            .r_t_nominal_pembulatan)));
+                        $('#free').html(formatNumber(Number(data.transaksi_rekap
+                            .r_t_nominal_free_kembalian)));
+
+                        $('.sub_sub_nota').remove();
+                        $.each(data.detail_nota, function(key, item) {
+                            var rekap_id = item.r_t_detail_r_t_id.toString().replace(
+                                /\./g, '');
+                            console.log(item.r_t_detail_m_produk_nama);
+                            $('#sub_nota').append(
+                                '<tr class="sub_sub_nota" style="background-color: white;">' +
+                                '<td>' +
+                                '<small class="fw-semibold" style="font-size: 15px;" id="produk">' +
+                                item.r_t_detail_m_produk_nama + '</small> <br>' +
+                                '<small id="qty">' + item.r_t_detail_qty +
+                                '</small> x <small id="price">' + formatNumber(
+                                    Number(item.r_t_detail_price)) + '</small>' +
+                                '</td>' +
+                                '<td class="text-end fw-semibold" id+="sub_total">' +
+                                formatNumber(Number(item.r_t_detail_nominal)) + '' +
+                                '</td>' +
                                 '</tr>'
-                          );
-                      });
+                            );
+                        });
                     },
                 });
                 $("#detail_nota").modal('show');
-            }); 
+            });
 
-});
-</script>
+        });
+    </script>
 @endsection

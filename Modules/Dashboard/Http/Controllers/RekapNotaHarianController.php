@@ -111,8 +111,8 @@ class RekapNotaHarianController extends Controller
                 $trans->where('r_t_created_by', $request->operator);
             }
             $trans->join('users', 'users_id', 'r_t_created_by')
-                ->selectRaw('r_t_tanggal, SUM(r_t_nominal_total_bayar) as total, SUM(r_t_nominal_pembulatan) as pembulatan, SUM(r_t_nominal_free_kembalian) as free, name, m_area_nama, m_area_id, m_w_nama, r_t_created_by, rekap_modal_sesi')
-                ->groupBy('r_t_tanggal', 'name', 'm_area_nama', 'm_area_id', 'm_w_nama', 'r_t_created_by', 'rekap_modal_sesi')
+                ->selectRaw('r_t_tanggal, SUM(r_t_nominal_total_bayar) as total, SUM(r_t_nominal_pembulatan) as pembulatan, SUM(r_t_nominal_free_kembalian) as free, name, m_area_nama, m_area_id, m_w_nama, r_t_created_by, rekap_modal_sesi, rekap_modal_id')
+                ->groupBy('r_t_tanggal', 'name', 'm_area_nama', 'm_area_id', 'm_w_nama', 'r_t_created_by', 'rekap_modal_sesi', 'rekap_modal_id')
                 ->orderBy('r_t_tanggal', 'ASC')
                 ->orderBy('m_area_id', 'ASC')
                 ->orderBy('rekap_modal_sesi', 'ASC');
@@ -125,8 +125,8 @@ class RekapNotaHarianController extends Controller
         $trans1 = $trans->get();
 
         if ($request->show_operator == 'ya') {
-            $trans->selectRaw('r_p_t_m_payment_method_id, r_t_tanggal, SUM(r_t_nominal_total_bayar) as nominal, SUM(r_t_nominal_pembulatan) as bulat, SUM(r_t_nominal_free_kembalian) as kembali, r_t_created_by')
-                ->groupBy('r_t_tanggal', 'r_p_t_m_payment_method_id', 'r_t_created_by');
+            $trans->selectRaw('r_p_t_m_payment_method_id, r_t_tanggal, SUM(r_t_nominal_total_bayar) as nominal, SUM(r_t_nominal_pembulatan) as bulat, SUM(r_t_nominal_free_kembalian) as kembali, r_t_created_by, rekap_modal_id')
+                ->groupBy('r_t_tanggal', 'r_p_t_m_payment_method_id', 'r_t_created_by', 'rekap_modal_id');
         } else {
             $trans->selectRaw('r_p_t_m_payment_method_id, r_t_tanggal, SUM(r_t_nominal_total_bayar) as nominal, SUM(r_t_nominal_pembulatan) as bulat, SUM(r_t_nominal_free_kembalian) as kembali')
                 ->groupBy('r_t_tanggal', 'r_p_t_m_payment_method_id');
@@ -154,7 +154,7 @@ class RekapNotaHarianController extends Controller
                 $data[$i][$valPay->m_payment_method_name] = 0;
                 foreach ($trans2 as $key => $valTrans2) {
                     if ($request->show_operator == 'ya') {
-                        if ($valTrans->r_t_tanggal == $valTrans2->r_t_tanggal && $valPay->m_payment_method_id == $valTrans2->r_p_t_m_payment_method_id && $valTrans->r_t_created_by == $valTrans2->r_t_created_by) {
+                        if ($valTrans->rekap_modal_id == $valTrans2->rekap_modal_id && $valPay->m_payment_method_id == $valTrans2->r_p_t_m_payment_method_id && $valTrans->r_t_created_by == $valTrans2->r_t_created_by) {
                             $data[$i][$valPay->m_payment_method_name] = number_format($valTrans2->nominal - ($valTrans2->bulat + $valTrans2->kembali));
                         }
                     } else {

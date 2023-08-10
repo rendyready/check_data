@@ -36,17 +36,19 @@ class LaporanKasHarianKasirController extends Controller
 
     public function select_waroeng(Request $request)
     {
-        $waroeng = DB::table('m_w')
-            ->select('m_w_id', 'm_w_nama', 'm_w_code')
-            ->where('m_w_m_area_id', $request->id_area)
-            ->orderBy('m_w_id', 'asc')
-            ->get();
-        $data = array();
-        foreach ($waroeng as $val) {
-            $data[$val->m_w_id] = [$val->m_w_nama];
-            //  $data['all'] = ['all waroeng'];
+        if ($request->id_area != 'all') {
+            $waroeng = DB::table('m_w')
+                ->select('m_w_id', 'm_w_nama', 'm_w_code')
+                ->where('m_w_m_area_id', $request->id_area)
+                ->orderBy('m_w_id', 'asc')
+                ->get();
+            $data = array();
+            foreach ($waroeng as $val) {
+                $data[$val->m_w_id] = [$val->m_w_nama];
+                $data['all'] = ['all waroeng'];
+            }
+            return response()->json($data);
         }
-        return response()->json($data);
     }
 
     public function detail($id)
@@ -345,7 +347,7 @@ class LaporanKasHarianKasirController extends Controller
                     $totalKeluar += $row->r_r_nominal_free_kembalian_refund;
                 }
             }
-        } // saldo awal // saldo awal
+        } // saldo awal
         $saldo_terakhir = end($data)['saldo'];
         $data[] = array(
             'no_nota' => 'Total',
@@ -659,6 +661,7 @@ class LaporanKasHarianKasirController extends Controller
                     $prevSaldo = $saldo;
                     $totalMasuk += $row->r_t_nominal;
                 }
+
                 if ($row->r_t_nominal_pajak != 0) {
                     $masuk = number_format($row->r_t_nominal_pajak);
                     $trans_pajak = $prevSaldo + $row->r_t_nominal_pajak;
@@ -871,9 +874,13 @@ class LaporanKasHarianKasirController extends Controller
             ->join('users', 'users_id', 'rekap_modal_created_by')
             ->join('rekap_transaksi', 'r_t_rekap_modal_id', 'rekap_modal_id')
             ->selectRaw('rekap_modal_id, rekap_modal_tanggal, rekap_modal_sesi, name, max(rekap_modal_nominal) rekap_modal_nominal, max(rekap_modal_cash_in) rekap_modal_cash_in, max(rekap_modal_cash_out) rekap_modal_cash_out, max(rekap_modal_cash_real) rekap_modal_cash_real, sum(r_t_nominal_free_kembalian) free, sum(r_t_nominal_pembulatan) bulat')
-            ->where('rekap_modal_status', 'close')
-            ->where('rekap_modal_m_area_id', $request->area)
-            ->where('rekap_modal_m_w_id', $request->waroeng);
+            ->where('rekap_modal_status', 'close');
+        if ($request->area != 'all') {
+            $saldoIn->where('rekap_modal_m_area_id', $request->area);
+            if ($request->waroeng != 'all') {
+                $saldoIn->where('rekap_modal_m_w_id', $request->waroeng);
+            }
+        }
         if (strpos($request->tanggal, 'to') !== false) {
             [$start, $end] = explode('to', $request->tanggal);
             $saldoIn->whereBetween(DB::raw('DATE(rekap_modal_tanggal)'), [$start, $end]);

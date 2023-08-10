@@ -1,6 +1,8 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -10,7 +12,7 @@ use Illuminate\Support\Facades\Route;
 | routes are loaded by the RouteServiceProvider within a group which
 | contains the "web" middleware group. Now create something great!
 |
-*/
+ */
 
 Auth::routes();
 
@@ -19,8 +21,13 @@ Route::get('/coba/{table}', [App\Http\Controllers\Controller::class, 'getMasterI
 Route::get('/sendmaster/{target}', [App\Http\Controllers\MyController::class, 'sendMaster']);
 Route::get('/updateclient', [App\Http\Controllers\Controller::class, 'coba']);
 Route::get('/nonmenu', [App\Http\Controllers\Controller::class, 'non_menu']);
-Route::get('/update/pass',[App\Http\Controllers\Auth\LoginController::class, 'change_pass'])->name('update.pass');
-Route::post('/users/pass/update',[App\Http\Controllers\Auth\LoginController::class, 'update_pass_save'])->name('password.changes');
+Route::get('/update/pass', [App\Http\Controllers\Auth\LoginController::class, 'change_pass'])
+    ->middleware('web')
+    ->name('update.pass');
+Route::post('/users/pass/update', [App\Http\Controllers\Auth\LoginController::class, 'update_pass_save'])
+    ->middleware('web')
+    ->name('password.changes');
+Route::get('/users/noakses', [App\Http\Controllers\Auth\LoginController::class, 'no_akses'])->name('users.noakses');
 // Dashboard Route
 Route::middleware(['auth', 'web'])->group(function () {
     Route::get('/', [App\Http\Controllers\HomeController::class, 'index']);

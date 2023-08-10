@@ -117,31 +117,30 @@
                         </form>
 
                         <div class="table-responsive">
-                            {{-- <table id="tampil_rekap"
+                            <div id="tampil_rekap_wrapper" class="dataTables_wrapper">
+                                {{-- <table id="tampil_rekap"
                             class="table table-sm table-bordered table-striped table-vcenter nowrap table-hover js-dataTable-full"
                             style="width:100%"> --}}
-                            <table id="tampil_rekap" class="table table-striped table-bordered table-hover" width="100%"
-                                cellspacing="0">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center">Area</th>
-                                        <th class="text-center">Waroeng</th>
-                                        <th class="text-center">Tanggal</th>
-                                        <th class="text-center">Kasir</th>
-                                        <th class="text-center">Sesi</th>
-                                        <th class="text-center">Intensitas Buka Laci</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody id="show_data">
-                                </tbody>>
-                                {{-- </table> --}}
-                            </table>
-                        </div>
-
-                        <div id="pagination">
-                            <button onclick="loadData(currentPage - 1)">Previous</button>
-                            <button onclick="loadData(currentPage + 1)">Next</button>
+                                <table id="tampil_rekap" class="table table-striped table-bordered nowrap table-hover"
+                                    width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">Area</th>
+                                            <th class="text-center">Waroeng</th>
+                                            <th class="text-center">Tanggal</th>
+                                            <th class="text-center">Kasir</th>
+                                            <th class="text-center">Sesi</th>
+                                            <th class="text-center">Intensitas Buka Laci</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="show_data">
+                                    </tbody>
+                                </table>
+                                <div class="dataTables_paginate paging_full_numbers" id="tampil_rekap_paginate">
+                                    <!-- Tombol halaman berikutnya, sebelumnya, dan lainnya akan ditampilkan di sini -->
+                                </div>
+                            </div>
                         </div>
 
                     </div>
@@ -231,364 +230,370 @@
 @section('js')
     <!-- js -->
     <script type="module">
-$(document).ready(function() {
-    Codebase.helpersOnLoad(['jq-select2']);
-    function formatNumber(number) {
-      return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-    }
+        $(document).ready(function() {
+            Codebase.helpersOnLoad(['jq-select2']);
 
-    var userInfo = document.getElementById('user-info');
-    var userInfoPusat = document.getElementById('user-info-pusat');
-    var waroengId = userInfo.dataset.waroengId;
-    var HakAksesArea = userInfo.dataset.hasAccess === 'true';
-    var HakAksesPusat = userInfoPusat.dataset.hasAccess === 'true';
-
-    var currentPage = 1;
-    var totalData = 0;
-    var dataPerPage = 10; // Jumlah data per halaman
-
-        $('#cari').on('click', function() {
-            var area = $('.filter_area option:selected').val();
-            var waroeng = $('.filter_waroeng option:selected').val();
-            var tanggal = $('.filter_tanggal').val();
-            var operator = $('.filter_operator option:selected').val();
-
-            if (tanggal === "" || area === "" || waroeng === "" || operator === "") {
-                Swal.fire({
-                    title: 'Informasi',
-                    text: 'Silahkan lengkapi semua kolom',
-                    confirmButtonColor: '#d33',
-                    confirmButtonText: 'OK',
-                    customClass: {
-                        confirmButton: 'bg-red-500',
-                    },
-                });
-            } else {
-                loadData(1); // Muat data untuk halaman pertama saat tombol "Cari" diklik
+            function formatNumber(number) {
+                return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
             }
-        });
 
-    function loadData(page) {
-        var area = $('.filter_area option:selected').val();
-            var waroeng = $('.filter_waroeng option:selected').val();
-            var tanggal = $('.filter_tanggal').val();
-            var operator = $('.filter_operator option:selected').val();
-        $.ajax({
-            url: '{{ route("rekap_aktiv_laci.tampil_laci") }}',
-            data: {
-                area: area,
-                waroeng: waroeng,
-                tanggal: tanggal,
-                operator: operator,
-                page: page, // Kirimkan nomor halaman ke server
-            },
-            method: 'GET',
-            dataType: 'json',
-            success: function(response) {
-                var data = response.data;
-                console.log(data);
-                totalData = response.totalData;
-                currentPage = response.currentPage;
-                var totalPages = Math.ceil(totalData / dataPerPage);
+            var userInfo = document.getElementById('user-info');
+            var userInfoPusat = document.getElementById('user-info-pusat');
+            var waroengId = userInfo.dataset.waroengId;
+            var HakAksesArea = userInfo.dataset.hasAccess === 'true';
+            var HakAksesPusat = userInfoPusat.dataset.hasAccess === 'true';
 
-                // Tampilkan data menggunakan fungsi displayData
-                displayData(data);
+            $('#cari').on('click', function() {
+                var area = $('.filter_area option:selected').val();
+                var waroeng = $('.filter_waroeng option:selected').val();
+                var tanggal = $('.filter_tanggal').val();
+                var operator = $('.filter_operator option:selected').val();
 
-                // Update tombol pagination manual
-                var paginationDiv = $('#pagination');
-                paginationDiv.empty();
-
-                var prevButton = $('<button>').text('Previous');
-                prevButton.on('click', function() {
-                    if (currentPage > 1) {
-                        loadData(currentPage - 1);
-                    }
-                });
-
-                var nextButton = $('<button>').text('Next');
-                nextButton.on('click', function() {
-                    if (currentPage < totalPages) {
-                        loadData(currentPage + 1);
-                    }
-                });
-
-                paginationDiv.append(prevButton);
-                paginationDiv.append(' Page ' + currentPage + ' of ' + totalPages + ' ');
-                paginationDiv.append(nextButton);
-            },
-            error: function(xhr, status, error) {
-                console.error(error);
-            }
-        });
-    }
-
-    // Function to display data on the table
-    function displayData(data) {
-        var tableBody = $('#show_data');
-        tableBody.empty();
-
-        $.each(data, function(index, laci) {
-            var row = $('<tr>');
-            row.append($('<td>').text(laci.r_b_l_m_area_nama));
-            row.append($('<td>').text(laci.r_b_l_m_w_nama));
-            row.append($('<td>').text(laci.r_b_l_tanggal));
-            row.append($('<td>').text(laci.name));
-            row.append($('<td>').text(laci.rekap_modal_sesi));
-            row.append($('<td>').text(laci.laci));
-            row.append('<td><a id="button_detail" class="btn btn-sm button_detail btn-info" value="' + laci.r_b_l_rekap_modal_id + '" title="Detail Nota"><i class="fa-sharp fa-solid fa-eye"></i></a></td>');
-            tableBody.append(row);
-        });
-    }
-
-    //eksekusi filter
-    // $('#cari').on('click', function() {
-    //     var area  = $('.filter_area option:selected').val();
-    //     var waroeng  = $('.filter_waroeng option:selected').val();
-    //     var tanggal  = $('.filter_tanggal').val();
-    //     var operator = $('.filter_operator option:selected').val();
-
-    //     if (tanggal === "" || area === "" || waroeng === "" || operator === "") {
-    //         Swal.fire({
-    //         title: 'Informasi',
-    //         text: 'Silahkan lengkapi semua kolom',
-    //         confirmButtonColor: '#d33',
-    //         confirmButtonText: 'OK',
-    //         customClass: {
-    //             confirmButton: 'bg-red-500',
-    //         },
-    //         });
-    //       } else {
-    //         $('#tampil_rekap').DataTable({
-    //         button: [],
-    //         destroy: true,
-    //         orderCellsTop: true,
-    //         processing: true,
-    //         scrollX: true,
-    //         columnDefs: [ 
-    //                         {
-    //                             targets: '_all',
-    //                             className: 'dt-body-center'
-    //                         },
-    //                     ],
-    //         buttons: [
-    //                 {
-    //                     extend: 'excelHtml5',
-    //                     text: 'Export Excel',
-    //                     title: 'Rekap Buka Laci - ' + tanggal,
-    //                     pageSize: 'A4',
-    //                     pageOrientation: 'potrait',
-    //                 }
-    //             ],
-    //         lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
-    //         pageLength: 10,
-    //         ajax: {
-    //             url: '{{route("rekap_aktiv_laci.tampil_laci")}}',
-    //             data : {
-    //                 area: area,
-    //                 waroeng: waroeng,
-    //                 tanggal: tanggal,
-    //                 operator: operator,
-    //             },
-    //             type : "GET",
-    //             },
-    //             success:function(data){ 
-    //                 console.log(data);
-    //             },
-    //   });
-    // }
-    // });
-
-    if(HakAksesPusat){
-      $('.filter_area').on('select2:select', function(){
-        var id_area = $(this).val();
-        var tanggal  = $('.filter_tanggal').val();
-        var prev = $(this).data('previous-value');
-
-        if (id_area == 'all'){
-            $("#select_waroeng").hide();
-            $("#select_operator").hide();
-        } else {
-            $("#select_waroeng").show();
-            $("#select_operator").show();
-        }
-
-        if(id_area && tanggal){
-            $.ajax({
-            type:"GET",
-            url: '{{route("rekap_aktiv_laci.select_waroeng")}}',
-            dataType: 'JSON',
-            destroy: true,    
-            data : {
-                id_area: id_area,
-            },
-            success:function(res){    
-              // console.log(res);           
-                if(res){
-                    $(".filter_waroeng").empty();
-                    $(".filter_waroeng").append('<option></option>');
-                    $.each(res,function(key,value){
-                        $(".filter_waroeng").append('<option value="'+key+'">'+value+'</option>');
+                if (tanggal === "" || area === "" || waroeng === "" || operator === "") {
+                    Swal.fire({
+                        title: 'Informasi',
+                        text: 'Silahkan lengkapi semua kolom',
+                        confirmButtonColor: '#d33',
+                        confirmButtonText: 'OK',
+                        customClass: {
+                            confirmButton: 'bg-red-500',
+                        },
                     });
-                }else{
-                $(".filter_waroeng").empty();
-                }
-            }
-            });
-        }else{
-            Swal.fire({
-                    title: 'Informasi',
-                    text: "Harap lengkapi kolom tanggal",
-                    confirmButtonColor: '#d33',
-                    confirmButtonText: 'OK',
-                    customClass: {
-                        confirmButton: 'bg-red-500',
-                    },
-                });
-            $(".filter_waroeng").empty();
-            $(".filter_area").val(prev).trigger('change');
-        }      
-        $(".filter_operator").empty();
-    });
-  } 
-
-  if(HakAksesArea){
-    $('.filter_waroeng').on('select2:select', function(){
-        var id_waroeng = $(this).val();   
-        var tanggal  = $('.filter_tanggal').val(); 
-        var prev = $(this).data('previous-value');
-
-        if (id_waroeng == 'all'){
-            $("#select_operator").hide();
-        } else {
-            $("#select_operator").show();
-        }
-
-        if(id_waroeng && tanggal){
-            $.ajax({
-            type:"GET",
-            url: '{{route("rekap_aktiv_laci.select_user_laci")}}',
-            dataType: 'JSON',
-            data : {
-              id_waroeng: id_waroeng,
-              tanggal: tanggal,
-            },
-            success:function(res){   
-            //   console.log(res);       
-                if(res){
-                    $(".filter_operator").empty();
-                    $(".filter_operator").append('<option></option>');
-                    $.each(res,function(key,value){
-                        $(".filter_operator").append('<option value="'+key+'">'+value+'</option>');
-                    });
-                }else{
-                $(".filter_operator").empty();
-                }
-            }
-            });
-        }else{
-            Swal.fire({
-                    title: 'Informasi',
-                    text: "Harap lengkapi kolom tanggal",
-                    confirmButtonColor: '#d33',
-                    confirmButtonText: 'OK',
-                    customClass: {
-                        confirmButton: 'bg-red-500',
-                    },
-                });
-            $(".filter_operator").empty();
-            $(".filter_waroeng").val(prev).trigger('change');
-        }      
-    });
-
-  } else {
-
-    $('.filter_tanggal').on('change', function(){
-      var tanggal  = $('.filter_tanggal').val();
-        if(tanggal){
-            $.ajax({
-            type:"GET",
-            url: '{{route("rekap_aktiv_laci.select_user_laci")}}',
-            dataType: 'JSON',
-            data : {
-              tanggal: tanggal,
-            },
-            success:function(res){         
-            //   console.log(res);      
-                if(res){
-                    $(".filter_operator").empty();
-                    $(".filter_operator").append('<option></option>');
-                    $.each(res,function(key,value){
-                        $(".filter_operator").append('<option value="'+key+'">'+value+'</option>');
-                    });
-                }else{
-                $(".filter_operator").empty();
-                }
-            }
-            });
-        }else{
-            $(".filter_operator").empty();
-        }     
-        $(".filter_operator").empty(); 
-    });
-  }
-
-    //filter tanggal
-    $('.filter_tanggal').flatpickr({
-            mode: "range",
-            dateFormat: 'Y-m-d',
-    });
-
-    //detail rekap laci
-    $("#tampil_rekap").on('click','#button_detail', function() {
-        var id = $(this).attr('value');
-        var waroeng  = $('.filter_waroeng').val();
-        var tanggal  = $('.filter_tanggal').val();
-        var operator = $('.filter_operator').val();
-        $('#tampil_modal form')[0].reset();
-        $("#myModalLabel").html('Rekap Buka Laci');
-        $.ajax({
-            url: "/dashboard/rekap_aktiv_laci/detail_laci/"+id,
-            type: "GET",
-            dataType: 'json',
-            destroy: true,
-            success: function(data) {
-              console.log(data.rekap_modal_m_w_nama);
-              var date = new Date(data.r_b_l_tanggal);
-              var formattedDate = ("0" + date.getDate()).slice(-2) + "/" + ("0" + (date.getMonth() + 1)).slice(-2) + "/" + date.getFullYear();
-
-              $('#tanggal_pop').val(formattedDate);
-              $('#waroeng_pop').val(data.r_b_l_m_w_nama);
-              $('#operator_pop').val(data.name);
-
-              $('#detail_modal').DataTable({
-                destroy: true,
-                processing: true,
-                scrollX: true,
-                //   scrollY: "300px",
-                autoWidth: false,
-                paging: false,
-                dom: 'Bfrtip',
-                buttons: [],
-                searching: false,
-                ajax: {
-                    url: "/dashboard/rekap_aktiv_laci/detail_show_laci/"+id,
-                    data : {
-                      waroeng: waroeng,
-                      tanggal: tanggal,
-                      operator: operator,
-                    },
-                type : "GET",
-                },
-                columns: [
-                          { data: 'waktu', class: 'text-center'},
-                          { data: 'intensitas', class: 'text-center'},
-                          { data: 'keterangan', class: 'text-center' },
+                } else {
+                    var table = $('#tampil_rekap').DataTable({
+                        // destroy: true,
+                        // orderCellsTop: true,
+                        processing: true,
+                        serverSide: true,
+                        // pagingType: 'full_numbers',
+                        // lengthChange: true,
+                        // scrollX: true,
+                        // paging: true,
+                        columnDefs: [{
+                            targets: '_all',
+                            className: 'dt-body-center'
+                        }, ],
+                        buttons: [{
+                            extend: 'excelHtml5',
+                            text: 'Export Excel',
+                            title: 'Rekap Buka Laci - ' + tanggal,
+                            pageSize: 'A4',
+                            pageOrientation: 'portrait',
+                        }],
+                        lengthMenu: [
+                            [10, 25, 50, 100, -1],
+                            [10, 25, 50, 100, "All"]
                         ],
+                        pageLength: 10,
+                        ajax: {
+                            url: '{{ route('rekap_aktiv_laci.tampil_laci') }}',
+                            type: 'GET',
+                            data: {
+                                area: area,
+                                waroeng: waroeng,
+                                tanggal: tanggal,
+                                operator: operator,
+                            },
+                        },
+                        success: function(data) {
+                            console.log(data);
+                        },
+                        columns: [{
+                                data: '0'
+                            }, // Kolom 1
+                            {
+                                data: '1'
+                            }, // Kolom 2
+                            {
+                                data: '2'
+                            }, // Kolom 3
+                            {
+                                data: '3'
+                            }, // Kolom 4
+                            {
+                                data: '4'
+                            }, // Kolom 5
+                            {
+                                data: '5'
+                            }, // Kolom 6
+                            {
+                                data: '6'
+                            }, // Kolom 7
+                        ],
+                        // drawCallback: function() {
+                        //     table.ajax.reload();
+                        // },
+
+                    });
+
+                }
+
             });
-          },
-        });
-      $("#tampil_modal").modal('show');
-    }); 
+
+
+
+            //eksekusi filter
+            // $('#cari').on('click', function() {
+            //     var area  = $('.filter_area option:selected').val();
+            //     var waroeng  = $('.filter_waroeng option:selected').val();
+            //     var tanggal  = $('.filter_tanggal').val();
+            //     var operator = $('.filter_operator option:selected').val();
+
+            //     if (tanggal === "" || area === "" || waroeng === "" || operator === "") {
+            //         Swal.fire({
+            //         title: 'Informasi',
+            //         text: 'Silahkan lengkapi semua kolom',
+            //         confirmButtonColor: '#d33',
+            //         confirmButtonText: 'OK',
+            //         customClass: {
+            //             confirmButton: 'bg-red-500',
+            //         },
+            //         });
+            //       } else {
+            //         $('#tampil_rekap').DataTable({
+            //         button: [],
+            //         destroy: true,
+            //         orderCellsTop: true,
+            //         processing: true,
+            //         scrollX: true,
+            //         columnDefs: [ 
+            //                         {
+            //                             targets: '_all',
+            //                             className: 'dt-body-center'
+            //                         },
+            //                     ],
+            //         buttons: [
+            //                 {
+            //                     extend: 'excelHtml5',
+            //                     text: 'Export Excel',
+            //                     title: 'Rekap Buka Laci - ' + tanggal,
+            //                     pageSize: 'A4',
+            //                     pageOrientation: 'potrait',
+            //                 }
+            //             ],
+            //         lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+            //         pageLength: 10,
+            //         ajax: {
+            //             url: '{{ route('rekap_aktiv_laci.tampil_laci') }}',
+            //             data : {
+            //                 area: area,
+            //                 waroeng: waroeng,
+            //                 tanggal: tanggal,
+            //                 operator: operator,
+            //             },
+            //             type : "GET",
+            //             },
+            //             success:function(data){ 
+            //                 console.log(data);
+            //             },
+            //   });
+            // }
+            // });
+
+            if (HakAksesPusat) {
+                $('.filter_area').on('select2:select', function() {
+                    var id_area = $(this).val();
+                    var tanggal = $('.filter_tanggal').val();
+                    var prev = $(this).data('previous-value');
+
+                    if (id_area == 'all') {
+                        $("#select_waroeng").hide();
+                        $("#select_operator").hide();
+                    } else {
+                        $("#select_waroeng").show();
+                        $("#select_operator").show();
+                    }
+
+                    if (id_area && tanggal) {
+                        $.ajax({
+                            type: "GET",
+                            url: '{{ route('rekap_aktiv_laci.select_waroeng') }}',
+                            dataType: 'JSON',
+                            destroy: true,
+                            data: {
+                                id_area: id_area,
+                            },
+                            success: function(res) {
+                                // console.log(res);           
+                                if (res) {
+                                    $(".filter_waroeng").empty();
+                                    $(".filter_waroeng").append('<option></option>');
+                                    $.each(res, function(key, value) {
+                                        $(".filter_waroeng").append('<option value="' +
+                                            key + '">' + value + '</option>');
+                                    });
+                                } else {
+                                    $(".filter_waroeng").empty();
+                                }
+                            }
+                        });
+                    } else {
+                        Swal.fire({
+                            title: 'Informasi',
+                            text: "Harap lengkapi kolom tanggal",
+                            confirmButtonColor: '#d33',
+                            confirmButtonText: 'OK',
+                            customClass: {
+                                confirmButton: 'bg-red-500',
+                            },
+                        });
+                        $(".filter_waroeng").empty();
+                        $(".filter_area").val(prev).trigger('change');
+                    }
+                    $(".filter_operator").empty();
+                });
+            }
+
+            if (HakAksesArea) {
+                $('.filter_waroeng').on('select2:select', function() {
+                    var id_waroeng = $(this).val();
+                    var tanggal = $('.filter_tanggal').val();
+                    var prev = $(this).data('previous-value');
+
+                    if (id_waroeng == 'all') {
+                        $("#select_operator").hide();
+                    } else {
+                        $("#select_operator").show();
+                    }
+
+                    if (id_waroeng && tanggal) {
+                        $.ajax({
+                            type: "GET",
+                            url: '{{ route('rekap_aktiv_laci.select_user_laci') }}',
+                            dataType: 'JSON',
+                            data: {
+                                id_waroeng: id_waroeng,
+                                tanggal: tanggal,
+                            },
+                            success: function(res) {
+                                //   console.log(res);       
+                                if (res) {
+                                    $(".filter_operator").empty();
+                                    $(".filter_operator").append('<option></option>');
+                                    $.each(res, function(key, value) {
+                                        $(".filter_operator").append('<option value="' +
+                                            key + '">' + value + '</option>');
+                                    });
+                                } else {
+                                    $(".filter_operator").empty();
+                                }
+                            }
+                        });
+                    } else {
+                        Swal.fire({
+                            title: 'Informasi',
+                            text: "Harap lengkapi kolom tanggal",
+                            confirmButtonColor: '#d33',
+                            confirmButtonText: 'OK',
+                            customClass: {
+                                confirmButton: 'bg-red-500',
+                            },
+                        });
+                        $(".filter_operator").empty();
+                        $(".filter_waroeng").val(prev).trigger('change');
+                    }
+                });
+
+            } else {
+
+                $('.filter_tanggal').on('change', function() {
+                    var tanggal = $('.filter_tanggal').val();
+                    if (tanggal) {
+                        $.ajax({
+                            type: "GET",
+                            url: '{{ route('rekap_aktiv_laci.select_user_laci') }}',
+                            dataType: 'JSON',
+                            data: {
+                                tanggal: tanggal,
+                            },
+                            success: function(res) {
+                                //   console.log(res);      
+                                if (res) {
+                                    $(".filter_operator").empty();
+                                    $(".filter_operator").append('<option></option>');
+                                    $.each(res, function(key, value) {
+                                        $(".filter_operator").append('<option value="' +
+                                            key + '">' + value + '</option>');
+                                    });
+                                } else {
+                                    $(".filter_operator").empty();
+                                }
+                            }
+                        });
+                    } else {
+                        $(".filter_operator").empty();
+                    }
+                    $(".filter_operator").empty();
+                });
+            }
+
+            //filter tanggal
+            $('.filter_tanggal').flatpickr({
+                mode: "range",
+                dateFormat: 'Y-m-d',
+            });
+
+            //detail rekap laci
+            $("#tampil_rekap").on('click', '#button_detail', function() {
+                var id = $(this).attr('value');
+                var waroeng = $('.filter_waroeng').val();
+                var tanggal = $('.filter_tanggal').val();
+                var operator = $('.filter_operator').val();
+                $('#tampil_modal form')[0].reset();
+                $("#myModalLabel").html('Rekap Buka Laci');
+                $.ajax({
+                    url: "/dashboard/rekap_aktiv_laci/detail_laci/" + id,
+                    type: "GET",
+                    dataType: 'json',
+                    destroy: true,
+                    success: function(data) {
+                        console.log(data.rekap_modal_m_w_nama);
+                        var date = new Date(data.r_b_l_tanggal);
+                        var formattedDate = ("0" + date.getDate()).slice(-2) + "/" + ("0" + (
+                            date.getMonth() + 1)).slice(-2) + "/" + date.getFullYear();
+
+                        $('#tanggal_pop').val(formattedDate);
+                        $('#waroeng_pop').val(data.r_b_l_m_w_nama);
+                        $('#operator_pop').val(data.name);
+
+                        $('#detail_modal').DataTable({
+                            destroy: true,
+                            processing: true,
+                            scrollX: true,
+                            //   scrollY: "300px",
+                            autoWidth: false,
+                            paging: false,
+                            dom: 'Bfrtip',
+                            buttons: [],
+                            searching: false,
+                            ajax: {
+                                url: "/dashboard/rekap_aktiv_laci/detail_show_laci/" +
+                                    id,
+                                data: {
+                                    waroeng: waroeng,
+                                    tanggal: tanggal,
+                                    operator: operator,
+                                },
+                                type: "GET",
+                            },
+                            columns: [{
+                                    data: 'waktu',
+                                    class: 'text-center'
+                                },
+                                {
+                                    data: 'intensitas',
+                                    class: 'text-center'
+                                },
+                                {
+                                    data: 'keterangan',
+                                    class: 'text-center'
+                                },
+                            ],
+                        });
+                    },
+                });
+                $("#tampil_modal").modal('show');
+            });
 
             // $("#tampil_rekap").on('click','#button_pdf', function() {
             //     var id = $(this).attr('value');
@@ -598,6 +603,6 @@ $(document).ready(function() {
             //     window.open(url,'_blank');
             // });
 
-});
-</script>
+        });
+    </script>
 @endsection

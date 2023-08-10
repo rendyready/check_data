@@ -6,7 +6,7 @@
                 <div class="block block-themed h-100 mb-0">
                     <div class="block-header bg-pulse">
                         <h3 class="block-title">
-                            Laporan Jurnal</h3>
+                            Buku Besar</h3>
                     </div>
                     <div class="block-content text-muted">
                         <form id="rekap_insert">
@@ -89,14 +89,29 @@
                                     <div class="row mb-1">
                                         <label class="col-sm-3 col-form-label">Pembayaran</label>
                                         <div class="col-sm-9">
-                                            <select id="filter_pembayaran" style="width: 100%;"
+                                            <select id="filter_payment" style="width: 100%;"
                                                 data-placeholder="Pilih Pembayaran"
-                                                class="cari f-area js-select2 form-control filter_pembayaran"
-                                                name="waroeng">
+                                                class="cari f-area js-select2 form-control filter_payment" name="waroeng">
                                                 <option></option>
                                                 @foreach ($data->payment as $payment)
                                                     <option value="{{ $payment->m_payment_method_id }}">
                                                         {{ $payment->m_payment_method_name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="row mb-1">
+                                        <label class="col-sm-3 col-form-label">Akun</label>
+                                        <div class="col-sm-9">
+                                            <select id="filter_akun" style="width: 100%;" data-placeholder="Pilih Akun"
+                                                class="cari f-area js-select2 form-control filter_akun" name="waroeng">
+                                                <option></option>
+                                                @foreach ($data->rekening as $rekening)
+                                                    <option value="{{ $rekening->m_link_akuntansi_nama }}">
+                                                        {{ $rekening->m_rekening_nama }}
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -157,7 +172,8 @@
             $('#cari').on('click', function() {
                 var waroeng = $('.filter_waroeng').val();
                 var tanggal = $('.filter_tanggal').val();
-                var payment = $('.filter_pembayaran').val();
+                var akun = $('.filter_akun').val();
+                var payment = $('.filter_payment').val();
                 $('#jurnal_tampil').DataTable({
                     destroy: true,
                     autoWidth: true,
@@ -168,15 +184,16 @@
                     buttons: [{
                         extend: 'excelHtml5',
                         text: 'Export Excel',
-                        title: 'Laporan Jurnal - ' + tanggal,
+                        title: 'Buku Besar - ' + tanggal,
                         pageSize: 'A4',
                         pageOrientation: 'portrait',
                     }],
                     ajax: {
-                        url: '{{ route('otomatis.tampil_jurnal') }}',
+                        url: '{{ route('buku_besar.tampil_buku_besar') }}',
                         data: {
                             waroeng: waroeng,
                             tanggal: tanggal,
+                            akun: akun,
                             payment: payment,
                         },
                         type: "GET",
@@ -228,7 +245,7 @@
                     if (id_area && tanggal) {
                         $.ajax({
                             type: "GET",
-                            url: '{{ route('otomatis.select_waroeng') }}',
+                            url: '{{ route('buku_besar.select_waroeng') }}',
                             dataType: 'JSON',
                             destroy: true,
                             data: {

@@ -39,6 +39,7 @@
                                                         <option value="{{ $area->m_area_id }}"> {{ $area->m_area_nama }}
                                                         </option>
                                                     @endforeach
+                                                    <option value="all">all area</option>
                                                 </select>
                                             @else
                                                 <select id="filter_area" data-placeholder="Pilih Area" style="width: 100%;"
@@ -203,203 +204,219 @@
     <!-- js -->
 
     <script type="module">
-$(document).ready(function() {
-    Codebase.helpersOnLoad(['jq-select2']);
-    function formatNumber(number) {
-      return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-    }
+        $(document).ready(function() {
+            Codebase.helpersOnLoad(['jq-select2']);
 
-    var userInfo = document.getElementById('user-info');
-    var userInfoPusat = document.getElementById('user-info-pusat');
-    var waroengId = userInfo.dataset.waroengId;
-    var HakAksesArea = userInfo.dataset.hasAccess === 'true';
-    var HakAksesPusat = userInfoPusat.dataset.hasAccess === 'true';
-
-      $('#cari').on('click', function(e) {
-      var area      = $('.filter_area option:selected').val();  
-      var waroeng   = $('.filter_waroeng option:selected').val();
-      var tanggal   = $('.filter_tanggal').val();
-
-      if (tanggal === "" || area === "" || waroeng === "") {
-            Swal.fire({
-            title: 'Informasi',
-            text: 'Silahkan lengkapi semua kolom',
-            confirmButtonColor: '#d33',
-            confirmButtonText: 'OK',
-            customClass: {
-                confirmButton: 'bg-red-500',
-            },
-            });
-          } else {
-
-      $('#tampil_rekap').DataTable({
-          button: [],
-          destroy: true,
-          orderCellsTop: true,
-          processing: true,
-          scrollX: true,
-          autoWidth: false,
-          columnDefs: [ 
-                    {
-                        targets: '_all',
-                        className: 'dt-body-center'
-                    },
-                ],
-            buttons: [
-                {
-                    extend: 'excelHtml5',
-                    text: 'Export Excel',
-                    title: 'Laporan Kas Harian Kasir - ' + tanggal,
-                    pageSize: 'A4',
-                    pageOrientation: 'potrait',
-                }
-            ],
-          lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
-          pageLength: 10,
-          ajax: {
-              url: '{{route("kas_kasir.show")}}',
-              data: {
-                    area: area,
-                    waroeng: waroeng,
-                    tanggal: tanggal,
-              },
-              type: "GET",
-          },
-          success: function(data) {
-              console.log(data);
-          },
-      });
-    }
-  });
-
-  if(HakAksesPusat){
-      $('.filter_area').on('select2:select', function(){
-        var id_area = $(this).val();
-        var tanggal  = $('.filter_tanggal').val();
-        var prev = $(this).data('previous-value');
-        if(id_area && tanggal){
-            $.ajax({
-            type:"GET",
-            url: '{{route("kas_kasir.select_waroeng")}}',
-            dataType: 'JSON',
-            destroy: true,    
-            data : {
-                id_area: id_area,
-            },
-            success:function(res){    
-              // console.log(res);           
-                if(res){
-                    $(".filter_waroeng").empty();
-                    $(".filter_waroeng").append('<option></option>');
-                    $.each(res,function(key,value){
-                        $(".filter_waroeng").append('<option value="'+key+'">'+value+'</option>');
-                    });
-                }else{
-                $(".filter_waroeng").empty();
-                }
+            function formatNumber(number) {
+                return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
             }
+
+            var userInfo = document.getElementById('user-info');
+            var userInfoPusat = document.getElementById('user-info-pusat');
+            var waroengId = userInfo.dataset.waroengId;
+            var HakAksesArea = userInfo.dataset.hasAccess === 'true';
+            var HakAksesPusat = userInfoPusat.dataset.hasAccess === 'true';
+
+            $('#cari').on('click', function(e) {
+                var area = $('.filter_area option:selected').val();
+                var waroeng = $('.filter_waroeng option:selected').val();
+                var tanggal = $('.filter_tanggal').val();
+
+                if (tanggal === "" || area === "" || waroeng === "") {
+                    Swal.fire({
+                        title: 'Informasi',
+                        text: 'Silahkan lengkapi semua kolom',
+                        confirmButtonColor: '#d33',
+                        confirmButtonText: 'OK',
+                        customClass: {
+                            confirmButton: 'bg-red-500',
+                        },
+                    });
+                } else {
+
+                    $('#tampil_rekap').DataTable({
+                        button: [],
+                        destroy: true,
+                        orderCellsTop: true,
+                        processing: true,
+                        scrollX: true,
+                        autoWidth: false,
+                        columnDefs: [{
+                            targets: '_all',
+                            className: 'dt-body-center'
+                        }, ],
+                        buttons: [{
+                            extend: 'excelHtml5',
+                            text: 'Export Excel',
+                            title: 'Laporan Kas Harian Kasir - ' + tanggal,
+                            pageSize: 'A4',
+                            pageOrientation: 'potrait',
+                        }],
+                        lengthMenu: [
+                            [10, 25, 50, 100, -1],
+                            [10, 25, 50, 100, "All"]
+                        ],
+                        pageLength: 10,
+                        ajax: {
+                            url: '{{ route('kas_kasir.show') }}',
+                            data: {
+                                area: area,
+                                waroeng: waroeng,
+                                tanggal: tanggal,
+                            },
+                            type: "GET",
+                        },
+                        success: function(data) {
+                            console.log(data);
+                        },
+                    });
+                }
             });
-        }else{
-            Swal.fire({
-                    title: 'Informasi',
-                    text: "Harap lengkapi kolom tanggal",
-                    confirmButtonColor: '#d33',
-                    confirmButtonText: 'OK',
-                    customClass: {
-                        confirmButton: 'bg-red-500',
-                    },
+
+            if (HakAksesPusat) {
+                $('.filter_area').on('select2:select', function() {
+                    var id_area = $(this).val();
+                    var tanggal = $('.filter_tanggal').val();
+                    var prev = $(this).data('previous-value');
+                    if (id_area && tanggal) {
+                        $.ajax({
+                            type: "GET",
+                            url: '{{ route('kas_kasir.select_waroeng') }}',
+                            dataType: 'JSON',
+                            destroy: true,
+                            data: {
+                                id_area: id_area,
+                            },
+                            success: function(res) {
+                                // console.log(res);           
+                                if (res) {
+                                    $(".filter_waroeng").empty();
+                                    $(".filter_waroeng").append('<option></option>');
+                                    $.each(res, function(key, value) {
+                                        $(".filter_waroeng").append('<option value="' +
+                                            key + '">' + value + '</option>');
+                                    });
+                                } else {
+                                    $(".filter_waroeng").empty();
+                                }
+                            }
+                        });
+                    } else {
+                        Swal.fire({
+                            title: 'Informasi',
+                            text: "Harap lengkapi kolom tanggal",
+                            confirmButtonColor: '#d33',
+                            confirmButtonText: 'OK',
+                            customClass: {
+                                confirmButton: 'bg-red-500',
+                            },
+                        });
+                        $(".filter_waroeng").empty();
+                        $(".filter_area").val(prev).trigger('change');
+                    }
                 });
-            $(".filter_waroeng").empty();
-            $(".filter_area").val(prev).trigger('change');
-        }      
-    });
-  } 
+            }
 
-  if(HakAksesArea){
-    $('.filter_waroeng').on('select2:select', function(){
-        var id_waroeng = $(this).val();   
-        var tanggal  = $('.filter_tanggal').val(); 
-        var prev = $(this).data('previous-value');
-        if(!id_waroeng || !tanggal){
-            Swal.fire({
-                    title: 'Informasi',
-                    text: "Harap lengkapi kolom tanggal",
-                    confirmButtonColor: '#d33',
-                    confirmButtonText: 'OK',
-                    customClass: {
-                        confirmButton: 'bg-red-500',
-                    },
+            if (HakAksesArea) {
+                $('.filter_waroeng').on('select2:select', function() {
+                    var id_waroeng = $(this).val();
+                    var tanggal = $('.filter_tanggal').val();
+                    var prev = $(this).data('previous-value');
+                    if (!id_waroeng || !tanggal) {
+                        Swal.fire({
+                            title: 'Informasi',
+                            text: "Harap lengkapi kolom tanggal",
+                            confirmButtonColor: '#d33',
+                            confirmButtonText: 'OK',
+                            customClass: {
+                                confirmButton: 'bg-red-500',
+                            },
+                        });
+                        $(".filter_waroeng").val(prev).trigger('change');
+                    }
                 });
-            $(".filter_waroeng").val(prev).trigger('change');
-        }  
-    });
-  }
+            }
 
-    $('.filter_tanggal').flatpickr({
-            mode: "range",
-            dateFormat: 'Y-m-d',
-    });
+            $('.filter_tanggal').flatpickr({
+                mode: "range",
+                dateFormat: 'Y-m-d',
+            });
 
-            $("#tampil_rekap").on('click','#button_detail', function() {
+            $("#tampil_rekap").on('click', '#button_detail', function() {
                 var id = $(this).attr('value');
-                var waroeng  = $('.filter_waroeng').val();
-                var tanggal  = $('.filter_tanggal').val();
+                var waroeng = $('.filter_waroeng').val();
+                var tanggal = $('.filter_tanggal').val();
                 var operator = $('.filter_operator').val();
-                var sesi     = $('.filter_sesi').val();
+                var sesi = $('.filter_sesi').val();
                 $('#tampil_modal form')[0].reset();
                 $("#myModalLabel").html('Laporan Kas Kasir');
                 $.ajax({
-                    url: "/dashboard/kas_kasir/detail/"+id,
+                    url: "/dashboard/kas_kasir/detail/" + id,
                     type: "GET",
                     dataType: 'json',
                     destroy: true,
                     success: function(data) {
-                      console.log(data.rekap_modal_m_w_nama);
-                      var date = new Date(data.rekap_modal_tanggal);
-                      var formattedDate = ("0" + date.getDate()).slice(-2) + "/" + ("0" + (date.getMonth() + 1)).slice(-2) + "/" + date.getFullYear();
+                        console.log(data.rekap_modal_m_w_nama);
+                        var date = new Date(data.rekap_modal_tanggal);
+                        var formattedDate = ("0" + date.getDate()).slice(-2) + "/" + ("0" + (
+                            date.getMonth() + 1)).slice(-2) + "/" + date.getFullYear();
 
                         $('#tanggal_pop').val(formattedDate);
                         $('#waroeng_pop').val(data.rekap_modal_m_w_nama);
                         $('#operator_pop').val(data.name);
 
                         $('#detail_modal').DataTable({
-                          destroy: true,
-                          processing: true,
-                          scrollX: true,
-                        //   scrollY: "300px",
-                          autoWidth: false,
-                          paging: false,
-                          dom: 'Bfrtip',
-                          buttons: [],
-                          ajax: {
-                              url: "/dashboard/kas_kasir/detail_show/"+id,
-                              data : {
-                                  waroeng: waroeng,
-                                  tanggal: tanggal,
-                                  operator: operator,
-                                  sesi: sesi,
-                              },
-                              type : "GET",
-                              },
-                              columns: [
-                              { data: 'no_nota', class: 'text-center' },
-                              { data: 'transaksi', class: 'text-center' },
-                              { data: 'masuk', class: 'text-center' },
-                              { data: 'keluar', class: 'text-center' },
-                              { data: 'saldo', class: 'text-center' },
+                            destroy: true,
+                            processing: true,
+                            scrollX: true,
+                            //   scrollY: "300px",
+                            autoWidth: false,
+                            paging: false,
+                            dom: 'Bfrtip',
+                            buttons: [],
+                            ajax: {
+                                url: "/dashboard/kas_kasir/detail_show/" + id,
+                                data: {
+                                    waroeng: waroeng,
+                                    tanggal: tanggal,
+                                    operator: operator,
+                                    sesi: sesi,
+                                },
+                                type: "GET",
+                            },
+                            columns: [{
+                                    data: 'no_nota',
+                                    class: 'text-center'
+                                },
+                                {
+                                    data: 'transaksi',
+                                    class: 'text-center'
+                                },
+                                {
+                                    data: 'masuk',
+                                    class: 'text-center'
+                                },
+                                {
+                                    data: 'keluar',
+                                    class: 'text-center'
+                                },
+                                {
+                                    data: 'saldo',
+                                    class: 'text-center'
+                                },
                             ],
-                      });
+                        });
                     },
                 });
                 $("#tampil_modal").modal('show');
-            }); 
+            });
 
-            $("#tampil_rekap").on('click','#button_pdf', function() {
+            $("#tampil_rekap").on('click', '#button_pdf', function() {
                 var id = $(this).attr('value');
                 var waroeng = $('.filter_waroeng').val();
                 var tanggal = $('.filter_tanggal').val();
-                var url = 'kas_kasir/export_pdf?id='+id+'&waroeng='+waroeng+'&tanggal='+tanggal;
-                window.open(url,'_blank');
+                var url = 'kas_kasir/export_pdf?id=' + id + '&waroeng=' + waroeng + '&tanggal=' + tanggal;
+                window.open(url, '_blank');
             });
 
             $("#tampil_rekap").on('click', '#button_tarikan', function() {
@@ -408,6 +425,6 @@ $(document).ready(function() {
                 window.open(url, '_blank');
             });
 
-});
-</script>
+        });
+    </script>
 @endsection
