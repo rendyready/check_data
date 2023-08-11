@@ -10,14 +10,14 @@ use App\Helpers\Helper;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Log;
 
-class DuplicateMasterCron extends Command
+class DuplicateRekapCron extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'duplicatemaster:cron';
+    protected $signature = 'duplicaterekap:cron';
 
     /**
      * The console command description.
@@ -35,18 +35,18 @@ class DuplicateMasterCron extends Command
     {
         #Cek cronjob status
         $cronStatus = DB::table('cronjob')
-                    ->where('cronjob_name','duplicatemaster:cron')
+                    ->where('cronjob_name','duplicaterekap:cron')
                     ->first();
 
         if (!empty($cronStatus)) {
             if ($cronStatus->cronjob_status == 'open') {
-                Log::info("Cronjob DUPLICATE MASTER START at ". Carbon::now()->format('Y-m-d H:i:s'));
+                Log::info("Cronjob DUPLICATE REKAP START at ". Carbon::now()->format('Y-m-d H:i:s'));
             }else{
-                Log::info("Cronjob DUPLICATE MASTER CLOSED");
+                Log::info("Cronjob DUPLICATE REKAP CLOSED");
                 return Command::SUCCESS;
             }
         }else{
-            Log::info("Cronjob DUPLICATE MASTER CLOSED");
+            Log::info("Cronjob DUPLICATE REKAP CLOSED");
             return Command::SUCCESS;
         }
 
@@ -84,7 +84,7 @@ class DuplicateMasterCron extends Command
             }
 
         } catch (\Exception $e) {
-            Log::info("duplicatemaster:Cron Could not connect to local database. Error:" . $e);
+            Log::info("duplicaterekap:Cron Could not connect to local database. Error:" . $e);
             DB::table('db_con')->where('db_con_id',$getLocalSipedas->db_con_id)
             ->update([
                 'db_con_network_status' => 'disconnect'
@@ -96,22 +96,27 @@ class DuplicateMasterCron extends Command
             ->table('config_sync')
             ->where('config_sync_for',env('SERVER_TYPE',''))
             ->orWhere('config_sync_for','all')
-            ->where('config_sync_tipe','duplicatemaster')
+            ->where('config_sync_tipe','duplicaterekap')
             ->where('config_sync_status','on')
             ->orderBy('config_sync_id','asc')
             ->get();
 
         if (empty($getTableList)) {
-            Log::info("Cronjob DUPLICATE MASTER - List Table to Check Not Found");
+            Log::info("Cronjob DUPLICATE REKAP - List Table to Check Not Found");
             return Command::SUCCESS;
         }
 
         foreach ($getTableList as $key => $valTab) {
-            $except = array('app_setting','role_has_permissions','model_has_permissions','model_has_roles');
-            if (in_array($valTab->config_sync_table_name,$except)){
-                #SKIP
-                continue;
+            $tableSchema = Schema::connection('sipedaslocal')->getColumnListing($valTab->config_sync_table_name);
+
+            #get field name date create
+            $fieldDate = '';
+            foreach ($tableSchema as $keySchema => $valSchema) {
+                if (substr($valSchema,-10) == 'created_at') {
+                    $fieldDate = $valSchema;
+                }
             }
+
             $groupValidation = [];
             for ($i=1; $i <= 4; $i++) {
                 $validate = "config_sync_field_validate{$i}";
@@ -120,9 +125,10 @@ class DuplicateMasterCron extends Command
                     array_push($groupValidation,$validateField);
                 }
             }
-
+            $now = Carbon::now()->format('Y-m-d');
             $maxId = $DbSipedasLocal->table($valTab->config_sync_table_name)
                 ->selectRaw("MAX(id) as id, MAX({$valTab->config_sync_field_pkey}) as pkey")
+                ->whereRaw("{$fieldDate}::TEXT LIKE '{$now}%'")
                 ->orderBy('id','asc')
                 ->groupBy($groupValidation)
                 ->havingRaw('COUNT(*) > 1')
@@ -153,7 +159,7 @@ class DuplicateMasterCron extends Command
                             ->whereIn($valChild->config_parent_child_fkey,$deletePkey)
                             ->delete();
                         } catch (\Throwable $th) {
-                            Log::info("Cronjob DUPLICATE MASTER : Can't Delete data from child table {$valChild->config_parent_child_name}. Error:" . $th);
+                            Log::info("Cronjob DUPLICATE REKAP : Can't Delete data from child table {$valChild->config_parent_child_name}. Error:" . $th);
                             continue;
                         }
 
@@ -165,17 +171,17 @@ class DuplicateMasterCron extends Command
                     ->whereIn('id',$deleteId)
                     ->delete();
                 } catch (\Throwable $th) {
-                    Log::info("Cronjob DUPLICATE MASTER : Can't Delete data from table {$valTab->config_sync_table_name}. Error:" . $th);
+                    Log::info("Cronjob DUPLICATE REKAP : Can't Delete data from table {$valTab->config_sync_table_name}. Error:" . $th);
                     continue;
                 }
 
-                Log::info("Cronjob DUPLICATE MASTER : {$count} records have been deleted from {$valTab->config_sync_table_name}");
+                Log::info("Cronjob DUPLICATE REKAP : {$count} records have been deleted from {$valTab->config_sync_table_name}");
 
             }
 
         }
 
-        Log::info("Cronjob DUPLICATE MASTER FINISH at ". Carbon::now()->format('Y-m-d H:i:s'));
+        Log::info("Cronjob DUPLICATE REKAP FINISH at ". Carbon::now()->format('Y-m-d H:i:s'));
 
         return Command::SUCCESS;
     }

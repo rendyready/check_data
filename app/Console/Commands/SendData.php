@@ -95,7 +95,7 @@ class SendData extends Command
             ->update([
                 'db_con_network_status' => 'disconnect'
             ]);
-            exit();
+            return Command::SUCCESS;
         }
 
         #GET Destination
@@ -262,12 +262,14 @@ class SendData extends Command
                             }
 
                             #control duplicate
-                            if ($cekReady > 1) {
+                            $except = array('app_setting','role_has_permissions','model_has_permissions','model_has_roles');
+                            if ($cekReady > 1 && !in_array($valTab->config_sync_table_name,$except)) {
                                 $maxId = $DbDest->table($valTab->config_sync_table_name)
                                     ->selectRaw("MAX(id) as id")
                                     ->where($validationField)
                                     ->orderBy('id','asc')
                                     ->groupBy($groupValidation)
+                                    ->havingRaw('COUNT(*) > 1')
                                     ->get();
 
                                 $deleteId = [];

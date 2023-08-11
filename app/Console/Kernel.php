@@ -15,10 +15,13 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('datasync:cron')->everyMinute()->withoutOverlapping(10);
         $schedule->command('getdata:cron')->everyMinute()->withoutOverlapping(10);
-        $schedule->command('senddata:cron')->everyMinute()->withoutOverlapping(10);
+        $schedule->command('duplicatemaster:cron')->everyMinute()->withoutOverlapping(10);
+        $schedule->command('duplicaterekap:cron')->everyMinute()->withoutOverlapping(10);
+        $schedule->command('senddata:cron')->everyThreeMinutes()->withoutOverlapping(10);
         $schedule->command('version:cron')->hourly()->withoutOverlapping(10);
+
+        $schedule->command('datasync:cron')->everyMinute()->withoutOverlapping(10);
         $schedule->command('getdataupdate:cron')->everyMinute()->withoutOverlapping(10);
         $schedule->command('sendcloud:cron')->everyTwoMinutes()->withoutOverlapping(10);
         $schedule->command('mastercontrol:cron')->hourly()->withoutOverlapping(10);

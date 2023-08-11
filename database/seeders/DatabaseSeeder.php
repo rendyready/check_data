@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         $this->call([
-            AllConnectionSeeder::class,
+            // AllConnectionSeeder::class,
             // DBConnectionSeeder::class,
             ConfigSyncMasterSeeder::class,
             ConfigSyncRekapSeeder::class,

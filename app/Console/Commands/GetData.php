@@ -95,7 +95,7 @@ class GetData extends Command
             ->update([
                 'db_con_network_status' => 'disconnect'
             ]);
-            exit();
+            return Command::SUCCESS;
         }
 
         #GET Destination
@@ -112,16 +112,16 @@ class GetData extends Command
         #GET Data is open from this destination?
         $getDataOpen = DB::connection('cronpusat')
             ->table('db_con')
-            ->where('db_con_host',$dest->db_con_host)
+            ->where('db_con_m_w_id',$dest->db_con_m_w_id)
             ->first();
         if (!empty($getDataOpen)) {
             if ($getDataOpen->db_con_sync_status == 'off') {
                 Log::alert("GET DATA NOT ALLOWED FROM PUSAT. SERVER BUSY.");
-                exit();
+                return Command::SUCCESS;
             }
         }else{
             Log::alert("GET DATA SETUP NOT FOUND.");
-            exit();
+            return Command::SUCCESS;
         }
 
 
@@ -159,7 +159,7 @@ class GetData extends Command
                     'db_con_network_status' => 'disconnect'
                 ]);
             #skip executing on error connection
-            exit();
+            return Command::SUCCESS;
         }
 
         $serverCode = ":{$dest->db_con_m_w_id}:";
@@ -280,12 +280,14 @@ class GetData extends Command
                         }
 
                         #control duplicate
-                        if ($cekReady > 1) {
+                        $except = array('app_setting','role_has_permissions','model_has_permissions','model_has_roles');
+                        if ($cekReady > 1 && !in_array($valTab->config_sync_table_name,$except)) {
                             $maxId = $DbDest->table($valTab->config_sync_table_name)
                                 ->selectRaw("MAX(id) as id")
                                 ->where($validationField)
                                 ->orderBy('id','asc')
                                 ->groupBy($groupValidation)
+                                ->havingRaw('COUNT(*) > 1')
                                 ->get();
 
                             $deleteId = [];

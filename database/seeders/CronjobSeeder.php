@@ -18,10 +18,6 @@ class CronjobSeeder extends Seeder
         DB::statement("TRUNCATE TABLE cronjob RESTART IDENTITY;");
 
         DB::table('cronjob')->insert([
-            'cronjob_name' => 'datasync:cron'
-        ]);
-
-        DB::table('cronjob')->insert([
             'cronjob_name' => 'getdata:cron',
             // 'cronjob_status' => 'close'
         ]);
@@ -30,9 +26,22 @@ class CronjobSeeder extends Seeder
             // 'cronjob_status' => 'close'
         ]);
         DB::table('cronjob')->insert([
+            'cronjob_name' => 'duplicatemaster:cron',
+            // 'cronjob_status' => 'close'
+        ]);
+        DB::table('cronjob')->insert([
+            'cronjob_name' => 'duplicaterekap:cron',
+            // 'cronjob_status' => 'close'
+        ]);
+        DB::table('cronjob')->insert([
             'cronjob_name' => 'version:cron',
             // 'cronjob_status' => 'close'
         ]);
+
+        DB::table('cronjob')->insert([
+            'cronjob_name' => 'datasync:cron'
+        ]);
+
         DB::table('cronjob')->insert([
             'cronjob_name' => 'autoshutdown:cron',
             // 'cronjob_status' => 'close'

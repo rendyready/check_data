@@ -24,6 +24,7 @@ return new class extends Migration
             $table->unsignedInteger('config_sync_limit')->default(100);
             $table->string('config_sync_truncate')->default('off')->comment('on/off');
             $table->string('config_sync_sequence')->default('off')->comment('on/off');
+            $table->string('config_sync_field_pkey')->nullable();
             $table->string('config_sync_field_status')->nullable();
             $table->string('config_sync_field_validate1')->nullable();
             $table->string('config_sync_field_validate2')->nullable();

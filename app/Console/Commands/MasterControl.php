@@ -38,9 +38,15 @@ class MasterControl extends Command
                     ->where('cronjob_name','mastercontrol:cron')
                     ->first();
 
-        if ($cronStatus->cronjob_status == 'open') {
-            info("Cronjob Master Controlling START at ". Carbon::now()->format('Y-m-d H:i:s'));
+        if (!empty($cronStatus)) {
+            if ($cronStatus->cronjob_status == 'open') {
+                Log::info("Cronjob MASTER CONTROL START at ". Carbon::now()->format('Y-m-d H:i:s'));
+            }else{
+                Log::info("Cronjob MASTER CONTROL CLOSED");
+                return Command::SUCCESS;
+            }
         }else{
+            Log::info("Cronjob MASTER CONTROL CLOSED");
             return Command::SUCCESS;
         }
 
@@ -84,6 +90,32 @@ class MasterControl extends Command
                 'db_con_network_status' => 'disconnect'
             ]);
             exit();
+        }
+
+        #GET Destination
+        $dest = DB::table('db_con')
+        ->whereIn('db_con_host','127.0.0.1')
+        ->first();
+
+        if (empty($dest)) {
+            Log::info("Cronjob MASTER CONTROL, LOCAL DB NOT ACTIVE");
+            return Command::SUCCESS;
+        }
+
+        #GET Data is open from this destination?
+        $getDataOpen = DB::connection('cronpusat')
+            ->table('db_con')
+            ->where('db_con_m_w_id',$dest->db_con_m_w_id)
+            ->first();
+
+        if (!empty($getDataOpen)) {
+            if ($getDataOpen->db_con_sync_status == 'off') {
+                Log::alert("MASTER CONTROL NOT ALLOWED FROM PUSAT. SERVER BUSY.");
+                return Command::SUCCESS;
+            }
+        }else{
+            Log::alert("MASTER CONTROL SETUP NOT FOUND.");
+            return Command::SUCCESS;
         }
 
         #GET Data is open?
