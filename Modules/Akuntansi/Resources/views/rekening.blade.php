@@ -258,79 +258,85 @@
 @endsection
 @section('js')
     <script type="module">
-  $(document).ready(function() {
-    Codebase.helpersOnLoad(['jq-select2']);
-    var no = 0;
-    $('.tambah').on('click', function() {
-      no++;
-      $('#form').append('<tr class="hapus" id="row' + no + '">' +
-        '<td><input type="text" class="form-control form-control-sm m_rekening_no_akunjq text-center no_rekening" name="m_rekening_no_akun[]" id="m_rekening_no_akunjq' + no + '" placeholder="Input Nama Akun" required></td>' +
-        '<td><input type="text" class="form-control form-control-sm m_rekening_namajq text-center" name="m_rekening_nama[]" id="m_rekening_namajq' + no + '" placeholder="Input Nama Rekening" required></td>' +
-        '<td><input type="text" class="form-control saldo form-control-sm text-end number" name="m_rekening_saldo[]" id="m_rekening_saldo" placeholder="Input Saldo Rekening" required></td>' +
-        '<td><button type="button" id="' + no + '" class="btn btn-danger btn_remove"> - </button></td> </tr> ');
-    });
+        $(document).ready(function() {
+            Codebase.helpersOnLoad(['jq-select2']);
+            var no = 0;
+            $('.tambah').on('click', function() {
+                no++;
+                $('#form').append('<tr class="hapus" id="row' + no + '">' +
+                    '<td><input type="text" class="form-control form-control-sm m_rekening_no_akunjq text-center no_rekening" name="m_rekening_no_akun[]" id="m_rekening_no_akunjq' +
+                    no + '" placeholder="Input Nama Akun" required></td>' +
+                    '<td><input type="text" class="form-control form-control-sm m_rekening_namajq text-center" name="m_rekening_nama[]" id="m_rekening_namajq' +
+                    no + '" placeholder="Input Nama Rekening" required></td>' +
+                    '<td><input type="text" class="form-control saldo form-control-sm text-end number" name="m_rekening_saldo[]" id="m_rekening_saldo" placeholder="Input Saldo Rekening" required></td>' +
+                    '<td><button type="button" id="' + no +
+                    '" class="btn btn-danger btn_remove"> - </button></td> </tr> ');
+            });
 
-    var waroengid           = $('#filter-waroeng').val();
-    var rekeningkategori    = $('#filter-rekening').val();
-    var table, save_method;
+            var waroengid = $('#filter-waroeng').val();
+            var rekeningkategori = $('#filter-rekening').val();
+            var table, save_method;
 
-    $(function() {
-    table = $('#rekening-tampil').DataTable({
-        button: [],
-        destroy: true,
-        orderCellsTop: true,
-        processing: true,
-        autoWidth: true,
-        lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
-        ajax: {
-            url: '{{route("rekening.tampil")}}',
-            data : {
-                m_rekening_m_waroeng_id: waroengid,
-                m_rekening_kategori: rekeningkategori,
-            },
-            type : "GET",
-            },
-      });
-    });
+            $(function() {
+                table = $('#rekening-tampil').DataTable({
+                    button: [],
+                    destroy: true,
+                    orderCellsTop: true,
+                    processing: true,
+                    autoWidth: true,
+                    lengthMenu: [
+                        [10, 25, 50, 100, -1],
+                        [10, 25, 50, 100, "All"]
+                    ],
+                    ajax: {
+                        url: '{{ route('rekening.tampil') }}',
+                        data: {
+                            m_rekening_m_waroeng_id: waroengid,
+                            m_rekening_kategori: rekeningkategori,
+                        },
+                        type: "GET",
+                    },
+                });
+            });
 
-    //get edit
-    $("#rekening-tampil").on('click','.buttonEdit', function() {
+            //get edit
+            $("#rekening-tampil").on('click', '.buttonEdit', function() {
                 var id = $(this).attr('value');
                 $('#form-rekening form')[0].reset();
                 $("#myModalLabel").html('Ubah Data Rekening');
                 $.ajax({
-                    url: "/akuntansi/rekening/edit/"+id,
+                    url: "/akuntansi/rekening/edit/" + id,
                     type: "GET",
                     dataType: 'json',
                     success: function(respond) {
                         // console.log(respond);
-                        $(".m_rekening_no_akun1").val(respond.m_rekening_no_akun).trigger('change');
+                        $(".m_rekening_no_akun1").val(respond.m_rekening_no_akun).trigger(
+                            'change');
                         $("#m_rekening_nama1").val(respond.m_rekening_nama).trigger('change');
                         $("#m_rekening_saldo1").val(respond.m_rekening_saldo).trigger('change');
                     },
-                    error: function() {
-                    }
+                    error: function() {}
                 });
                 $("#form-rekening").modal('show');
-            }); 
+            });
 
             //edit
-            $('#formAction').submit( function(e){
-                if(!e.isDefaultPrevented()){
+            $('#formAction').submit(function(e) {
+                if (!e.isDefaultPrevented()) {
                     $.ajax({
-                        url : "{{ route('rekening.simpan_edit') }}",
-                        type : "POST",
-                        data : $('#form-rekening form').serialize(),
-                        success : function(data){
+                        url: "{{ route('rekening.simpan_edit') }}",
+                        type: "POST",
+                        data: $('#form-rekening form').serialize(),
+                        success: function(data) {
                             console.log(data);
                             $('#form-rekening').modal('hide');
-                                Codebase.helpers('jq-notify', {
-                                    align: 'right', // 'right', 'left', 'center'
-                                    from: 'top', // 'top', 'bottom'
-                                    type: 'info', // 'info', 'success', 'warning', 'danger'
-                                    icon: 'fa fa-info me-5', // Icon class
-                                    message: 'Berhasil update rekening.',
-                                });
+                            Codebase.helpers('jq-notify', {
+                                align: 'right',
+                                from: 'top',
+                                type: data.type,
+                                icon: 'fa fa-info me-5',
+                                message: data.messages
+                            });
                             table.ajax.reload();
                         },
                     });
@@ -339,343 +345,352 @@
             });
 
             //GET HAPUS
-        $('#rekening-tampil').on('click','.buttonHapus',function(){
-            var id=$(this).attr('value');
-            $("#myModalLabel2").html('Konfirmasi Hapus Rekening');
-            $('#ModalHapus').modal('show');
-            $('[name="m_rekening_no_akun"]').val(id);
+            $('#rekening-tampil').on('click', '.buttonHapus', function() {
+                var id = $(this).attr('value');
+                $("#myModalLabel2").html('Konfirmasi Hapus Rekening');
+                $('#ModalHapus').modal('show');
+                $('[name="m_rekening_no_akun"]').val(id);
 
-        });
+            });
 
-         //Hapus
-         $('#btn_hapus').on('click',function(){
-            var id=$('#m_rekening_no_akun2').val();
-            $.ajax({
-            type : "POST",
-            url: "/akuntansi/rekening/delete/"+id,
-            dataType : "JSON",
-            data : $('#ModalHapus form').serialize(),
-                    success: function(data){
+            //Hapus
+            $('#btn_hapus').on('click', function() {
+                var id = $('#m_rekening_no_akun2').val();
+                $.ajax({
+                    type: "POST",
+                    url: "/akuntansi/rekening/delete/" + id,
+                    dataType: "JSON",
+                    data: $('#ModalHapus form').serialize(),
+                    success: function(data) {
                         console.log(data);
-                            $('#ModalHapus').modal('hide');
-                            Codebase.helpers('jq-notify', {
-                                align: 'right', // 'right', 'left', 'center'
-                                from: 'top', // 'top', 'bottom'
-                                type: 'info', // 'info', 'success', 'warning', 'danger'
-                                icon: 'fa fa-info me-5', // Icon class
-                                message: 'Berhasil hapus rekening.',
-                            });
-                            table.ajax.reload();
+                        $('#ModalHapus').modal('hide');
+                        Codebase.helpers('jq-notify', {
+                            align: 'right', // 'right', 'left', 'center'
+                            from: 'top', // 'top', 'bottom'
+                            type: 'info', // 'info', 'success', 'warning', 'danger'
+                            icon: 'fa fa-info me-5', // Icon class
+                            message: 'Berhasil hapus rekening.',
+                        });
+                        table.ajax.reload();
                     },
                 });
                 return false;
             });
 
-    $('#rekening-insert').submit(function(e) {
-      if (!e.isDefaultPrevented()) {
-      $.ajax({
-          url: "{{ route('rekening.simpan') }}",
-          type: "POST",
-          data: $('#rekening-insert').serialize(),
-          success: function(data) {
-            Codebase.helpers('jq-notify', {
-                              align: 'right', // 'right', 'left', 'center'
-                              from: 'top', // 'top', 'bottom'
-                              type: data.type, // 'info', 'success', 'warning', 'danger'
-                              icon: 'fa fa-info me-5', // Icon class
-                              message: data.messages
+            $('#rekening-insert').submit(function(e) {
+                if (!e.isDefaultPrevented()) {
+                    $.ajax({
+                        url: "{{ route('rekening.simpan') }}",
+                        type: "POST",
+                        data: $('#rekening-insert').serialize(),
+                        success: function(data) {
+                            Codebase.helpers('jq-notify', {
+                                align: 'right', // 'right', 'left', 'center'
+                                from: 'top', // 'top', 'bottom'
+                                type: data
+                                    .type, // 'info', 'success', 'warning', 'danger'
+                                icon: 'fa fa-info me-5', // Icon class
+                                message: data.messages
                             });
-            $('.hapus').remove();
-            $('.set').val('');
+                            $('.hapus').remove();
+                            $('.set').val('');
 
-            var waroengid2= $('#filter-waroeng').val();
-            var rekeningkategori2 = $('#filter-rekening').val();
+                            var waroengid2 = $('#filter-waroeng').val();
+                            var rekeningkategori2 = $('#filter-rekening').val();
 
-            $('#rekening-tampil').DataTable({
-                button: [],
-                destroy: true,
-                orderCellsTop: true,
-                processing: true,
-                autoWidth: true,
-                lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
-                ajax: {
-                    url: '{{route("rekening.tampil")}}',
-                    data : {
-                        m_rekening_m_waroeng_id: waroengid,
-                        m_rekening_kategori: rekeningkategori,
-                    },
-                    type : "GET",
-                    },
-            });
-          },
-          error: function() {
-            alert("Tidak dapat menyimpan data!");
-          }
-        });
-        return false;
-      }
-    });
-
-    $(document).on('click', '.btn_remove', function() {
-      var button_id = $(this).attr("id");
-     $('#row' + button_id + '').remove();
-     $('.saldo').trigger("input");
-    });
-    
-    $('.cari').on('change', function() {
-        var waroengid = $('#filter-waroeng').val();
-        var rekeningkategori = $('#filter-rekening').val();
-        $('#rekening-tampil').DataTable({
-            button: [],
-            destroy: true,
-            orderCellsTop: true,
-            processing: true,
-            autoWidth: true,
-            lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
-            ajax: {
-                url: '{{route("rekening.tampil")}}',
-                data : {
-                    m_rekening_m_waroeng_id: waroengid,
-                    m_rekening_kategori: rekeningkategori,
-                },
-                type : "GET",
-                },
-        });
-    });
-
-    $(document).on('input', '.number', function () {
-			var angka = $(this).val();
-			var number_string = angka.replace(/[^,\d]/g, '').toString(),
-			split   		= number_string.split(','),
-			sisa     		= split[0].length % 3,
-			angka_hasil     = split[0].substr(0, sisa),
-			ribuan     		= split[0].substr(sisa).match(/\d{3}/gi);
-
-			if(ribuan){
-				var separator = sisa ? '.' : '';
-				angka_hasil += separator + ribuan.join('.');
-			}
-
-			$(this).val(angka_hasil = split[1] != undefined ? angka_hasil + ',' + split[1] : angka_hasil);
-    });
-
-    $("input.mask").each((i,ele)=>{
-            let clone=$(ele).clone(false)
-            clone.attr("type","text")
-            let ele1=$(ele)
-            clone.val(Number(ele1.val()).toLocaleString("id"))
-            $(ele).after(clone)
-            $(ele).hide()
-            setInterval(()=>{
-                let newv=Number(ele1.val()).toLocaleString("id")
-                if(clone.val()!=newv){
-                    clone.val(newv)
+                            $('#rekening-tampil').DataTable({
+                                button: [],
+                                destroy: true,
+                                orderCellsTop: true,
+                                processing: true,
+                                autoWidth: true,
+                                lengthMenu: [
+                                    [10, 25, 50, 100, -1],
+                                    [10, 25, 50, 100, "All"]
+                                ],
+                                ajax: {
+                                    url: '{{ route('rekening.tampil') }}',
+                                    data: {
+                                        m_rekening_m_waroeng_id: waroengid,
+                                        m_rekening_kategori: rekeningkategori,
+                                    },
+                                    type: "GET",
+                                },
+                            });
+                        },
+                        error: function() {
+                            alert("Tidak dapat menyimpan data!");
+                        }
+                    });
+                    return false;
                 }
-            },10)
-            $(ele).mouseleave(()=>{
-                $(clone).show()
-                $(ele1).hide()
+            });
+
+            $(document).on('click', '.btn_remove', function() {
+                var button_id = $(this).attr("id");
+                $('#row' + button_id + '').remove();
+                $('.saldo').trigger("input");
+            });
+
+            $('.cari').on('change', function() {
+                var waroengid = $('#filter-waroeng').val();
+                var rekeningkategori = $('#filter-rekening').val();
+                $('#rekening-tampil').DataTable({
+                    button: [],
+                    destroy: true,
+                    orderCellsTop: true,
+                    processing: true,
+                    autoWidth: true,
+                    lengthMenu: [
+                        [10, 25, 50, 100, -1],
+                        [10, 25, 50, 100, "All"]
+                    ],
+                    ajax: {
+                        url: '{{ route('rekening.tampil') }}',
+                        data: {
+                            m_rekening_m_waroeng_id: waroengid,
+                            m_rekening_kategori: rekeningkategori,
+                        },
+                        type: "GET",
+                    },
+                });
+            });
+
+            $(document).on('input', '.number', function() {
+                var angka = $(this).val();
+                var number_string = angka.replace(/[^,\d]/g, '').toString(),
+                    split = number_string.split(','),
+                    sisa = split[0].length % 3,
+                    angka_hasil = split[0].substr(0, sisa),
+                    ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+                if (ribuan) {
+                    var separator = sisa ? '.' : '';
+                    angka_hasil += separator + ribuan.join('.');
+                }
+
+                $(this).val(angka_hasil = split[1] != undefined ? angka_hasil + ',' + split[1] :
+                    angka_hasil);
+            });
+
+            $("input.mask").each((i, ele) => {
+                let clone = $(ele).clone(false)
+                clone.attr("type", "text")
+                let ele1 = $(ele)
+                clone.val(Number(ele1.val()).toLocaleString("id"))
+                $(ele).after(clone)
+                $(ele).hide()
+                setInterval(() => {
+                    let newv = Number(ele1.val()).toLocaleString("id")
+                    if (clone.val() != newv) {
+                        clone.val(newv)
+                    }
+                }, 10)
+                $(ele).mouseleave(() => {
+                    $(clone).show()
+                    $(ele1).hide()
+                })
             })
-        })
 
-     //auto sum multiple insert
-     $(document).on('input', '.saldo', function() {
-        var sum = 0;
-        $(".saldo").each(function(){
-            sum += +$(this).val().replace(/\./g, '').replace(/\,/g, '.');
-        });
-        $('#total').val(sum);  
-    });
+            //auto sum multiple insert
+            $(document).on('input', '.saldo', function() {
+                var sum = 0;
+                $(".saldo").each(function() {
+                    sum += +$(this).val().replace(/\./g, '').replace(/\,/g, '.');
+                });
+                $('#total').val(sum);
+            });
 
-    //validasi nama
-    $(document).on("change", ".m_rekening_nama", function() {
-        var nama                = $('#m_rekening_nama').val().toLowerCase();
-        var waroengid           = $('#filter-waroeng').val();
-        var rekeningkategori    = $('#filter-rekening').val();
+            //validasi nama
+            $(document).on("change", ".m_rekening_nama", function() {
+                var nama = $('#m_rekening_nama').val().toLowerCase();
+                var waroengid = $('#filter-waroeng').val();
+                var rekeningkategori = $('#filter-rekening').val();
                 $.ajax({
-                url: "{{ route('rekening.validasinama') }}",
-                data : {
-                    m_rekening_nama: nama,
-                    m_rekening_m_waroeng_id: waroengid,
-                },
-                type: "get",
-                success: function(data) {
-                    if (data > 0){
-                        Codebase.helpers('jq-notify', {
-                              align: 'right', // 'right', 'left', 'center'
-                              from: 'top', // 'top', 'bottom'
-                              type: 'danger', // 'info', 'success', 'warning', 'danger'
-                              icon: 'fa fa-info me-5', // Icon class
-                              message: 'Nama rekening yang anda inputkan sama/ duplikat !'
-                            });
-                    $('.m_rekening_nama').val('');
-                    }  
-                },
-            }); 
-        }); 
-
-        //validasi no akun
-        $(document).on("change", ".m_rekening_no_akun", function() {
-            var no = $('#m_rekening_no_akun').val();
-            var waroengid           = $('#filter-waroeng').val();
-            var rekeningkategori    = $('#filter-rekening').val();
-                $.ajax({
-                url: "{{ route('rekening.validasino') }}",
-                data : {
-                m_rekening_no_akun: no,
-                m_rekening_m_waroeng_id: waroengid,
-                },
-                type: "get",
-                success: function(data) {
-
-                    // console.log(data);
-                    if (data > 0){
-                        Codebase.helpers('jq-notify', {
-                              align: 'right', // 'right', 'left', 'center'
-                              from: 'top', // 'top', 'bottom'
-                              type: 'danger', // 'info', 'success', 'warning', 'danger'
-                              icon: 'fa fa-info me-5', // Icon class
-                              message: 'No Akun yang anda inputkan sama/duplikat ! '
-                            });
-                    $('.m_rekening_no_akun').val('');
-                    }  
-                },
-            }); 
-        });
-    
-        //validasi nama jquery
-        $(document).on("change", ".m_rekening_namajq", function() {
-        var id   = $(this).closest("tr").index(); 
-        var nama = $('#m_rekening_namajq'+id).val().toLowerCase();
-        var waroengid           = $('#filter-waroeng').val();
-        var rekeningkategori    = $('#filter-rekening').val();
-                $.ajax({
-                url: "{{ route('rekening.validasinama') }}",
-                data : {
-                    m_rekening_nama: nama,
-                    m_rekening_m_waroeng_id: waroengid,
-                },
-                type: "get",
-                success: function(data) {
-                    if (data > 0){
-                        Codebase.helpers('jq-notify', {
-                              align: 'right', // 'right', 'left', 'center'
-                              from: 'top', // 'top', 'bottom'
-                              type: 'danger', // 'info', 'success', 'warning', 'danger'
-                              icon: 'fa fa-info me-5', // Icon class
-                              message: 'Nama rekening yang anda inputkan sama/ duplikat !'
-                            });   
-                    $('#m_rekening_namajq'+id).val('');
-                    }  
-                },
-            }); 
-        }); 
-
-        //validasi no akun jquery
-        $(document).on("change", ".m_rekening_no_akunjq", function() {
-        var id = $(this).closest("tr").index(); 
-        var no = $('#m_rekening_no_akunjq'+id).val();
-        var waroengid           = $('#filter-waroeng').val();
-        var rekeningkategori    = $('#filter-rekening').val();
-                $.ajax({
-                url: "{{ route('rekening.validasino') }}",
-                data : {
-                m_rekening_no_akun: no,
-                m_rekening_m_waroeng_id: waroengid,
-                },
-                type: "get",
-                success: function(data) {
-                    if (data > 0){
-                        Codebase.helpers('jq-notify', {
-                              align: 'right', // 'right', 'left', 'center'
-                              from: 'top', // 'top', 'bottom'
-                              type: 'danger', // 'info', 'success', 'warning', 'danger'
-                              icon: 'fa fa-info me-5', // Icon class
-                              message: 'No Akun yang anda inputkan sama/duplikat ! '
-                            });
-                    $('#m_rekening_no_akunjq'+id).val('');
-                    }  
-                },
-            }); 
-        });
-
-    $(document).on('click', '.btn_remove', function() {
-      var button_id = $(this).attr("id");
-     $('#row' + button_id + '').remove();
-     $('.saldo').trigger("input");
-    });
-
-    //copyrecord
-    $(document).on('click', '#copyrecord', function() {
-        var waroengasal      = $('#filter-waroeng').val();
-        var waroengtj        = $('#m_rekening_m_waroeng_id2').val();
-        var waroengasal1     = $('#filter-waroeng').val();
-        var waroengtj1       = $('#m_rekening_m_waroeng_id2').val();
-        var saldo            = $('#m_rekening_copy_saldo').val();
-    if(waroengasal1 != waroengtj1){
-        $.ajax({
-            url: "{{ route('rekening.copyrecord') }}",
-            data : { 
-                waroeng_asal: waroengasal,
-                waroeng_tujuan: waroengtj,
-                m_rekening_copy_saldo: saldo,
-            },            
-            type : "GET",
-            success: function(data) {
-              Codebase.helpers('jq-notify', {
-                              align: 'right', // 'right', 'left', 'center'
-                              from: 'top', // 'top', 'bottom'
-                              type: data.type, // 'info', 'success', 'warning', 'danger'
-                              icon: 'fa fa-info me-5', // Icon class
-                              message: data.messages
-                            });
-            },
-        });
-      }else{
-        Codebase.helpers('jq-notify', {
+                    url: "{{ route('rekening.validasinama') }}",
+                    data: {
+                        m_rekening_nama: nama,
+                        m_rekening_m_waroeng_id: waroengid,
+                    },
+                    type: "get",
+                    success: function(data) {
+                        if (data > 0) {
+                            Codebase.helpers('jq-notify', {
                                 align: 'right', // 'right', 'left', 'center'
                                 from: 'top', // 'top', 'bottom'
                                 type: 'danger', // 'info', 'success', 'warning', 'danger'
                                 icon: 'fa fa-info me-5', // Icon class
-                                message: 'waroeng yang anda pilih sama dengan yang di halaman !'
-                                });
-        $('#m_rekening_m_waroeng_id2').val('-- Pilih Waroeng --').trigger('change');
-        }
-    });
-
-    $(document).on("input", ".no_rekening", function () {
-        var prev = $(this).data("val");
-            var current = $(this).val();
-            var id = $(this).data("id");
-            var no_rekening = $(".no_rekening").val();
-            if (!current) {
-                // If the selected value is empty, skip the duplicate value check
-                return;
-            }
-            var values = $(".no_rekening")
-                .map(function () {
-                    return this.value.trim();
-                })
-                .get();
-            var filteredValues = values.filter(function (value) {
-                return value !== "";
-            });
-            var unique = [...new Set(filteredValues)];
-            if (filteredValues.length !== unique.length) {
-                e.preventDefault();
-                Codebase.helpers("jq-notify", {
-                    align: "right", // 'right', 'left', 'center'
-                    from: "top", // 'top', 'bottom'
-                    type: "danger", // 'info', 'success', 'warning', 'danger'
-                    icon: "fa fa-info me-5", // Icon class
-                    message: "Nama Barang Telah Ada",
+                                message: 'Nama rekening yang anda inputkan sama/ duplikat !'
+                            });
+                            $('.m_rekening_nama').val('');
+                        }
+                    },
                 });
-                $("#" + id)
-                    .val('')
-            }
-        })
+            });
+
+            //validasi no akun
+            $(document).on("change", ".m_rekening_no_akun", function() {
+                var no = $('#m_rekening_no_akun').val();
+                var waroengid = $('#filter-waroeng').val();
+                var rekeningkategori = $('#filter-rekening').val();
+                $.ajax({
+                    url: "{{ route('rekening.validasino') }}",
+                    data: {
+                        m_rekening_no_akun: no,
+                        m_rekening_m_waroeng_id: waroengid,
+                    },
+                    type: "get",
+                    success: function(data) {
+
+                        // console.log(data);
+                        if (data > 0) {
+                            Codebase.helpers('jq-notify', {
+                                align: 'right', // 'right', 'left', 'center'
+                                from: 'top', // 'top', 'bottom'
+                                type: 'danger', // 'info', 'success', 'warning', 'danger'
+                                icon: 'fa fa-info me-5', // Icon class
+                                message: 'No Akun yang anda inputkan sama/duplikat ! '
+                            });
+                            $('.m_rekening_no_akun').val('');
+                        }
+                    },
+                });
+            });
+
+            //validasi nama jquery
+            $(document).on("change", ".m_rekening_namajq", function() {
+                var id = $(this).closest("tr").index();
+                var nama = $('#m_rekening_namajq' + id).val().toLowerCase();
+                var waroengid = $('#filter-waroeng').val();
+                var rekeningkategori = $('#filter-rekening').val();
+                $.ajax({
+                    url: "{{ route('rekening.validasinama') }}",
+                    data: {
+                        m_rekening_nama: nama,
+                        m_rekening_m_waroeng_id: waroengid,
+                    },
+                    type: "get",
+                    success: function(data) {
+                        if (data > 0) {
+                            Codebase.helpers('jq-notify', {
+                                align: 'right', // 'right', 'left', 'center'
+                                from: 'top', // 'top', 'bottom'
+                                type: 'danger', // 'info', 'success', 'warning', 'danger'
+                                icon: 'fa fa-info me-5', // Icon class
+                                message: 'Nama rekening yang anda inputkan sama/ duplikat !'
+                            });
+                            $('#m_rekening_namajq' + id).val('');
+                        }
+                    },
+                });
+            });
+
+            //validasi no akun jquery
+            $(document).on("change", ".m_rekening_no_akunjq", function() {
+                var id = $(this).closest("tr").index();
+                var no = $('#m_rekening_no_akunjq' + id).val();
+                var waroengid = $('#filter-waroeng').val();
+                var rekeningkategori = $('#filter-rekening').val();
+                $.ajax({
+                    url: "{{ route('rekening.validasino') }}",
+                    data: {
+                        m_rekening_no_akun: no,
+                        m_rekening_m_waroeng_id: waroengid,
+                    },
+                    type: "get",
+                    success: function(data) {
+                        if (data > 0) {
+                            Codebase.helpers('jq-notify', {
+                                align: 'right', // 'right', 'left', 'center'
+                                from: 'top', // 'top', 'bottom'
+                                type: 'danger', // 'info', 'success', 'warning', 'danger'
+                                icon: 'fa fa-info me-5', // Icon class
+                                message: 'No Akun yang anda inputkan sama/duplikat ! '
+                            });
+                            $('#m_rekening_no_akunjq' + id).val('');
+                        }
+                    },
+                });
+            });
+
+            $(document).on('click', '.btn_remove', function() {
+                var button_id = $(this).attr("id");
+                $('#row' + button_id + '').remove();
+                $('.saldo').trigger("input");
+            });
+
+            //copyrecord
+            $(document).on('click', '#copyrecord', function() {
+                var waroengasal = $('#filter-waroeng').val();
+                var waroengtj = $('#m_rekening_m_waroeng_id2').val();
+                var waroengasal1 = $('#filter-waroeng').val();
+                var waroengtj1 = $('#m_rekening_m_waroeng_id2').val();
+                var saldo = $('#m_rekening_copy_saldo').val();
+                if (waroengasal1 != waroengtj1) {
+                    $.ajax({
+                        url: "{{ route('rekening.copyrecord') }}",
+                        data: {
+                            waroeng_asal: waroengasal,
+                            waroeng_tujuan: waroengtj,
+                            m_rekening_copy_saldo: saldo,
+                        },
+                        type: "GET",
+                        success: function(data) {
+                            Codebase.helpers('jq-notify', {
+                                align: 'right', // 'right', 'left', 'center'
+                                from: 'top', // 'top', 'bottom'
+                                type: data
+                                    .type, // 'info', 'success', 'warning', 'danger'
+                                icon: 'fa fa-info me-5', // Icon class
+                                message: data.messages
+                            });
+                        },
+                    });
+                } else {
+                    Codebase.helpers('jq-notify', {
+                        align: 'right', // 'right', 'left', 'center'
+                        from: 'top', // 'top', 'bottom'
+                        type: 'danger', // 'info', 'success', 'warning', 'danger'
+                        icon: 'fa fa-info me-5', // Icon class
+                        message: 'waroeng yang anda pilih sama dengan yang di halaman !'
+                    });
+                    $('#m_rekening_m_waroeng_id2').val('-- Pilih Waroeng --').trigger('change');
+                }
+            });
+
+            $(document).on("input", ".no_rekening", function() {
+                var prev = $(this).data("val");
+                var current = $(this).val();
+                var id = $(this).data("id");
+                var no_rekening = $(".no_rekening").val();
+                if (!current) {
+                    // If the selected value is empty, skip the duplicate value check
+                    return;
+                }
+                var values = $(".no_rekening")
+                    .map(function() {
+                        return this.value.trim();
+                    })
+                    .get();
+                var filteredValues = values.filter(function(value) {
+                    return value !== "";
+                });
+                var unique = [...new Set(filteredValues)];
+                if (filteredValues.length !== unique.length) {
+                    e.preventDefault();
+                    Codebase.helpers("jq-notify", {
+                        align: "right", // 'right', 'left', 'center'
+                        from: "top", // 'top', 'bottom'
+                        type: "danger", // 'info', 'success', 'warning', 'danger'
+                        icon: "fa fa-info me-5", // Icon class
+                        message: "Nama Barang Telah Ada",
+                    });
+                    $("#" + id)
+                        .val('')
+                }
+            })
 
 
-});
-</script>
+        });
+    </script>
 @endsection
