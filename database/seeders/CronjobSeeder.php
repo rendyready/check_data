@@ -59,7 +59,7 @@ class CronjobSeeder extends Seeder
             'cronjob_status' => 'close'
         ]);
         DB::table('cronjob')->insert([
-            'cronjob_name' => 'mastercontrol:cron',
+            'cronjob_name' => 'mastercontroll:cron',
             'cronjob_status' => 'open'
         ]);
         DB::table('cronjob')->insert([

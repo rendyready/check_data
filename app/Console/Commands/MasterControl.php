@@ -17,7 +17,7 @@ class MasterControl extends Command
      *
      * @var string
      */
-    protected $signature = 'mastercontrol:cron';
+    protected $signature = 'mastercontroll:cron';
 
     /**
      * The console command description.
@@ -35,7 +35,7 @@ class MasterControl extends Command
     {
         #Cek cronjob status
         $cronStatus = DB::table('cronjob')
-                    ->where('cronjob_name','mastercontrol:cron')
+                    ->where('cronjob_name','mastercontroll:cron')
                     ->first();
 
         if (!empty($cronStatus)) {
@@ -89,12 +89,12 @@ class MasterControl extends Command
             ->update([
                 'db_con_network_status' => 'disconnect'
             ]);
-            exit();
+            return Command::SUCCESS;
         }
 
-        #GET Destination
+        #GET Local Connection
         $dest = DB::table('db_con')
-        ->whereIn('db_con_host','127.0.0.1')
+        ->where('db_con_host','127.0.0.1')
         ->first();
 
         if (empty($dest)) {
@@ -102,7 +102,7 @@ class MasterControl extends Command
             return Command::SUCCESS;
         }
 
-        #GET Data is open from this destination?
+        #SYNC Data is open from this local?
         $getDataOpen = DB::connection('cronpusat')
             ->table('db_con')
             ->where('db_con_m_w_id',$dest->db_con_m_w_id)
@@ -117,20 +117,6 @@ class MasterControl extends Command
             Log::alert("MASTER CONTROL SETUP NOT FOUND.");
             return Command::SUCCESS;
         }
-
-        #GET Data is open?
-        $getCronOpen = $DbPusat->table('cronjob')
-            ->where('cronjob_name','mastercontrol:cron')
-            ->first();
-
-        if ($getCronOpen->cronjob_status == 'close') {
-            Log::alert("MASTER CONTROL NOT ALLOWED. SERVER BUSY.");
-            exit();
-        }
-
-        #GET Destination
-        $dest = DB::table('db_con')->whereIn('db_con_location',['waroeng','area'])
-        ->first();
 
         Config::set("database.connections.destination", [
             'driver' => $dest->db_con_driver,
@@ -166,66 +152,133 @@ class MasterControl extends Command
                     'db_con_network_status' => 'disconnect'
                 ]);
             #skip executing on error connection
-            exit();
+            return Command::SUCCESS;
         }
 
         $getTableList = DB::table('config_get_data')
                         ->where('config_get_data_status','on')
                         ->orderBy('config_get_data_id','desc')
                         ->get();
+
+        $getTableList = DB::connection('cronpusat')
+            ->table('config_sync')
+            ->where('config_sync_tipe','mastercontroll')
+            ->where('config_sync_status','on')
+            ->orderBy('config_sync_id','asc')
+            ->get();
+
         foreach ($getTableList as $key => $valTab) {
             #get Schema Table From resource
-            $sourceSchema = Schema::connection('source')->getColumnListing($valTab->config_get_data_table_name);
-            $destSchema = Schema::connection('destination')->getColumnListing($valTab->config_get_data_table_name);
+            $sourceSchema = Schema::connection('source')->getColumnListing($valTab->config_sync_table_name);
+            $destSchema = Schema::connection('destination')->getColumnListing($valTab->config_sync_table_name);
             if (count($sourceSchema) != count($destSchema)) {
-                info("DB structur of DESTINATION EXPIRED");
+                info("CRON MASTER CONTROLL - Table {$valTab->config_sync_table_name} Schema not suitable ");
                 #SKIP
-                exit();
+                continue;
             }
 
             #comparing data lokal <-> pusat
-            $getLocal = $DbLocal->table($valTab->config_get_data_table_name)->get();
-            $fieldId = $valTab->config_get_data_field_validate1;
-            $dataLocal = [];
-            foreach ($getLocal as $key => $value) {
-                array_push($dataLocal,$value->$fieldId);
+            $countLocal = $DbLocal->table($valTab->config_sync_table_name)->count();
+            $countPusat = $DbPusat->table($valTab->config_sync_table_name)->count();
+
+            if ($countLocal > $countPusat) {
+                #CONTROLL-CHECK
+                $DbLocal->table($valTab->config_sync_table_name)->orderBy($valTab->config_sync_field_pkey,'asc')->chunk($valTab->config_sync_limit, function ($chunks) use ($DbLocal,$DbPusat,$valTab) {
+
+                    foreach ($chunks as $valchunk) {
+                        $pkey = $valTab->config_sync_field_pkey;
+                        $cek = $DbPusat->table($valTab->config_sync_table_name)
+                                ->where($valTab->config_sync_field_pkey,$valchunk->$pkey)
+                                ->count();
+                        if ($cek == 0) {
+                            try {
+                                $DbLocal->table($valTab->config_sync_table_name)
+                                    ->where($valTab->config_sync_field_pkey,$valchunk->$pkey)
+                                    ->delete();
+                                    Log::alert("CRON MASTER CONTROLL : Deleted id {$valchunk->$pkey} from {$valTab->config_sync_table_name}");
+                            } catch (\Throwable $th) {
+                                Log::alert("Error: ".$th);
+                            }
+                        }
+                    }
+                });
+            }elseif($countLocal < $countPusat){
+                #CONTROLL-GET
+                $DbPusat->table($valTab->config_sync_table_name)->orderBy($valTab->config_sync_field_pkey,'asc')->chunk($valTab->config_sync_limit, function ($chunks) use ($DbLocal,$DbPusat,$valTab,$sourceSchema) {
+
+                    foreach ($chunks as $valchunk) {
+                        $pkey = $valTab->config_sync_field_pkey;
+                        $cek = $DbLocal->table($valTab->config_sync_table_name)
+                                ->where($valTab->config_sync_field_pkey,$valchunk->$pkey)
+                                ->count();
+                        if ($cek == 0) {
+                            $newDestStatus = "";
+                            $data = [];
+                            foreach ($sourceSchema as $keySchema => $valSchema) {
+                                if ($valSchema != 'id') {
+                                    if ($valSchema == $valTab->config_sync_field_status) {
+                                        $data[$valSchema] = $newDestStatus;
+                                    } else {
+                                        $data[$valSchema] = $valchunk->$valSchema;
+                                    }
+                                }
+                            }
+                            try {
+                                $DbLocal->table($valTab->config_sync_table_name)
+                                    ->insert($data);
+                                    Log::alert("CRON MASTER CONTROLL : Insert New Data {$valchunk->$pkey} to {$valTab->config_sync_table_name}");
+                            } catch (\Throwable $th) {
+                                Log::alert("Error: ".$th);
+                            }
+                        }
+                    }
+                });
+            }else{
+                Log::info("CRON MASTER CONTROLL: Table {$valTab->config_sync_table_name} is GOOD!");
             }
 
-            $getPusat = $DbPusat->table($valTab->config_get_data_table_name)->get();
-            $fieldId = $valTab->config_get_data_field_validate1;
-            $dataPusat = [];
-            foreach ($getPusat as $key => $value) {
-                array_push($dataPusat,$value->$fieldId);
-            }
+            // $getLocal = $DbLocal->table($valTab->config_get_data_table_name)->get();
+            // $fieldId = $valTab->config_get_data_field_validate1;
+            // $dataLocal = [];
+            // foreach ($getLocal as $key => $value) {
+            //     array_push($dataLocal,$value->$fieldId);
+            // }
 
-            $notExist = array_diff($dataLocal,$dataPusat);
+            // $getPusat = $DbPusat->table($valTab->config_get_data_table_name)->get();
+            // $fieldId = $valTab->config_get_data_field_validate1;
+            // $dataPusat = [];
+            // foreach ($getPusat as $key => $value) {
+            //     array_push($dataPusat,$value->$fieldId);
+            // }
 
-            if (count($notExist) > 0) {
-                try {
-                    $DbLocal->table($valTab->config_get_data_table_name)
-                    ->whereIn($fieldId,$notExist)
-                    ->delete();
-                } catch (\Throwable $th) {
-                    Log::alert("Can't delete data from {$valTab->config_get_data_table_name}");
-                    Log::info($th);
-                }
-            }
+            // $notExist = array_diff($dataLocal,$dataPusat);
 
-            #Local Log
-            DB::table('log_cronjob')
-            ->insert([
-                'log_cronjob_name' => 'mastercontrol:cron',
-                'log_cronjob_from_server_id' => $getSourceConn->db_con_m_w_id,
-                'log_cronjob_from_server_name' => $getSourceConn->db_con_location_name,
-                'log_cronjob_to_server_id' => $dest->db_con_m_w_id,
-                'log_cronjob_to_server_name' => $dest->db_con_location_name,
-                'log_cronjob_datetime' => Carbon::now(),
-                'log_cronjob_note' => $valTab->config_get_data_table_name.'-CHECKED!',
-            ]);
+            // if (count($notExist) > 0) {
+            //     try {
+            //         $DbLocal->table($valTab->config_get_data_table_name)
+            //         ->whereIn($fieldId,$notExist)
+            //         ->delete();
+            //     } catch (\Throwable $th) {
+            //         Log::alert("Can't delete data from {$valTab->config_get_data_table_name}");
+            //         Log::info($th);
+            //     }
+            // }
+
+            // #Local Log
+            // DB::table('log_cronjob')
+            // ->insert([
+            //     'log_cronjob_name' => 'mastercontroll:cron',
+            //     'log_cronjob_from_server_id' => $getSourceConn->db_con_m_w_id,
+            //     'log_cronjob_from_server_name' => $getSourceConn->db_con_location_name,
+            //     'log_cronjob_to_server_id' => $dest->db_con_m_w_id,
+            //     'log_cronjob_to_server_name' => $dest->db_con_location_name,
+            //     'log_cronjob_datetime' => Carbon::now(),
+            //     'log_cronjob_note' => $valTab->config_get_data_table_name.'-CHECKED!',
+            // ]);
 
             // #Cek Last Sync
             // $lastId = DB::table('log_data_sync')
-            //             ->where('log_data_sync_cron','mastercontrol:cron')
+            //             ->where('log_data_sync_cron','mastercontroll:cron')
             //             ->where('log_data_sync_table',$valTab->config_get_data_table_name)
             //             ->first();
 
@@ -280,11 +333,11 @@ class MasterControl extends Command
             //         DB::table('log_data_sync')
             //             ->updateOrInsert(
             //             [
-            //                 'log_data_sync_cron' => 'mastercontrol:cron',
+            //                 'log_data_sync_cron' => 'mastercontroll:cron',
             //                 'log_data_sync_table' => $valTab->config_get_data_table_name,
             //             ],
             //             [
-            //                 'log_data_sync_cron' => 'mastercontrol:cron',
+            //                 'log_data_sync_cron' => 'mastercontroll:cron',
             //                 'log_data_sync_table' => $valTab->config_get_data_table_name,
             //                 'log_data_sync_last' => $nextLast,
             //                 'log_data_sync_note' => 'ok'
@@ -293,7 +346,7 @@ class MasterControl extends Command
             //         #Local Log
             //         DB::table('log_cronjob')
             //         ->insert([
-            //             'log_cronjob_name' => 'mastercontrol:cron',
+            //             'log_cronjob_name' => 'mastercontroll:cron',
             //             'log_cronjob_from_server_id' => $getSourceConn->db_con_m_w_id,
             //             'log_cronjob_from_server_name' => $getSourceConn->db_con_location_name,
             //             'log_cronjob_to_server_id' => $dest->db_con_m_w_id,
@@ -305,7 +358,7 @@ class MasterControl extends Command
             // }
         }
 
-        Log::info("Cronjob Master Controlling FINISH at ". Carbon::now()->format('Y-m-d H:i:s'));
+        Log::info("Cronjob MASTER CONTROLL FINISH at ". Carbon::now()->format('Y-m-d H:i:s'));
         return Command::SUCCESS;
     }
 }
