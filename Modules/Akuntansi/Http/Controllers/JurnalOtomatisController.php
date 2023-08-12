@@ -248,6 +248,10 @@ class JurnalOtomatisController extends Controller
             ->join('m_rekening', 'm_rekening_no_akun', 'm_link_akuntansi_m_rekening_no_akun')
             ->where('m_link_akuntansi_nama', 'Biaya Persediaan Garansi')
             ->get();
+        $kas_mutasi = DB::table('m_link_akuntansi')
+            ->join('m_rekening', 'm_rekening_no_akun', 'm_link_akuntansi_m_rekening_no_akun')
+            ->where('m_link_akuntansi_nama', 'Kas Mutasi')
+            ->get();
         $mutasi_keluar = DB::table('m_link_akuntansi')
             ->join('m_rekening', 'm_rekening_no_akun', 'm_link_akuntansi_m_rekening_no_akun')
             ->where('m_link_akuntansi_nama', 'Mutasi Keluar')
@@ -388,26 +392,26 @@ class JurnalOtomatisController extends Controller
             ->orderby('sesi', 'ASC')
             ->get();
 
-        // $mutasi = DB::table('rekap_mutasi')
-        //     ->join('rekap_modal', 'rekap_modal_id', 'r_m_m_rekap_modal_id')
-        //     ->selectRaw('max(r_m_m_tanggal) tanggal,
-        //                 max(r_m_m_m_w_code) m_w_code,
-        //                 r_m_m_id kode_id,
-        //                 rekap_modal_sesi as sesi,
-        //                 r_m_m_keterangan catatan,
-        //                 max(r_m_m_debit) debit,
-        //                 max(r_m_m_kredit) kredit');
-        // if (strpos($request->tanggal, 'to') !== false) {
-        //     [$start, $end] = explode('to', $request->tanggal);
-        //     $mutasi->whereBetween('r_m_m_tanggal', [$start, $end]);
-        // } else {
-        //     $mutasi->where('r_m_m_tanggal', $request->tanggal);
-        // }
-        // $mutasi = $mutasi->groupby('kode_id', 'sesi', 'catatan')
-        //     ->where('r_m_m_m_w_id', $request->waroeng)
-        //     ->orderby('kode_id', 'ASC')
-        //     ->orderby('sesi', 'ASC')
-        //     ->get();
+        $mutasi = DB::table('rekap_mutasi_modal')
+            ->join('rekap_modal', 'rekap_modal_id', 'r_m_m_rekap_modal_id')
+            ->selectRaw('max(r_m_m_tanggal) tanggal,
+                        max(r_m_m_m_w_code) m_w_code,
+                        r_m_m_id kode_id,
+                        rekap_modal_sesi as sesi,
+                        r_m_m_keterangan catatan,
+                        max(r_m_m_debit) debit,
+                        max(r_m_m_kredit) kredit');
+        if (strpos($request->tanggal, 'to') !== false) {
+            [$start, $end] = explode('to', $request->tanggal);
+            $mutasi->whereBetween('r_m_m_tanggal', [$start, $end]);
+        } else {
+            $mutasi->where('r_m_m_tanggal', $request->tanggal);
+        }
+        $mutasi = $mutasi->groupby('kode_id', 'sesi', 'catatan')
+            ->where('r_m_m_m_w_id', $request->waroeng)
+            ->orderby('kode_id', 'ASC')
+            ->orderby('sesi', 'ASC')
+            ->get();
 
         $selisih = DB::table('rekap_modal')
             ->selectRaw('max(rekap_modal_tanggal) tanggal,
@@ -457,11 +461,11 @@ class JurnalOtomatisController extends Controller
         $listGaransi = array_unique($arrayListGaransi);
 
         //mutasi
-        // $arrayListGaransi = [];
-        // foreach ($garansi as $keyRekap => $valRekap) {
-        //     array_push($arrayListGaransi, $valRekap->kode_id);
-        // }
-        // $listGaransi = array_unique($arrayListGaransi);
+        $arrayListMutasi = [];
+        foreach ($mutasi as $keyRekap => $valRekap) {
+            array_push($arrayListMutasi, $valRekap->kode_id);
+        }
+        $listMutasi = array_unique($arrayListMutasi);
 
         //selisih kasir
         $arrayListSelisihKasir = [];
@@ -1669,6 +1673,183 @@ class JurnalOtomatisController extends Controller
                 } //if notacode
             } //garansi
         } //nota code
+        foreach ($listGaransi as $key => $notaGaransi) {
+            ${$notaGaransi . '-menu'} = 0;
+            ${$notaGaransi . '-nonmenu'} = 0;
+            ${$notaGaransi . '-wbd'} = 0;
+            ${$notaGaransi . '-lainlain'} = 0;
+            ${$notaGaransi . '-pajak'} = 0;
+            ${$notaGaransi . '-biaya'} = 0;
+            ${$notaGaransi . '-persediaan'} = 0;
+            foreach ($garansi as $keyGaransi => $valGaransi) {
+                if ($valGaransi->kode_id == $notaGaransi) {
+                    $listAll = array_merge($listMenu, $listNonMenu, $listWbd, $listIceCream);
+                    if (in_array($valGaransi->produk_id, $listMenu)) {
+                        $nominal = $valGaransi->nominal;
+                        ${$notaGaransi . '-menu'} += $nominal;
+                    }
+                    if (in_array($valGaransi->produk_id, $listNonMenu)) {
+                        $nominal = $valGaransi->nominal;
+                        ${$notaGaransi . '-nonmenu'} += $nominal;
+                    }
+                    if (in_array($valGaransi->produk_id, $listWbd)) {
+                        $nominal = $valGaransi->nominal;
+                        ${$notaGaransi . '-wbd'} += $nominal;
+                    }
+                    if (in_array($valGaransi->produk_id, $listIceCream)) {
+                        $nominal = $valGaransi->nominal;
+                        ${$notaGaransi . '-lainlain'} += $nominal;
+                    }
+                    if (in_array($valGaransi->produk_id, $listAll)) {
+                        $nominal = $valGaransi->nominal;
+                        ${$notaGaransi . '-biaya'} += $nominal;
+                    }
+                    if (in_array($valGaransi->produk_id, $listAll)) {
+                        $nominal = $valGaransi->nominal * 0.8;
+                        ${$notaGaransi . '-persediaan'} += $nominal;
+                    }
+                    if (${$notaGaransi . '-biaya'} != 0) {
+                        foreach ($biaya_garansi as $ValMenuGaransi) {
+                            $data[$notaGaransi]['Garansi Biaya'] = array(
+                                'tanggal' => $valGaransi->r_t_tanggal,
+                                'no_akun' => $valGaransi->r_t_m_w_code . '.' . $ValMenuGaransi->m_rekening_no_akun,
+                                'akun' => $ValMenuGaransi->m_rekening_nama,
+                                'particul' => 'biaya garansi (nota ' . $valGaransi->r_t_nota_code . ') - sesi ' . $valGaransi->sesi,
+                                'debit' => number_format(${$notaGaransi . '-biaya'}),
+                                'kredit' => 0,
+                                'urutan' => $urutan++,
+                            );
+                        }
+                    }
+                    foreach ($penjualan_garansi as $ValMenuGaransi) {
+                        if (${$notaGaransi . '-menu'} != 0) {
+                            $data[$notaGaransi]['Garansi Menu'] = array(
+                                'tanggal' => $valGaransi->r_t_tanggal,
+                                'no_akun' => $valGaransi->r_t_m_w_code . '.' . $ValMenuGaransi->m_rekening_no_akun,
+                                'akun' => $ValMenuGaransi->m_rekening_nama,
+                                'particul' => 'garansi menu (cat : ' . $valGaransi->catatan . ' (nota ' . $valGaransi->r_t_nota_code . ') - sesi ' . $valGaransi->sesi,
+                                'debit' => 0,
+                                'kredit' => number_format(${$notaGaransi . '-menu'}),
+                                'urutan' => $urutan++,
+                            );
+                        }
+                        if (${$notaGaransi . '-nonmenu'} != 0) {
+                            $data[$notaGaransi]['Garansi Non Menu'] = array(
+                                'tanggal' => $valGaransi->r_t_tanggal,
+                                'no_akun' => $valGaransi->r_t_m_w_code . '.' . $ValMenuGaransi->m_rekening_no_akun,
+                                'akun' => $ValMenuGaransi->m_rekening_nama,
+                                'particul' => 'garansi non menu (cat : ' . $valGaransi->catatan . ' (nota ' . $valGaransi->r_t_nota_code . ') - sesi ' . $valGaransi->sesi,
+                                'debit' => 0,
+                                'kredit' => number_format(${$notaGaransi . '-nonmenu'}),
+                                'urutan' => $urutan++,
+                            );
+                        }
+                        if (${$notaGaransi . '-wbd'} != 0) {
+                            $data[$notaGaransi]['Garansi Wbd'] = array(
+                                'tanggal' => $valGaransi->r_t_tanggal,
+                                'no_akun' => $valGaransi->r_t_m_w_code . '.' . $ValMenuGaransi->m_rekening_no_akun,
+                                'akun' => $ValMenuGaransi->m_rekening_nama,
+                                'particul' => 'garansi wbd (cat : ' . $valGaransi->catatan . ' (nota ' . $valGaransi->r_t_nota_code . ') - sesi ' . $valGaransi->sesi,
+                                'debit' => 0,
+                                'kredit' => number_format(${$notaGaransi . '-wbd'}),
+                                'urutan' => $urutan++,
+                            );
+                        }
+                        if (${$notaGaransi . '-lainlain'} != 0) {
+                            $data[$notaGaransi]['Garansi lain-lain'] = array(
+                                'tanggal' => $valGaransi->r_t_tanggal,
+                                'no_akun' => $valGaransi->r_t_m_w_code . '.' . $ValMenuGaransi->m_rekening_no_akun,
+                                'akun' => $ValMenuGaransi->m_rekening_nama,
+                                'particul' => 'garansi diluar usaha (cat : ' . $valGaransi->catatan . ' (nota ' . $valGaransi->r_t_nota_code . ') - sesi ' . $valGaransi->sesi,
+                                'debit' => 0,
+                                'kredit' => number_format(${$notaGaransi . '-lainlain'}),
+                                'urutan' => $urutan++,
+                            );
+                        }
+                    }
+                    if (${$notaGaransi . '-persediaan'} != 0) {
+                        foreach ($sedia_garansi as $ValMenuGaransi) {
+                            $data[$notaGaransi]['Garansi Persediaan'] = array(
+                                'tanggal' => $valGaransi->r_t_tanggal,
+                                'no_akun' => $valGaransi->r_t_m_w_code . '.' . $ValMenuGaransi->m_rekening_no_akun,
+                                'akun' => $ValMenuGaransi->m_rekening_nama,
+                                'particul' => 'persediaan garansi (nota ' . $valGaransi->r_t_nota_code . ') - sesi ' . $valGaransi->sesi,
+                                'debit' => 0,
+                                'kredit' => number_format(${$notaGaransi . '-persediaan'}),
+                                'urutan' => $urutan++,
+                            );
+                        }
+                    }
+                    if (${$notaGaransi . '-persediaan'} != 0) {
+                        foreach ($biaya_sedia_garansi as $ValMenuGaransi) {
+                            $data[$notaGaransi]['Garansi Biaya Persediaan'] = array(
+                                'tanggal' => $valGaransi->r_t_tanggal,
+                                'no_akun' => $valGaransi->r_t_m_w_code . '.' . $ValMenuGaransi->m_rekening_no_akun,
+                                'akun' => $ValMenuGaransi->m_rekening_nama,
+                                'particul' => 'biaya persediaan garansi (nota ' . $valGaransi->r_t_nota_code . ') - sesi ' . $valGaransi->sesi,
+                                'debit' => number_format(${$notaGaransi . '-persediaan'}),
+                                'kredit' => 0,
+                                'urutan' => $urutan++,
+                            );
+                        }
+                    }
+                } //if notacode
+            } //garansi
+        } //nota code
+        foreach ($listMutasi as $key => $notaMutasi) {
+            foreach ($mutasi as $keyMutasi => $valMutasi) {
+                if ($valMutasi->kode_id == $notaMutasi) {
+                    if ($valMutasi->kredit != 0) {
+                        foreach ($mutasi_keluar as $valNotaMutasi) {
+                            $data[$notaMutasi]['Mutasi Kasbon Keluar'] = array(
+                                'tanggal' => $valMutasi->tanggal,
+                                'no_akun' => $valMutasi->m_w_code . '.' . $valNotaMutasi->m_rekening_no_akun,
+                                'akun' => $valNotaMutasi->m_rekening_nama,
+                                'particul' => 'mutasi kasbon keluar ' . $valMutasi->catatan . '- sesi ' . $valMutasi->sesi,
+                                'debit' => number_format($valMutasi->kredit),
+                                'kredit' => 0,
+                                'urutan' => $urutan++,
+                            );
+                        }
+                        foreach ($kas_mutasi as $valNotaMutasi) {
+                            $data[$notaMutasi]['Mutasi kas Keluar'] = array(
+                                'tanggal' => $valMutasi->tanggal,
+                                'no_akun' => $valMutasi->m_w_code . '.' . $valNotaMutasi->m_rekening_no_akun,
+                                'akun' => $valNotaMutasi->m_rekening_nama,
+                                'particul' => 'mutasi kas keluar ' . $valMutasi->catatan . '- sesi ' . $valMutasi->sesi,
+                                'debit' => 0,
+                                'kredit' => number_format($valMutasi->kredit),
+                                'urutan' => $urutan++,
+                            );
+                        }
+                        if ($valMutasi->debit != 0) {
+                            foreach ($kas_mutasi as $valNotaMutasi) {
+                                $data[$notaMutasi]['Mutasi Kas Masuk'] = array(
+                                    'tanggal' => $valMutasi->tanggal,
+                                    'no_akun' => $valMutasi->m_w_code . '.' . $valNotaMutasi->m_rekening_no_akun,
+                                    'akun' => $valNotaMutasi->m_rekening_nama,
+                                    'particul' => 'mutasi kas masuk ' . $valMutasi->catatan . ' - sesi ' . $valMutasi->sesi,
+                                    'debit' => 0,
+                                    'kredit' => number_format($valMutasi->debit),
+                                    'urutan' => $urutan++,
+                                );
+                            }
+                            foreach ($mutasi_masuk as $valNotaMutasi) {
+                                $data[$notaMutasi]['Mutasi Kasbon Masuk'] = array(
+                                    'tanggal' => $valMutasi->tanggal,
+                                    'no_akun' => $valMutasi->m_w_code . '.' . $valNotaMutasi->m_rekening_no_akun,
+                                    'akun' => $valNotaMutasi->m_rekening_nama,
+                                    'particul' => 'mutasi kasbon masuk ' . $valMutasi->catatan . ' - sesi ' . $valMutasi->sesi,
+                                    'debit' => number_format($valMutasi->debit),
+                                    'kredit' => 0,
+                                    'urutan' => $urutan++,
+                                );
+                            }
+                        }
+                    } //if selisih not 0
+                } //if notacode
+            } //mutasi kasir
+        } //nota code
         foreach ($listSelisihKasir as $key => $notaSelisih) {
             foreach ($selisih as $keySelisih => $valSelisih) {
                 if ($valSelisih->kode_id == $notaSelisih) {
@@ -1704,8 +1885,8 @@ class JurnalOtomatisController extends Controller
                                     'no_akun' => $valSelisih->m_w_code . '.' . $valNotaSelisih->m_rekening_no_akun,
                                     'akun' => $valNotaSelisih->m_rekening_nama,
                                     'particul' => 'biaya selisih kasir ' . $valSelisih->catatan . ' - sesi ' . $valSelisih->sesi,
-                                    'debit' => 0,
-                                    'kredit' => number_format($valSelisih->nominal),
+                                    'debit' => number_format(abs($valSelisih->nominal)),
+                                    'kredit' => 0,
                                     'urutan' => $urutan++,
                                 );
                             }
@@ -1715,8 +1896,8 @@ class JurnalOtomatisController extends Controller
                                     'no_akun' => $valSelisih->m_w_code . '.' . $valNotaSelisih->m_rekening_no_akun,
                                     'akun' => $valNotaSelisih->m_rekening_nama,
                                     'particul' => 'selisih kasir ' . $valSelisih->catatan . ' - sesi ' . $valSelisih->sesi,
-                                    'debit' => number_format($valSelisih->nominal),
-                                    'kredit' => 0,
+                                    'debit' => 0,
+                                    'kredit' => number_format(abs($valSelisih->nominal)),
                                     'urutan' => $urutan++,
                                 );
                             }
