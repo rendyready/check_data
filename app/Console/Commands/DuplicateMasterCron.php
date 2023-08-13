@@ -52,7 +52,7 @@ class DuplicateMasterCron extends Command
 
         #get sipedas local connection
         $getLocalSipedas = DB::table('db_con')
-            ->whereIn('db_con_host','127.0.0.1')
+            ->where('db_con_host','127.0.0.1')
             ->first();
 
         Config::set("database.connections.sipedaslocal", [
@@ -95,7 +95,6 @@ class DuplicateMasterCron extends Command
         $getTableList = DB::connection('cronpusat')
             ->table('config_sync')
             ->where('config_sync_for',env('SERVER_TYPE',''))
-            ->orWhere('config_sync_for','all')
             ->where('config_sync_tipe','duplicatemaster')
             ->where('config_sync_status','on')
             ->orderBy('config_sync_id','asc')
@@ -108,10 +107,7 @@ class DuplicateMasterCron extends Command
 
         foreach ($getTableList as $key => $valTab) {
             $except = array('app_setting','role_has_permissions','model_has_permissions','model_has_roles');
-            if (in_array($valTab->config_sync_table_name,$except)){
-                #SKIP
-                continue;
-            }
+
             $groupValidation = [];
             for ($i=1; $i <= 4; $i++) {
                 $validate = "config_sync_field_validate{$i}";
@@ -120,15 +116,19 @@ class DuplicateMasterCron extends Command
                     array_push($groupValidation,$validateField);
                 }
             }
+            $incId = 'id';
+            if (in_array($valTab->config_sync_table_name,$except)) {
+                $incId = $valTab->config_sync_field_pkey;
+            }
 
             $maxId = $DbSipedasLocal->table($valTab->config_sync_table_name)
-                ->selectRaw("MAX(id) as id, MAX({$valTab->config_sync_field_pkey}) as pkey")
-                ->orderBy('id','asc')
+                ->selectRaw("MAX({$incId}) as id, MAX({$valTab->config_sync_field_pkey}) as pkey")
+                ->orderBy($incId,'asc')
                 ->groupBy($groupValidation)
                 ->havingRaw('COUNT(*) > 1')
                 ->get();
 
-            if (!empty($maxId)) {
+            if ($maxId->count() > 0) {
                 #GET child of table
                 $getChild = DB::connection('cronpusat')
                     ->table('config_parent')
@@ -171,6 +171,8 @@ class DuplicateMasterCron extends Command
 
                 Log::info("Cronjob DUPLICATE MASTER : {$count} records have been deleted from {$valTab->config_sync_table_name}");
 
+            }else{
+                Log::info("Cronjob DUPLICATE MASTER : Table {$valTab->config_sync_table_name} is GOOD!");
             }
 
         }

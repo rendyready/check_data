@@ -181,8 +181,9 @@ class GetData extends Command
                 #SKIP
                 continue;
             }
+            $except = array('app_setting','role_has_permissions','model_has_permissions','model_has_roles');
 
-            if ($valTab->config_sync_sequence == 'on') {
+            if ($valTab->config_sync_sequence == 'on' && !in_array($valTab->config_sync_table_name,$except)) {
                 #Get Last Increment Used
                 $maxId = $DbDest->select("SELECT MAX(id) FROM {$valTab->config_sync_table_name};")[0]->max;
 
@@ -281,11 +282,15 @@ class GetData extends Command
 
                         #control duplicate
                         $except = array('app_setting','role_has_permissions','model_has_permissions','model_has_roles');
-                        if ($cekReady > 1 && !in_array($valTab->config_sync_table_name,$except)) {
+                        if ($cekReady > 1) {
+                            $incId = 'id';
+                            if (in_array($valTab->config_sync_table_name,$except)) {
+                                $incId = $valTab->config_sync_field_pkey;
+                            }
                             $maxId = $DbDest->table($valTab->config_sync_table_name)
-                                ->selectRaw("MAX(id) as id")
+                                ->selectRaw("MAX({$incId}) as id")
                                 ->where($validationField)
-                                ->orderBy('id','asc')
+                                ->orderBy($incId,'asc')
                                 ->groupBy($groupValidation)
                                 ->havingRaw('COUNT(*) > 1')
                                 ->get();

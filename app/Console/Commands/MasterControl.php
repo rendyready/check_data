@@ -155,11 +155,6 @@ class MasterControl extends Command
             return Command::SUCCESS;
         }
 
-        $getTableList = DB::table('config_get_data')
-                        ->where('config_get_data_status','on')
-                        ->orderBy('config_get_data_id','desc')
-                        ->get();
-
         $getTableList = DB::connection('cronpusat')
             ->table('config_sync')
             ->where('config_sync_tipe','mastercontroll')

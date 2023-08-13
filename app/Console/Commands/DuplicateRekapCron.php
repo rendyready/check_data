@@ -52,7 +52,7 @@ class DuplicateRekapCron extends Command
 
         #get sipedas local connection
         $getLocalSipedas = DB::table('db_con')
-            ->whereIn('db_con_host','127.0.0.1')
+            ->where('db_con_host','127.0.0.1')
             ->first();
 
         Config::set("database.connections.sipedaslocal", [
@@ -95,7 +95,6 @@ class DuplicateRekapCron extends Command
         $getTableList = DB::connection('cronpusat')
             ->table('config_sync')
             ->where('config_sync_for',env('SERVER_TYPE',''))
-            ->orWhere('config_sync_for','all')
             ->where('config_sync_tipe','duplicaterekap')
             ->where('config_sync_status','on')
             ->orderBy('config_sync_id','asc')
@@ -134,7 +133,7 @@ class DuplicateRekapCron extends Command
                 ->havingRaw('COUNT(*) > 1')
                 ->get();
 
-            if (!empty($maxId)) {
+            if ($maxId->count() > 0) {
                 #GET child of table
                 $getChild = DB::connection('cronpusat')
                     ->table('config_parent')
@@ -177,6 +176,8 @@ class DuplicateRekapCron extends Command
 
                 Log::info("Cronjob DUPLICATE REKAP : {$count} records have been deleted from {$valTab->config_sync_table_name}");
 
+            }else{
+                Log::info("Cronjob DUPLICATE REKAP : Table {$valTab->config_sync_table_name} is GOOD!");
             }
 
         }

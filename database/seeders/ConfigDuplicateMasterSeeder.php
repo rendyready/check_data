@@ -280,7 +280,7 @@ class ConfigDuplicateMasterSeeder extends Seeder
                 "sequence" => "on",
                 "field_pkey" => "app_setting_id",
                 "field_status" => "app_setting_client_target",
-                "field_validate1" => "app_setting_url_server_struk",
+                "field_validate1" => "app_setting_id",
                 "field_validate2" => NULL,
                 "field_validate3" => NULL,
                 "field_validate4" => NULL
@@ -422,7 +422,26 @@ class ConfigDuplicateMasterSeeder extends Seeder
                 'config_sync_table_name' => $val['tableName'],
                 'config_sync_table_tipe' => 'master',
                 'config_sync_status' => 'on',
-                'config_sync_for' => 'all',
+                'config_sync_for' => 'waroeng',
+                'config_sync_tipe' => $val['config_sync_tipe'],
+                'config_sync_limit' => $val['limit'],
+                'config_sync_truncate' => 'off',
+                'config_sync_sequence' => $val['sequence'],
+                'config_sync_field_pkey' => $val['field_pkey'],
+                'config_sync_field_status' => NULL,
+                'config_sync_field_validate1' => $val['field_validate1'],
+                'config_sync_field_validate2' => $val['field_validate2'],
+                'config_sync_field_validate3' => $val['field_validate3'],
+                'config_sync_field_validate4' => $val['field_validate4']
+            ]);
+        }
+
+        foreach ($data as $key => $val) {
+            DB::table('config_sync')->insert([
+                'config_sync_table_name' => $val['tableName'],
+                'config_sync_table_tipe' => 'master',
+                'config_sync_status' => 'on',
+                'config_sync_for' => 'area',
                 'config_sync_tipe' => $val['config_sync_tipe'],
                 'config_sync_limit' => $val['limit'],
                 'config_sync_truncate' => 'off',
