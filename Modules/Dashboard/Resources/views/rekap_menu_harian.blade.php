@@ -167,7 +167,6 @@
                                 </table>
                             </div>
                         </form>
-
                     </div>
                 </div>
             </div>
@@ -178,267 +177,276 @@
 @section('js')
     <!-- js -->
     <script type="module">
-$(document).ready(function() {
-    Codebase.helpersOnLoad(['jq-select2']);
+        $(document).ready(function() {
+            Codebase.helpersOnLoad(['jq-select2']);
 
-    var userInfo = document.getElementById('user-info');
-    var userInfoPusat = document.getElementById('user-info-pusat');
-    var waroengId = userInfo.dataset.waroengId;
-    var HakAksesArea = userInfo.dataset.hasAccess === 'true';
-    var HakAksesPusat = userInfoPusat.dataset.hasAccess === 'true';
+            var userInfo = document.getElementById('user-info');
+            var userInfoPusat = document.getElementById('user-info-pusat');
+            var waroengId = userInfo.dataset.waroengId;
+            var HakAksesArea = userInfo.dataset.hasAccess === 'true';
+            var HakAksesPusat = userInfoPusat.dataset.hasAccess === 'true';
 
-        $('#cari').on('click', function (e) {
-        var area = $('.filter_area option:selected').val();
-        var waroeng = $('.filter_waroeng option:selected').val();
-        var tanggal = $('.filter_tanggal').val();
-        var trans = $('.filter_trans option:selected').val();
-        var sesi = $('.filter_sif option:selected').val();
-        var status = $('.filter_status').val();
-
-        if (tanggal === "" || area === "" || waroeng === "" || sesi === "" || trans === "") {
-            Swal.fire({
-            title: 'Informasi',
-            text: 'Silahkan lengkapi semua kolom',
-            confirmButtonColor: '#d33',
-            confirmButtonText: 'OK',
-            customClass: {
-                confirmButton: 'bg-red-500',
-            },
-            });
-        } else {
-            $.ajax({
-            type: "GET",
-            url: '{{route("menu_harian.show")}}',
-            dataType: 'JSON',
-            destroy: true,
-            data: {
-                area: area,
-                waroeng: waroeng,
-                tanggal: tanggal,
-                trans: trans,
-                sesi: sesi,
-                status: status,
-            },
-            success: function (res) {
-                if (res.type != 'error') {
-                $('#tampil_rekap').DataTable({
-                    destroy: true,
-                    orderCellsTop: true,
-                    processing: true,
-                    scrollX: true,
-                    autoWidth: true,
-                    scrollCollapse: true,
-                    buttons: [{
-                        extend: 'excelHtml5',
-                        text: 'Export Excel',
-                        title: 'Rekap Menu - ' + trans + ' Sesi - ' + sesi + ' - ' + tanggal,
-                        pageSize: 'A4',
-                        pageOrientation: 'potrait',
-                    }],
-                    columnDefs: [{
-                        targets: '_all',
-                        className: 'dt-body-center'
-                    }],
-                    lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
-                    pageLength: 10,
-                    ajax: {
-                    url: '{{route("menu_harian.show")}}',
-                    data: {
-                        area: area,
-                        waroeng: waroeng,
-                        tanggal: tanggal,
-                        trans: trans,
-                        sesi: sesi,
-                        status: status,
-                    },
-                    type: "GET",
-                    dataType: "json",
-                    },
-                });
-                } else {
-                Swal.fire({
-                    title: 'Informasi',
-                    text: res.messages,
-                    confirmButtonColor: '#d33',
-                    confirmButtonText: 'OK',
-                    customClass: {
-                    confirmButton: 'bg-red-500',
-                    },
-                });
-                }
-            }
-            });
-        }
-        });
-
-    if(HakAksesPusat){
-      $('.filter_area').on('select2:select', function(){
-        var id_area = $(this).val();
-        var tanggal  = $('.filter_tanggal').val();
-        var prev = $(this).data('previous-value');
-        if(id_area && tanggal){
-            $.ajax({
-            type:"GET",
-            url: '{{route("menu_harian.select_waroeng")}}',
-            dataType: 'JSON',
-            destroy: true,    
-            data : {
-                id_area: id_area,
-            },
-            success:function(res){    
-              // console.log(res);           
-                if(res){
-                    $(".filter_waroeng").empty();
-                    $(".filter_waroeng").append('<option></option>');
-                    $.each(res,function(key,value){
-                        $(".filter_waroeng").append('<option value="'+key+'">'+value+'</option>');
-                    });
-                }else{
-                $(".filter_waroeng").empty();
-                }
-            }
-            });
-        }else{
-            Swal.fire({
-                    title: 'Informasi',
-                    text: "Harap lengkapi kolom tanggal",
-                    confirmButtonColor: '#d33',
-                    confirmButtonText: 'OK',
-                    customClass: {
-                        confirmButton: 'bg-red-500',
-                    },
-                });
-            $(".filter_waroeng").empty();
-            $(".filter_area").val(prev).trigger('change');
-        }   
-        $(".filter_sif").empty();   
-        $(".filter_trans").empty(); 
-    });
-  } 
-
-  if(HakAksesArea){
-    $('.filter_waroeng').on('select2:select', function(){
-        var id_waroeng = $(this).val();   
-        var id_tanggal  = $('.filter_tanggal').val(); 
-        var prev = $(this).data('previous-value');
-        if(id_waroeng && id_tanggal){
-            $.ajax({
-            type:"GET",
-            url: '{{route("menu_harian.select_sif")}}',
-            dataType: 'JSON',
-            data : {
-              id_waroeng: id_waroeng,
-              id_tanggal: id_tanggal,
-            },
-            success:function(res){   
-              console.log(res);       
-                if(res){
-                    $(".filter_sif").empty();
-                    $(".filter_sif").append('<option></option>');
-                    $.each(res,function(key,value){
-                        $(".filter_sif").append('<option value="'+key+'">'+value+'</option>');
-                    });
-                }else{
-                $(".filter_sif").empty();
-                }
-            }
-            });
-        }else{
-            Swal.fire({
-                    title: 'Informasi',
-                    text: "Harap lengkapi kolom tanggal",
-                    confirmButtonColor: '#d33',
-                    confirmButtonText: 'OK',
-                    customClass: {
-                        confirmButton: 'bg-red-500',
-                    },
-                });
-            $(".filter_sif").empty();
-            $(".filter_waroeng").val(prev).trigger('change');
-        }     
-        $(".filter_trans").empty();
-    });
-
-  } else {
-
-    $('.filter_tanggal').on('change', function(){
-        var id_waroeng  = $('.filter_waroeng').val();   
-        var id_tanggal  = $('.filter_tanggal').val(); 
-        if(id_tanggal){
-            $.ajax({
-            type:"GET",
-            url: '{{route("menu_harian.select_sif")}}',
-            dataType: 'JSON',
-            data : {
-              id_waroeng: id_waroeng,
-              id_tanggal: id_tanggal,
-            },
-            success:function(res){               
-                if(res){
-                    $(".filter_sif").empty();
-                    $(".filter_sif").append('<option></option>');
-                    $.each(res,function(key,value){
-                        $(".filter_sif").append('<option value="'+key+'">'+value+'</option>');
-                    });
-                }else{
-                $(".filter_sif").empty();
-                }
-            }
-            });
-        }else{
-            $(".filter_sif").empty();
-        }  
-        $(".filter_trans").empty();    
-    });
-  }
-
-    $('#filter_sif').on('select2:select', function() {
-        var id_waroeng  = $('.filter_waroeng').val();  
-        var id_sif = $(this).val();    
-        if(id_sif !== 'all'){
-            $.ajax({
-            type:"GET",
-            url: '{{route("menu_harian.select_trans")}}',
-            dataType: 'JSON',
-            data : {
-                id_sif: id_sif,
-                id_waroeng: id_waroeng,
-            },
-            success:function(res){               
-                if(res){
-                    $("#filter_trans").empty();
-                    $("#filter_trans").append('<option></option>');
-                    $.each(res,function(key,value){
-                        $("#filter_trans").append('<option value="'+key+'">'+value+'</option>');
-                    });
-                }else{
-                $("#filter_trans").empty();
-                }
-            }
-            });
-        }else{
-            $("#filter_trans").empty();
-        }      
-        $("#filter_trans").empty();
-    });
-
-    $('.filter_tanggal').flatpickr({
-            // mode: "range",
-            dateFormat: 'Y-m-d',           
-    });
-
-    $('#export_excel').on('click', function() {
+            $('#cari').on('click', function(e) {
                 var area = $('.filter_area option:selected').val();
                 var waroeng = $('.filter_waroeng option:selected').val();
                 var tanggal = $('.filter_tanggal').val();
                 var trans = $('.filter_trans option:selected').val();
                 var sesi = $('.filter_sif option:selected').val();
                 var status = $('.filter_status').val();
-                var url = 'menu_harian/export_excel?area='+area+'&waroeng='+waroeng+'&tanggal='+tanggal+'&sesi='+sesi+'&trans='+trans+'&status='+status;
-                window.open(url, '_blank');
-               
+
+                if (tanggal === "" || area === "" || waroeng === "" || sesi === "" || trans === "") {
+                    Swal.fire({
+                        title: 'Informasi',
+                        text: 'Silahkan lengkapi semua kolom',
+                        confirmButtonColor: '#d33',
+                        confirmButtonText: 'OK',
+                        customClass: {
+                            confirmButton: 'bg-red-500',
+                        },
+                    });
+                } else {
+                    $.ajax({
+                        type: "GET",
+                        url: '{{ route('menu_harian.show') }}',
+                        dataType: 'JSON',
+                        destroy: true,
+                        data: {
+                            area: area,
+                            waroeng: waroeng,
+                            tanggal: tanggal,
+                            trans: trans,
+                            sesi: sesi,
+                            status: status,
+                        },
+                        success: function(res) {
+                            if (res.type != 'error') {
+                                $('#tampil_rekap').DataTable({
+                                    destroy: true,
+                                    orderCellsTop: true,
+                                    processing: true,
+                                    scrollX: true,
+                                    autoWidth: true,
+                                    scrollCollapse: true,
+                                    buttons: [{
+                                        extend: 'excelHtml5',
+                                        text: 'Export Excel',
+                                        title: 'Rekap Menu - ' + trans +
+                                            ' Sesi - ' + sesi + ' - ' + tanggal,
+                                        pageSize: 'A4',
+                                        pageOrientation: 'potrait',
+                                    }],
+                                    columnDefs: [{
+                                        targets: '_all',
+                                        className: 'dt-body-center'
+                                    }],
+                                    lengthMenu: [
+                                        [10, 25, 50, 100, -1],
+                                        [10, 25, 50, 100, "All"]
+                                    ],
+                                    pageLength: 10,
+                                    ajax: {
+                                        url: '{{ route('menu_harian.show') }}',
+                                        data: {
+                                            area: area,
+                                            waroeng: waroeng,
+                                            tanggal: tanggal,
+                                            trans: trans,
+                                            sesi: sesi,
+                                            status: status,
+                                        },
+                                        type: "GET",
+                                        dataType: "json",
+                                    },
+                                });
+                            } else {
+                                Swal.fire({
+                                    title: 'Informasi',
+                                    text: res.messages,
+                                    confirmButtonColor: '#d33',
+                                    confirmButtonText: 'OK',
+                                    customClass: {
+                                        confirmButton: 'bg-red-500',
+                                    },
+                                });
+                            }
+                        }
+                    });
+                }
             });
 
-});
-</script>
+            if (HakAksesPusat) {
+                $('.filter_area').on('select2:select', function() {
+                    var id_area = $(this).val();
+                    var tanggal = $('.filter_tanggal').val();
+                    var prev = $(this).data('previous-value');
+                    if (id_area && tanggal) {
+                        $.ajax({
+                            type: "GET",
+                            url: '{{ route('menu_harian.select_waroeng') }}',
+                            dataType: 'JSON',
+                            destroy: true,
+                            data: {
+                                id_area: id_area,
+                            },
+                            success: function(res) {
+                                // console.log(res);           
+                                if (res) {
+                                    $(".filter_waroeng").empty();
+                                    $(".filter_waroeng").append('<option></option>');
+                                    $.each(res, function(key, value) {
+                                        $(".filter_waroeng").append('<option value="' +
+                                            key + '">' + value + '</option>');
+                                    });
+                                } else {
+                                    $(".filter_waroeng").empty();
+                                }
+                            }
+                        });
+                    } else {
+                        Swal.fire({
+                            title: 'Informasi',
+                            text: "Harap lengkapi kolom tanggal",
+                            confirmButtonColor: '#d33',
+                            confirmButtonText: 'OK',
+                            customClass: {
+                                confirmButton: 'bg-red-500',
+                            },
+                        });
+                        $(".filter_waroeng").empty();
+                        $(".filter_area").val(prev).trigger('change');
+                    }
+                    $(".filter_sif").empty();
+                    $(".filter_trans").empty();
+                });
+            }
+
+            if (HakAksesArea) {
+                $('.filter_waroeng').on('select2:select', function() {
+                    var id_waroeng = $(this).val();
+                    var id_tanggal = $('.filter_tanggal').val();
+                    var prev = $(this).data('previous-value');
+                    if (id_waroeng && id_tanggal) {
+                        $.ajax({
+                            type: "GET",
+                            url: '{{ route('menu_harian.select_sif') }}',
+                            dataType: 'JSON',
+                            data: {
+                                id_waroeng: id_waroeng,
+                                id_tanggal: id_tanggal,
+                            },
+                            success: function(res) {
+                                console.log(res);
+                                if (res) {
+                                    $(".filter_sif").empty();
+                                    $(".filter_sif").append('<option></option>');
+                                    $.each(res, function(key, value) {
+                                        $(".filter_sif").append('<option value="' +
+                                            key + '">' + value + '</option>');
+                                    });
+                                } else {
+                                    $(".filter_sif").empty();
+                                }
+                            }
+                        });
+                    } else {
+                        Swal.fire({
+                            title: 'Informasi',
+                            text: "Harap lengkapi kolom tanggal",
+                            confirmButtonColor: '#d33',
+                            confirmButtonText: 'OK',
+                            customClass: {
+                                confirmButton: 'bg-red-500',
+                            },
+                        });
+                        $(".filter_sif").empty();
+                        $(".filter_waroeng").val(prev).trigger('change');
+                    }
+                    $(".filter_trans").empty();
+                });
+
+            } else {
+
+                $('.filter_tanggal').on('change', function() {
+                    var id_waroeng = $('.filter_waroeng').val();
+                    var id_tanggal = $('.filter_tanggal').val();
+                    if (id_tanggal) {
+                        $.ajax({
+                            type: "GET",
+                            url: '{{ route('menu_harian.select_sif') }}',
+                            dataType: 'JSON',
+                            data: {
+                                id_waroeng: id_waroeng,
+                                id_tanggal: id_tanggal,
+                            },
+                            success: function(res) {
+                                if (res) {
+                                    $(".filter_sif").empty();
+                                    $(".filter_sif").append('<option></option>');
+                                    $.each(res, function(key, value) {
+                                        $(".filter_sif").append('<option value="' +
+                                            key + '">' + value + '</option>');
+                                    });
+                                } else {
+                                    $(".filter_sif").empty();
+                                }
+                            }
+                        });
+                    } else {
+                        $(".filter_sif").empty();
+                    }
+                    $(".filter_trans").empty();
+                });
+            }
+
+            $('#filter_sif').on('select2:select', function() {
+                var id_waroeng = $('.filter_waroeng').val();
+                var id_sif = $(this).val();
+                if (id_sif !== 'all') {
+                    $.ajax({
+                        type: "GET",
+                        url: '{{ route('menu_harian.select_trans') }}',
+                        dataType: 'JSON',
+                        data: {
+                            id_sif: id_sif,
+                            id_waroeng: id_waroeng,
+                        },
+                        success: function(res) {
+                            if (res) {
+                                $("#filter_trans").empty();
+                                $("#filter_trans").append('<option></option>');
+                                $.each(res, function(key, value) {
+                                    $("#filter_trans").append('<option value="' + key +
+                                        '">' + value + '</option>');
+                                });
+                            } else {
+                                $("#filter_trans").empty();
+                            }
+                        }
+                    });
+                } else {
+                    $("#filter_trans").empty();
+                }
+                $("#filter_trans").empty();
+            });
+
+            $('.filter_tanggal').flatpickr({
+                // mode: "range",
+                dateFormat: 'Y-m-d',
+            });
+
+            $('#export_excel').on('click', function() {
+                var area = $('.filter_area option:selected').val();
+                var waroeng = $('.filter_waroeng option:selected').val();
+                var tanggal = $('.filter_tanggal').val();
+                var trans = $('.filter_trans option:selected').val();
+                var sesi = $('.filter_sif option:selected').val();
+                var status = $('.filter_status').val();
+                var url = 'menu_harian/export_excel?area=' + area + '&waroeng=' + waroeng + '&tanggal=' +
+                    tanggal + '&sesi=' + sesi + '&trans=' + trans + '&status=' + status;
+                window.open(url, '_blank');
+
+            });
+
+        });
+    </script>
 @endsection
