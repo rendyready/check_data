@@ -280,14 +280,11 @@
                         },
                     });
                 } else {
-
                     $('#tampil_rekap').DataTable({
-                        button: [],
                         destroy: true,
                         orderCellsTop: true,
                         processing: true,
                         scrollX: true,
-                        // scrollY: '300px',
                         columnDefs: [{
                             targets: '_all',
                             className: 'dt-body-center'
@@ -316,6 +313,19 @@
                         },
                         success: function(data) {
                             console.log(data);
+                            Swal.fire({
+                                title: 'Informasi',
+                                text: 'error gaes',
+                                confirmButtonColor: '#d33',
+                                confirmButtonText: 'OK',
+                                customClass: {
+                                    confirmButton: 'bg-red-500',
+                                },
+                            });
+                        },
+                        error: function(data) {
+                            console.log(data);
+                            alert("Tidak dapat menyimpan data!");
                         }
                     });
                 }
@@ -458,7 +468,7 @@
                         $('#tgl_nota').html(data.transaksi_rekap.r_t_tanggal);
                         $('#nama_kons').html(data.transaksi_rekap.name);
                         $('#total').html(formatNumber(Number(data.transaksi_rekap
-                        .r_t_nominal)));
+                            .r_t_nominal)));
                         $('#pajak').html(formatNumber(Number(data.transaksi_rekap
                             .r_t_nominal_pajak)));
                         $('#bayar').html(formatNumber(Number(data.transaksi_rekap
@@ -467,7 +477,7 @@
                             .r_t_nominal_free_kembalian)));
                         $('#pembayaran').html(data.transaksi_rekap.m_payment_method_name);
                         $('#sc').html(formatNumber(Number(data.transaksi_rekap
-                        .r_t_nominal_sc)));
+                            .r_t_nominal_sc)));
                         $('#diskon').html(formatNumber(Number(data.transaksi_rekap
                             .r_t_nominal_diskon)));
                         $('#voucher').html(formatNumber(Number(data.transaksi_rekap
@@ -480,6 +490,7 @@
                             .r_t_nominal_free_kembalian)));
 
                         $('.sub_sub_nota').remove();
+                        //transaksi
                         $.each(data.detail_nota, function(key, item) {
                             var rekap_id = item.r_t_detail_r_t_id.toString().replace(
                                 /\./g, '');
@@ -499,6 +510,60 @@
                                 '</tr>'
                             );
                         });
+                        //garansi
+                        var garansi_notnull = data.garansi_notnull;
+                        console.log(garansi_notnull);
+                        if (garansi_notnull !== null) {
+                            $.each(data.garansi, function(key, item) {
+                                var rekap_id = item.rekap_garansi_r_t_id.toString()
+                                    .replace(
+                                        /\./g, '');
+                                $('#sub_nota').append(
+                                    '<tr class="sub_sub_nota" style="background-color: #F0E68C;">' +
+                                    '<td>' +
+                                    '<small class="fw-semibold" style="font-size: 15px;" id="produk">' +
+                                    item.rekap_garansi_m_produk_nama +
+                                    '</small> <br>' +
+                                    '<small id="qty">' + item.rekap_garansi_qty +
+                                    '</small> x <small id="price">' + formatNumber(
+                                        Number(item.rekap_garansi_price)) +
+                                    ' (Garansi) </small>' +
+                                    '</td>' +
+                                    '<td class="text-end fw-semibold" id+="sub_total">' +
+                                    formatNumber(Number(item
+                                        .rekap_garansi_nominal)) + '' +
+                                    '</td>' +
+                                    '</tr>'
+                                );
+                            });
+                        }
+
+                        //refund
+                        var refund_notnull = data.refund_notnull;
+                        console.log(refund_notnull);
+                        if (refund_notnull !== null) {
+                            $.each(data.refund, function(key, item) {
+                                var rekap_id = item.r_r_r_t_id.toString().replace(
+                                    /\./g, '');
+                                $('#sub_nota').append(
+                                    '<tr class="sub_sub_nota" style="background-color: #FFEFD5;">' +
+                                    '<td>' +
+                                    '<small class="fw-semibold" style="font-size: 15px;" id="produk">' +
+                                    item.r_r_detail_m_produk_nama +
+                                    '</small> <br>' +
+                                    '<small id="qty">' + item.r_r_detail_qty +
+                                    '</small> x <small id="price">' + formatNumber(
+                                        Number(item.r_r_detail_price)) +
+                                    ' (Refund) </small>' +
+                                    '</td>' +
+                                    '<td class="text-end fw-semibold" id+="sub_total">' +
+                                    formatNumber(Number(item.r_r_detail_nominal)) +
+                                    '' +
+                                    '</td>' +
+                                    '</tr>'
+                                );
+                            });
+                        }
                     },
                 });
                 $("#detail_nota").modal('show');

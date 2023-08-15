@@ -296,6 +296,64 @@
                                                 );
                                             });
 
+                                            var garansi_notnull = data.garansi_notnull;
+                                            console.log(garansi_notnull);
+                                            if (garansi_notnull !== null) {
+                                                $.each(data.garansi, function(key, item) {
+                                                    var id = item.rekap_garansi_r_t_id.toString()
+                                                        .replace(
+                                                            /\./g, '');
+                                                    $('#sub_nota' + id).append(
+                                                        '<tr style="background-color: #F0E68C;" class="show_nota">' +
+                                                        '<td>' +
+                                                        '<small class="fw-semibold" style="font-size: 15px;">' +
+                                                        item.rekap_garansi_m_produk_nama +
+                                                        '</small> <br>' +
+                                                        '<small>' + item.rekap_garansi_qty +
+                                                        ' x ' +
+                                                        formatNumber(Number(item
+                                                            .rekap_garansi_price)) +
+                                                        ' (Garansi)' +
+                                                        '</small>' +
+                                                        '</td>' +
+                                                        '<td class="text-end fw-semibold" >' +
+                                                        formatNumber(Number(item
+                                                            .rekap_garansi_nominal)) + '' +
+                                                        '</td>' +
+                                                        '</tr>'
+                                                    );
+                                                });
+                                            }
+
+                                            var refund_notnull = data.refund_notnull;
+                                            console.log(refund_notnull);
+                                            if (refund_notnull !== null) {
+                                                $.each(data.refund, function(key, item) {
+                                                    var id = item.r_r_r_t_id.toString()
+                                                        .replace(
+                                                            /\./g, '');
+                                                    $('#sub_nota' + id).append(
+                                                        '<tr style="background-color: #FFEFD5;" class="show_nota">' +
+                                                        '<td>' +
+                                                        '<small class="fw-semibold" style="font-size: 15px;">' +
+                                                        item.r_r_detail_m_produk_nama +
+                                                        '</small> <br>' +
+                                                        '<small>' + item.r_r_detail_qty +
+                                                        ' x ' +
+                                                        formatNumber(Number(item
+                                                            .r_r_detail_price)) +
+                                                        ' (Refund)' +
+                                                        '</small>' +
+                                                        '</td>' +
+                                                        '<td class="text-end fw-semibold" >' +
+                                                        formatNumber(Number(item
+                                                            .r_r_detail_nominal)) + '' +
+                                                        '</td>' +
+                                                        '</tr>'
+                                                    );
+                                                });
+                                            }
+
                                         } else {
 
                                             $.each(data.transaksi_rekap, function(key, value) {
