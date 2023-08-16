@@ -139,43 +139,98 @@ class DuplicateRekapCron extends Command
                     ->table('config_parent')
                     ->where('config_parent_name',$valTab->config_sync_table_name)
                     ->where('config_parent_status','on')
-                    ->orderBy('config_parent_id','asc')
-                    ->get();
+                    ->orderBy('config_parent_id','asc');
 
-                $count = 0;
-                $deleteId = [];
-                $deletePkey = [];
-                foreach ($maxId as $key => $valId) {
-                    array_push($deleteId,$valId->id);
-                    array_push($deletePkey,$valId->pkey);
-                    $count++;
-                }
+                $childCount = $getChild->count();
+
                 #Delete Child
-                if (!empty($getChild)) {
-                    foreach ($getChild as $keyChild => $valChild) {
-                        try {
-                            $DbSipedasLocal->table($valChild->config_parent_child_name)
-                            ->whereIn($valChild->config_parent_child_fkey,$deletePkey)
-                            ->delete();
-                        } catch (\Throwable $th) {
-                            Log::info("Cronjob DUPLICATE REKAP : Can't Delete data from child table {$valChild->config_parent_child_name}. Error:" . $th);
-                            continue;
+                if ($childCount > 0) {
+                    $unDeletePkey = [];
+                    $deletePkey = [];
+                    $deleteId = [];
+                    foreach ($maxId as $key => $valMax) {
+                        $childCroscheck = 0;
+                        foreach ($getChild->get() as $keyChild => $valChild) {
+                            $cek = $DbSipedasLocal->table($valChild->config_parent_child_name)
+                            ->where($valChild->config_parent_child_fkey,$valMax->pkey)->count();
+                            if ($cek > 0) {
+                                $childCroscheck++;
+                            }
                         }
 
+                        if ($childCount != $childCroscheck) {
+                            array_push($deletePkey,$valMax->pkey);
+                            array_push($deleteId,$valMax->id);
+                        }else{
+                            array_push($unDeletePkey,$valMax->pkey);
+                        }
+                    }
+
+                    if (count($unDeletePkey) > 0) {
+                        $minId = $DbSipedasLocal->table($valTab->config_sync_table_name)
+                        ->selectRaw("MIN(id) as id, MIN({$valTab->config_sync_field_pkey}) as pkey")
+                        ->whereRaw("{$fieldDate}::TEXT LIKE '{$now}%'")
+                        ->orderBy('id','asc')
+                        ->groupBy($groupValidation)
+                        ->havingRaw('COUNT(*) > 1')
+                        ->get();
+
+                        foreach ($minId as $key => $valMin) {
+                            $childCroscheck = 0;
+                            foreach ($getChild->get() as $keyChild => $valChild) {
+                                $cek = $DbSipedasLocal->table($valChild->config_parent_child_name)
+                                ->where($valChild->config_parent_child_fkey,$valMin->pkey)->count();
+                                if ($cek > 0) {
+                                    $childCroscheck++;
+                                }
+                            }
+
+                            if ($childCount != $childCroscheck) {
+                                array_push($deletePkey,$valMin->pkey);
+                                array_push($deleteId,$valMin->id);
+                            }
+                        }
+                    }
+
+                    if (count($deletePkey) > 0) {
+                        foreach ($getChild->get() as $keyChild => $valChild) {
+                            try {
+                                $countChildToDel = $DbSipedasLocal->table($valChild->config_parent_child_name)
+                                ->whereIn($valChild->config_parent_child_fkey,$deletePkey)
+                                ->count();
+
+                                $DbSipedasLocal->table($valChild->config_parent_child_name)
+                                ->whereIn($valChild->config_parent_child_fkey,$deletePkey)
+                                ->delete();
+
+                                Log::info("Cronjob DUPLICATE REKAP : {$countChildToDel} records have been deleted from child table {$valChild->config_parent_child_name}");
+                            } catch (\Throwable $th) {
+                                Log::info("Cronjob DUPLICATE REKAP : Can't Delete data from child table {$valChild->config_parent_child_name}. Error:" . $th);
+                                continue;
+                            }
+
+                        }
+                    }
+                }else{
+                    $deleteId = [];
+                    foreach ($maxId as $key => $valId) {
+                        array_push($deleteId,$valId->id);
                     }
                 }
-                #Delete Duplicate
+
+                #Delete Parent Duplicate
                 try {
+                    $count = count($deleteId);
+
                     $DbSipedasLocal->table($valTab->config_sync_table_name)
                     ->whereIn('id',$deleteId)
                     ->delete();
+
+                    Log::info("Cronjob DUPLICATE REKAP : {$count} records have been deleted from {$valTab->config_sync_table_name}");
                 } catch (\Throwable $th) {
                     Log::info("Cronjob DUPLICATE REKAP : Can't Delete data from table {$valTab->config_sync_table_name}. Error:" . $th);
                     continue;
                 }
-
-                Log::info("Cronjob DUPLICATE REKAP : {$count} records have been deleted from {$valTab->config_sync_table_name}");
-
             }else{
                 Log::info("Cronjob DUPLICATE REKAP : Table {$valTab->config_sync_table_name} is GOOD!");
             }
