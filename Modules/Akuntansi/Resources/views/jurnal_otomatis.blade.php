@@ -158,7 +158,7 @@
                 var waroeng = $('.filter_waroeng').val();
                 var tanggal = $('.filter_tanggal').val();
                 var payment = $('.filter_pembayaran').val();
-                $('#jurnal_tampil').DataTable({
+                var table = $('#jurnal_tampil').DataTable({
                     destroy: true,
                     autoWidth: true,
                     lengthMenu: [
@@ -206,7 +206,31 @@
                             class: 'text-center'
                         },
                     ],
+
                 });
+                table.on('draw.dt', function() {
+                    var api = table;
+                    var data = api.rows({
+                        page: 'current'
+                    }).data();
+
+                    var debitTotal = 0;
+                    var kreditTotal = 0;
+
+                    for (var i = 0; i < data.length; i++) {
+                        if (data[i]['debit']) {
+                            debitTotal += parseFloat(data[i]['debit'].replace(/[^0-9.-]+/g, ""));
+                        }
+                        if (data[i]['kredit']) {
+                            kreditTotal += parseFloat(data[i]['kredit'].replace(/[^0-9.-]+/g, ""));
+                        }
+                    }
+                    console.log(debitTotal);
+                    console.log(kreditTotal);
+                    $(api.column(4).footer()).html(debitTotal.toLocaleString());
+                    $(api.column(5).footer()).html(kreditTotal.toLocaleString());
+                });
+
             });
 
             if (HakAksesPusat) {

@@ -280,53 +280,54 @@
                         },
                     });
                 } else {
-                    $('#tampil_rekap').DataTable({
-                        destroy: true,
-                        orderCellsTop: true,
-                        processing: true,
-                        scrollX: true,
-                        columnDefs: [{
-                            targets: '_all',
-                            className: 'dt-body-center'
-                        }, ],
-                        buttons: [{
-                            extend: 'excelHtml5',
-                            text: 'Export Excel',
-                            title: 'Rekap Nota - ' + tanggal,
-                            pageSize: 'A4',
-                            pageOrientation: 'potrait',
-                        }],
-                        lengthMenu: [
-                            [10, 25, 50, 100, -1],
-                            [10, 25, 50, 100, "All"]
-                        ],
-                        pageLength: 10,
-                        ajax: {
-                            url: '{{ route('rekap.show') }}',
-                            data: {
-                                waroeng: waroeng,
-                                tanggal: tanggal,
-                                operator: operator,
-                                status: status,
-                            },
-                            type: "GET",
+                    $.ajax({
+                        type: "GET",
+                        dataType: 'JSON',
+                        url: '{{ route('rekap.show') }}',
+                        data: {
+                            waroeng: waroeng,
+                            tanggal: tanggal,
+                            operator: operator,
+                            status: status,
                         },
-                        success: function(data) {
-                            console.log(data);
-                            Swal.fire({
-                                title: 'Informasi',
-                                text: 'error gaes',
-                                confirmButtonColor: '#d33',
-                                confirmButtonText: 'OK',
-                                customClass: {
-                                    confirmButton: 'bg-red-500',
-                                },
-                            });
+                        success: function(res) {
+                            console.log(res);
+                            if (res.error == 1) {
+                                Swal.fire({
+                                    title: 'Warning',
+                                    text: 'Ditemukan data error !! Silahkan menghubungi IT Pusat (Call Center: 08112826619)',
+                                    confirmButtonColor: '#d33',
+                                    confirmButtonText: 'OK',
+                                    customClass: {
+                                        confirmButton: 'bg-red-500',
+                                    },
+                                });
+                            }
+                            $('#tampil_rekap').DataTable({
+                                destroy: true,
+                                orderCellsTop: true,
+                                processing: true,
+                                scrollX: true,
+                                columnDefs: [{
+                                    targets: '_all',
+                                    className: 'dt-body-center'
+                                }, ],
+                                buttons: [{
+                                    extend: 'excelHtml5',
+                                    text: 'Export Excel',
+                                    title: 'Rekap Nota - ' + tanggal,
+                                    pageSize: 'A4',
+                                    pageOrientation: 'potrait',
+                                }],
+                                lengthMenu: [
+                                    [10, 25, 50, 100, -1],
+                                    [10, 25, 50, 100, "All"]
+                                ],
+                                pageLength: 10,
+                                data: res.data,
+                            })
+
                         },
-                        error: function(data) {
-                            console.log(data);
-                            alert("Tidak dapat menyimpan data!");
-                        }
                     });
                 }
             });
@@ -391,7 +392,7 @@
                                 tanggal: tanggal,
                             },
                             success: function(res) {
-                                console.log(res);
+                                // console.log(res);
                                 if (res) {
                                     $(".filter_operator").empty();
                                     $(".filter_operator").append('<option></option>');

@@ -1931,6 +1931,16 @@ class JurnalOtomatisController extends Controller
             'urutan' => $urutan++,
         );
 
+        $totalData = array(
+            'tanggal' => '',
+            'no_akun' => '',
+            'akun' => '',
+            'particul' => '<strong> Total </strong>',
+            'debit' => '<strong>' . $debit . '</strong>',
+            'kredit' => '<strong>' . $kredit . '</strong>',
+            'urutan' => $urutan++,
+        );
+
         $output = array();
 
         foreach ($data as $notaCode => $items) {
@@ -1949,6 +1959,7 @@ class JurnalOtomatisController extends Controller
 
         $output = array(
             "data" => $convert,
+            "footer" => array($totalData),
         );
 
         return response()->json($output);

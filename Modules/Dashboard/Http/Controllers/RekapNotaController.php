@@ -121,9 +121,10 @@ class RekapNotaController extends Controller
             ->orderBy('r_t_nota_code', 'ASC')
             ->get();
 
+        $error_respon = 0;
+        $errorDetected = false;
         $data = array();
         foreach ($get2 as $key => $value) {
-            $errorMessages = '';
             $row = array();
             $row[] = date('d-m-Y', strtotime($value->r_t_tanggal));
             $row[] = date('H:i', strtotime($value->r_t_jam));
@@ -144,28 +145,32 @@ class RekapNotaController extends Controller
                 $row[] = 'Lostbill';
                 $row[] = 'Lostbill';
             } else {
+                $paymentMethodFound = false;
                 foreach ($payment as $key => $valpay) {
-                    if ($valpay->r_p_t_r_t_id != null) {
-                        if ($valpay->r_p_t_r_t_id == $value->r_t_id) {
-                            $row[] = ($value->m_t_t_group == 'ojol') ? $value->m_t_t_group : $valpay->m_payment_method_type;
-                            $row[] = $valpay->m_payment_method_name;
-                        }
-                    } else {
-                        return response()->json([
-                            'type' => 'danger',
-                            'messages' => 'Ada data yang tidak lengkap, silahkan menghubungi IT Pusat',
-                        ]);
+                    if ($valpay->r_p_t_r_t_id == $value->r_t_id) {
+                        $paymentMethodFound = true;
+                        $row[] = ($value->m_t_t_group == 'ojol') ? $value->m_t_t_group : $valpay->m_payment_method_type;
+                        $row[] = $valpay->m_payment_method_name;
                     }
+
+                }
+                if ($paymentMethodFound == false) {
+                    $errorDetected = true;
+                    $row[] = '<span style="background-color: #ffcccc;">Error</span>';
+                    $row[] = '<span style="background-color: #ffcccc;">Error</span>';
                 }
             }
             $row[] = number_format($value->r_t_nominal_selisih);
             $row[] = '<a id="button_detail" class="btn btn-sm button_detail btn-info" value="' . $value->r_t_id . '" title="Detail Nota"><i class="fa-sharp fa-solid fa-file"></i></a>';
             $data[] = $row;
         }
+        if ($errorDetected == true) {
+            $error_respon = 1;
+        }
 
         $output = array(
             "data" => $data,
-            // 'messages' => $error,
+            "error" => $error_respon,
         );
         return response()->json($output);
     }
