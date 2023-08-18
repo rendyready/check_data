@@ -491,7 +491,7 @@ class RekapNonMenuController extends Controller
                         }
                         ${$valListRekap . '-pajakreguler'} += $valPajak;
                     } else {
-                        $valPajak = $valRekap->nominal * 0.10;
+                        $valPajak = $valRekap->pajak * 0.10;
                         if (!empty($refundCek)) {
                             foreach ($refund as $valRefund) {
                                 if ($valRekap->m_produk_id == $valRefund->r_r_detail_m_produk_id && $valRekap->tanggal == $valRefund->tanggal && $valRekap->sesi == $valRefund->sesi && $valRekap->type_id == $valRefund->r_t_m_t_t_id) {
