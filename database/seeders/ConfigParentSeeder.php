@@ -15,6 +15,8 @@ class ConfigParentSeeder extends Seeder
      */
     public function run()
     {
+        DB::statement("TRUNCATE TABLE config_parent RESTART IDENTITY;");
+
         DB::table('config_parent')->insert([
             'config_parent_name' => 'rekap_transaksi',
             'config_parent_status' => 'on',
