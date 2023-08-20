@@ -127,6 +127,7 @@
                                     <th class="text_center">No. Nota</th>
                                     <th class="text_center">Operator</th>
                                     <th class="text_center">Big Bos</th>
+                                    <th class="text_center">Sesi</th>
                                     <th class="text_center">Menu</th>
                                     <th class="text_center">Qty</th>
                                     <th class="text_center">Harga</th>
@@ -148,204 +149,207 @@
 @section('js')
     <!-- js -->
     <script type="module">
-$(document).ready(function() {
-    Codebase.helpersOnLoad(['jq-select2']);
-    function formatNumber(number) {
-      return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-    }
+        $(document).ready(function() {
+            Codebase.helpersOnLoad(['jq-select2']);
 
-    var userInfo = document.getElementById('user-info');
-    var userInfoPusat = document.getElementById('user-info-pusat');
-    var waroengId = userInfo.dataset.waroengId;
-    var HakAksesArea = userInfo.dataset.hasAccess === 'true';
-    var HakAksesPusat = userInfoPusat.dataset.hasAccess === 'true';
+            function formatNumber(number) {
+                return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            }
 
-    //eksekusi filter
-    $('#cari').on('click', function() {
-        var area     = $('.filter_area').val();
-        var waroeng  = $('.filter_waroeng').val();
-        var tanggal  = $('.filter_tanggal').val();
-        var operator = $('.filter_operator').val();
-        if (tanggal === "" && (area === "" || waroeng === "") && operator === "") {
-            Swal.fire({
-            title: 'Informasi',
-            text: 'Silahkan lengkapi semua kolom',
-            confirmButtonColor: '#d33',
-            confirmButtonText: 'OK',
-            customClass: {
-                confirmButton: 'bg-red-500',
-            },
-            });
-          } else {
-        $('#tampil_rekap').DataTable({
-            button: [],
-            destroy: true,
-            orderCellsTop: true,
-            processing: true,
-            scrollX: true,
-            // scrollY: '300px',
-            lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
-            pageLength: 10,
-            columnDefs: [ 
-                        {
+            var userInfo = document.getElementById('user-info');
+            var userInfoPusat = document.getElementById('user-info-pusat');
+            var waroengId = userInfo.dataset.waroengId;
+            var HakAksesArea = userInfo.dataset.hasAccess === 'true';
+            var HakAksesPusat = userInfoPusat.dataset.hasAccess === 'true';
+
+            //eksekusi filter
+            $('#cari').on('click', function() {
+                var area = $('.filter_area').val();
+                var waroeng = $('.filter_waroeng').val();
+                var tanggal = $('.filter_tanggal').val();
+                var operator = $('.filter_operator').val();
+                if (tanggal === "" && (area === "" || waroeng === "") && operator === "") {
+                    Swal.fire({
+                        title: 'Informasi',
+                        text: 'Silahkan lengkapi semua kolom',
+                        confirmButtonColor: '#d33',
+                        confirmButtonText: 'OK',
+                        customClass: {
+                            confirmButton: 'bg-red-500',
+                        },
+                    });
+                } else {
+                    $('#tampil_rekap').DataTable({
+                        button: [],
+                        destroy: true,
+                        orderCellsTop: true,
+                        processing: true,
+                        scrollX: true,
+                        // scrollY: '300px',
+                        lengthMenu: [
+                            [10, 25, 50, 100, -1],
+                            [10, 25, 50, 100, "All"]
+                        ],
+                        pageLength: 10,
+                        columnDefs: [{
                             targets: '_all',
                             className: 'dt-body-center'
+                        }, ],
+                        buttons: [{
+                            extend: 'excelHtml5',
+                            text: 'Export Excel',
+                            title: 'Rekap Garansi - ' + tanggal,
+                            pageSize: 'A4',
+                            pageOrientation: 'potrait',
+                        }],
+                        ajax: {
+                            url: '{{ route('rekap_garansi.show') }}',
+                            data: {
+                                area: area,
+                                waroeng: waroeng,
+                                tanggal: tanggal,
+                                operator: operator,
+                            },
+                            type: "GET",
                         },
-                    ],
-            buttons: [
-                    {
-                        extend: 'excelHtml5',
-                        text: 'Export Excel',
-                        title: 'Rekap Garansi - ' + tanggal,
-                        pageSize: 'A4',
-                        pageOrientation: 'potrait',
+                        success: function(data) {
+                            console.log(data);
+                        }
+                    });
+                }
+            });
+
+            if (HakAksesPusat) {
+                $('.filter_area').on('select2:select', function() {
+                    var id_area = $(this).val();
+                    var tanggal = $('.filter_tanggal').val();
+                    var prev = $(this).data('previous-value');
+
+                    if (id_area == 'all') {
+                        $("#select_waroeng").hide();
+                        $("#select_operator").hide();
+                        $(".filter_waroeng").empty();
+                        $(".filter_operator").empty();
+                    } else {
+                        $("#select_waroeng").show();
+                        $("#select_operator").show();
                     }
-                ],
-            ajax: {
-                url: '{{route("rekap_garansi.show")}}',
-                data : {
-                    area: area,
-                    waroeng: waroeng,
-                    tanggal: tanggal,
-                    operator: operator,
-                },
-                type : "GET",
-                },
-                success:function(data){ 
-                    console.log(data);
-                }
+
+                    if (id_area && tanggal) {
+                        $.ajax({
+                            type: "GET",
+                            url: '{{ route('rekap_garansi.select_waroeng') }}',
+                            dataType: 'JSON',
+                            destroy: true,
+                            data: {
+                                id_area: id_area,
+                            },
+                            success: function(res) {
+                                // console.log(res);           
+                                if (res) {
+                                    $(".filter_waroeng").empty();
+                                    $(".filter_waroeng").append('<option></option>');
+                                    $.each(res, function(key, value) {
+                                        $(".filter_waroeng").append('<option value="' +
+                                            key + '">' + value + '</option>');
+                                    });
+                                } else {
+                                    $(".filter_waroeng").empty();
+                                }
+                            }
+                        });
+                    } else {
+                        alert('Harap lengkapi kolom tanggal');
+                        $(".filter_waroeng").empty();
+                        $(".filter_area").val(prev).trigger('change');
+                    }
+                });
+                $(".filter_operator").empty();
+            }
+
+            if (HakAksesArea) {
+                $('.filter_waroeng').on('select2:select', function() {
+                    var id_waroeng = $(this).val();
+                    var tanggal = $('.filter_tanggal').val();
+                    var prev = $(this).data('previous-value');
+
+                    if (id_waroeng == 'all') {
+                        $("#select_operator").hide();
+                        $(".filter_operator").empty();
+                    } else {
+                        $("#select_operator").show();
+                    }
+
+                    if (id_waroeng && tanggal) {
+                        $.ajax({
+                            type: "GET",
+                            url: '{{ route('rekap_garansi.select_user') }}',
+                            dataType: 'JSON',
+                            data: {
+                                id_waroeng: id_waroeng,
+                                tanggal: tanggal,
+                            },
+                            success: function(res) {
+                                console.log(res);
+                                if (res) {
+                                    $(".filter_operator").empty();
+                                    $(".filter_operator").append('<option></option>');
+                                    $.each(res, function(key, value) {
+                                        $(".filter_operator").append('<option value="' +
+                                            key + '">' + value + '</option>');
+                                    });
+                                } else {
+                                    $(".filter_operator").empty();
+                                }
+                            }
+                        });
+                    } else {
+                        alert('Harap lengkapi kolom tanggal');
+                        $(".filter_operator").empty();
+                        $(".filter_waroeng").val(prev).trigger('change');
+                    }
+                });
+
+            } else {
+
+                $('.filter_tanggal').on('change', function() {
+                    var tanggal = $('.filter_tanggal').val();
+                    if (tanggal) {
+                        $.ajax({
+                            type: "GET",
+                            url: '{{ route('rekap_garansi.select_user') }}',
+                            dataType: 'JSON',
+                            data: {
+                                tanggal: tanggal,
+                            },
+                            success: function(res) {
+                                if (res) {
+                                    $(".filter_operator").empty();
+                                    $(".filter_operator").append('<option></option>');
+                                    $.each(res, function(key, value) {
+                                        $(".filter_operator").append('<option value="' +
+                                            key + '">' + value + '</option>');
+                                    });
+                                } else {
+                                    $(".filter_operator").empty();
+                                }
+                            }
+                        });
+                    } else {
+                        $(".filter_operator").empty();
+                    }
+                    $(".filter_operator").empty();
+                });
+            }
+
+            //filter tanggal
+            $('#filter_tanggal').flatpickr({
+                mode: "range",
+                dateFormat: 'Y-m-d',
+                // noCalendar: false,
+                // allowInput: true,            
+            });
+
         });
-        }
-    });
-
-    if(HakAksesPusat){
-      $('.filter_area').on('select2:select', function(){
-        var id_area = $(this).val();
-        var tanggal  = $('.filter_tanggal').val();
-        var prev = $(this).data('previous-value');
-
-        if (id_area == 'all'){
-            $("#select_waroeng").hide();
-            $("#select_operator").hide();
-            $(".filter_waroeng").empty();
-            $(".filter_operator").empty();
-        } else {
-            $("#select_waroeng").show();
-            $("#select_operator").show();
-        }
-
-        if(id_area && tanggal){
-            $.ajax({
-            type:"GET",
-            url: '{{route("rekap_garansi.select_waroeng")}}',
-            dataType: 'JSON',
-            destroy: true,    
-            data : {
-                id_area: id_area,
-            },
-            success:function(res){    
-              // console.log(res);           
-                if(res){
-                    $(".filter_waroeng").empty();
-                    $(".filter_waroeng").append('<option></option>');
-                    $.each(res,function(key,value){
-                        $(".filter_waroeng").append('<option value="'+key+'">'+value+'</option>');
-                    });
-                }else{
-                $(".filter_waroeng").empty();
-                }
-            }
-            });
-        }else{
-          alert('Harap lengkapi kolom tanggal');
-            $(".filter_waroeng").empty();
-            $(".filter_area").val(prev).trigger('change');
-        }      
-    });
-    $(".filter_operator").empty();
-  } 
-
-  if(HakAksesArea){
-    $('.filter_waroeng').on('select2:select', function(){
-        var id_waroeng = $(this).val();   
-        var tanggal  = $('.filter_tanggal').val(); 
-        var prev = $(this).data('previous-value');
-
-        if (id_waroeng == 'all'){
-            $("#select_operator").hide();
-            $(".filter_operator").empty();
-        } else {
-            $("#select_operator").show();
-        }
-
-        if(id_waroeng && tanggal){
-            $.ajax({
-            type:"GET",
-            url: '{{route("rekap_garansi.select_user")}}',
-            dataType: 'JSON',
-            data : {
-              id_waroeng: id_waroeng,
-              tanggal: tanggal,
-            },
-            success:function(res){   
-              console.log(res);       
-                if(res){
-                    $(".filter_operator").empty();
-                    $(".filter_operator").append('<option></option>');
-                    $.each(res,function(key,value){
-                        $(".filter_operator").append('<option value="'+key+'">'+value+'</option>');
-                    });
-                }else{
-                $(".filter_operator").empty();
-                }
-            }
-            });
-        }else{
-          alert('Harap lengkapi kolom tanggal');
-            $(".filter_operator").empty();
-            $(".filter_waroeng").val(prev).trigger('change');
-        }      
-    });
-
-  } else {
-
-    $('.filter_tanggal').on('change', function(){
-        var tanggal  = $('.filter_tanggal').val(); 
-        if(tanggal){
-            $.ajax({
-            type:"GET",
-            url: '{{route("rekap_garansi.select_user")}}',
-            dataType: 'JSON',
-            data : {
-              tanggal: tanggal,
-            },
-            success:function(res){               
-                if(res){
-                    $(".filter_operator").empty();
-                    $(".filter_operator").append('<option></option>');
-                    $.each(res,function(key,value){
-                        $(".filter_operator").append('<option value="'+key+'">'+value+'</option>');
-                    });
-                }else{
-                $(".filter_operator").empty();
-                }
-            }
-            });
-        }else{
-            $(".filter_operator").empty();
-        }    
-        $(".filter_operator").empty();  
-    });
-  }
-
-    //filter tanggal
-    $('#filter_tanggal').flatpickr({
-            mode: "range",
-            dateFormat: 'Y-m-d',
-            // noCalendar: false,
-            // allowInput: true,            
-    });
-
-});
-</script>
+    </script>
 @endsection
