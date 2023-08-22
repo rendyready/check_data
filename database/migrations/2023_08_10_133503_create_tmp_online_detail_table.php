@@ -21,6 +21,9 @@ return new class extends Migration
             $table->string('tmp_online_detail_m_produk_nama');
             $table->decimal('tmp_online_detail_price', 8,2);
             $table->integer('tmp_online_detail_qty');
+            $table->decimal('tmp_online_detail_nominal', 15,2);
+            $table->decimal('tmp_online_detail_tax', 15,2);
+            $table->decimal('tmp_online_detail_service', 15,2);
             $table->string('tmp_online_detail_custom')->nullable();
             $table->string('tmp_online_detail_client_target');
             $table->timestamps();

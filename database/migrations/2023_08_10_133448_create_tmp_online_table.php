@@ -19,10 +19,16 @@ return new class extends Migration
             $table->unsignedBigInteger('tmp_online_m_w_id');
             $table->string('tmp_online_m_w_nama');
             $table->string('tmp_online_code')->comment('generate code and queue');
-            $table->string('tmp_online_trans_type')->comment('dine in,take away');
-            $table->string('tmp_online_table')->nullable();
+            $table->integer('tmp_online_m_t_t_id')->comment('type transaksi id');
+            $table->jsonb('tmp_online_table_id');
             $table->string('tmp_online_bigboss_name');
             $table->string('tmp_online_bigboss_phone')->nullable();
+            $table->decimal('tmp_online_nominal',15,2);
+            $table->decimal('tmp_online_tax',8,2);
+            $table->decimal('tmp_online_service',8,2);
+            $table->decimal('tmp_online_total',15,2);
+            $table->decimal('tmp_online_tax_val',5,2);
+            $table->decimal('tmp_online_service_val',5,2);
             $table->date('tmp_online_date');
             $table->time('tmp_online_time');
             $table->string('tmp_online_client_target');
