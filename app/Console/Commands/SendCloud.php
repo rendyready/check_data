@@ -133,7 +133,7 @@ class SendCloud extends Command
             $getTransaksi->limit(100);
 
         #PUSH data to Destination
-        if (!empty($getTransaksi->get())) {
+        if ($getTransaksi->count() > 0) {
             $lastId = 0;
             foreach ($getTransaksi->get() as $keyDataSource => $valDataTrans) {
                 /**

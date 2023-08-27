@@ -104,7 +104,7 @@ class SendData extends Command
         ->where('db_con_senddata_status','target')
         ->get();
 
-        if (empty($dest)) {
+        if ($dest->count() == 0) {
             Log::info("Cronjob SEND Data, ALL Target NOT ACTIVE");
             return Command::SUCCESS;
         }
@@ -117,11 +117,15 @@ class SendData extends Command
             ->orderBy('config_sync_id','asc')
             ->get();
 
+        if ($getTableList->count() == 0) {
+            Log::info("Cronjob SEND Data: CONFIG Table List NOT FOUND");
+        }
+
         foreach ($dest as $keyDest => $valDest) {
-            #GET Data is open from this destination?
+            #Sync Data is open from this destination?
             $getDataOpen = DB::connection('cronpusat')
             ->table('db_con')
-            ->where('db_con_host',$valDest->db_con_host)
+            ->where('db_con_host',$valDest->db_con_m_w_id)
             ->first();
 
             if (!empty($getDataOpen)) {

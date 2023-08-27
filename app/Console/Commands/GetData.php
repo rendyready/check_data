@@ -172,6 +172,10 @@ class GetData extends Command
             ->orderBy('config_sync_id','asc')
             ->get();
 
+        if ($getTableList->count() == 0) {
+            Log::info("Cronjob GET Data: CONFIG Table List NOT FOUND");
+        }
+
         foreach ($getTableList as $key => $valTab) {
             #get Schema Table From resource
             $sourceSchema = Schema::connection('source')->getColumnListing($valTab->config_sync_table_name);

@@ -54,7 +54,7 @@ class VersionControl extends Command
             ->table('version_app')
             ->get();
 
-        if (empty($getVersion)) {
+        if ($getVersion->count() == 0) {
             Log::info("Cronjob VERSION INFO NOT FOUND");
             return Command::SUCCESS;
         }
@@ -73,7 +73,7 @@ class VersionControl extends Command
                                 ->where('instuction_update_app_name',$valVersi->version_app_name)
                                 ->orderBy('instuction_update_order','asc');
 
-                    if (empty($command->get())) {
+                    if ($command->count() == 0) {
                         Log::info("Cronjob VERSION - Command of {$valVersi->version_app_name} NOT FOUND");
                         continue;
                     }
@@ -122,7 +122,7 @@ class VersionControl extends Command
                 ->where('instuction_update_app_name',$valVersi->version_app_name)
                 ->orderBy('instuction_update_order','asc');
 
-                if (empty($command->get())) {
+                if ($command->count() == 0) {
                     Log::info("Cronjob VERSION - Command of {$valVersi->version_app_name} NOT FOUND");
                     continue;
                 }

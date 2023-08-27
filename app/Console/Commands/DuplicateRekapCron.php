@@ -100,7 +100,7 @@ class DuplicateRekapCron extends Command
             ->orderBy('config_sync_id','asc')
             ->get();
 
-        if (empty($getTableList)) {
+        if ($getTableList->count() == 0) {
             Log::info("Cronjob DUPLICATE REKAP - List Table to Check Not Found");
             return Command::SUCCESS;
         }

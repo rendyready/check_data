@@ -146,7 +146,7 @@ class DuplicateMasterCron extends Command
                     $count++;
                 }
                 #Delete Child
-                if (!empty($getChild)) {
+                if ($getChild->count() > 0) {
                     foreach ($getChild as $keyChild => $valChild) {
                         try {
                             $DbSipedasLocal->table($valChild->config_parent_child_name)

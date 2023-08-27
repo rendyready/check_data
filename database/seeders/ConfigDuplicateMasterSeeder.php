@@ -185,7 +185,7 @@ class ConfigDuplicateMasterSeeder extends Seeder
                 "field_pkey" => "m_produk_id",
                 "field_status" => "m_produk_client_target",
                 "field_validate1" => "m_produk_nama",
-                "field_validate2" => NULL,
+                "field_validate2" => "m_produk_code",
                 "field_validate3" => NULL,
                 "field_validate4" => NULL
             ],
