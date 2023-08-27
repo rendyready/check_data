@@ -125,7 +125,7 @@ class SendData extends Command
             #Sync Data is open from this destination?
             $getDataOpen = DB::connection('cronpusat')
             ->table('db_con')
-            ->where('db_con_host',$valDest->db_con_m_w_id)
+            ->where('db_con_m_w_id',$valDest->db_con_m_w_id)
             ->first();
 
             if (!empty($getDataOpen)) {
