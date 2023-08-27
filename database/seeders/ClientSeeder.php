@@ -21,11 +21,13 @@ class ClientSeeder extends Seeder
 
         DB::table('db_con')->where('db_con_location','pusat')
         ->update([
+            'db_con_sync_status' => 'on',
             'db_con_getdata_status' => 'source',
             'db_con_senddata_status' => 'target',
         ]);
         DB::table('db_con')->whereIn('db_con_location',['waroeng','area'])
         ->update([
+            'db_con_sync_status' => 'on',
             'db_con_getdata_status' => 'target',
             'db_con_senddata_status' => 'source',
         ]);

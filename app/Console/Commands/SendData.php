@@ -297,7 +297,7 @@ class SendData extends Command
 
         }
 
-        Log::info("Cronjob GET Data FINISH at ". Carbon::now()->format('Y-m-d H:i:s'));
+        Log::info("Cronjob SEND Data FINISH at ". Carbon::now()->format('Y-m-d H:i:s'));
 
         return Command::SUCCESS;
     }
