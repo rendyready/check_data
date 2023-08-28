@@ -116,7 +116,9 @@
                             </div>
                         </form>
 
-                        <div class="table-responsive">
+                        <div class="table-responsive" id="table_hapus_menu">
+                            {{-- <a class="btn btn-primary" id="export">Export to
+                                Excel</a> --}}
                             <table id="tampil_rekap"
                                 class="table table-sm table-bordered table-striped table-vcenter nowrap table-hover js-dataTable-full"
                                 style="width:100%">
@@ -222,6 +224,18 @@
                         }
                     });
                 }
+            });
+
+            $('#export').on('click', function() {
+                var area = $('.filter_area option:selected').val();
+                var waroeng = $('.filter_waroeng option:selected').val();
+                var tanggal = $('.filter_tanggal').val();
+                var operator = $('.filter_operator option:selected').val();
+
+                var exportUrl = '{{ route('rekap_aktiv_menu.export_hapus_menu') }}?area=' + area +
+                    '&waroeng=' + waroeng + '&tanggal=' + tanggal + '&operator=' + operator;
+
+                window.location.href = exportUrl;
             });
 
             if (HakAksesPusat) {

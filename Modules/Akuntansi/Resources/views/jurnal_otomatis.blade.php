@@ -122,16 +122,26 @@
                             <table id="jurnal_tampil" class="table table-bordered table-striped table-vcenter nowrap">
                                 <thead class="justify-content-center">
                                     <tr>
-                                        <th>Tanggal</th>
-                                        <th>Nomor Akun</th>
-                                        <th>Akun</th>
-                                        <th>Particul</th>
-                                        <th>Debit</th>
-                                        <th>Kredit</th>
+                                        <th class="text-center">Tanggal</th>
+                                        <th class="text-center">Nomor Akun</th>
+                                        <th class="text-center">Akun</th>
+                                        <th class="text-center" style="white-space: normal;">Keterangan</th>
+                                        <th class="text-center">Debit</th>
+                                        <th class="text-center">Kredit</th>
                                     </tr>
                                 </thead>
                                 <tbody id="dataReload">
                                 </tbody>
+                                <tfoot>
+                                    <tr style="font-weight: bold; background-color: #fac1c1;">
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th class="text-center">Total</th>
+                                        <th class="text-center" id="debitTotalFooter"></th>
+                                        <th class="text-center" id="kreditTotalFooter"></th>
+                                    </tr>
+                                </tfoot>
                             </table>
                         </div>
                     </div>
@@ -195,41 +205,51 @@
                         },
                         {
                             data: 'particul',
-                            class: 'text-center'
+                            class: 'text-center',
+                            render: function(data) {
+                                return '<div style="white-space: normal;">' + data +
+                                    '</div>';
+                            }
                         },
                         {
                             data: 'debit',
-                            class: 'text-center'
+                            class: 'text-center',
+                            render: function(data) {
+                                return '<div style="white-space: normal;">' + data +
+                                    '</div>';
+                            }
                         },
                         {
                             data: 'kredit',
                             class: 'text-center'
                         },
                     ],
+                    drawCallback: function(settings) {
+                        var api = this.api();
+                        var data = api.rows({
+                            page: 'current'
+                        }).data();
 
-                });
-                table.on('draw.dt', function() {
-                    var api = table;
-                    var data = api.rows({
-                        page: 'current'
-                    }).data();
+                        var debitTotal = 0;
+                        var kreditTotal = 0;
 
-                    var debitTotal = 0;
-                    var kreditTotal = 0;
-
-                    for (var i = 0; i < data.length; i++) {
-                        if (data[i]['debit']) {
-                            debitTotal += parseFloat(data[i]['debit'].replace(/[^0-9.-]+/g, ""));
+                        for (var i = 0; i < data.length; i++) {
+                            if (data[i]['debit']) {
+                                debitTotal += parseFloat(data[i]['debit'].replace(/[^0-9.-]+/g,
+                                    ""));
+                            }
+                            if (data[i]['kredit']) {
+                                kreditTotal += parseFloat(data[i]['kredit'].replace(
+                                    /[^0-9.-]+/g, ""));
+                            }
                         }
-                        if (data[i]['kredit']) {
-                            kreditTotal += parseFloat(data[i]['kredit'].replace(/[^0-9.-]+/g, ""));
-                        }
+                        console.log(kreditTotal);
+                        $(api.column(4).footer()).html(debitTotal.toLocaleString());
+                        $(api.column(5).footer()).html(kreditTotal.toLocaleString());
                     }
-                    console.log(debitTotal);
-                    console.log(kreditTotal);
-                    $(api.column(4).footer()).html(debitTotal.toLocaleString());
-                    $(api.column(5).footer()).html(kreditTotal.toLocaleString());
+
                 });
+
 
             });
 

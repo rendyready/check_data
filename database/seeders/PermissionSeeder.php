@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+
 class PermissionSeeder extends Seeder
 {
     /**
@@ -205,35 +205,15 @@ class PermissionSeeder extends Seeder
                 'guard_name' => 'web',
             ],
             [
-                'name' => 'detail nota.view',
+                'name' => 'laporan nota.view',
                 'guard_name' => 'web',
             ],
             [
-                'name' => 'rekap nota.view',
+                'name' => 'laporan menu.view',
                 'guard_name' => 'web',
             ],
             [
-                'name' => 'rekap nota harian.view',
-                'guard_name' => 'web',
-            ],
-            [
-                'name' => 'rekap menu summary.view',
-                'guard_name' => 'web',
-            ],
-            [
-                'name' => 'rekap menu tarikan.view',
-                'guard_name' => 'web',
-            ],
-            [
-                'name' => 'rekap refund.view',
-                'guard_name' => 'web',
-            ],
-            [
-                'name' => 'rekap lostbill.view',
-                'guard_name' => 'web',
-            ],
-            [
-                'name' => 'rekap garansi.view',
+                'name' => 'laporan reflosgar.view',
                 'guard_name' => 'web',
             ],
             [
@@ -241,15 +221,7 @@ class PermissionSeeder extends Seeder
                 'guard_name' => 'web',
             ],
             [
-                'name' => 'rekap summary penjualan.view',
-                'guard_name' => 'web',
-            ],
-            [
-                'name' => 'rekap penjualan kat menu.view',
-                'guard_name' => 'web',
-            ],
-            [
-                'name' => 'rekap penjualan non menu.view',
+                'name' => 'laporan penjualan.view',
                 'guard_name' => 'web',
             ],
             [
@@ -399,7 +371,27 @@ class PermissionSeeder extends Seeder
             [
                 'name' => 'hak akses.view',
                 'guard_name' => 'web',
-            ]
+            ],
+            [
+                'name' => 'permission.view',
+                'guard_name' => 'web',
+            ],
+            [
+                'name' => 'status menu.view',
+                'guard_name' => 'web',
+            ],
+            [
+                'name' => 'module keuangan.view',
+                'guard_name' => 'web',
+            ],
+            [
+                'name' => 'laporan akuntansi.view',
+                'guard_name' => 'web',
+            ],
+            [
+                'name' => 'master akuntansi.view',
+                'guard_name' => 'web',
+            ],
         ]);
     }
 }

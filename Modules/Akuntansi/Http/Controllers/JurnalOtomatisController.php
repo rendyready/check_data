@@ -414,7 +414,7 @@ class JurnalOtomatisController extends Controller
             ->get();
 
         $selisih = DB::table('rekap_modal')
-            ->selectRaw('max(rekap_modal_tanggal) tanggal,
+            ->selectRaw('DATE(max(rekap_modal_tanggal)) tanggal,
                         max(rekap_modal_m_w_code) m_w_code,
                         rekap_modal_id kode_id,
                         rekap_modal_sesi as sesi,
@@ -1907,39 +1907,29 @@ class JurnalOtomatisController extends Controller
             } //selisih kasir
         } //nota code
 
-        foreach ($data as $nota => $item) {
-            foreach ($item as $type => $transaction) {
-                if (isset($transaction['debit'])) {
-                    $totalDebit += floatval(str_replace(',', '', $transaction['debit']));
-                }
-                if (isset($transaction['kredit'])) {
-                    $totalKredit += floatval(str_replace(',', '', $transaction['kredit']));
-                }
-            }
-        }
+        // foreach ($data as $nota => $item) {
+        //     foreach ($item as $type => $transaction) {
+        //         if (isset($transaction['debit'])) {
+        //             $totalDebit += floatval(str_replace(',', '', $transaction['debit']));
+        //         }
+        //         if (isset($transaction['kredit'])) {
+        //             $totalKredit += floatval(str_replace(',', '', $transaction['kredit']));
+        //         }
+        //     }
+        // }
 
-        $debit = number_format($totalDebit);
-        $kredit = number_format($totalKredit);
+        // $debit = number_format($totalDebit);
+        // $kredit = number_format($totalKredit);
 
-        $data[$notaSelisih]['Total'] = array(
-            'tanggal' => '',
-            'no_akun' => '',
-            'akun' => '',
-            'particul' => '<strong> Total </strong>',
-            'debit' => '<strong>' . $debit . '</strong>',
-            'kredit' => '<strong>' . $kredit . '</strong>',
-            'urutan' => $urutan++,
-        );
-
-        $totalData = array(
-            'tanggal' => '',
-            'no_akun' => '',
-            'akun' => '',
-            'particul' => '<strong> Total </strong>',
-            'debit' => '<strong>' . $debit . '</strong>',
-            'kredit' => '<strong>' . $kredit . '</strong>',
-            'urutan' => $urutan++,
-        );
+        // $data[$notaSelisih]['Total'] = array(
+        //     'tanggal' => '',
+        //     'no_akun' => '',
+        //     'akun' => '',
+        //     'particul' => '<strong> Total </strong>',
+        //     'debit' => '<strong>' . $debit . '</strong>',
+        //     'kredit' => '<strong>' . $kredit . '</strong>',
+        //     'urutan' => $urutan++,
+        // );
 
         $output = array();
 
@@ -1959,7 +1949,6 @@ class JurnalOtomatisController extends Controller
 
         $output = array(
             "data" => $convert,
-            "footer" => array($totalData),
         );
 
         return response()->json($output);

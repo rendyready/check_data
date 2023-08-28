@@ -129,6 +129,7 @@ Route::prefix('dashboard')->middleware('auth', 'web')
             Route::get('rekap_aktiv_menu', 'rekap_hps_menu')->name('rekap_aktiv_menu.rekap_hps_menu');
             Route::get('rekap_aktiv_menu/select_user_menu', 'select_user_menu')->name('rekap_aktiv_menu.select_user_menu');
             Route::get('rekap_aktiv_menu/tampil_hps_menu', 'tampil_hps_menu')->name('rekap_aktiv_menu.tampil_hps_menu');
+            Route::get('rekap_aktiv_menu/export_hapus_menu', 'export_hapus_menu')->name('rekap_aktiv_menu.export_hapus_menu');
             Route::get('rekap_aktiv_nota', 'rekap_hps_nota')->name('rekap_aktiv_nota.rekap_hps_nota');
             Route::get('rekap_aktiv_nota/rekap_hps_nota', 'rekap_hps_nota')->name('rekap_aktiv_nota.rekap_hps_nota');
             Route::get('rekap_aktiv_nota/select_user_nota', 'select_user_nota')->name('rekap_aktiv_nota.select_user_nota');

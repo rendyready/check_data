@@ -18,13 +18,13 @@ class FormatExcel implements FromView, WithHeadingRow, ShouldAutoSize
 
     public function view(): View
     {
-        return view('exports.header_non_menu', [
+        return view('exports.header_hps_menu', [
             'data' => $this->data,
         ]);
     }
 }
 
-class RekapNonMenuExport implements FromView, WithHeadingRow
+class RekapHapusMenuExport implements FromView, WithHeadingRow
 {
     protected $data;
 
