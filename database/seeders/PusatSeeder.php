@@ -71,5 +71,14 @@ class PusatSeeder extends Seeder
             'cronjob_name' => 'countdataserver:cron',
             'cronjob_status' => 'open'
         ]);
+
+        DB::table('db_con')->where('db_con_sync_status','aktif')
+        ->update([
+            'db_con_sync_status' => 'on'
+        ]);
+        DB::table('db_con')->where('db_con_sync_status','tidak')
+        ->update([
+            'db_con_sync_status' => 'off'
+        ]);
     }
 }
