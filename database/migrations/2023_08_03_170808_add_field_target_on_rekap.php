@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-
+use Illuminate\Support\Facades\DB;
 return new class extends Migration
 {
     /**
@@ -51,6 +51,7 @@ return new class extends Migration
             $table->text('r_u_t_client_target')->nullable();
         });
         Schema::table('rekap_transaksi', function (Blueprint $table) {
+            $table->uuid('r_t_tmp_transaction_id')->unique()->nullable();
             $table->text('r_t_client_target')->nullable();
         });
         Schema::table('rekap_transaksi_detail', function (Blueprint $table) {
@@ -112,7 +113,7 @@ return new class extends Migration
             $table->dropColumn(['r_u_t_client_target']);
         });
         Schema::table('rekap_transaksi', function (Blueprint $table) {
-            $table->dropColumn(['r_t_client_target']);
+            $table->dropColumn(['r_t_client_target','r_t_tmp_transaction_id']);
         });
         Schema::table('rekap_transaksi_detail', function (Blueprint $table) {
             $table->dropColumn(['r_t_detail_client_target']);

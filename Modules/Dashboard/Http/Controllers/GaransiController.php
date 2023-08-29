@@ -59,9 +59,9 @@ class GaransiController extends Controller
                 ->join('rekap_transaksi', 'r_t_id', 'rekap_garansi_r_t_id')
                 ->select('users_id', 'name');
             if (in_array(Auth::user()->waroeng_id, $this->get_akses_area())) {
-                $user->where('waroeng_id', $request->id_waroeng);
+                $user->where('r_t_m_w_id', $request->id_waroeng);
             } else {
-                $user->where('waroeng_id', Auth::user()->waroeng_id);
+                $user->where('r_t_m_w_id', Auth::user()->waroeng_id);
             }
             if (strpos($request->tanggal, 'to') !== false) {
                 [$start, $end] = explode('to', $request->tanggal);
@@ -115,6 +115,7 @@ class GaransiController extends Controller
             $row[] = $value->r_t_nota_code;
             $row[] = $value->name;
             $row[] = $value->r_t_bigboss;
+            $row[] = $value->rekap_modal_sesi;
             $row[] = $value->rekap_garansi_m_produk_nama;
             $row[] = $value->rekap_garansi_qty;
             $row[] = number_format($value->rekap_garansi_price);

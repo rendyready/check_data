@@ -133,6 +133,46 @@ class DetailNotaController extends Controller
                 ->orderby('r_t_detail_m_produk_nama', 'ASC')
                 ->get();
 
+            $garansi = DB::table('rekap_garansi')
+                ->join('rekap_transaksi', 'r_t_id', 'rekap_garansi_r_t_id')
+                ->select('rekap_garansi_r_t_id'
+                    , 'rekap_garansi_m_produk_nama'
+                    , 'rekap_garansi_qty'
+                    , 'rekap_garansi_price'
+                    , 'rekap_garansi_nominal')
+                ->where('r_t_m_w_id', $request->waroeng);
+            if ($request->operator != 'all') {
+                $garansi->where('rekap_garansi_created_by', $request->operator);
+            }
+            if (strpos($request->tanggal, 'to') !== false) {
+                $dates = explode('to', $request->tanggal);
+                $garansi->whereBetween('r_t_tanggal', $dates);
+            } else {
+                $garansi->where('r_t_tanggal', $request->tanggal);
+            }
+            $data->garansi_notnull = $garansi->first();
+            $data->garansi = $garansi->get();
+
+            $refund = DB::table('rekap_refund_detail')
+                ->join('rekap_refund', 'r_r_id', 'r_r_detail_r_r_id')
+                ->select('r_r_r_t_id'
+                    , 'r_r_detail_m_produk_nama'
+                    , 'r_r_detail_qty'
+                    , 'r_r_detail_price'
+                    , 'r_r_detail_nominal')
+                ->where('r_r_m_w_id', $request->waroeng);
+            if ($request->operator != 'all') {
+                $refund->where('r_r_created_by', $request->operator);
+            }
+            if (strpos($request->tanggal, 'to') !== false) {
+                $dates = explode('to', $request->tanggal);
+                $refund->whereBetween('r_r_tanggal', $dates);
+            } else {
+                $refund->where('r_r_tanggal', $request->tanggal);
+            }
+            $data->refund_notnull = $refund->first();
+            $data->refund = $refund->get();
+
         } else {
 
             $data->transaksi_rekap2 = DB::table('rekap_lost_bill')

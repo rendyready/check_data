@@ -121,6 +121,8 @@ class RekapNotaController extends Controller
             ->orderBy('r_t_nota_code', 'ASC')
             ->get();
 
+        $error_respon = 0;
+        $errorDetected = false;
         $data = array();
         foreach ($get2 as $key => $value) {
             $row = array();
@@ -143,19 +145,33 @@ class RekapNotaController extends Controller
                 $row[] = 'Lostbill';
                 $row[] = 'Lostbill';
             } else {
+                $paymentMethodFound = false;
                 foreach ($payment as $key => $valpay) {
                     if ($valpay->r_p_t_r_t_id == $value->r_t_id) {
+                        $paymentMethodFound = true;
                         $row[] = ($value->m_t_t_group == 'ojol') ? $value->m_t_t_group : $valpay->m_payment_method_type;
                         $row[] = $valpay->m_payment_method_name;
                     }
+
+                }
+                if ($paymentMethodFound == false) {
+                    $errorDetected = true;
+                    $row[] = '<span style="background-color: #ffcccc;">Error</span>';
+                    $row[] = '<span style="background-color: #ffcccc;">Error</span>';
                 }
             }
             $row[] = number_format($value->r_t_nominal_selisih);
             $row[] = '<a id="button_detail" class="btn btn-sm button_detail btn-info" value="' . $value->r_t_id . '" title="Detail Nota"><i class="fa-sharp fa-solid fa-file"></i></a>';
             $data[] = $row;
         }
+        if ($errorDetected == true) {
+            $error_respon = 1;
+        }
 
-        $output = array("data" => $data);
+        $output = array(
+            "data" => $data,
+            "error" => $error_respon,
+        );
         return response()->json($output);
     }
 
@@ -172,6 +188,18 @@ class RekapNotaController extends Controller
         $data->detail_nota = DB::table('rekap_transaksi_detail')
             ->where('r_t_detail_r_t_id', $id)
             ->get();
+
+        $garansi = DB::table('rekap_garansi')
+            ->where('rekap_garansi_r_t_id', $id);
+        $data->garansi = $garansi->get();
+        $garansi_notnull = $garansi->first();
+
+        $refund = DB::table('rekap_refund_detail')
+            ->join('rekap_refund', 'r_r_id', 'r_r_detail_r_r_id')
+            ->where('r_r_r_t_id', $id);
+        $data->refund = $refund->get();
+        $refund_notnull = $refund->first();
+
         return response()->json($data);
     }
 
