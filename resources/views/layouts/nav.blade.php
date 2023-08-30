@@ -164,7 +164,7 @@
                 <a class="link-fx fw-bold tracking-wide mx-auto" href="/">
                     <span class="smini-hidden">
                         <i class="fa fa-fire text-primary"></i>
-                        <span class="fs-4 text-dual">Sipedas</span><span class="fs-4 text-primary">V4.1.8</span>
+                        <span class="fs-4 text-dual">Sipedas</span><span class="fs-4 text-primary">V4.1.9</span>
                     </span>
                 </a>
             </div>
@@ -448,70 +448,95 @@
                                             <span class="nav-main-link-name">Laporan CR55</span>
                                         </a>
                                         <ul class="nav-main-submenu">
-                                            @can('detail nota.view')
-                                                <li class="nav-main-item">
-                                                    <a class="nav-main-link{{ request()->is('dashboard/detail') ? ' active' : '' }}"
-                                                        href="{{ route('detail.index') }}">
-                                                        <span class="nav-main-link-name">Detail Nota</span>
+                                            @can('rekap nota.view')
+                                                <li class="nav-main-item{{ request()->is('dashboard/nota') ? ' open' : '' }}">
+                                                    <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu"
+                                                        aria-haspopup="true" aria-expanded="true" href="#">
+                                                        <span class="nav-main-link-name">Laporan Nota</span>
                                                     </a>
+                                                    <ul class="nav-main-submenu">
+                                                        <li class="nav-main-item">
+                                                            <a class="nav-main-link{{ request()->is('dashboard/detail') ? ' active' : '' }}"
+                                                                href="{{ route('detail.index') }}">
+                                                                <span class="nav-main-link-name">Rekap Detail Nota</span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="nav-main-item">
+                                                            <a class="nav-main-link{{ request()->is('dashboard/rekap') ? ' active' : '' }}"
+                                                                href="{{ route('rekap.index') }}">
+                                                                <span class="nav-main-link-name">Rekap Nota</span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="nav-main-item">
+                                                            <a class="nav-main-link{{ request()->is('dashboard/harian') ? ' active' : '' }}"
+                                                                href="{{ route('harian.index') }}">
+                                                                <span class="nav-main-link-name">Rekap Nota Harian</span>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
                                                 </li>
                                             @endcan
-                                            @can('rekap nota.view')
-                                                <li class="nav-main-item">
-                                                    <a class="nav-main-link{{ request()->is('dashboard/rekap') ? ' active' : '' }}"
-                                                        href="{{ route('rekap.index') }}">
-                                                        <span class="nav-main-link-name">Rekap Nota</span>
-                                                    </a>
-                                                </li>
+                                            {{-- @can('rekap nota.view')
                                             @endcan
                                             @can('rekap nota harian.view')
-                                                <li class="nav-main-item">
-                                                    <a class="nav-main-link{{ request()->is('dashboard/harian') ? ' active' : '' }}"
-                                                        href="{{ route('harian.index') }}">
-                                                        <span class="nav-main-link-name">Rekap Nota Harian</span>
-                                                    </a>
-                                                </li>
-                                            @endcan
-                                            @can('rekap menu summary.view')
-                                                <li class="nav-main-item">
-                                                    <a class="nav-main-link{{ request()->is('dashboard/rekap_menu') ? ' active' : '' }}"
-                                                        href="{{ route('rekap_menu.index') }}">
-                                                        <span class="nav-main-link-name">Rekap Menu Summary</span>
-                                                    </a>
-                                                </li>
-                                            @endcan
+                                            @endcan --}}
                                             @can('rekap menu tarikan.view')
-                                                <li class="nav-main-item">
-                                                    <a class="nav-main-link{{ request()->is('dashboard/menu_harian') ? ' active' : '' }}"
-                                                        href="{{ route('menu_harian.index') }}">
-                                                        <span class="nav-main-link-name">Rekap Menu Tarikan</span>
+                                                <li class="nav-main-item{{ request()->is('dashboard/menu') ? ' open' : '' }}">
+                                                    <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu"
+                                                        aria-haspopup="true" aria-expanded="true" href="#">
+                                                        <span class="nav-main-link-name">Laporan Menu</span>
                                                     </a>
+                                                    <ul class="nav-main-submenu">
+                                                        <li class="nav-main-item">
+                                                            <a class="nav-main-link{{ request()->is('dashboard/rekap_menu') ? ' active' : '' }}"
+                                                                href="{{ route('rekap_menu.index') }}">
+                                                                <span class="nav-main-link-name">Rekap Menu Summary</span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="nav-main-item">
+                                                            <a class="nav-main-link{{ request()->is('dashboard/menu_harian') ? ' active' : '' }}"
+                                                                href="{{ route('menu_harian.index') }}">
+                                                                <span class="nav-main-link-name">Rekap Menu Tarikan</span>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
                                                 </li>
                                             @endcan
-                                            @can('rekap refund.view')
-                                                <li class="nav-main-item">
-                                                    <a class="nav-main-link{{ request()->is('dashboard/rekap_refund') ? ' active' : '' }}"
-                                                        href="{{ route('rekap_refund.index') }}">
-                                                        <span class="nav-main-link-name">Rekap Refund</span>
-                                                    </a>
-                                                </li>
-                                            @endcan
+                                            {{-- @can('rekap menu tarikan.view')
+                                            @endcan --}}
                                             @can('rekap lostbill.view')
-                                                <li class="nav-main-item">
-                                                    <a class="nav-main-link{{ request()->is('dashboard/rekap_lostbill') ? ' active' : '' }}"
-                                                        href="{{ route('rekap_lostbill.index') }}">
-                                                        <span class="nav-main-link-name">Rekap Lostbill</span>
+                                                <li
+                                                    class="nav-main-item{{ request()->is('dashboard/nontransaksi') ? ' open' : '' }}">
+                                                    <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu"
+                                                        aria-haspopup="true" aria-expanded="true" href="#">
+                                                        <span class="nav-main-link-name">Laporan Refund Lostbill Garansi</span>
                                                     </a>
+                                                    <ul class="nav-main-submenu">
+                                                        <li class="nav-main-item">
+                                                            <a class="nav-main-link{{ request()->is('dashboard/rekap_refund') ? ' active' : '' }}"
+                                                                href="{{ route('rekap_refund.index') }}">
+                                                                <span class="nav-main-link-name">Rekap Refund</span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="nav-main-item">
+                                                            <a class="nav-main-link{{ request()->is('dashboard/rekap_lostbill') ? ' active' : '' }}"
+                                                                href="{{ route('rekap_lostbill.index') }}">
+                                                                <span class="nav-main-link-name">Rekap Lostbill</span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="nav-main-item">
+                                                            <a class="nav-main-link{{ request()->is('dashboard/rekap_garansi') ? ' active' : '' }}"
+                                                                href="{{ route('rekap_garansi.index') }}">
+                                                                <span class="nav-main-link-name">Rekap Garansi</span>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
                                                 </li>
+                                            @endcan
+                                            {{-- @can('rekap lostbill.view')
                                             @endcan
                                             @can('rekap garansi.view')
-                                                <li class="nav-main-item">
-                                                    <a class="nav-main-link{{ request()->is('dashboard/rekap_garansi') ? ' active' : '' }}"
-                                                        href="{{ route('rekap_garansi.index') }}">
-                                                        <span class="nav-main-link-name">Rekap Garansi</span>
-                                                    </a>
-                                                </li>
-                                            @endcan
+                                            @endcan --}}
                                             @can('laporan kas harian.view')
                                                 <li class="nav-main-item">
                                                     <a class="nav-main-link{{ request()->is('dashboard/kas_kasir') ? ' active' : '' }}"
@@ -520,30 +545,40 @@
                                                     </a>
                                                 </li>
                                             @endcan
-                                            @can('rekap summary penjualan.view')
-                                                <li class="nav-main-item">
-                                                    <a class="nav-main-link{{ request()->is('dashboard/rekap_kategori') ? ' active' : '' }}"
-                                                        href="{{ route('rekap_kategori.index') }}">
-                                                        <span class="nav-main-link-name">Rekap Summary Penjualan</span>
+                                            @can('rekap penjualan kat menu.view')
+                                                <li
+                                                    class="nav-main-item{{ request()->is('dashboard/penjualan') ? ' open' : '' }}">
+                                                    <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu"
+                                                        aria-haspopup="true" aria-expanded="true" href="#">
+                                                        <span class="nav-main-link-name">Laporan Penjualan</span>
                                                     </a>
+                                                    <ul class="nav-main-submenu">
+                                                        <li class="nav-main-item">
+                                                            <a class="nav-main-link{{ request()->is('dashboard/rekap_kategori') ? ' active' : '' }}"
+                                                                href="{{ route('rekap_kategori.index') }}">
+                                                                <span class="nav-main-link-name">Rekap Summary Penjualan</span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="nav-main-item">
+                                                            <a class="nav-main-link{{ request()->is('dashboard/rekap_penj_kat') ? ' active' : '' }}"
+                                                                href="{{ route('rekap_penj_kat.index') }}">
+                                                                <span class="nav-main-link-name">Rekap Penjualan Kategori
+                                                                    Menu</span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="nav-main-item">
+                                                            <a class="nav-main-link{{ request()->is('dashboard/non_menu') ? ' active' : '' }}"
+                                                                href="{{ route('non_menu.index') }}">
+                                                                <span class="nav-main-link-name">Rekap Penjualan Non Menu</span>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
                                                 </li>
                                             @endcan
-                                            @can('rekap penjualan kat menu.view')
-                                                <li class="nav-main-item">
-                                                    <a class="nav-main-link{{ request()->is('dashboard/rekap_penj_kat') ? ' active' : '' }}"
-                                                        href="{{ route('rekap_penj_kat.index') }}">
-                                                        <span class="nav-main-link-name">Rekap Penjualan Kategori Menu</span>
-                                                    </a>
-                                                </li>
+                                            {{-- @can('rekap penjualan kat menu.view')
                                             @endcan
                                             @can('rekap penjualan non menu.view')
-                                                <li class="nav-main-item">
-                                                    <a class="nav-main-link{{ request()->is('dashboard/non_menu') ? ' active' : '' }}"
-                                                        href="{{ route('non_menu.index') }}">
-                                                        <span class="nav-main-link-name">Rekap Penjualan Non Menu</span>
-                                                    </a>
-                                                </li>
-                                            @endcan
+                                            @endcan --}}
                                             @can('rekap aktifitas kasir.view')
                                                 <li
                                                     class="nav-main-item{{ request()->is('dashboard/rekap_aktiv') ? ' open' : '' }}">
@@ -572,7 +607,7 @@
                                                             <li class="nav-main-item">
                                                                 <a class="nav-main-link{{ request()->is('dashboard/rekap_aktiv_nota') ? ' active' : '' }}"
                                                                     href="{{ route('rekap_aktiv_nota.rekap_hps_nota') }}">
-                                                                    <span class="nav-main-link-name">Rekap Nota</span>
+                                                                    <span class="nav-main-link-name">Rekap Hapus Nota</span>
                                                                 </a>
                                                             </li>
                                                         @endcan

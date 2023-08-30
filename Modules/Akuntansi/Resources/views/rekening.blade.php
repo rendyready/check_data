@@ -60,7 +60,7 @@
                                                     <td>
                                                         <input type="text" placeholder="Input Nomor Akun"
                                                             id="m_rekening_no_akun" name="m_rekening_no_akun[]"
-                                                            class="form-control set form-control-sm m_rekening_no_akun text-center"
+                                                            class="form-control set form-control-sm m_rekening_no_akun text-center no_rekening"
                                                             required />
                                                     </td>
                                                     <td>
@@ -179,15 +179,17 @@
                         </div>
                     </div>
                     <div class="block-content">
+
                         <!-- Select2 is initialized at the bottom of the page -->
                         <form id="formAction" name="form_action" method="post">
+
                             @csrf
                             <div class="mb-4">
                                 <input name="m_rekening_id" type="hidden" class="m_rekening_no_akun1">
                                 <div class="form-group">
                                     <label for="m_rekening_no_akun">Nomor Akun</label>
                                     <div>
-                                        <input class="form-control m_rekening_no_akun1 no_rekening" type="text"
+                                        <input class="form-control m_rekening_no_akun1" type="text"
                                             name="m_rekening_no_akun" id="m_rekening_no_akun1" style="width: 100%;"
                                             required>
                                     </div>
@@ -241,7 +243,7 @@
                             <div class="mb-4">
                                 <input name="m_rekening_no_akun" type="hidden" id="m_rekening_no_akun2">
                                 <div class="alert">
-                                    <p>Apakah Anda yakin mau memhapus rekening ini?</p>
+                                    <p>Apakah Anda yakin mau menghapus rekening ini?</p>
                                 </div>
                             </div>
                     </div>
@@ -265,12 +267,48 @@
                 no++;
                 $('#form').append('<tr class="hapus" id="row' + no + '">' +
                     '<td><input type="text" class="form-control form-control-sm m_rekening_no_akunjq text-center no_rekening" name="m_rekening_no_akun[]" id="m_rekening_no_akunjq' +
-                    no + '" placeholder="Input Nama Akun" required></td>' +
+                    no + '" placeholder="Input Nomor Akun" required></td>' +
                     '<td><input type="text" class="form-control form-control-sm m_rekening_namajq text-center" name="m_rekening_nama[]" id="m_rekening_namajq' +
                     no + '" placeholder="Input Nama Rekening" required></td>' +
                     '<td><input type="text" class="form-control saldo form-control-sm text-end number" name="m_rekening_saldo[]" id="m_rekening_saldo" placeholder="Input Saldo Rekening" required></td>' +
                     '<td><button type="button" id="' + no +
                     '" class="btn btn-danger btn_remove"> - </button></td> </tr> ');
+            });
+
+
+
+            $(document).on('focusout', '.no_rekening', function() {
+                var current_value = $(this).val().trim();
+                var prev = $(this).data('previous-value');
+
+                if (current_value === '') {
+                    return;
+                }
+
+                var isDuplicate = false;
+
+                $('.no_rekening').not(this).each(function() {
+                    if ($(this).val() === current_value) {
+                        isDuplicate = true;
+                        return false;
+                    }
+                });
+
+                if (isDuplicate) {
+                    Swal.fire({
+                        title: 'Warning',
+                        text: 'Nomor Akun Sudah Digunakan',
+                        confirmButtonColor: '#d33',
+                        confirmButtonText: 'OK',
+                        customClass: {
+                            confirmButton: 'bg-red-500',
+                        },
+                    });
+                    $(this).val('');
+                } else {
+                    $(this).data('previous-value', current_value);
+                }
+                console.log(current_value);
             });
 
             var waroengid = $('#filter-waroeng').val();
@@ -657,39 +695,6 @@
                     $('#m_rekening_m_waroeng_id2').val('-- Pilih Waroeng --').trigger('change');
                 }
             });
-
-            $(document).on("input", ".no_rekening", function() {
-                var prev = $(this).data("val");
-                var current = $(this).val();
-                var id = $(this).data("id");
-                var no_rekening = $(".no_rekening").val();
-                if (!current) {
-                    // If the selected value is empty, skip the duplicate value check
-                    return;
-                }
-                var values = $(".no_rekening")
-                    .map(function() {
-                        return this.value.trim();
-                    })
-                    .get();
-                var filteredValues = values.filter(function(value) {
-                    return value !== "";
-                });
-                var unique = [...new Set(filteredValues)];
-                if (filteredValues.length !== unique.length) {
-                    e.preventDefault();
-                    Codebase.helpers("jq-notify", {
-                        align: "right", // 'right', 'left', 'center'
-                        from: "top", // 'top', 'bottom'
-                        type: "danger", // 'info', 'success', 'warning', 'danger'
-                        icon: "fa fa-info me-5", // Icon class
-                        message: "Nama Barang Telah Ada",
-                    });
-                    $("#" + id)
-                        .val('')
-                }
-            })
-
 
         });
     </script>
