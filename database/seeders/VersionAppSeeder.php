@@ -38,26 +38,74 @@ class VersionAppSeeder extends Seeder
         DB::table('instuction_update')->insert([
             'instuction_update_app_name' => 'sipedas',
             'instuction_update_base_path' => 'sipedas.wss',
-            'instuction_update_syntax' => 'git reset --hard && git pull origin develop && composer dump-autoload && php artisan migrate && npm run build',
+            'instuction_update_syntax' => 'git reset --hard',
+            'instuction_update_order' => '1'
+        ]);
+        DB::table('instuction_update')->insert([
+            'instuction_update_app_name' => 'sipedas',
+            'instuction_update_base_path' => 'sipedas.wss',
+            'instuction_update_syntax' => 'git pull origin develop',
+            'instuction_update_order' => '2'
+        ]);
+        DB::table('instuction_update')->insert([
+            'instuction_update_app_name' => 'sipedas',
+            'instuction_update_base_path' => 'sipedas.wss',
+            'instuction_update_syntax' => 'composer dump-autoload',
+            'instuction_update_order' => '3'
+        ]);
+        DB::table('instuction_update')->insert([
+            'instuction_update_app_name' => 'sipedas',
+            'instuction_update_base_path' => 'sipedas.wss',
+            'instuction_update_syntax' => 'php artisan migrate',
+            'instuction_update_order' => '4'
+        ]);
+        DB::table('instuction_update')->insert([
+            'instuction_update_app_name' => 'sipedas',
+            'instuction_update_base_path' => 'sipedas.wss',
+            'instuction_update_syntax' => 'npm run build',
+            'instuction_update_order' => '5'
+        ]);
+        DB::table('instuction_update')->insert([
+            'instuction_update_app_name' => 'api',
+            'instuction_update_base_path' => 'api.sipedas.wss',
+            'instuction_update_syntax' => 'git reset --hard',
             'instuction_update_order' => '1'
         ]);
         DB::table('instuction_update')->insert([
             'instuction_update_app_name' => 'api',
             'instuction_update_base_path' => 'api.sipedas.wss',
-            'instuction_update_syntax' => 'git reset --hard && git pull origin production && composer dump-autoload',
+            'instuction_update_syntax' => 'git pull origin production',
+            'instuction_update_order' => '2'
+        ]);
+        DB::table('instuction_update')->insert([
+            'instuction_update_app_name' => 'api',
+            'instuction_update_base_path' => 'api.sipedas.wss',
+            'instuction_update_syntax' => 'composer dump-autoload',
+            'instuction_update_order' => '3'
+        ]);
+        DB::table('instuction_update')->insert([
+            'instuction_update_app_name' => 'cr55',
+            'instuction_update_base_path' => 'cr55.wss',
+            'instuction_update_syntax' => 'git reset --hard',
             'instuction_update_order' => '1'
         ]);
         DB::table('instuction_update')->insert([
             'instuction_update_app_name' => 'cr55',
             'instuction_update_base_path' => 'cr55.wss',
-            'instuction_update_syntax' => 'git reset --hard && git pull origin production',
+            'instuction_update_syntax' => 'git pull origin production',
+            'instuction_update_order' => '2'
+        ]);
+        DB::table('instuction_update')->insert([
+            'instuction_update_app_name' => 'cronjob',
+            'instuction_update_base_path' => 'cronjob.wss',
+            'instuction_update_syntax' => 'git reset --hard',
             'instuction_update_order' => '1'
         ]);
         DB::table('instuction_update')->insert([
             'instuction_update_app_name' => 'cronjob',
             'instuction_update_base_path' => 'cronjob.wss',
-            'instuction_update_syntax' => 'git reset --hard && git pull origin main',
-            'instuction_update_order' => '1'
+            'instuction_update_syntax' => 'git pull origin main',
+            'instuction_update_order' => '2'
         ]);
     }
 }
