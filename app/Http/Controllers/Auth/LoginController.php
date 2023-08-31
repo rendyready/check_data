@@ -65,14 +65,16 @@ class LoginController extends Controller
         if ($user) {
             $domain = $request->server('HTTP_HOST');
             $get_id = $user->waroeng_id;
-            $get_m_w = DB::table('m_w')->where('m_w_id',$get_id)->first();
-            if ($get_m_w->m_w_m_w_jenis_id == 1 or $get_m_w->m_w_m_w_jenis_id == 2 and $domain == 'sipedaspusat.waroengss.com') {
+            $get_m_w = DB::table('m_w')->where('m_w_id', $get_id)->first();
+            
+            if (($get_m_w->m_w_m_w_jenis_id == 1 || $get_m_w->m_w_m_w_jenis_id == 2) && $domain == 'sipedaspusat.waroengss.com') {
                 auth()->logout();
-                return redirect()->route('users.noakses')->with('anda tidak dapat mengakses kantor pusat');
+                return redirect()->route('users.noakses')->with('message', 'Anda tidak dapat mengakses kantor pusat');
             } else {
                 return redirect()->intended();
             }
         }
+        
     }
     public function change_pass(Request $request)
     {

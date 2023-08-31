@@ -43,7 +43,7 @@ class DatabaseSeeder extends Seeder
             // List_AktTableSeeder::class,
             //MRekeningTableSeeder::class,
             SupplierSeeder::class,
-            NmGudangTableSeeder::class,
+            NamaGudangTableSeeder::class,
             MKasirAksesTableSeeder::class,
             MPaymentMethodeTable::class,
             // MDivisiTableSeeder::class,

@@ -5,12 +5,12 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-class NmgudangTableSeeder extends Seeder
+class NamaGudangSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      *
-     * @return voidm
+     * @return void
      */
     public function run()
     {
@@ -33,6 +33,5 @@ class NmgudangTableSeeder extends Seeder
                 'm_gudang_nama_created_by'=>1
             ],  
         ]);
-           
     }
 }
