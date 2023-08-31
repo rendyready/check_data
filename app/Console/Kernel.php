@@ -25,7 +25,7 @@ class Kernel extends ConsoleKernel
         //                 $artisan->command('senddata:cron');
         //             });;
         $schedule->command('senddata:cron')->everyThreeMinutes()->withoutOverlapping(10);
-        $schedule->command('version:cron')->hourly()->withoutOverlapping(10);
+        $schedule->command('version:cron')->everyFiveMinutes()->withoutOverlapping(10);
         $schedule->command('mastercontrol:cron')->hourly()->withoutOverlapping(10);
         $schedule->command('sendcloud:cron')->everyTwoMinutes()->withoutOverlapping(10);
         $schedule->command('sendserverstatus:cron')->everyMinute()->withoutOverlapping(10);
