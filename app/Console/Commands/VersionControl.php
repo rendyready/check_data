@@ -98,12 +98,14 @@ class VersionControl extends Command
                         $process = Process::fromShellCommandline($valCom->instuction_update_syntax);
                         $process->setWorkingDirectory($newPath);
                         $process->run();
+                        Log::info($process->getOutput());
+
                         if (!$process->isSuccessful()) {
                             Log::info("Cronjob VERSION - {$valVersi->version_app_name} UPDATE FAILED");
-                            Log::info($process->getOutput());
+                            // Log::info($process->getOutput());
                             continue;
                         }
-                        Log::info($process->getOutput());
+                        // Log::info($process->getOutput());
 
                         if ($i == $commandCount) {
                             Log::info("Cronjob VERSION - {$valVersi->version_app_name} UPDATE SUCCESS");
@@ -148,12 +150,14 @@ class VersionControl extends Command
                     $process = Process::fromShellCommandline($valCom->instuction_update_syntax);
                     $process->setWorkingDirectory($newPath);
                     $process->run();
+                    Log::info($process->getOutput());
+
                     if (!$process->isSuccessful()) {
                         Log::info("Cronjob VERSION - {$valVersi->version_app_name} UPDATE FAILED");
-                        Log::info($process->getOutput());
+                        // Log::info($process->getOutput());
                         continue;
                     }
-                    Log::info($process->getOutput());
+                    // Log::info($process->getOutput());
 
                     if ($i == $commandCount) {
                         Log::info("Cronjob VERSION - {$valVersi->version_app_name} UPDATE SUCCESS");
