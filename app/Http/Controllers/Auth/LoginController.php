@@ -57,20 +57,24 @@ class LoginController extends Controller
         Artisan::call('cache:clear');
         if (!$user->hasVerifiedAccount()) {
             $token = Password::createToken($user);
+            DB::table('users')->where('email',$user->email)->update(['reset_token'=>$token]);
+            auth()->logout();
             return redirect()->route('update.pass', [ 'token' => $token,
             'email' => $request->email]);
         }
         if ($user) {
             $domain = $request->server('HTTP_HOST');
             $get_id = $user->waroeng_id;
-            $get_m_w = DB::table('m_w')->where('m_w_id',$get_id)->first();
-            if ($get_m_w->m_w_m_w_jenis_id == 1 or $get_m_w->m_w_m_w_jenis_id == 2 and $domain == 'sipedaspusat.waroengss.com') {
+            $get_m_w = DB::table('m_w')->where('m_w_id', $get_id)->first();
+            
+            if (($get_m_w->m_w_m_w_jenis_id == 1 || $get_m_w->m_w_m_w_jenis_id == 2) && $domain == 'sipedaspusat.waroengss.com') {
                 auth()->logout();
-                return redirect()->route('users.noakses')->with('anda tidak dapat mengakses kantor pusat');
+                return redirect()->route('users.noakses')->with('message', 'Anda tidak dapat mengakses kantor pusat');
             } else {
                 return redirect()->intended();
             }
         }
+        
     }
     public function change_pass(Request $request)
     {
@@ -81,9 +85,19 @@ class LoginController extends Controller
     }
     public function update_pass_save(Request $request)
     {
-        DB::table('users')->where('email',$request->email)->update(['password'=> Hash::make($request->password),'verified'=>$request->verified]); 
-        auth()->logout();       
-        return redirect('/login');
+        $user = DB::table('users')->where('email', $request->email)->first();
+    
+        if ($user && $user->reset_token === $request->reset_token) {
+            DB::table('users')->where('email', $request->email)->update([
+                'password' => Hash::make($request->password),
+                'verified' => $request->verified,
+                'reset_token' => null, // Reset token to null after successful reset
+            ]);
+            auth()->logout();
+            return redirect('/login')->with('success', 'Password updated successfully. Please login with your new password.');
+        } else {
+            return redirect()->back()->with('error', 'Invalid reset token.');
+        }
     }
     public function no_akses(Request $request) {
         return view('auth.no_akses');
