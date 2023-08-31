@@ -150,6 +150,7 @@ class VersionControl extends Command
                     $process->run();
                     if (!$process->isSuccessful()) {
                         Log::info("Cronjob VERSION - {$valVersi->version_app_name} UPDATE FAILED");
+                        Log::info($process->getOutput());
                         continue;
                     }
                     Log::info($process->getOutput());
