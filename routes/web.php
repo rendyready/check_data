@@ -31,4 +31,5 @@ Route::get('/getdataupdate', [CronjobController::class, 'getdataupdate']);
 Route::get('/sendcloud', [CronjobController::class, 'sendcloud']);
 
 Route::get('/upgrade', [VersionController::class, 'upgrade']);
+Route::get('/test', [VersionController::class, 'test']);
 Route::get('/server',[ServerStatusController::class,'server']);

@@ -11,7 +11,10 @@ class VersionController extends Controller
 {
     public function upgrade()
     {
-        return $path = base_path();
+        $process = new Process(['php','/usr/local/var/www/sipedas_v4/artisan','db:seed --class=MigrationSeeder']);
+$process->run();
+return $process->getOutput();
+//         return $path = base_path();
         $path= "/home/adminweb/web/cronjob.wss/public_html";
         $appPath = 'cr55.wss';
         $replace = explode('/',$path);
@@ -28,15 +31,31 @@ class VersionController extends Controller
         }
         return $newPath;
     }
-    public function tes(){
+    public function test(){
         #/home/admin/web/cronjob.wss/public_html
-
+        // $string = 'php artisan migrate';
+        // if (str_contains($string, 'migrate')) {
+        //     return 'ada';
+        // }else{
+        //     return 'tidak';
+        // }
         #This is Work Fine
-        $path = "/usr/local/var/www/backend-cr-2023";
-        $process = Process::fromShellCommandline('php artisan config:clear');
+        $path = "/usr/local/var/www/sipedas_v4";
+        // try {
+            //code...
+
+        $process = Process::fromShellCommandline('composer dump-autoload');
+        // $process = Process::fromShellCommandline('php artisan migrate --path=/usr/local/var/www/sipedas_v4/database/migrations');
         // $process->setWorkingDirectory(base_path());
         $process->setWorkingDirectory($path);
         $process->run();
+
+        // } catch (\Throwable $th) {
+        //     //throw $th;
+        //     return $th;
+        // }
+        // return $process->getOutput();
+
         if (!$process->isSuccessful()) {
             throw new ProcessFailedException($process);
         }
