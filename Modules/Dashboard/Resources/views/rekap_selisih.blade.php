@@ -6,7 +6,7 @@
                 <div class="block block-themed h-100 mb-0">
                     <div class="block-header bg-pulse">
                         <h3 class="block-title">
-                            Rekap Non Menu Penjualan
+                            Rekap Selisih, Pembulatan dan Free Kembalian
                         </h3>
                     </div>
                     <div class="block-content text-muted">
@@ -95,8 +95,10 @@
 
                             <div class="row">
                                 <div class="col-md-5">
-                                    <button type="button" id="cari" class="btn btn-primary btn-sm mb-3">Cari</button>
-                                    <a class="btn btn-sm btn-primary mb-3" id="export_excel" style="display: none;">Export
+                                    <button type="button" id="cari"
+                                        class="btn btn-primary btn-sm mb-3 mt-3">Cari</button>
+                                    <a class="btn btn-sm btn-primary mb-3 mt-3" id="export_excel"
+                                        style="display: none;">Export
                                         Excel <span id="export_loading" style="display: none;"><img
                                                 src="{{ asset('media/gif/loading.gif') }}" alt="Loading..."
                                                 style="max-width: 16px; max-height: 16px;"></span></a>
@@ -112,60 +114,13 @@
                                         <th rowspan="2" class="text-center">Area</th>
                                         <th rowspan="2" class="text-center">Waroeng</th>
                                         <th rowspan="2" class="text-center">Tanggal</th>
-                                        <th rowspan="2" class="text-center">Sesi</th>
-                                        <th rowspan="2" class="text-center">Operator</th>
-                                        <th colspan="5" class="text-center">Dine In</th>
-                                        <th colspan="5" class="text-center">Take Away</th>
-                                        <th colspan="5" class="text-center">Grab</th>
-                                        <th colspan="5" class="text-center">Gojek</th>
-                                        <th colspan="5" class="text-center">Shopee</th>
-                                        <th colspan="5" class="text-center">Grab Mart</th>
-                                        <th colspan="5" class="text-center">Rincian</th>
-                                        <th rowspan="2" class="text-center">Pajak Reguler</th>
-                                        <th rowspan="2" class="text-center">Pajak Ojol</th>
+                                        <th colspan="2" class="text-center">Selisih Uang</th>
+                                        <th rowspan="2" class="text-center">Pembulatan/Tax</th>
+                                        <th rowspan="2" class="text-center">Free Kembalian</th>
                                     </tr>
                                     <tr>
-                                        <th rowspan="1" class="text-center">Menu</th>
-                                        <th rowspan="1" class="text-center">Menu (P)</th>
-                                        <th rowspan="1" class="text-center">Menu (TP)</th>
-                                        <th rowspan="1" class="text-center">Non Menu</th>
-                                        <th rowspan="1" class="text-center">Nota</th>
-
-                                        <th rowspan="1" class="text-center">Menu</th>
-                                        <th rowspan="1" class="text-center">Menu (P)</th>
-                                        <th rowspan="1" class="text-center">Menu (TP)</th>
-                                        <th rowspan="1" class="text-center">Non Menu</th>
-                                        <th rowspan="1" class="text-center">Nota</th>
-
-                                        <th rowspan="1" class="text-center">Menu</th>
-                                        <th rowspan="1" class="text-center">Menu (P)</th>
-                                        <th rowspan="1" class="text-center">Menu (TP)</th>
-                                        <th rowspan="1" class="text-center">Non Menu</th>
-                                        <th rowspan="1" class="text-center">Nota</th>
-
-                                        <th rowspan="1" class="text-center">Menu</th>
-                                        <th rowspan="1" class="text-center">Menu (P)</th>
-                                        <th rowspan="1" class="text-center">Menu (TP)</th>
-                                        <th rowspan="1" class="text-center">Non Menu</th>
-                                        <th rowspan="1" class="text-center">Nota</th>
-
-                                        <th rowspan="1" class="text-center">Menu</th>
-                                        <th rowspan="1" class="text-center">Menu (P)</th>
-                                        <th rowspan="1" class="text-center">Menu (TP)</th>
-                                        <th rowspan="1" class="text-center">Non Menu</th>
-                                        <th rowspan="1" class="text-center">Nota</th>
-
-                                        <th rowspan="1" class="text-center">WBD BB</th>
-                                        <th rowspan="1" class="text-center">WBD (P)</th>
-                                        <th rowspan="1" class="text-center">WBD (TP)</th>
-                                        <th rowspan="1" class="text-center">WBD Frozen</th>
-                                        <th rowspan="1" class="text-center">Nota</th>
-
-                                        <th rowspan="1" class="text-center">Es Cream</th>
-                                        <th rowspan="1" class="text-center">Air Mineral</th>
-                                        <th rowspan="1" class="text-center">Kerupuk</th>
-                                        <th rowspan="1" class="text-center">WBD BB</th>
-                                        <th rowspan="1" class="text-center">WBD Frozen</th>
+                                        <th rowspan="1" class="text-center">Selisih Lebih</th>
+                                        <th rowspan="1" class="text-center">Selisih Kurang</th>
                                     </tr>
                                 </thead>
                             </table>
@@ -214,33 +169,20 @@
                         destroy: true,
                         orderCellsTop: true,
                         processing: true,
-                        autoWidth: true,
+                        autoWidth: false,
                         scrollX: true,
                         scrollCollapse: true,
                         columnDefs: [{
                             targets: '_all',
                             className: 'dt-body-center'
                         }, ],
-                        // buttons: [{
-                        //     extend: 'excelHtml5',
-                        //     text: 'Export Excel',
-                        //     title: 'Laporan Rekap Non Menu - ' + tanggal,
-                        //     pageSize: 'A4',
-                        //     pageOrientation: 'portrait',
-                        //     exportOptions: {
-                        //         columns: [0, 1, 2, 3, 4, 5, 8, 9, 10, 13, 14, 15, 18, 19,
-                        //             20, 23, 24, 25, 28, 29, 30, 33, 34, 35, 36, 37, 38,
-                        //             39, 40, 41
-                        //         ],
-                        //     },
-                        // }],
                         lengthMenu: [
                             [10, 25, 50, 100, -1],
                             [10, 25, 50, 100, "All"]
                         ],
                         pageLength: 10,
                         ajax: {
-                            url: '{{ route('non_menu.show') }}',
+                            url: '{{ route('rekap_selisih.show') }}',
                             data: {
                                 area: area,
                                 waroeng: waroeng,
@@ -262,7 +204,7 @@
                 var waroeng = $('.filter_waroeng option:selected').val();
                 var tanggal = $('.filter_tanggal').val();
 
-                var exportUrl = '{{ route('non_menu.export_excel') }}?area=' + area +
+                var exportUrl = '{{ route('rekap_selisih.export_excel') }}?area=' + area +
                     '&waroeng=' + waroeng + '&tanggal=' + tanggal;
 
                 $('#export_loading').show();
@@ -305,7 +247,7 @@
                     if (id_area && tanggal) {
                         $.ajax({
                             type: "GET",
-                            url: '{{ route('non_menu.select_waroeng') }}',
+                            url: '{{ route('rekap_selisih.select_waroeng') }}',
                             dataType: 'JSON',
                             destroy: true,
                             data: {

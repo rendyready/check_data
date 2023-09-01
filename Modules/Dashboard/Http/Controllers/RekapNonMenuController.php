@@ -11,7 +11,6 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class RekapNonMenuController extends Controller
 {
-
     public function index()
     {
         $waroeng_id = Auth::user()->waroeng_id;
@@ -183,22 +182,22 @@ class RekapNonMenuController extends Controller
             $countNotaArray[$valNot->type_id . "-" . $valNot->modal_id] = $valNot->jml;
         }
 
-        $getMenu = DB::table('m_produk')
-            ->select('m_produk_id')
-            ->whereNotIn('m_produk_m_jenis_produk_id', [9, 11, 12, 13])->get();
+        // $getMenu = DB::table('m_produk')
+        //     ->select('m_produk_id')
+        //     ->whereNotIn('m_produk_m_jenis_produk_id', [9, 11, 12, 13])->get();
 
-        $listMenu = [];
-        foreach ($getMenu as $key => $valMenu) {
-            array_push($listMenu, $valMenu->m_produk_id);
-        }
+        // $listMenu = [];
+        // foreach ($getMenu as $key => $valMenu) {
+        //     array_push($listMenu, $valMenu->m_produk_id);
+        // }
 
-        $getNonMenu = DB::table('m_produk')
-            ->select('m_produk_id')
-            ->whereIn('m_produk_m_jenis_produk_id', [9, 11])->get();
-        $listNonMenu = [];
-        foreach ($getNonMenu as $key => $valMenu) {
-            array_push($listNonMenu, $valMenu->m_produk_id);
-        }
+        // $getNonMenu = DB::table('m_produk')
+        //     ->select('m_produk_id')
+        //     ->whereIn('m_produk_m_jenis_produk_id', [9, 11])->get();
+        // $listNonMenu = [];
+        // foreach ($getNonMenu as $key => $valMenu) {
+        //     array_push($listNonMenu, $valMenu->m_produk_id);
+        // }
 
         $arrayListRekap = [];
         foreach ($rekap as $keyRekap => $valRekap) {
@@ -207,49 +206,88 @@ class RekapNonMenuController extends Controller
 
         $listRekap = array_unique($arrayListRekap);
         // return $listRekap;
-        $getIceCream = DB::table('m_produk')
-            ->join('config_sub_jenis_produk', 'config_sub_jenis_produk_m_produk_id', '=', 'm_produk_id')
-            ->select('m_produk_id')
-            ->whereIn('config_sub_jenis_produk_m_sub_jenis_produk_id', [20, 22, 23, 24, 25])->get();
-        $listIceCream = [];
-        foreach ($getIceCream as $key => $valMenu) {
-            array_push($listIceCream, $valMenu->m_produk_id);
-        }
-        $getMineral = DB::table('m_produk')
-            ->join('config_sub_jenis_produk', 'config_sub_jenis_produk_m_produk_id', '=', 'm_produk_id')
-            ->select('m_produk_id')
-            ->whereIn('config_sub_jenis_produk_m_sub_jenis_produk_id', [12])->get();
-        $listMineral = [];
-        foreach ($getMineral as $key => $valMenu) {
-            array_push($listMineral, $valMenu->m_produk_id);
-        }
+        // $getIceCream = DB::table('m_produk')
+        //     ->join('config_sub_jenis_produk', 'config_sub_jenis_produk_m_produk_id', '=', 'm_produk_id')
+        //     ->select('m_produk_id')
+        //     ->whereIn('config_sub_jenis_produk_m_sub_jenis_produk_id', [20, 22, 23, 24, 25])->get();
+        // $listIceCream = [];
+        // foreach ($getIceCream as $key => $valMenu) {
+        //     array_push($listIceCream, $valMenu->m_produk_id);
+        // }
+        // $getMineral = DB::table('m_produk')
+        //     ->join('config_sub_jenis_produk', 'config_sub_jenis_produk_m_produk_id', '=', 'm_produk_id')
+        //     ->select('m_produk_id')
+        //     ->whereIn('config_sub_jenis_produk_m_sub_jenis_produk_id', [12])->get();
+        // $listMineral = [];
+        // foreach ($getMineral as $key => $valMenu) {
+        //     array_push($listMineral, $valMenu->m_produk_id);
+        // }
 
-        $getKerupuk = DB::table('m_produk')
-            ->join('config_sub_jenis_produk', 'config_sub_jenis_produk_m_produk_id', '=', 'm_produk_id')
-            ->select('m_produk_id')
-            ->whereIn('config_sub_jenis_produk_m_sub_jenis_produk_id', [47])->get();
-        $listKerupuk = [];
-        foreach ($getKerupuk as $key => $valMenu) {
-            array_push($listKerupuk, $valMenu->m_produk_id);
-        }
+        // $getKerupuk = DB::table('m_produk')
+        //     ->join('config_sub_jenis_produk', 'config_sub_jenis_produk_m_produk_id', '=', 'm_produk_id')
+        //     ->select('m_produk_id')
+        //     ->whereIn('config_sub_jenis_produk_m_sub_jenis_produk_id', [47])->get();
+        // $listKerupuk = [];
+        // foreach ($getKerupuk as $key => $valMenu) {
+        //     array_push($listKerupuk, $valMenu->m_produk_id);
+        // }
 
-        $getWbdFrozen = DB::table('m_produk')
-            ->join('config_sub_jenis_produk', 'config_sub_jenis_produk_m_produk_id', '=', 'm_produk_id')
-            ->select('m_produk_id')
-            ->whereIn('config_sub_jenis_produk_m_sub_jenis_produk_id', [45])->get();
-        $listWbdFrozen = [];
-        foreach ($getWbdFrozen as $key => $valMenu) {
-            array_push($listWbdFrozen, $valMenu->m_produk_id);
-        }
+        // $getWbdFrozen = DB::table('m_produk')
+        //     ->join('config_sub_jenis_produk', 'config_sub_jenis_produk_m_produk_id', '=', 'm_produk_id')
+        //     ->select('m_produk_id')
+        //     ->whereIn('config_sub_jenis_produk_m_sub_jenis_produk_id', [45])->get();
+        // $listWbdFrozen = [];
+        // foreach ($getWbdFrozen as $key => $valMenu) {
+        //     array_push($listWbdFrozen, $valMenu->m_produk_id);
+        // }
 
-        $getKbd = DB::table('m_produk')
-            ->select('m_produk_id')
+        // $getKbd = DB::table('m_produk')
+        //     ->select('m_produk_id')
+        //     ->whereIn('m_produk_m_jenis_produk_id', [11])
+        //     ->get();
+        // $listKbd = [];
+        // foreach ($getKbd as $key => $valMenu) {
+        //     array_push($listKbd, $valMenu->m_produk_id);
+        // }
+
+        $listMenu = DB::table('m_produk')
+            ->whereNotIn('m_produk_m_jenis_produk_id', [9, 11, 12, 13])
+            ->pluck('m_produk_id')
+            ->toArray();
+
+        $listNonMenu = DB::table('m_produk')
+            ->whereIn('m_produk_m_jenis_produk_id', [9, 11])
+            ->pluck('m_produk_id')
+            ->toArray();
+
+        $listIceCream = DB::table('m_produk')
+            ->join('config_sub_jenis_produk', 'config_sub_jenis_produk_m_produk_id', '=', 'm_produk_id')
+            ->whereIn('config_sub_jenis_produk_m_sub_jenis_produk_id', [20, 22, 23, 24, 25])
+            ->pluck('m_produk_id')
+            ->toArray();
+
+        $listMineral = DB::table('m_produk')
+            ->join('config_sub_jenis_produk', 'config_sub_jenis_produk_m_produk_id', '=', 'm_produk_id')
+            ->whereIn('config_sub_jenis_produk_m_sub_jenis_produk_id', [12])
+            ->pluck('m_produk_id')
+            ->toArray();
+
+        $listKerupuk = DB::table('m_produk')
+            ->join('config_sub_jenis_produk', 'config_sub_jenis_produk_m_produk_id', '=', 'm_produk_id')
+            ->whereIn('config_sub_jenis_produk_m_sub_jenis_produk_id', [47])
+            ->pluck('m_produk_id')
+            ->toArray();
+
+        $listWbdFrozen = DB::table('m_produk')
+            ->join('config_sub_jenis_produk', 'config_sub_jenis_produk_m_produk_id', '=', 'm_produk_id')
+            ->whereIn('config_sub_jenis_produk_m_sub_jenis_produk_id', [45])
+            ->pluck('m_produk_id')
+            ->toArray();
+
+        $listKbd = DB::table('m_produk')
             ->whereIn('m_produk_m_jenis_produk_id', [11])
-            ->get();
-        $listKbd = [];
-        foreach ($getKbd as $key => $valMenu) {
-            array_push($listKbd, $valMenu->m_produk_id);
-        }
+            ->pluck('m_produk_id')
+            ->toArray();
 
         #List of transaction type
         $tipe = ['dine in', 'take away', 'grab', 'gojek', 'shopeefood', 'grabmart'];
@@ -633,6 +671,24 @@ class RekapNonMenuController extends Controller
             ->orderBy('sesi', 'asc')
             ->get();
 
+        // $rekap = DB::table('rekap_non_menu');
+        // if (strpos($request->tanggal, 'to') !== false) {
+        //     $dates = explode('to', $request->tanggal);
+        //     $rekap->whereBetween('tanggal', $dates);
+        // } else {
+        //     $rekap->where('tanggal', $request->tanggal);
+        // }
+        // if ($request->area != 'all') {
+        //     $rekap->where('m_area_id', $request->area);
+        //     if ($request->waroeng != 'all') {
+        //         $rekap->where('m_w_id', $request->waroeng);
+        //     }
+        // }
+        // $rekap = $rekap->orderBy('tanggal', 'asc')
+        //     ->orderBy('m_w_nama', 'asc')
+        //     ->orderBy('sesi', 'asc')
+        //     ->get();
+
         $countNota = DB::table('rekap_transaksi')
             ->selectRaw('r_t_m_t_t_id type_id, r_t_rekap_modal_id modal_id, COUNT(r_t_id) jml')
             ->join('m_transaksi_tipe', 'm_t_t_id', 'r_t_m_t_t_id')
@@ -658,73 +714,113 @@ class RekapNonMenuController extends Controller
             $countNotaArray[$valNot->type_id . "-" . $valNot->modal_id] = $valNot->jml;
         }
 
-        $getMenu = DB::table('m_produk')
-            ->select('m_produk_id')
-            ->whereNotIn('m_produk_m_jenis_produk_id', [9, 11, 12, 13])->get();
-
-        $listMenu = [];
-        foreach ($getMenu as $key => $valMenu) {
-            array_push($listMenu, $valMenu->m_produk_id);
-        }
-
-        $getNonMenu = DB::table('m_produk')
-            ->select('m_produk_id')
-            ->whereIn('m_produk_m_jenis_produk_id', [9, 11])->get();
-        $listNonMenu = [];
-        foreach ($getNonMenu as $key => $valMenu) {
-            array_push($listNonMenu, $valMenu->m_produk_id);
-        }
-
         $arrayListRekap = [];
         foreach ($rekap as $keyRekap => $valRekap) {
             array_push($arrayListRekap, $valRekap->rekap_modal_id);
         }
 
         $listRekap = array_unique($arrayListRekap);
+
+        // $getMenu = DB::table('m_produk')
+        //     ->select('m_produk_id')
+        //     ->whereNotIn('m_produk_m_jenis_produk_id', [9, 11, 12, 13])->get();
+
+        // $listMenu = [];
+        // foreach ($getMenu as $key => $valMenu) {
+        //     array_push($listMenu, $valMenu->m_produk_id);
+        // }
+
+        // $getNonMenu = DB::table('m_produk')
+        //     ->select('m_produk_id')
+        //     ->whereIn('m_produk_m_jenis_produk_id', [9, 11])->get();
+        // $listNonMenu = [];
+        // foreach ($getNonMenu as $key => $valMenu) {
+        //     array_push($listNonMenu, $valMenu->m_produk_id);
+        // }
+
         // return $listRekap;
-        $getIceCream = DB::table('m_produk')
-            ->join('config_sub_jenis_produk', 'config_sub_jenis_produk_m_produk_id', '=', 'm_produk_id')
-            ->select('m_produk_id')
-            ->whereIn('config_sub_jenis_produk_m_sub_jenis_produk_id', [20, 22, 23, 24, 25])->get();
-        $listIceCream = [];
-        foreach ($getIceCream as $key => $valMenu) {
-            array_push($listIceCream, $valMenu->m_produk_id);
-        }
-        $getMineral = DB::table('m_produk')
-            ->join('config_sub_jenis_produk', 'config_sub_jenis_produk_m_produk_id', '=', 'm_produk_id')
-            ->select('m_produk_id')
-            ->whereIn('config_sub_jenis_produk_m_sub_jenis_produk_id', [12])->get();
-        $listMineral = [];
-        foreach ($getMineral as $key => $valMenu) {
-            array_push($listMineral, $valMenu->m_produk_id);
-        }
+        // $getIceCream = DB::table('m_produk')
+        //     ->join('config_sub_jenis_produk', 'config_sub_jenis_produk_m_produk_id', '=', 'm_produk_id')
+        //     ->select('m_produk_id')
+        //     ->whereIn('config_sub_jenis_produk_m_sub_jenis_produk_id', [20, 22, 23, 24, 25])->get();
+        // $listIceCream = [];
+        // foreach ($getIceCream as $key => $valMenu) {
+        //     array_push($listIceCream, $valMenu->m_produk_id);
+        // }
+        // $getMineral = DB::table('m_produk')
+        //     ->join('config_sub_jenis_produk', 'config_sub_jenis_produk_m_produk_id', '=', 'm_produk_id')
+        //     ->select('m_produk_id')
+        //     ->whereIn('config_sub_jenis_produk_m_sub_jenis_produk_id', [12])->get();
+        // $listMineral = [];
+        // foreach ($getMineral as $key => $valMenu) {
+        //     array_push($listMineral, $valMenu->m_produk_id);
+        // }
 
-        $getKerupuk = DB::table('m_produk')
-            ->join('config_sub_jenis_produk', 'config_sub_jenis_produk_m_produk_id', '=', 'm_produk_id')
-            ->select('m_produk_id')
-            ->whereIn('config_sub_jenis_produk_m_sub_jenis_produk_id', [47])->get();
-        $listKerupuk = [];
-        foreach ($getKerupuk as $key => $valMenu) {
-            array_push($listKerupuk, $valMenu->m_produk_id);
-        }
+        // $getKerupuk = DB::table('m_produk')
+        //     ->join('config_sub_jenis_produk', 'config_sub_jenis_produk_m_produk_id', '=', 'm_produk_id')
+        //     ->select('m_produk_id')
+        //     ->whereIn('config_sub_jenis_produk_m_sub_jenis_produk_id', [47])->get();
+        // $listKerupuk = [];
+        // foreach ($getKerupuk as $key => $valMenu) {
+        //     array_push($listKerupuk, $valMenu->m_produk_id);
+        // }
 
-        $getWbdFrozen = DB::table('m_produk')
-            ->join('config_sub_jenis_produk', 'config_sub_jenis_produk_m_produk_id', '=', 'm_produk_id')
-            ->select('m_produk_id')
-            ->whereIn('config_sub_jenis_produk_m_sub_jenis_produk_id', [45])->get();
-        $listWbdFrozen = [];
-        foreach ($getWbdFrozen as $key => $valMenu) {
-            array_push($listWbdFrozen, $valMenu->m_produk_id);
-        }
+        // $getWbdFrozen = DB::table('m_produk')
+        //     ->join('config_sub_jenis_produk', 'config_sub_jenis_produk_m_produk_id', '=', 'm_produk_id')
+        //     ->select('m_produk_id')
+        //     ->whereIn('config_sub_jenis_produk_m_sub_jenis_produk_id', [45])->get();
+        // $listWbdFrozen = [];
+        // foreach ($getWbdFrozen as $key => $valMenu) {
+        //     array_push($listWbdFrozen, $valMenu->m_produk_id);
+        // }
 
-        $getKbd = DB::table('m_produk')
-            ->select('m_produk_id')
+        // $getKbd = DB::table('m_produk')
+        //     ->select('m_produk_id')
+        //     ->whereIn('m_produk_m_jenis_produk_id', [11])
+        //     ->get();
+        // $listKbd = [];
+        // foreach ($getKbd as $key => $valMenu) {
+        //     array_push($listKbd, $valMenu->m_produk_id);
+        // }
+
+        $listMenu = DB::table('m_produk')
+            ->whereNotIn('m_produk_m_jenis_produk_id', [9, 11, 12, 13])
+            ->pluck('m_produk_id')
+            ->toArray();
+
+        $listNonMenu = DB::table('m_produk')
+            ->whereIn('m_produk_m_jenis_produk_id', [9, 11])
+            ->pluck('m_produk_id')
+            ->toArray();
+
+        $listIceCream = DB::table('m_produk')
+            ->join('config_sub_jenis_produk', 'config_sub_jenis_produk_m_produk_id', '=', 'm_produk_id')
+            ->whereIn('config_sub_jenis_produk_m_sub_jenis_produk_id', [20, 22, 23, 24, 25])
+            ->pluck('m_produk_id')
+            ->toArray();
+
+        $listMineral = DB::table('m_produk')
+            ->join('config_sub_jenis_produk', 'config_sub_jenis_produk_m_produk_id', '=', 'm_produk_id')
+            ->whereIn('config_sub_jenis_produk_m_sub_jenis_produk_id', [12])
+            ->pluck('m_produk_id')
+            ->toArray();
+
+        $listKerupuk = DB::table('m_produk')
+            ->join('config_sub_jenis_produk', 'config_sub_jenis_produk_m_produk_id', '=', 'm_produk_id')
+            ->whereIn('config_sub_jenis_produk_m_sub_jenis_produk_id', [47])
+            ->pluck('m_produk_id')
+            ->toArray();
+
+        $listWbdFrozen = DB::table('m_produk')
+            ->join('config_sub_jenis_produk', 'config_sub_jenis_produk_m_produk_id', '=', 'm_produk_id')
+            ->whereIn('config_sub_jenis_produk_m_sub_jenis_produk_id', [45])
+            ->pluck('m_produk_id')
+            ->toArray();
+
+        $listKbd = DB::table('m_produk')
             ->whereIn('m_produk_m_jenis_produk_id', [11])
-            ->get();
-        $listKbd = [];
-        foreach ($getKbd as $key => $valMenu) {
-            array_push($listKbd, $valMenu->m_produk_id);
-        }
+            ->pluck('m_produk_id')
+            ->toArray();
 
         #List of transaction type
         $tipe = ['dine in', 'take away', 'grab', 'gojek', 'shopeefood', 'grabmart'];
