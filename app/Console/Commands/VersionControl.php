@@ -141,6 +141,8 @@ class VersionControl extends Command
                             'log_version_m_w_id' => $getLocalSipedas->db_con_m_w_id
                         ],
                         [
+                            'log_version_m_w_id' => $getLocalSipedas->db_con_m_w_id,
+                            'log_version_m_w_nama' => $getLocalSipedas->db_con_location_name,
                             $fieldApp => $version
                         ]
                     );
