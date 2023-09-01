@@ -141,7 +141,15 @@ Route::prefix('dashboard')->middleware('auth', 'web')
             Route::get('non_menu/show', 'show')->name('non_menu.show');
             Route::get('non_menu/select_waroeng', 'select_waroeng')->name('non_menu.select_waroeng');
             Route::get('non_menu/select_user', 'select_user')->name('non_menu.select_user');
-            Route::get('non_menu/rekap_non_menu', 'rekap_non_menu')->name('non_menu.rekap_non_menu');
+            // Route::get('non_menu/rekap_non_menu', 'rekap_non_menu')->name('non_menu.rekap_non_menu');
             Route::get('non_menu/export_excel', 'export_excel')->name('non_menu.export_excel');
+        });
+
+        Route::controller(RekapSelisihController::class)->group(function () {
+            Route::get('rekap_selisih', 'index')->name('rekap_selisih.index');
+            Route::get('rekap_selisih/show', 'show')->name('rekap_selisih.show');
+            Route::get('rekap_selisih/select_waroeng', 'select_waroeng')->name('rekap_selisih.select_waroeng');
+            Route::get('rekap_selisih/select_user', 'select_user')->name('rekap_selisih.select_user');
+            Route::get('rekap_selisih/export_excel', 'export_excel')->name('rekap_selisih.export_excel');
         });
     });

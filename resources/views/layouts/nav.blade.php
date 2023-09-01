@@ -509,7 +509,7 @@
                                                     class="nav-main-item{{ request()->is('dashboard/nontransaksi') ? ' open' : '' }}">
                                                     <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu"
                                                         aria-haspopup="true" aria-expanded="true" href="#">
-                                                        <span class="nav-main-link-name">Laporan Refund Lostbill Garansi</span>
+                                                        <span class="nav-main-link-name">Laporan Biaya</span>
                                                     </a>
                                                     <ul class="nav-main-submenu">
                                                         <li class="nav-main-item">
@@ -528,6 +528,13 @@
                                                             <a class="nav-main-link{{ request()->is('dashboard/rekap_garansi') ? ' active' : '' }}"
                                                                 href="{{ route('rekap_garansi.index') }}">
                                                                 <span class="nav-main-link-name">Rekap Garansi</span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="nav-main-item">
+                                                            <a class="nav-main-link{{ request()->is('dashboard/rekap_selisih') ? ' active' : '' }}"
+                                                                href="{{ route('rekap_selisih.index') }}">
+                                                                <span class="nav-main-link-name">Rekap Selisih, Pembulatan dan Free
+                                                                    Kembalian</span>
                                                             </a>
                                                         </li>
                                                     </ul>
