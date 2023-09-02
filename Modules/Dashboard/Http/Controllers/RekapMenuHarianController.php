@@ -175,7 +175,7 @@ class RekapMenuHarianController extends Controller
             }
             if (!empty($garansi_notnull)) {
                 foreach ($garansi_qty as $key => $valGaransi) {
-                    if ($val_menu->r_t_detail_m_produk_id == $valGaransi->rekap_garansi_m_produk_id && $val_menu->r_t_tanggal == $valGaransi->r_t_tanggal) {
+                    if ($val_menu->r_t_detail_m_produk_id == $valGaransi->rekap_garansi_m_produk_id && $val_menu->r_t_tanggal == $valGaransi->r_t_tanggal && $val_menu->m_t_t_id == $valGaransi->m_t_t_id) {
                         $qty = $qty + $valGaransi->qty;
                         $pajakMenu = $pajakMenu + (($val_menu->r_t_detail_reguler_price * $valGaransi->qty) * 0.1);
                     }

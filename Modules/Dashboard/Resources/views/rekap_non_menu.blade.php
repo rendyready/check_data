@@ -94,14 +94,33 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-md-5">
-                                    <button type="button" id="cari" class="btn btn-primary btn-sm mb-3">Cari</button>
-                                    <a class="btn btn-sm btn-primary mb-3" id="export_excel" style="display: none;">Export
-                                        Excel <span id="export_loading" style="display: none;"><img
-                                                src="{{ asset('media/gif/loading.gif') }}" alt="Loading..."
-                                                style="max-width: 16px; max-height: 16px;"></span></a>
+                                <div class="col-md-7">
+                                    <div class="row">
+                                        <div class="col-sm-1">
+                                            <button type="button" id="cari"
+                                                class="btn btn-primary btn-sm mb-3 mt-1">Cari</button>
+                                        </div>
+                                        {{-- <div class="col-md-6">
+                                            <select id="export_option" class="form-control js-select2"
+                                                data-placeholder="Pilih Opsi Export" style="width: 100%;">
+                                                <option></option>
+                                                <option value="daily">Per Hari</option>
+                                                <option value="monthly">Per Bulan</option>
+                                            </select>
+                                        </div> --}}
+                                        <div class="col-md-4">
+                                            <a class="btn btn-sm btn-primary mb-3 mt-1" id="export_excel"
+                                                style="display: none;">Export Excel <span id="export_loading"
+                                                    style="display: none;"><img src="{{ asset('media/gif/loading.gif') }}"
+                                                        alt="Loading..."
+                                                        style="max-width: 16px; max-height: 16px;"></span></a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+
+
+
                         </form>
 
                         <div id="tampil" class="table-responsive text-center">
@@ -175,6 +194,7 @@
             </div>
         </div>
     </div>
+
 @endsection
 @section('js')
     <!-- js -->
@@ -256,6 +276,9 @@
             });
 
             // $("#export_excel").hide();
+            $('#export_option').on('change', function() {
+                $("#export_excel").show();
+            });
 
             $('#export_excel').on('click', function() {
                 var area = $('.filter_area option:selected').val();
@@ -286,7 +309,6 @@
                         $('#export_excel').prop('disabled', false);
                     }
                 });
-
             });
 
             if (HakAksesPusat) {
