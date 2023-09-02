@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class ManualUploadSeeder extends Seeder
 {
@@ -28,7 +29,7 @@ class ManualUploadSeeder extends Seeder
 
         DB::table('rekap_hapus_transaksi')
             ->where('r_h_t_tanggal', '>', '2023-08-26')
-            ->update(['r_h_m_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
+            ->update(['r_h_t_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
 
         DB::table('rekap_hapus_transaksi_detail')
             ->join('rekap_hapus_transaksi', 'r_h_t_id', 'r_h_t_detail_r_h_t_id')
