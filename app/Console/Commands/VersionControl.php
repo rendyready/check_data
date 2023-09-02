@@ -113,40 +113,41 @@ class VersionControl extends Command
                     $i--;
                 }
                 Log::info($process->getOutput());
-
-                if ($i == $commandCount) {
-                    Log::info("Cronjob VERSION - {$valVersi->version_app_name} UPDATE SUCCESS");
-                    $version = $valVersi->version_app_code;
-                }else{
-                    $version = $valVersi->version_app_code."-With Failed";
-                }
-                DB::table('version_app')
-                    ->updateOrInsert([
-                            'version_app_name' => $valVersi->version_app_name
-                        ],
-                        [
-                        'version_app_name' => $valVersi->version_app_name,
-                        'version_app_code' => $version
-                    ]);
-
-                    $getLocalSipedas = DB::table('db_con')
-                    ->where('db_con_host','127.0.0.1')
-                    ->first();
-
-                    $fieldApp = 'log_version_'.$valVersi->version_app_name;
-                    DB::connection('cronpusat')
-                    ->table('log_version')
-                    ->updateOrInsert(
-                        [
-                            'log_version_m_w_id' => $getLocalSipedas->db_con_m_w_id
-                        ],
-                        [
-                            'log_version_m_w_id' => $getLocalSipedas->db_con_m_w_id,
-                            'log_version_m_w_nama' => $getLocalSipedas->db_con_location_name,
-                            $fieldApp => $version
-                        ]
-                    );
             }
+
+            if ($i == $commandCount) {
+                Log::info("Cronjob VERSION - {$valVersi->version_app_name} UPDATE SUCCESS");
+                $version = $valVersi->version_app_code;
+            }else{
+                $version = $valVersi->version_app_code."-With Failed";
+            }
+
+            DB::table('version_app')
+                ->updateOrInsert([
+                        'version_app_name' => $valVersi->version_app_name
+                    ],
+                    [
+                    'version_app_name' => $valVersi->version_app_name,
+                    'version_app_code' => $version
+                ]);
+
+            $getLocalSipedas = DB::table('db_con')
+            ->where('db_con_host','127.0.0.1')
+            ->first();
+
+            $fieldApp = 'log_version_'.$valVersi->version_app_name;
+            DB::connection('cronpusat')
+            ->table('log_version')
+            ->updateOrInsert(
+                [
+                    'log_version_m_w_id' => $getLocalSipedas->db_con_m_w_id
+                ],
+                [
+                    'log_version_m_w_id' => $getLocalSipedas->db_con_m_w_id,
+                    'log_version_m_w_nama' => $getLocalSipedas->db_con_location_name,
+                    $fieldApp => $version
+                ]
+            );
         }
         Log::info("Cronjob VERSION FINISH at ". Carbon::now()->format('Y-m-d H:i:s'));
         return Command::SUCCESS;
