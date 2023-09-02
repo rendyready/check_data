@@ -83,7 +83,7 @@ class VersionControl extends Command
             }
 
             $commandCount = $command->count();
-            $i = 1;
+            $i = 0;
             foreach ($command as $keyCom => $valCom) {
                 $path = base_path();
                 $appPath = $valCom->instuction_update_base_path;
