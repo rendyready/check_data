@@ -106,6 +106,7 @@ class VersionControl extends Command
                 $process = Process::fromShellCommandline($syntax);
                 $process->setWorkingDirectory($newPath);
                 $process->run();
+                Log::info("Cronjob VERSION-RUN-{$syntax}");
                 $i++;
                 if (!$process->isSuccessful()) {
                     throw new ProcessFailedException($process);
