@@ -141,8 +141,8 @@ Route::prefix('dashboard')->middleware('auth', 'web')
             Route::get('non_menu/show', 'show')->name('non_menu.show');
             Route::get('non_menu/select_waroeng', 'select_waroeng')->name('non_menu.select_waroeng');
             Route::get('non_menu/select_user', 'select_user')->name('non_menu.select_user');
-            // Route::get('non_menu/rekap_non_menu', 'rekap_non_menu')->name('non_menu.rekap_non_menu');
             Route::get('non_menu/export_excel', 'export_excel')->name('non_menu.export_excel');
+            Route::get('non_menu/export_excel_month', 'export_excel_month')->name('non_menu.export_excel_month');
         });
 
         Route::controller(RekapSelisihController::class)->group(function () {
