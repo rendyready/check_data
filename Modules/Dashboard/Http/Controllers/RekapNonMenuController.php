@@ -866,8 +866,8 @@ class RekapNonMenuController extends Controller
                                 ${$valListRekap . '-' . $valTipe . '-jmlnota'} = $countNotaArray[$valRekap->type_id . '-' . $valListRekap];
                             }
                         }
-                        $data[$valListRekap][$valTipe . '-menu'] = number_format(${$valListRekap . '-' . $valTipe . '-menu'});
-                        $data[$valListRekap][$valTipe . '-nonmenu'] = number_format(${$valListRekap . '-' . $valTipe . '-nonmenu'});
+                        $data[$valListRekap][$valTipe . '-menu'] = ${$valListRekap . '-' . $valTipe . '-menu'};
+                        $data[$valListRekap][$valTipe . '-nonmenu'] = ${$valListRekap . '-' . $valTipe . '-nonmenu'};
                         $data[$valListRekap][$valTipe . '-jmlnota'] = ${$valRekap->rekap_modal_id . '-' . $valTipe . '-jmlnota'};
                     }
                 }
@@ -894,7 +894,7 @@ class RekapNonMenuController extends Controller
                         $valIceCream = ($valRekap->price * $qty) + $valRekap->kemasan;
                         ${$valListRekap . '-icecream'} += $valIceCream;
                     }
-                    $data[$valListRekap]['icecream'] = number_format(${$valListRekap . '-icecream'});
+                    $data[$valListRekap]['icecream'] = ${$valListRekap . '-icecream'};
 
                     if (in_array($valRekap->m_produk_id, $listMineral)) {
                         $qty = $valRekap->qty;
@@ -915,7 +915,7 @@ class RekapNonMenuController extends Controller
                         $valMineral = ($valRekap->price * $qty) + $valRekap->kemasan;
                         ${$valListRekap . '-mineral'} += $valMineral;
                     }
-                    $data[$valListRekap]['mineral'] = number_format(${$valListRekap . '-mineral'});
+                    $data[$valListRekap]['mineral'] = ${$valListRekap . '-mineral'};
 
                     if (in_array($valRekap->m_produk_id, $listKerupuk)) {
                         $qty = $valRekap->qty;
@@ -936,7 +936,7 @@ class RekapNonMenuController extends Controller
                         $valKerupuk = ($valRekap->price * $qty) + $valRekap->kemasan;
                         ${$valListRekap . '-krupuk'} += $valKerupuk;
                     }
-                    $data[$valListRekap]['krupuk'] = number_format(${$valListRekap . '-krupuk'});
+                    $data[$valListRekap]['krupuk'] = ${$valListRekap . '-krupuk'};
 
                     if (in_array($valRekap->m_produk_id, $listKbd) && !in_array($valRekap->m_produk_id, $listWbdFrozen)) {
                         $qty = $valRekap->qty;
@@ -957,7 +957,7 @@ class RekapNonMenuController extends Controller
                         $valWbdBB = ($valRekap->price * $qty) + $valRekap->kemasan;
                         ${$valListRekap . '-wbdbb'} += $valWbdBB;
                     }
-                    $data[$valListRekap]['wbdbb'] = number_format(${$valListRekap . '-wbdbb'});
+                    $data[$valListRekap]['wbdbb'] = ${$valListRekap . '-wbdbb'};
 
                     if (in_array($valRekap->m_produk_id, $listWbdFrozen)) {
                         $qty = $valRekap->qty;
@@ -978,20 +978,13 @@ class RekapNonMenuController extends Controller
                         $valWbdFrozen = ($valRekap->price * $qty) + $valRekap->kemasan;
                         ${$valListRekap . '-wbdfrozen'} += $valWbdFrozen;
                     }
-                    $data[$valListRekap]['wbdfrozen'] = number_format(${$valListRekap . '-wbdfrozen'});
+                    $data[$valListRekap]['wbdfrozen'] = ${$valListRekap . '-wbdfrozen'};
                     if (in_array($valRekap->type_name, ['dine in', 'take away'])) {
                         $valPajak = $valRekap->pajak;
                         if (!empty($refundCek)) {
                             foreach ($refund as $valRefund) {
                                 if ($valRekap->m_produk_id == $valRefund->r_r_detail_m_produk_id && $valRekap->tanggal == $valRefund->tanggal && $valRekap->sesi == $valRefund->sesi && $valRekap->type_id == $valRefund->r_t_m_t_t_id) {
                                     $valPajak = $valPajak - $valRefund->pajak_refund;
-                                }
-                            }
-                        }
-                        if (!empty($garansi_notnull)) {
-                            foreach ($garansi_nominal as $valGaransi) {
-                                if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->sesi == $valGaransi->sesi && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
-                                    $valPajak = $valPajak + $valGaransi->pajak_garansi;
                                 }
                             }
                         }
@@ -1005,22 +998,15 @@ class RekapNonMenuController extends Controller
                                 }
                             }
                         }
-                        if (!empty($garansi_notnull)) {
-                            foreach ($garansi_nominal as $valGaransi) {
-                                if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->sesi == $valGaransi->sesi && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
-                                    $valPajak = $valPajak + $valGaransi->pajak_garansi;
-                                }
-                            }
-                        }
                         ${$valListRekap . '-pajakojol'} += $valPajak;
                     }
-                    $data[$valListRekap]['pajakreguler'] = number_format(${$valListRekap . '-pajakreguler'});
-                    $data[$valListRekap]['pajakojol'] = number_format(${$valListRekap . '-pajakojol'});
+                    $data[$valListRekap]['pajakreguler'] = ${$valListRekap . '-pajakreguler'};
+                    $data[$valListRekap]['pajakojol'] = ${$valListRekap . '-pajakojol'};
                 }
             }
         }
 
-        return Excel::download(new RekapNonMenuExport($data), 'Rekap Non Menu - ' . $request->tanggal . '.xlsx');
+        return Excel::download(new RekapNonMenuExport($data), 'Rekap Non Menu (per hari) - ' . $request->tanggal . '.xlsx');
     }
 
     public function export_excel_month(Request $request)
@@ -1030,10 +1016,8 @@ class RekapNonMenuController extends Controller
             ->join('rekap_transaksi', 'r_t_id', 'r_r_r_t_id')
             ->join('rekap_modal', 'rekap_modal_id', 'r_t_rekap_modal_id')
             ->selectRaw('
-                        MAX(r_r_tanggal) tanggal,
+                        r_r_tanggal as tanggal,
                         MAX(r_t_m_w_nama) m_w_nama,
-                        MAX(rekap_modal_sesi) sesi,
-                        rekap_modal_id,
                         r_r_detail_m_produk_id,
                         r_t_m_w_id,
                         r_t_m_t_t_id,
@@ -1052,10 +1036,9 @@ class RekapNonMenuController extends Controller
                 $refund->where('rekap_modal_m_w_id', $request->waroeng);
             }
         }
-        $refund = $refund->groupBy('rekap_modal_id', 'r_r_detail_m_produk_id', 'r_t_m_w_id', 'r_t_m_t_t_id')
+        $refund = $refund->groupBy('tanggal', 'r_r_detail_m_produk_id', 'r_t_m_w_id', 'r_t_m_t_t_id')
             ->orderBy('tanggal', 'asc')
             ->orderBy('m_w_nama', 'asc')
-            ->orderBy('sesi', 'asc')
             ->get();
 
         $refundCek = $refund->first();
@@ -1065,10 +1048,8 @@ class RekapNonMenuController extends Controller
             ->join('rekap_modal', 'rekap_modal_id', 'r_t_rekap_modal_id')
             ->join('m_transaksi_tipe', 'm_t_t_id', 'r_t_m_t_t_id')
             ->selectRaw('
-                MAX(r_t_tanggal) tanggal,
+                r_t_tanggal as tanggal,
                 MAX(r_t_m_w_nama) m_w_nama,
-                MAX(rekap_modal_sesi) sesi,
-                rekap_modal_id,
                 rekap_garansi_m_produk_id as produk_id,
                 r_t_m_w_id,
                 r_t_m_t_t_id,
@@ -1087,19 +1068,17 @@ class RekapNonMenuController extends Controller
                 $garansi->where('rekap_modal_m_w_id', $request->waroeng);
             }
         }
-        $garansi_nominal = $garansi->groupBy('rekap_modal_id', 'produk_id', 'r_t_m_w_id', 'r_t_m_t_t_id')
+        $garansi_nominal = $garansi->groupBy('tanggal', 'produk_id', 'r_t_m_w_id', 'r_t_m_t_t_id')
             ->get();
         $garansi_notnull = $garansi->first();
 
         $rekap = DB::table('rekap_transaksi_detail')
             ->selectRaw('
-                        rekap_modal_id,
                         MAX(r_t_m_area_id) m_area_id,
                         MAX(r_t_m_area_nama) m_area_nama,
                         r_t_m_w_id m_w_id,
                         MAX(r_t_m_w_nama) m_w_nama,
-                        MAX(r_t_tanggal) tanggal,
-                        MAX(rekap_modal_sesi) sesi,
+                        r_t_tanggal as tanggal,
                         MAX(name) kasir,
                         MAX(r_t_m_t_t_id) type_id,
                         MAX(m_t_t_name) type_name,
@@ -1126,14 +1105,13 @@ class RekapNonMenuController extends Controller
                 $rekap->where('r_t_m_w_id', $request->waroeng);
             }
         }
-        $rekap = $rekap->groupBy('rekap_modal_id', 'r_t_detail_m_produk_id', 'r_t_m_w_id', 'm_t_t_id')
+        $rekap = $rekap->groupBy('tanggal', 'r_t_detail_m_produk_id', 'r_t_m_w_id', 'm_t_t_id')
             ->orderBy('tanggal', 'asc')
             ->orderBy('m_w_nama', 'asc')
-            ->orderBy('sesi', 'asc')
             ->get();
 
         $countNota = DB::table('rekap_transaksi')
-            ->selectRaw('r_t_m_t_t_id type_id, r_t_rekap_modal_id modal_id, COUNT(r_t_id) jml')
+            ->selectRaw('r_t_m_t_t_id type_id, r_t_tanggal as tanggal, COUNT(r_t_id) jml')
             ->join('m_transaksi_tipe', 'm_t_t_id', 'r_t_m_t_t_id')
             ->join('rekap_modal', 'rekap_modal_id', 'r_t_rekap_modal_id');
         if (strpos($request->tanggal, 'to') !== false) {
@@ -1149,17 +1127,17 @@ class RekapNonMenuController extends Controller
             }
         }
         $countNota = $countNota->where('r_t_status', 'paid')
-            ->groupBy('r_t_rekap_modal_id', 'r_t_m_t_t_id')
+            ->groupBy('tanggal', 'r_t_m_t_t_id')
             ->get();
 
         $countNotaArray = [];
         foreach ($countNota as $keyNot => $valNot) {
-            $countNotaArray[$valNot->type_id . "-" . $valNot->modal_id] = $valNot->jml;
+            $countNotaArray[$valNot->type_id . "-" . $valNot->tanggal] = $valNot->jml;
         }
 
         $arrayListRekap = [];
         foreach ($rekap as $keyRekap => $valRekap) {
-            array_push($arrayListRekap, $valRekap->rekap_modal_id);
+            array_push($arrayListRekap, $valRekap->tanggal);
         }
 
         $listRekap = array_unique($arrayListRekap);
@@ -1222,11 +1200,10 @@ class RekapNonMenuController extends Controller
                 ${$valListRekap . '-' . $valTipe . '-jmlnota'} = 0;
 
                 foreach ($rekap as $keyRekap => $valRekap) {
-                    if ($valRekap->rekap_modal_id == $valListRekap) {
+                    if ($valRekap->tanggal == $valListRekap) {
                         $data[$valListRekap]['area'] = $valRekap->m_area_nama;
                         $data[$valListRekap]['waroeng'] = $valRekap->m_w_nama;
                         $data[$valListRekap]['tanggal'] = date('d-m-Y', strtotime($valRekap->tanggal));
-                        $data[$valListRekap]['sesi'] = $valRekap->sesi;
                         $data[$valListRekap]['operator'] = $valRekap->kasir;
                         if ($valRekap->type_name == $valTipe) {
                             if (in_array($valRekap->m_produk_id, $listMenu)) {
@@ -1272,15 +1249,15 @@ class RekapNonMenuController extends Controller
                                 ${$valListRekap . '-' . $valTipe . '-jmlnota'} = $countNotaArray[$valRekap->type_id . '-' . $valListRekap];
                             }
                         }
-                        $data[$valListRekap][$valTipe . '-menu'] = number_format(${$valListRekap . '-' . $valTipe . '-menu'});
-                        $data[$valListRekap][$valTipe . '-nonmenu'] = number_format(${$valListRekap . '-' . $valTipe . '-nonmenu'});
-                        $data[$valListRekap][$valTipe . '-jmlnota'] = ${$valRekap->rekap_modal_id . '-' . $valTipe . '-jmlnota'};
+                        $data[$valListRekap][$valTipe . '-menu'] = ${$valListRekap . '-' . $valTipe . '-menu'};
+                        $data[$valListRekap][$valTipe . '-nonmenu'] = ${$valListRekap . '-' . $valTipe . '-nonmenu'};
+                        $data[$valListRekap][$valTipe . '-jmlnota'] = ${$valRekap->tanggal . '-' . $valTipe . '-jmlnota'};
                     }
                 }
             }
             // return $data;
             foreach ($rekap as $keyRekap => $valRekap) {
-                if ($valRekap->rekap_modal_id == $valListRekap) {
+                if ($valRekap->tanggal == $valListRekap) {
                     if (in_array($valRekap->m_produk_id, $listIceCream)) {
                         $qty = $valRekap->qty;
                         if (!empty($refundCek)) {
@@ -1300,7 +1277,7 @@ class RekapNonMenuController extends Controller
                         $valIceCream = ($valRekap->price * $qty) + $valRekap->kemasan;
                         ${$valListRekap . '-icecream'} += $valIceCream;
                     }
-                    $data[$valListRekap]['icecream'] = number_format(${$valListRekap . '-icecream'});
+                    $data[$valListRekap]['icecream'] = ${$valListRekap . '-icecream'};
 
                     if (in_array($valRekap->m_produk_id, $listMineral)) {
                         $qty = $valRekap->qty;
@@ -1321,7 +1298,7 @@ class RekapNonMenuController extends Controller
                         $valMineral = ($valRekap->price * $qty) + $valRekap->kemasan;
                         ${$valListRekap . '-mineral'} += $valMineral;
                     }
-                    $data[$valListRekap]['mineral'] = number_format(${$valListRekap . '-mineral'});
+                    $data[$valListRekap]['mineral'] = ${$valListRekap . '-mineral'};
 
                     if (in_array($valRekap->m_produk_id, $listKerupuk)) {
                         $qty = $valRekap->qty;
@@ -1342,7 +1319,7 @@ class RekapNonMenuController extends Controller
                         $valKerupuk = ($valRekap->price * $qty) + $valRekap->kemasan;
                         ${$valListRekap . '-krupuk'} += $valKerupuk;
                     }
-                    $data[$valListRekap]['krupuk'] = number_format(${$valListRekap . '-krupuk'});
+                    $data[$valListRekap]['krupuk'] = ${$valListRekap . '-krupuk'};
 
                     if (in_array($valRekap->m_produk_id, $listKbd) && !in_array($valRekap->m_produk_id, $listWbdFrozen)) {
                         $qty = $valRekap->qty;
@@ -1363,7 +1340,7 @@ class RekapNonMenuController extends Controller
                         $valWbdBB = ($valRekap->price * $qty) + $valRekap->kemasan;
                         ${$valListRekap . '-wbdbb'} += $valWbdBB;
                     }
-                    $data[$valListRekap]['wbdbb'] = number_format(${$valListRekap . '-wbdbb'});
+                    $data[$valListRekap]['wbdbb'] = ${$valListRekap . '-wbdbb'};
 
                     if (in_array($valRekap->m_produk_id, $listWbdFrozen)) {
                         $qty = $valRekap->qty;
@@ -1384,20 +1361,13 @@ class RekapNonMenuController extends Controller
                         $valWbdFrozen = ($valRekap->price * $qty) + $valRekap->kemasan;
                         ${$valListRekap . '-wbdfrozen'} += $valWbdFrozen;
                     }
-                    $data[$valListRekap]['wbdfrozen'] = number_format(${$valListRekap . '-wbdfrozen'});
+                    $data[$valListRekap]['wbdfrozen'] = ${$valListRekap . '-wbdfrozen'};
                     if (in_array($valRekap->type_name, ['dine in', 'take away'])) {
                         $valPajak = $valRekap->pajak;
                         if (!empty($refundCek)) {
                             foreach ($refund as $valRefund) {
                                 if ($valRekap->m_produk_id == $valRefund->r_r_detail_m_produk_id && $valRekap->tanggal == $valRefund->tanggal && $valRekap->sesi == $valRefund->sesi && $valRekap->type_id == $valRefund->r_t_m_t_t_id) {
                                     $valPajak = $valPajak - $valRefund->pajak_refund;
-                                }
-                            }
-                        }
-                        if (!empty($garansi_notnull)) {
-                            foreach ($garansi_nominal as $valGaransi) {
-                                if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->sesi == $valGaransi->sesi && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
-                                    $valPajak = $valPajak + $valGaransi->pajak_garansi;
                                 }
                             }
                         }
@@ -1411,22 +1381,15 @@ class RekapNonMenuController extends Controller
                                 }
                             }
                         }
-                        if (!empty($garansi_notnull)) {
-                            foreach ($garansi_nominal as $valGaransi) {
-                                if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->sesi == $valGaransi->sesi && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
-                                    $valPajak = $valPajak + $valGaransi->pajak_garansi;
-                                }
-                            }
-                        }
                         ${$valListRekap . '-pajakojol'} += $valPajak;
                     }
-                    $data[$valListRekap]['pajakreguler'] = number_format(${$valListRekap . '-pajakreguler'});
-                    $data[$valListRekap]['pajakojol'] = number_format(${$valListRekap . '-pajakojol'});
+                    $data[$valListRekap]['pajakreguler'] = ${$valListRekap . '-pajakreguler'};
+                    $data[$valListRekap]['pajakojol'] = ${$valListRekap . '-pajakojol'};
                 }
             }
         }
-        return $data;
-        return Excel::download(new RekapNonMenuExport($data), 'Rekap Non Menu - ' . $request->tanggal . '.xlsx');
+        // return $data;
+        return Excel::download(new RekapNonMenuExport($data), 'Rekap Non Menu (per bulan) - ' . $request->tanggal . '.xlsx');
     }
 
     // public function showori(Request $request)

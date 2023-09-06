@@ -4,7 +4,6 @@
             <th rowspan="2" class="text-center">Area</th>
             <th rowspan="2" class="text-center">Waroeng</th>
             <th rowspan="2" class="text-center">Tanggal</th>
-            <th rowspan="2" class="text-center">Sesi</th>
             <th rowspan="2" class="text-center">Operator</th>
             <th colspan="3" class="text-center">Dine In</th>
             <th colspan="3" class="text-center">Take Away</th>
