@@ -817,11 +817,10 @@ class RekapNonMenuController extends Controller
 
                 foreach ($rekap as $keyRekap => $valRekap) {
                     if ($valRekap->rekap_modal_id == $valListRekap) {
-                        $data[$valListRekap]['area'] = $valRekap->m_area_nama;
-                        $data[$valListRekap]['waroeng'] = $valRekap->m_w_nama;
-                        $data[$valListRekap]['tanggal'] = date('d-m-Y', strtotime($valRekap->tanggal));
-                        $data[$valListRekap]['sesi'] = $valRekap->sesi;
-                        $data[$valListRekap]['operator'] = $valRekap->kasir;
+                        $data[$valListRekap]['operator'] = ucwords($valRekap->kasir);
+                        $data[$valListRekap]['waroeng'] = strtoupper(substr($valRekap->m_w_nama, 3));
+                        $data[$valListRekap]['tanggal'] = date('d', strtotime($valRekap->tanggal));
+                        $data[$valListRekap]['sesi'] = 'Shift-' . $valRekap->sesi;
                         if ($valRekap->type_name == $valTipe) {
                             if (in_array($valRekap->m_produk_id, $listMenu)) {
                                 $qty = $valRekap->qty;
@@ -1201,10 +1200,10 @@ class RekapNonMenuController extends Controller
 
                 foreach ($rekap as $keyRekap => $valRekap) {
                     if ($valRekap->tanggal == $valListRekap) {
-                        $data[$valListRekap]['area'] = $valRekap->m_area_nama;
-                        $data[$valListRekap]['waroeng'] = $valRekap->m_w_nama;
-                        $data[$valListRekap]['tanggal'] = date('d-m-Y', strtotime($valRekap->tanggal));
-                        $data[$valListRekap]['operator'] = $valRekap->kasir;
+                        $data[$valListRekap]['operator'] = '';
+                        $data[$valListRekap]['waroeng'] = strtoupper(str_replace('WSS', '', $valRekap->m_w_nama));
+                        $data[$valListRekap]['tanggal'] = date('d', strtotime($valRekap->tanggal));
+                        $data[$valListRekap]['sesi'] = '';
                         if ($valRekap->type_name == $valTipe) {
                             if (in_array($valRekap->m_produk_id, $listMenu)) {
                                 $qty = $valRekap->qty;
