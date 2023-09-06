@@ -104,14 +104,18 @@
                                             <div class="btn-group">
                                                 <button type="button" id="button_drop"
                                                     class="btn btn-sm btn-primary dropdown-toggle mt-1">
-                                                    Export Excel
+                                                    Export Excel<span id="export_loading" style="display: none;"><img
+                                                            src="{{ asset('media/gif/loading.gif') }}" alt="Loading..."
+                                                            style="max-width: 16px; max-height: 16px;"></span>
                                                 </button>
                                                 <div class="dropdown-menu" id="dropdown-menu"
                                                     style="position: absolute; top: 100%; left: 5%; background-color:rgba(235, 25, 25, 0.123);">
-                                                    <a class="dropdown-item" style="font-weight:550;" id="hari">Export
-                                                        Per Hari</a>
-                                                    <a class="dropdown-item" style="font-weight: 550;" id="bulan">Export
-                                                        Per Bulan</a>
+                                                    <button class="dropdown-item" style="font-weight:550;"
+                                                        id="hari">Export
+                                                        Per Hari</button>
+                                                    <button class="dropdown-item" style="font-weight: 550;"
+                                                        id="bulan">Export
+                                                        Per Bulan</button>
                                                 </div>
                                             </div>
 
@@ -284,15 +288,10 @@
                 $('#dropdown-menu').toggle();
             });
 
-            // Close the dropdown when clicking outside of it
             $(document).click(function(e) {
                 if (!$(e.target).closest('.btn-group').length) {
                     $('#dropdown-menu').hide();
                 }
-            });
-
-            $('#dropdown-menu').on('click', '.dropdown-item', function() {
-                $('#dropdown-menu').hide();
             });
 
             $('#hari').on('click', function() {
@@ -305,14 +304,18 @@
 
                 $('#export_loading').show();
 
-                $(this).prop('disabled', true);
+                var $buttonHari = $(this);
+
+                $buttonHari.prop('disabled', true);
+
+                $('.dropdown-menu').hide();
 
                 $.ajax({
                     url: exportUrl,
                     method: 'GET',
                     success: function(response) {
                         window.location.href = exportUrl;
-                        $(this).prop('disabled', false);
+                        $buttonHari.prop('disabled', false);
 
                         setTimeout(function() {
                             $('#export_loading')
@@ -321,7 +324,6 @@
                     },
                     error: function() {
                         $('#export_loading').hide();
-                        // $('#export_excel').prop('disabled', false);
                     }
                 });
             });
@@ -336,14 +338,18 @@
 
                 $('#export_loading').show();
 
-                $(this).prop('disabled', true);
+                var $buttonHari = $(this);
+
+                $buttonHari.prop('disabled', true);
+
+                $('.dropdown-menu').hide();
 
                 $.ajax({
                     url: exportUrl,
                     method: 'GET',
                     success: function(response) {
                         window.location.href = exportUrl;
-                        $(this).prop('disabled', false);
+                        $buttonHari.prop('disabled', false);
 
                         setTimeout(function() {
                             $('#export_loading')

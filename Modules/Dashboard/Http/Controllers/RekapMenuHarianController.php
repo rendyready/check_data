@@ -218,7 +218,7 @@ class RekapMenuHarianController extends Controller
             $garansi_row[] = $valGaransi->waroeng_gar;
             $garansi_row[] = $valGaransi->menu_gar;
             $garansi_row[] = $valGaransi->qty_gar;
-            $garansi_row[] = number_format($nominal_garansi);
+            $garansi_row[] = $nominal_garansi;
             $garansi_row[] = $valGaransi->jenis_produk_gar;
             $garansi_row[] = $valGaransi->tipe_gar;
             $garansi_row[] = '';
@@ -251,7 +251,7 @@ class RekapMenuHarianController extends Controller
             $nominal = $val_menu->r_t_detail_reguler_price * $qty + ($val_menu->kemasan * $qty);
             $crRef = $val_menu->r_t_detail_price * $qty + ($val_menu->kemasan * $qty);
             $row[] = $qty;
-            $row[] = number_format($nominal);
+            $row[] = $nominal;
             $row[] = $val_menu->m_jenis_produk_nama;
             $row[] = $val_menu->m_t_t_name;
             $nominal_trans = $val_menu->r_t_detail_price * $qty + ($val_menu->kemasan * $qty);

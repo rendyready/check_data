@@ -117,16 +117,16 @@ class RekapSelisihController extends Controller
             if ($selisih < 0) {
                 $selisihMinus = $selisih;
                 $row[] = 0;
-                $row[] = number_format($selisihMinus);
+                $row[] = $selisihMinus;
             } else {
                 $selisihPlus = $selisih;
-                $row[] = number_format($selisihPlus);
+                $row[] = $selisihPlus;
                 $row[] = 0;
             }
             foreach ($rekap as $valRekap) {
                 if ($valModal->tanggal == $valRekap->tanggal && $valModal->waroeng == $valRekap->waroeng) {
-                    $row[] = number_format($valRekap->bulat);
-                    $row[] = number_format($valRekap->free);
+                    $row[] = $valRekap->bulat;
+                    $row[] = $valRekap->free;
                     $totalFreeKembalian += $valRekap->free;
                     $totalPembulatan += $valRekap->bulat;
                 }
