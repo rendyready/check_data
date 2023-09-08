@@ -104,7 +104,7 @@
                                             <div class="btn-group">
                                                 <button type="button" id="button_drop"
                                                     class="btn btn-sm btn-primary dropdown-toggle mt-1">
-                                                    Export Excel<span id="export_loading" style="display: none;"><img
+                                                    Export Excel <span id="export_loading" style="display: none;"><img
                                                             src="{{ asset('media/gif/loading.gif') }}" alt="Loading..."
                                                             style="max-width: 16px; max-height: 16px;"></span>
                                                 </button>
@@ -113,9 +113,9 @@
                                                     <button class="dropdown-item" style="font-weight:550;"
                                                         id="hari">Export
                                                         Per Hari</button>
-                                                    <button class="dropdown-item" style="font-weight: 550;"
+                                                    {{-- <button class="dropdown-item" style="font-weight: 550;"
                                                         id="bulan">Export
-                                                        Per Bulan</button>
+                                                        Per Bulan</button> --}}
                                                 </div>
                                             </div>
 
