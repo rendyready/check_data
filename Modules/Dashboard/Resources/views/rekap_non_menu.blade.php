@@ -100,24 +100,35 @@
                                             <button type="button" id="cari"
                                                 class="btn btn-primary btn-sm mb-3 mt-1">Cari</button>
                                         </div>
-                                        {{-- <div class="col-md-6">
-                                            <select id="export_option" class="form-control js-select2"
-                                                data-placeholder="Pilih Opsi Export" style="width: 100%;">
-                                                <option></option>
-                                                <option value="daily">Per Hari</option>
-                                                <option value="monthly">Per Bulan</option>
-                                            </select>
-                                        </div> --}}
                                         <div class="col-md-4">
+                                            <div class="btn-group">
+                                                <button type="button" id="button_drop"
+                                                    class="btn btn-sm btn-primary dropdown-toggle mt-1">
+                                                    Export Excel <span id="export_loading" style="display: none;"><img
+                                                            src="{{ asset('media/gif/loading.gif') }}" alt="Loading..."
+                                                            style="max-width: 16px; max-height: 16px;"></span>
+                                                </button>
+                                                <div class="dropdown-menu" id="dropdown-menu"
+                                                    style="position: absolute; top: 100%; left: 5%; background-color:rgba(235, 25, 25, 0.123);">
+                                                    <button class="dropdown-item" style="font-weight:550;"
+                                                        id="hari">Export
+                                                        Per Hari</button>
+                                                    {{-- <button class="dropdown-item" style="font-weight: 550;"
+                                                        id="bulan">Export
+                                                        Per Bulan</button> --}}
+                                                </div>
+                                            </div>
+
+
+                                            {{-- <div class="col-md-4">
                                             <a class="btn btn-sm btn-primary mb-3 mt-1" id="export_excel"
                                                 style="display: none;">Export Excel <span id="export_loading"
                                                     style="display: none;"><img src="{{ asset('media/gif/loading.gif') }}"
                                                         alt="Loading..."
-                                                        style="max-width: 16px; max-height: 16px;"></span></a>
+                                                        style="max-width: 16px; max-height: 16px;"></span></a> --}}
                                         </div>
                                     </div>
                                 </div>
-                            </div>
 
 
 
@@ -138,7 +149,7 @@
                                         <th colspan="5" class="text-center">Grab</th>
                                         <th colspan="5" class="text-center">Gojek</th>
                                         <th colspan="5" class="text-center">Shopee</th>
-                                        <th colspan="5" class="text-center">Grab Mart</th>
+                                        <th colspan="3" class="text-center">Grab Mart</th>
                                         <th colspan="5" class="text-center">Rincian</th>
                                         <th rowspan="2" class="text-center">Pajak Reguler</th>
                                         <th rowspan="2" class="text-center">Pajak Ojol</th>
@@ -175,8 +186,6 @@
                                         <th rowspan="1" class="text-center">Nota</th>
 
                                         <th rowspan="1" class="text-center">WBD BB</th>
-                                        <th rowspan="1" class="text-center">WBD (P)</th>
-                                        <th rowspan="1" class="text-center">WBD (TP)</th>
                                         <th rowspan="1" class="text-center">WBD Frozen</th>
                                         <th rowspan="1" class="text-center">Nota</th>
 
@@ -275,12 +284,17 @@
                 }
             });
 
-            // $("#export_excel").hide();
-            $('#export_option').on('change', function() {
-                $("#export_excel").show();
+            $('#button_drop').on('click', function() {
+                $('#dropdown-menu').toggle();
             });
 
-            $('#export_excel').on('click', function() {
+            $(document).click(function(e) {
+                if (!$(e.target).closest('.btn-group').length) {
+                    $('#dropdown-menu').hide();
+                }
+            });
+
+            $('#hari').on('click', function() {
                 var area = $('.filter_area option:selected').val();
                 var waroeng = $('.filter_waroeng option:selected').val();
                 var tanggal = $('.filter_tanggal').val();
@@ -290,14 +304,18 @@
 
                 $('#export_loading').show();
 
-                $(this).prop('disabled', true);
+                var $buttonHari = $(this);
+
+                $buttonHari.prop('disabled', true);
+
+                $('.dropdown-menu').hide();
 
                 $.ajax({
                     url: exportUrl,
                     method: 'GET',
                     success: function(response) {
                         window.location.href = exportUrl;
-                        $(this).prop('disabled', false);
+                        $buttonHari.prop('disabled', false);
 
                         setTimeout(function() {
                             $('#export_loading')
@@ -306,10 +324,75 @@
                     },
                     error: function() {
                         $('#export_loading').hide();
-                        $('#export_excel').prop('disabled', false);
                     }
                 });
             });
+
+            $('#bulan').on('click', function() {
+                var area = $('.filter_area option:selected').val();
+                var waroeng = $('.filter_waroeng option:selected').val();
+                var tanggal = $('.filter_tanggal').val();
+
+                var exportUrl = '{{ route('non_menu.export_excel_month') }}?area=' + area +
+                    '&waroeng=' + waroeng + '&tanggal=' + tanggal;
+
+                $('#export_loading').show();
+
+                var $buttonHari = $(this);
+
+                $buttonHari.prop('disabled', true);
+
+                $('.dropdown-menu').hide();
+
+                $.ajax({
+                    url: exportUrl,
+                    method: 'GET',
+                    success: function(response) {
+                        window.location.href = exportUrl;
+                        $buttonHari.prop('disabled', false);
+
+                        setTimeout(function() {
+                            $('#export_loading')
+                                .hide();
+                        }, 2000);
+                    },
+                    error: function() {
+                        $('#export_loading').hide();
+                        // $('#export_excel').prop('disabled', false);
+                    }
+                });
+            });
+
+            // $('#export_excel').on('click', function() {
+            //     var area = $('.filter_area option:selected').val();
+            //     var waroeng = $('.filter_waroeng option:selected').val();
+            //     var tanggal = $('.filter_tanggal').val();
+
+            //     var exportUrl = '{{ route('non_menu.export_excel') }}?area=' + area +
+            //         '&waroeng=' + waroeng + '&tanggal=' + tanggal;
+
+            //     $('#export_loading').show();
+
+            //     $(this).prop('disabled', true);
+
+            //     $.ajax({
+            //         url: exportUrl,
+            //         method: 'GET',
+            //         success: function(response) {
+            //             window.location.href = exportUrl;
+            //             $(this).prop('disabled', false);
+
+            //             setTimeout(function() {
+            //                 $('#export_loading')
+            //                     .hide();
+            //             }, 2000);
+            //         },
+            //         error: function() {
+            //             $('#export_loading').hide();
+            //             $('#export_excel').prop('disabled', false);
+            //         }
+            //     });
+            // });
 
             if (HakAksesPusat) {
                 $('.filter_area').on('select2:select', function() {
