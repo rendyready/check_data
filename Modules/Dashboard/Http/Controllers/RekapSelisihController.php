@@ -117,16 +117,16 @@ class RekapSelisihController extends Controller
             if ($selisih < 0) {
                 $selisihMinus = $selisih;
                 $row[] = 0;
-                $row[] = $selisihMinus;
+                $row[] = number_format($selisihMinus);
             } else {
                 $selisihPlus = $selisih;
-                $row[] = $selisihPlus;
+                $row[] = number_format($selisihPlus);
                 $row[] = 0;
             }
             foreach ($rekap as $valRekap) {
                 if ($valModal->tanggal == $valRekap->tanggal && $valModal->waroeng == $valRekap->waroeng) {
-                    $row[] = $valRekap->bulat;
-                    $row[] = $valRekap->free;
+                    $row[] = number_format($valRekap->bulat);
+                    $row[] = number_format($valRekap->free);
                     $totalFreeKembalian += $valRekap->free;
                     $totalPembulatan += $valRekap->bulat;
                 }
@@ -219,16 +219,16 @@ class RekapSelisihController extends Controller
             if ($selisih < 0) {
                 $selisihMinus = $selisih;
                 $row[] = 0;
-                $row[] = number_format($selisihMinus);
+                $row[] = $selisihMinus;
             } else {
                 $selisihPlus = $selisih;
-                $row[] = number_format($selisihPlus);
+                $row[] = $selisihPlus;
                 $row[] = 0;
             }
             foreach ($rekap as $valRekap) {
                 if ($valModal->tanggal == $valRekap->tanggal && $valModal->waroeng == $valRekap->waroeng) {
-                    $row[] = number_format($valRekap->bulat);
-                    $row[] = number_format($valRekap->free);
+                    $row[] = $valRekap->bulat;
+                    $row[] = $valRekap->free;
                     $totalFreeKembalian += $valRekap->free;
                     $totalPembulatan += $valRekap->bulat;
                 }
@@ -241,10 +241,10 @@ class RekapSelisihController extends Controller
         $totalRow[] = '';
         $totalRow[] = '';
         $totalRow[] = 'Total';
-        $totalRow[] = number_format($totalSelisihPlus);
-        $totalRow[] = number_format($totalSelisihMinus);
-        $totalRow[] = number_format($totalPembulatan);
-        $totalRow[] = number_format($totalFreeKembalian);
+        $totalRow[] = $totalSelisihPlus;
+        $totalRow[] = $totalSelisihMinus;
+        $totalRow[] = $totalPembulatan;
+        $totalRow[] = $totalFreeKembalian;
 
         $data[] = $totalRow;
 

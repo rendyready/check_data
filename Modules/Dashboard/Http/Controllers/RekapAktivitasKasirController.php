@@ -2,13 +2,11 @@
 
 namespace Modules\Dashboard\Http\Controllers;
 
-use App\Exports\RekapHapusMenuExport;
 use App\Http\Controllers\Controller;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Maatwebsite\Excel\Facades\Excel;
 
 class RekapAktivitasKasirController extends Controller
 {
@@ -89,63 +87,63 @@ class RekapAktivitasKasirController extends Controller
         }
     }
 
-    public function tampil_laci_ujicoba(Request $request)
-    {
-        $buka_laci = DB::table('rekap_buka_laci')
-            ->join('users', 'users_id', 'r_b_l_created_by')
-            ->join('rekap_modal', 'rekap_modal_id', 'r_b_l_rekap_modal_id');
+    // public function tampil_laci_ujicoba(Request $request)
+    // {
+    //     $buka_laci = DB::table('rekap_buka_laci')
+    //         ->join('users', 'users_id', 'r_b_l_created_by')
+    //         ->join('rekap_modal', 'rekap_modal_id', 'r_b_l_rekap_modal_id');
 
-        if (strpos($request->tanggal, 'to') !== false) {
-            [$start, $end] = explode('to', $request->tanggal);
-            $buka_laci->whereBetween('r_b_l_tanggal', [$start, $end]);
-        } else {
-            $buka_laci->where('r_b_l_tanggal', $request->tanggal);
-        }
+    //     if (strpos($request->tanggal, 'to') !== false) {
+    //         [$start, $end] = explode('to', $request->tanggal);
+    //         $buka_laci->whereBetween('r_b_l_tanggal', [$start, $end]);
+    //     } else {
+    //         $buka_laci->where('r_b_l_tanggal', $request->tanggal);
+    //     }
 
-        if ($request->area != 'all') {
-            $buka_laci->where('r_b_l_m_area_id', $request->area);
-            if ($request->waroeng != 'all') {
-                $buka_laci->where('r_b_l_m_w_id', $request->waroeng);
-                if ($request->operator != 'all') {
-                    $buka_laci->where('r_b_l_created_by', $request->operator);
-                }
-            }
-        }
+    //     if ($request->area != 'all') {
+    //         $buka_laci->where('r_b_l_m_area_id', $request->area);
+    //         if ($request->waroeng != 'all') {
+    //             $buka_laci->where('r_b_l_m_w_id', $request->waroeng);
+    //             if ($request->operator != 'all') {
+    //                 $buka_laci->where('r_b_l_created_by', $request->operator);
+    //             }
+    //         }
+    //     }
 
-        $totalData = $buka_laci->count();
+    //     $totalData = $buka_laci->count();
 
-        $buka_laci = $buka_laci->selectRaw('r_b_l_rekap_modal_id, r_b_l_tanggal, name, sum(r_b_l_qty) as laci, r_b_l_m_area_nama, r_b_l_m_w_nama, rekap_modal_sesi')
-            ->groupBy('r_b_l_tanggal', 'name', 'r_b_l_rekap_modal_id', 'r_b_l_m_area_nama', 'r_b_l_m_area_id', 'r_b_l_m_w_nama', 'rekap_modal_sesi')
-            ->orderBy('r_b_l_m_area_id', 'ASC')
-            ->orderBy('r_b_l_tanggal', 'ASC')
-            ->orderBy('rekap_modal_sesi', 'ASC');
+    //     $buka_laci = $buka_laci->selectRaw('r_b_l_rekap_modal_id, r_b_l_tanggal, name, sum(r_b_l_qty) as laci, r_b_l_m_area_nama, r_b_l_m_w_nama, rekap_modal_sesi')
+    //         ->groupBy('r_b_l_tanggal', 'name', 'r_b_l_rekap_modal_id', 'r_b_l_m_area_nama', 'r_b_l_m_area_id', 'r_b_l_m_w_nama', 'rekap_modal_sesi')
+    //         ->orderBy('r_b_l_m_area_id', 'ASC')
+    //         ->orderBy('r_b_l_tanggal', 'ASC')
+    //         ->orderBy('rekap_modal_sesi', 'ASC');
 
-        $result = $buka_laci->paginate(10);
+    //     $result = $buka_laci->paginate(10);
 
-        $data = [];
-        foreach ($result as $laci) {
-            $row = [
-                $laci->r_b_l_m_area_nama,
-                $laci->r_b_l_m_w_nama,
-                date('d-m-Y', strtotime($laci->r_b_l_tanggal)),
-                $laci->name,
-                $laci->rekap_modal_sesi,
-                $laci->laci,
-                '<a id="button_detail" class="btn btn-sm button_detail btn-info" value="' . $laci->r_b_l_rekap_modal_id . '" title="Detail Nota"><i class="fa-sharp fa-solid fa-eye"></i></a>',
-            ];
-            $data[] = $row;
-        }
-        $filterData = count($data);
+    //     $data = [];
+    //     foreach ($result as $laci) {
+    //         $row = [
+    //             $laci->r_b_l_m_area_nama,
+    //             $laci->r_b_l_m_w_nama,
+    //             date('d-m-Y', strtotime($laci->r_b_l_tanggal)),
+    //             $laci->name,
+    //             $laci->rekap_modal_sesi,
+    //             $laci->laci,
+    //             '<a id="button_detail" class="btn btn-sm button_detail btn-info" value="' . $laci->r_b_l_rekap_modal_id . '" title="Detail Nota"><i class="fa-sharp fa-solid fa-eye"></i></a>',
+    //         ];
+    //         $data[] = $row;
+    //     }
+    //     $filterData = count($data);
 
-        $output = [
-            "draw" => intval($request->input('draw', 1)),
-            "recordsTotal" => $filterData,
-            "recordsFiltered" => $totalData,
-            "data" => $data,
-        ];
+    //     $output = [
+    //         "draw" => intval($request->input('draw', 1)),
+    //         "recordsTotal" => $filterData,
+    //         "recordsFiltered" => $totalData,
+    //         "data" => $data,
+    //     ];
 
-        return response()->json($output);
-    }
+    //     return response()->json($output);
+    // }
 
     public function tampil_laci(Request $request)
     {
@@ -249,9 +247,9 @@ class RekapAktivitasKasirController extends Controller
             ->join('rekap_hapus_menu', 'r_h_m_created_by', 'users_id')
             ->select('users_id', 'name');
         if (in_array(Auth::user()->waroeng_id, $this->get_akses_area())) {
-            $user->where('waroeng_id', $request->id_waroeng);
+            $user->where('r_h_m_m_w_id', $request->id_waroeng);
         } else {
-            $user->where('waroeng_id', Auth::user()->waroeng_id);
+            $user->where('r_h_m_m_w_id', Auth::user()->waroeng_id);
         }
         if (strpos($request->tanggal, 'to') !== false) {
             [$start, $end] = explode('to', $request->tanggal);
@@ -318,53 +316,53 @@ class RekapAktivitasKasirController extends Controller
         return response()->json($output);
     }
 
-    public function export_hapus_menu(Request $request)
-    {
-        $hps_menu = DB::table('rekap_hapus_menu')
-            ->join('users', 'users_id', 'r_h_m_created_by')
-            ->join('rekap_modal', 'rekap_modal_id', 'r_h_m_rekap_modal_id');
-        if (strpos($request->tanggal, 'to') !== false) {
-            [$start, $end] = explode('to', $request->tanggal);
-            $hps_menu->whereBetween('r_h_m_tanggal', [$start, $end]);
-        } else {
-            $hps_menu->where('r_h_m_tanggal', $request->tanggal);
-        }
-        if ($request->area != 'all') {
-            $hps_menu->where('r_h_m_m_area_id', $request->area);
-            if ($request->waroeng != 'all') {
-                $hps_menu->where('r_h_m_m_w_id', $request->waroeng);
-                if ($request->operator != 'all') {
-                    $hps_menu->where('r_h_m_created_by', $request->operator);
-                }
-            }
-        }
-        $hps_menu = $hps_menu->orderby('r_h_m_m_area_id', 'ASC')
-            ->orderby('r_h_m_tanggal', 'ASC')
-            ->orderby('rekap_modal_sesi', 'ASC')
-            ->get();
+    // public function export_hapus_menu(Request $request)
+    // {
+    //     $hps_menu = DB::table('rekap_hapus_menu')
+    //         ->join('users', 'users_id', 'r_h_m_created_by')
+    //         ->join('rekap_modal', 'rekap_modal_id', 'r_h_m_rekap_modal_id');
+    //     if (strpos($request->tanggal, 'to') !== false) {
+    //         [$start, $end] = explode('to', $request->tanggal);
+    //         $hps_menu->whereBetween('r_h_m_tanggal', [$start, $end]);
+    //     } else {
+    //         $hps_menu->where('r_h_m_tanggal', $request->tanggal);
+    //     }
+    //     if ($request->area != 'all') {
+    //         $hps_menu->where('r_h_m_m_area_id', $request->area);
+    //         if ($request->waroeng != 'all') {
+    //             $hps_menu->where('r_h_m_m_w_id', $request->waroeng);
+    //             if ($request->operator != 'all') {
+    //                 $hps_menu->where('r_h_m_created_by', $request->operator);
+    //             }
+    //         }
+    //     }
+    //     $hps_menu = $hps_menu->orderby('r_h_m_m_area_id', 'ASC')
+    //         ->orderby('r_h_m_tanggal', 'ASC')
+    //         ->orderby('rekap_modal_sesi', 'ASC')
+    //         ->get();
 
-        $data = [];
-        foreach ($hps_menu as $menu) {
-            $row = [
-                $menu->r_h_m_m_area_nama,
-                $menu->r_h_m_m_w_nama,
-                $menu->name,
-                $menu->rekap_modal_sesi,
-                date('d-m-Y', strtotime($menu->r_h_m_tanggal)),
-                date('H:i', strtotime($menu->r_h_m_jam)),
-                $menu->r_h_m_nota_code,
-                $menu->r_h_m_bigboss,
-                $menu->r_h_m_m_produk_nama,
-                $menu->r_h_m_qty,
-                number_format($menu->r_h_m_price),
-                number_format($menu->r_h_m_nominal_pajak),
-                number_format($menu->r_h_m_nominal_sc),
-                number_format(($menu->r_h_m_qty * $menu->r_h_m_price) + $menu->r_h_m_nominal_pajak + $menu->r_h_m_nominal_sc),
-            ];
-            $data[] = $row;
-        }
-        return Excel::download(new RekapHapusMenuExport($data), 'hapus_menu.xlsx');
-    }
+    //     $data = [];
+    //     foreach ($hps_menu as $menu) {
+    //         $row = [
+    //             $menu->r_h_m_m_area_nama,
+    //             $menu->r_h_m_m_w_nama,
+    //             $menu->name,
+    //             $menu->rekap_modal_sesi,
+    //             date('d-m-Y', strtotime($menu->r_h_m_tanggal)),
+    //             date('H:i', strtotime($menu->r_h_m_jam)),
+    //             $menu->r_h_m_nota_code,
+    //             $menu->r_h_m_bigboss,
+    //             $menu->r_h_m_m_produk_nama,
+    //             $menu->r_h_m_qty,
+    //             number_format($menu->r_h_m_price),
+    //             number_format($menu->r_h_m_nominal_pajak),
+    //             number_format($menu->r_h_m_nominal_sc),
+    //             number_format(($menu->r_h_m_qty * $menu->r_h_m_price) + $menu->r_h_m_nominal_pajak + $menu->r_h_m_nominal_sc),
+    //         ];
+    //         $data[] = $row;
+    //     }
+    //     return Excel::download(new RekapHapusMenuExport($data), 'hapus_menu.xlsx');
+    // }
 
     public function rekap_hps_nota()
     {
