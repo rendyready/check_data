@@ -112,19 +112,42 @@ class RekapMenuHarianController extends Controller
             $refund2 = $refundM->first();
 
             $garansi = DB::table('rekap_garansi')
-                ->join('rekap_transaksi', 'r_t_id', 'rekap_garansi_r_t_id')
-                ->join('rekap_modal', 'rekap_modal_id', 'r_t_rekap_modal_id')
-                ->join('m_transaksi_tipe', 'm_t_t_id', 'r_t_m_t_t_id')
-                ->select('rekap_garansi_m_produk_id',
-                    'rekap_garansi_qty as qty',
-                    'r_t_tanggal',
-                    'rekap_modal_sesi',
-                    'm_t_t_id')
+                ->leftJoin('rekap_transaksi', 'rekap_garansi_r_t_id', '=', 'r_t_id')
+                ->leftJoin('m_produk', 'm_produk_id', '=', 'rekap_garansi_m_produk_id')
+                ->leftJoin('m_jenis_produk', 'm_jenis_produk_id', '=', 'm_produk_m_jenis_produk_id')
+                ->leftJoin('m_transaksi_tipe', 'm_t_t_id', '=', 'r_t_m_t_t_id')
+                ->leftJoin('rekap_modal', 'rekap_modal_id', '=', 'r_t_rekap_modal_id')
+                ->whereDate('rekap_modal_tanggal', $request->tanggal)
+                ->where('rekap_modal_m_area_id', $request->area)
+                ->where('rekap_modal_m_w_id', $request->waroeng)
                 ->where('rekap_modal_id', $get_modal_id->rekap_modal_id);
-            $garansi_qty = $garansi->get();
-            $garansi_notnull = $garansi->first();
+            if ($request->trans != 'all') {
+                $garansi->where('m_t_t_name', $request->trans);
+            }
+            $garansi = $garansi->selectRaw('
+                    sum(rekap_garansi_qty) AS qty_gar,
+                    rekap_garansi_reguler_price as harga_garansi,
+                    r_t_tanggal as tanggal_gar,
+                    rekap_garansi_m_produk_nama as menu_gar,
+                    r_t_m_w_nama as waroeng_gar,
+                    m_jenis_produk_nama as jenis_produk_gar,
+                    m_t_t_name as tipe_gar,
+                    rekap_modal_sesi
+                    ')
+                ->groupBy(
+                    'harga_garansi',
+                    'tanggal_gar',
+                    'menu_gar',
+                    'waroeng_gar',
+                    'jenis_produk_gar',
+                    'tipe_gar',
+                    'rekap_modal_sesi',
+                )
+                ->orderBy('jenis_produk_gar', 'ASC')
+                ->orderBy('menu_gar', 'ASC')
+                ->get();
 
-            $get2 = DB::table('rekap_transaksi_detail')
+            $rekap = DB::table('rekap_transaksi_detail')
                 ->leftJoin('rekap_transaksi', 'r_t_id', 'r_t_detail_r_t_id')
                 ->leftJoin('m_w', 'm_w_id', 'r_t_m_w_id')
                 ->leftJoin('m_produk', 'm_produk_id', 'r_t_detail_m_produk_id')
@@ -135,16 +158,46 @@ class RekapMenuHarianController extends Controller
                 ->where('rekap_modal_m_area_id', $request->area)
                 ->where('rekap_modal_m_w_id', $request->waroeng)
                 ->where('rekap_modal_id', $get_modal_id->rekap_modal_id);
-            // ->where('r_t_detail_status', 'paid');
             if ($request->trans != 'all') {
-                $get2->where('m_t_t_name', $request->trans);
+                $rekap->where('m_t_t_name', $request->trans);
             }
 
-            $get = $get2->selectRaw('SUM(r_t_detail_qty) AS qty, r_t_detail_reguler_price, r_t_tanggal, r_t_detail_m_produk_nama, r_t_detail_m_produk_id, m_w_nama, m_jenis_produk_id, m_jenis_produk_nama, m_t_t_name, m_t_t_id, rekap_modal_sesi, r_t_detail_price, SUM(r_t_detail_nominal) AS nominal_nota, SUM(r_t_detail_price * r_t_detail_qty) as trans, SUM(r_t_detail_nominal) - (SUM(r_t_detail_reguler_price * r_t_detail_qty)) cr_trans, sum(r_t_detail_nominal_pajak) pajak, r_t_detail_package_price as kemasan, max(r_t_status) r_t_status')
-                ->groupBy('r_t_tanggal', 'r_t_detail_m_produk_nama', 'r_t_detail_m_produk_id', 'm_w_nama', 'r_t_detail_reguler_price', 'm_jenis_produk_nama', 'm_jenis_produk_id', 'm_t_t_name', 'm_t_t_id', 'rekap_modal_sesi', 'r_t_detail_price', 'kemasan')
+            $rekap = $rekap->selectRaw('
+                    SUM(r_t_detail_qty) AS qty,
+                    r_t_detail_reguler_price,
+                    r_t_tanggal,
+                    r_t_detail_m_produk_nama,
+                    r_t_detail_m_produk_id,
+                    m_w_nama, m_jenis_produk_id,
+                    m_jenis_produk_nama,
+                    m_t_t_name, m_t_t_id,
+                    rekap_modal_sesi,
+                    r_t_detail_price,
+                    SUM(r_t_detail_nominal) AS nominal_nota,
+                    SUM(r_t_detail_price * r_t_detail_qty) as trans,
+                    SUM(r_t_detail_nominal) - (SUM(r_t_detail_reguler_price * r_t_detail_qty)) cr_trans,
+                    sum(r_t_detail_nominal_pajak) pajak,
+                    r_t_detail_package_price as kemasan,
+                    max(r_t_status) r_t_status
+                    ')
+                ->groupBy(
+                    'r_t_tanggal',
+                    'r_t_detail_m_produk_nama',
+                    'r_t_detail_m_produk_id',
+                    'm_w_nama',
+                    'r_t_detail_reguler_price',
+                    'm_jenis_produk_nama',
+                    'm_jenis_produk_id',
+                    'm_t_t_name',
+                    'm_t_t_id',
+                    'rekap_modal_sesi',
+                    'r_t_detail_price',
+                    'kemasan'
+                )
                 ->orderBy('m_jenis_produk_id', 'ASC')
                 ->orderBy('r_t_detail_m_produk_nama', 'ASC')
                 ->get();
+
         } else {
             return response()->json(['messages' => 'Data pada tanggal ' . $request->tanggal . ' tidak ada', 'type' => 'error']);
         }
@@ -156,9 +209,31 @@ class RekapMenuHarianController extends Controller
         $totalselisihCR = 0;
         $totalPajak = 0;
         $totalselisihTax = 0;
+        $totalNominal_garansi = 0;
         $data = array();
-        foreach ($get as $key => $val_menu) {
-            $keterangan = '';
+        foreach ($garansi as $key => $valGaransi) {
+            $nominal_garansi = $valGaransi->harga_garansi * $valGaransi->qty_gar;
+            $garansi_row = array();
+            $garansi_row[] = date('d-m-Y', strtotime($valGaransi->tanggal_gar));
+            $garansi_row[] = $valGaransi->waroeng_gar;
+            $garansi_row[] = $valGaransi->menu_gar;
+            $garansi_row[] = $valGaransi->qty_gar;
+            $garansi_row[] = $nominal_garansi;
+            $garansi_row[] = $valGaransi->jenis_produk_gar;
+            $garansi_row[] = $valGaransi->tipe_gar;
+            $garansi_row[] = '';
+            $garansi_row[] = '';
+            $garansi_row[] = '';
+            $garansi_row[] = 'Menu Garansi';
+            $garansi_row[] = '';
+            $garansi_row[] = '';
+            $garansi_row[] = '';
+            $data[] = $garansi_row;
+
+            $totalNominal_garansi += $nominal_garansi;
+        }
+
+        foreach ($rekap as $key => $val_menu) {
             $row = array();
             $row[] = date('d-m-Y', strtotime($val_menu->r_t_tanggal));
             $row[] = $val_menu->m_w_nama;
@@ -173,18 +248,10 @@ class RekapMenuHarianController extends Controller
                     }
                 }
             }
-            if (!empty($garansi_notnull)) {
-                foreach ($garansi_qty as $key => $valGaransi) {
-                    if ($val_menu->r_t_detail_m_produk_id == $valGaransi->rekap_garansi_m_produk_id && $val_menu->r_t_tanggal == $valGaransi->r_t_tanggal) {
-                        $qty = $qty + $valGaransi->qty;
-                        $pajakMenu = $pajakMenu + (($val_menu->r_t_detail_reguler_price * $valGaransi->qty) * 0.1);
-                    }
-                }
-            }
             $nominal = $val_menu->r_t_detail_reguler_price * $qty + ($val_menu->kemasan * $qty);
             $crRef = $val_menu->r_t_detail_price * $qty + ($val_menu->kemasan * $qty);
             $row[] = $qty;
-            $row[] = number_format($nominal);
+            $row[] = $nominal;
             $row[] = $val_menu->m_jenis_produk_nama;
             $row[] = $val_menu->m_t_t_name;
             $nominal_trans = $val_menu->r_t_detail_price * $qty + ($val_menu->kemasan * $qty);
@@ -237,12 +304,13 @@ class RekapMenuHarianController extends Controller
             $totalPajak += $pajak;
             $totalselisihTax += $selisihTax;
         }
+
         $totalRow = array();
         $totalRow[] = '';
         $totalRow[] = '';
         $totalRow[] = 'Total';
         $totalRow[] = '';
-        $totalRow[] = number_format($totalNominal);
+        $totalRow[] = number_format($totalNominal + $totalNominal_garansi);
         $totalRow[] = '';
         $totalRow[] = '';
         $totalRow[] = number_format($totalNominal_trans);

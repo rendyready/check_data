@@ -93,15 +93,48 @@
                                 data-has-access="{{ in_array(Auth::user()->waroeng_id, $data->akses_pusat) ? 'true' : 'false' }}">
                             </div>
 
-                            <div class="col-sm-8">
-                                <button type="button" id="cari"
-                                    class="btn btn-primary btn-sm col-1 mt-2 mb-3">Cari</button>
-                            </div>
+                            <div class="row">
+                                <div class="col-md-7">
+                                    <div class="row">
+                                        <div class="col-sm-1">
+                                            <button type="button" id="cari"
+                                                class="btn btn-primary btn-sm mb-3 mt-1">Cari</button>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="btn-group">
+                                                <button type="button" id="button_drop"
+                                                    class="btn btn-sm btn-primary dropdown-toggle mt-1">
+                                                    Export Excel <span id="export_loading" style="display: none;"><img
+                                                            src="{{ asset('media/gif/loading.gif') }}" alt="Loading..."
+                                                            style="max-width: 16px; max-height: 16px;"></span>
+                                                </button>
+                                                <div class="dropdown-menu" id="dropdown-menu"
+                                                    style="position: absolute; top: 100%; left: 5%; background-color:rgba(235, 25, 25, 0.123);">
+                                                    <button class="dropdown-item" style="font-weight:550;"
+                                                        id="hari">Export
+                                                        Per Hari</button>
+                                                    {{-- <button class="dropdown-item" style="font-weight: 550;"
+                                                        id="bulan">Export
+                                                        Per Bulan</button> --}}
+                                                </div>
+                                            </div>
+
+
+                                            {{-- <div class="col-md-4">
+                                            <a class="btn btn-sm btn-primary mb-3 mt-1" id="export_excel"
+                                                style="display: none;">Export Excel <span id="export_loading"
+                                                    style="display: none;"><img src="{{ asset('media/gif/loading.gif') }}"
+                                                        alt="Loading..."
+                                                        style="max-width: 16px; max-height: 16px;"></span></a> --}}
+                                        </div>
+                                    </div>
+                                </div>
+
+
 
                         </form>
 
                         <div id="tampil" class="table-responsive text-center">
-                            {{-- <button type="button" id="export_excel" class="btn btn-sm btn-primary">Export Excel</button> --}}
                             <table id="tampil_rekap"
                                 class="table table-sm table-bordered table-hover table-striped table-vcenter js-dataTable-full nowrap">
                                 <thead>
@@ -116,7 +149,7 @@
                                         <th colspan="5" class="text-center">Grab</th>
                                         <th colspan="5" class="text-center">Gojek</th>
                                         <th colspan="5" class="text-center">Shopee</th>
-                                        <th colspan="5" class="text-center">Grab Mart</th>
+                                        <th colspan="3" class="text-center">Grab Mart</th>
                                         <th colspan="5" class="text-center">Rincian</th>
                                         <th rowspan="2" class="text-center">Pajak Reguler</th>
                                         <th rowspan="2" class="text-center">Pajak Ojol</th>
@@ -153,8 +186,6 @@
                                         <th rowspan="1" class="text-center">Nota</th>
 
                                         <th rowspan="1" class="text-center">WBD BB</th>
-                                        <th rowspan="1" class="text-center">WBD (P)</th>
-                                        <th rowspan="1" class="text-center">WBD (TP)</th>
                                         <th rowspan="1" class="text-center">WBD Frozen</th>
                                         <th rowspan="1" class="text-center">Nota</th>
 
@@ -172,162 +203,280 @@
             </div>
         </div>
     </div>
+
 @endsection
 @section('js')
     <!-- js -->
     <script type="module">
-$(document).ready(function() {
-    Codebase.helpersOnLoad(['jq-select2']);
+        $(document).ready(function() {
+            Codebase.helpersOnLoad(['jq-select2']);
 
-    var userInfo = document.getElementById('user-info');
-    var userInfoPusat = document.getElementById('user-info-pusat');
-    var waroengId = userInfo.dataset.waroengId;
-    var HakAksesArea = userInfo.dataset.hasAccess === 'true';
-    var HakAksesPusat = userInfoPusat.dataset.hasAccess === 'true';
+            var userInfo = document.getElementById('user-info');
+            var userInfoPusat = document.getElementById('user-info-pusat');
+            var waroengId = userInfo.dataset.waroengId;
+            var HakAksesArea = userInfo.dataset.hasAccess === 'true';
+            var HakAksesPusat = userInfoPusat.dataset.hasAccess === 'true';
 
-    $("#tampil").hide();
+            $("#tampil").hide();
+            $("#export_excel").show();
 
-    $('#cari').on('click', function() {
-        var area     = $('.filter_area option:selected').val();
-        var waroeng  = $('.filter_waroeng option:selected').val();
-        var tanggal  = $('.filter_tanggal').val(); 
+            $('#cari').on('click', function() {
+                var area = $('.filter_area option:selected').val();
+                var waroeng = $('.filter_waroeng option:selected').val();
+                var tanggal = $('.filter_tanggal').val();
 
-        if (tanggal === "" && (area === "" || waroeng === "")) {
-            Swal.fire({
-            title: 'Informasi',
-            text: 'Silahkan lengkapi semua kolom',
-            confirmButtonColor: '#d33',
-            confirmButtonText: 'OK',
-            customClass: {
-                confirmButton: 'bg-red-500',
-            },
-            });
-          } else {
-
-        $("#tampil").show();
-        $('#tampil_rekap').DataTable({
-            destroy: true,
-            orderCellsTop: true,
-            processing: true,
-            autoWidth: true,
-            scrollX: true,
-            scrollCollapse: true,
-            columnDefs: [ 
-                    {
-                        targets: '_all',
-                        className: 'dt-body-center'
-                    },
-                ],
-                buttons: [
-                {
-                    extend: 'excelHtml5',
-                    text: 'Export Excel',
-                    title: 'Laporan Rekap Non Menu - ' + tanggal,
-                    pageSize: 'A4',
-                    pageOrientation: 'portrait',
-                    exportOptions: {
-                        columns: [0, 1, 2, 3, 4, 5, 8, 9, 10, 13, 14, 15, 18, 19, 20, 23, 24, 25, 28, 29, 30, 33, 34, 35, 36, 37, 38, 39, 40, 41],
-                    },
-                }
-            ],
-            lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
-            pageLength: 10,
-            ajax: {
-                url: '{{route("non_menu.show")}}',
-                data : {
-                    area: area,
-                    waroeng: waroeng,
-                    tanggal: tanggal,
-                },
-                type : "GET",
-                },
-                success:function(data){ 
-                    console.log(data);
-                }
-        });    
-    }
-    });
-
-if(HakAksesPusat){
-      $('.filter_area').on('select2:select', function(){
-        var id_area = $(this).val();
-        var tanggal  = $('.filter_tanggal').val();
-        var prev = $(this).data('previous-value');
-
-        if (id_area == 'all'){
-            $("#select_waroeng").hide();
-            $(".filter_waroeng").empty();
-        } else {
-            $("#select_waroeng").show();
-        }
-
-        if(id_area && tanggal){
-            $.ajax({
-            type:"GET",
-            url: '{{route("non_menu.select_waroeng")}}',
-            dataType: 'JSON',
-            destroy: true,    
-            data : {
-                id_area: id_area,
-            },
-            success:function(res){    
-              // console.log(res);           
-                if(res){
-                    $(".filter_waroeng").empty();
-                    $(".filter_waroeng").append('<option></option>');
-                    $.each(res,function(key,value){
-                        $(".filter_waroeng").append('<option value="'+key+'">'+value+'</option>');
+                if (tanggal === "" && (area === "" || waroeng === "")) {
+                    Swal.fire({
+                        title: 'Informasi',
+                        text: 'Silahkan lengkapi semua kolom',
+                        confirmButtonColor: '#d33',
+                        confirmButtonText: 'OK',
+                        customClass: {
+                            confirmButton: 'bg-red-500',
+                        },
                     });
-                }else{
-                $(".filter_waroeng").empty();
+                } else {
+
+                    $("#tampil").show();
+                    $('#tampil_rekap').DataTable({
+                        buttons: [],
+                        destroy: true,
+                        orderCellsTop: true,
+                        processing: true,
+                        autoWidth: true,
+                        scrollX: true,
+                        scrollCollapse: true,
+                        columnDefs: [{
+                            targets: '_all',
+                            className: 'dt-body-center'
+                        }, ],
+                        // buttons: [{
+                        //     extend: 'excelHtml5',
+                        //     text: 'Export Excel',
+                        //     title: 'Laporan Rekap Non Menu - ' + tanggal,
+                        //     pageSize: 'A4',
+                        //     pageOrientation: 'portrait',
+                        //     exportOptions: {
+                        //         columns: [0, 1, 2, 3, 4, 5, 8, 9, 10, 13, 14, 15, 18, 19,
+                        //             20, 23, 24, 25, 28, 29, 30, 33, 34, 35, 36, 37, 38,
+                        //             39, 40, 41
+                        //         ],
+                        //     },
+                        // }],
+                        lengthMenu: [
+                            [10, 25, 50, 100, -1],
+                            [10, 25, 50, 100, "All"]
+                        ],
+                        pageLength: 10,
+                        ajax: {
+                            url: '{{ route('non_menu.show') }}',
+                            data: {
+                                area: area,
+                                waroeng: waroeng,
+                                tanggal: tanggal,
+                            },
+                            type: "GET",
+                        },
+                        success: function(data) {
+                            console.log(data);
+                        }
+                    });
                 }
-            }
             });
-        }else{
-            Swal.fire({
-                    title: 'Informasi',
-                    text: "Harap lengkapi kolom tanggal",
-                    confirmButtonColor: '#d33',
-                    confirmButtonText: 'OK',
-                    customClass: {
-                        confirmButton: 'bg-red-500',
+
+            $('#button_drop').on('click', function() {
+                $('#dropdown-menu').toggle();
+            });
+
+            $(document).click(function(e) {
+                if (!$(e.target).closest('.btn-group').length) {
+                    $('#dropdown-menu').hide();
+                }
+            });
+
+            $('#hari').on('click', function() {
+                var area = $('.filter_area option:selected').val();
+                var waroeng = $('.filter_waroeng option:selected').val();
+                var tanggal = $('.filter_tanggal').val();
+
+                var exportUrl = '{{ route('non_menu.export_excel') }}?area=' + area +
+                    '&waroeng=' + waroeng + '&tanggal=' + tanggal;
+
+                $('#export_loading').show();
+
+                var $buttonHari = $(this);
+
+                $buttonHari.prop('disabled', true);
+
+                $('.dropdown-menu').hide();
+
+                $.ajax({
+                    url: exportUrl,
+                    method: 'GET',
+                    success: function(response) {
+                        window.location.href = exportUrl;
+                        $buttonHari.prop('disabled', false);
+
+                        setTimeout(function() {
+                            $('#export_loading')
+                                .hide();
+                        }, 2000);
                     },
+                    error: function() {
+                        $('#export_loading').hide();
+                    }
                 });
-            $(".filter_waroeng").empty();
-            $(".filter_area").val(prev).trigger('change');
-        }      
-        $("#button_non_menu").hide();
-    });
-  } 
+            });
 
-  if(HakAksesArea){
-    $('.filter_waroeng').on('select2:select', function(){
-        var id_waroeng = $(this).val();   
-        var tanggal  = $('.filter_tanggal').val(); 
-        var prev = $(this).data('previous-value');
-        if(!id_waroeng || !tanggal){
-            Swal.fire({
-                    title: 'Informasi',
-                    text: "Harap lengkapi kolom tanggal",
-                    confirmButtonColor: '#d33',
-                    confirmButtonText: 'OK',
-                    customClass: {
-                        confirmButton: 'bg-red-500',
+            $('#bulan').on('click', function() {
+                var area = $('.filter_area option:selected').val();
+                var waroeng = $('.filter_waroeng option:selected').val();
+                var tanggal = $('.filter_tanggal').val();
+
+                var exportUrl = '{{ route('non_menu.export_excel_month') }}?area=' + area +
+                    '&waroeng=' + waroeng + '&tanggal=' + tanggal;
+
+                $('#export_loading').show();
+
+                var $buttonHari = $(this);
+
+                $buttonHari.prop('disabled', true);
+
+                $('.dropdown-menu').hide();
+
+                $.ajax({
+                    url: exportUrl,
+                    method: 'GET',
+                    success: function(response) {
+                        window.location.href = exportUrl;
+                        $buttonHari.prop('disabled', false);
+
+                        setTimeout(function() {
+                            $('#export_loading')
+                                .hide();
+                        }, 2000);
                     },
+                    error: function() {
+                        $('#export_loading').hide();
+                        // $('#export_excel').prop('disabled', false);
+                    }
                 });
-            $(".filter_waroeng").val(prev).trigger('change');
-        }  
-        if (id_waroeng == 'all'){
-            $("#button_non_menu").hide();
-        }
-    });
-  }
+            });
 
-    $('.filter_tanggal').flatpickr({
-            mode: "range",
-            dateFormat: 'Y-m-d',         
-    });
+            // $('#export_excel').on('click', function() {
+            //     var area = $('.filter_area option:selected').val();
+            //     var waroeng = $('.filter_waroeng option:selected').val();
+            //     var tanggal = $('.filter_tanggal').val();
 
-});
-</script>
+            //     var exportUrl = '{{ route('non_menu.export_excel') }}?area=' + area +
+            //         '&waroeng=' + waroeng + '&tanggal=' + tanggal;
+
+            //     $('#export_loading').show();
+
+            //     $(this).prop('disabled', true);
+
+            //     $.ajax({
+            //         url: exportUrl,
+            //         method: 'GET',
+            //         success: function(response) {
+            //             window.location.href = exportUrl;
+            //             $(this).prop('disabled', false);
+
+            //             setTimeout(function() {
+            //                 $('#export_loading')
+            //                     .hide();
+            //             }, 2000);
+            //         },
+            //         error: function() {
+            //             $('#export_loading').hide();
+            //             $('#export_excel').prop('disabled', false);
+            //         }
+            //     });
+            // });
+
+            if (HakAksesPusat) {
+                $('.filter_area').on('select2:select', function() {
+                    var id_area = $(this).val();
+                    var tanggal = $('.filter_tanggal').val();
+                    var prev = $(this).data('previous-value');
+
+                    if (id_area == 'all') {
+                        $("#select_waroeng").hide();
+                        $(".filter_waroeng").empty();
+                    } else {
+                        $("#select_waroeng").show();
+                    }
+
+                    if (id_area && tanggal) {
+                        $.ajax({
+                            type: "GET",
+                            url: '{{ route('non_menu.select_waroeng') }}',
+                            dataType: 'JSON',
+                            destroy: true,
+                            data: {
+                                id_area: id_area,
+                            },
+                            success: function(res) {
+                                // console.log(res);           
+                                if (res) {
+                                    $(".filter_waroeng").empty();
+                                    $(".filter_waroeng").append('<option></option>');
+                                    $.each(res, function(key, value) {
+                                        $(".filter_waroeng").append('<option value="' +
+                                            key + '">' + value + '</option>');
+                                    });
+                                } else {
+                                    $(".filter_waroeng").empty();
+                                }
+                            }
+                        });
+                    } else {
+                        Swal.fire({
+                            title: 'Informasi',
+                            text: "Harap lengkapi kolom tanggal",
+                            confirmButtonColor: '#d33',
+                            confirmButtonText: 'OK',
+                            customClass: {
+                                confirmButton: 'bg-red-500',
+                            },
+                        });
+                        $(".filter_waroeng").empty();
+                        $(".filter_area").val(prev).trigger('change');
+                    }
+                    $("#button_non_menu").hide();
+                });
+            }
+
+            if (HakAksesArea) {
+                $('.filter_waroeng').on('select2:select', function() {
+                    var id_waroeng = $(this).val();
+                    var tanggal = $('.filter_tanggal').val();
+                    var prev = $(this).data('previous-value');
+
+                    if (!id_waroeng || !tanggal) {
+                        Swal.fire({
+                            title: 'Informasi',
+                            text: "Harap lengkapi kolom tanggal",
+                            confirmButtonColor: '#d33',
+                            confirmButtonText: 'OK',
+                            customClass: {
+                                confirmButton: 'bg-red-500',
+                            },
+                        });
+                        $(".filter_waroeng").val(prev).trigger('change');
+                    }
+                    if (id_waroeng == 'all') {
+                        $("#button_non_menu").hide();
+                    }
+
+                });
+            }
+
+            $('.filter_tanggal').flatpickr({
+                mode: "range",
+                dateFormat: 'Y-m-d',
+            });
+
+        });
+    </script>
 @endsection

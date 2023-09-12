@@ -350,49 +350,49 @@ class LaporanKasHarianKasirController extends Controller
         } // saldo awal
         $saldo_terakhir = end($data)['saldo'];
         $data[] = array(
-            'no_nota' => 'Total',
-            'transaksi' => '',
-            'masuk' => number_format($totalMasuk),
-            'keluar' => number_format($totalKeluar),
-            'saldo' => $saldo_terakhir,
+            'no_nota' => '',
+            'transaksi' => '<b>Total</b>',
+            'masuk' => '<b>' . number_format($totalMasuk) . '<b>',
+            'keluar' => '<b>' . number_format($totalKeluar) . '<b>',
+            'saldo' => '<b>' . $saldo_terakhir . '<b>',
             'payment' => 1,
         );
         $data[] = array(
-            'no_nota' => 'Pembulatan',
-            'transaksi' => '',
-            'masuk' => number_format($pembulatan),
-            'keluar' => number_format($pembulatan),
+            'no_nota' => '',
+            'transaksi' => '<b>Pembulatan</b>',
+            'masuk' => '<b>' . number_format($pembulatan) . '<b>',
+            'keluar' => '<b>' . number_format($pembulatan) . '<b>',
             'saldo' => '',
             'payment' => 1,
         );
         $data[] = array(
-            'no_nota' => 'Discount',
-            'transaksi' => '',
-            'masuk' => number_format($diskon),
-            'keluar' => number_format($diskon),
+            'no_nota' => '',
+            'transaksi' => '<b>Discount</b>',
+            'masuk' => '<b>' . number_format($diskon) . '<b>',
+            'keluar' => '<b>' . number_format($diskon) . '<b>',
             'saldo' => '',
             'payment' => 1,
         );
         $data[] = array(
-            'no_nota' => 'Voucher',
-            'transaksi' => '',
-            'masuk' => number_format($voucher),
-            'keluar' => number_format($voucher),
+            'no_nota' => '',
+            'transaksi' => '<b>Voucher</b>',
+            'masuk' => '<b>' . number_format($voucher) . '<b>',
+            'keluar' => '<b>' . number_format($voucher) . '<b>',
             'saldo' => '',
             'payment' => 1,
         );
         $data[] = array(
-            'no_nota' => 'Grand Total',
-            'transaksi' => '',
-            'masuk' => number_format($totalMasuk - $pembulatan - $diskon - $voucher),
-            'keluar' => number_format($totalKeluar - $pembulatan - $diskon - $voucher),
+            'no_nota' => '',
+            'transaksi' => '<b>Grand Total</b>',
+            'masuk' => '<b>' . number_format($totalMasuk - $pembulatan - $diskon - $voucher) . '<b>',
+            'keluar' => '<b>' . number_format($totalKeluar - $pembulatan - $diskon - $voucher) . '<b>',
             'saldo' => '',
             'payment' => 1,
         );
 
         //Non Tunai
-        $totalKeluar = 0;
-        $totalMasuk = 0;
+        $totalKeluarTF = 0;
+        $totalMasukTF = 0;
         $prevSaldo = 0;
         $pembulatanTF = 0;
         $discountTF = 0;
@@ -410,7 +410,7 @@ class LaporanKasHarianKasirController extends Controller
                     'payment' => 2, 3, 4, 5, 6, 7, 8, 9,
                 );
                 $prevSaldo = $saldo;
-                $totalMasuk += $row->r_t_nominal;
+                $totalMasukTF += $row->r_t_nominal;
             }
             if ($row->r_t_nominal_pajak != 0) {
                 $masuk = number_format($row->r_t_nominal_pajak);
@@ -424,7 +424,7 @@ class LaporanKasHarianKasirController extends Controller
                     'payment' => 2, 3, 4, 5, 6, 7, 8, 9,
                 );
                 $prevSaldo = $trans_pajak;
-                $totalMasuk += $row->r_t_nominal_pajak;
+                $totalMasukTF += $row->r_t_nominal_pajak;
             }
             if ($row->r_t_nominal_sc != 0) {
                 $masuk = number_format($row->r_t_nominal_sc);
@@ -438,7 +438,7 @@ class LaporanKasHarianKasirController extends Controller
                     'payment' => 2, 3, 4, 5, 6, 7, 8, 9,
                 );
                 $prevSaldo = $trans_sc;
-                $totalMasuk += $row->r_t_nominal_sc;
+                $totalMasukTF += $row->r_t_nominal_sc;
             }
             if ($row->r_t_nominal_diskon != 0) {
                 $masuk = number_format($row->r_t_nominal_diskon);
@@ -452,7 +452,7 @@ class LaporanKasHarianKasirController extends Controller
                     'payment' => 2, 3, 4, 5, 6, 7, 8, 9,
                 );
                 $prevSaldo = $trans_diskon;
-                $totalMasuk += $row->r_t_nominal_diskon;
+                $totalMasukTF += $row->r_t_nominal_diskon;
                 $discountTF += $row->r_t_nominal_diskon;
             }
             if ($row->r_t_nominal_voucher != 0) {
@@ -467,7 +467,7 @@ class LaporanKasHarianKasirController extends Controller
                     'payment' => 2, 3, 4, 5, 6, 7, 8, 9,
                 );
                 $prevSaldo = $trans_voucer;
-                $totalMasuk += $row->r_t_nominal_voucher;
+                $totalMasukTF += $row->r_t_nominal_voucher;
                 $voucherTF += $row->r_t_nominal_voucher;
             }
             if ($row->r_t_nominal_pembulatan != 0) {
@@ -482,7 +482,7 @@ class LaporanKasHarianKasirController extends Controller
                     'payment' => 2, 3, 4, 5, 6, 7, 8, 9,
                 );
                 $prevSaldo = $trans_bulat;
-                $totalKeluar += $row->r_t_nominal_pembulatan;
+                $totalKeluarTF += $row->r_t_nominal_pembulatan;
                 $pembulatanTF += $row->r_t_nominal_pembulatan;
             }
             if ($row->r_t_nominal_tarik_tunai != 0) {
@@ -497,7 +497,7 @@ class LaporanKasHarianKasirController extends Controller
                     'payment' => 2, 3, 4, 5, 6, 7, 8, 9,
                 );
                 $prevSaldo = $trans_tarik;
-                $totalKeluar += $row->r_t_nominal_tarik_tunai;
+                $totalKeluarTF += $row->r_t_nominal_tarik_tunai;
             }
             if ($row->r_t_nominal_free_kembalian != 0) {
                 $keluar = number_format($row->r_t_nominal_free_kembalian);
@@ -511,53 +511,54 @@ class LaporanKasHarianKasirController extends Controller
                     'payment' => 2, 3, 4, 5, 6, 7, 8, 9,
                 );
                 $prevSaldo = $trans_free;
-                $totalKeluar += $row->r_t_nominal_free_kembalian;
+                $totalKeluarTF += $row->r_t_nominal_free_kembalian;
             }
         } // saldo awal
         $saldo_terakhir = end($data)['saldo'];
         $data[] = array(
             'no_nota' => '',
-            'transaksi' => 'Total',
-            'masuk' => number_format($totalMasuk),
-            'keluar' => number_format($totalKeluar),
-            'saldo' => $saldo_terakhir,
+            'transaksi' => '<b>Total</b>',
+            'masuk' => '<b>' . number_format($totalMasukTF) . '</b>',
+            'keluar' => '<b>' . number_format($totalKeluarTF) . '</b>',
+            'saldo' => '<b>' . $saldo_terakhir . '</b>',
             'payment' => 2, 3, 4, 5, 6, 7, 8, 9,
         );
         $data[] = array(
             'no_nota' => '',
-            'transaksi' => 'Pembulatan',
-            'masuk' => number_format($pembulatanTF),
-            'keluar' => number_format($pembulatanTF),
+            'transaksi' => '<b>Pembulatan</b>',
+            'masuk' => '<b>' . number_format($pembulatanTF) . '</b>',
+            'keluar' => '<b>' . number_format($pembulatanTF) . '</b>',
             'saldo' => '',
             'payment' => 2, 3, 4, 5, 6, 7, 8, 9,
         );
         $data[] = array(
             'no_nota' => '',
-            'transaksi' => 'Discount',
-            'masuk' => number_format($voucherTF),
-            'keluar' => number_format($voucherTF),
+            'transaksi' => '<b>Discount</b>',
+            'masuk' => '<b>' . number_format($voucherTF) . '</b>',
+            'keluar' => '<b>' . number_format($voucherTF) . '</b>',
             'saldo' => '',
             'payment' => 2, 3, 4, 5, 6, 7, 8, 9,
         );
         $data[] = array(
             'no_nota' => '',
-            'transaksi' => 'Voucher',
-            'masuk' => number_format($discountTF),
-            'keluar' => number_format($discountTF),
+            'transaksi' => '<b>Voucher</b>',
+            'masuk' => '<b>' . number_format($discountTF) . '</b>',
+            'keluar' => '<b>' . number_format($discountTF) . '</b>',
             'saldo' => '',
             'payment' => 2, 3, 4, 5, 6, 7, 8, 9,
         );
         $data[] = array(
             'no_nota' => '',
-            'transaksi' => 'Grand Total',
-            'masuk' => number_format($totalMasuk - $pembulatanTF - $voucherTF - $discountTF),
-            'keluar' => number_format($totalKeluar - $pembulatanTF - $voucherTF - $discountTF),
+            'transaksi' => '<b>Grand Total</b>',
+            'masuk' => '<b>' . number_format($totalMasukTF - $pembulatanTF - $voucherTF - $discountTF) . '</b>',
+            'keluar' => '<b>' . number_format($totalKeluarTF - $pembulatanTF - $voucherTF - $discountTF) . '</b>',
             'saldo' => '',
             'payment' => 2, 3, 4, 5, 6, 7, 8, 9,
         );
 
         $tgl = tgl_indo($request->tanggal);
-        $w_nama = strtoupper($this->getNamaW($request->waroeng));
+        $waroeng_nama = $this->getNamaW($request->waroeng);
+        $w_nama = strtoupper(substr($waroeng_nama, 0, 3)) . ucwords(substr($waroeng_nama, 3));
         $nama_kasir = DB::table('users')
             ->join('rekap_modal', 'rekap_modal_created_by', 'users_id')
             ->where('waroeng_id', $request->waroeng)
@@ -569,8 +570,18 @@ class LaporanKasHarianKasirController extends Controller
             ->first();
         $kasir = $nama_kasir->name;
         $shift = $sesi_kasir->rekap_modal_sesi;
+        $roleJabatan = DB::table('model_has_roles')
+            ->rightJoin('users', 'users.users_id', 'model_id')
+            ->leftJoin('roles', 'role_id', 'roles.id')
+            ->select('roles.name as jabatan')
+            ->where('users.name', $nama_kasir->name)
+            ->orderBy('waroeng_id', 'asc')
+            ->first();
+        $jabatan = $roleJabatan->jabatan;
 
-        $pdf = pdf::loadview('dashboard::lap_kas_harian_kasir_pdf', compact('data', 'tgl', 'w_nama', 'kasir', 'shift'))->setPaper('a4');
+        $pdf = pdf::loadview('dashboard::lap_kas_harian_kasir_pdf', compact('data', 'tgl', 'w_nama', 'kasir', 'shift', 'jabatan'))->setPaper('a4');
+        // return view('dashboard::lap_kas_harian_kasir_pdf', compact('data', 'tgl', 'w_nama', 'kasir', 'shift', 'jabatan'));
+
         return $pdf->download('laporan_kas_kasir_' . strtolower($w_nama) . '_sesi_' . $shift . '_.pdf');
     }
 
