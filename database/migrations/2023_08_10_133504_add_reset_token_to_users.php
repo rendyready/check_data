@@ -14,6 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('reset_token');
+        });
+        Schema::table('users', function (Blueprint $table) {
             $table->string('reset_token')->nullable();
         });
     }

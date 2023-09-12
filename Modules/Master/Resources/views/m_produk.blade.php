@@ -18,6 +18,7 @@
                                 <tr>
                                     <th>No.</th>
                                     <th>Kode Menu</th>
+                                    <th>Foto</th>
                                     <th>Nama Menu</th>
                                     <th>Urut Menu</th>
                                     <th>Status Menu</th>
@@ -35,6 +36,7 @@
                                     <tr class="row1">
                                         <td>{{ $no++ }}</td>
                                         <td>{{ strtoupper($item->m_produk_code) }}</td>
+                                        <td><img src="{{$item->m_produk_image}}" alt="{{$item->m_produk_image}}" style="width: 80px; height: 80px;"></td>
                                         <td>{{ ucwords($item->m_produk_nama) }}</td>
                                         <td>{{ $item->m_produk_urut }}</td>
                                         <td>
@@ -237,6 +239,14 @@
                                                 <option value="ya">Ya</option>
                                                 <option value="tidak">Tidak</option>
                                             </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-4">
+                                    <div class="form-group">
+                                        <label for="m_produk_image">Produk Image</label>
+                                        <div>
+                                            <input type="file" name="m_produk_image" id="m_produk_image">
                                         </div>
                                     </div>
                                 </div>

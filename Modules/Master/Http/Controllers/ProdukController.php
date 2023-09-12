@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use illuminate\Support\Str;
-
+use Intervention\Image\Image;
 class ProdukController extends Controller
 {
     /**
@@ -59,6 +59,23 @@ class ProdukController extends Controller
                     $kat = $request->m_produk_m_klasifikasi_produk_id;
                     $num = $produk_code->m_klasifikasi_produk_last_id + 1;
                     $code = $produk_code->m_klasifikasi_produk_prefix . '-' . $kat . str_pad($num, 5, "0", STR_PAD_LEFT);
+                    
+                    if ($request->hasFile('image')) {
+                        $image = $request->file('image');
+                        $filename = time() . '.' . $image->getClientOriginalExtension();
+                        $path = public_path('uploads/' . $filename);
+                
+                        // Create an Intervention Image instance
+                        $resizedImage = Image::make($image)->resize(300, 200, function ($constraint) {
+                            $constraint->aspectRatio();
+                        });
+                
+                        // Save the resized image
+                        $resizedImage->save($path);
+                
+                        // Simpan informasi gambar ke database atau lakukan yang lain sesuai kebutuhan Anda
+                    }
+
                     DB::table('m_produk')->insert([
                         "m_produk_id" => '1',
                         "m_produk_code" => $code,
