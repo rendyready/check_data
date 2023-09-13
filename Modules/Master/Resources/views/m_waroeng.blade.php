@@ -45,9 +45,15 @@
                                             <td>{{ ucwords($item->m_w_jenis_nama) }}</td>
                                             <td>{{ ucwords($item->m_w_m_kode_nota) }}</td>
                                             <td>{{ $item->m_modal_tipe_nama }}</td>
-                                            <td><a id="buttonEdit" class="btn btn-sm buttonEdit btn-success"
-                                                    value="{{ $item->m_w_id }}" title="Edit"><i
-                                                        class="fa fa-pencil"></i></a></td>
+                                            <td>
+                                                <a class="btn btn-sm buttonEdit btn-success" data-id="{{ $item->m_w_id }}"
+                                                    title="Edit">
+                                                    <i class="fa fa-pencil"></i>
+                                                </a>
+                                                <a class="btn btn-sm btn-info btn-qr" data-id="{{ $item->m_w_id }}">
+                                                    <i class="fa fa-eye"> QR</i>
+                                                </a>
+                                            </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -135,7 +141,8 @@
                                                     style="width: 100%;" data-placeholder="Pilih Kode Nota" required>
                                                     <option></option>
                                                     @foreach ($m_tipe_nota as $item)
-                                                        <option value="{{$item->m_tipe_nota_nama}}">{{$item->m_tipe_nota_nama}}</option>
+                                                        <option value="{{ $item->m_tipe_nota_nama }}">
+                                                            {{ $item->m_tipe_nota_nama }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -226,6 +233,40 @@
                     </div>
                 </div>
                 <!-- END Select2 in a modal -->
+                <div id="qrcode-container"></div>
+
+                <!-- Select2 in a modal -->
+                <div class="modal" id="qrCodeModal" tabindex="-1" role="dialog" aria-labelledby="qrCodeModal"
+                    aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="block block-themed shadow-none mb-0">
+                                <div class="block-header block-header-default bg-pulse">
+                                    <h3 class="block-title" id="myModalLabel">QR Code Generated</h3>
+                                    <div class="block-options">
+                                        <button type="button" class="btn-block-option" data-bs-dismiss="modal"
+                                            aria-label="Close">
+                                            <i class="fa fa-fw fa-times"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="block-content">
+                                    <div class="modal-body">
+                                        <!-- Gambar QR code akan ditampilkan di sini -->
+                                    </div>
+                                    <div class="block-content block-content-full text-end bg-body">
+                                        <button type="button" class="btn btn-sm btn-alt-secondary me-1"
+                                            data-bs-dismiss="modal">Close</button>
+                                        <a id="downloadLink" class="btn btn-sm btn-success"
+                                            download="qr_waroeng.png">Download PNG</a>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END Select2 in a modal -->
             </div>
         </div>
     </div>
@@ -233,27 +274,29 @@
 @endsection
 @section('js')
     <script type="module">
-  $(document).ready(function() {
-    $.ajaxSetup({
-      headers: {
-        'X-CSRF-Token': $("input[name=_token]").val()
-      }
-    });
-    $('.js-select2').select2({dropdownParent: $('#formAction')})
-    $(".buttonInsert").on('click', function() {
-            $('[name="action"]').val('add');
-            var id = $(this).attr('value');
-            $('.js-select2').val(null).trigger('change');
-            $("#myModalLabel").html('Tambah Waroeng');
-            $("#form-waroeng").modal('show');
-    });
-     $("#m_w").on('click','.buttonEdit', function() {
+        $(document).ready(function() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-Token': $("input[name=_token]").val()
+                }
+            });
+            $('.js-select2').select2({
+                dropdownParent: $('#formAction')
+            })
+            $(".buttonInsert").on('click', function() {
+                $('[name="action"]').val('add');
+                var id = $(this).attr('value');
+                $('.js-select2').val(null).trigger('change');
+                $("#myModalLabel").html('Tambah Waroeng');
+                $("#form-waroeng").modal('show');
+            });
+            $("#m_w").on('click', '.buttonEdit', function() {
                 var id = $(this).attr('value');
                 $('[name="action"]').val('edit');
                 $('#form-waroeng form')[0].reset();
                 $("#myModalLabel").html('Ubah Waroeng');
                 $.ajax({
-                    url: "/master/m_waroeng/edit/"+id,
+                    url: "/master/m_waroeng/edit/" + id,
                     type: "GET",
                     dataType: 'json',
                     success: function(respond) {
@@ -266,53 +309,106 @@
                         $("#m_w_alamat").val(respond.m_w_alamat).trigger('change');
                         $("#m_w_m_kode_nota").val(respond.m_w_m_kode_nota).trigger('change');
                         $("#m_w_m_pajak_id").val(respond.m_w_m_pajak_id).trigger('change');
-                        $("#m_w_m_modal_tipe_id").val(respond.m_w_m_modal_tipe_id).trigger('change');
+                        $("#m_w_m_modal_tipe_id").val(respond.m_w_m_modal_tipe_id).trigger(
+                            'change');
                         $("#m_w_m_sc_id").val(respond.m_w_m_sc_id).trigger('change');
                         $("#m_w_decimal").val(respond.m_w_decimal).trigger('change');
                         $("#m_w_pembulatan").val(respond.m_w_pembulatan).trigger('change');
                         $("#m_w_currency").val(respond.m_w_currency).trigger('change');
                     },
-                    error: function() {
-                    }
+                    error: function() {}
                 });
                 $("#form-waroeng").modal('show');
-            }); 
-    var t = $('#m_w').DataTable({
-      processing: false,
-      serverSide: false,
-      destroy: true,
-      order: [0, 'asc'],
-    });
-    $('#formAction').submit( function(e){
-                if(!e.isDefaultPrevented()){
+            });
+            var t = $('#m_w').DataTable({
+                processing: false,
+                serverSide: false,
+                destroy: true,
+                order: [0, 'asc'],
+            });
+            $('#formAction').submit(function(e) {
+                if (!e.isDefaultPrevented()) {
                     $.ajax({
-                        url : "{{ route('action.m_waroeng') }}",
-                        type : "POST",
-                        data : $('#form-waroeng form').serialize(),
+                        url: "{{ route('action.m_waroeng') }}",
+                        type: "POST",
+                        data: $('#form-waroeng form').serialize(),
                         success: function(data) {
-                        $('#form-waroeng').modal('hide');
-                        Codebase.helpers('jq-notify', {
-                            align: 'right',
-                            from: 'top',
-                            type: data.type,
-                            icon: 'fa fa-info me-5',
-                            message: data.messages
-                        }); 
+                            $('#form-waroeng').modal('hide');
+                            Codebase.helpers('jq-notify', {
+                                align: 'right',
+                                from: 'top',
+                                type: data.type,
+                                icon: 'fa fa-info me-5',
+                                message: data.messages
+                            });
                             setTimeout(function() {
                                 window.location.reload();
                             }, 1000);
                         },
-                        error : function(){
+                        error: function() {
                             alert("Tidak dapat menyimpan data!");
                         }
                     });
                     return false;
                 }
             });
-    
-      $("#m_w").append(
-        $('<tfoot/>').append($("#m_w thead tr").clone())
-      );
-    });
-</script>
+
+            $("#m_w").append(
+                $('<tfoot/>').append($("#m_w thead tr").clone())
+            );
+            $('.btn-qr').on('click', function(e) {
+                e.preventDefault();
+                var id = $(this).data('id');
+                console.log(id);
+                $.ajax({
+                    type: 'GET',
+                    url: '{{ route('generate.qr-code') }}',
+                    data: {
+                        m_w_id: id
+                    },
+                    success: function(data) {
+                        // Show the Bootstrap Modal
+                        $('#qrCodeModal').modal('show').find('.modal-body').html(data);
+                    },
+                    error: function() {
+                        alert('Failed to generate QR code.');
+                    }
+                });
+            });
+            $(document).ready(function() {
+                // Function to convert SVG to PNG and initiate download
+                function downloadSvgAsPng() {
+                    var $svg = $(
+                    '.modal-body svg:first-child');
+                     // Target the first SVG element within modal-body
+                    var canvas = document.createElement('canvas');
+                    var ctx = canvas.getContext('2d');
+
+                    // Get the dimensions of the SVG
+                    var width = $svg.attr('width');
+                    var height = $svg.attr('height');
+
+                    // Set canvas dimensions
+                    canvas.width = parseInt(width);
+                    canvas.height = parseInt(height);
+
+                    // Convert SVG to PNG
+                    canvg(canvas, new XMLSerializer().serializeToString($svg[
+                    0])); // Use [0] to get the DOM element
+
+                    // Create a data URL for the PNG
+                    var pngDataUrl = canvas.toDataURL('image/png');
+
+                    // Update the download link's href attribute
+                    $('#downloadLink').attr('href', pngDataUrl);
+                }
+
+                // Trigger the download when the "Download PNG" button is clicked
+                $('#downloadLink').click(downloadSvgAsPng);
+            });
+
+
+
+        });
+    </script>
 @endsection

@@ -103,7 +103,7 @@ class MyController extends Controller
             ]);
 
         return "DONE";
-    }
+    } 
 
     function uploadImage(){
         #Send Image to public server

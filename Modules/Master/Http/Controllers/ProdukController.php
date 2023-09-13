@@ -8,8 +8,9 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use illuminate\Support\Str;
-use Intervention\Image\Image;
+
 class ProdukController extends Controller
 {
     /**
@@ -59,22 +60,10 @@ class ProdukController extends Controller
                     $kat = $request->m_produk_m_klasifikasi_produk_id;
                     $num = $produk_code->m_klasifikasi_produk_last_id + 1;
                     $code = $produk_code->m_klasifikasi_produk_prefix . '-' . $kat . str_pad($num, 5, "0", STR_PAD_LEFT);
-                    
-                    if ($request->hasFile('image')) {
-                        $image = $request->file('image');
-                        $filename = time() . '.' . $image->getClientOriginalExtension();
-                        $path = public_path('uploads/' . $filename);
-                
-                        // Create an Intervention Image instance
-                        $resizedImage = Image::make($image)->resize(300, 200, function ($constraint) {
-                            $constraint->aspectRatio();
-                        });
-                
-                        // Save the resized image
-                        $resizedImage->save($path);
-                
-                        // Simpan informasi gambar ke database atau lakukan yang lain sesuai kebutuhan Anda
-                    }
+
+                    $file = $this->upload_file($request);
+                    $link = $this->uploadImageCloud($file);
+                    $url = ($link) ? $link : 'https://placehold.co/400x400/000000/FFF' ;
 
                     DB::table('m_produk')->insert([
                         "m_produk_id" => '1',
@@ -95,6 +84,7 @@ class ProdukController extends Controller
                         "m_produk_hpp" => $request->m_produk_hpp,
                         "m_produk_created_by" => Auth::user()->users_id,
                         "m_produk_created_at" => Carbon::now(),
+                        "m_produk_image" => $url,
                     ]);
                     DB::table('m_klasifikasi_produk')->where('m_klasifikasi_produk_id', $kat)->update(['m_klasifikasi_produk_last_id' => $num]);
                     $get_last_produk = DB::table('m_produk')->orderBy('m_produk_id', 'desc')->first();
@@ -142,8 +132,11 @@ class ProdukController extends Controller
                 if ($request->m_produk_id == null) {
                     return response()->json(['messages' => 'Data Edit Double !', 'type' => 'danger']);
                 } else {
-                    DB::table('m_produk')->where('m_produk_id', $request->m_produk_id)
-                        ->update([
+                    $file = $this->upload_file($request);
+                    $link = $this->uploadImageCloud($file);
+                    $this->remove_file($file);
+                    if ($link) {
+                        $data = [
                             "m_produk_nama" => $request->m_produk_nama,
                             "m_produk_urut" => $request->m_produk_urut,
                             "m_produk_cr" => $request->m_produk_cr,
@@ -161,7 +154,35 @@ class ProdukController extends Controller
                             "m_produk_client_target" => DB::raw('DEFAULT'),
                             "m_produk_updated_by" => Auth::user()->users_id,
                             "m_produk_updated_at" => Carbon::now(),
-                        ]);
+                            "m_produk_image" => $link,
+                        ];
+                    } else {
+                        $data = [
+                            "m_produk_nama" => $request->m_produk_nama,
+                            "m_produk_urut" => $request->m_produk_urut,
+                            "m_produk_cr" => $request->m_produk_cr,
+                            "m_produk_status" => $request->m_produk_status,
+                            "m_produk_tax" => $request->m_produk_tax,
+                            "m_produk_sc" => $request->m_produk_sc,
+                            "m_produk_m_jenis_produk_id" => $request->m_produk_m_jenis_produk_id,
+                            "m_produk_utama_m_satuan_id" => $request->m_produk_utama_m_satuan_id,
+                            "m_produk_m_plot_produksi_id" => $request->m_produk_m_plot_produksi_id,
+                            "m_produk_m_klasifikasi_produk_id" => $request->m_produk_m_klasifikasi_produk_id,
+                            "m_produk_jual" => $request->m_produk_jual,
+                            "m_produk_scp" => $request->m_produk_scp,
+                            "m_produk_hpp" => $request->m_produk_hpp,
+                            "m_produk_status_sync" => 'send',
+                            "m_produk_client_target" => DB::raw('DEFAULT'),
+                            "m_produk_updated_by" => Auth::user()->users_id,
+                            "m_produk_updated_at" => Carbon::now(),
+                        ];
+                    }
+
+                    DB::table('m_produk')
+                        ->where('m_produk_id', $request->m_produk_id)
+                        ->update($data);
+                    
+
                     if ($request->config_sub_jenis_produk_m_sub_jenis_produk_id) {
                         foreach ($request->config_sub_jenis_produk_m_sub_jenis_produk_id as $value) {
                             $existingData = DB::table('config_sub_jenis_produk')
@@ -191,7 +212,8 @@ class ProdukController extends Controller
      * @param Request $request
      * @return Renderable
      */
-    function list($id) {
+    public function list($id)
+    {
         $data_produk = DB::table('m_produk')->where('m_produk_id', $id)->first();
         $data_sub_jenis_produk = DB::table('config_sub_jenis_produk')
             ->where('config_sub_jenis_produk_m_produk_id', $id)

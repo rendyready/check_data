@@ -69,6 +69,7 @@ Route::group(['prefix' => 'master', 'controller' => MWaroengController::class, '
     Route::post('m_waroeng/action', 'action')->name('action.m_waroeng');
     Route::get('m_waroeng/akses', 'get_mw_akses');
     Route::get('m_waroeng/waroeng_update/{id}', 'update_waroeng_id');
+    Route::get('generate-qr-code', 'generateQRCode')->name('generate.qr-code');
 });
 //Master Jenis Nota
 Route::group(['prefix' => 'master', 'controller' => MJenisNotaController::class, 'middleware' => ['auth', 'web']], function () {
