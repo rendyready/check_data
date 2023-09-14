@@ -17,6 +17,7 @@
     },
     "dependencies": {
         "@popperjs/core": "^2.11.6",
+        "blueimp-file-upload": "^10.32.0",
         "bootstrap": "^5.2.2",
         "jspdf": "^2.5.1",
         "jspdf-autotable": "^3.5.28",
