@@ -164,7 +164,7 @@
                 <a class="link-fx fw-bold tracking-wide mx-auto" href="/">
                     <span class="smini-hidden">
                         <i class="fa fa-fire text-primary"></i>
-                        <span class="fs-4 text-dual">Sipedas</span><span class="fs-4 text-primary">V4.1.10</span>
+                        <span class="fs-4 text-dual">Sipedas</span><span class="fs-4 text-primary">V4.1.12</span>
                     </span>
                 </a>
             </div>
@@ -591,7 +591,7 @@
                                                     class="nav-main-item{{ request()->is('dashboard/rekap_aktiv') ? ' open' : '' }}">
                                                     <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu"
                                                         aria-haspopup="true" aria-expanded="true" href="#">
-                                                        <span class="nav-main-link-name">Rekap Aktivitas Kasir</span>
+                                                        <span class="nav-main-link-name">Laporan Aktivitas Kasir</span>
                                                     </a>
                                                     <ul class="nav-main-submenu">
                                                         @can('rekap buka laci.view')

@@ -3,12 +3,14 @@
 namespace Modules\Master\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\MW;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Response;
 use illuminate\Support\Str;
-use App\Models\MW;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class MWaroengController extends Controller
 {
@@ -39,7 +41,7 @@ class MWaroengController extends Controller
         $pajak = DB::table('m_pajak')->select('m_pajak_id', 'm_pajak_value')->get();
         $sc = DB::table('m_sc')->select('m_sc_id', 'm_sc_value')->get();
         $m_tipe_nota = DB::table('m_tipe_nota')->select('m_tipe_nota_nama')->get();
-        return view('master::m_waroeng', compact('data', 'area', 'waroeng_jenis', 'pajak', 'sc', 'modaltipe','m_tipe_nota'));
+        return view('master::m_waroeng', compact('data', 'area', 'waroeng_jenis', 'pajak', 'sc', 'modaltipe', 'm_tipe_nota'));
     }
     public function edit($id)
     {
@@ -125,9 +127,27 @@ class MWaroengController extends Controller
         return response()->json($get_waroeng);
     }
 
-    public function update_waroeng_id($id){
-        DB::table('users')->where('users_id',Auth::user()->users_id)
-        ->update(['waroeng_id'=>$id]);
+    public function update_waroeng_id($id)
+    {
+        DB::table('users')->where('users_id', Auth::user()->users_id)
+            ->update(['waroeng_id' => $id]);
         return response()->json('success');
     }
+
+    public function generateQRCode(Request $request)
+    {
+        $waroeng = MW::find($request->m_w_id);
+        $waroengnama = str_replace(' ', '_', $waroeng->m_w_nama);
+        $url = ($waroeng->m_area_id == 11) ? 'https://order.waroengss.com/id/en/landing' : 'https://order.waroengss.com/id/en/landing';
+        $urltext = $url . '/' . $waroengnama;
+
+        // Generate the QR code as an image
+        $qrCode = QrCode::size(200)->generate($urltext);
+
+        // Create a response with the QR code image
+        $response = response($qrCode);
+
+        return $response;
+    }
+
 }

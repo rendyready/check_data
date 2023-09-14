@@ -298,6 +298,11 @@ class MJenisNotaController extends Controller
                 ->where('m_menu_harga_m_produk_id', $request->m_menu_harga_m_produk_id)
                 ->count();
             if ($cek <= 0) {
+                if (empty($request->m_menu_harga_package)) {
+                   $package = 0;
+                }else{
+                    $package = $request->m_menu_harga_package;
+                }
                 MMenuHarga::insert([
                     'm_menu_harga_id' => '1',
                     'm_menu_harga_nominal' => convertfloat($request->m_menu_harga_nominal),
@@ -306,7 +311,7 @@ class MJenisNotaController extends Controller
                     'm_menu_harga_sc_status' => $request->m_menu_harga_sc_status,
                     'm_menu_harga_status' => $request->m_menu_harga_status,
                     'm_menu_harga_tax_status' => $request->m_menu_harga_tax_status,
-                    'm_menu_harga_package' => $request->m_menu_harga_package,
+                    'm_menu_harga_package' => $package,
                     'm_menu_harga_created_at' => Carbon::now(),
                     'm_menu_harga_created_by' => Auth::user()->users_id,
                 ]);
