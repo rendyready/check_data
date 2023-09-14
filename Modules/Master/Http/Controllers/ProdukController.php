@@ -137,9 +137,9 @@ class ProdukController extends Controller
                     $this->remove_file($file);
                     if ($link) {
                         $data = [
-                            "m_produk_nama" => $request->m_produk_nama,
+                            "m_produk_nama" => $produkNama,
                             "m_produk_urut" => $request->m_produk_urut,
-                            "m_produk_cr" => $request->m_produk_cr,
+                            "m_produk_cr" => $produkNamaCR,
                             "m_produk_status" => $request->m_produk_status,
                             "m_produk_tax" => $request->m_produk_tax,
                             "m_produk_sc" => $request->m_produk_sc,
@@ -158,9 +158,9 @@ class ProdukController extends Controller
                         ];
                     } else {
                         $data = [
-                            "m_produk_nama" => $request->m_produk_nama,
+                            "m_produk_nama" => $produkNama,
                             "m_produk_urut" => $request->m_produk_urut,
-                            "m_produk_cr" => $request->m_produk_cr,
+                            "m_produk_cr" => $produkNamaCR,
                             "m_produk_status" => $request->m_produk_status,
                             "m_produk_tax" => $request->m_produk_tax,
                             "m_produk_sc" => $request->m_produk_sc,

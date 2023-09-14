@@ -349,7 +349,7 @@ class Controller extends BaseController
         return response($data);
     }
 
-    function upload_file($request)
+    public function upload_file($request)
     {
         if ($request->hasFile('m_produk_image')) {
             $image = $request->file('m_produk_image');
@@ -357,20 +357,23 @@ class Controller extends BaseController
             $directory = public_path('uploads');
             $path = $directory . '/' . $filename;
 
-            // Membuat direktori jika belum ada
+            // Create the directory if it doesn't exist
             if (!File::isDirectory($directory)) {
                 File::makeDirectory($directory, 0755, true, true);
             }
-
             $image->move($directory, $filename);
-            $img = File::get($path);
-            $img = Image::make($img)->resize(200, 200);
+            // Open and resize the image while maintaining the aspect ratio
+            $img = Image::make($path);
+            $img->fit(200, 200, function ($constraint) {
+                $constraint->upsize(); 
+            });
             $img->save($path);
+
             return 'uploads/' . $filename;
         }
     }
 
-     function remove_file($directory)
+    public function remove_file($directory)
     {
         $path = public_path($directory);
         if (File::exists($path)) {
@@ -378,7 +381,7 @@ class Controller extends BaseController
         }
     }
 
-     function uploadImageCloud($url)
+    public function uploadImageCloud($url)
     {
         #Send Image to public server
         $img = url($url);
@@ -397,7 +400,7 @@ class Controller extends BaseController
         return $upload;
     }
 
-     function deleteImageCloud($urlImage)
+    public function deleteImageCloud($urlImage)
     {
         #delete image from cloud storage
         $delete = Http::withHeaders([

@@ -33,19 +33,16 @@
                     </div>
                     <div class="p-2">
                         <a class="dropdown-item d-flex align-items-center justify-content-between space-x-1"
-                            href="javascript:void(0)" onclick="event.stopPropagation();">
-                            <div class="form-group">
-                                <select class="js-select2-nav" id="waroeng_default" name="waroeng_id"
-                                    style="width: 100%;" data-placeholder="Ganti Waroeng">
-                                    <option></option>
-                                </select>
-                            </div>
-                        </a>
-                        <a class="dropdown-item d-flex align-items-center justify-content-between space-x-1"
-                            href="javascript:void(0)" onclick="event.stopPropagation();">
+                            href="{{ route('logout') }}"
+                            onclick="event.preventDefault();
+                                             document.getElementById('logout-form').submit();"
+                            onclick="event.stopPropagation();">
                             <span>Sign Out</span>
                             <i class="fa fa-fw fa-sign-out-alt opacity-25"></i>
                         </a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                            @csrf
+                        </form>
                     </div>
                 </div>
             </div>
@@ -164,7 +161,7 @@
                 <a class="link-fx fw-bold tracking-wide mx-auto" href="/">
                     <span class="smini-hidden">
                         <i class="fa fa-fire text-primary"></i>
-                        <span class="fs-4 text-dual">Sipedas</span><span class="fs-4 text-primary">V4.1.12</span>
+                        <span class="fs-4 text-dual">Sipedas</span><span class="fs-4 text-primary">V4.2.1</span>
                     </span>
                 </a>
             </div>
@@ -234,6 +231,10 @@
                         <a class="nav-main-link{{ request()->is('dashboard') ? ' active' : '' }}" href="/dashboard">
                             <i class="nav-main-link-icon fa fa-house-user"></i>
                             <span class="nav-main-link-name">Dashboard</span>
+                        </a>
+                        <a class="nav-main-link{{ request()->is('*/profile') ? ' active' : '' }}" href="{{route('users.profile')}}">
+                            <i class="nav-main-link-icon fa fa-user"></i>
+                            <span class="nav-main-link-name">Profile</span>
                         </a>
                     </li>
                     <li class="nav-main-heading">Menu</li>

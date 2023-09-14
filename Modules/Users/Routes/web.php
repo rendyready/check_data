@@ -1,5 +1,5 @@
 <?php
-
+use illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,6 +17,8 @@ Route::group(['prefix' => 'users', 'controller' => UsersController::class, 'midd
     Route::get('/edit/{id}', 'edit')->name('users.edit');
     Route::post('users/action', 'action')->name('users.action');
     Route::post('/reset/{id}', 'reset_pass')->name('password.reset');
+    Route::get('/profile','profile')->name('users.profile');
+    Route::post('pass_update','pass_update')->name('users.pass_update');
 });
 //Akses Route
 Route::group(['prefix' => 'users', 'controller' => AksesController::class, 'middleware' => ['auth', 'web']], function () {
