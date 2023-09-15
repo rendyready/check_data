@@ -63,31 +63,23 @@ class LaporanKasHarianKasirController extends Controller
 
     ###############################################################################################################################
 
-    public function export_pdf(Request $request, $id, $tanggal, $waroeng)
+    // public function export_pdf(Request $request, $id, $tanggal, $waroeng)
+    public function export_pdf(Request $request)
     {
-        if ($request->id == null) {
-            $id;
-        } else {
-            $id = $request->id;
-        }
-
-        // return $waroeng = $request->waroeng;
+        $id = $request->id;
 
         $modal = DB::table('rekap_modal')
-        // ->where('rekap_modal_m_w_id', $waroeng)
             ->where('rekap_modal_id', $id)
             ->where('rekap_modal_status', 'close')
             ->orderby('rekap_modal_tanggal', 'ASC')
             ->get();
         $mutasi = DB::table('rekap_mutasi_modal')
-        // ->where('r_m_m_m_w_id', $waroeng)
             ->where('r_m_m_rekap_modal_id', $id)
             ->orderby('r_m_m_tanggal', 'ASC')
             ->orderby('r_m_m_jam', 'ASC')
             ->get();
         $transaksi = DB::table('rekap_transaksi')
             ->join('rekap_payment_transaksi', 'r_p_t_r_t_id', 'r_t_id')
-        // ->where('r_t_m_w_id', $waroeng)
             ->where('r_t_rekap_modal_id', $id)
             ->where('r_p_t_m_payment_method_id', 1)
             ->orderby('r_t_tanggal', 'ASC')
@@ -95,14 +87,12 @@ class LaporanKasHarianKasirController extends Controller
             ->get();
         $transaksi2 = DB::table('rekap_transaksi')
             ->join('rekap_payment_transaksi', 'r_p_t_r_t_id', 'r_t_id')
-        // ->where('r_t_m_w_id', $waroeng)
             ->where('r_t_rekap_modal_id', $id)
             ->whereIn('r_p_t_m_payment_method_id', [2, 3, 4, 5, 6, 7, 8, 9])
             ->orderby('r_t_tanggal', 'ASC')
             ->orderby('r_t_jam', 'ASC')
             ->get();
         $refund = DB::table('rekap_refund')
-        // ->where('r_r_m_w_id', $waroeng)
             ->where('r_r_rekap_modal_id', $id)
             ->orderby('r_r_tanggal', 'ASC')
             ->orderby('r_r_jam', 'ASC')
@@ -566,18 +556,9 @@ class LaporanKasHarianKasirController extends Controller
             'payment' => 2, 3, 4, 5, 6, 7, 8, 9,
         );
 
-        $kronologi = $request->input('kronologi');
-        if ($request->tanggal == null) {
-            $tgl = $tanggal;
-        } else {
-            $tgl = tgl_indo($request->tanggal);
-        }
-        if ($request->waroeng == null) {
-            $waroeng_nama = $waroeng;
-        } else {
-            $waroeng_nama = $this->getNamaW($request->waroeng);
-        }
-
+        $kronologi = $request->kronologi;
+        $tgl = tgl_indo($request->tanggal);
+        $waroeng_nama = $this->getNamaW($request->waroeng);
         $w_nama = strtoupper(substr($waroeng_nama, 0, 3)) . ucwords(substr($waroeng_nama, 3));
         $nama_kasir = DB::table('users')
             ->join('rekap_modal', 'rekap_modal_created_by', 'users_id')
