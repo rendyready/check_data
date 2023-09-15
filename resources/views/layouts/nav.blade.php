@@ -489,7 +489,7 @@
                                                     <ul class="nav-main-submenu">
                                                         <li class="nav-main-item">
                                                             <a class="nav-main-link{{ request()->is('dashboard/rekap_menu') ? ' active' : '' }}"
-                                                                href="{{ route('rekap_menu.index') }}">
+                                                                href="{{ route('rekap_menu.menu_summary') }}">
                                                                 <span class="nav-main-link-name">Rekap Menu Summary</span>
                                                             </a>
                                                         </li>
@@ -497,6 +497,12 @@
                                                             <a class="nav-main-link{{ request()->is('dashboard/menu_harian') ? ' active' : '' }}"
                                                                 href="{{ route('menu_harian.index') }}">
                                                                 <span class="nav-main-link-name">Rekap Menu Tarikan</span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="nav-main-item">
+                                                            <a class="nav-main-link{{ request()->is('dashboard/rekap_menu_global') ? ' active' : '' }}"
+                                                                href="{{ route('rekap_menu_global.menu_global') }}">
+                                                                <span class="nav-main-link-name">Rekap Menu Global</span>
                                                             </a>
                                                         </li>
                                                     </ul>
