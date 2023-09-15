@@ -113,9 +113,9 @@
                                                     <button class="dropdown-item" style="font-weight:550;"
                                                         id="hari">Export
                                                         Per Hari</button>
-                                                    {{-- <button class="dropdown-item" style="font-weight: 550;"
+                                                    <button class="dropdown-item" style="font-weight: 550;"
                                                         id="bulan">Export
-                                                        Per Bulan</button> --}}
+                                                        Per Bulan</button>
                                                 </div>
                                             </div>
 
