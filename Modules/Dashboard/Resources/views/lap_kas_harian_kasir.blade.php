@@ -198,7 +198,70 @@
         </div>
     </div>
     </div>
+
+    <div class="modal fade" id="konfrim_ba" tabindex="-1" role="dialog" aria-labelledby="modal-popin"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-popin" role="document">
+            <div class="modal-content">
+                <div class="block block-rounded shadow-none mb-0">
+                    <div class="block-header block-header-default bg-pulse">
+                        <h3 class="block-title text-center" style="color: white; font-size:20px;">Konfirmasi</h3>
+                        <div class="block-options">
+                            <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
+                                <i class="fa fa-times" style="color: white;"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="block-content">
+                        <p>Tulis kronologi Berita Acara Disini?</p>
+                    </div>
+                    <div
+                        class="block-content block-content-full block-content-sm text-end border-top d-flex justify-content-between">
+                        <button type="button" id="konfrim_tidak" class="btn btn-secondary btn-sm"
+                            data-bs-dismiss="modal">
+                            Tidak
+                        </button>
+                        <button type="button" id="konfrim_ya" class="btn btn-primary btn-sm" data-bs-dismiss="modal">
+                            Ya
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="input_ba" tabindex="-1" role="dialog" aria-labelledby="modal-popin"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-popin" role="document">
+            <div class="modal-content">
+                <div class="block block-rounded shadow-none mb-0">
+                    <div class="block-header block-header-default bg-pulse">
+                        <h3 class="block-title text-center" style="color: white; font-size:18px;">Kronologi Berita Acara
+                            Kasir
+                        </h3>
+                        <div class="block-options">
+                            <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
+                                <i class="fa fa-times" style="color: white;"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="block-content">
+                        <form id="kronologi_insert">
+                            @csrf
+                            <textarea class="form-control" id="kronologi" placeholder="Masukkan Kronologi Disini" style="height: 40vh;"></textarea>
+                    </div>
+                    <div class="block-content block-content-full block-content-sm text-end border-top">
+                        <button type="submit" class="btn btn-primary btn-sm" data-bs-dismiss="modal">
+                            Simpan
+                        </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- END Select2 in a modal -->
+
 @endsection
 @section('js')
     <!-- js -->
@@ -411,12 +474,83 @@
                 $("#tampil_modal").modal('show');
             });
 
+            var id_pdf;
             $("#tampil_rekap").on('click', '#button_pdf', function() {
-                var id = $(this).attr('value');
+                id_pdf = $(this).attr('value');
+                $("#konfrim_ba").modal('show');
+            });
+
+            $("#konfrim_tidak").on('click', function() {
+                event.preventDefault();
+
                 var waroeng = $('.filter_waroeng').val();
                 var tanggal = $('.filter_tanggal').val();
-                var url = 'kas_kasir/export_pdf?id=' + id + '&waroeng=' + waroeng + '&tanggal=' + tanggal;
-                window.open(url, '_blank');
+                var url = 'kas_kasir/export_pdf/' + id_pdf + '/' + tanggal + '/' + waroeng;
+
+                $.ajax({
+                    type: 'GET',
+                    url: url,
+                    success: function(response) {
+                        console.log(response);
+                        Codebase.helpers('jq-notify', {
+                            align: 'right', // 'right', 'left', 'center'
+                            from: 'top', // 'top', 'bottom'
+                            type: 'success', // 'info', 'success', 'warning', 'danger'
+                            icon: 'fa fa-info me-5', // Icon class
+                            message: 'Berhasil terdownload'
+                        });
+                    },
+                    error: function(data) {
+                        console.log(data);
+                        Codebase.helpers('jq-notify', {
+                            align: 'right', // 'right', 'left', 'center'
+                            from: 'top', // 'top', 'bottom'
+                            type: 'info', // 'info', 'success', 'warning', 'danger'
+                            icon: 'fa fa-info me-5', // Icon class
+                            message: 'Berhasil terdownload'
+                        });
+                    }
+                });
+            });
+
+            $("#konfrim_ya").on('click', function() {
+                $("#input_ba").modal('show');
+            });
+
+            $('#kronologi_insert').submit(function(e) {
+                e.preventDefault();
+                var kronologi = $('#kronologi').val();
+                var waroeng = $('.filter_waroeng').val();
+                var tanggal = $('.filter_tanggal').val();
+
+                $.ajax({
+                    type: 'POST',
+                    url: 'kas_kasir/export_pdf/' + id_pdf + '/' + tanggal + '/' + waroeng,
+                    data: {
+                        _token: $('input[name="_token"]').val(),
+                        kronologi: kronologi
+                    },
+                    success: function(response) {
+                        console.log(response);
+                        Codebase.helpers('jq-notify', {
+                            align: 'right', // 'right', 'left', 'center'
+                            from: 'top', // 'top', 'bottom'
+                            type: 'success', // 'info', 'success', 'warning', 'danger'
+                            icon: 'fa fa-info me-5', // Icon class
+                            message: 'Berhasil terdownload'
+                        });
+                    },
+                    error: function(data) {
+                        console.log(data);
+                        Codebase.helpers('jq-notify', {
+                            align: 'right', // 'right', 'left', 'center'
+                            from: 'top', // 'top', 'bottom'
+                            type: 'info', // 'info', 'success', 'warning', 'danger'
+                            icon: 'fa fa-info me-5', // Icon class
+                            message: 'Berhasil terdownload'
+                        });
+                    }
+                });
             });
 
             $("#tampil_rekap").on('click', '#button_tarikan', function() {

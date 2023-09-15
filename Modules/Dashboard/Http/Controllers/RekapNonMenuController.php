@@ -3,6 +3,7 @@
 namespace Modules\Dashboard\Http\Controllers;
 
 use App\Exports\RekapNonMenuExport;
+use App\Exports\RekapNonMenuHarianExport;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -1261,23 +1262,21 @@ class RekapNonMenuController extends Controller
 
                 foreach ($rekap as $keyRekap => $valRekap) {
                     if ($valRekap->tanggal == $valListRekap) {
-                        $data[$valListRekap]['operator'] = '';
                         $data[$valListRekap]['waroeng'] = strtoupper(str_replace('WSS', '', $valRekap->m_w_nama));
-                        $data[$valListRekap]['tanggal'] = date('d', strtotime($valRekap->tanggal));
-                        $data[$valListRekap]['sesi'] = '';
+                        $data[$valListRekap]['tanggal'] = date('j', strtotime($valRekap->tanggal));
                         if ($valRekap->type_name == $valTipe) {
                             if (in_array($valRekap->m_produk_id, $listMenu)) {
                                 $qty = $valRekap->qty;
                                 if (!empty($refundCek)) {
                                     foreach ($refund as $valRefund) {
-                                        if ($valRekap->m_produk_id == $valRefund->r_r_detail_m_produk_id && $valRekap->tanggal == $valRefund->tanggal && $valRekap->sesi == $valRefund->sesi && $valRekap->type_id == $valRefund->r_t_m_t_t_id) {
+                                        if ($valRekap->m_produk_id == $valRefund->r_r_detail_m_produk_id && $valRekap->tanggal == $valRefund->tanggal && $valRekap->m_w_nama == $valRefund->m_w_nama && $valRekap->type_id == $valRefund->r_t_m_t_t_id) {
                                             $qty = $qty - $valRefund->qty;
                                         }
                                     }
                                 }
                                 if (!empty($garansi_notnull)) {
                                     foreach ($garansi_nominal as $valGaransi) {
-                                        if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->sesi == $valGaransi->sesi && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
+                                        if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->m_w_nama == $valGaransi->m_w_nama && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
                                             $qty = $qty + $valGaransi->qty;
                                         }
                                     }
@@ -1289,14 +1288,14 @@ class RekapNonMenuController extends Controller
                                 $qty = $valRekap->qty;
                                 if (!empty($refundCek)) {
                                     foreach ($refund as $valRefund) {
-                                        if ($valRekap->m_produk_id == $valRefund->r_r_detail_m_produk_id && $valRekap->tanggal == $valRefund->tanggal && $valRekap->sesi == $valRefund->sesi && $valRekap->type_id == $valRefund->r_t_m_t_t_id) {
+                                        if ($valRekap->m_produk_id == $valRefund->r_r_detail_m_produk_id && $valRekap->tanggal == $valRefund->tanggal && $valRekap->m_w_nama == $valRefund->m_w_nama && $valRekap->type_id == $valRefund->r_t_m_t_t_id) {
                                             $qty = $qty - $valRefund->qty;
                                         }
                                     }
                                 }
                                 if (!empty($garansi_notnull)) {
                                     foreach ($garansi_nominal as $valGaransi) {
-                                        if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->sesi == $valGaransi->sesi && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
+                                        if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->m_w_nama == $valGaransi->m_w_nama && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
                                             $qty = $qty + $valGaransi->qty;
                                         }
                                     }
@@ -1322,14 +1321,14 @@ class RekapNonMenuController extends Controller
                         $qty = $valRekap->qty;
                         if (!empty($refundCek)) {
                             foreach ($refund as $valRefund) {
-                                if ($valRekap->m_produk_id == $valRefund->r_r_detail_m_produk_id && $valRekap->tanggal == $valRefund->tanggal && $valRekap->sesi == $valRefund->sesi && $valRekap->type_id == $valRefund->r_t_m_t_t_id) {
+                                if ($valRekap->m_produk_id == $valRefund->r_r_detail_m_produk_id && $valRekap->tanggal == $valRefund->tanggal && $valRekap->m_w_nama == $valRefund->m_w_nama && $valRekap->type_id == $valRefund->r_t_m_t_t_id) {
                                     $qty = $qty - $valRefund->qty;
                                 }
                             }
                         }
                         if (!empty($garansi_notnull)) {
                             foreach ($garansi_nominal as $valGaransi) {
-                                if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->sesi == $valGaransi->sesi && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
+                                if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->m_w_nama == $valGaransi->m_w_nama && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
                                     $qty = $qty + $valGaransi->qty;
                                 }
                             }
@@ -1343,14 +1342,14 @@ class RekapNonMenuController extends Controller
                         $qty = $valRekap->qty;
                         if (!empty($refundCek)) {
                             foreach ($refund as $valRefund) {
-                                if ($valRekap->m_produk_id == $valRefund->r_r_detail_m_produk_id && $valRekap->tanggal == $valRefund->tanggal && $valRekap->sesi == $valRefund->sesi && $valRekap->type_id == $valRefund->r_t_m_t_t_id) {
+                                if ($valRekap->m_produk_id == $valRefund->r_r_detail_m_produk_id && $valRekap->tanggal == $valRefund->tanggal && $valRekap->m_w_nama == $valRefund->m_w_nama && $valRekap->type_id == $valRefund->r_t_m_t_t_id) {
                                     $qty = $qty - $valRefund->qty;
                                 }
                             }
                         }
                         if (!empty($garansi_notnull)) {
                             foreach ($garansi_nominal as $valGaransi) {
-                                if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->sesi == $valGaransi->sesi && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
+                                if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->m_w_nama == $valGaransi->m_w_nama && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
                                     $qty = $qty + $valGaransi->qty;
                                 }
                             }
@@ -1364,14 +1363,14 @@ class RekapNonMenuController extends Controller
                         $qty = $valRekap->qty;
                         if (!empty($refundCek)) {
                             foreach ($refund as $valRefund) {
-                                if ($valRekap->m_produk_id == $valRefund->r_r_detail_m_produk_id && $valRekap->tanggal == $valRefund->tanggal && $valRekap->sesi == $valRefund->sesi && $valRekap->type_id == $valRefund->r_t_m_t_t_id) {
+                                if ($valRekap->m_produk_id == $valRefund->r_r_detail_m_produk_id && $valRekap->tanggal == $valRefund->tanggal && $valRekap->m_w_nama == $valRefund->m_w_nama && $valRekap->type_id == $valRefund->r_t_m_t_t_id) {
                                     $qty = $qty - $valRefund->qty;
                                 }
                             }
                         }
                         if (!empty($garansi_notnull)) {
                             foreach ($garansi_nominal as $valGaransi) {
-                                if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->sesi == $valGaransi->sesi && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
+                                if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->m_w_nama == $valGaransi->m_w_nama && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
                                     $qty = $qty + $valGaransi->qty;
                                 }
                             }
@@ -1385,14 +1384,14 @@ class RekapNonMenuController extends Controller
                         $qty = $valRekap->qty;
                         if (!empty($refundCek)) {
                             foreach ($refund as $valRefund) {
-                                if ($valRekap->m_produk_id == $valRefund->r_r_detail_m_produk_id && $valRekap->tanggal == $valRefund->tanggal && $valRekap->sesi == $valRefund->sesi && $valRekap->type_id == $valRefund->r_t_m_t_t_id) {
+                                if ($valRekap->m_produk_id == $valRefund->r_r_detail_m_produk_id && $valRekap->tanggal == $valRefund->tanggal && $valRekap->m_w_nama == $valRefund->m_w_nama && $valRekap->type_id == $valRefund->r_t_m_t_t_id) {
                                     $qty = $qty - $valRefund->qty;
                                 }
                             }
                         }
                         if (!empty($garansi_notnull)) {
                             foreach ($garansi_nominal as $valGaransi) {
-                                if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->sesi == $valGaransi->sesi && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
+                                if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->m_w_nama == $valGaransi->m_w_nama && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
                                     $qty = $qty + $valGaransi->qty;
                                 }
                             }
@@ -1406,14 +1405,14 @@ class RekapNonMenuController extends Controller
                         $qty = $valRekap->qty;
                         if (!empty($refundCek)) {
                             foreach ($refund as $valRefund) {
-                                if ($valRekap->m_produk_id == $valRefund->r_r_detail_m_produk_id && $valRekap->tanggal == $valRefund->tanggal && $valRekap->sesi == $valRefund->sesi && $valRekap->type_id == $valRefund->r_t_m_t_t_id) {
+                                if ($valRekap->m_produk_id == $valRefund->r_r_detail_m_produk_id && $valRekap->tanggal == $valRefund->tanggal && $valRekap->m_w_nama == $valRefund->m_w_nama && $valRekap->type_id == $valRefund->r_t_m_t_t_id) {
                                     $qty = $qty - $valRefund->qty;
                                 }
                             }
                         }
                         if (!empty($garansi_notnull)) {
                             foreach ($garansi_nominal as $valGaransi) {
-                                if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->sesi == $valGaransi->sesi && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
+                                if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->m_w_nama == $valGaransi->m_w_nama && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
                                     $qty = $qty + $valGaransi->qty;
                                 }
                             }
@@ -1426,7 +1425,7 @@ class RekapNonMenuController extends Controller
                         $valPajak = $valRekap->pajak;
                         if (!empty($refundCek)) {
                             foreach ($refund as $valRefund) {
-                                if ($valRekap->m_produk_id == $valRefund->r_r_detail_m_produk_id && $valRekap->tanggal == $valRefund->tanggal && $valRekap->sesi == $valRefund->sesi && $valRekap->type_id == $valRefund->r_t_m_t_t_id) {
+                                if ($valRekap->m_produk_id == $valRefund->r_r_detail_m_produk_id && $valRekap->tanggal == $valRefund->tanggal && $valRekap->m_w_nama == $valRefund->m_w_nama && $valRekap->type_id == $valRefund->r_t_m_t_t_id) {
                                     $valPajak = $valPajak - $valRefund->pajak_refund;
                                 }
                             }
@@ -1436,7 +1435,7 @@ class RekapNonMenuController extends Controller
                         $valPajak = $valRekap->pajak;
                         if (!empty($refundCek)) {
                             foreach ($refund as $valRefund) {
-                                if ($valRekap->m_produk_id == $valRefund->r_r_detail_m_produk_id && $valRekap->tanggal == $valRefund->tanggal && $valRekap->sesi == $valRefund->sesi && $valRekap->type_id == $valRefund->r_t_m_t_t_id) {
+                                if ($valRekap->m_produk_id == $valRefund->r_r_detail_m_produk_id && $valRekap->tanggal == $valRefund->tanggal && $valRekap->m_w_nama == $valRefund->m_w_nama && $valRekap->type_id == $valRefund->r_t_m_t_t_id) {
                                     $valPajak = $valPajak - $valRefund->pajak_refund;
                                 }
                             }
@@ -1449,7 +1448,7 @@ class RekapNonMenuController extends Controller
             }
         }
         // return $data;
-        return Excel::download(new RekapNonMenuExport($data), 'Rekap Non Menu (per bulan) - ' . $request->tanggal . '.xlsx');
+        return Excel::download(new RekapNonMenuHarianExport($data), 'Rekap Non Menu (per bulan) - ' . $request->tanggal . '.xlsx');
     }
 
     // public function showori(Request $request)
