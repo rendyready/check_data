@@ -99,32 +99,33 @@
                                     class="btn btn-primary btn-sm col-1 mt-2 mb-3">Cari</button>
                             </div>
                         </form>
-                        <table id="tampil_rekap"
-                            class="table table-sm table-bordered table-striped table-vcenter nowrap table-hover js-dataTable-full">
-                            <thead>
-                                <tr>
-                                    <th>Tanggal</th>
-                                    <th>Sesi</th>
-                                    <th>Operator</th>
-                                    <th>Saldo Awal</th>
-                                    <th>Pemasukan</th>
-                                    <th>Pengeluaran</th>
-                                    <th>Saldo Akhir</th>
-                                    <th>Saldo Real</th>
-                                    <th>Selisih</th>
-                                    <th>Free Kembalian</th>
-                                    <th>Pembulatan</th>
-                                    <th>Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody id="show_data">
-                            </tbody>
-                        </table>
+                        <div class="table-responsive">
+                            <table id="tampil_rekap"
+                                class="table table-sm table-bordered table-striped table-vcenter nowrap table-hover js-dataTable-full">
+                                <thead>
+                                    <tr>
+                                        <th>Tanggal</th>
+                                        <th>Sesi</th>
+                                        <th>Operator</th>
+                                        <th>Saldo Awal</th>
+                                        <th>Pemasukan</th>
+                                        <th>Pengeluaran</th>
+                                        <th>Saldo Akhir</th>
+                                        <th>Saldo Real</th>
+                                        <th>Selisih</th>
+                                        <th>Free Kembalian</th>
+                                        <th>Pembulatan</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="show_data">
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
     </div>
 
     <!-- Select2 in a modal -->
@@ -246,15 +247,16 @@
                         </div>
                     </div>
                     <div class="block-content">
-                        <form id="kronologi_insert">
-                            @csrf
-                            <textarea class="form-control" id="kronologi" placeholder="Masukkan Kronologi Disini" style="height: 40vh;"></textarea>
+                        {{-- <form id="kronologi_insert">
+                            @csrf --}}
+                        <textarea class="form-control" id="kronologi" placeholder="Masukkan Kronologi Disini" style="height: 40vh;"></textarea>
                     </div>
                     <div class="block-content block-content-full block-content-sm text-end border-top">
-                        <button type="submit" class="btn btn-primary btn-sm" data-bs-dismiss="modal">
+                        <button type="button" id="simpan_kronologi" class="btn btn-primary btn-sm"
+                            data-bs-dismiss="modal">
                             Simpan
                         </button>
-                        </form>
+                        {{-- </form> --}}
                     </div>
                 </div>
             </div>
@@ -474,83 +476,34 @@
                 $("#tampil_modal").modal('show');
             });
 
-            var id_pdf;
+            var id;
             $("#tampil_rekap").on('click', '#button_pdf', function() {
-                id_pdf = $(this).attr('value');
+                id = $(this).attr('value');
                 $("#konfrim_ba").modal('show');
             });
 
             $("#konfrim_tidak").on('click', function() {
-                event.preventDefault();
-
                 var waroeng = $('.filter_waroeng').val();
                 var tanggal = $('.filter_tanggal').val();
-                var url = 'kas_kasir/export_pdf/' + id_pdf + '/' + tanggal + '/' + waroeng;
+                var url = 'kas_kasir/export_pdf?id=' + id + '&tanggal=' + tanggal + '&waroeng=' + waroeng;
 
-                $.ajax({
-                    type: 'GET',
-                    url: url,
-                    success: function(response) {
-                        console.log(response);
-                        Codebase.helpers('jq-notify', {
-                            align: 'right', // 'right', 'left', 'center'
-                            from: 'top', // 'top', 'bottom'
-                            type: 'success', // 'info', 'success', 'warning', 'danger'
-                            icon: 'fa fa-info me-5', // Icon class
-                            message: 'Berhasil terdownload'
-                        });
-                    },
-                    error: function(data) {
-                        console.log(data);
-                        Codebase.helpers('jq-notify', {
-                            align: 'right', // 'right', 'left', 'center'
-                            from: 'top', // 'top', 'bottom'
-                            type: 'info', // 'info', 'success', 'warning', 'danger'
-                            icon: 'fa fa-info me-5', // Icon class
-                            message: 'Berhasil terdownload'
-                        });
-                    }
-                });
+                window.open(url);
             });
 
             $("#konfrim_ya").on('click', function() {
                 $("#input_ba").modal('show');
             });
 
-            $('#kronologi_insert').submit(function(e) {
+            $('#simpan_kronologi').on('click', function(e) {
                 e.preventDefault();
                 var kronologi = $('#kronologi').val();
                 var waroeng = $('.filter_waroeng').val();
                 var tanggal = $('.filter_tanggal').val();
 
-                $.ajax({
-                    type: 'POST',
-                    url: 'kas_kasir/export_pdf/' + id_pdf + '/' + tanggal + '/' + waroeng,
-                    data: {
-                        _token: $('input[name="_token"]').val(),
-                        kronologi: kronologi
-                    },
-                    success: function(response) {
-                        console.log(response);
-                        Codebase.helpers('jq-notify', {
-                            align: 'right', // 'right', 'left', 'center'
-                            from: 'top', // 'top', 'bottom'
-                            type: 'success', // 'info', 'success', 'warning', 'danger'
-                            icon: 'fa fa-info me-5', // Icon class
-                            message: 'Berhasil terdownload'
-                        });
-                    },
-                    error: function(data) {
-                        console.log(data);
-                        Codebase.helpers('jq-notify', {
-                            align: 'right', // 'right', 'left', 'center'
-                            from: 'top', // 'top', 'bottom'
-                            type: 'info', // 'info', 'success', 'warning', 'danger'
-                            icon: 'fa fa-info me-5', // Icon class
-                            message: 'Berhasil terdownload'
-                        });
-                    }
-                });
+                var url = 'kas_kasir/export_pdf?id=' + id + '&tanggal=' + tanggal + '&waroeng=' + waroeng +
+                    '&kronologi=' + kronologi;
+
+                window.open(url);
             });
 
             $("#tampil_rekap").on('click', '#button_tarikan', function() {
