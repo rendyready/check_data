@@ -6,7 +6,7 @@
                 <div class="block block-themed h-100 mb-0">
                     <div class="block-header bg-pulse">
                         <h3 class="block-title">
-                            Rekap Penjualan Menu Summary
+                            Rekap Penjualan Menu Global
                         </h3>
                     </div>
                     <div class="block-content text-muted">
@@ -89,11 +89,11 @@
                             <div class="row">
                                 <div class="col-md-5" id="select_operator">
                                     <div class="row mb-1">
-                                        <label class="col-sm-3 col-form-label">Transaksi</label>
+                                        <label class="col-sm-3 col-form-label">Kategori</label>
                                         <div class="col-sm-9">
                                             <select id="filter_trans" style="width: 100%;"
                                                 class="cari f-wrg js-select2 form-control filter_trans"
-                                                data-placeholder="Pilih Tipe Transaksi" name="tipe_trans[]">
+                                                data-placeholder="Pilih Kategori Menu" name="tipe_trans[]">
                                                 <option></option>
                                             </select>
                                         </div>
@@ -112,15 +112,22 @@
                                 <button type="button" id="cari"
                                     class="btn btn-primary btn-sm col-1 mt-2 mb-3">Cari</button>
                             </div>
-                            {{-- <div class="text-center mt-2 mb-2">
-                            <button id="export_excel" class="btn btn-primary btn-sm">Export Excel</button> --}}
-
-                            <table id="tampil_rekap"
-                                class="table table-sm table-bordered table-hover table-striped table-vcenter js-dataTable-full nowrap">
-                                <thead id="head_data"></thead>
-                            </table>
-                            {{-- </div>    --}}
                         </form>
+
+                        <div class="table-responsive">
+                            <table id="tampil_rekap"
+                                class="table table-sm table-bordered table-striped table-vcenter nowrap table-hover js-dataTable-full">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">Kategori</th>
+                                        <th class="text-center">Menu</th>
+                                        <th class="text-center">Qty</th>
+                                        <th class="text-center">Harga</th>
+                                        <th class="text-center">Jumlah</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
 
                     </div>
                 </div>
@@ -141,113 +148,64 @@
             var HakAksesArea = userInfo.dataset.hasAccess === 'true';
             var HakAksesPusat = userInfoPusat.dataset.hasAccess === 'true';
 
-            var click = false;
+            $('#cari').on('click', function() {
+                var area = $('.filter_area option:selected').val();
+                var waroeng = $('.filter_waroeng option:selected').val();
+                var tanggal = $('.filter_tanggal').val();
+                var kategori = $('.filter_trans option:selected').val();
 
-            $('#cari').on('click', function(e) {
-                if (!click) {
-                    click = true;
-                    var area = $('.filter_area option:selected').val();
-                    var waroeng = $('.filter_waroeng option:selected').val();
-                    var tanggal = $('.filter_tanggal').val();
-                    var trans = $('.filter_trans option:selected').val();
-
-                    if (tanggal === "" && (area === "" || waroeng === "") && trans === "") {
-                        Swal.fire({
-                            title: 'Informasi',
-                            text: 'Silahkan lengkapi semua kolom',
-                            confirmButtonColor: '#d33',
-                            confirmButtonText: 'OK',
-                            customClass: {
-                                confirmButton: 'bg-red-500',
-                            },
-                        });
-                    } else {
-
-                        $.ajax({
-                            url: '{{ route('rekap_menu.tanggal_rekap') }}',
-                            type: 'GET',
-                            dataType: 'Json',
-                            data: {
-                                tanggal: tanggal,
-                            },
-                            success: function(data) {
-                                console.log(data);
-                                $('#head_data').empty();
-                                var html = '<tr>';
-                                html += '<th class="text-center" rowspan="2">Waroeng</th>';
-                                html += '<th class="text-center" rowspan="2">Transaksi</th>';
-                                html +=
-                                    '<th class="text-center" rowspan="2">Kategori Menu</th>';
-                                html += '<th class="text-center" rowspan="2">Nama Menu</th>';
-                                for (var i = 0; i < data.length; i++) {
-                                    var dateObj = new Date(Date.parse(data[i]));
-                                    var dateString = dateObj.toLocaleDateString('id-ID', {
-                                        year: 'numeric',
-                                        month: 'long',
-                                        day: 'numeric'
-                                    });
-                                    html += '<th class="text-center" colspan="2">' +
-                                        dateString + '</th>';
-                                }
-                                html += '</tr>';
-                                html += '<tr>';
-                                var jenis_transaksi = ['Qty', 'Harga'];
-                                var jumlah_transaksi = jenis_transaksi.length;
-
-                                for (var i = 0; i < data.length; i++) {
-                                    for (var j = 0; j < jumlah_transaksi; j++) {
-                                        html += '<th class="text-center">' + jenis_transaksi[
-                                            j] + '</th>';
-                                    }
-                                }
-                                html += '</tr>';
-                                $('#head_data').append(html);
-
-                                $('#tampil_rekap').DataTable({
-                                    destroy: true,
-                                    orderCellsTop: true,
-                                    processing: true,
-                                    scrollX: true,
-                                    autoWidth: true,
-                                    scrollCollapse: true,
-                                    buttons: [{
-                                        extend: 'excelHtml5',
-                                        text: 'Export Excel',
-                                        title: 'Rekap Menu - ' + trans + ' - ' +
-                                            tanggal,
-                                        // exportOptions: {
-                                        //     columns: [1, 2, 3, 4, 5]
-                                        // },
-                                        pageSize: 'A4',
-                                        pageOrientation: 'potrait',
-                                    }],
-                                    columnDefs: [{
-                                        targets: '_all',
-                                        className: 'dt-body-center'
-                                    }, ],
-                                    lengthMenu: [
-                                        [10, 25, 50, 100, -1],
-                                        [10, 25, 50, 100, "All"]
-                                    ],
-                                    pageLength: 10,
-                                    ajax: {
-                                        url: '{{ route('rekap_menu.show') }}',
-                                        data: {
-                                            area: area,
-                                            waroeng: waroeng,
-                                            tanggal: tanggal,
-                                            trans: trans,
-                                        },
-                                        type: "GET",
-                                    },
-                                });
-                            }
-                        });
-                    }
+                if (tanggal === "" && (area === "" || waroeng === "")) {
+                    Swal.fire({
+                        title: 'Informasi',
+                        text: 'Silahkan lengkapi semua kolom',
+                        confirmButtonColor: '#d33',
+                        confirmButtonText: 'OK',
+                        customClass: {
+                            confirmButton: 'bg-red-500',
+                        },
+                    });
                 } else {
-                    location.reload();
-                }
 
+                    $('#tampil_rekap').DataTable({
+                        buttons: [{
+                            extend: 'excelHtml5',
+                            text: 'Export Excel',
+                            title: 'Rekap Menu Global - ' +
+                                tanggal,
+
+                            pageSize: 'A4',
+                            pageOrientation: 'potrait',
+                        }],
+                        destroy: true,
+                        orderCellsTop: true,
+                        processing: true,
+                        autoWidth: false,
+                        scrollX: true,
+                        scrollCollapse: true,
+                        columnDefs: [{
+                            targets: '_all',
+                            className: 'dt-body-center'
+                        }, ],
+                        lengthMenu: [
+                            [10, 25, 50, 100, -1],
+                            [10, 25, 50, 100, "All"]
+                        ],
+                        pageLength: 10,
+                        ajax: {
+                            url: '{{ route('rekap_menu_global.show_menu_global') }}',
+                            data: {
+                                area: area,
+                                waroeng: waroeng,
+                                tanggal: tanggal,
+                                kategori: kategori,
+                            },
+                            type: "GET",
+                        },
+                        success: function(data) {
+                            console.log(data);
+                        }
+                    });
+                }
             });
 
             if (HakAksesPusat) {
@@ -322,7 +280,7 @@
                     if (id_waroeng && tanggal) {
                         $.ajax({
                             type: "GET",
-                            url: '{{ route('rekap_menu.select_trans') }}',
+                            url: '{{ route('rekap_menu_global.select_kategori') }}',
                             dataType: 'JSON',
                             data: {
                                 id_waroeng: id_waroeng,
@@ -365,7 +323,7 @@
                     if (tanggal) {
                         $.ajax({
                             type: "GET",
-                            url: '{{ route('rekap_menu.select_trans') }}',
+                            url: '{{ route('rekap_menu_global.select_kategori') }}',
                             dataType: 'JSON',
                             data: {
                                 id_waroeng: id_waroeng,
@@ -394,16 +352,6 @@
                 mode: "range",
                 dateFormat: 'Y-m-d',
             });
-
-            // $('#export_excel').on('click', function() {
-            //             var id = $(this).attr('value');
-            //             var waroeng = $('#filter_waroeng').val();
-            //             var tanggal = $('#filter_tanggal').val();
-            //             var operator = $('#filter_operator').val();
-            //             var sesi = $('#filter_sif').val();
-            //             var url = 'rekap_menu/export_excel?waroeng='+waroeng+'&tanggal='+tanggal+'&operator='+operator+'&sesi='+sesi;
-            //             window.open(url,'_blank');
-            //         });
 
         });
     </script>
