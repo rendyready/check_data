@@ -44,7 +44,8 @@ Route::prefix('dashboard')->middleware('auth', 'web')
         });
 
         Route::controller(RekapMenuController::class)->group(function () {
-            Route::get('rekap_menu', 'index')->name('rekap_menu.index');
+            Route::get('rekap_menu', 'menu_summary')->name('rekap_menu.menu_summary');
+            Route::get('rekap_menu_global', 'menu_global')->name('rekap_menu_global.menu_global');
             Route::get('rekap_menu/show', 'show')->name('rekap_menu.show');
             Route::get('rekap_menu/select_waroeng', 'select_waroeng')->name('rekap_menu.select_waroeng');
             Route::get('rekap_menu/select_tanggal', 'select_tanggal')->name('rekap_menu.select_tanggal');
@@ -52,7 +53,9 @@ Route::prefix('dashboard')->middleware('auth', 'web')
             Route::post('rekap_menu/delete_tgl', 'delete_tgl')->name('rekap_menu.delete_tgl');
             Route::post('rekap_menu/simpan_tgl', 'simpan_tgl')->name('rekap_menu.simpan_tgl');
             Route::get('rekap_menu/select_trans', 'select_trans')->name('rekap_menu.select_trans');
+            Route::get('rekap_menu_global/select_kategori', 'select_kategori')->name('rekap_menu_global.select_kategori');
             Route::get('rekap_menu/select_sif', 'select_sif')->name('rekap_menu.select_sif');
+            Route::get('rekap_menu_global/show_menu_global', 'show_menu_global')->name('rekap_menu_global.show_menu_global');
             // Route::get('rekap_menu/menu_non_menu/{mw}/{date}', 'rekapNonMenu')->name('rekap_menu.menu_non_menu');
         });
 
@@ -86,8 +89,7 @@ Route::prefix('dashboard')->middleware('auth', 'web')
             Route::get('kas_kasir/select_user', 'select_user')->name('kas_kasir.select_user');
             Route::get('kas_kasir/detail/{id}', 'detail')->name('kas_kasir.detail');
             Route::get('kas_kasir/detail_show/{id}', 'detail_show')->name('kas_kasir.detail_show');
-            Route::get('kas_kasir/export_pdf', 'export_pdf')->name('kas_kasir.export_pdf');
-            // Route::get('kas_kasir/export_pdf_nontunai', 'export_pdf_nontunai')->name('kas_kasir.export_pdf_nontunai');
+            Route::get('kas_kasir/export_pdf/', 'export_pdf')->name('kas_kasir.export_pdf');
             Route::get('kas_kasir/select_sesi', 'select_sesi')->name('kas_kasir.select_sesi');
         });
 
