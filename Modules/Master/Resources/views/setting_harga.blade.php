@@ -348,6 +348,19 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="mb-4 status_menu" style="display: none">
+                                    <div class="form-group">
+                                        <label for="m_menu_harga_qr_status">Status QR</label>
+                                        <div>
+                                            <select class="js-select2" id="m_menu_harga_qr_status"
+                                                name="m_menu_harga_qr_status" style="width: 100%;">
+                                                <option value="ya">Ya</option>
+                                                <option value="tidak">Tidak</option>
+                                                <option value="sementara">Sementara</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="block-content block-content-full text-end bg-transparent">
                                     <button type="button" class="btn btn-sm btn-alt-secondary me-1"
                                         data-bs-dismiss="modal">Close</button>

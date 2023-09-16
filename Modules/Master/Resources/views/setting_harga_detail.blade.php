@@ -41,6 +41,7 @@
                                                         <th>Status</th>
                                                         <th>Pajak</th>
                                                         <th>Service</th>
+                                                        <th>Status QR</th>
                                                         <th>Aksi</th>
                                                     </tr>
                                                 </thead>
@@ -88,6 +89,7 @@
                                                                 <td>{{ $statusHarga }}</td>
                                                                 <td>{{ $statusPajak }}</td>
                                                                 <td>{{ $statusService }}</td>
+                                                                <td>{{ $item->m_menu_harga_qr_status }}</td>
                                                                 <td><a class="btn btn-info buttonEdit"
                                                                         value="{{ $item->m_menu_harga_id }}"
                                                                         title="Edit"><i class="fa fa-edit"></i></a></td>
@@ -209,6 +211,20 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="mb-4">
+                                        <div class="form-group">
+                                            <label for="m_menu_harga_qr_status">Status QR</label>
+                                            <div>
+                                                <select class="js-select2" id="m_menu_harga_qr_status"
+                                                    name="m_menu_harga_qr_status" style="width: 100%;"
+                                                    data-container="#modal-block-select2" data-placeholder="Choose one..">
+                                                    <option value="ya">Ya</option>
+                                                    <option value="tidak">Tidak</option>
+                                                    <option value="sementara">Sementara</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="block-content block-content-full text-end bg-transparent">
                                         <button type="button" class="btn btn-sm btn-alt-secondary me-1"
                                             data-bs-dismiss="modal">Close</button>
@@ -280,6 +296,8 @@
                             $("#m_menu_harga_tax_status").val(respond.m_menu_harga_tax_status)
                                 .trigger('change');
                             $("#m_menu_harga_sc_status").val(respond.m_menu_harga_sc_status)
+                                .trigger('change');
+                            $("#m_menu_harga_qr_status").val(respond.m_menu_harga_qr_status)
                                 .trigger('change');
                             $("#m_menu_harga_nominal").prop('readonly', true);
                         },

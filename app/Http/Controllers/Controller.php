@@ -350,7 +350,7 @@ class Controller extends BaseController
     }
 
     public function upload_file($request)
-    {
+    {   
         if ($request->hasFile('m_produk_image')) {
             $image = $request->file('m_produk_image');
             $filename = time() . '.' . $image->getClientOriginalExtension();

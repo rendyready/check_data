@@ -60,11 +60,15 @@ class ProdukController extends Controller
                     $kat = $request->m_produk_m_klasifikasi_produk_id;
                     $num = $produk_code->m_klasifikasi_produk_last_id + 1;
                     $code = $produk_code->m_klasifikasi_produk_prefix . '-' . $kat . str_pad($num, 5, "0", STR_PAD_LEFT);
-
-                    $file = $this->upload_file($request);
-                    $link = $this->uploadImageCloud($file);
-                    $url = ($link) ? $link : 'https://placehold.co/400x400/000000/FFF' ;
-
+                   
+                    if ($request->m_produk_image) {
+                        $file = $this->upload_file($request);
+                        $link = $this->uploadImageCloud($file);
+                        $url = ($link) ? $link : 'https://placehold.co/400x400/000000/FFF' ;
+                    } else {
+                        $url = 'https://placehold.co/400x400/000000/FFF' ;
+                    }
+                   
                     DB::table('m_produk')->insert([
                         "m_produk_id" => '1',
                         "m_produk_code" => $code,
@@ -80,6 +84,7 @@ class ProdukController extends Controller
                         "m_produk_m_plot_produksi_id" => $request->m_produk_m_plot_produksi_id,
                         "m_produk_m_klasifikasi_produk_id" => $request->m_produk_m_klasifikasi_produk_id,
                         "m_produk_jual" => $request->m_produk_jual,
+                        "m_produk_qr" => $request->m_produk_qr,
                         "m_produk_scp" => $request->m_produk_scp,
                         "m_produk_hpp" => $request->m_produk_hpp,
                         "m_produk_created_by" => Auth::user()->users_id,
@@ -132,9 +137,15 @@ class ProdukController extends Controller
                 if ($request->m_produk_id == null) {
                     return response()->json(['messages' => 'Data Edit Double !', 'type' => 'danger']);
                 } else {
-                    $file = $this->upload_file($request);
-                    $link = $this->uploadImageCloud($file);
-                    $this->remove_file($file);
+                    if ($request->m_produk_image) {
+                        $file = $this->upload_file($request);
+                        $link = $this->uploadImageCloud($file);
+                        $this->remove_file($file);
+                        $url = ($link) ? $link : 'https://placehold.co/400x400/000000/FFF' ;
+                    } else {
+                        $url = 'https://placehold.co/400x400/000000/FFF' ;
+                        $link = null;
+                    }
                     if ($link) {
                         $data = [
                             "m_produk_nama" => $produkNama,
@@ -148,6 +159,7 @@ class ProdukController extends Controller
                             "m_produk_m_plot_produksi_id" => $request->m_produk_m_plot_produksi_id,
                             "m_produk_m_klasifikasi_produk_id" => $request->m_produk_m_klasifikasi_produk_id,
                             "m_produk_jual" => $request->m_produk_jual,
+                            "m_produk_qr" => $request->m_produk_qr,
                             "m_produk_scp" => $request->m_produk_scp,
                             "m_produk_hpp" => $request->m_produk_hpp,
                             "m_produk_status_sync" => 'send',
@@ -169,6 +181,7 @@ class ProdukController extends Controller
                             "m_produk_m_plot_produksi_id" => $request->m_produk_m_plot_produksi_id,
                             "m_produk_m_klasifikasi_produk_id" => $request->m_produk_m_klasifikasi_produk_id,
                             "m_produk_jual" => $request->m_produk_jual,
+                            "m_produk_qr" => $request->m_produk_qr,
                             "m_produk_scp" => $request->m_produk_scp,
                             "m_produk_hpp" => $request->m_produk_hpp,
                             "m_produk_status_sync" => 'send',
