@@ -150,6 +150,8 @@ Route::prefix('dashboard')->middleware('auth', 'web')
         Route::controller(RekapSelisihController::class)->group(function () {
             Route::get('rekap_selisih', 'index')->name('rekap_selisih.index');
             Route::get('rekap_selisih/show', 'show')->name('rekap_selisih.show');
+            Route::get('rekap_selisih_ujicoba', 'ujicoba')->name('rekap_selisih_ujicoba.ujicoba');
+            Route::get('rekap_selisih/show_ujicoba', 'show_ujicoba')->name('rekap_selisih.show_ujicoba');
             Route::get('rekap_selisih/select_waroeng', 'select_waroeng')->name('rekap_selisih.select_waroeng');
             Route::get('rekap_selisih/select_user', 'select_user')->name('rekap_selisih.select_user');
             Route::get('rekap_selisih/export_excel', 'export_excel')->name('rekap_selisih.export_excel');
