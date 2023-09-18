@@ -97,7 +97,28 @@ class RekapNotaController extends Controller
             ->join('rekap_transaksi_detail', 'r_t_detail_r_t_id', 'r_t_id')
             ->join('users', 'users_id', 'r_t_created_by')
             ->join('m_transaksi_tipe', 'm_t_t_id', 'r_t_m_t_t_id')
-            ->selectRaw('(SUM(r_t_detail_reguler_price * r_t_detail_qty)) as sum_detail, r_t_tanggal, r_t_jam, name, r_t_nota_code, r_t_bigboss, r_t_nominal_pajak, r_t_nominal, r_t_nominal_sc, r_t_nominal_diskon, r_t_nominal_voucher, r_t_nominal_tarik_tunai, r_t_nominal_pembulatan, r_t_nominal_free_kembalian, r_t_nominal_total_bayar, r_t_nominal_free_kembalian, r_t_nominal_pembulatan, r_t_nominal_selisih, r_t_id, m_t_t_group, r_t_status')
+            ->selectRaw('
+                    SUM(r_t_detail_reguler_price * r_t_detail_qty) as sum_detail,
+                    SUM(r_t_detail_price * r_t_detail_qty) as sum_price,
+                    r_t_tanggal,
+                    r_t_jam, name,
+                    r_t_nota_code,
+                    r_t_bigboss,
+                    r_t_nominal_pajak,
+                    r_t_nominal, r_t_nominal_sc,
+                    r_t_nominal_diskon,
+                    r_t_nominal_voucher,
+                    r_t_nominal_tarik_tunai,
+                    r_t_nominal_pembulatan,
+                    r_t_nominal_free_kembalian,
+                    r_t_nominal_total_bayar,
+                    r_t_nominal_free_kembalian,
+                    r_t_nominal_pembulatan,
+                    r_t_nominal_selisih,
+                    r_t_id,
+                    m_t_t_group,
+                    r_t_status
+                    ')
             ->join('rekap_modal', 'rekap_modal_id', 'r_t_rekap_modal_id')
             ->where('rekap_modal_status', 'close')
             ->where('r_t_m_w_id', $request->waroeng);
@@ -161,6 +182,7 @@ class RekapNotaController extends Controller
                 }
             }
             $row[] = number_format($value->r_t_nominal_selisih);
+            $row[] = number_format(($value->sum_price + $value->r_t_nominal_pajak + $value->r_t_nominal_sc + $value->r_t_nominal_diskon + $value->r_t_nominal_voucher + $value->r_t_nominal_tarik_tunai - $value->r_t_nominal_free_kembalian) - $value->r_t_nominal_total_bayar);
             $row[] = '<a id="button_detail" class="btn btn-sm button_detail btn-info" value="' . $value->r_t_id . '" title="Detail Nota"><i class="fa-sharp fa-solid fa-file"></i></a>';
             $data[] = $row;
         }

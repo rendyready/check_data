@@ -150,6 +150,7 @@
                                         <th>Metode</th>
                                         <th>Jenis Payment</th>
                                         <th>Selisih Ojol</th>
+                                        <th>Selisih Total Bayar</th>
                                         <th></th>
                                     </tr>
                                 </thead>

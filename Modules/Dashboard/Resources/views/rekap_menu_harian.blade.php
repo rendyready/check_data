@@ -154,12 +154,12 @@
                                             <th class="text-center">Nominal Reguler </th>
                                             <th class="text-center">Transaksi</th>
                                             <th class="text-center">Kategori Menu</th>
-                                            <th class="text-center">Nominal Transaksi</th>
-                                            <th class="text-center">Selisih Reg vs Trans</th>
-                                            <th class="text-center">Nominal CR </th>
-                                            <th class="text-center">Selisih Reg vs CR</th>
-                                            <th class="text-center">Nominal Pajak</th>
-                                            <th class="text-center">Selisih Reg vs Pajak</th>
+                                            <th class="text-center">Sub Total</th>
+                                            <th class="text-center">Nominal Reguler vs Sub Total</th>
+                                            <th class="text-center">Penjualan</th>
+                                            <th class="text-center">Nominal Reguler vs Penjualan</th>
+                                            <th class="text-center">Pajak CR</th>
+                                            <th class="text-center">Nominal Reguler (10%) vs Pajak CR</th>
                                         </tr>
                                     </thead>
                                     <tbody>
