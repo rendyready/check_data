@@ -133,7 +133,7 @@ class RekapNonMenuController extends Controller
                         MAX(r_t_detail_m_produk_nama) m_produk_nama,
                         SUM(r_t_detail_qty) qty,
                         max(r_t_detail_reguler_price) price,
-                        SUM(r_t_detail_package_price * r_t_detail_qty) kemasan,
+                        SUM(r_t_detail_package_price) kemasan,
                         SUM(r_t_detail_nominal_pajak) pajak
                     ')
             ->join('rekap_transaksi', 'r_t_detail_r_t_id', 'r_t_id')
@@ -190,67 +190,6 @@ class RekapNonMenuController extends Controller
         }
 
         $listRekap = array_unique($arrayListRekap);
-
-        // $getMenu = DB::table('m_produk')
-        //     ->select('m_produk_id')
-        //     ->whereNotIn('m_produk_m_jenis_produk_id', [9, 11, 12, 13])->get();
-
-        // $listMenu = [];
-        // foreach ($getMenu as $key => $valMenu) {
-        //     array_push($listMenu, $valMenu->m_produk_id);
-        // }
-
-        // $getNonMenu = DB::table('m_produk')
-        //     ->select('m_produk_id')
-        //     ->whereIn('m_produk_m_jenis_produk_id', [9, 11])->get();
-        // $listNonMenu = [];
-        // foreach ($getNonMenu as $key => $valMenu) {
-        //     array_push($listNonMenu, $valMenu->m_produk_id);
-        // }
-
-        // $getIceCream = DB::table('m_produk')
-        //     ->join('config_sub_jenis_produk', 'config_sub_jenis_produk_m_produk_id', '=', 'm_produk_id')
-        //     ->select('m_produk_id')
-        //     ->whereIn('config_sub_jenis_produk_m_sub_jenis_produk_id', [20, 22, 23, 24, 25])->get();
-        // $listIceCream = [];
-        // foreach ($getIceCream as $key => $valMenu) {
-        //     array_push($listIceCream, $valMenu->m_produk_id);
-        // }
-        // $getMineral = DB::table('m_produk')
-        //     ->join('config_sub_jenis_produk', 'config_sub_jenis_produk_m_produk_id', '=', 'm_produk_id')
-        //     ->select('m_produk_id')
-        //     ->whereIn('config_sub_jenis_produk_m_sub_jenis_produk_id', [12])->get();
-        // $listMineral = [];
-        // foreach ($getMineral as $key => $valMenu) {
-        //     array_push($listMineral, $valMenu->m_produk_id);
-        // }
-
-        // $getKerupuk = DB::table('m_produk')
-        //     ->join('config_sub_jenis_produk', 'config_sub_jenis_produk_m_produk_id', '=', 'm_produk_id')
-        //     ->select('m_produk_id')
-        //     ->whereIn('config_sub_jenis_produk_m_sub_jenis_produk_id', [47])->get();
-        // $listKerupuk = [];
-        // foreach ($getKerupuk as $key => $valMenu) {
-        //     array_push($listKerupuk, $valMenu->m_produk_id);
-        // }
-
-        // $getWbdFrozen = DB::table('m_produk')
-        //     ->join('config_sub_jenis_produk', 'config_sub_jenis_produk_m_produk_id', '=', 'm_produk_id')
-        //     ->select('m_produk_id')
-        //     ->whereIn('config_sub_jenis_produk_m_sub_jenis_produk_id', [45])->get();
-        // $listWbdFrozen = [];
-        // foreach ($getWbdFrozen as $key => $valMenu) {
-        //     array_push($listWbdFrozen, $valMenu->m_produk_id);
-        // }
-
-        // $getKbd = DB::table('m_produk')
-        //     ->select('m_produk_id')
-        //     ->whereIn('m_produk_m_jenis_produk_id', [11])
-        //     ->get();
-        // $listKbd = [];
-        // foreach ($getKbd as $key => $valMenu) {
-        //     array_push($listKbd, $valMenu->m_produk_id);
-        // }
 
         $listMenu = DB::table('m_produk')
             ->whereNotIn('m_produk_m_jenis_produk_id', [9, 11, 12, 13])
@@ -324,64 +263,7 @@ class RekapNonMenuController extends Controller
                                 $qty = $valRekap->qty;
                                 if (!empty($refundCek)) {
                                     foreach ($refund as $valRefund) {
-                                        if ($valRekap->m_produk_id == $valRefund->r_r_detail_m_produk_id && $valRekap->tanggal == $valRefund->tanggal && $valRekap->sesi == $valRefund->sesi && $valRekap->type_id == $valRefund->r_t_m_t_t_id) {
-                                            $qty = $qty - $valRefund->qty;
-                                        }
-                                    }
-                                }
-                                if (!empty($garansi_notnull)) {
-                                    foreach ($garansi_nominal as $valGaransi) {
-                                        if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->sesi == $valGaransi->sesi && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
-                                            $qty = $qty + $valGaransi->qty;
-                                        }
-                                    }
-                                }
-                                $valMenu = ($valRekap->price * $qty) + $valRekap->kemasan;
-                                ${$valListRekap . '-' . $valTipe . '-menu'} += $valMenu;
-                            }
-                            if (in_array($valRekap->m_produk_id, $listMenu) && $valRekap->pajak != 0) {
-                                $qty = $valRekap->qty;
-                                if (!empty($refundCek)) {
-                                    foreach ($refund as $valRefund) {
-                                        if ($valRekap->m_produk_id == $valRefund->r_r_detail_m_produk_id && $valRekap->tanggal == $valRefund->tanggal && $valRekap->sesi == $valRefund->sesi && $valRekap->type_id == $valRefund->r_t_m_t_t_id) {
-                                            $qty = $qty - $valRefund->qty;
-                                        }
-                                    }
-                                }
-                                if (!empty($garansi_notnull)) {
-                                    foreach ($garansi_nominal as $valGaransi) {
-                                        if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->sesi == $valGaransi->sesi && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
-                                            $qty = $qty + $valGaransi->qty;
-                                        }
-                                    }
-                                }
-                                $valMenu = ($valRekap->price * $qty) + $valRekap->kemasan;
-                                ${$valListRekap . '-' . $valTipe . '-menupajak'} += $valMenu;
-                            }
-                            if (in_array($valRekap->m_produk_id, $listMenu) && $valRekap->pajak == 0) {
-                                $qty = $valRekap->qty;
-                                if (!empty($refundCek)) {
-                                    foreach ($refund as $valRefund) {
-                                        if ($valRekap->m_produk_id == $valRefund->r_r_detail_m_produk_id && $valRekap->tanggal == $valRefund->tanggal && $valRekap->sesi == $valRefund->sesi && $valRekap->type_id == $valRefund->r_t_m_t_t_id) {
-                                            $qty = $qty - $valRefund->qty;
-                                        }
-                                    }
-                                }
-                                if (!empty($garansi_notnull)) {
-                                    foreach ($garansi_nominal as $valGaransi) {
-                                        if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->sesi == $valGaransi->sesi && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
-                                            $qty = $qty + $valGaransi->qty;
-                                        }
-                                    }
-                                }
-                                $valMenu = ($valRekap->price * $qty) + $valRekap->kemasan;
-                                ${$valListRekap . '-' . $valTipe . '-menunonpajak'} += $valMenu;
-                            }
-                            if (in_array($valRekap->m_produk_id, $listNonMenu)) {
-                                $qty = $valRekap->qty;
-                                if (!empty($refundCek)) {
-                                    foreach ($refund as $valRefund) {
-                                        if ($valRekap->m_produk_id == $valRefund->r_r_detail_m_produk_id && $valRekap->tanggal == $valRefund->tanggal && $valRekap->sesi == $valRefund->sesi && $valRekap->type_id == $valRefund->r_t_m_t_t_id) {
+                                        if ($valRekap->m_produk_id == $valRefund->r_r_detail_m_produk_id && $valRekap->tanggal == $valRefund->tanggal && $valRekap->rekap_modal_id == $valRefund->rekap_modal_id && $valRekap->type_id == $valRefund->r_t_m_t_t_id) {
                                             $qty = $qty - $valRefund->qty;
                                         }
                                     }
@@ -393,7 +275,64 @@ class RekapNonMenuController extends Controller
                                         }
                                     }
                                 }
-                                $valNonMenu = ($valRekap->price * $qty) + $valRekap->kemasan;
+                                $valMenu = ($valRekap->price * $qty) + ($valRekap->kemasan * $qty);
+                                ${$valListRekap . '-' . $valTipe . '-menu'} += $valMenu;
+                            }
+                            if (in_array($valRekap->m_produk_id, $listMenu) && $valRekap->pajak != 0) {
+                                $qty = $valRekap->qty;
+                                if (!empty($refundCek)) {
+                                    foreach ($refund as $valRefund) {
+                                        if ($valRekap->m_produk_id == $valRefund->r_r_detail_m_produk_id && $valRekap->tanggal == $valRefund->tanggal && $valRekap->rekap_modal_id == $valRefund->rekap_modal_id && $valRekap->type_id == $valRefund->r_t_m_t_t_id) {
+                                            $qty = $qty - $valRefund->qty;
+                                        }
+                                    }
+                                }
+                                if (!empty($garansi_notnull)) {
+                                    foreach ($garansi_nominal as $valGaransi) {
+                                        if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->rekap_modal_id == $valGaransi->rekap_modal_id && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
+                                            $qty = $qty + $valGaransi->qty;
+                                        }
+                                    }
+                                }
+                                $valMenu = ($valRekap->price * $qty) + ($valRekap->kemasan * $qty);
+                                ${$valListRekap . '-' . $valTipe . '-menupajak'} += $valMenu;
+                            }
+                            if (in_array($valRekap->m_produk_id, $listMenu) && $valRekap->pajak == 0) {
+                                $qty = $valRekap->qty;
+                                if (!empty($refundCek)) {
+                                    foreach ($refund as $valRefund) {
+                                        if ($valRekap->m_produk_id == $valRefund->r_r_detail_m_produk_id && $valRekap->tanggal == $valRefund->tanggal && $valRekap->rekap_modal_id == $valRefund->rekap_modal_id && $valRekap->type_id == $valRefund->r_t_m_t_t_id) {
+                                            $qty = $qty - $valRefund->qty;
+                                        }
+                                    }
+                                }
+                                if (!empty($garansi_notnull)) {
+                                    foreach ($garansi_nominal as $valGaransi) {
+                                        if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->rekap_modal_id == $valGaransi->rekap_modal_id && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
+                                            $qty = $qty + $valGaransi->qty;
+                                        }
+                                    }
+                                }
+                                $valMenu = ($valRekap->price * $qty) + ($valRekap->kemasan * $qty);
+                                ${$valListRekap . '-' . $valTipe . '-menunonpajak'} += $valMenu;
+                            }
+                            if (in_array($valRekap->m_produk_id, $listNonMenu)) {
+                                $qty = $valRekap->qty;
+                                if (!empty($refundCek)) {
+                                    foreach ($refund as $valRefund) {
+                                        if ($valRekap->m_produk_id == $valRefund->r_r_detail_m_produk_id && $valRekap->tanggal == $valRefund->tanggal && $valRekap->rekap_modal_id == $valRefund->rekap_modal_id && $valRekap->type_id == $valRefund->r_t_m_t_t_id) {
+                                            $qty = $qty - $valRefund->qty;
+                                        }
+                                    }
+                                }
+                                if (!empty($garansi_notnull)) {
+                                    foreach ($garansi_nominal as $valGaransi) {
+                                        if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->rekap_modal_id == $valGaransi->rekap_modal_id && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
+                                            $qty = $qty + $valGaransi->qty;
+                                        }
+                                    }
+                                }
+                                $valNonMenu = ($valRekap->price * $qty) + ($valRekap->kemasan * $qty);
                                 ${$valListRekap . '-' . $valTipe . '-nonmenu'} += $valNonMenu;
                             }
 

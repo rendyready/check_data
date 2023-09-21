@@ -96,7 +96,7 @@
                             <div class="row">
                                 <div class="col-md-7">
                                     <div class="row">
-                                        <div class="col-sm-1">
+                                        <div class="col-md-1">
                                             <button type="button" id="cari"
                                                 class="btn btn-primary btn-sm mb-3 mt-1">Cari</button>
                                         </div>
@@ -118,20 +118,10 @@
                                                         Per Bulan</button>
                                                 </div>
                                             </div>
-
-
-                                            {{-- <div class="col-md-4">
-                                            <a class="btn btn-sm btn-primary mb-3 mt-1" id="export_excel"
-                                                style="display: none;">Export Excel <span id="export_loading"
-                                                    style="display: none;"><img src="{{ asset('media/gif/loading.gif') }}"
-                                                        alt="Loading..."
-                                                        style="max-width: 16px; max-height: 16px;"></span></a> --}}
                                         </div>
                                     </div>
                                 </div>
-
-
-
+                            </div>
                         </form>
 
                         <div id="tampil" class="table-responsive text-center">

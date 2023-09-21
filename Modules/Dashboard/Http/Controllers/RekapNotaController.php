@@ -182,7 +182,7 @@ class RekapNotaController extends Controller
                 }
             }
             $row[] = number_format($value->r_t_nominal_selisih);
-            $row[] = number_format(($value->sum_price + $value->r_t_nominal_pajak + $value->r_t_nominal_sc + $value->r_t_nominal_diskon + $value->r_t_nominal_voucher + $value->r_t_nominal_tarik_tunai - $value->r_t_nominal_free_kembalian) - $value->r_t_nominal_total_bayar);
+            $row[] = number_format(($value->sum_price + $value->r_t_nominal_pajak + $value->r_t_nominal_sc + $value->r_t_nominal_diskon + $value->r_t_nominal_voucher + $value->r_t_nominal_tarik_tunai) - $value->r_t_nominal_total_bayar);
             $row[] = '<a id="button_detail" class="btn btn-sm button_detail btn-info" value="' . $value->r_t_id . '" title="Detail Nota"><i class="fa-sharp fa-solid fa-file"></i></a>';
             $data[] = $row;
         }
