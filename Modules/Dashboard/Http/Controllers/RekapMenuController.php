@@ -2,11 +2,14 @@
 
 namespace Modules\Dashboard\Http\Controllers;
 
+use App\Exports\RekapMenuGlobalAktExport;
+use App\Exports\RekapMenuGlobalExport;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class RekapMenuController extends Controller
 {
@@ -57,6 +60,10 @@ class RekapMenuController extends Controller
             ->get();
         $data->area = DB::table('m_area')
             ->orderby('m_area_id', 'ASC')
+            ->get();
+        $data->kategori = DB::table('m_jenis_produk')
+            ->select('m_jenis_produk_id', 'm_jenis_produk_nama')
+            ->orderBy('m_jenis_produk_id', 'asc')
             ->get();
 
         return view('dashboard::rekap_menu_global', compact('data'));
@@ -124,37 +131,6 @@ class RekapMenuController extends Controller
             foreach ($trans as $val) {
                 $data['all'] = ['all transaksi'];
                 $data[$val->m_t_t_name] = [$val->m_t_t_name];
-            }
-            return response()->json($data);
-        }
-    }
-
-    public function select_kategori(Request $request)
-    {
-        if ($request->id_waroeng != 'all') {
-            $trans = DB::table('m_jenis_produk')
-                ->join('m_produk', 'm_produk_m_jenis_produk_id', 'm_jenis_produk_id')
-                ->join('rekap_transaksi_detail', 'r_t_detail_m_produk_id', 'm_produk_id')
-                ->join('rekap_transaksi', 'r_t_id', 'r_t_detail_r_t_id')
-                ->select('m_jenis_produk_id', 'm_jenis_produk_nama');
-            if (in_array(Auth::user()->waroeng_id, $this->get_akses_area())) {
-                if ($request->id_waroeng != 'all') {
-                    $trans->where('r_t_m_w_id', $request->id_waroeng)
-                        ->where('r_t_tanggal', $request->tanggal);
-                }
-            } else {
-                if ($request->id_waroeng != 'all') {
-                    $trans->where('r_t_m_w_id', Auth::user()->waroeng_id)
-                        ->where('r_t_tanggal', $request->tanggal);
-                }
-            }
-            $trans = $trans->orderBy('m_jenis_produk_id', 'asc')
-                ->get();
-
-            $data = array();
-            foreach ($trans as $val) {
-                $data['all'] = ['all kategori'];
-                $data[$val->m_jenis_produk_id] = [$val->m_jenis_produk_nama];
             }
             return response()->json($data);
         }
@@ -282,10 +258,10 @@ class RekapMenuController extends Controller
             $menu->where('r_t_m_area_id', $request->area);
             if ($request->waroeng != 'all') {
                 $menu->where('r_t_m_w_id', $request->waroeng);
-                if ($request->kategori != 'all') {
-                    $menu->where('m_jenis_produk_id', $request->kategori);
-                }
             }
+        }
+        if ($request->kategori != 'all') {
+            $menu->where('m_jenis_produk_id', $request->kategori);
         }
         $menu = $menu->selectRaw('
             sum(r_t_detail_qty) as qty,
@@ -316,6 +292,244 @@ class RekapMenuController extends Controller
             "data" => $data,
         );
         return response()->json($output);
+    }
+
+    public function export_by_menu(Request $request)
+    {
+        $menu = DB::table('rekap_transaksi_detail')
+            ->join('rekap_transaksi', 'r_t_id', 'r_t_detail_r_t_id')
+            ->join('m_produk', 'm_produk_id', 'r_t_detail_m_produk_id')
+            ->join('m_jenis_produk', 'm_jenis_produk_id', 'm_produk_m_jenis_produk_id')
+            ->join('rekap_modal', 'rekap_modal_id', 'r_t_rekap_modal_id')
+            ->where('rekap_modal_status', 'close');
+        if (strpos($request->tanggal, 'to') !== false) {
+            [$start, $end] = explode('to', $request->tanggal);
+            $menu->whereBetween('r_t_tanggal', [$start, $end]);
+        } else {
+            $menu->where('r_t_tanggal', $request->tanggal);
+        }
+        if ($request->area != 'all') {
+            $menu->where('r_t_m_area_id', $request->area);
+            if ($request->waroeng != 'all') {
+                $menu->where('r_t_m_w_id', $request->waroeng);
+            }
+        }
+        if ($request->kategori != 'all') {
+            $menu->where('m_jenis_produk_id', $request->kategori);
+        }
+        $menu = $menu->selectRaw('
+            sum(r_t_detail_qty) as qty,
+            r_t_detail_m_produk_nama,
+            m_jenis_produk_nama
+        ')
+            ->groupBy(
+                'r_t_detail_m_produk_nama',
+                'm_jenis_produk_nama'
+            )
+            ->orderby('r_t_detail_m_produk_nama', 'ASC')
+            ->get();
+
+        $data = array();
+        foreach ($menu as $valMenu) {
+            $row = array();
+            $row[] = $valMenu->m_jenis_produk_nama;
+            $row[] = $valMenu->r_t_detail_m_produk_nama;
+            $row[] = $valMenu->qty;
+            $data[] = $row;
+        }
+
+        return Excel::download(new RekapMenuGlobalExport($data), 'Rekap Menu By Menu - ' . $request->tanggal . '.xlsx');
+    }
+
+    public function export_excel_akt(Request $request)
+    {
+        if ($request->mark == 'Export By Area') {
+            $menu = DB::table('rekap_transaksi_detail')
+                ->join('rekap_transaksi', 'r_t_id', 'r_t_detail_r_t_id')
+                ->join('m_produk', 'm_produk_id', 'r_t_detail_m_produk_id')
+                ->join('m_jenis_produk', 'm_jenis_produk_id', 'm_produk_m_jenis_produk_id')
+                ->join('rekap_modal', 'rekap_modal_id', 'r_t_rekap_modal_id')
+                ->where('rekap_modal_status', 'close');
+            if (strpos($request->tanggal, 'to') !== false) {
+                [$start, $end] = explode('to', $request->tanggal);
+                $menu->whereBetween('r_t_tanggal', [$start, $end]);
+            } else {
+                $menu->where('r_t_tanggal', $request->tanggal);
+            }
+            if ($request->area != 'all') {
+                $menu->where('r_t_m_area_id', $request->area);
+                if ($request->waroeng != 'all') {
+                    $menu->where('r_t_m_w_id', $request->waroeng);
+                }
+            }
+            if ($request->kategori != 'all') {
+                $menu->where('m_jenis_produk_id', $request->kategori);
+            }
+            $menu = $menu->selectRaw('
+            r_t_m_area_id,
+            r_t_m_area_nama,
+            sum(r_t_detail_qty) as qty,
+            r_t_detail_reguler_price as price,
+            r_t_detail_m_produk_nama,
+            m_jenis_produk_nama
+            ')
+                ->groupBy(
+                    'r_t_m_area_id',
+                    'r_t_m_area_nama',
+                    'r_t_detail_m_produk_nama',
+                    'r_t_detail_reguler_price',
+                    'm_jenis_produk_nama'
+                )
+                ->orderby('r_t_m_area_id', 'ASC')
+                ->orderby('r_t_detail_m_produk_nama', 'ASC')
+                ->get();
+
+            $data = array();
+            foreach ($menu as $valMenu) {
+                $row = array();
+                $row[] = $valMenu->r_t_m_area_nama;
+                $row[] = $valMenu->m_jenis_produk_nama;
+                $row[] = $valMenu->r_t_detail_m_produk_nama;
+                $row[] = number_format($valMenu->qty);
+                $row[] = number_format($valMenu->price);
+                $row[] = number_format($valMenu->qty * $valMenu->price);
+                $data[] = $row;
+            }
+
+            $mark = $request->mark;
+
+            return Excel::download(new RekapMenuGlobalAktExport($data, $mark), 'Rekap Menu By Area - ' . $request->tanggal . '.xlsx');
+
+        } elseif ($request->mark == 'Export By Waroeng') {
+            $menu = DB::table('rekap_transaksi_detail')
+                ->join('rekap_transaksi', 'r_t_id', 'r_t_detail_r_t_id')
+                ->join('m_produk', 'm_produk_id', 'r_t_detail_m_produk_id')
+                ->join('m_jenis_produk', 'm_jenis_produk_id', 'm_produk_m_jenis_produk_id')
+                ->join('rekap_modal', 'rekap_modal_id', 'r_t_rekap_modal_id')
+                ->where('rekap_modal_status', 'close');
+            if (strpos($request->tanggal, 'to') !== false) {
+                [$start, $end] = explode('to', $request->tanggal);
+                $menu->whereBetween('r_t_tanggal', [$start, $end]);
+            } else {
+                $menu->where('r_t_tanggal', $request->tanggal);
+            }
+            if ($request->area != 'all') {
+                $menu->where('r_t_m_area_id', $request->area);
+                if ($request->waroeng != 'all') {
+                    $menu->where('r_t_m_w_id', $request->waroeng);
+                }
+            }
+            if ($request->kategori != 'all') {
+                $menu->where('m_jenis_produk_id', $request->kategori);
+            }
+            $menu = $menu->selectRaw('
+            r_t_m_area_id,
+            r_t_m_area_nama,
+            r_t_m_w_id,
+            r_t_m_w_nama,
+            sum(r_t_detail_qty) as qty,
+            r_t_detail_reguler_price as price,
+            r_t_detail_m_produk_nama,
+            m_jenis_produk_nama
+            ')
+                ->groupBy(
+                    'r_t_m_area_id',
+                    'r_t_m_area_nama',
+                    'r_t_m_w_id',
+                    'r_t_m_w_nama',
+                    'r_t_detail_m_produk_nama',
+                    'r_t_detail_reguler_price',
+                    'm_jenis_produk_nama'
+                )
+                ->orderby('r_t_m_area_id', 'ASC')
+                ->orderby('r_t_m_area_nama', 'ASC')
+                ->orderby('r_t_detail_m_produk_nama', 'ASC')
+                ->get();
+
+            $data = array();
+            foreach ($menu as $valMenu) {
+                $row = array();
+                $row[] = $valMenu->r_t_m_area_nama;
+                $row[] = $valMenu->r_t_m_w_nama;
+                $row[] = $valMenu->m_jenis_produk_nama;
+                $row[] = $valMenu->r_t_detail_m_produk_nama;
+                $row[] = number_format($valMenu->qty);
+                $row[] = number_format($valMenu->price);
+                $row[] = number_format($valMenu->qty * $valMenu->price);
+                $data[] = $row;
+            }
+
+            $mark = $request->mark;
+
+            return Excel::download(new RekapMenuGlobalAktExport($data, $mark), 'Rekap Menu By Waroeng - ' . $request->tanggal . '.xlsx');
+
+        } elseif ($request->mark == 'Export By Tanggal') {
+
+            $menu = DB::table('rekap_transaksi_detail')
+                ->join('rekap_transaksi', 'r_t_id', 'r_t_detail_r_t_id')
+                ->join('m_produk', 'm_produk_id', 'r_t_detail_m_produk_id')
+                ->join('m_jenis_produk', 'm_jenis_produk_id', 'm_produk_m_jenis_produk_id')
+                ->join('rekap_modal', 'rekap_modal_id', 'r_t_rekap_modal_id')
+                ->where('rekap_modal_status', 'close');
+            if (strpos($request->tanggal, 'to') !== false) {
+                [$start, $end] = explode('to', $request->tanggal);
+                $menu->whereBetween('r_t_tanggal', [$start, $end]);
+            } else {
+                $menu->where('r_t_tanggal', $request->tanggal);
+            }
+            if ($request->area != 'all') {
+                $menu->where('r_t_m_area_id', $request->area);
+                if ($request->waroeng != 'all') {
+                    $menu->where('r_t_m_w_id', $request->waroeng);
+                }
+            }
+            if ($request->kategori != 'all') {
+                $menu->where('m_jenis_produk_id', $request->kategori);
+            }
+            $menu = $menu->selectRaw('
+            r_t_m_area_id,
+            r_t_m_area_nama,
+            r_t_m_w_id,
+            r_t_m_w_nama,
+            r_t_tanggal,
+            sum(r_t_detail_qty) as qty,
+            r_t_detail_reguler_price as price,
+            r_t_detail_m_produk_nama,
+            m_jenis_produk_nama
+            ')
+                ->groupBy(
+                    'r_t_m_area_nama',
+                    'r_t_m_w_nama',
+                    'r_t_tanggal',
+                    'r_t_detail_m_produk_nama',
+                    'r_t_detail_reguler_price',
+                    'm_jenis_produk_nama'
+                )
+                ->orderby('r_t_m_area_id', 'ASC')
+                ->orderby('r_t_m_w_id', 'ASC')
+                ->orderby('r_t_tanggal', 'ASC')
+                ->orderby('r_t_detail_m_produk_nama', 'ASC')
+                ->get();
+
+            $data = array();
+            foreach ($menu as $valMenu) {
+                $row = array();
+                $row[] = $valMenu->r_t_m_area_nama;
+                $row[] = $valMenu->r_t_m_w_nama;
+                $row[] = $valMenu->r_t_tanggal;
+                $row[] = $valMenu->m_jenis_produk_nama;
+                $row[] = $valMenu->r_t_detail_m_produk_nama;
+                $row[] = number_format($valMenu->qty);
+                $row[] = number_format($valMenu->price);
+                $row[] = number_format($valMenu->qty * $valMenu->price);
+                $data[] = $row;
+            }
+
+            $mark = $request->mark;
+
+            return Excel::download(new RekapMenuGlobalAktExport($data, $mark), 'Rekap Menu By Tanggal - ' . $request->tanggal . '.xlsx');
+
+        }
 
     }
 

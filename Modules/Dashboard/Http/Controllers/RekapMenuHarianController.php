@@ -161,7 +161,6 @@ class RekapMenuHarianController extends Controller
             if ($request->trans != 'all') {
                 $rekap->where('m_t_t_name', $request->trans);
             }
-
             $rekap = $rekap->selectRaw('
                     SUM(r_t_detail_qty) AS qty,
                     r_t_detail_reguler_price,
@@ -240,36 +239,39 @@ class RekapMenuHarianController extends Controller
             $row[] = $val_menu->r_t_detail_m_produk_nama;
             $qty = $val_menu->qty;
             $pajakMenu = $val_menu->pajak;
+            $nominal_trans = $val_menu->nominal_nota;
             if (!empty($refund2)) {
                 foreach ($refund as $key => $valRef) {
                     if ($val_menu->r_t_detail_m_produk_id == $valRef->r_r_detail_m_produk_id && $val_menu->r_t_tanggal == $valRef->r_r_tanggal && $val_menu->rekap_modal_sesi == $valRef->rekap_modal_sesi && $val_menu->m_t_t_name == $valRef->m_t_t_name) {
                         $qty = $val_menu->qty - $valRef->r_r_detail_qty;
                         $pajakMenu = $val_menu->pajak - (($val_menu->r_t_detail_reguler_price * $valRef->r_r_detail_qty) * 0.1);
+                        $nominal_trans = $val_menu->nominal_nota - $valRef->r_r_detail_nominal;
                     }
                 }
             }
             $nominal = $val_menu->r_t_detail_reguler_price * $qty + ($val_menu->kemasan * $qty);
-            $crRef = $val_menu->r_t_detail_price * $qty + ($val_menu->kemasan * $qty);
             $row[] = $qty;
             $row[] = $nominal;
             $row[] = $val_menu->m_jenis_produk_nama;
             $row[] = $val_menu->m_t_t_name;
-            $nominal_trans = $val_menu->r_t_detail_price * $qty + ($val_menu->kemasan * $qty);
+            $row[] = number_format($nominal_trans + ($val_menu->kemasan * $qty));
             $selisihTrans = $nominal - $nominal_trans;
             if ($val_menu->m_t_t_name != 'dine in' && $val_menu->m_t_t_name != 'take away') {
-                if ($nominal == $nominal_trans) {
-                    $selisihTrans = 'Harga Sama';
-                } else {
+                if ($nominal != $nominal_trans) {
                     $selisihTrans = 0;
+                } elseif ($nominal == 0 && $nominal_trans == 0) {
+                    $selisihTrans = 0;
+                } else {
+                    $selisihTrans = 'harga sama';
                 }
             }
-            $row[] = number_format($nominal_trans);
             if (!is_string($selisihTrans)) {
-                $row[] = number_format($selisihTrans);
+                $row[] = number_format($selisihTrans); //reguler price * qty - nominal
             } else {
-                $row[] = $selisihTrans;
+                $row[] = $selisihTrans; //reguler price * qty - nominal
             }
-            $cr = $qty != 0 ? $crRef : 0;
+            $crRef = $val_menu->r_t_detail_price * $qty + ($val_menu->kemasan * $qty);
+            $cr = $qty != 0 ? $crRef : 0; //detail price - reguler price
             $row[] = number_format($cr);
             $selisihCR = $nominal - $cr;
             if ($val_menu->m_t_t_name != 'dine in' && $val_menu->m_t_t_name != 'take away') {

@@ -45,7 +45,6 @@ Route::prefix('dashboard')->middleware('auth', 'web')
 
         Route::controller(RekapMenuController::class)->group(function () {
             Route::get('rekap_menu', 'menu_summary')->name('rekap_menu.menu_summary');
-            Route::get('rekap_menu_global', 'menu_global')->name('rekap_menu_global.menu_global');
             Route::get('rekap_menu/show', 'show')->name('rekap_menu.show');
             Route::get('rekap_menu/select_waroeng', 'select_waroeng')->name('rekap_menu.select_waroeng');
             Route::get('rekap_menu/select_tanggal', 'select_tanggal')->name('rekap_menu.select_tanggal');
@@ -53,9 +52,12 @@ Route::prefix('dashboard')->middleware('auth', 'web')
             Route::post('rekap_menu/delete_tgl', 'delete_tgl')->name('rekap_menu.delete_tgl');
             Route::post('rekap_menu/simpan_tgl', 'simpan_tgl')->name('rekap_menu.simpan_tgl');
             Route::get('rekap_menu/select_trans', 'select_trans')->name('rekap_menu.select_trans');
-            Route::get('rekap_menu_global/select_kategori', 'select_kategori')->name('rekap_menu_global.select_kategori');
             Route::get('rekap_menu/select_sif', 'select_sif')->name('rekap_menu.select_sif');
+            Route::get('rekap_menu_global', 'menu_global')->name('rekap_menu_global.menu_global');
+            Route::get('rekap_menu_global/select_kategori', 'select_kategori')->name('rekap_menu_global.select_kategori');
             Route::get('rekap_menu_global/show_menu_global', 'show_menu_global')->name('rekap_menu_global.show_menu_global');
+            Route::get('rekap_menu_global/export_by_menu', 'export_by_menu')->name('rekap_menu_global.export_by_menu');
+            Route::get('rekap_menu_global/export_excel_akt', 'export_excel_akt')->name('rekap_menu_global.export_excel_akt');
             // Route::get('rekap_menu/menu_non_menu/{mw}/{date}', 'rekapNonMenu')->name('rekap_menu.menu_non_menu');
         });
 
@@ -150,6 +152,8 @@ Route::prefix('dashboard')->middleware('auth', 'web')
         Route::controller(RekapSelisihController::class)->group(function () {
             Route::get('rekap_selisih', 'index')->name('rekap_selisih.index');
             Route::get('rekap_selisih/show', 'show')->name('rekap_selisih.show');
+            Route::get('rekap_selisih_ujicoba', 'ujicoba')->name('rekap_selisih_ujicoba.ujicoba');
+            Route::get('rekap_selisih/show_ujicoba', 'show_ujicoba')->name('rekap_selisih.show_ujicoba');
             Route::get('rekap_selisih/select_waroeng', 'select_waroeng')->name('rekap_selisih.select_waroeng');
             Route::get('rekap_selisih/select_user', 'select_user')->name('rekap_selisih.select_user');
             Route::get('rekap_selisih/export_excel', 'export_excel')->name('rekap_selisih.export_excel');

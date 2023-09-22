@@ -94,6 +94,7 @@
                                                 class="cari f-area js-select2 form-control filter_pembayaran"
                                                 name="waroeng">
                                                 <option></option>
+                                                <option value="all">all pembayaran</option>
                                                 @foreach ($data->payment as $payment)
                                                     <option value="{{ $payment->m_payment_method_id }}">
                                                         {{ $payment->m_payment_method_name }}

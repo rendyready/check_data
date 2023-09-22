@@ -95,6 +95,12 @@
                                                 class="cari f-wrg js-select2 form-control filter_trans"
                                                 data-placeholder="Pilih Kategori Menu" name="tipe_trans[]">
                                                 <option></option>
+                                                <option value="all">all kategori</option>
+                                                @foreach ($data->kategori as $kategori)
+                                                    <option value="{{ $kategori->m_jenis_produk_id }}">
+                                                        {{ $kategori->m_jenis_produk_nama }}
+                                                    </option>
+                                                @endforeach
                                             </select>
                                         </div>
                                     </div>
@@ -108,13 +114,40 @@
                                 data-has-access="{{ in_array(Auth::user()->waroeng_id, $data->akses_pusat) ? 'true' : 'false' }}">
                             </div>
 
-                            <div class="col-sm-8">
-                                <button type="button" id="cari"
-                                    class="btn btn-primary btn-sm col-1 mt-2 mb-3">Cari</button>
+                            <div class="row">
+                                <div class="col-md-7">
+                                    <div class="row">
+                                        <div class="col-md-1">
+                                            <button type="button" id="cari"
+                                                class="btn btn-primary btn-sm mb-3 mt-3">Cari</button>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="btn-group">
+                                                <button type="button" id="button_drop"
+                                                    class="btn btn-sm btn-primary dropdown-toggle mt-3">
+                                                    Export Excel <span id="export_loading" style="display: none;"><img
+                                                            src="{{ asset('media/gif/loading.gif') }}" alt="Loading..."
+                                                            style="max-width: 16px; max-height: 16px;"></span>
+                                                </button>
+                                                <div class="dropdown-menu" id="dropdown-menu"
+                                                    style="position: absolute; top: 100%; left: 5%; background-color:rgba(235, 25, 25, 0.123);">
+                                                    <button class="dropdown-item" style="font-weight:550;"
+                                                        id="hari">Export By Menu</button>
+                                                    <button class="dropdown-item" style="font-weight: 550;"
+                                                        id="byarea">Export By Area</button>
+                                                    <button class="dropdown-item" style="font-weight: 550;"
+                                                        id="bywaroeng">Export By Waroeng</button>
+                                                    <button class="dropdown-item" style="font-weight: 550;"
+                                                        id="bytanggal">Export By Tanggal</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </form>
 
-                        <div class="table-responsive">
+                        <div class="table-responsive" id="tampil" style="display: none;">
                             <table id="tampil_rekap"
                                 class="table table-sm table-bordered table-striped table-vcenter nowrap table-hover js-dataTable-full">
                                 <thead>
@@ -153,6 +186,7 @@
                 var waroeng = $('.filter_waroeng option:selected').val();
                 var tanggal = $('.filter_tanggal').val();
                 var kategori = $('.filter_trans option:selected').val();
+                $('#tampil').show();
 
                 if (tanggal === "" && (area === "" || waroeng === "")) {
                     Swal.fire({
@@ -167,15 +201,7 @@
                 } else {
 
                     $('#tampil_rekap').DataTable({
-                        buttons: [{
-                            extend: 'excelHtml5',
-                            text: 'Export Excel',
-                            title: 'Rekap Menu Global - ' +
-                                tanggal,
-
-                            pageSize: 'A4',
-                            pageOrientation: 'potrait',
-                        }],
+                        buttons: [],
                         destroy: true,
                         orderCellsTop: true,
                         processing: true,
@@ -208,6 +234,195 @@
                 }
             });
 
+            $('#button_drop').on('click', function() {
+                $('#dropdown-menu').toggle();
+            });
+
+            $(document).click(function(e) {
+                if (!$(e.target).closest('.btn-group').length) {
+                    $('#dropdown-menu').hide();
+                }
+            });
+
+            $('#hari').on('click', function() {
+                var area = $('.filter_area option:selected').val();
+                var waroeng = $('.filter_waroeng option:selected').val();
+                var tanggal = $('.filter_tanggal').val();
+                var kategori = $('.filter_trans option:selected').val();
+
+                var exportUrl = '{{ route('rekap_menu_global.export_by_menu') }}?area=' + area +
+                    '&waroeng=' + waroeng + '&tanggal=' + tanggal + '&kategori=' + kategori;
+
+                $('#export_loading').show();
+
+                var $buttonHari = $(this);
+
+                $buttonHari.prop('disabled', true);
+
+                $('.dropdown-menu').hide();
+
+                $.ajax({
+                    url: exportUrl,
+                    method: 'GET',
+                    success: function(response) {
+                        window.location.href = exportUrl;
+                        $buttonHari.prop('disabled', false);
+
+                        setTimeout(function() {
+                            $('#export_loading')
+                                .hide();
+                        }, 2000);
+                    },
+                    error: function() {
+                        $('#export_loading').hide();
+                    }
+                });
+            });
+
+            $('#byarea').on('click', function() {
+                var area = $('.filter_area option:selected').val();
+                var waroeng = $('.filter_waroeng option:selected').val();
+                var tanggal = $('.filter_tanggal').val();
+                var kategori = $('.filter_trans option:selected').val();
+                var mark = $('#byarea').text();
+
+                var exportUrl = '{{ route('rekap_menu_global.export_excel_akt') }}?area=' + area +
+                    '&waroeng=' + waroeng + '&tanggal=' + tanggal + '&kategori=' + kategori + '&mark=' +
+                    mark;
+
+                $('#export_loading').show();
+
+                var $buttonHari = $(this);
+
+                $buttonHari.prop('disabled', true);
+
+                $('.dropdown-menu').hide();
+
+                $.ajax({
+                    url: exportUrl,
+                    method: 'GET',
+                    success: function(response) {
+                        window.location.href = exportUrl;
+                        $buttonHari.prop('disabled', false);
+
+                        setTimeout(function() {
+                            $('#export_loading')
+                                .hide();
+                        }, 2000);
+                    },
+                    error: function() {
+                        $('#export_loading').hide();
+                    }
+                });
+            });
+
+            $('#bywaroeng').on('click', function() {
+                var area = $('.filter_area option:selected').val();
+                var waroeng = $('.filter_waroeng option:selected').val();
+                var tanggal = $('.filter_tanggal').val();
+                var kategori = $('.filter_trans option:selected').val();
+                var mark = $('#bywaroeng').text();
+
+                var exportUrl = '{{ route('rekap_menu_global.export_excel_akt') }}?area=' + area +
+                    '&waroeng=' + waroeng + '&tanggal=' + tanggal + '&kategori=' + kategori + '&mark=' +
+                    mark;
+
+                $('#export_loading').show();
+
+                var $buttonHari = $(this);
+
+                $buttonHari.prop('disabled', true);
+
+                $('.dropdown-menu').hide();
+
+                $.ajax({
+                    url: exportUrl,
+                    method: 'GET',
+                    success: function(response) {
+                        window.location.href = exportUrl;
+                        $buttonHari.prop('disabled', false);
+
+                        setTimeout(function() {
+                            $('#export_loading')
+                                .hide();
+                        }, 2000);
+                    },
+                    error: function() {
+                        $('#export_loading').hide();
+                    }
+                });
+            });
+
+            $('#bytanggal').on('click', function() {
+                var area = $('.filter_area option:selected').val();
+                var waroeng = $('.filter_waroeng option:selected').val();
+                var tanggal = $('.filter_tanggal').val();
+                var kategori = $('.filter_trans option:selected').val();
+                var mark = $('#bytanggal').text();
+
+                var exportUrl = '{{ route('rekap_menu_global.export_excel_akt') }}?area=' + area +
+                    '&waroeng=' + waroeng + '&tanggal=' + tanggal + '&kategori=' + kategori + '&mark=' +
+                    mark;
+
+                $('#export_loading').show();
+
+                var $buttonHari = $(this);
+
+                $buttonHari.prop('disabled', true);
+
+                $('.dropdown-menu').hide();
+
+                $.ajax({
+                    url: exportUrl,
+                    method: 'GET',
+                    success: function(response) {
+                        window.location.href = exportUrl;
+                        $buttonHari.prop('disabled', false);
+
+                        setTimeout(function() {
+                            $('#export_loading')
+                                .hide();
+                        }, 2000);
+                    },
+                    error: function() {
+                        $('#export_loading').hide();
+                    }
+                });
+            });
+
+            // $('#export_excel').on('click', function() {
+            //     var area = $('.filter_area option:selected').val();
+            //     var waroeng = $('.filter_waroeng option:selected').val();
+            //     var tanggal = $('.filter_tanggal').val();
+            //     var kategori = $('.filter_trans option:selected').val();
+
+            //     var exportUrl = '{{ route('rekap_menu_global.export_by_menu') }}?area=' + area +
+            //         '&waroeng=' + waroeng + '&tanggal=' + tanggal + '&kategori=' + kategori;
+
+            //     $('#export_loading').show();
+
+            //     $(this).prop('disabled', true);
+
+            //     $.ajax({
+            //         url: exportUrl,
+            //         method: 'GET',
+            //         success: function(response) {
+            //             window.location.href = exportUrl;
+            //             $(this).prop('disabled', false);
+
+            //             setTimeout(function() {
+            //                 $('#export_loading')
+            //                     .hide();
+            //             }, 2000);
+            //         },
+            //         error: function() {
+            //             $('#export_loading').hide();
+            //             $('#export_excel').prop('disabled', false);
+            //         }
+            //     });
+
+            // });
+
             if (HakAksesPusat) {
                 $('.filter_area').on('select2:select', function() {
                     var id_area = $(this).val();
@@ -216,12 +431,9 @@
 
                     if (id_area == 'all') {
                         $("#select_waroeng").hide();
-                        $("#select_operator").hide();
                         $(".filter_waroeng").empty();
-                        $(".filter_trans").empty();
                     } else {
                         $("#select_waroeng").show();
-                        $("#select_operator").show();
                     }
 
                     if (id_area && tanggal) {
@@ -260,91 +472,6 @@
                         $(".filter_waroeng").empty();
                         $(".filter_area").val(prev).trigger('change');
                     }
-                    $(".filter_trans").empty();
-                });
-            }
-
-            if (HakAksesArea) {
-                $('.filter_waroeng').on('select2:select', function() {
-                    var id_waroeng = $(this).val();
-                    var tanggal = $('.filter_tanggal').val();
-                    var prev = $(this).data('previous-value');
-
-                    if (id_waroeng == 'all') {
-                        $("#select_operator").hide();
-                        $(".filter_trans").empty();
-                    } else {
-                        $("#select_operator").show();
-                    }
-
-                    if (id_waroeng && tanggal) {
-                        $.ajax({
-                            type: "GET",
-                            url: '{{ route('rekap_menu_global.select_kategori') }}',
-                            dataType: 'JSON',
-                            data: {
-                                id_waroeng: id_waroeng,
-                                tanggal: tanggal,
-                            },
-                            success: function(res) {
-                                console.log(res);
-                                if (res) {
-                                    $(".filter_trans").empty();
-                                    $(".filter_trans").append('<option></option>');
-                                    $.each(res, function(key, value) {
-                                        $(".filter_trans").append('<option value="' +
-                                            key + '">' + value + '</option>');
-                                    });
-                                } else {
-                                    $(".filter_trans").empty();
-                                }
-                            }
-                        });
-                    } else {
-                        Swal.fire({
-                            title: 'Informasi',
-                            text: "Harap lengkapi kolom tanggal",
-                            confirmButtonColor: '#d33',
-                            confirmButtonText: 'OK',
-                            customClass: {
-                                confirmButton: 'bg-red-500',
-                            },
-                        });
-                        $(".filter_trans").empty();
-                        $(".filter_waroeng").val(prev).trigger('change');
-                    }
-                });
-
-            } else {
-
-                $('.filter_tanggal').on('change', function() {
-                    var id_waroeng = $('.filter_waroeng').val();
-                    var tanggal = $('.filter_tanggal').val();
-                    if (tanggal) {
-                        $.ajax({
-                            type: "GET",
-                            url: '{{ route('rekap_menu_global.select_kategori') }}',
-                            dataType: 'JSON',
-                            data: {
-                                id_waroeng: id_waroeng,
-                            },
-                            success: function(res) {
-                                if (res) {
-                                    $(".filter_trans").empty();
-                                    $(".filter_trans").append('<option></option>');
-                                    $.each(res, function(key, value) {
-                                        $(".filter_trans").append('<option value="' +
-                                            key + '">' + value + '</option>');
-                                    });
-                                } else {
-                                    $(".filter_trans").empty();
-                                }
-                            }
-                        });
-                    } else {
-                        $(".filter_trans").empty();
-                    }
-                    $(".filter_trans").empty();
                 });
             }
 
