@@ -60,15 +60,15 @@ class ProdukController extends Controller
                     $kat = $request->m_produk_m_klasifikasi_produk_id;
                     $num = $produk_code->m_klasifikasi_produk_last_id + 1;
                     $code = $produk_code->m_klasifikasi_produk_prefix . '-' . $kat . str_pad($num, 5, "0", STR_PAD_LEFT);
-                   
+
                     if ($request->m_produk_image) {
                         $file = $this->upload_file($request);
                         $link = $this->uploadImageCloud($file);
-                        $url = ($link) ? $link : 'https://placehold.co/400x400/000000/FFF' ;
+                        $url = ($link) ? $link : 'https://placehold.co/400x400/000000/FFF';
                     } else {
-                        $url = 'https://placehold.co/400x400/000000/FFF' ;
+                        $url = 'https://placehold.co/400x400/000000/FFF';
                     }
-                   
+
                     DB::table('m_produk')->insert([
                         "m_produk_id" => '1',
                         "m_produk_code" => $code,
@@ -141,9 +141,9 @@ class ProdukController extends Controller
                         $file = $this->upload_file($request);
                         $link = $this->uploadImageCloud($file);
                         $this->remove_file($file);
-                        $url = ($link) ? $link : 'https://placehold.co/400x400/000000/FFF' ;
+                        $url = ($link) ? $link : 'https://placehold.co/400x400/000000/FFF';
                     } else {
-                        $url = 'https://placehold.co/400x400/000000/FFF' ;
+                        $url = 'https://placehold.co/400x400/000000/FFF';
                         $link = null;
                     }
                     if ($link) {
@@ -194,7 +194,6 @@ class ProdukController extends Controller
                     DB::table('m_produk')
                         ->where('m_produk_id', $request->m_produk_id)
                         ->update($data);
-                    
 
                     if ($request->config_sub_jenis_produk_m_sub_jenis_produk_id) {
                         foreach ($request->config_sub_jenis_produk_m_sub_jenis_produk_id as $value) {
@@ -244,5 +243,126 @@ class ProdukController extends Controller
             ->join('m_satuan', 'm_satuan_id', 'm_produk_utama_m_satuan_id')
             ->first();
         return $satuan_bb;
+    }
+    //Titip QR Non Aktif Menu
+
+    public function menu()
+    {
+        return view('master::qr_menu');
+    }
+
+    public function be_get_menu()
+    {
+        $mw_id = Auth::user()->waroeng_id;
+        $db_qr = $this->connect_qr();
+        $menu = $db_qr->table('m_jenis_nota')
+            ->where('m_jenis_nota_m_t_t_id', 1)
+            ->where('m_jenis_nota_m_w_id', $mw_id)
+            ->join('m_menu_harga', 'm_menu_harga_m_jenis_nota_id', 'm_jenis_nota_id')
+            ->join('m_produk', 'm_menu_harga_m_produk_id', 'm_produk_id')
+            ->join('m_jenis_produk', 'm_produk_m_jenis_produk_id', 'm_jenis_produk_id')
+            ->leftjoin('m_w', 'm_w_id', 'm_jenis_nota_m_w_id')
+            ->whereNotIn('m_produk_m_jenis_produk_id', ['8', '9', '11', '12', '14'])
+            ->where('m_produk_status', '1')
+            ->where('m_menu_harga_status', '1')
+            ->where('m_produk_jual', 'ya')
+            ->where('m_produk_qr', 'ya')
+            ->select(
+                'm_produk_id',
+                'm_produk_nama',
+                'm_produk_image',
+                'm_jenis_produk_nama',
+                'm_jenis_produk_id',
+                'm_menu_harga_qr_status',
+                'm_w_id',
+            )
+            ->orderBy('m_jenis_produk_id')
+            ->orderBy('m_produk_urut')
+            ->get()
+            ->toArray();
+
+        $non_menu = $db_qr->table('m_jenis_nota')
+            ->where('m_jenis_nota_m_t_t_id', 1)
+            ->where('m_jenis_nota_m_w_id', $mw_id)
+            ->join('m_menu_harga', 'm_menu_harga_m_jenis_nota_id', 'm_jenis_nota_id')
+            ->join('m_produk', 'm_menu_harga_m_produk_id', 'm_produk_id')
+            ->join('m_jenis_produk', 'm_produk_m_jenis_produk_id', 'm_jenis_produk_id')
+            ->leftjoin('m_w', 'm_w_id', 'm_jenis_nota_m_w_id')
+            ->whereIn('m_produk_id', [662, 664])
+            ->where('m_produk_status', '1')
+            ->where('m_menu_harga_status', '1')
+            ->where('m_produk_jual', 'ya')
+            ->where('m_produk_qr', 'ya')
+            ->select(
+                'm_produk_id',
+                'm_produk_nama',
+                'm_produk_image',
+                'm_jenis_produk_nama',
+                'm_jenis_produk_id',
+                'm_menu_harga_qr_status',
+                'm_w_id',
+            )
+            ->orderBy('m_jenis_produk_id')
+            ->orderBy('m_produk_urut')
+            ->get();
+
+        $formattedMenu = [];
+        foreach ($non_menu as $key) {
+            $menuItem = [
+                'm_produk_id' => $key->m_produk_id,
+                'm_produk_nama' => $key->m_produk_nama,
+                'm_produk_image' => $key->m_produk_image,
+                'm_jenis_produk_nama' => 'minuman',
+                'm_jenis_produk_id' => 1,
+                'm_menu_harga_qr_status' => $key->m_menu_harga_qr_status,
+                'm_w_id' => $key->m_w_id,
+            ];
+
+            $formattedMenu[] = $menuItem;
+        }
+        $data['menu'] = array_merge($menu, $formattedMenu);
+
+        $data['kategori'] = $db_qr->table('m_jenis_nota')
+            ->where('m_jenis_nota_m_t_t_id', 1)
+            ->where('m_jenis_nota_m_w_id', $mw_id)
+            ->whereNotIn('m_produk_m_jenis_produk_id', ['8', '9', '11', '12', '13', '14'])
+            ->where('m_produk_status', '1')
+            ->where('m_menu_harga_status', '1')
+            ->join('m_menu_harga', 'm_menu_harga_m_jenis_nota_id', 'm_jenis_nota_id')
+            ->join('m_produk', 'm_menu_harga_m_produk_id', 'm_produk_id')
+            ->join('m_jenis_produk', 'm_produk_m_jenis_produk_id', 'm_jenis_produk_id')
+            ->select('m_jenis_produk_id', 'm_jenis_produk_nama')
+            ->groupBy('m_jenis_produk_id', 'm_jenis_produk_nama')
+            ->get();
+
+        return response()->json($data, 200);
+    }
+
+    public function be_menu_update(Request $request)
+    {
+        $db_qr = $this->connect_qr();
+        $getListaNota =  $db_qr->table('m_jenis_nota')
+            ->where('m_jenis_nota_m_w_id', $request->m_w_id)
+            ->whereIn('m_jenis_nota_m_t_t_id', [1, 2])
+            ->get();
+
+        foreach ($getListaNota as $key) {
+            $hargaMenu = $db_qr->table('m_menu_harga')
+                ->where('m_menu_harga_m_jenis_nota_id', $key->m_jenis_nota_id)
+                ->where('m_menu_harga_m_produk_id', $request->m_produk_id)
+                ->first();
+
+            if ($hargaMenu) {
+                // Update the m_menu_harga_qr_status based on your condition
+                $status = ($hargaMenu->m_menu_harga_qr_status == 'ya') ? 'tidak' : 'ya';
+
+                // Update the row in the m_menu_harga table
+                $db_qr->table('m_menu_harga')
+                    ->where('m_menu_harga_m_jenis_nota_id', $key->m_jenis_nota_id)
+                    ->where('m_menu_harga_m_produk_id', $request->m_produk_id)
+                    ->update(['m_menu_harga_qr_status' => $status]);
+            }
+        }
+        return response()->json(['status' => 'success', 'messages' => $status], 200);
     }
 }
