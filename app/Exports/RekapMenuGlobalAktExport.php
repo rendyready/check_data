@@ -46,7 +46,7 @@ class RekapMenuGlobalAktExport implements FromView, WithHeadingRow
     protected $mark;
     protected $tanggal;
 
-    public function __construct(array $data, $mark, $tanggal)
+    public function __construct(array $data, $mark, $tanggal = null)
     {
         $this->data = $data;
         $this->mark = $mark;
@@ -66,7 +66,7 @@ class FormatExcel implements FromView, WithHeadingRow, ShouldAutoSize
     protected $mark;
     protected $tanggal;
 
-    public function __construct(array $data, $mark, $tanggal)
+    public function __construct(array $data, $mark, $tanggal = null)
     {
         $this->data = $data;
         $this->mark = $mark; // Menyimpan nilai $mark
