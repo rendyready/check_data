@@ -118,8 +118,8 @@
                                 <div class="col-md-7">
                                     <div class="row">
                                         <div class="col-md-1">
-                                            <button type="button" id="cari"
-                                                class="btn btn-primary btn-sm mb-3 mt-3">Cari</button>
+                                            <button type="button" id="cari" class="btn btn-primary btn-sm mb-3 mt-3"
+                                                style="margin-right: 5px;">Cari</button>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="btn-group">

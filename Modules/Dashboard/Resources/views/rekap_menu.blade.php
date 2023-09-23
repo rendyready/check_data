@@ -108,48 +108,47 @@
                                 data-has-access="{{ in_array(Auth::user()->waroeng_id, $data->akses_pusat) ? 'true' : 'false' }}">
                             </div>
 
-                            <div class="col-sm-8">
-                                <button type="button" id="cari"
-                                    class="btn btn-primary btn-sm col-1 mt-2 mb-3">Cari</button>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <button type="button" id="cari" class="btn btn-primary btn-sm mb-3 mt-3"
+                                        style="margin-right: 5px;">Cari</button>
+                                    <a class="btn btn-sm btn-primary mb-3 mt-3" id="export_excel">Export Excel <span
+                                            id="export_loading" style="display: none;"><img
+                                                src="{{ asset('media/gif/loading.gif') }}" alt="Loading..."
+                                                style="max-width: 16px; max-height: 16px;"></span></a>
+                                </div>
                             </div>
-                            {{-- <div class="text-center mt-2 mb-2">
-                            <button id="export_excel" class="btn btn-primary btn-sm">Export Excel</button> --}}
 
                             <table id="tampil_rekap"
                                 class="table table-sm table-bordered table-hover table-striped table-vcenter js-dataTable-full nowrap">
                                 <thead id="head_data"></thead>
                             </table>
-                            {{-- </div>    --}}
                         </form>
 
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    </div>
-@endsection
-@section('js')
-    <!-- js -->
-    <script type="module">
-        $(document).ready(function() {
-            Codebase.helpersOnLoad(['jq-select2']);
+    @endsection
+    @section('js')
+        <!-- js -->
+        <script type="module">
+            $(document).ready(function() {
+                Codebase.helpersOnLoad(['jq-select2']);
 
-            var userInfo = document.getElementById('user-info');
-            var userInfoPusat = document.getElementById('user-info-pusat');
-            var waroengId = userInfo.dataset.waroengId;
-            var HakAksesArea = userInfo.dataset.hasAccess === 'true';
-            var HakAksesPusat = userInfoPusat.dataset.hasAccess === 'true';
+                var userInfo = document.getElementById('user-info');
+                var userInfoPusat = document.getElementById('user-info-pusat');
+                var waroengId = userInfo.dataset.waroengId;
+                var HakAksesArea = userInfo.dataset.hasAccess === 'true';
+                var HakAksesPusat = userInfoPusat.dataset.hasAccess === 'true';
 
-            var click = false;
+                $('#cari').on('click', function() {
 
-            $('#cari').on('click', function(e) {
-                if (!click) {
-                    click = true;
                     var area = $('.filter_area option:selected').val();
                     var waroeng = $('.filter_waroeng option:selected').val();
                     var tanggal = $('.filter_tanggal').val();
                     var trans = $('.filter_trans option:selected').val();
+                    var status = 'bukan export';
 
                     if (tanggal === "" && (area === "" || waroeng === "") && trans === "") {
                         Swal.fire({
@@ -162,23 +161,22 @@
                             },
                         });
                     } else {
-
                         $.ajax({
                             url: '{{ route('rekap_menu.tanggal_rekap') }}',
                             type: 'GET',
-                            dataType: 'Json',
+                            dataType: 'json',
                             data: {
                                 tanggal: tanggal,
                             },
                             success: function(data) {
                                 console.log(data);
-                                $('#head_data').empty();
-                                var html = '<tr>';
-                                html += '<th class="text-center" rowspan="2">Waroeng</th>';
-                                html += '<th class="text-center" rowspan="2">Transaksi</th>';
-                                html +=
+
+                                var htmlHeader = '<tr>';
+                                htmlHeader += '<th class="text-center" rowspan="2">Waroeng</th>';
+                                htmlHeader += '<th class="text-center" rowspan="2">Transaksi</th>';
+                                htmlHeader +=
                                     '<th class="text-center" rowspan="2">Kategori Menu</th>';
-                                html += '<th class="text-center" rowspan="2">Nama Menu</th>';
+                                htmlHeader += '<th class="text-center" rowspan="2">Nama Menu</th>';
                                 for (var i = 0; i < data.length; i++) {
                                     var dateObj = new Date(Date.parse(data[i]));
                                     var dateString = dateObj.toLocaleDateString('id-ID', {
@@ -186,45 +184,39 @@
                                         month: 'long',
                                         day: 'numeric'
                                     });
-                                    html += '<th class="text-center" colspan="2">' +
+                                    htmlHeader += '<th class="text-center" colspan="2">' +
                                         dateString + '</th>';
                                 }
-                                html += '</tr>';
-                                html += '<tr>';
+                                htmlHeader += '</tr>';
+                                htmlHeader += '<tr>';
                                 var jenis_transaksi = ['Qty', 'Harga'];
                                 var jumlah_transaksi = jenis_transaksi.length;
 
                                 for (var i = 0; i < data.length; i++) {
                                     for (var j = 0; j < jumlah_transaksi; j++) {
-                                        html += '<th class="text-center">' + jenis_transaksi[
+                                        htmlHeader += '<th class="text-center">' + jenis_transaksi[
                                             j] + '</th>';
                                     }
                                 }
-                                html += '</tr>';
-                                $('#head_data').append(html);
+                                htmlHeader += '</tr>';
+
+                                if ($.fn.DataTable.isDataTable('#tampil_rekap')) {
+                                    $('#tampil_rekap').DataTable().clear().destroy();
+                                }
+
+                                $('#tampil_rekap thead').html(htmlHeader);
 
                                 $('#tampil_rekap').DataTable({
-                                    destroy: true,
                                     orderCellsTop: true,
                                     processing: true,
                                     scrollX: true,
                                     autoWidth: true,
                                     scrollCollapse: true,
-                                    buttons: [{
-                                        extend: 'excelHtml5',
-                                        text: 'Export Excel',
-                                        title: 'Rekap Menu - ' + trans + ' - ' +
-                                            tanggal,
-                                        // exportOptions: {
-                                        //     columns: [1, 2, 3, 4, 5]
-                                        // },
-                                        pageSize: 'A4',
-                                        pageOrientation: 'potrait',
-                                    }],
+                                    buttons: [],
                                     columnDefs: [{
                                         targets: '_all',
                                         className: 'dt-body-center'
-                                    }, ],
+                                    }],
                                     lengthMenu: [
                                         [10, 25, 50, 100, -1],
                                         [10, 25, 50, 100, "All"]
@@ -237,6 +229,7 @@
                                             waroeng: waroeng,
                                             tanggal: tanggal,
                                             trans: trans,
+                                            status: status,
                                         },
                                         type: "GET",
                                     },
@@ -244,167 +237,208 @@
                             }
                         });
                     }
-                } else {
-                    location.reload();
+                });
+
+
+                $('#export_excel').on('click', function() {
+                    var area = $('.filter_area option:selected').val();
+                    var waroeng = $('.filter_waroeng option:selected').val();
+                    var tanggal = $('.filter_tanggal').val();
+                    var trans = $('.filter_trans option:selected').val();
+
+                    var status = $('#export_excel').text();
+                    console.log(status);
+
+                    var exportUrl = '{{ route('rekap_menu.show') }}?area=' + area +
+                        '&waroeng=' + waroeng + '&tanggal=' + tanggal + '&trans=' + trans +
+                        '&status=' + status;
+
+                    $('#export_loading').show();
+
+                    $(this).prop('disabled', true);
+
+                    $.ajax({
+                        url: exportUrl,
+                        method: 'GET',
+                        success: function(response) {
+                            window.location.href = exportUrl;
+                            $(this).prop('disabled', false);
+
+                            setTimeout(function() {
+                                $('#export_loading')
+                                    .hide();
+                            }, 2000);
+                        },
+                        error: function() {
+                            $('#export_loading').hide();
+                            $('#export_excel').prop('disabled', false);
+                        }
+                    });
+
+                });
+
+                if (HakAksesPusat) {
+                    $('.filter_area').on('select2:select', function() {
+                        var id_area = $(this).val();
+                        var tanggal = $('.filter_tanggal').val();
+                        var prev = $(this).data('previous-value');
+
+                        if (id_area == 'all') {
+                            $("#select_waroeng").hide();
+                            $("#select_operator").hide();
+                            $(".filter_waroeng").empty();
+                            $(".filter_trans").empty();
+                        } else {
+                            $("#select_waroeng").show();
+                            $("#select_operator").show();
+                        }
+
+                        if (id_area && tanggal) {
+                            $.ajax({
+                                type: "GET",
+                                url: '{{ route('rekap_menu.select_waroeng') }}',
+                                dataType: 'JSON',
+                                destroy: true,
+                                data: {
+                                    id_area: id_area,
+                                },
+                                success: function(res) {
+                                    // console.log(res);           
+                                    if (res) {
+                                        $(".filter_waroeng").empty();
+                                        $(".filter_waroeng").append(
+                                            '<option></option>');
+                                        $.each(res, function(key, value) {
+                                            $(".filter_waroeng").append(
+                                                '<option value="' +
+                                                key + '">' + value +
+                                                '</option>');
+                                        });
+                                    } else {
+                                        $(".filter_waroeng").empty();
+                                    }
+                                }
+                            });
+                        } else {
+                            Swal.fire({
+                                title: 'Informasi',
+                                text: "Harap lengkapi kolom tanggal",
+                                confirmButtonColor: '#d33',
+                                confirmButtonText: 'OK',
+                                customClass: {
+                                    confirmButton: 'bg-red-500',
+                                },
+                            });
+                            $(".filter_waroeng").empty();
+                            $(".filter_area").val(prev).trigger('change');
+                        }
+                        $(".filter_trans").empty();
+                    });
                 }
 
+                if (HakAksesArea) {
+                    $('.filter_waroeng').on('select2:select', function() {
+                        var id_waroeng = $(this).val();
+                        var tanggal = $('.filter_tanggal').val();
+                        var prev = $(this).data('previous-value');
+
+                        if (id_waroeng == 'all') {
+                            $("#select_operator").hide();
+                            $(".filter_trans").empty();
+                        } else {
+                            $("#select_operator").show();
+                        }
+
+                        if (id_waroeng && tanggal) {
+                            $.ajax({
+                                type: "GET",
+                                url: '{{ route('rekap_menu.select_trans') }}',
+                                dataType: 'JSON',
+                                data: {
+                                    id_waroeng: id_waroeng,
+                                    tanggal: tanggal,
+                                },
+                                success: function(res) {
+                                    console.log(res);
+                                    if (res) {
+                                        $(".filter_trans").empty();
+                                        $(".filter_trans").append('<option></option>');
+                                        $.each(res, function(key, value) {
+                                            $(".filter_trans").append(
+                                                '<option value="' +
+                                                key + '">' + value +
+                                                '</option>');
+                                        });
+                                    } else {
+                                        $(".filter_trans").empty();
+                                    }
+                                }
+                            });
+                        } else {
+                            Swal.fire({
+                                title: 'Informasi',
+                                text: "Harap lengkapi kolom tanggal",
+                                confirmButtonColor: '#d33',
+                                confirmButtonText: 'OK',
+                                customClass: {
+                                    confirmButton: 'bg-red-500',
+                                },
+                            });
+                            $(".filter_trans").empty();
+                            $(".filter_waroeng").val(prev).trigger('change');
+                        }
+                    });
+
+                } else {
+
+                    $('.filter_tanggal').on('change', function() {
+                        var id_waroeng = $('.filter_waroeng').val();
+                        var tanggal = $('.filter_tanggal').val();
+                        if (tanggal) {
+                            $.ajax({
+                                type: "GET",
+                                url: '{{ route('rekap_menu.select_trans') }}',
+                                dataType: 'JSON',
+                                data: {
+                                    id_waroeng: id_waroeng,
+                                },
+                                success: function(res) {
+                                    if (res) {
+                                        $(".filter_trans").empty();
+                                        $(".filter_trans").append('<option></option>');
+                                        $.each(res, function(key, value) {
+                                            $(".filter_trans").append(
+                                                '<option value="' +
+                                                key + '">' + value +
+                                                '</option>');
+                                        });
+                                    } else {
+                                        $(".filter_trans").empty();
+                                    }
+                                }
+                            });
+                        } else {
+                            $(".filter_trans").empty();
+                        }
+                        $(".filter_trans").empty();
+                    });
+                }
+
+                $('.filter_tanggal').flatpickr({
+                    mode: "range",
+                    dateFormat: 'Y-m-d',
+                });
+
+                // $('#export_excel').on('click', function() {
+                //             var id = $(this).attr('value');
+                //             var waroeng = $('#filter_waroeng').val();
+                //             var tanggal = $('#filter_tanggal').val();
+                //             var operator = $('#filter_operator').val();
+                //             var sesi = $('#filter_sif').val();
+                //             var url = 'rekap_menu/export_excel?waroeng='+waroeng+'&tanggal='+tanggal+'&operator='+operator+'&sesi='+sesi;
+                //             window.open(url,'_blank');
+                //         });
+
             });
-
-            if (HakAksesPusat) {
-                $('.filter_area').on('select2:select', function() {
-                    var id_area = $(this).val();
-                    var tanggal = $('.filter_tanggal').val();
-                    var prev = $(this).data('previous-value');
-
-                    if (id_area == 'all') {
-                        $("#select_waroeng").hide();
-                        $("#select_operator").hide();
-                        $(".filter_waroeng").empty();
-                        $(".filter_trans").empty();
-                    } else {
-                        $("#select_waroeng").show();
-                        $("#select_operator").show();
-                    }
-
-                    if (id_area && tanggal) {
-                        $.ajax({
-                            type: "GET",
-                            url: '{{ route('rekap_menu.select_waroeng') }}',
-                            dataType: 'JSON',
-                            destroy: true,
-                            data: {
-                                id_area: id_area,
-                            },
-                            success: function(res) {
-                                // console.log(res);           
-                                if (res) {
-                                    $(".filter_waroeng").empty();
-                                    $(".filter_waroeng").append('<option></option>');
-                                    $.each(res, function(key, value) {
-                                        $(".filter_waroeng").append('<option value="' +
-                                            key + '">' + value + '</option>');
-                                    });
-                                } else {
-                                    $(".filter_waroeng").empty();
-                                }
-                            }
-                        });
-                    } else {
-                        Swal.fire({
-                            title: 'Informasi',
-                            text: "Harap lengkapi kolom tanggal",
-                            confirmButtonColor: '#d33',
-                            confirmButtonText: 'OK',
-                            customClass: {
-                                confirmButton: 'bg-red-500',
-                            },
-                        });
-                        $(".filter_waroeng").empty();
-                        $(".filter_area").val(prev).trigger('change');
-                    }
-                    $(".filter_trans").empty();
-                });
-            }
-
-            if (HakAksesArea) {
-                $('.filter_waroeng').on('select2:select', function() {
-                    var id_waroeng = $(this).val();
-                    var tanggal = $('.filter_tanggal').val();
-                    var prev = $(this).data('previous-value');
-
-                    if (id_waroeng == 'all') {
-                        $("#select_operator").hide();
-                        $(".filter_trans").empty();
-                    } else {
-                        $("#select_operator").show();
-                    }
-
-                    if (id_waroeng && tanggal) {
-                        $.ajax({
-                            type: "GET",
-                            url: '{{ route('rekap_menu.select_trans') }}',
-                            dataType: 'JSON',
-                            data: {
-                                id_waroeng: id_waroeng,
-                                tanggal: tanggal,
-                            },
-                            success: function(res) {
-                                console.log(res);
-                                if (res) {
-                                    $(".filter_trans").empty();
-                                    $(".filter_trans").append('<option></option>');
-                                    $.each(res, function(key, value) {
-                                        $(".filter_trans").append('<option value="' +
-                                            key + '">' + value + '</option>');
-                                    });
-                                } else {
-                                    $(".filter_trans").empty();
-                                }
-                            }
-                        });
-                    } else {
-                        Swal.fire({
-                            title: 'Informasi',
-                            text: "Harap lengkapi kolom tanggal",
-                            confirmButtonColor: '#d33',
-                            confirmButtonText: 'OK',
-                            customClass: {
-                                confirmButton: 'bg-red-500',
-                            },
-                        });
-                        $(".filter_trans").empty();
-                        $(".filter_waroeng").val(prev).trigger('change');
-                    }
-                });
-
-            } else {
-
-                $('.filter_tanggal').on('change', function() {
-                    var id_waroeng = $('.filter_waroeng').val();
-                    var tanggal = $('.filter_tanggal').val();
-                    if (tanggal) {
-                        $.ajax({
-                            type: "GET",
-                            url: '{{ route('rekap_menu.select_trans') }}',
-                            dataType: 'JSON',
-                            data: {
-                                id_waroeng: id_waroeng,
-                            },
-                            success: function(res) {
-                                if (res) {
-                                    $(".filter_trans").empty();
-                                    $(".filter_trans").append('<option></option>');
-                                    $.each(res, function(key, value) {
-                                        $(".filter_trans").append('<option value="' +
-                                            key + '">' + value + '</option>');
-                                    });
-                                } else {
-                                    $(".filter_trans").empty();
-                                }
-                            }
-                        });
-                    } else {
-                        $(".filter_trans").empty();
-                    }
-                    $(".filter_trans").empty();
-                });
-            }
-
-            $('.filter_tanggal').flatpickr({
-                mode: "range",
-                dateFormat: 'Y-m-d',
-            });
-
-            // $('#export_excel').on('click', function() {
-            //             var id = $(this).attr('value');
-            //             var waroeng = $('#filter_waroeng').val();
-            //             var tanggal = $('#filter_tanggal').val();
-            //             var operator = $('#filter_operator').val();
-            //             var sesi = $('#filter_sif').val();
-            //             var url = 'rekap_menu/export_excel?waroeng='+waroeng+'&tanggal='+tanggal+'&operator='+operator+'&sesi='+sesi;
-            //             window.open(url,'_blank');
-            //         });
-
-        });
-    </script>
-@endsection
+        </script>
+    @endsection

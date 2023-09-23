@@ -179,39 +179,44 @@ class RekapMenuController extends Controller
             ->orderby('m_jenis_produk_id', 'ASC')
             ->orderby('r_t_detail_m_produk_nama', 'ASC')
             ->get();
-        $data = [];
+        $rows = [];
         foreach ($get2 as $key => $val_menu) {
             $waroeng = $val_menu->m_w_nama;
             $menu = $val_menu->r_t_detail_m_produk_nama;
             $date = $val_menu->r_t_tanggal;
             $qty = $val_menu->qty;
-            $nominal = number_format($val_menu->r_t_detail_reguler_price * $qty);
+            if ($request->status == 'Export Excel') {
+                $nominal = $val_menu->r_t_detail_reguler_price * $val_menu->qty;
+            } else {
+                $nominal = number_format($val_menu->r_t_detail_reguler_price * $val_menu->qty);
+
+            }
             $kategori = $val_menu->m_jenis_produk_nama;
             $transaksi = $val_menu->m_t_t_name;
-            if (!isset($data[$waroeng])) {
-                $data[$waroeng] = [];
+            if (!isset($rows[$waroeng])) {
+                $rows[$waroeng] = [];
             }
-            if (!isset($data[$waroeng][$transaksi])) {
-                $data[$waroeng][$transaksi] = [];
+            if (!isset($rows[$waroeng][$transaksi])) {
+                $rows[$waroeng][$transaksi] = [];
             }
-            if (!isset($data[$waroeng][$transaksi][$kategori])) {
-                $data[$waroeng][$transaksi][$kategori] = [];
+            if (!isset($rows[$waroeng][$transaksi][$kategori])) {
+                $rows[$waroeng][$transaksi][$kategori] = [];
             }
-            if (!isset($data[$waroeng][$transaksi][$kategori][$menu])) {
-                $data[$waroeng][$transaksi][$kategori][$menu] = [];
+            if (!isset($rows[$waroeng][$transaksi][$kategori][$menu])) {
+                $rows[$waroeng][$transaksi][$kategori][$menu] = [];
             }
-            if (!isset($data[$waroeng][$transaksi][$kategori][$menu][$date])) {
-                $data[$waroeng][$transaksi][$kategori][$menu][$date] = [
+            if (!isset($rows[$waroeng][$transaksi][$kategori][$menu][$date])) {
+                $rows[$waroeng][$transaksi][$kategori][$menu][$date] = [
                     'qty' => 0,
                     'nominal' => 0,
                 ];
             }
-            $data[$waroeng][$transaksi][$kategori][$menu][$date]['qty'] += $qty;
-            $data[$waroeng][$transaksi][$kategori][$menu][$date]['nominal'] = $nominal;
+            $rows[$waroeng][$transaksi][$kategori][$menu][$date]['qty'] += $qty;
+            $rows[$waroeng][$transaksi][$kategori][$menu][$date]['nominal'] = $nominal;
         }
-        $output = ['data' => []];
 
-        foreach ($data as $waroeng => $kategoris) {
+        $row = array();
+        foreach ($rows as $waroeng => $kategoris) {
             foreach ($kategoris as $transaksi => $transaksis) {
                 foreach ($transaksis as $kategori => $menus) {
                     foreach ($menus as $menu => $dates) {
@@ -231,13 +236,24 @@ class RekapMenuController extends Controller
                                 $row[] = 0;
                             }
                         }
-                        $output['data'][] = $row;
+                        // $data['data'][] = $row;
+                        $data[] = $row;
                     }
                 }
             }
         }
 
-        return response()->json($output);
+        $mark = $request->status;
+        $tanggal = $tanggal1->get()->pluck('r_t_tanggal')->toArray();
+
+        if ($mark == 'Export Excel') {
+            return Excel::download(new RekapMenuGlobalAktExport($data, $mark, $tanggal), 'Rekap Menu Summary - ' . $request->tanggal . '.xlsx');
+        } else {
+            $output = array(
+                "data" => $data,
+            );
+            return response()->json($output);
+        }
     }
 
     public function show_menu_global(Request $request)
@@ -499,7 +515,9 @@ class RekapMenuController extends Controller
             ')
                 ->groupBy(
                     'r_t_m_area_nama',
+                    'r_t_m_area_id',
                     'r_t_m_w_nama',
+                    'r_t_m_w_id',
                     'r_t_tanggal',
                     'r_t_detail_m_produk_nama',
                     'r_t_detail_reguler_price',
