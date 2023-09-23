@@ -232,10 +232,18 @@
                             <i class="nav-main-link-icon fa fa-house-user"></i>
                             <span class="nav-main-link-name">Dashboard</span>
                         </a>
-                        <a class="nav-main-link{{ request()->is('*/profile') ? ' active' : '' }}" href="{{route('users.profile')}}">
+                        <a class="nav-main-link{{ request()->is('*/profile') ? ' active' : '' }}"
+                            href="{{ route('users.profile') }}">
                             <i class="nav-main-link-icon fa fa-user"></i>
                             <span class="nav-main-link-name">Profile</span>
                         </a>
+                        @can('qrmenu.view')
+                            <a class="nav-main-link{{ request()->is('qr/*') ? ' active' : '' }}"
+                                href="{{ route('qr.menu') }}">
+                                <i class="nav-main-link-icon fa fa-book"></i>
+                                <span class="nav-main-link-name">Produk Menu</span>
+                            </a>
+                        @endcan
                     </li>
                     <li class="nav-main-heading">Menu</li>
                     @can('module cr55.view')
