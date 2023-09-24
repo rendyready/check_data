@@ -103,7 +103,7 @@ class MyController extends Controller
             ]);
 
         return "DONE";
-    } 
+    }
 
     function uploadImage(){
         #Send Image to public server
@@ -186,8 +186,8 @@ class MyController extends Controller
 
         foreach ($server->get() as $keyServer => $valServer) {
             #create Connection to client
-            // Config::set("database.connections.client", [
-            App::make('config')->set('database.connections.client', [
+            Config::set("database.connections.client", [
+            // App::make('config')->set('database.connections.client', [
                 'driver' => $valServer->db_con_driver,
                 'host' => $valServer->db_con_host,
                 'port' => $valServer->db_con_port,
@@ -206,89 +206,94 @@ class MyController extends Controller
             $pusatSchema = Schema::connection('pusat')->getColumnListing('users');
             $countPusat = count($pusatSchema);
             $countClient = count($clientSchema);
+            try {
+                //code...
+
                     DB::connection('client')->table('rekap_buka_laci')
-            ->where('r_b_l_tanggal', '>', '2023-08-26')
-            ->whereNull('r_b_l_client_target')
+            ->whereBetween('r_b_l_tanggal', ['2023-08-27','2023-09-02'])
+            // ->whereNull('r_b_l_client_target')
             ->update(['r_b_l_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
 
         DB::connection('client')->table('rekap_garansi')
             ->join('rekap_transaksi', 'r_t_id', 'rekap_garansi_r_t_id')
-            ->where('r_t_tanggal', '>', '2023-08-26')
-            ->whereNull('rekap_garansi_client_target')
+            ->whereBetween('r_t_tanggal', ['2023-08-27','2023-09-02'])
+            // ->whereNull('rekap_garansi_client_target')
             ->update(['rekap_garansi_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
 
         DB::connection('client')->table('rekap_hapus_menu')
-            ->where('r_h_m_tanggal', '>', '2023-08-26')
-            ->whereNull('r_h_m_client_target')
+            ->whereBetween('r_h_m_tanggal', ['2023-08-27','2023-09-02'])
+            // ->whereNull('r_h_m_client_target')
             ->update(['r_h_m_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
 
         DB::connection('client')->table('rekap_hapus_transaksi')
-            ->where('r_h_t_tanggal', '>', '2023-08-26')
-            ->whereNull('r_h_t_client_target')
+            ->whereBetween('r_h_t_tanggal', ['2023-08-27','2023-09-02'])
+            // ->whereNull('r_h_t_client_target')
             ->update(['r_h_t_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
 
         DB::connection('client')->table('rekap_hapus_transaksi_detail')
             ->join('rekap_hapus_transaksi', 'r_h_t_id', 'r_h_t_detail_r_h_t_id')
-            ->where('r_h_t_tanggal', '>', '2023-08-26')
-            ->whereNull('r_h_t_detail_client_target')
+            ->whereBetween('r_h_t_tanggal', ['2023-08-27','2023-09-02'])
+            // ->whereNull('r_h_t_detail_client_target')
             ->update(['r_h_t_detail_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
 
         DB::connection('client')->table('rekap_lost_bill')
-            ->where('r_l_b_tanggal', '>', '2023-08-26')
-            ->whereNull('r_l_b_client_target')
+            ->whereBetween('r_l_b_tanggal', ['2023-08-27','2023-09-02'])
+            // ->whereNull('r_l_b_client_target')
             ->update(['r_l_b_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
 
         DB::connection('client')->table('rekap_lost_bill_detail')
             ->join('rekap_lost_bill', 'r_l_b_id', 'r_l_b_detail_r_l_b_id')
-            ->where('r_l_b_tanggal', '>', '2023-08-26')
-            ->where('r_l_b_detail_client_target')
+            ->whereBetween('r_l_b_tanggal', ['2023-08-27','2023-09-02'])
+            // ->where('r_l_b_detail_client_target')
             ->update(['r_l_b_detail_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
 
         DB::connection('client')->table('rekap_modal')
-            ->where(DB::raw('DATE(rekap_modal_tanggal)'), '>', '2023-08-26')
-            ->whereNull('rekap_modal_client_target')
+            ->whereBetween(DB::raw('DATE(rekap_modal_tanggal)'), ['2023-08-27','2023-09-02'])
+            // ->whereNull('rekap_modal_client_target')
             ->update(['rekap_modal_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
 
             DB::connection('client')->table('rekap_modal_detail')
             ->join('rekap_modal', 'rekap_modal_id', 'rekap_modal_detail_rekap_modal_id')
-            ->where(DB::raw('DATE(rekap_modal_tanggal)'), '>', '2023-08-26')
-            ->where('rekap_modal_detail_client_target')
+            ->whereBetween(DB::raw('DATE(rekap_modal_tanggal)'), ['2023-08-27','2023-09-02'])
+            // ->where('rekap_modal_detail_client_target')
             ->update(['rekap_modal_detail_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
 
         DB::connection('client')->table('rekap_mutasi_modal')
-            ->where('r_m_m_tanggal', '>', '2023-08-26')
-            ->whereNull('r_m_m_client_target')
+            ->whereBetween('r_m_m_tanggal', ['2023-08-27','2023-09-02'])
+            // ->whereNull('r_m_m_client_target')
             ->update(['r_m_m_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
 
         DB::connection('client')->table('rekap_payment_transaksi')
             ->join('rekap_transaksi', 'r_t_id', 'r_p_t_r_t_id')
-            ->where('r_t_tanggal', '>', '2023-08-26')
-            ->whereNull('r_p_t_client_target')
+            ->whereBetween('r_t_tanggal', ['2023-08-27','2023-09-02'])
+            // ->whereNull('r_p_t_client_target')
             ->update(['r_p_t_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
 
         DB::connection('client')->table('rekap_refund')
-            ->where('r_r_tanggal', '>', '2023-08-26')
-            ->whereNull('r_r_client_target')
+            ->whereBetween('r_r_tanggal', ['2023-08-27','2023-09-02'])
+            // ->whereNull('r_r_client_target')
             ->update(['r_r_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
 
         DB::connection('client')->table('rekap_refund_detail')
             ->join('rekap_refund', 'r_r_id', 'r_r_detail_r_r_id')
-            ->where('r_r_tanggal', '>', '2023-08-26')
-            ->whereNull('r_r_detail_client_target')
+            ->whereBetween('r_r_tanggal', ['2023-08-27','2023-09-02'])
+            // ->whereNull('r_r_detail_client_target')
             ->update(['r_r_detail_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
 
         DB::connection('client')->table('rekap_transaksi')
-            ->where('r_t_tanggal', '>', '2023-08-26')
-            ->whereNull('r_t_client_target')
+            ->whereBetween('r_t_tanggal', ['2023-08-27','2023-09-02'])
+            // ->whereNull('r_t_client_target')
             ->update(['r_t_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
 
         DB::connection('client')->table('rekap_transaksi_detail')
             ->join('rekap_transaksi', 'r_t_id', 'r_t_detail_r_t_id')
-            ->where('r_t_tanggal', '>', '2023-08-26')
-            ->whereNull('r_t_detail_client_target')
+            ->whereBetween('r_t_tanggal', ['2023-08-27','2023-09-02'])
+            // ->whereNull('r_t_detail_client_target')
             ->update(['r_t_detail_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
                 echo nl2br("{$valServer->db_con_location_name}: add users token Success!");
-
+            } catch (\Throwable $th) {
+                return $th;
+            }
             // if (count($clientSchema) != count($pusatSchema)) {
 
             //     Schema::connection('client')->table('users', function (Blueprint $table) {
