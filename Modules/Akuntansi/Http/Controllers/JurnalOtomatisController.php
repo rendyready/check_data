@@ -68,6 +68,10 @@ class JurnalOtomatisController extends Controller
             ->join('m_rekening', 'm_rekening_no_akun', 'm_link_akuntansi_m_rekening_no_akun')
             ->where('m_link_akuntansi_nama', 'Nominal Transaksi - Diluar Usaha')
             ->get();
+        $nominal_lainlain = DB::table('m_link_akuntansi')
+            ->join('m_rekening', 'm_rekening_no_akun', 'm_link_akuntansi_m_rekening_no_akun')
+            ->where('m_link_akuntansi_nama', 'Nominal Transaksi - Lain - Lain')
+            ->get();
         $bank_mandiri = DB::table('m_link_akuntansi')
             ->join('m_rekening', 'm_rekening_no_akun', 'm_link_akuntansi_m_rekening_no_akun')
             ->where('m_link_akuntansi_nama', 'Bank Mandiri')
@@ -151,6 +155,10 @@ class JurnalOtomatisController extends Controller
         $nominal_usaha_refund = DB::table('m_link_akuntansi')
             ->join('m_rekening', 'm_rekening_no_akun', 'm_link_akuntansi_m_rekening_no_akun')
             ->where('m_link_akuntansi_nama', 'Nominal Refund - Diluar Usaha')
+            ->get();
+        $nominal_lainlain_refund = DB::table('m_link_akuntansi')
+            ->join('m_rekening', 'm_rekening_no_akun', 'm_link_akuntansi_m_rekening_no_akun')
+            ->where('m_link_akuntansi_nama', 'Nominal Refund - Lain - Lain')
             ->get();
         $pajak_refund = DB::table('m_link_akuntansi')
             ->join('m_rekening', 'm_rekening_no_akun', 'm_link_akuntansi_m_rekening_no_akun')
@@ -298,14 +306,15 @@ class JurnalOtomatisController extends Controller
         } else {
             $kas_transaksi_1->where('r_t_tanggal', $request->tanggal);
         }
-
+        if ($request->payment != 'all') {
+            $kas_transaksi_1->where('r_p_t_m_payment_method_id', $request->payment);
+        }
         $kas_transaksi = $kas_transaksi_1->groupby('r_t_m_w_code', 'kode_id', 'r_t_detail_m_produk_id', 'sesi')
             ->where('r_t_detail_status', 'paid')
             ->where('r_t_status', 'paid')
-            ->where('r_p_t_m_payment_method_id', $request->payment)
             ->where('r_t_m_w_id', $request->waroeng)
-            ->orderby('kode_id', 'ASC')
             ->orderby('sesi', 'ASC')
+            ->orderby('kode_id', 'ASC')
             ->get();
 
         $lostbill = DB::table('rekap_transaksi_detail')
@@ -331,8 +340,8 @@ class JurnalOtomatisController extends Controller
             ->where('r_t_detail_status', 'unpaid')
             ->where('r_t_status', 'unpaid')
             ->where('r_t_m_w_id', $request->waroeng)
-            ->orderby('kode_id', 'ASC')
             ->orderby('sesi', 'ASC')
+            ->orderby('kode_id', 'ASC')
             ->get();
 
         $refund = DB::table('rekap_refund_detail')
@@ -359,11 +368,13 @@ class JurnalOtomatisController extends Controller
         } else {
             $refund->where('r_r_tanggal', $request->tanggal);
         }
+        if ($request->payment != 'all') {
+            $refund->where('r_p_t_m_payment_method_id', $request->payment);
+        }
         $refund = $refund->groupby('r_r_m_w_code', 'kode_id', 'produk_id', 'sesi')
-            ->where('r_p_t_m_payment_method_id', $request->payment)
             ->where('r_r_m_w_id', $request->waroeng)
-            ->orderby('kode_id', 'ASC')
             ->orderby('sesi', 'ASC')
+            ->orderby('kode_id', 'ASC')
             ->get();
 
         $garansi = DB::table('rekap_garansi')
@@ -385,11 +396,13 @@ class JurnalOtomatisController extends Controller
         } else {
             $garansi->where('r_t_tanggal', $request->tanggal);
         }
+        if ($request->payment != 'all') {
+            $garansi->where('r_p_t_m_payment_method_id', $request->payment);
+        }
         $garansi = $garansi->groupby('r_t_m_w_code', 'kode_id', 'produk_id', 'sesi', 'rekap_garansi_keterangan')
-            ->where('r_p_t_m_payment_method_id', $request->payment)
             ->where('r_t_m_w_id', $request->waroeng)
-            ->orderby('kode_id', 'ASC')
             ->orderby('sesi', 'ASC')
+            ->orderby('kode_id', 'ASC')
             ->get();
 
         $mutasi = DB::table('rekap_mutasi_modal')
@@ -409,8 +422,8 @@ class JurnalOtomatisController extends Controller
         }
         $mutasi = $mutasi->groupby('kode_id', 'sesi', 'catatan')
             ->where('r_m_m_m_w_id', $request->waroeng)
-            ->orderby('kode_id', 'ASC')
             ->orderby('sesi', 'ASC')
+            ->orderby('kode_id', 'ASC')
             ->get();
 
         $selisih = DB::table('rekap_modal')
@@ -428,8 +441,8 @@ class JurnalOtomatisController extends Controller
         }
         $selisih = $selisih->groupby('kode_id', 'sesi')
             ->where('rekap_modal_m_w_id', $request->waroeng)
-            ->orderby('kode_id', 'ASC')
             ->orderby('sesi', 'ASC')
+            ->orderby('kode_id', 'ASC')
             ->get();
 
         //transaksi
@@ -474,40 +487,31 @@ class JurnalOtomatisController extends Controller
         }
         $listSelisihKasir = array_unique($arrayListSelisihKasir);
 
-        $getMenu = DB::table('m_produk')
-            ->select('m_produk_id')
-            ->whereNotIn('m_produk_m_jenis_produk_id', [9, 11, 12, 13])->get();
+        $listMenu = DB::table('m_produk')
+            ->whereNotIn('m_produk_m_jenis_produk_id', [9, 11, 12, 13])
+            ->pluck('m_produk_id')
+            ->toArray();
 
-        $listMenu = [];
-        foreach ($getMenu as $key => $valMenu) {
-            array_push($listMenu, $valMenu->m_produk_id);
-        }
+        $listNonMenu = DB::table('m_produk')
+            ->whereIn('m_produk_m_jenis_produk_id', [9, 11])
+            ->pluck('m_produk_id')
+            ->toArray();
 
-        $getNonMenu = DB::table('m_produk')
-            ->select('m_produk_id')
-            ->whereIn('m_produk_m_jenis_produk_id', [9, 11])->get();
-        $listNonMenu = [];
-        foreach ($getNonMenu as $key => $valMenu) {
-            array_push($listNonMenu, $valMenu->m_produk_id);
-        }
-
-        $getWbd = DB::table('m_produk')
-            ->select('m_produk_id')
+        $listWbd = DB::table('m_produk')
             ->whereIn('m_produk_m_jenis_produk_id', [11])
-            ->get();
-        $listWbd = [];
-        foreach ($getWbd as $key => $valMenu) {
-            array_push($listWbd, $valMenu->m_produk_id);
-        }
+            ->pluck('m_produk_id')
+            ->toArray();
 
-        $getIceCream = DB::table('m_produk')
+        $diLuarUsaha = DB::table('m_produk')
             ->join('config_sub_jenis_produk', 'config_sub_jenis_produk_m_produk_id', '=', 'm_produk_id')
-            ->select('m_produk_id')
-            ->whereIn('config_sub_jenis_produk_m_sub_jenis_produk_id', [20, 22, 23, 24, 25])->get();
-        $listIceCream = [];
-        foreach ($getIceCream as $key => $valMenu) {
-            array_push($listIceCream, $valMenu->m_produk_id);
-        }
+            ->whereIn('config_sub_jenis_produk_m_sub_jenis_produk_id', [20, 22, 23, 24, 25])
+            ->pluck('m_produk_id')
+            ->toArray();
+
+        $lainLain = DB::table('m_produk')
+            ->whereIn('m_produk_id', [660, 661, 948])
+            ->pluck('m_produk_id')
+            ->toArray();
 
         $data = array();
         $sortedData = array();
@@ -517,6 +521,7 @@ class JurnalOtomatisController extends Controller
             ${$notaCode . '-menu'} = 0;
             ${$notaCode . '-nonmenu'} = 0;
             ${$notaCode . '-wbd'} = 0;
+            ${$notaCode . '-diluarusaha'} = 0;
             ${$notaCode . '-lainlain'} = 0;
             ${$notaCode . '-pajak'} = 0;
             ${$notaCode . '-persediaan'} = 0;
@@ -534,7 +539,11 @@ class JurnalOtomatisController extends Controller
                         $nominal = $kasTrans->nominal;
                         ${$notaCode . '-wbd'} += $nominal;
                     }
-                    if (in_array($kasTrans->produk_id, $listIceCream)) {
+                    if (in_array($kasTrans->produk_id, $diLuarUsaha)) {
+                        $nominal = $kasTrans->nominal;
+                        ${$notaCode . '-diluarusaha'} += $nominal;
+                    }
+                    if (in_array($kasTrans->produk_id, $lainLain)) {
                         $nominal = $kasTrans->nominal;
                         ${$notaCode . '-lainlain'} += $nominal;
                     }
@@ -542,7 +551,7 @@ class JurnalOtomatisController extends Controller
                         $nominal = $kasTrans->pajak;
                         ${$notaCode . '-pajak'} += $nominal;
                     }
-                    $listAll = array_merge($listMenu, $listNonMenu, $listWbd, $listIceCream);
+                    $listAll = array_merge($listMenu, $listNonMenu, $listWbd, $diLuarUsaha);
                     if (in_array($kasTrans->produk_id, $listAll)) {
                         $nominal = $kasTrans->nominal * 0.8;
                         ${$notaCode . '-persediaan'} += $nominal;
@@ -550,12 +559,13 @@ class JurnalOtomatisController extends Controller
                     $urutan = 1;
                     if ($kasTrans->pay_method == 1) {
                         foreach ($kas as $valKas) {
+                            $akun = $valKas->m_rekening_nama;
                             if (${$notaCode . '-menu'} != 0) {
                                 $data[$notaCode]['Kas Menu'] = array(
                                     'tanggal' => $kasTrans->r_t_tanggal,
                                     'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valKas->m_rekening_no_akun,
-                                    'akun' => $valKas->m_rekening_nama,
-                                    'particul' => 'nominal menu (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'akun' => $akun,
+                                    'particul' => 'penjualan menu (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
                                     'debit' => number_format(${$notaCode . '-menu'}),
                                     'kredit' => 0,
                                     'urutan' => $urutan++,
@@ -565,8 +575,8 @@ class JurnalOtomatisController extends Controller
                                 $data[$notaCode]['Kas Non Menu'] = array(
                                     'tanggal' => $kasTrans->r_t_tanggal,
                                     'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valKas->m_rekening_no_akun,
-                                    'akun' => $valKas->m_rekening_nama,
-                                    'particul' => 'nominal non menu (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'akun' => $akun,
+                                    'particul' => 'penjualan non menu (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
                                     'debit' => number_format(${$notaCode . '-nonmenu'}),
                                     'kredit' => 0,
                                     'urutan' => $urutan++,
@@ -576,19 +586,30 @@ class JurnalOtomatisController extends Controller
                                 $data[$notaCode]['Kas WBD'] = array(
                                     'tanggal' => $kasTrans->r_t_tanggal,
                                     'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valKas->m_rekening_no_akun,
-                                    'akun' => $valKas->m_rekening_nama,
-                                    'particul' => 'nominal wbd (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'akun' => $akun,
+                                    'particul' => 'penjualan wbd (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
                                     'debit' => number_format(${$notaCode . '-wbd'}),
                                     'kredit' => 0,
                                     'urutan' => $urutan++,
                                 );
                             }
-                            if (${$notaCode . '-lainlain'} != 0) {
-                                $data[$notaCode]['Kas lain - lain'] = array(
+                            if (${$notaCode . '-diluarusaha'} != 0) {
+                                $data[$notaCode]['Kas Di luar Usaha'] = array(
                                     'tanggal' => $kasTrans->r_t_tanggal,
                                     'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valKas->m_rekening_no_akun,
-                                    'akun' => $valKas->m_rekening_nama,
-                                    'particul' => 'nominal diluar usaha (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'akun' => $akun,
+                                    'particul' => 'penjualan diluar usaha (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'debit' => number_format(${$notaCode . '-diluarusaha'}),
+                                    'kredit' => 0,
+                                    'urutan' => $urutan++,
+                                );
+                            }
+                            if (${$notaCode . '-lainlain'} != 0) {
+                                $data[$notaCode]['Kas Lain - Lain'] = array(
+                                    'tanggal' => $kasTrans->r_t_tanggal,
+                                    'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valKas->m_rekening_no_akun,
+                                    'akun' => $akun,
+                                    'particul' => 'pendapatan lain-lain (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
                                     'debit' => number_format(${$notaCode . '-lainlain'}),
                                     'kredit' => 0,
                                     'urutan' => $urutan++,
@@ -599,8 +620,8 @@ class JurnalOtomatisController extends Controller
                                 $data[$notaCode]['Kas Pajak'] = array(
                                     'tanggal' => $kasTrans->r_t_tanggal,
                                     'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valKas->m_rekening_no_akun,
-                                    'akun' => $valKas->m_rekening_nama,
-                                    'particul' => 'pajak (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'akun' => $akun,
+                                    'particul' => 'pajak penjualan (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
                                     'debit' => number_format(${$notaCode . '-pajak'}),
                                     'kredit' => 0,
                                     'urutan' => $urutan++,
@@ -610,8 +631,8 @@ class JurnalOtomatisController extends Controller
                                 $data[$notaCode]['Kas SC'] = array(
                                     'tanggal' => $kasTrans->r_t_tanggal,
                                     'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valKas->m_rekening_no_akun,
-                                    'akun' => $valKas->m_rekening_nama,
-                                    'particul' => 'sc (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'akun' => $akun,
+                                    'particul' => 'sc penjualan (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
                                     'debit' => number_format($kasTrans->sc),
                                     'kredit' => 0,
                                     'urutan' => $urutan++,
@@ -621,7 +642,7 @@ class JurnalOtomatisController extends Controller
                                 $data[$notaCode]['Kas Tarik Tunai'] = array(
                                     'tanggal' => $kasTrans->r_t_tanggal,
                                     'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valKas->m_rekening_no_akun,
-                                    'akun' => $valKas->m_rekening_nama,
+                                    'akun' => $akun,
                                     'particul' => 'tarik tunai (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
                                     'debit' => 0,
                                     'kredit' => number_format($kasTrans->tarik),
@@ -632,8 +653,8 @@ class JurnalOtomatisController extends Controller
                                 $data[$notaCode]['Kas Free'] = array(
                                     'tanggal' => $kasTrans->r_t_tanggal,
                                     'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valKas->m_rekening_no_akun,
-                                    'akun' => $valKas->m_rekening_nama,
-                                    'particul' => 'free kembali (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'akun' => $akun,
+                                    'particul' => 'free kembalian (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
                                     'debit' => 0,
                                     'kredit' => number_format($kasTrans->free),
                                     'urutan' => $urutan++,
@@ -643,7 +664,7 @@ class JurnalOtomatisController extends Controller
                                 $data[$notaCode]['Kas Bulat'] = array(
                                     'tanggal' => $kasTrans->r_t_tanggal,
                                     'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valKas->m_rekening_no_akun,
-                                    'akun' => $valKas->m_rekening_nama,
+                                    'akun' => $akun,
                                     'particul' => 'pembulatan (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
                                     'debit' => 0,
                                     'kredit' => number_format($kasTrans->pembulatan),
@@ -654,15 +675,183 @@ class JurnalOtomatisController extends Controller
                                 $data[$notaCode]['Kas Diskon'] = array(
                                     'tanggal' => $kasTrans->r_t_tanggal,
                                     'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valKas->m_rekening_no_akun,
-                                    'akun' => $valKas->m_rekening_nama,
-                                    'particul' => 'diskon (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'akun' => $akun,
+                                    'particul' => 'diskon penjualan (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
                                     'debit' => 0,
                                     'kredit' => number_format($kasTrans->diskon),
                                     'urutan' => $urutan++,
                                 );
                             }
-
                         } //link kas
+                        if (${$notaCode . '-menu'} != 0) {
+                            foreach ($nominal_menu as $valNominal) {
+                                $data[$notaCode]['Pendapatan Menu Transaksi'] = array(
+                                    'tanggal' => $kasTrans->r_t_tanggal,
+                                    'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valNominal->m_rekening_no_akun,
+                                    'akun' => $valNominal->m_rekening_nama,
+                                    'particul' => 'penjualan menu (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'debit' => 0,
+                                    'kredit' => number_format(${$notaCode . '-menu'}),
+                                    'urutan' => $urutan++,
+                                );
+                            }
+                        }
+                        if (${$notaCode . '-nonmenu'} != 0) {
+                            foreach ($nominal_non_menu as $valNominal) {
+                                $data[$notaCode]['Pendapatan Non Menu Transaksi'] = array(
+                                    'tanggal' => $kasTrans->r_t_tanggal,
+                                    'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valNominal->m_rekening_no_akun,
+                                    'akun' => $valNominal->m_rekening_nama,
+                                    'particul' => 'penjualan non menu (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'debit' => 0,
+                                    'kredit' => number_format(${$notaCode . '-nonmenu'}),
+                                    'urutan' => $urutan++,
+                                );
+                            }
+                        }
+                        if (${$notaCode . '-wbd'} != 0) {
+                            foreach ($nominal_WBD as $valNominal) {
+                                $data[$notaCode]['Pendapatan Wbd Transaksi'] = array(
+                                    'tanggal' => $kasTrans->r_t_tanggal,
+                                    'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valNominal->m_rekening_no_akun,
+                                    'akun' => $valNominal->m_rekening_nama,
+                                    'particul' => 'penjualan wbd (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'debit' => 0,
+                                    'kredit' => number_format(${$notaCode . '-wbd'}),
+                                    'urutan' => $urutan++,
+                                );
+                            }
+                        }
+                        if (${$notaCode . '-diluarusaha'} != 0) {
+                            foreach ($nominal_usaha as $valNominal) {
+                                $data[$notaCode]['Pendapatan Di luar Usaha Transaksi'] = array(
+                                    'tanggal' => $kasTrans->r_t_tanggal,
+                                    'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valNominal->m_rekening_no_akun,
+                                    'akun' => $valNominal->m_rekening_nama,
+                                    'particul' => 'penjualan diluar usaha (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'debit' => 0,
+                                    'kredit' => number_format(${$notaCode . '-diluarusaha'}),
+                                    'urutan' => $urutan++,
+                                );
+                            }
+                        }
+                        if (${$notaCode . '-lainlain'} != 0) {
+                            foreach ($nominal_lainlain as $valNominal) {
+                                $data[$notaCode]['Pendapatan Lain - Lain'] = array(
+                                    'tanggal' => $kasTrans->r_t_tanggal,
+                                    'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valNominal->m_rekening_no_akun,
+                                    'akun' => $valNominal->m_rekening_nama,
+                                    'particul' => 'pendapatan lain-lain (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'debit' => 0,
+                                    'kredit' => number_format(${$notaCode . '-lainlain'}),
+                                    'urutan' => $urutan++,
+                                );
+                            }
+                        }
+                        if (${$notaCode . '-pajak'} != 0) {
+                            foreach ($pajak as $valPajak) {
+                                $data[$notaCode]['Pajak Ditahan Transaksi'] = array(
+                                    'tanggal' => $kasTrans->r_t_tanggal,
+                                    'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valPajak->m_rekening_no_akun,
+                                    'akun' => $valPajak->m_rekening_nama,
+                                    'particul' => 'pajak penjualan (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'debit' => 0,
+                                    'kredit' => number_format(${$notaCode . '-pajak'}),
+                                    'urutan' => $urutan++,
+                                );
+                            }
+                        }
+                        if ($kasTrans->sc != 0) {
+                            foreach ($sc as $valsc) {
+                                $data[$notaCode]['SC Transaksi'] = array(
+                                    'tanggal' => $kasTrans->r_t_tanggal,
+                                    'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valsc->m_rekening_no_akun,
+                                    'akun' => $valsc->m_rekening_nama,
+                                    'particul' => 'sc penjualan (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'debit' => 0,
+                                    'kredit' => number_format($kasTrans->sc),
+                                    'urutan' => $urutan++,
+                                );
+                            }
+                        }
+                        if ($kasTrans->tarik != 0) {
+                            foreach ($tarik as $valTarik) {
+                                $data[$notaCode]['Tarik Transaksi'] = array(
+                                    'tanggal' => $kasTrans->r_t_tanggal,
+                                    'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valTarik->m_rekening_no_akun,
+                                    'akun' => $valTarik->m_rekening_nama,
+                                    'particul' => 'tarik tunai (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'debit' => number_format($kasTrans->tarik),
+                                    'kredit' => 0,
+                                    'urutan' => $urutan++,
+                                );
+                            }
+                        }
+                        if ($kasTrans->pembulatan != 0) {
+                            foreach ($bulat as $valBulat) {
+                                $data[$notaCode]['Pembulatan Transaksi'] = array(
+                                    'tanggal' => $kasTrans->r_t_tanggal,
+                                    'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valBulat->m_rekening_no_akun,
+                                    'akun' => $valBulat->m_rekening_nama,
+                                    'particul' => 'pembulatan (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'debit' => number_format($kasTrans->pembulatan),
+                                    'kredit' => 0,
+                                    'urutan' => $urutan++,
+                                );
+                            }
+                        }
+                        if ($kasTrans->free != 0) {
+                            foreach ($free as $valFree) {
+                                $data[$notaCode]['free Transaksi'] = array(
+                                    'tanggal' => $kasTrans->r_t_tanggal,
+                                    'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valFree->m_rekening_no_akun,
+                                    'akun' => $valFree->m_rekening_nama,
+                                    'particul' => 'free kembalian (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'debit' => number_format($kasTrans->free),
+                                    'kredit' => 0,
+                                    'urutan' => $urutan++,
+                                );
+                            }
+                        }
+                        if ($kasTrans->diskon != 0) {
+                            foreach ($diskon as $valDiskon) {
+                                $data[$notaCode]['Diskon Transaksi'] = array(
+                                    'tanggal' => $kasTrans->r_t_tanggal,
+                                    'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valDiskon->m_rekening_no_akun,
+                                    'akun' => $valDiskon->m_rekening_nama,
+                                    'particul' => 'diskon penjualan (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'debit' => number_format($kasTrans->diskon),
+                                    'kredit' => 0,
+                                    'urutan' => $urutan++,
+                                );
+                            }
+                        }
+                        if (${$notaCode . '-persediaan'} != 0) {
+                            foreach ($persediaan as $valSedia) {
+                                $data[$notaCode]['Persediaan Transaksi'] = array(
+                                    'tanggal' => $kasTrans->r_t_tanggal,
+                                    'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valSedia->m_rekening_no_akun,
+                                    'akun' => $valSedia->m_rekening_nama,
+                                    'particul' => 'persediaan (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'debit' => 0,
+                                    'kredit' => number_format(${$notaCode . '-persediaan'}),
+                                    'urutan' => $urutan++,
+                                );
+                            }
+                        }
+                        foreach ($biaya_persediaan as $valBiayaSedia) {
+                            if (${$notaCode . '-persediaan'} != 0) {
+                                $data[$notaCode]['Biaya Persediaan Transaksi'] = array(
+                                    'tanggal' => $kasTrans->r_t_tanggal,
+                                    'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valBiayaSedia->m_rekening_no_akun,
+                                    'akun' => $valBiayaSedia->m_rekening_nama,
+                                    'particul' => 'biaya persediaan (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'debit' => number_format(${$notaCode . '-persediaan'}),
+                                    'kredit' => 0,
+                                    'urutan' => $urutan++,
+                                );
+                            }
+                        }
                     } elseif ($kasTrans->pay_method == 2) {
                         foreach ($bank_mandiri as $valKas) {
                             if (${$notaCode . '-menu'} != 0) {
@@ -670,7 +859,7 @@ class JurnalOtomatisController extends Controller
                                     'tanggal' => $kasTrans->r_t_tanggal,
                                     'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valKas->m_rekening_no_akun,
                                     'akun' => $valKas->m_rekening_nama,
-                                    'particul' => 'nominal menu (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'particul' => 'penjualan menu (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
                                     'debit' => number_format(${$notaCode . '-menu'}),
                                     'kredit' => 0,
                                     'urutan' => $urutan++,
@@ -681,7 +870,7 @@ class JurnalOtomatisController extends Controller
                                     'tanggal' => $kasTrans->r_t_tanggal,
                                     'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valKas->m_rekening_no_akun,
                                     'akun' => $valKas->m_rekening_nama,
-                                    'particul' => 'nominal non menu (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'particul' => 'penjualan non menu (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
                                     'debit' => number_format(${$notaCode . '-nonmenu'}),
                                     'kredit' => 0,
                                     'urutan' => $urutan++,
@@ -692,18 +881,29 @@ class JurnalOtomatisController extends Controller
                                     'tanggal' => $kasTrans->r_t_tanggal,
                                     'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valKas->m_rekening_no_akun,
                                     'akun' => $valKas->m_rekening_nama,
-                                    'particul' => 'nominal wbd (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'particul' => 'penjualan wbd (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
                                     'debit' => number_format(${$notaCode . '-wbd'}),
                                     'kredit' => 0,
                                     'urutan' => $urutan++,
                                 );
                             }
-                            if (${$notaCode . '-lainlain'} != 0) {
-                                $data[$notaCode]['Mandiri lain - lain'] = array(
+                            if (${$notaCode . '-diluarusaha'} != 0) {
+                                $data[$notaCode]['Mandiri Di luar Usaha'] = array(
                                     'tanggal' => $kasTrans->r_t_tanggal,
                                     'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valKas->m_rekening_no_akun,
                                     'akun' => $valKas->m_rekening_nama,
-                                    'particul' => 'nominal diluar usaha (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'particul' => 'penjualan diluar usaha (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'debit' => number_format(${$notaCode . '-diluarusaha'}),
+                                    'kredit' => 0,
+                                    'urutan' => $urutan++,
+                                );
+                            }
+                            if (${$notaCode . '-lainlain'} != 0) {
+                                $data[$notaCode]['Mandiri Lain - Lain'] = array(
+                                    'tanggal' => $kasTrans->r_t_tanggal,
+                                    'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valKas->m_rekening_no_akun,
+                                    'akun' => $valKas->m_rekening_nama,
+                                    'particul' => 'pendapatan lain-lain (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
                                     'debit' => number_format(${$notaCode . '-lainlain'}),
                                     'kredit' => 0,
                                     'urutan' => $urutan++,
@@ -715,7 +915,7 @@ class JurnalOtomatisController extends Controller
                                     'tanggal' => $kasTrans->r_t_tanggal,
                                     'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valKas->m_rekening_no_akun,
                                     'akun' => $valKas->m_rekening_nama,
-                                    'particul' => 'pajak (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'particul' => 'pajak penjualan (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
                                     'debit' => number_format(${$notaCode . '-pajak'}),
                                     'kredit' => 0,
                                     'urutan' => $urutan++,
@@ -726,7 +926,7 @@ class JurnalOtomatisController extends Controller
                                     'tanggal' => $kasTrans->r_t_tanggal,
                                     'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valKas->m_rekening_no_akun,
                                     'akun' => $valKas->m_rekening_nama,
-                                    'particul' => 'sc (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'particul' => 'sc penjualan (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
                                     'debit' => number_format($kasTrans->sc),
                                     'kredit' => 0,
                                     'urutan' => $urutan++,
@@ -748,7 +948,7 @@ class JurnalOtomatisController extends Controller
                                     'tanggal' => $kasTrans->r_t_tanggal,
                                     'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valKas->m_rekening_no_akun,
                                     'akun' => $valKas->m_rekening_nama,
-                                    'particul' => 'free kembali (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'particul' => 'free kembalian (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
                                     'debit' => 0,
                                     'kredit' => number_format($kasTrans->free),
                                     'urutan' => $urutan++,
@@ -770,13 +970,182 @@ class JurnalOtomatisController extends Controller
                                     'tanggal' => $kasTrans->r_t_tanggal,
                                     'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valKas->m_rekening_no_akun,
                                     'akun' => $valKas->m_rekening_nama,
-                                    'particul' => 'diskon (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'particul' => 'diskon penjualan (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
                                     'debit' => 0,
                                     'kredit' => number_format($kasTrans->diskon),
                                     'urutan' => $urutan++,
                                 );
                             }
                         } //link mandiri
+                        if (${$notaCode . '-menu'} != 0) {
+                            foreach ($nominal_menu as $valNominal) {
+                                $data[$notaCode]['Pendapatan Menu Transaksi'] = array(
+                                    'tanggal' => $kasTrans->r_t_tanggal,
+                                    'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valNominal->m_rekening_no_akun,
+                                    'akun' => $valNominal->m_rekening_nama,
+                                    'particul' => 'penjualan menu (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'debit' => 0,
+                                    'kredit' => number_format(${$notaCode . '-menu'}),
+                                    'urutan' => $urutan++,
+                                );
+                            }
+                        }
+                        if (${$notaCode . '-nonmenu'} != 0) {
+                            foreach ($nominal_non_menu as $valNominal) {
+                                $data[$notaCode]['Pendapatan Non Menu Transaksi'] = array(
+                                    'tanggal' => $kasTrans->r_t_tanggal,
+                                    'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valNominal->m_rekening_no_akun,
+                                    'akun' => $valNominal->m_rekening_nama,
+                                    'particul' => 'penjualan non menu (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'debit' => 0,
+                                    'kredit' => number_format(${$notaCode . '-nonmenu'}),
+                                    'urutan' => $urutan++,
+                                );
+                            }
+                        }
+                        if (${$notaCode . '-wbd'} != 0) {
+                            foreach ($nominal_WBD as $valNominal) {
+                                $data[$notaCode]['Pendapatan Wbd Transaksi'] = array(
+                                    'tanggal' => $kasTrans->r_t_tanggal,
+                                    'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valNominal->m_rekening_no_akun,
+                                    'akun' => $valNominal->m_rekening_nama,
+                                    'particul' => 'penjualan wbd (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'debit' => 0,
+                                    'kredit' => number_format(${$notaCode . '-wbd'}),
+                                    'urutan' => $urutan++,
+                                );
+                            }
+                        }
+                        if (${$notaCode . '-diluarusaha'} != 0) {
+                            foreach ($nominal_usaha as $valNominal) {
+                                $data[$notaCode]['Pendapatan Di luar Usaha Transaksi'] = array(
+                                    'tanggal' => $kasTrans->r_t_tanggal,
+                                    'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valNominal->m_rekening_no_akun,
+                                    'akun' => $valNominal->m_rekening_nama,
+                                    'particul' => 'penjualan diluar usaha (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'debit' => 0,
+                                    'kredit' => number_format(${$notaCode . '-diluarusaha'}),
+                                    'urutan' => $urutan++,
+                                );
+                            }
+                        }
+                        if (${$notaCode . '-lainlain'} != 0) {
+                            foreach ($nominal_lainlain as $valNominal) {
+                                $data[$notaCode]['Pendapatan Lain - Lain'] = array(
+                                    'tanggal' => $kasTrans->r_t_tanggal,
+                                    'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valNominal->m_rekening_no_akun,
+                                    'akun' => $valNominal->m_rekening_nama,
+                                    'particul' => 'pendapatan lain-lain (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'debit' => 0,
+                                    'kredit' => number_format(${$notaCode . '-lainlain'}),
+                                    'urutan' => $urutan++,
+                                );
+                            }
+                        }
+                        if (${$notaCode . '-pajak'} != 0) {
+                            foreach ($pajak as $valPajak) {
+                                $data[$notaCode]['Pajak Ditahan Transaksi'] = array(
+                                    'tanggal' => $kasTrans->r_t_tanggal,
+                                    'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valPajak->m_rekening_no_akun,
+                                    'akun' => $valPajak->m_rekening_nama,
+                                    'particul' => 'pajak penjualan (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'debit' => 0,
+                                    'kredit' => number_format(${$notaCode . '-pajak'}),
+                                    'urutan' => $urutan++,
+                                );
+                            }
+                        }
+                        if ($kasTrans->sc != 0) {
+                            foreach ($sc as $valsc) {
+                                $data[$notaCode]['SC Transaksi'] = array(
+                                    'tanggal' => $kasTrans->r_t_tanggal,
+                                    'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valsc->m_rekening_no_akun,
+                                    'akun' => $valsc->m_rekening_nama,
+                                    'particul' => 'sc penjualan (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'debit' => 0,
+                                    'kredit' => number_format($kasTrans->sc),
+                                    'urutan' => $urutan++,
+                                );
+                            }
+                        }
+                        if ($kasTrans->tarik != 0) {
+                            foreach ($tarik as $valTarik) {
+                                $data[$notaCode]['Tarik Transaksi'] = array(
+                                    'tanggal' => $kasTrans->r_t_tanggal,
+                                    'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valTarik->m_rekening_no_akun,
+                                    'akun' => $valTarik->m_rekening_nama,
+                                    'particul' => 'tarik tunai (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'debit' => number_format($kasTrans->tarik),
+                                    'kredit' => 0,
+                                    'urutan' => $urutan++,
+                                );
+                            }
+                        }
+                        if ($kasTrans->pembulatan != 0) {
+                            foreach ($bulat as $valBulat) {
+                                $data[$notaCode]['Pembulatan Transaksi'] = array(
+                                    'tanggal' => $kasTrans->r_t_tanggal,
+                                    'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valBulat->m_rekening_no_akun,
+                                    'akun' => $valBulat->m_rekening_nama,
+                                    'particul' => 'pembulatan (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'debit' => number_format($kasTrans->pembulatan),
+                                    'kredit' => 0,
+                                    'urutan' => $urutan++,
+                                );
+                            }
+                        }
+                        if ($kasTrans->free != 0) {
+                            foreach ($free as $valFree) {
+                                $data[$notaCode]['free Transaksi'] = array(
+                                    'tanggal' => $kasTrans->r_t_tanggal,
+                                    'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valFree->m_rekening_no_akun,
+                                    'akun' => $valFree->m_rekening_nama,
+                                    'particul' => 'free kembalian (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'debit' => number_format($kasTrans->free),
+                                    'kredit' => 0,
+                                    'urutan' => $urutan++,
+                                );
+                            }
+                        }
+                        if ($kasTrans->diskon != 0) {
+                            foreach ($diskon as $valDiskon) {
+                                $data[$notaCode]['Diskon Transaksi'] = array(
+                                    'tanggal' => $kasTrans->r_t_tanggal,
+                                    'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valDiskon->m_rekening_no_akun,
+                                    'akun' => $valDiskon->m_rekening_nama,
+                                    'particul' => 'diskon penjualan (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'debit' => number_format($kasTrans->diskon),
+                                    'kredit' => 0,
+                                    'urutan' => $urutan++,
+                                );
+                            }
+                        }
+                        if (${$notaCode . '-persediaan'} != 0) {
+                            foreach ($persediaan as $valSedia) {
+                                $data[$notaCode]['Persediaan Transaksi'] = array(
+                                    'tanggal' => $kasTrans->r_t_tanggal,
+                                    'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valSedia->m_rekening_no_akun,
+                                    'akun' => $valSedia->m_rekening_nama,
+                                    'particul' => 'persediaan (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'debit' => 0,
+                                    'kredit' => number_format(${$notaCode . '-persediaan'}),
+                                    'urutan' => $urutan++,
+                                );
+                            }
+                        }
+                        foreach ($biaya_persediaan as $valBiayaSedia) {
+                            if (${$notaCode . '-persediaan'} != 0) {
+                                $data[$notaCode]['Biaya Persediaan Transaksi'] = array(
+                                    'tanggal' => $kasTrans->r_t_tanggal,
+                                    'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valBiayaSedia->m_rekening_no_akun,
+                                    'akun' => $valBiayaSedia->m_rekening_nama,
+                                    'particul' => 'biaya persediaan (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'debit' => number_format(${$notaCode . '-persediaan'}),
+                                    'kredit' => 0,
+                                    'urutan' => $urutan++,
+                                );
+                            }
+                        }
                     } elseif ($kasTrans->pay_method == 5) {
                         foreach ($bank_bca as $valKas) {
                             if (${$notaCode . '-menu'} != 0) {
@@ -784,7 +1153,7 @@ class JurnalOtomatisController extends Controller
                                     'tanggal' => $kasTrans->r_t_tanggal,
                                     'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valKas->m_rekening_no_akun,
                                     'akun' => $valKas->m_rekening_nama,
-                                    'particul' => 'nominal menu (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'particul' => 'penjualan menu (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
                                     'debit' => number_format(${$notaCode . '-menu'}),
                                     'kredit' => 0,
                                     'urutan' => $urutan++,
@@ -795,7 +1164,7 @@ class JurnalOtomatisController extends Controller
                                     'tanggal' => $kasTrans->r_t_tanggal,
                                     'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valKas->m_rekening_no_akun,
                                     'akun' => $valKas->m_rekening_nama,
-                                    'particul' => 'nominal non menu (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'particul' => 'penjualan non menu (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
                                     'debit' => number_format(${$notaCode . '-nonmenu'}),
                                     'kredit' => 0,
                                     'urutan' => $urutan++,
@@ -806,18 +1175,29 @@ class JurnalOtomatisController extends Controller
                                     'tanggal' => $kasTrans->r_t_tanggal,
                                     'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valKas->m_rekening_no_akun,
                                     'akun' => $valKas->m_rekening_nama,
-                                    'particul' => 'nominal wbd (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'particul' => 'penjualan wbd (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
                                     'debit' => number_format(${$notaCode . '-wbd'}),
                                     'kredit' => 0,
                                     'urutan' => $urutan++,
                                 );
                             }
-                            if (${$notaCode . '-lainlain'} != 0) {
-                                $data[$notaCode]['BCA lain - lain'] = array(
+                            if (${$notaCode . '-diluarusaha'} != 0) {
+                                $data[$notaCode]['BCA Di luar Usaha'] = array(
                                     'tanggal' => $kasTrans->r_t_tanggal,
                                     'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valKas->m_rekening_no_akun,
                                     'akun' => $valKas->m_rekening_nama,
-                                    'particul' => 'nominal diluar usaha (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'particul' => 'penjualan diluar usaha (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'debit' => number_format(${$notaCode . '-diluarusaha'}),
+                                    'kredit' => 0,
+                                    'urutan' => $urutan++,
+                                );
+                            }
+                            if (${$notaCode . '-lainlain'} != 0) {
+                                $data[$notaCode]['BCA Lain - Lain'] = array(
+                                    'tanggal' => $kasTrans->r_t_tanggal,
+                                    'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valKas->m_rekening_no_akun,
+                                    'akun' => $valKas->m_rekening_nama,
+                                    'particul' => 'pendapatan lain-lain (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
                                     'debit' => number_format(${$notaCode . '-lainlain'}),
                                     'kredit' => 0,
                                     'urutan' => $urutan++,
@@ -829,7 +1209,7 @@ class JurnalOtomatisController extends Controller
                                     'tanggal' => $kasTrans->r_t_tanggal,
                                     'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valKas->m_rekening_no_akun,
                                     'akun' => $valKas->m_rekening_nama,
-                                    'particul' => 'pajak (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'particul' => 'pajak penjualan (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
                                     'debit' => number_format(${$notaCode . '-pajak'}),
                                     'kredit' => 0,
                                     'urutan' => $urutan++,
@@ -840,7 +1220,7 @@ class JurnalOtomatisController extends Controller
                                     'tanggal' => $kasTrans->r_t_tanggal,
                                     'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valKas->m_rekening_no_akun,
                                     'akun' => $valKas->m_rekening_nama,
-                                    'particul' => 'sc (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'particul' => 'sc penjualan (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
                                     'debit' => number_format($kasTrans->sc),
                                     'kredit' => 0,
                                     'urutan' => $urutan++,
@@ -862,7 +1242,7 @@ class JurnalOtomatisController extends Controller
                                     'tanggal' => $kasTrans->r_t_tanggal,
                                     'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valKas->m_rekening_no_akun,
                                     'akun' => $valKas->m_rekening_nama,
-                                    'particul' => 'free kembali (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'particul' => 'free kembalian (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
                                     'debit' => 0,
                                     'kredit' => number_format($kasTrans->free),
                                     'urutan' => $urutan++,
@@ -884,170 +1264,184 @@ class JurnalOtomatisController extends Controller
                                     'tanggal' => $kasTrans->r_t_tanggal,
                                     'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valKas->m_rekening_no_akun,
                                     'akun' => $valKas->m_rekening_nama,
-                                    'particul' => 'diskon (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'particul' => 'diskon penjualan (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
                                     'debit' => 0,
                                     'kredit' => number_format($kasTrans->diskon),
                                     'urutan' => $urutan++,
                                 );
                             }
                         } //link bca
-                    }
-                    if (${$notaCode . '-menu'} != 0) {
-                        foreach ($nominal_menu as $valNominal) {
-                            $data[$notaCode]['Pendapatan Menu Transaksi'] = array(
-                                'tanggal' => $kasTrans->r_t_tanggal,
-                                'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valNominal->m_rekening_no_akun,
-                                'akun' => $valNominal->m_rekening_nama,
-                                'particul' => 'pendapatan menu (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
-                                'debit' => 0,
-                                'kredit' => number_format(${$notaCode . '-menu'}),
-                                'urutan' => $urutan++,
-                            );
+                        if (${$notaCode . '-menu'} != 0) {
+                            foreach ($nominal_menu as $valNominal) {
+                                $data[$notaCode]['Pendapatan Menu Transaksi'] = array(
+                                    'tanggal' => $kasTrans->r_t_tanggal,
+                                    'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valNominal->m_rekening_no_akun,
+                                    'akun' => $valNominal->m_rekening_nama,
+                                    'particul' => 'penjualan menu (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'debit' => 0,
+                                    'kredit' => number_format(${$notaCode . '-menu'}),
+                                    'urutan' => $urutan++,
+                                );
+                            }
                         }
-                    }
-                    if (${$notaCode . '-nonmenu'} != 0) {
-                        foreach ($nominal_non_menu as $valNominal) {
-                            $data[$notaCode]['Pendapatan Non Menu Transaksi'] = array(
-                                'tanggal' => $kasTrans->r_t_tanggal,
-                                'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valNominal->m_rekening_no_akun,
-                                'akun' => $valNominal->m_rekening_nama,
-                                'particul' => 'pendapatan non menu (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
-                                'debit' => 0,
-                                'kredit' => number_format(${$notaCode . '-nonmenu'}),
-                                'urutan' => $urutan++,
-                            );
+                        if (${$notaCode . '-nonmenu'} != 0) {
+                            foreach ($nominal_non_menu as $valNominal) {
+                                $data[$notaCode]['Pendapatan Non Menu Transaksi'] = array(
+                                    'tanggal' => $kasTrans->r_t_tanggal,
+                                    'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valNominal->m_rekening_no_akun,
+                                    'akun' => $valNominal->m_rekening_nama,
+                                    'particul' => 'penjualan non menu (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'debit' => 0,
+                                    'kredit' => number_format(${$notaCode . '-nonmenu'}),
+                                    'urutan' => $urutan++,
+                                );
+                            }
                         }
-                    }
-                    if (${$notaCode . '-wbd'} != 0) {
-                        foreach ($nominal_WBD as $valNominal) {
-                            $data[$notaCode]['Pendapatan Wbd Transaksi'] = array(
-                                'tanggal' => $kasTrans->r_t_tanggal,
-                                'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valNominal->m_rekening_no_akun,
-                                'akun' => $valNominal->m_rekening_nama,
-                                'particul' => 'pendapatan wbd (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
-                                'debit' => 0,
-                                'kredit' => number_format(${$notaCode . '-wbd'}),
-                                'urutan' => $urutan++,
-                            );
+                        if (${$notaCode . '-wbd'} != 0) {
+                            foreach ($nominal_WBD as $valNominal) {
+                                $data[$notaCode]['Pendapatan Wbd Transaksi'] = array(
+                                    'tanggal' => $kasTrans->r_t_tanggal,
+                                    'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valNominal->m_rekening_no_akun,
+                                    'akun' => $valNominal->m_rekening_nama,
+                                    'particul' => 'penjualan wbd (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'debit' => 0,
+                                    'kredit' => number_format(${$notaCode . '-wbd'}),
+                                    'urutan' => $urutan++,
+                                );
+                            }
                         }
-                    }
-                    if (${$notaCode . '-lainlain'} != 0) {
-                        foreach ($nominal_usaha as $valNominal) {
-                            $data[$notaCode]['Pendapatan Lain - lain Transaksi'] = array(
-                                'tanggal' => $kasTrans->r_t_tanggal,
-                                'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valNominal->m_rekening_no_akun,
-                                'akun' => $valNominal->m_rekening_nama,
-                                'particul' => 'pendapatan diluar usaha (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
-                                'debit' => 0,
-                                'kredit' => number_format(${$notaCode . '-lainlain'}),
-                                'urutan' => $urutan++,
-                            );
+                        if (${$notaCode . '-diluarusaha'} != 0) {
+                            foreach ($nominal_usaha as $valNominal) {
+                                $data[$notaCode]['Pendapatan Di luar Usaha Transaksi'] = array(
+                                    'tanggal' => $kasTrans->r_t_tanggal,
+                                    'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valNominal->m_rekening_no_akun,
+                                    'akun' => $valNominal->m_rekening_nama,
+                                    'particul' => 'penjualan diluar usaha (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'debit' => 0,
+                                    'kredit' => number_format(${$notaCode . '-diluarusaha'}),
+                                    'urutan' => $urutan++,
+                                );
+                            }
                         }
-                    }
-                    if (${$notaCode . '-pajak'} != 0) {
-                        foreach ($pajak as $valPajak) {
-                            $data[$notaCode]['Pajak Ditahan Transaksi'] = array(
-                                'tanggal' => $kasTrans->r_t_tanggal,
-                                'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valPajak->m_rekening_no_akun,
-                                'akun' => $valPajak->m_rekening_nama,
-                                'particul' => 'pajak (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
-                                'debit' => 0,
-                                'kredit' => number_format(${$notaCode . '-pajak'}),
-                                'urutan' => $urutan++,
-                            );
+                        if (${$notaCode . '-lainlain'} != 0) {
+                            foreach ($nominal_lainlain as $valNominal) {
+                                $data[$notaCode]['Pendapatan Lain - Lain'] = array(
+                                    'tanggal' => $kasTrans->r_t_tanggal,
+                                    'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valNominal->m_rekening_no_akun,
+                                    'akun' => $valNominal->m_rekening_nama,
+                                    'particul' => 'pendapatan lain-lain (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'debit' => 0,
+                                    'kredit' => number_format(${$notaCode . '-lainlain'}),
+                                    'urutan' => $urutan++,
+                                );
+                            }
                         }
-                    }
-                    if ($kasTrans->sc != 0) {
-                        foreach ($sc as $valsc) {
-                            $data[$notaCode]['SC Transaksi'] = array(
-                                'tanggal' => $kasTrans->r_t_tanggal,
-                                'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valsc->m_rekening_no_akun,
-                                'akun' => $valsc->m_rekening_nama,
-                                'particul' => 'sc (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
-                                'debit' => 0,
-                                'kredit' => number_format($kasTrans->sc),
-                                'urutan' => $urutan++,
-                            );
+                        if (${$notaCode . '-pajak'} != 0) {
+                            foreach ($pajak as $valPajak) {
+                                $data[$notaCode]['Pajak Ditahan Transaksi'] = array(
+                                    'tanggal' => $kasTrans->r_t_tanggal,
+                                    'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valPajak->m_rekening_no_akun,
+                                    'akun' => $valPajak->m_rekening_nama,
+                                    'particul' => 'pajak penjualan (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'debit' => 0,
+                                    'kredit' => number_format(${$notaCode . '-pajak'}),
+                                    'urutan' => $urutan++,
+                                );
+                            }
                         }
-                    }
-                    if ($kasTrans->tarik != 0) {
-                        foreach ($tarik as $valTarik) {
-                            $data[$notaCode]['Tarik Transaksi'] = array(
-                                'tanggal' => $kasTrans->r_t_tanggal,
-                                'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valTarik->m_rekening_no_akun,
-                                'akun' => $valTarik->m_rekening_nama,
-                                'particul' => 'tarik tunai (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
-                                'debit' => number_format($kasTrans->tarik),
-                                'kredit' => 0,
-                                'urutan' => $urutan++,
-                            );
+                        if ($kasTrans->sc != 0) {
+                            foreach ($sc as $valsc) {
+                                $data[$notaCode]['SC Transaksi'] = array(
+                                    'tanggal' => $kasTrans->r_t_tanggal,
+                                    'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valsc->m_rekening_no_akun,
+                                    'akun' => $valsc->m_rekening_nama,
+                                    'particul' => 'sc penjualan (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'debit' => 0,
+                                    'kredit' => number_format($kasTrans->sc),
+                                    'urutan' => $urutan++,
+                                );
+                            }
                         }
-                    }
-                    if ($kasTrans->pembulatan != 0) {
-                        foreach ($bulat as $valBulat) {
-                            $data[$notaCode]['Pembulatan Transaksi'] = array(
-                                'tanggal' => $kasTrans->r_t_tanggal,
-                                'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valBulat->m_rekening_no_akun,
-                                'akun' => $valBulat->m_rekening_nama,
-                                'particul' => 'pembulatan (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
-                                'debit' => number_format($kasTrans->pembulatan),
-                                'kredit' => 0,
-                                'urutan' => $urutan++,
-                            );
+                        if ($kasTrans->tarik != 0) {
+                            foreach ($tarik as $valTarik) {
+                                $data[$notaCode]['Tarik Transaksi'] = array(
+                                    'tanggal' => $kasTrans->r_t_tanggal,
+                                    'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valTarik->m_rekening_no_akun,
+                                    'akun' => $valTarik->m_rekening_nama,
+                                    'particul' => 'tarik tunai (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'debit' => number_format($kasTrans->tarik),
+                                    'kredit' => 0,
+                                    'urutan' => $urutan++,
+                                );
+                            }
                         }
-                    }
-                    if ($kasTrans->free != 0) {
-                        foreach ($free as $valFree) {
-                            $data[$notaCode]['free Transaksi'] = array(
-                                'tanggal' => $kasTrans->r_t_tanggal,
-                                'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valFree->m_rekening_no_akun,
-                                'akun' => $valFree->m_rekening_nama,
-                                'particul' => 'free (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
-                                'debit' => number_format($kasTrans->free),
-                                'kredit' => 0,
-                                'urutan' => $urutan++,
-                            );
+                        if ($kasTrans->pembulatan != 0) {
+                            foreach ($bulat as $valBulat) {
+                                $data[$notaCode]['Pembulatan Transaksi'] = array(
+                                    'tanggal' => $kasTrans->r_t_tanggal,
+                                    'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valBulat->m_rekening_no_akun,
+                                    'akun' => $valBulat->m_rekening_nama,
+                                    'particul' => 'pembulatan (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'debit' => number_format($kasTrans->pembulatan),
+                                    'kredit' => 0,
+                                    'urutan' => $urutan++,
+                                );
+                            }
                         }
-                    }
-                    if ($kasTrans->diskon != 0) {
-                        foreach ($diskon as $valDiskon) {
-                            $data[$notaCode]['Diskon Transaksi'] = array(
-                                'tanggal' => $kasTrans->r_t_tanggal,
-                                'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valDiskon->m_rekening_no_akun,
-                                'akun' => $valDiskon->m_rekening_nama,
-                                'particul' => 'diskon (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
-                                'debit' => number_format($kasTrans->diskon),
-                                'kredit' => 0,
-                                'urutan' => $urutan++,
-                            );
+                        if ($kasTrans->free != 0) {
+                            foreach ($free as $valFree) {
+                                $data[$notaCode]['free Transaksi'] = array(
+                                    'tanggal' => $kasTrans->r_t_tanggal,
+                                    'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valFree->m_rekening_no_akun,
+                                    'akun' => $valFree->m_rekening_nama,
+                                    'particul' => 'free kembalian (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'debit' => number_format($kasTrans->free),
+                                    'kredit' => 0,
+                                    'urutan' => $urutan++,
+                                );
+                            }
                         }
-                    }
-                    if (${$notaCode . '-persediaan'} != 0) {
-                        foreach ($persediaan as $valSedia) {
-                            $data[$notaCode]['Persediaan Transaksi'] = array(
-                                'tanggal' => $kasTrans->r_t_tanggal,
-                                'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valSedia->m_rekening_no_akun,
-                                'akun' => $valSedia->m_rekening_nama,
-                                'particul' => 'persediaan (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
-                                'debit' => 0,
-                                'kredit' => number_format(${$notaCode . '-persediaan'}),
-                                'urutan' => $urutan++,
-                            );
+                        if ($kasTrans->diskon != 0) {
+                            foreach ($diskon as $valDiskon) {
+                                $data[$notaCode]['Diskon Transaksi'] = array(
+                                    'tanggal' => $kasTrans->r_t_tanggal,
+                                    'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valDiskon->m_rekening_no_akun,
+                                    'akun' => $valDiskon->m_rekening_nama,
+                                    'particul' => 'diskon penjualan (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'debit' => number_format($kasTrans->diskon),
+                                    'kredit' => 0,
+                                    'urutan' => $urutan++,
+                                );
+                            }
                         }
-                    }
-                    foreach ($biaya_persediaan as $valBiayaSedia) {
                         if (${$notaCode . '-persediaan'} != 0) {
-                            $data[$notaCode]['Biaya Persediaan Transaksi'] = array(
-                                'tanggal' => $kasTrans->r_t_tanggal,
-                                'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valBiayaSedia->m_rekening_no_akun,
-                                'akun' => $valBiayaSedia->m_rekening_nama,
-                                'particul' => 'biaya persediaan (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
-                                'debit' => number_format(${$notaCode . '-persediaan'}),
-                                'kredit' => 0,
-                                'urutan' => $urutan++,
-                            );
+                            foreach ($persediaan as $valSedia) {
+                                $data[$notaCode]['Persediaan Transaksi'] = array(
+                                    'tanggal' => $kasTrans->r_t_tanggal,
+                                    'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valSedia->m_rekening_no_akun,
+                                    'akun' => $valSedia->m_rekening_nama,
+                                    'particul' => 'persediaan (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'debit' => 0,
+                                    'kredit' => number_format(${$notaCode . '-persediaan'}),
+                                    'urutan' => $urutan++,
+                                );
+                            }
+                        }
+                        foreach ($biaya_persediaan as $valBiayaSedia) {
+                            if (${$notaCode . '-persediaan'} != 0) {
+                                $data[$notaCode]['Biaya Persediaan Transaksi'] = array(
+                                    'tanggal' => $kasTrans->r_t_tanggal,
+                                    'no_akun' => $kasTrans->r_t_m_w_code . '.' . $valBiayaSedia->m_rekening_no_akun,
+                                    'akun' => $valBiayaSedia->m_rekening_nama,
+                                    'particul' => 'biaya persediaan (nota ' . $kasTrans->r_t_nota_code . ') - sesi ' . $kasTrans->sesi,
+                                    'debit' => number_format(${$notaCode . '-persediaan'}),
+                                    'kredit' => 0,
+                                    'urutan' => $urutan++,
+                                );
+                            }
                         }
                     }
+
                 } //if notacode
             } //transaksi
         } //notacode
@@ -1055,6 +1449,7 @@ class JurnalOtomatisController extends Controller
             ${$notaRefund . '-menu'} = 0;
             ${$notaRefund . '-nonmenu'} = 0;
             ${$notaRefund . '-wbd'} = 0;
+            ${$notaRefund . '-diluarusaha'} = 0;
             ${$notaRefund . '-lainlain'} = 0;
             ${$notaRefund . '-pajak'} = 0;
             ${$notaRefund . '-biaya_refund'} = 0;
@@ -1077,7 +1472,11 @@ class JurnalOtomatisController extends Controller
                             $nominal = $valRefund->nominal;
                             ${$notaRefund . '-wbd'} += $nominal;
                         }
-                        if (in_array($valRefund->produk_id, $listIceCream)) {
+                        if (in_array($valRefund->produk_id, $diLuarUsaha)) {
+                            $nominal = $valRefund->nominal;
+                            ${$notaRefund . '-diluarusaha'} += $nominal;
+                        }
+                        if (in_array($valRefund->produk_id, $lainLain)) {
                             $nominal = $valRefund->nominal;
                             ${$notaRefund . '-lainlain'} += $nominal;
                         }
@@ -1120,12 +1519,23 @@ class JurnalOtomatisController extends Controller
                                     'urutan' => $urutan++,
                                 );
                             }
-                            if (${$notaRefund . '-lainlain'} != 0) {
-                                $data[$notaRefund]['Refund Kas Lain-lain'] = array(
+                            if (${$notaRefund . '-diluarusaha'} != 0) {
+                                $data[$notaRefund]['Refund Kas Di luar Usaha'] = array(
                                     'tanggal' => $valRefund->r_r_tanggal,
                                     'no_akun' => $valRefund->r_r_m_w_code . '.' . $valKasRefund->m_rekening_no_akun,
                                     'akun' => $valKasRefund->m_rekening_nama,
                                     'particul' => 'refund diluar usaha (nota ' . $valRefund->r_r_nota_code . ') - sesi ' . $valRefund->sesi,
+                                    'debit' => 0,
+                                    'kredit' => number_format(${$notaRefund . '-diluarusaha'}),
+                                    'urutan' => $urutan++,
+                                );
+                            }
+                            if (${$notaRefund . '-lainlain'} != 0) {
+                                $data[$notaRefund]['Refund Lain - Lain'] = array(
+                                    'tanggal' => $valRefund->r_r_tanggal,
+                                    'no_akun' => $valRefund->r_r_m_w_code . '.' . $valKasRefund->m_rekening_no_akun,
+                                    'akun' => $valKasRefund->m_rekening_nama,
+                                    'particul' => 'refund lain - lain (nota ' . $valRefund->r_r_nota_code . ') - sesi ' . $valRefund->sesi,
                                     'debit' => 0,
                                     'kredit' => number_format(${$notaRefund . '-lainlain'}),
                                     'urutan' => $urutan++,
@@ -1215,13 +1625,26 @@ class JurnalOtomatisController extends Controller
                                 );
                             }
                         }
-                        if (${$notaRefund . '-lainlain'} != 0) {
+                        if (${$notaRefund . '-diluarusaha'} != 0) {
                             foreach ($nominal_usaha_refund as $ValMenuRefund) {
-                                $data[$notaRefund]['Refund Lain-lain'] = array(
+                                $data[$notaRefund]['Refund Di luar Usaha'] = array(
                                     'tanggal' => $valRefund->r_r_tanggal,
                                     'no_akun' => $valRefund->r_r_m_w_code . '.' . $ValMenuRefund->m_rekening_no_akun,
                                     'akun' => $ValMenuRefund->m_rekening_nama,
                                     'particul' => 'refund diluar usaha (nota ' . $valRefund->r_r_nota_code . ') - sesi ' . $valRefund->sesi,
+                                    'debit' => number_format(${$notaRefund . '-diluarusaha'}),
+                                    'kredit' => 0,
+                                    'urutan' => $urutan++,
+                                );
+                            }
+                        }
+                        if (${$notaRefund . '-lainlain'} != 0) {
+                            foreach ($nominal_lainlain_refund as $ValMenuRefund) {
+                                $data[$notaRefund]['Refund Lain - Lain'] = array(
+                                    'tanggal' => $valRefund->r_r_tanggal,
+                                    'no_akun' => $valRefund->r_r_m_w_code . '.' . $ValMenuRefund->m_rekening_no_akun,
+                                    'akun' => $ValMenuRefund->m_rekening_nama,
+                                    'particul' => 'refund lain - lain (nota ' . $valRefund->r_r_nota_code . ') - sesi ' . $valRefund->sesi,
                                     'debit' => number_format(${$notaRefund . '-lainlain'}),
                                     'kredit' => 0,
                                     'urutan' => $urutan++,
@@ -1307,7 +1730,7 @@ class JurnalOtomatisController extends Controller
                             }
                         }
                     } elseif ($valRefund->r_r_tanggal != $valRefund->r_t_tanggal) {
-                        $listAll = array_merge($listMenu, $listNonMenu, $listWbd, $listIceCream);
+                        $listAll = array_merge($listMenu, $listNonMenu, $listWbd, $diLuarUsaha);
                         if (in_array($valRefund->produk_id, $listAll) && in_array($valRefund->type_trans, [1, 2])) {
                             $nominal = $valRefund->nominal + $valRefund->pajak;
                             ${$notaRefund . '-biaya_refund'} += $nominal;
@@ -1324,7 +1747,11 @@ class JurnalOtomatisController extends Controller
                             $nominal = $valRefund->nominal;
                             ${$notaRefund . '-wbd'} += $nominal;
                         }
-                        if (in_array($valRefund->produk_id, $listIceCream)) {
+                        if (in_array($valRefund->produk_id, $diLuarUsaha)) {
+                            $nominal = $valRefund->nominal;
+                            ${$notaRefund . '-diluarusaha'} += $nominal;
+                        }
+                        if (in_array($valRefund->produk_id, $lainLain)) {
                             $nominal = $valRefund->nominal;
                             ${$notaRefund . '-lainlain'} += $nominal;
                         }
@@ -1348,7 +1775,7 @@ class JurnalOtomatisController extends Controller
                         }
                         foreach ($kas_refund as $ValMenuRefund) {
                             if (${$notaRefund . '-menu'} != 0) {
-                                $data[$notaRefund]['Refund Dif Kas Penjualan'] = array(
+                                $data[$notaRefund]['Refund Dif Kas Penjualan Menu'] = array(
                                     'tanggal' => $valRefund->r_r_tanggal,
                                     'no_akun' => $valRefund->r_r_m_w_code . '.' . $ValMenuRefund->m_rekening_no_akun,
                                     'akun' => $ValMenuRefund->m_rekening_nama,
@@ -1359,7 +1786,7 @@ class JurnalOtomatisController extends Controller
                                 );
                             }
                             if (${$notaRefund . '-nonmenu'} != 0) {
-                                $data[$notaRefund]['Refund Dif Kas Penjualan'] = array(
+                                $data[$notaRefund]['Refund Dif Kas Penjualan Non Menu'] = array(
                                     'tanggal' => $valRefund->r_r_tanggal,
                                     'no_akun' => $valRefund->r_r_m_w_code . '.' . $ValMenuRefund->m_rekening_no_akun,
                                     'akun' => $ValMenuRefund->m_rekening_nama,
@@ -1370,7 +1797,7 @@ class JurnalOtomatisController extends Controller
                                 );
                             }
                             if (${$notaRefund . '-wbd'} != 0) {
-                                $data[$notaRefund]['Refund Dif Kas Penjualan'] = array(
+                                $data[$notaRefund]['Refund Dif Kas Penjualan WBD'] = array(
                                     'tanggal' => $valRefund->r_r_tanggal,
                                     'no_akun' => $valRefund->r_r_m_w_code . '.' . $ValMenuRefund->m_rekening_no_akun,
                                     'akun' => $ValMenuRefund->m_rekening_nama,
@@ -1380,12 +1807,23 @@ class JurnalOtomatisController extends Controller
                                     'urutan' => $urutan++,
                                 );
                             }
-                            if (${$notaRefund . '-lainlain'} != 0) {
-                                $data[$notaRefund]['Refund Dif Kas Penjualan'] = array(
+                            if (${$notaRefund . '-diluarusaha'} != 0) {
+                                $data[$notaRefund]['Refund Dif Kas Penjualan Diluar Usaha'] = array(
                                     'tanggal' => $valRefund->r_r_tanggal,
                                     'no_akun' => $valRefund->r_r_m_w_code . '.' . $ValMenuRefund->m_rekening_no_akun,
                                     'akun' => $ValMenuRefund->m_rekening_nama,
                                     'particul' => 'refund diluar usaha (nota ' . $valRefund->r_r_nota_code . ') - sesi ' . $valRefund->sesi,
+                                    'debit' => 0,
+                                    'kredit' => number_format(${$notaRefund . '-diluarusaha'}),
+                                    'urutan' => $urutan++,
+                                );
+                            }
+                            if (${$notaRefund . '-lainlain'} != 0) {
+                                $data[$notaRefund]['Refund Dif Kas Penjualan Lain - Lain'] = array(
+                                    'tanggal' => $valRefund->r_r_tanggal,
+                                    'no_akun' => $valRefund->r_r_m_w_code . '.' . $ValMenuRefund->m_rekening_no_akun,
+                                    'akun' => $ValMenuRefund->m_rekening_nama,
+                                    'particul' => 'refund lain - lain (nota ' . $valRefund->r_r_nota_code . ') - sesi ' . $valRefund->sesi,
                                     'debit' => 0,
                                     'kredit' => number_format(${$notaRefund . '-lainlain'}),
                                     'urutan' => $urutan++,
@@ -1413,6 +1851,7 @@ class JurnalOtomatisController extends Controller
             ${$notaLostbill . '-menu'} = 0;
             ${$notaLostbill . '-nonmenu'} = 0;
             ${$notaLostbill . '-wbd'} = 0;
+            ${$notaLostbill . '-diluarusaha'} = 0;
             ${$notaLostbill . '-lainlain'} = 0;
             ${$notaLostbill . '-pajak'} = 0;
             ${$notaLostbill . '-biaya_lostbill'} = 0;
@@ -1420,7 +1859,7 @@ class JurnalOtomatisController extends Controller
             ${$notaLostbill . '-persediaan_lostbill'} = 0;
             foreach ($lostbill as $keyLost => $valLostbill) {
                 if ($valLostbill->kode_id == $notaLostbill) {
-                    $listAll = array_merge($listMenu, $listNonMenu, $listWbd, $listIceCream);
+                    $listAll = array_merge($listMenu, $listNonMenu, $listWbd, $diLuarUsaha);
                     if (in_array($valLostbill->produk_id, $listMenu)) {
                         $nominal = $valLostbill->nominal;
                         ${$notaLostbill . '-menu'} += $nominal;
@@ -1433,7 +1872,11 @@ class JurnalOtomatisController extends Controller
                         $nominal = $valLostbill->nominal;
                         ${$notaLostbill . '-wbd'} += $nominal;
                     }
-                    if (in_array($valLostbill->produk_id, $listIceCream)) {
+                    if (in_array($valLostbill->produk_id, $diLuarUsaha)) {
+                        $nominal = $valLostbill->nominal;
+                        ${$notaLostbill . '-diluarusaha'} += $nominal;
+                    }
+                    if (in_array($valLostbill->produk_id, $lainLain)) {
                         $nominal = $valLostbill->nominal;
                         ${$notaLostbill . '-lainlain'} += $nominal;
                     }
@@ -1496,12 +1939,23 @@ class JurnalOtomatisController extends Controller
                                 'urutan' => $urutan++,
                             );
                         }
-                        if (${$notaLostbill . '-lainlain'} != 0) {
-                            $data[$notaLostbill]['Lostbill lain-lain'] = array(
+                        if (${$notaLostbill . '-diluarusaha'} != 0) {
+                            $data[$notaLostbill]['Lostbill Di luar Usaha'] = array(
                                 'tanggal' => $valLostbill->r_t_tanggal,
                                 'no_akun' => $valLostbill->r_t_m_w_code . '.' . $ValMenuLostbill->m_rekening_no_akun,
                                 'akun' => $ValMenuLostbill->m_rekening_nama,
                                 'particul' => 'penjualan diluar usaha (nota ' . $valLostbill->r_t_nota_code . ') - sesi ' . $valLostbill->sesi,
+                                'debit' => 0,
+                                'kredit' => number_format(${$notaLostbill . '-diluarusaha'}),
+                                'urutan' => $urutan++,
+                            );
+                        }
+                        if (${$notaLostbill . '-lainlain'} != 0) {
+                            $data[$notaLostbill]['Lostbill Lain - Lain'] = array(
+                                'tanggal' => $valLostbill->r_t_tanggal,
+                                'no_akun' => $valLostbill->r_t_m_w_code . '.' . $ValMenuLostbill->m_rekening_no_akun,
+                                'akun' => $ValMenuLostbill->m_rekening_nama,
+                                'particul' => 'penjualan lain - lain (nota ' . $valLostbill->r_t_nota_code . ') - sesi ' . $valLostbill->sesi,
                                 'debit' => 0,
                                 'kredit' => number_format(${$notaLostbill . '-lainlain'}),
                                 'urutan' => $urutan++,
@@ -1554,13 +2008,14 @@ class JurnalOtomatisController extends Controller
             ${$notaGaransi . '-menu'} = 0;
             ${$notaGaransi . '-nonmenu'} = 0;
             ${$notaGaransi . '-wbd'} = 0;
+            ${$notaGaransi . '-diluarusaha'} = 0;
             ${$notaGaransi . '-lainlain'} = 0;
             ${$notaGaransi . '-pajak'} = 0;
             ${$notaGaransi . '-biaya'} = 0;
             ${$notaGaransi . '-persediaan'} = 0;
             foreach ($garansi as $keyGaransi => $valGaransi) {
                 if ($valGaransi->kode_id == $notaGaransi) {
-                    $listAll = array_merge($listMenu, $listNonMenu, $listWbd, $listIceCream);
+                    $listAll = array_merge($listMenu, $listNonMenu, $listWbd, $diLuarUsaha);
                     if (in_array($valGaransi->produk_id, $listMenu)) {
                         $nominal = $valGaransi->nominal;
                         ${$notaGaransi . '-menu'} += $nominal;
@@ -1573,7 +2028,11 @@ class JurnalOtomatisController extends Controller
                         $nominal = $valGaransi->nominal;
                         ${$notaGaransi . '-wbd'} += $nominal;
                     }
-                    if (in_array($valGaransi->produk_id, $listIceCream)) {
+                    if (in_array($valGaransi->produk_id, $diLuarUsaha)) {
+                        $nominal = $valGaransi->nominal;
+                        ${$notaGaransi . '-diluarusaha'} += $nominal;
+                    }
+                    if (in_array($valGaransi->produk_id, $lainLain)) {
                         $nominal = $valGaransi->nominal;
                         ${$notaGaransi . '-lainlain'} += $nominal;
                     }
@@ -1632,135 +2091,23 @@ class JurnalOtomatisController extends Controller
                                 'urutan' => $urutan++,
                             );
                         }
-                        if (${$notaGaransi . '-lainlain'} != 0) {
-                            $data[$notaGaransi]['Garansi lain-lain'] = array(
+                        if (${$notaGaransi . '-diluarusaha'} != 0) {
+                            $data[$notaGaransi]['Garansi Di luar Usaha'] = array(
                                 'tanggal' => $valGaransi->r_t_tanggal,
                                 'no_akun' => $valGaransi->r_t_m_w_code . '.' . $ValMenuGaransi->m_rekening_no_akun,
                                 'akun' => $ValMenuGaransi->m_rekening_nama,
                                 'particul' => 'garansi diluar usaha (cat : ' . $valGaransi->catatan . ' (nota ' . $valGaransi->r_t_nota_code . ') - sesi ' . $valGaransi->sesi,
                                 'debit' => 0,
-                                'kredit' => number_format(${$notaGaransi . '-lainlain'}),
-                                'urutan' => $urutan++,
-                            );
-                        }
-                    }
-                    if (${$notaGaransi . '-persediaan'} != 0) {
-                        foreach ($sedia_garansi as $ValMenuGaransi) {
-                            $data[$notaGaransi]['Garansi Persediaan'] = array(
-                                'tanggal' => $valGaransi->r_t_tanggal,
-                                'no_akun' => $valGaransi->r_t_m_w_code . '.' . $ValMenuGaransi->m_rekening_no_akun,
-                                'akun' => $ValMenuGaransi->m_rekening_nama,
-                                'particul' => 'persediaan garansi (nota ' . $valGaransi->r_t_nota_code . ') - sesi ' . $valGaransi->sesi,
-                                'debit' => 0,
-                                'kredit' => number_format(${$notaGaransi . '-persediaan'}),
-                                'urutan' => $urutan++,
-                            );
-                        }
-                    }
-                    if (${$notaGaransi . '-persediaan'} != 0) {
-                        foreach ($biaya_sedia_garansi as $ValMenuGaransi) {
-                            $data[$notaGaransi]['Garansi Biaya Persediaan'] = array(
-                                'tanggal' => $valGaransi->r_t_tanggal,
-                                'no_akun' => $valGaransi->r_t_m_w_code . '.' . $ValMenuGaransi->m_rekening_no_akun,
-                                'akun' => $ValMenuGaransi->m_rekening_nama,
-                                'particul' => 'biaya persediaan garansi (nota ' . $valGaransi->r_t_nota_code . ') - sesi ' . $valGaransi->sesi,
-                                'debit' => number_format(${$notaGaransi . '-persediaan'}),
-                                'kredit' => 0,
-                                'urutan' => $urutan++,
-                            );
-                        }
-                    }
-                } //if notacode
-            } //garansi
-        } //nota code
-        foreach ($listGaransi as $key => $notaGaransi) {
-            ${$notaGaransi . '-menu'} = 0;
-            ${$notaGaransi . '-nonmenu'} = 0;
-            ${$notaGaransi . '-wbd'} = 0;
-            ${$notaGaransi . '-lainlain'} = 0;
-            ${$notaGaransi . '-pajak'} = 0;
-            ${$notaGaransi . '-biaya'} = 0;
-            ${$notaGaransi . '-persediaan'} = 0;
-            foreach ($garansi as $keyGaransi => $valGaransi) {
-                if ($valGaransi->kode_id == $notaGaransi) {
-                    $listAll = array_merge($listMenu, $listNonMenu, $listWbd, $listIceCream);
-                    if (in_array($valGaransi->produk_id, $listMenu)) {
-                        $nominal = $valGaransi->nominal;
-                        ${$notaGaransi . '-menu'} += $nominal;
-                    }
-                    if (in_array($valGaransi->produk_id, $listNonMenu)) {
-                        $nominal = $valGaransi->nominal;
-                        ${$notaGaransi . '-nonmenu'} += $nominal;
-                    }
-                    if (in_array($valGaransi->produk_id, $listWbd)) {
-                        $nominal = $valGaransi->nominal;
-                        ${$notaGaransi . '-wbd'} += $nominal;
-                    }
-                    if (in_array($valGaransi->produk_id, $listIceCream)) {
-                        $nominal = $valGaransi->nominal;
-                        ${$notaGaransi . '-lainlain'} += $nominal;
-                    }
-                    if (in_array($valGaransi->produk_id, $listAll)) {
-                        $nominal = $valGaransi->nominal;
-                        ${$notaGaransi . '-biaya'} += $nominal;
-                    }
-                    if (in_array($valGaransi->produk_id, $listAll)) {
-                        $nominal = $valGaransi->nominal * 0.8;
-                        ${$notaGaransi . '-persediaan'} += $nominal;
-                    }
-                    if (${$notaGaransi . '-biaya'} != 0) {
-                        foreach ($biaya_garansi as $ValMenuGaransi) {
-                            $data[$notaGaransi]['Garansi Biaya'] = array(
-                                'tanggal' => $valGaransi->r_t_tanggal,
-                                'no_akun' => $valGaransi->r_t_m_w_code . '.' . $ValMenuGaransi->m_rekening_no_akun,
-                                'akun' => $ValMenuGaransi->m_rekening_nama,
-                                'particul' => 'biaya garansi (nota ' . $valGaransi->r_t_nota_code . ') - sesi ' . $valGaransi->sesi,
-                                'debit' => number_format(${$notaGaransi . '-biaya'}),
-                                'kredit' => 0,
-                                'urutan' => $urutan++,
-                            );
-                        }
-                    }
-                    foreach ($penjualan_garansi as $ValMenuGaransi) {
-                        if (${$notaGaransi . '-menu'} != 0) {
-                            $data[$notaGaransi]['Garansi Menu'] = array(
-                                'tanggal' => $valGaransi->r_t_tanggal,
-                                'no_akun' => $valGaransi->r_t_m_w_code . '.' . $ValMenuGaransi->m_rekening_no_akun,
-                                'akun' => $ValMenuGaransi->m_rekening_nama,
-                                'particul' => 'garansi menu (cat : ' . $valGaransi->catatan . ' (nota ' . $valGaransi->r_t_nota_code . ') - sesi ' . $valGaransi->sesi,
-                                'debit' => 0,
-                                'kredit' => number_format(${$notaGaransi . '-menu'}),
-                                'urutan' => $urutan++,
-                            );
-                        }
-                        if (${$notaGaransi . '-nonmenu'} != 0) {
-                            $data[$notaGaransi]['Garansi Non Menu'] = array(
-                                'tanggal' => $valGaransi->r_t_tanggal,
-                                'no_akun' => $valGaransi->r_t_m_w_code . '.' . $ValMenuGaransi->m_rekening_no_akun,
-                                'akun' => $ValMenuGaransi->m_rekening_nama,
-                                'particul' => 'garansi non menu (cat : ' . $valGaransi->catatan . ' (nota ' . $valGaransi->r_t_nota_code . ') - sesi ' . $valGaransi->sesi,
-                                'debit' => 0,
-                                'kredit' => number_format(${$notaGaransi . '-nonmenu'}),
-                                'urutan' => $urutan++,
-                            );
-                        }
-                        if (${$notaGaransi . '-wbd'} != 0) {
-                            $data[$notaGaransi]['Garansi Wbd'] = array(
-                                'tanggal' => $valGaransi->r_t_tanggal,
-                                'no_akun' => $valGaransi->r_t_m_w_code . '.' . $ValMenuGaransi->m_rekening_no_akun,
-                                'akun' => $ValMenuGaransi->m_rekening_nama,
-                                'particul' => 'garansi wbd (cat : ' . $valGaransi->catatan . ' (nota ' . $valGaransi->r_t_nota_code . ') - sesi ' . $valGaransi->sesi,
-                                'debit' => 0,
-                                'kredit' => number_format(${$notaGaransi . '-wbd'}),
+                                'kredit' => number_format(${$notaGaransi . '-diluarusaha'}),
                                 'urutan' => $urutan++,
                             );
                         }
                         if (${$notaGaransi . '-lainlain'} != 0) {
-                            $data[$notaGaransi]['Garansi lain-lain'] = array(
+                            $data[$notaGaransi]['Garansi Lain - Lain'] = array(
                                 'tanggal' => $valGaransi->r_t_tanggal,
                                 'no_akun' => $valGaransi->r_t_m_w_code . '.' . $ValMenuGaransi->m_rekening_no_akun,
                                 'akun' => $ValMenuGaransi->m_rekening_nama,
-                                'particul' => 'garansi diluar usaha (cat : ' . $valGaransi->catatan . ' (nota ' . $valGaransi->r_t_nota_code . ') - sesi ' . $valGaransi->sesi,
+                                'particul' => 'garansi lain - lain (cat : ' . $valGaransi->catatan . ' (nota ' . $valGaransi->r_t_nota_code . ') - sesi ' . $valGaransi->sesi,
                                 'debit' => 0,
                                 'kredit' => number_format(${$notaGaransi . '-lainlain'}),
                                 'urutan' => $urutan++,

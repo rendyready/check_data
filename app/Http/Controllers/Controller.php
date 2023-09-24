@@ -12,7 +12,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
 use Intervention\Image\Facades\Image;
-
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Config;
+use PDO;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
@@ -349,28 +351,31 @@ class Controller extends BaseController
         return response($data);
     }
 
-    function upload_file($request)
-    {
+    public function upload_file($request)
+    {   
         if ($request->hasFile('m_produk_image')) {
             $image = $request->file('m_produk_image');
             $filename = time() . '.' . $image->getClientOriginalExtension();
             $directory = public_path('uploads');
             $path = $directory . '/' . $filename;
 
-            // Membuat direktori jika belum ada
+            // Create the directory if it doesn't exist
             if (!File::isDirectory($directory)) {
                 File::makeDirectory($directory, 0755, true, true);
             }
-
             $image->move($directory, $filename);
-            $img = File::get($path);
-            $img = Image::make($img)->resize(200, 200);
+            // Open and resize the image while maintaining the aspect ratio
+            $img = Image::make($path);
+            $img->fit(200, 200, function ($constraint) {
+                $constraint->upsize(); 
+            });
             $img->save($path);
+
             return 'uploads/' . $filename;
         }
     }
 
-     function remove_file($directory)
+    public function remove_file($directory)
     {
         $path = public_path($directory);
         if (File::exists($path)) {
@@ -378,7 +383,7 @@ class Controller extends BaseController
         }
     }
 
-     function uploadImageCloud($url)
+    public function uploadImageCloud($url)
     {
         #Send Image to public server
         $img = url($url);
@@ -397,7 +402,7 @@ class Controller extends BaseController
         return $upload;
     }
 
-     function deleteImageCloud($urlImage)
+    public function deleteImageCloud($urlImage)
     {
         #delete image from cloud storage
         $delete = Http::withHeaders([
@@ -408,5 +413,33 @@ class Controller extends BaseController
                 "url" => $urlImage,
             ]);
         return response($delete, 200);
+    }
+
+    function connect_qr(){
+        Config::set("database.connections.qronline", [
+            'driver' => 'pgsql',
+            'host' => '45.76.144.207',
+            'port' => '5432',
+            'database' => 'admindb_qrorder',
+            'username' => 'admindb_qrorder',
+            'password' => 'Qr.Waroeng@55',
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'search_path' => 'public',
+            'sslmode' => 'prefer',
+            'options' => [
+                PDO::ATTR_TIMEOUT => 3, // Timeout dalam detik
+            ],
+        ]);
+        $db_qr = DB::connection('qronline');
+
+        try {
+            $db_qr->table('m_w')->get();
+            return $db_qr;
+        } catch (\Throwable $th) {
+            Log::info($th);
+            return response()->json(["messages" => "Can't Connect Database Order"]);
+        }
     }
 }

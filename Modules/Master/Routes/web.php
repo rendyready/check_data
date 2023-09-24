@@ -163,3 +163,9 @@ Route::group(['prefix' => 'master', 'controller' => CompareMenuController::class
     Route::get('compare_menu/select_waroeng', 'select_waroeng')->name('compare_menu.select_waroeng');
     Route::get('compare_menu/show', 'show')->name('compare_menu.show');
 });
+// QR Menu
+Route::group(['prefix' => 'qr', 'controller' => ProdukController::class, 'middleware' => ['auth', 'web']], function () {
+    Route::get('menu', 'menu')->name('qr.menu');
+    Route::get('get_menu', 'be_get_menu')->name('qr.be_get_menu');
+    Route::post('menu_update', 'be_menu_update')->name('qr.be_menu_update');
+});

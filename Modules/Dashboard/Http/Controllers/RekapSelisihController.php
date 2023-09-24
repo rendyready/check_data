@@ -249,7 +249,94 @@ class RekapSelisihController extends Controller
         $data[] = $totalRow;
 
         return Excel::download(new RekapSelisihPenjualanExport($data), 'Rekap Selisih, Pembulatan dan Free Kembalian - ' . $request->tanggal . '.xlsx');
+    }
 
+    public function ujicoba()
+    {
+        $waroeng_id = Auth::user()->waroeng_id;
+        $data = new \stdClass();
+        $data->waroeng_nama = DB::table('m_w')->select('m_w_nama', 'm_w_id')->where('m_w_id', $waroeng_id)->first();
+        $data->area_nama = DB::table('m_area')->join('m_w', 'm_w_m_area_id', 'm_area_id')->select('m_area_nama', 'm_area_id')->where('m_w_id', $waroeng_id)->first();
+        $data->akses_area = $this->get_akses_area(); //mulai dari 1 - akhir
+        $data->akses_pusat = $this->get_akses_pusat(); //1,2,3,4,5
+        $data->akses_pusar = $this->get_akses_pusar(); //mulai dari 6 - akhir
+
+        $data->waroeng = DB::table('m_w')
+            ->where('m_w_m_area_id', $data->area_nama->m_area_id)
+            ->orderby('m_w_id', 'ASC')
+            ->get();
+        $data->area = DB::table('m_area')
+            ->orderby('m_area_id', 'ASC')
+            ->get();
+        return view('dashboard::rekap_selisih_ujicoba', compact('data'));
+    }
+
+    public function show_ujicoba(Request $request)
+    {
+        $modal = DB::table('rekap_modal')
+            ->selectRaw('
+                date(rekap_modal_tanggal) tanggal,
+                rekap_modal_m_area_nama area,
+                rekap_modal_m_w_nama waroeng,
+                sum(rekap_modal_cash_real) real,
+                sum(rekap_modal_nominal) nominal,
+                sum(rekap_modal_cash_in) in,
+                sum(rekap_modal_cash_out) out
+                ')
+            ->where('rekap_modal_status', 'close');
+        if ($request->area != 'all') {
+            $modal->where('rekap_modal_m_area_id', $request->area);
+            if ($request->waroeng != 'all') {
+                $modal->where('rekap_modal_m_w_id', $request->waroeng);
+            }
+        }
+        if (strpos($request->tanggal, 'to') !== false) {
+            [$start, $end] = explode('to', $request->tanggal);
+            $modal->whereBetween(DB::raw('DATE(rekap_modal_tanggal)'), [$start, $end]);
+        } else {
+            $modal->where(DB::raw('DATE(rekap_modal_tanggal)'), $request->tanggal);
+        }
+        $modal = $modal->groupby('area', 'waroeng', 'tanggal')
+            ->orderBy('tanggal', 'ASC')
+            ->get();
+
+        $selisihPlus = 0;
+        $selisihMinus = 0;
+        $data = array();
+        foreach ($modal as $valModal) {
+            $row = array();
+            $saldoAkhir = $valModal->nominal + $valModal->in - $valModal->out;
+            $selisih = $valModal->real - $saldoAkhir;
+            $row[] = $valModal->area;
+            $row[] = $valModal->waroeng;
+            $row[] = date('d-m-Y', strtotime($valModal->tanggal));
+            if ($selisih < 0) {
+                $selisihMinus = $selisih;
+                $row[] = 0;
+                $row[] = number_format($selisihMinus);
+            } else {
+                $selisihPlus = $selisih;
+                $row[] = number_format($selisihPlus);
+                $row[] = 0;
+            }
+            $data[] = $row;
+        }
+
+        $currentPage = $request->input('page', 1);
+        return $currentPage;
+        $perPage = 10;
+        $totalData = count($data);
+        $totalPages = ceil($totalData / $perPage);
+        $dataForPage = array_slice($data, ($currentPage - 1) * $perPage, $perPage);
+
+        $output = [
+            "draw" => $request->input('draw'),
+            "recordsTotal" => $totalData,
+            "recordsFiltered" => $totalData,
+            "data" => $dataForPage,
+        ];
+
+        return response()->json($output);
         // $output = array("data" => $data);
         // return response()->json($output);
     }

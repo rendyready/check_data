@@ -25,6 +25,7 @@
                                     <th>Jenis Produk</th>
                                     <th>Satuan Utama</th>
                                     <th>Dijual</th>
+                                    <th>QR</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -50,6 +51,7 @@
                                         <td>{{ ucwords($item->m_jenis_produk_nama) }}</td>
                                         <td>{{ ucwords($item->m_satuan_kode) }}</td>
                                         <td>{{ ucwords($item->m_produk_jual) }}</td>
+                                        <td>{{ ucwords($item->m_produk_qr) }}</td>
                                         <td><a class="btn btn-sm btn-warning buttonEdit" value="{{ $item->m_produk_id }}"
                                                 title="Edit"><i class="fa fa-pencil"></i></a></td>
                                     </tr>
@@ -246,6 +248,16 @@
                                 </div>
                                 <div class="mb-4">
                                     <div class="form-group">
+                                        <label for="m_produk_qr">Dijual QR</label>
+                                        <select class="js-select2" id="m_produk_qr" name="m_produk_qr"
+                                            style="width: 100%;" data-container="#form_produk">
+                                            <option value="ya">Ya</option>
+                                            <option value="tidak">Tidak</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="mb-4">
+                                    <div class="form-group">
                                         <label for="m_produk_image">Produk Image</label>
                                         <input type="file" name="m_produk_image" id="m_produk_image">
                                     </div>
@@ -310,6 +322,8 @@
                             'change');
                         $("#m_produk_jual").val(respond.data_produk.m_produk_jual).trigger(
                             'change');
+                        $("#m_produk_qr").val(respond.data_produk.m_produk_qr).trigger(
+                            'change');
                         $("#m_produk_m_jenis_produk_id").val(respond.data_produk
                             .m_produk_m_jenis_produk_id).trigger('change');
                         $("#m_produk_m_klasifikasi_produk_id").val(respond.data_produk
@@ -358,9 +372,9 @@
                             icon: 'fa fa-info me-5', // Icon class
                             message: data.messages
                         });
-                        // setTimeout(function() {
-                        //     window.location.reload();
-                        // }, 800);
+                        setTimeout(function() {
+                            window.location.reload();
+                        }, 800);
                     },
                     error: function() {
                         alert("Tidak dapat menyimpan data!");

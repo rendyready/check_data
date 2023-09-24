@@ -104,6 +104,7 @@ class MJenisNotaController extends Controller
                         'm_menu_harga_status' => $key->m_menu_harga_status,
                         'm_menu_harga_tax_status' => $key->m_menu_harga_tax_status,
                         'm_menu_harga_sc_status' => $key->m_menu_harga_sc_status,
+                        'm_menu_harga_qr_status' => $key->m_menu_harga_qr_status,
                         'm_menu_harga_package' => $key->m_menu_harga_package,
                         'm_menu_harga_status_sync' => 'send',
                         'm_menu_harga_created_by' => $user_id,
@@ -117,6 +118,7 @@ class MJenisNotaController extends Controller
                         'm_menu_harga_status' => $key->m_menu_harga_status,
                         'm_menu_harga_tax_status' => $key->m_menu_harga_tax_status,
                         'm_menu_harga_sc_status' => $key->m_menu_harga_sc_status,
+                        'm_menu_harga_qr_status' => $key->m_menu_harga_qr_status,
                         'm_menu_harga_status_sync' => 'send',
                         'm_menu_harga_client_target' => DB::raw('DEFAULT'),
                         'm_menu_harga_package' => $key->m_menu_harga_package,
@@ -177,6 +179,7 @@ class MJenisNotaController extends Controller
                         $data['m_menu_harga_status'] = $request->m_menu_harga_status;
                         $data['m_menu_harga_tax_status'] = $request->m_menu_harga_tax_status;
                         $data['m_menu_harga_sc_status'] = $request->m_menu_harga_sc_status;
+                        $data['m_menu_harga_qr_status'] = $request->m_menu_harga_qr_status;
                     } else {
                         $data['m_menu_harga_nominal'] = convertfloat($request->nom_harga[$key]);
                         $data['m_menu_harga_status_sync'] = 'send';
@@ -237,6 +240,7 @@ class MJenisNotaController extends Controller
                     'm_menu_harga_sc_status',
                     'm_menu_harga_status',
                     'm_menu_harga_tax_status',
+                    'm_menu_harga_qr_status',
                     'm_menu_harga_package',
                     'm_menu_harga_m_jenis_nota_id'
                 )
@@ -268,6 +272,7 @@ class MJenisNotaController extends Controller
                 'm_menu_harga_status',
                 'm_menu_harga_tax_status',
                 'm_menu_harga_sc_status',
+                'm_menu_harga_qr_status',
                 'm_menu_harga_package',
                 'm_produk_id'
             )
@@ -311,6 +316,7 @@ class MJenisNotaController extends Controller
                     'm_menu_harga_sc_status' => $request->m_menu_harga_sc_status,
                     'm_menu_harga_status' => $request->m_menu_harga_status,
                     'm_menu_harga_tax_status' => $request->m_menu_harga_tax_status,
+                    'm_menu_harga_qr_status' => $request->m_menu_harga_qr_status,
                     'm_menu_harga_package' => $package,
                     'm_menu_harga_created_at' => Carbon::now(),
                     'm_menu_harga_created_by' => Auth::user()->users_id,
@@ -323,6 +329,7 @@ class MJenisNotaController extends Controller
                         'm_menu_harga_sc_status' => $request->m_menu_harga_sc_status,
                         'm_menu_harga_status' => $request->m_menu_harga_status,
                         'm_menu_harga_tax_status' => $request->m_menu_harga_tax_status,
+                        'm_menu_harga_qr_status' => $request->m_menu_harga_qr_status,
                         'm_menu_harga_status_sync' => 'send',
                         'm_menu_harga_updated_at' => Carbon::now(),
                         'm_menu_harga_updated_by' => Auth::user()->users_id,
@@ -342,6 +349,7 @@ class MJenisNotaController extends Controller
                         'm_menu_harga_sc_status' => $request->m_menu_harga_sc_status,
                         'm_menu_harga_status' => $request->m_menu_harga_status,
                         'm_menu_harga_tax_status' => $request->m_menu_harga_tax_status,
+                        'm_menu_harga_qr_status' => $request->m_menu_harga_qr_status,
                         'm_menu_harga_package' => $request->m_menu_harga_package,
                         'm_menu_harga_status_sync' => 'send',
                         'm_menu_harga_updated_at' => Carbon::now(),

@@ -198,7 +198,38 @@ class UsersController extends Controller
             ]);
         return response()->json(['success' => 'success']);
     }
-    public function noakses() {
+    public function noakses()
+    {
         return view('users::no_akses');
     }
+
+    public function profile()
+    {
+        return view('users::profile');
+    }
+
+    public function pass_update(Request $request)
+    {
+        $user = DB::table('users')
+            ->where('email', $request->email)
+            ->first();
+
+        if (!$user) {
+            // Jika pengguna tidak ditemukan, tampilkan pesan kesalahan
+            return redirect()->back()->with('error', 'Email tidak ditemukan.');
+        }
+
+        // Lakukan pembaruan kata sandi dan atribut lainnya
+        DB::table('users')
+            ->where('email', $request->email)
+            ->update([
+                'password' => Hash::make($request->new_password),
+                'users_status_sync' => 'send',
+                'users_client_target' => DB::raw('DEFAULT'),
+            ]);
+
+        // Set session flash data untuk pesan sukses
+        return redirect()->back()->with('success', 'Kata sandi berhasil diubah.');
+    }
+
 }
