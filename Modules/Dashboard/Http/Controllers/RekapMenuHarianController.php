@@ -215,7 +215,7 @@ class RekapMenuHarianController extends Controller
             $garansi_row = array();
             $garansi_row[] = date('d-m-Y', strtotime($valGaransi->tanggal_gar));
             $garansi_row[] = $valGaransi->waroeng_gar;
-            $garansi_row[] = $valGaransi->menu_gar;
+            $garansi_row[] = trim($valGaransi->menu_gar);
             $garansi_row[] = $valGaransi->qty_gar;
             $garansi_row[] = $nominal_garansi;
             $garansi_row[] = $valGaransi->jenis_produk_gar;
@@ -236,7 +236,7 @@ class RekapMenuHarianController extends Controller
             $row = array();
             $row[] = date('d-m-Y', strtotime($val_menu->r_t_tanggal));
             $row[] = $val_menu->m_w_nama;
-            $row[] = $val_menu->r_t_detail_m_produk_nama;
+            $row[] = trim($val_menu->r_t_detail_m_produk_nama);
             $qty = $val_menu->qty;
             $pajakMenu = $val_menu->pajak;
             $nominal_trans = $val_menu->nominal_nota;

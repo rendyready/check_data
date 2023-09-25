@@ -81,6 +81,7 @@
                                                     <option value="{{ ucwords($data->waroeng_nama->m_w_id) }}">
                                                         {{ ucwords($data->waroeng_nama->m_w_nama) }}</option>
                                                 </select>
+                                                <option value="all">all waroeng</option>
                                             @endif
                                         </div>
                                     </div>

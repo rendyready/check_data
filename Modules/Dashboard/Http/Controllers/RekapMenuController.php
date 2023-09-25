@@ -483,6 +483,7 @@ class RekapMenuController extends Controller
 
             $menu = DB::table('rekap_transaksi_detail')
                 ->join('rekap_transaksi', 'r_t_id', 'r_t_detail_r_t_id')
+                ->join('m_transaksi_tipe', 'm_t_t_id', 'r_t_m_t_t_id')
                 ->join('m_produk', 'm_produk_id', 'r_t_detail_m_produk_id')
                 ->join('m_jenis_produk', 'm_jenis_produk_id', 'm_produk_m_jenis_produk_id')
                 ->join('rekap_modal', 'rekap_modal_id', 'r_t_rekap_modal_id')
@@ -508,6 +509,7 @@ class RekapMenuController extends Controller
             r_t_m_w_id,
             r_t_m_w_nama,
             r_t_tanggal,
+            m_t_t_name,
             sum(r_t_detail_qty) as qty,
             r_t_detail_reguler_price as price,
             r_t_detail_m_produk_nama,
@@ -519,6 +521,7 @@ class RekapMenuController extends Controller
                     'r_t_m_w_nama',
                     'r_t_m_w_id',
                     'r_t_tanggal',
+                    'm_t_t_name',
                     'r_t_detail_m_produk_nama',
                     'r_t_detail_reguler_price',
                     'm_jenis_produk_nama'
@@ -526,6 +529,7 @@ class RekapMenuController extends Controller
                 ->orderby('r_t_m_area_id', 'ASC')
                 ->orderby('r_t_m_w_id', 'ASC')
                 ->orderby('r_t_tanggal', 'ASC')
+                ->orderby('m_t_t_name', 'ASC')
                 ->orderby('r_t_detail_m_produk_nama', 'ASC')
                 ->get();
 
@@ -535,6 +539,7 @@ class RekapMenuController extends Controller
                 $row[] = $valMenu->r_t_m_area_nama;
                 $row[] = $valMenu->r_t_m_w_nama;
                 $row[] = $valMenu->r_t_tanggal;
+                $row[] = $valMenu->m_t_t_name;
                 $row[] = $valMenu->m_jenis_produk_nama;
                 $row[] = $valMenu->r_t_detail_m_produk_nama;
                 $row[] = number_format($valMenu->qty);

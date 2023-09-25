@@ -200,70 +200,6 @@
     </div>
     </div>
 
-    <div class="modal fade" id="konfrim_ba" tabindex="-1" role="dialog" aria-labelledby="modal-popin"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-popin" role="document">
-            <div class="modal-content">
-                <div class="block block-rounded shadow-none mb-0">
-                    <div class="block-header block-header-default bg-pulse">
-                        <h3 class="block-title text-center" style="color: white; font-size:20px;">Konfirmasi</h3>
-                        <div class="block-options">
-                            <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
-                                <i class="fa fa-times" style="color: white;"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="block-content">
-                        <p>Tulis kronologi Berita Acara Disini?</p>
-                    </div>
-                    <div
-                        class="block-content block-content-full block-content-sm text-end border-top d-flex justify-content-between">
-                        <button type="button" id="konfrim_tidak" class="btn btn-secondary btn-sm"
-                            data-bs-dismiss="modal">
-                            Tidak
-                        </button>
-                        <button type="button" id="konfrim_ya" class="btn btn-primary btn-sm" data-bs-dismiss="modal">
-                            Ya
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="input_ba" tabindex="-1" role="dialog" aria-labelledby="modal-popin"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-popin" role="document">
-            <div class="modal-content">
-                <div class="block block-rounded shadow-none mb-0">
-                    <div class="block-header block-header-default bg-pulse">
-                        <h3 class="block-title text-center" style="color: white; font-size:18px;">Kronologi Berita Acara
-                            Kasir
-                        </h3>
-                        <div class="block-options">
-                            <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
-                                <i class="fa fa-times" style="color: white;"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="block-content">
-                        {{-- <form id="kronologi_insert">
-                            @csrf --}}
-                        <textarea class="form-control" id="kronologi" placeholder="Masukkan Kronologi Disini" style="height: 40vh;"></textarea>
-                    </div>
-                    <div class="block-content block-content-full block-content-sm text-end border-top">
-                        <button type="button" id="simpan_kronologi" class="btn btn-primary btn-sm"
-                            data-bs-dismiss="modal">
-                            Simpan
-                        </button>
-                        {{-- </form> --}}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- END Select2 in a modal -->
-
 @endsection
 @section('js')
     <!-- js -->
@@ -476,32 +412,11 @@
                 $("#tampil_modal").modal('show');
             });
 
-            var id;
             $("#tampil_rekap").on('click', '#button_pdf', function() {
-                id = $(this).attr('value');
-                $("#konfrim_ba").modal('show');
-            });
-
-            $("#konfrim_tidak").on('click', function() {
+                var id = $(this).attr('value');
                 var waroeng = $('.filter_waroeng').val();
                 var tanggal = $('.filter_tanggal').val();
                 var url = 'kas_kasir/export_pdf?id=' + id + '&tanggal=' + tanggal + '&waroeng=' + waroeng;
-
-                window.open(url);
-            });
-
-            $("#konfrim_ya").on('click', function() {
-                $("#input_ba").modal('show');
-            });
-
-            $('#simpan_kronologi').on('click', function(e) {
-                e.preventDefault();
-                var kronologi = $('#kronologi').val();
-                var waroeng = $('.filter_waroeng').val();
-                var tanggal = $('.filter_tanggal').val();
-
-                var url = 'kas_kasir/export_pdf?id=' + id + '&tanggal=' + tanggal + '&waroeng=' + waroeng +
-                    '&kronologi=' + kronologi;
 
                 window.open(url);
             });
