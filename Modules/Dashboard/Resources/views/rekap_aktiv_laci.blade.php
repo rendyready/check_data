@@ -73,6 +73,7 @@
                                                         <option value="{{ $waroeng->m_w_id }}"> {{ $waroeng->m_w_nama }}
                                                         </option>
                                                     @endforeach
+                                                    <option value="all">all waroeng</option>
                                                 </select>
                                             @else
                                                 <select id="filter_waroeng2" style="width: 100%;"
@@ -150,7 +151,8 @@
     </div>
 
     <!-- Select2 in a modal -->
-    <div class="modal" id="tampil_modal" tabindex="-1" role="dialog" aria-labelledby="tampil_modal" aria-hidden="true">
+    <div class="modal" id="tampil_modal" tabindex="-1" role="dialog" aria-labelledby="tampil_modal"
+        aria-hidden="true">
         <div class="modal-dialog modal-md" role="document">
             <div class="modal-content">
                 <div class="block block-themed shadow-none mb-0">

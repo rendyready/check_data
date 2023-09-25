@@ -72,6 +72,7 @@
                                                         <option value="{{ $waroeng->m_w_id }}"> {{ $waroeng->m_w_nama }}
                                                         </option>
                                                     @endforeach
+                                                    <option value="all">all waroeng</option>
                                                 </select>
                                             @else
                                                 <select id="filter_waroeng2" style="width: 100%;"

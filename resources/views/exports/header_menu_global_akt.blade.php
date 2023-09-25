@@ -50,6 +50,7 @@
                 <th class="text-center" style="text-align: center; vertical-align: middle;">Area</th>
                 <th class="text-center" style="text-align: center; vertical-align: middle;">Waroeng</th>
                 <th class="text-center" style="text-align: center; vertical-align: middle;">Tanggal</th>
+                <th class="text-center" style="text-align: center; vertical-align: middle;">Transaksi</th>
                 <th class="text-center" style="text-align: center; vertical-align: middle;">Kategori</th>
                 <th class="text-center" style="text-align: center; vertical-align: middle;">Menu</th>
                 <th class="text-center" style="text-align: center; vertical-align: middle;">Qty</th>
