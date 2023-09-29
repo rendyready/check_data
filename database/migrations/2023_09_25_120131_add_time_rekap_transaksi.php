@@ -25,6 +25,10 @@ return new class extends Migration
             $table->time('r_t_kitchen_done_time')->nullable();
 
         });
+
+        Schema::table('m_w', function (Blueprint $table) {
+            $table->string('m_w_telp')->nullable();
+        });
     }
 
     /**
@@ -40,6 +44,10 @@ return new class extends Migration
 
         Schema::table('rekap_transaksi', function (Blueprint $table) {
             $table->dropColumn(['r_t_qrcode_datetime','r_t_tmpcr_datetime','r_t_kitchen_done_datetime']);
+        });
+
+        Schema::table('m_w', function (Blueprint $table) {
+            $table->dropColumn('m_w_telp');
         });
     }
 };
