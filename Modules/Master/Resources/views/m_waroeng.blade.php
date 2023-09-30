@@ -291,7 +291,7 @@
                 $("#form-waroeng").modal('show');
             });
             $("#m_w").on('click', '.buttonEdit', function() {
-                var id = $(this).attr('value');
+                var id = $(this).data("id");
                 $('[name="action"]').val('edit');
                 $('#form-waroeng form')[0].reset();
                 $("#myModalLabel").html('Ubah Waroeng');
