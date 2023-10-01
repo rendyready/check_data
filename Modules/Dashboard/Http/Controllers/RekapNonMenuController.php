@@ -132,7 +132,7 @@ class RekapNonMenuController extends Controller
                         r_t_detail_m_produk_id m_produk_id,
                         MAX(r_t_detail_m_produk_nama) m_produk_nama,
                         SUM(r_t_detail_qty) qty,
-                        max(r_t_detail_reguler_price) price,
+                        r_t_detail_reguler_price as price,
                         SUM(r_t_detail_package_price) kemasan,
                         SUM(r_t_detail_nominal_pajak) pajak
                     ')
@@ -153,7 +153,7 @@ class RekapNonMenuController extends Controller
                 $rekap->where('r_t_m_w_id', $request->waroeng);
             }
         }
-        $rekap = $rekap->groupBy('rekap_modal_id', 'r_t_detail_m_produk_id', 'r_t_m_w_id', 'm_t_t_id')
+        $rekap = $rekap->groupBy('rekap_modal_id', 'r_t_detail_m_produk_id', 'r_t_m_w_id', 'm_t_t_id', 'price')
             ->orderBy('tanggal', 'asc')
             ->orderBy('m_w_nama', 'asc')
             ->orderBy('sesi', 'asc')

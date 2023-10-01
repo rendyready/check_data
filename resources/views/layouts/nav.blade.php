@@ -1019,7 +1019,7 @@
                         <li class="nav-main-item{{ request()->is('hrd/*') ? ' open' : '' }}">
                             <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true"
                                 aria-expanded="true" href="#">
-                                <i class="nav-main-link-icon fa fa-money-bill-1"></i>
+                                <i class="nav-main-link-icon fa-solid fa-people-group"></i>
                                 <span class="nav-main-link-name">HRD</span>
                             </a>
                             <ul class="nav-main-submenu">
@@ -1052,6 +1052,23 @@
                                     <a class="nav-main-link{{ request()->is('keuangan/pajak') ? ' active' : '' }}"
                                         href="{{ route('pajak.index') }}">
                                         <span class="nav-main-link-name">Pajak</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    @endcan
+                    @can('module wbd.view')
+                        <li class="nav-main-item{{ request()->is('keuangan/*') ? ' open' : '' }}">
+                            <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true"
+                                aria-expanded="true" href="#">
+                                <i class="nav-main-link-icon fa-solid fa-basket-shopping"></i>
+                                <span class="nav-main-link-name">WBD</span>
+                            </a>
+                            <ul class="nav-main-submenu">
+                                <li class="nav-main-item">
+                                    <a class="nav-main-link{{ request()->is('rekap_wbd/laporan') ? ' active' : '' }}"
+                                        href="{{ route('rekap_wbd.index') }}">
+                                        <span class="nav-main-link-name">Laporan WBD</span>
                                     </a>
                                 </li>
                             </ul>
