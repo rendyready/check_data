@@ -166,92 +166,137 @@
 
             //filter tampil
             $('#cari').on('click', function() {
+                var area = $('.filter_area').val();
                 var waroeng = $('.filter_waroeng').val();
                 var tanggal = $('.filter_tanggal').val();
                 var payment = $('.filter_pembayaran').val();
-                var table = $('#jurnal_tampil').DataTable({
-                    destroy: true,
-                    autoWidth: true,
-                    lengthMenu: [
-                        [10, 25, 50, 100, -1],
-                        [10, 25, 50, 100, "All"]
-                    ],
-                    buttons: [{
-                        extend: 'excelHtml5',
-                        text: 'Export Excel',
-                        title: 'Laporan Jurnal - ' + tanggal,
-                        pageSize: 'A4',
-                        pageOrientation: 'portrait',
-                    }],
-                    ajax: {
+
+                if (area === "" || waroeng === "" || tanggal === "" || payment === "") {
+                    Swal.fire({
+                        title: 'Informasi',
+                        text: 'Silahkan lengkapi semua kolom',
+                        confirmButtonColor: '#d33',
+                        confirmButtonText: 'OK',
+                        customClass: {
+                            confirmButton: 'bg-red-500',
+                        },
+                    });
+                } else {
+                    $.ajax({
+                        type: "GET",
                         url: '{{ route('otomatis.tampil_jurnal') }}',
+                        dataType: 'JSON',
+                        destroy: true,
                         data: {
                             waroeng: waroeng,
                             tanggal: tanggal,
                             payment: payment,
                         },
-                        type: "GET",
-                    },
-                    columns: [{
-                            data: 'tanggal',
-                            class: 'text-center'
-                        },
-                        {
-                            data: 'no_akun',
-                            class: 'text-center'
-                        },
-                        {
-                            data: 'akun',
-                            class: 'text-center'
-                        },
-                        {
-                            data: 'particul',
-                            class: 'text-center',
-                            render: function(data) {
-                                return '<div style="white-space: normal;">' + data +
-                                    '</div>';
-                            }
-                        },
-                        {
-                            data: 'debit',
-                            class: 'text-center',
-                            render: function(data) {
-                                return '<div style="white-space: normal;">' + data +
-                                    '</div>';
-                            }
-                        },
-                        {
-                            data: 'kredit',
-                            class: 'text-center'
-                        },
-                    ],
-                    drawCallback: function(settings) {
-                        var api = this.api();
-                        var data = api.rows({
-                            page: 'current'
-                        }).data();
+                        success: function(res) {
+                            if (res.type != 'error') {
+                                var table = $('#jurnal_tampil').DataTable({
+                                    destroy: true,
+                                    autoWidth: true,
+                                    lengthMenu: [
+                                        [10, 25, 50, 100, -1],
+                                        [10, 25, 50, 100, "All"]
+                                    ],
+                                    buttons: [{
+                                        extend: 'excelHtml5',
+                                        text: 'Export Excel',
+                                        title: 'Laporan Jurnal - ' + tanggal,
+                                        pageSize: 'A4',
+                                        pageOrientation: 'portrait',
+                                    }],
+                                    ajax: {
+                                        url: '{{ route('otomatis.tampil_jurnal') }}',
+                                        data: {
+                                            waroeng: waroeng,
+                                            tanggal: tanggal,
+                                            payment: payment,
+                                        },
+                                        type: "GET",
+                                    },
+                                    columns: [{
+                                            data: 'tanggal',
+                                            class: 'text-center'
+                                        },
+                                        {
+                                            data: 'no_akun',
+                                            class: 'text-center'
+                                        },
+                                        {
+                                            data: 'akun',
+                                            class: 'text-center'
+                                        },
+                                        {
+                                            data: 'particul',
+                                            class: 'text-center',
+                                            render: function(data) {
+                                                return '<div style="white-space: normal;">' +
+                                                    data +
+                                                    '</div>';
+                                            }
+                                        },
+                                        {
+                                            data: 'debit',
+                                            class: 'text-center',
+                                            render: function(data) {
+                                                return '<div style="white-space: normal;">' +
+                                                    data +
+                                                    '</div>';
+                                            }
+                                        },
+                                        {
+                                            data: 'kredit',
+                                            class: 'text-center'
+                                        },
+                                    ],
+                                    drawCallback: function(settings) {
+                                        var api = this.api();
+                                        var data = api.rows({
+                                            page: 'current'
+                                        }).data();
 
-                        var debitTotal = 0;
-                        var kreditTotal = 0;
+                                        var debitTotal = 0;
+                                        var kreditTotal = 0;
 
-                        for (var i = 0; i < data.length; i++) {
-                            if (data[i]['debit']) {
-                                debitTotal += parseFloat(data[i]['debit'].replace(/[^0-9.-]+/g,
-                                    ""));
-                            }
-                            if (data[i]['kredit']) {
-                                kreditTotal += parseFloat(data[i]['kredit'].replace(
-                                    /[^0-9.-]+/g, ""));
+                                        for (var i = 0; i < data.length; i++) {
+                                            if (data[i]['debit']) {
+                                                debitTotal += parseFloat(data[i][
+                                                    'debit'
+                                                ].replace(
+                                                    /[^0-9.-]+/g,
+                                                    ""));
+                                            }
+                                            if (data[i]['kredit']) {
+                                                kreditTotal += parseFloat(data[i][
+                                                    'kredit'
+                                                ].replace(
+                                                    /[^0-9.-]+/g, ""));
+                                            }
+                                        }
+                                        console.log(kreditTotal);
+                                        $(api.column(4).footer()).html(debitTotal
+                                            .toLocaleString());
+                                        $(api.column(5).footer()).html(kreditTotal
+                                            .toLocaleString());
+                                    }
+                                });
+                            } else {
+                                Swal.fire({
+                                    title: 'Informasi',
+                                    text: res.messages,
+                                    confirmButtonColor: '#d33',
+                                    confirmButtonText: 'OK',
+                                    customClass: {
+                                        confirmButton: 'bg-red-500',
+                                    },
+                                });
                             }
                         }
-                        console.log(kreditTotal);
-                        $(api.column(4).footer()).html(debitTotal.toLocaleString());
-                        $(api.column(5).footer()).html(kreditTotal.toLocaleString());
-                    }
-
-                });
-
-
+                    });
+                }
             });
 
             if (HakAksesPusat) {
@@ -285,8 +330,10 @@
                                     $(".filter_waroeng").empty();
                                     $(".filter_waroeng").append('<option></option>');
                                     $.each(res, function(key, value) {
-                                        $(".filter_waroeng").append('<option value="' +
-                                            key + '">' + value + '</option>');
+                                        $(".filter_waroeng").append(
+                                            '<option value="' +
+                                            key + '">' + value + '</option>'
+                                        );
                                     });
                                 } else {
                                     $(".filter_waroeng").empty();

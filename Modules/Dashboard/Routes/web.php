@@ -155,7 +155,16 @@ Route::prefix('dashboard')->middleware('auth', 'web')
             Route::get('rekap_selisih_ujicoba', 'ujicoba')->name('rekap_selisih_ujicoba.ujicoba');
             Route::get('rekap_selisih/show_ujicoba', 'show_ujicoba')->name('rekap_selisih.show_ujicoba');
             Route::get('rekap_selisih/select_waroeng', 'select_waroeng')->name('rekap_selisih.select_waroeng');
-            Route::get('rekap_selisih/select_user', 'select_user')->name('rekap_selisih.select_user');
             Route::get('rekap_selisih/export_excel', 'export_excel')->name('rekap_selisih.export_excel');
+        });
+
+        Route::controller(RekapWbdController::class)->group(function () {
+            Route::get('rekap_wbd', 'index')->name('rekap_wbd.index');
+            Route::get('rekap_wbd/show_member', 'show_member')->name('rekap_wbd.show_member');
+            Route::get('rekap_wbd/show_waroeng', 'show_waroeng')->name('rekap_wbd.show_waroeng');
+            Route::get('rekap_wbd/select_waroeng', 'select_waroeng')->name('rekap_wbd.select_waroeng');
+            Route::get('rekap_wbd/export_excel', 'export_excel')->name('rekap_wbd.export_excel');
+            Route::get('rekap_wbd/detail_member/{tanggal}/{member}', 'detail_member')->name('rekap_wbd.detail_member');
+
         });
     });
