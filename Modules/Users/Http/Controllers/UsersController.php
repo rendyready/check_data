@@ -96,7 +96,8 @@ class UsersController extends Controller
     public function action(Request $request)
     {
         $data = $request->waroeng_akses; // mengambil data dari Select2 dalam format JSON dan mengubahnya menjadi array
-        $waroeng_akses = implode(',', $data); // menggabungkan data menjadi string dengan delimiter koma
+        $waroeng_akses = ($data) ? implode(',', $data) : $request->waroeng_id ;
+         // menggabungkan data menjadi string dengan delimiter koma
 
         if ($request->action == 'add') {
             // Kode untuk menambah pengguna baru
@@ -230,6 +231,22 @@ class UsersController extends Controller
 
         // Set session flash data untuk pesan sukses
         return redirect()->back()->with('success', 'Kata sandi berhasil diubah.');
+    }
+
+    public function status()
+    {
+        $data = new \stdClass();
+        $data->num = 1;
+
+        $data->waroeng = MArea::with(['m_ws' => function ($query) {
+            $query->whereNull('m_w_deleted_at');
+        }])
+            ->whereNull('m_area_deleted_at')
+            ->get();
+
+        $data->lokasi = DB::table('m_w')->select('m_w_id', 'm_w_nama')->get();
+        $data->roles = DB::table('roles')->get();
+        return view('users::users_status',compact('data'));
     }
 
 }
