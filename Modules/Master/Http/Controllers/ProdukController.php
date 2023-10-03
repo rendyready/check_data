@@ -41,8 +41,10 @@ class ProdukController extends Controller
     public function simpan(request $request)
     {
         if ($request->ajax()) {
-            $produkNama = Str::lower(preg_replace(array('/\s{2,}/', '/[\t\n]/', '/[^A-Za-z0-9]/'), ' ', $request->m_produk_nama));
-            $produkNamaCR = Str::lower(preg_replace(array('/\s{2,}/', '/[\t\n]/', '/[^A-Za-z0-9]/'), ' ', $request->m_produk_cr));
+            $produkNama = preg_replace(array('/\s{2,}/', '/[\t\n]/', '/[^@\w\s()\/]/'), ' ', $request->m_produk_nama);
+            $produkNama = Str::lower($produkNama);
+            $produkNamaCR = preg_replace(array('/\s{2,}/', '/[\t\n]/', '/[^@\w\s()\/]/'), ' ', $request->m_produk_cr);
+            $produkNamaCR = Str::lower($produkNamaCR);
             $produkUrut = Str::upper(preg_replace(array('/\s{2,}/', '/[\t\n]/'), ' ', $request->m_produk_urut));
             $check = DB::table('m_produk')
                 ->select('m_produk_id')
@@ -341,7 +343,7 @@ class ProdukController extends Controller
     public function be_menu_update(Request $request)
     {
         $db_qr = $this->connect_qr();
-        $getListaNota =  $db_qr->table('m_jenis_nota')
+        $getListaNota = $db_qr->table('m_jenis_nota')
             ->where('m_jenis_nota_m_w_id', $request->m_w_id)
             ->whereIn('m_jenis_nota_m_t_t_id', [1, 2])
             ->get();
