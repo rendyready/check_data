@@ -15,6 +15,8 @@
                                 style="color: #fff"><i class="fa fa-plus mr-5"></i> Harga</a>
                         @endif
                         @csrf
+                        <input type="hidden" name="m_w_id" value="{{ $m_jenis_nota_m_w_id }}">
+                        <input type="hidden" name="m_t_t_id" value="{{ $m_jenis_nota_m_t_t_id }}">
                         <div id="tabpane" class="block block-rounded overflow-hidden">
                             <ul class="nav nav-tabs nav-tabs-block nav-tabs-alt align-items-center" role="tablist">
                                 @foreach ($jenis_produk as $i)
@@ -55,18 +57,17 @@
                                                                 <td>{{ $no++ }}</td>
                                                                 <td>{{ $item->m_produk_nama }}</td>
                                                                 <td>
-                                                                    @if ($item->m_produk_code == 'mn-400354' || $item->m_produk_code == 'mn-400355' || $item->m_produk_code == 'mn-400327')
-                                                                        <input type="hidden" name="m_menu_harga_id_edit[]"
-                                                                            value="{{ $item->m_menu_harga_id }}">
-                                                                        <input type="hidden" name="m_w_id[]"
-                                                                            value="{{ $item->m_jenis_nota_m_w_id }}">
-                                                                        <input type="hidden" name="m_t_t_id[]"
-                                                                            value="{{ $item->m_jenis_nota_m_t_t_id }}">
-                                                                        <input type="hidden" name="m_produk_id[]"
+                                                                    @if (
+                                                                        $item->m_produk_code == 'mn-400354' ||
+                                                                            $item->m_produk_code == 'mn-400355' ||
+                                                                            $item->m_produk_code == 'mn-400327' ||
+                                                                            $status == 'master')
+                                                                        <input type="hidden"
+                                                                            name="menu_data[{{ $loop->index }}][m_produk_id]"
                                                                             value="{{ $item->m_produk_id }}">
-                                                                        <input value="{{ $item->m_menu_harga_nominal }}"
-                                                                            type="text" class="form-control number"
-                                                                            name="m_menu_harga_nominal_edit[]">
+                                                                        <input type="text" class="form-control number"
+                                                                            name="menu_data[{{ $loop->index }}][m_menu_harga_nominal_edit]"
+                                                                            value="{{ $item->m_menu_harga_nominal }}">
                                                                     @else
                                                                         {{ rupiah($item->m_menu_harga_nominal) }}
                                                                     @endif
@@ -299,7 +300,13 @@
                                 .trigger('change');
                             $("#m_menu_harga_qr_status").val(respond.m_menu_harga_qr_status)
                                 .trigger('change');
-                            $("#m_menu_harga_nominal").prop('readonly', true);
+                            if (respond.m_w_m_w_jenis_id == 8) {
+                                $("#m_menu_harga_nominal").prop('readonly', false);
+                                $("#m_menu_harga_package").prop('readonly', false);
+                            } else {
+                                $("#m_menu_harga_nominal").prop('readonly', true);
+                                $("#m_menu_harga_package").prop('readonly', true);
+                            }
                         },
                         error: function() {}
                     });
@@ -319,9 +326,9 @@
                                 icon: 'fa fa-info me-5', // Icon class
                                 message: 'Update Harga Berhasil'
                             });
-                            setTimeout(function() {
-                                window.location.reload();
-                            }, 750);
+                            // setTimeout(function() {
+                            //     window.location.reload();
+                            // }, 750);
 
                         }
                     });

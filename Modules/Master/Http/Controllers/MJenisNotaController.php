@@ -229,6 +229,7 @@ class MJenisNotaController extends Controller
     public function showHarga($id)
     {
         return response(MMenuHarga::join('m_jenis_nota', 'm_menu_harga_m_jenis_nota_id', 'm_jenis_nota_id')
+                ->join('m_w', 'm_jenis_nota_m_w_id', 'm_w_id')
                 ->where('m_menu_harga_id', $id)->orderBy('m_menu_harga_m_produk_id', 'asc')
                 ->select(
                     'm_jenis_nota_id',
@@ -242,7 +243,8 @@ class MJenisNotaController extends Controller
                     'm_menu_harga_tax_status',
                     'm_menu_harga_qr_status',
                     'm_menu_harga_package',
-                    'm_menu_harga_m_jenis_nota_id'
+                    'm_menu_harga_m_jenis_nota_id',
+                    'm_w_m_w_jenis_id'
                 )
                 ->first(), 200);
     }
@@ -304,8 +306,8 @@ class MJenisNotaController extends Controller
                 ->count();
             if ($cek <= 0) {
                 if (empty($request->m_menu_harga_package)) {
-                   $package = 0;
-                }else{
+                    $package = 0;
+                } else {
                     $package = $request->m_menu_harga_package;
                 }
                 MMenuHarga::insert([
@@ -346,11 +348,12 @@ class MJenisNotaController extends Controller
                 MMenuHarga::where('m_menu_harga_m_jenis_nota_id', $key->m_jenis_nota_id)
                     ->where('m_menu_harga_m_produk_id', $request->m_menu_harga_m_produk_id)
                     ->update([
+                        'm_menu_harga_nominal' => convertfloat($request->m_menu_harga_nominal),
                         'm_menu_harga_sc_status' => $request->m_menu_harga_sc_status,
                         'm_menu_harga_status' => $request->m_menu_harga_status,
                         'm_menu_harga_tax_status' => $request->m_menu_harga_tax_status,
                         'm_menu_harga_qr_status' => $request->m_menu_harga_qr_status,
-                        'm_menu_harga_package' => $request->m_menu_harga_package,
+                        'm_menu_harga_package' => convertfloat($request->m_menu_harga_package),
                         'm_menu_harga_status_sync' => 'send',
                         'm_menu_harga_updated_at' => Carbon::now(),
                         'm_menu_harga_updated_by' => Auth::user()->users_id,
@@ -363,31 +366,30 @@ class MJenisNotaController extends Controller
 
     public function simpanUpdateHarga(Request $request)
     {
-        foreach ($request->m_menu_harga_id_edit as $key => $value) {
+        $jenisNotaIds = DB::table('m_jenis_nota')
+        ->where('m_jenis_nota_m_w_id', $request->m_w_id)
+        ->when(
+            $request->m_t_t_id == 1 || $request->m_t_t_id == 2,
+            function ($query) {
+                return $query->whereIn('m_jenis_nota_m_t_t_id', [1, 2]);
+            },
+            function ($query) use ($request) {
+                return $query->where('m_jenis_nota_m_t_t_id', $request->m_t_t_id);
+            }
+        )
+        ->pluck('m_jenis_nota_id');
+        foreach ($request->menu_data as $key => $data) {
             $updateData = [
-                'm_menu_harga_nominal' => convertfloat($request->m_menu_harga_nominal_edit[$key]),
+                'm_menu_harga_nominal' => convertfloat($data['m_menu_harga_nominal_edit']),
                 'm_menu_harga_status_sync' => 'send',
                 'm_menu_harga_updated_at' => Carbon::now(),
                 'm_menu_harga_updated_by' => Auth::user()->users_id,
                 'm_menu_harga_client_target' => DB::raw('DEFAULT'),
             ];
-
-            if ($request->m_t_t_id[$key] == 1) {
-                $get_jenis_nota_id = DB::table('m_jenis_nota')
-                    ->where('m_jenis_nota_m_t_t_id', 2)
-                    ->where('m_jenis_nota_m_w_id', $request->m_w_id[$key])
-                    ->value('m_jenis_nota_id');
-
-                if ($get_jenis_nota_id) {
-                    DB::table('m_menu_harga')
-                        ->where('m_menu_harga_m_jenis_nota_id', $get_jenis_nota_id)
-                        ->where('m_menu_harga_m_produk_id', $request->m_produk_id[$key])
-                        ->update($updateData);
-                }
-            }
-
+            // Update m_menu_harga records based on jenis nota ids and m_produk_id
             DB::table('m_menu_harga')
-                ->where('m_menu_harga_id', $request->m_menu_harga_id_edit[$key])
+                ->whereIn('m_menu_harga_m_jenis_nota_id', $jenisNotaIds)
+                ->where('m_menu_harga_m_produk_id', $data['m_produk_id'])
                 ->update($updateData);
         }
     }
