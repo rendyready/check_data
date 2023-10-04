@@ -562,7 +562,7 @@ class LaporanKasHarianKasirController extends Controller
         $w_nama = strtoupper(substr($waroeng_nama, 0, 3)) . ucwords(substr($waroeng_nama, 3));
         $nama_kasir = DB::table('users')
             ->join('rekap_modal', 'rekap_modal_created_by', 'users_id')
-            ->where('waroeng_id', $request->waroeng)
+            ->where('rekap_modal_m_w_id', $request->waroeng)
             ->where('rekap_modal_id', $request->id)
             ->first();
         $sesi_kasir = DB::table('rekap_modal')
