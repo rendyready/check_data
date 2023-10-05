@@ -19,6 +19,7 @@ Route::group(['prefix' => 'users', 'controller' => UsersController::class, 'midd
     Route::post('/reset/{id}', 'reset_pass')->name('password.reset');
     Route::get('/profile','profile')->name('users.profile');
     Route::post('pass_update','pass_update')->name('users.pass_update');
+    Route::get('status','status')->name('users.status');
 });
 //Akses Route
 Route::group(['prefix' => 'users', 'controller' => AksesController::class, 'middleware' => ['auth', 'web']], function () {
