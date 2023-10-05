@@ -165,6 +165,7 @@ Route::prefix('dashboard')->middleware('auth', 'web')
             Route::get('rekap_wbd/select_waroeng', 'select_waroeng')->name('rekap_wbd.select_waroeng');
             Route::get('rekap_wbd/export_excel', 'export_excel')->name('rekap_wbd.export_excel');
             Route::get('rekap_wbd/detail_member/{tanggal}/{member}', 'detail_member')->name('rekap_wbd.detail_member');
-
+            Route::get('rekap_wbd/detail_waroeng/{tanggal}/{waroeng}', 'detail_waroeng')->name('rekap_wbd.detail_waroeng');
+            Route::get('rekap_wbd/detail_waroeng_member/{tanggal}/{waroeng}', 'detail_waroeng_member')->name('rekap_wbd.detail_waroeng_member');
         });
     });

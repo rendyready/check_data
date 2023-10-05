@@ -96,10 +96,11 @@
 
                             <div class="row">
                                 <div class="col-md-5">
-                                    <button type="button" id="cari" class="btn btn-primary btn-sm mb-3 mt-3">Cari By
+                                    <button type="button" id="cari_member" class="btn btn-primary btn-sm mb-3 mt-3">Cari By
                                         Member</button>
-                                    {{-- <button type="button" id="cari" class="btn btn-primary btn-sm mb-3 mt-3">Cari By
-                                        Waroeng</button> --}}
+                                    <button type="button" id="cari_waroeng" class="btn btn-warning btn-sm mb-3 mt-3">Cari
+                                        By
+                                        Waroeng</button>
                                     <a class="btn btn-sm btn-primary mb-3 mt-3" id="export_excel"
                                         style="display: none;">Export
                                         Excel <span id="export_loading" style="display: none;"><img
@@ -109,7 +110,7 @@
                             </div>
                         </form>
 
-                        <div id="tampil" class="table-responsive text-center">
+                        <div id="member_show" style="display: none;" class="table-responsive text-center">
                             <table id="tampil_rekap"
                                 class="table table-sm table-bordered table-hover table-striped table-vcenter js-dataTable-full nowrap">
                                 <thead>
@@ -125,6 +126,21 @@
                                 </thead>
                             </table>
                         </div>
+                        <div id="waroeng_show" style="display: none;" class="table-responsive text-center">
+                            <table id="tampil_waroeng"
+                                class="table table-sm table-bordered table-hover table-striped table-vcenter js-dataTable-full nowrap">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">Area</th>
+                                        <th class="text-center">Waroeng</th>
+                                        <th class="text-center">Tanggal</th>
+                                        <th class="text-center">Omset WBD Total</th>
+                                        <th class="text-center">Omset WBD Karyawan</th>
+                                        <th class="text-center">Action</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -132,12 +148,13 @@
     </div>
 
     <!-- Select2 in a modal -->
-    <div class="modal" id="detail_wbd" tabindex="-1" role="dialog" aria-labelledby="tampil_modal" aria-hidden="true">
+    <div class="modal" id="detail_wbd" tabindex="-1" role="dialog" aria-labelledby="tampil_modal"
+        aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="block block-themed shadow-none mb-0">
                     <div class="block-header block-header-default bg-pulse">
-                        <h3 class="block-title text-center" id="myModalLabel">Detail WBD</h3>
+                        <h3 class="block-title text-center" id="myModalLabel">Rincian Pesanan WBD</h3>
                         <div class="block-options">
                             <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
                                 <i class="fa fa-fw fa-times"></i>
@@ -176,15 +193,116 @@
                                 </tbody>
                             </table>
                         </div>
-                    </div>
-                    <div class="mt-3 text-end">
-                        <button type="button" class="btn btn-sm btn-alt-secondary me-1"
-                            data-bs-dismiss="modal">Close</button>
+                        <div class="mt-3 text-end">
+                            <button type="button" class="btn btn-sm btn-alt-secondary me-1 mb-3"
+                                data-bs-dismiss="modal">Close</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <div class="modal" id="detail_wbd_waroeng_total" tabindex="-1" role="dialog" aria-labelledby="tampil_modal"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="block block-themed shadow-none mb-0">
+                    <div class="block-header block-header-default bg-pulse">
+                        <h3 class="block-title text-center" id="myModalLabel">Rincian WBD Waroeng</h3>
+                        <div class="block-options">
+                            <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
+                                <i class="fa fa-fw fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="block-content">
+                        <table style="margin-bottom: 10px;">
+                            <tr>
+                                <td><b>Tanggal </b></td>
+                                <td>&nbsp; : &nbsp;</td>
+                                <td><span id="tanggal_pop_waroeng"> </span></td>
+                            </tr>
+                            <tr>
+                                <td><b>Waroeng </b></td>
+                                <td>&nbsp; : &nbsp;</td>
+                                <td><span id="waroeng_pop_waroeng"> </span></td>
+                            </tr>
+                        </table>
+
+                        <div class="table-responsive">
+                            <table id="detailTableWaroeng" class="table table-bordered nowrap">
+                                <thead>
+                                    <th class="text-center">Nota</th>
+                                    <th class="text-center">Produk WBD</th>
+                                    <th class="text-center">Qty</th>
+                                    <th class="text-center">Harga</th>
+                                    <th class="text-center">Nominal WBD</th>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="mt-3 text-end">
+                            <button type="button" class="btn btn-sm btn-alt-secondary me-1 mb-3"
+                                data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END Select2 in a modal -->
+
+    <div class="modal" id="detail_wbd_waroeng_member" tabindex="-1" role="dialog" aria-labelledby="tampil_modal"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="block block-themed shadow-none mb-0">
+                    <div class="block-header block-header-default bg-pulse">
+                        <h3 class="block-title text-center" id="myModalLabel">Rincian WBD Karyawan</h3>
+                        <div class="block-options">
+                            <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
+                                <i class="fa fa-fw fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="block-content">
+                        <table style="margin-bottom: 10px;">
+                            <tr>
+                                <td><b>Tanggal </b></td>
+                                <td>&nbsp; : &nbsp;</td>
+                                <td><span id="tanggal_pop_waroeng_member"> </span></td>
+                            </tr>
+                            <tr>
+                                <td><b>Waroeng </b></td>
+                                <td>&nbsp; : &nbsp;</td>
+                                <td><span id="waroeng_pop_waroeng_member"> </span></td>
+                            </tr>
+                        </table>
+
+                        <div class="table-responsive">
+                            <table id="detailTableWaroengMember" class="table table-bordered nowrap">
+                                <thead>
+                                    <th class="text-center">Karyawan</th>
+                                    <th class="text-center">Nota</th>
+                                    <th class="text-center">Produk WBD</th>
+                                    <th class="text-center">Qty</th>
+                                    <th class="text-center">Harga</th>
+                                    <th class="text-center">Nominal WBD</th>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="mt-3 text-end">
+                            <button type="button" class="btn btn-sm btn-alt-secondary me-1 mb-3"
+                                data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <!-- END Select2 in a modal -->
 
@@ -201,10 +319,7 @@
             var HakAksesArea = userInfo.dataset.hasAccess === 'true';
             var HakAksesPusat = userInfoPusat.dataset.hasAccess === 'true';
 
-            $("#tampil").hide();
-
-
-            $('#cari').on('click', function() {
+            $('#cari_member').on('click', function() {
                 var area = $('.filter_area option:selected').val();
                 var waroeng = $('.filter_waroeng option:selected').val();
                 var tanggal = $('.filter_tanggal').val();
@@ -221,13 +336,13 @@
                         },
                     });
                 } else {
-
-                    $("#tampil").show();
+                    $("#member_show").show();
+                    $("#waroeng_show").hide();
                     $('#tampil_rekap').DataTable({
                         buttons: [{
                             extend: 'excelHtml5',
                             text: 'Export Excel',
-                            title: 'Rekap WBD - ' + tanggal,
+                            title: 'Rekap WBD by Personel - ' + tanggal,
                             pageSize: 'A4',
                             pageOrientation: 'potrait',
                         }],
@@ -296,9 +411,69 @@
                 }
             });
 
+            $('#cari_waroeng').on('click', function() {
+                var area = $('.filter_area option:selected').val();
+                var waroeng = $('.filter_waroeng option:selected').val();
+                var tanggal = $('.filter_tanggal').val();
+                // $("#export_excel").show();
+
+                if (tanggal === "" && (area === "" || waroeng === "")) {
+                    Swal.fire({
+                        title: 'Informasi',
+                        text: 'Silahkan lengkapi semua kolom',
+                        confirmButtonColor: '#d33',
+                        confirmButtonText: 'OK',
+                        customClass: {
+                            confirmButton: 'bg-red-500',
+                        },
+                    });
+                } else {
+                    $("#member_show").hide();
+                    $("#waroeng_show").show();
+                    $('#tampil_waroeng').DataTable({
+                        buttons: [{
+                            extend: 'excelHtml5',
+                            text: 'Export Excel',
+                            title: 'Rekap WBD by Waroeng- ' + tanggal,
+                            pageSize: 'A4',
+                            pageOrientation: 'potrait',
+                        }],
+                        destroy: true,
+                        orderCellsTop: true,
+                        processing: true,
+                        autoWidth: false,
+                        scrollX: true,
+                        scrollCollapse: true,
+                        columnDefs: [{
+                            targets: '_all',
+                            className: 'dt-body-center'
+                        }, ],
+                        lengthMenu: [
+                            [10, 25, 50, 100, -1],
+                            [10, 25, 50, 100, "All"]
+                        ],
+                        pageLength: 10,
+                        ajax: {
+                            url: '{{ route('rekap_wbd.show_waroeng') }}',
+                            data: {
+                                area: area,
+                                waroeng: waroeng,
+                                tanggal: tanggal,
+                            },
+                            type: "GET",
+                        },
+                        success: function(data) {
+                            console.log(data);
+
+                        }
+                    });
+                }
+            });
+
             $("#tampil_rekap").on('click', '#button_detail', function() {
                 var tanggal = $(this).data('tanggal');
                 var member = $(this).data('member');
+
                 console.log(tanggal);
                 $.ajax({
                     url: "/dashboard/rekap_wbd/detail_member/" + tanggal + "/" + member,
@@ -359,7 +534,96 @@
                 $("#detail_wbd").modal('show');
             })
 
-            // $("#export_excel").hide();
+            $("#tampil_waroeng").on('click', '#button_detail_waroeng', function() {
+                var tanggal = $(this).data('tanggal');
+                var waroeng = $(this).data('waroeng');
+                // console.log(waroeng);
+                // console.log(tanggal);
+                $.ajax({
+                    buttons: [{
+                        extend: 'excelHtml5',
+                        text: 'Export Excel',
+                        title: 'Rekap WBD - ' + tanggal,
+                        pageSize: 'A4',
+                        pageOrientation: 'potrait',
+                    }],
+                    url: "/dashboard/rekap_wbd/detail_waroeng/" + tanggal + "/" + waroeng,
+                    type: "GET",
+                    dataType: 'json',
+                    success: function(data) {
+                        console.log(data.tanggal.tanggal);
+                        var date = new Date(data.tanggal.tanggal);
+                        var options = {
+                            year: 'numeric',
+                            month: 'long',
+                            day: '2-digit'
+                        };
+                        var formattedDate = date.toLocaleDateString('id-ID', options);
+                        $('#tanggal_pop_waroeng').html(formattedDate);
+                        $('#waroeng_pop_waroeng').html(data.waroeng.waroeng);
+                        $('#detailTableWaroeng').DataTable({
+                            buttons: [{
+                                extend: 'excelHtml5',
+                                text: 'Export Excel',
+                                title: 'Rekap WBD- ' + tanggal,
+                                pageSize: 'A4',
+                                pageOrientation: 'potrait',
+                            }],
+                            destroy: true,
+                            autoWidth: false,
+                            paging: false,
+                            ajax: {
+                                url: "/dashboard/rekap_wbd/detail_waroeng/" +
+                                    tanggal + "/" + waroeng,
+                                type: "GET",
+                            },
+                        });
+                    }
+                })
+                $("#detail_wbd_waroeng_total").modal('show');
+            })
+
+            $("#tampil_waroeng").on('click', '#button_detail_member', function() {
+                var tanggal = $(this).data('tanggal');
+                var waroeng = $(this).data('waroeng');
+                // console.log(waroeng);
+                // console.log(tanggal);
+                $.ajax({
+                    url: "/dashboard/rekap_wbd/detail_waroeng_member/" + tanggal + "/" + waroeng,
+                    type: "GET",
+                    dataType: 'json',
+                    success: function(data) {
+                        console.log(data.tanggal.tanggal);
+                        var date = new Date(data.tanggal.tanggal);
+                        var options = {
+                            year: 'numeric',
+                            month: 'long',
+                            day: '2-digit'
+                        };
+                        var formattedDate = date.toLocaleDateString('id-ID', options);
+                        $('#tanggal_pop_waroeng_member').html(formattedDate);
+                        $('#waroeng_pop_waroeng_member').html(data.waroeng.waroeng);
+                        $('#detailTableWaroengMember').DataTable({
+                            buttons: [{
+                                extend: 'excelHtml5',
+                                text: 'Export Excel',
+                                title: 'Rekap WBD- ' + tanggal,
+                                pageSize: 'A4',
+                                pageOrientation: 'potrait',
+                            }],
+                            destroy: true,
+                            autoWidth: false,
+                            paging: false,
+                            ajax: {
+                                url: "/dashboard/rekap_wbd/detail_waroeng_member/" +
+                                    tanggal + "/" + waroeng,
+                                type: "GET",
+                            },
+                        });
+                    }
+                })
+                $("#detail_wbd_waroeng_member").modal('show');
+            })
 
             $('#export_excel').on('click', function() {
                 var area = $('.filter_area option:selected').val();

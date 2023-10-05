@@ -52,13 +52,13 @@ class RefundController extends Controller
     public function select_user(Request $request)
     {
         if ($request->id_waroeng != 'all') {
-            $user = DB::table('users')
-                ->join('rekap_refund', 'r_r_created_by', 'users_id')
+            $user = DB::table('rekap_refund')
+                ->join('users', 'r_r_created_by', 'users_id')
                 ->select('users_id', 'name');
             if (in_array(Auth::user()->waroeng_id, $this->get_akses_area())) {
-                $user->where('waroeng_id', $request->id_waroeng);
+                $user->where('r_r_m_w_id', $request->id_waroeng);
             } else {
-                $user->where('waroeng_id', Auth::user()->waroeng_id);
+                $user->where('r_r_m_w_id', Auth::user()->waroeng_id);
             }
             if (strpos($request->tanggal, 'to') !== false) {
                 [$start, $end] = explode('to', $request->tanggal);
