@@ -158,6 +158,7 @@ class RekapMenuHarianController extends Controller
                 ->where('rekap_modal_m_area_id', $request->area)
                 ->where('rekap_modal_m_w_id', $request->waroeng)
                 ->where('rekap_modal_id', $get_modal_id->rekap_modal_id);
+
             if ($request->trans != 'all') {
                 $rekap->where('m_t_t_name', $request->trans);
             }
@@ -169,12 +170,12 @@ class RekapMenuHarianController extends Controller
                     r_t_detail_m_produk_id,
                     m_w_nama, m_jenis_produk_id,
                     m_jenis_produk_nama,
-                    m_t_t_name, m_t_t_id,
+                    m_t_t_name,
+                    m_t_t_id,
                     rekap_modal_sesi,
                     r_t_detail_price,
                     SUM(r_t_detail_nominal) AS nominal_nota,
                     SUM(r_t_detail_price * r_t_detail_qty) as trans,
-                    SUM(r_t_detail_nominal) - (SUM(r_t_detail_reguler_price * r_t_detail_qty)) cr_trans,
                     sum(r_t_detail_nominal_pajak) pajak,
                     r_t_detail_package_price as kemasan,
                     max(r_t_status) r_t_status

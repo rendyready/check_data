@@ -133,7 +133,7 @@ class RekapNonMenuController extends Controller
                         MAX(r_t_detail_m_produk_nama) m_produk_nama,
                         SUM(r_t_detail_qty) qty,
                         r_t_detail_reguler_price as price,
-                        SUM(r_t_detail_package_price) kemasan,
+                        r_t_detail_package_price as kemasan,
                         SUM(r_t_detail_nominal_pajak) pajak
                     ')
             ->join('rekap_transaksi', 'r_t_detail_r_t_id', 'r_t_id')
@@ -153,7 +153,7 @@ class RekapNonMenuController extends Controller
                 $rekap->where('r_t_m_w_id', $request->waroeng);
             }
         }
-        $rekap = $rekap->groupBy('rekap_modal_id', 'r_t_detail_m_produk_id', 'r_t_m_w_id', 'm_t_t_id', 'price')
+        $rekap = $rekap->groupBy('rekap_modal_id', 'r_t_detail_m_produk_id', 'r_t_m_w_id', 'm_t_t_id', 'price', 'kemasan')
             ->orderBy('tanggal', 'asc')
             ->orderBy('m_w_nama', 'asc')
             ->orderBy('sesi', 'asc')
@@ -629,7 +629,7 @@ class RekapNonMenuController extends Controller
                         MAX(r_t_m_area_nama) m_area_nama,
                         r_t_m_w_id m_w_id,
                         MAX(r_t_m_w_nama) m_w_nama,
-                        MAX(r_t_tanggal) tanggal,
+                        max(r_t_tanggal) as tanggal,
                         MAX(rekap_modal_sesi) sesi,
                         MAX(name) kasir,
                         MAX(r_t_m_t_t_id) type_id,
@@ -637,8 +637,8 @@ class RekapNonMenuController extends Controller
                         r_t_detail_m_produk_id m_produk_id,
                         MAX(r_t_detail_m_produk_nama) m_produk_nama,
                         SUM(r_t_detail_qty) qty,
-                        max(r_t_detail_reguler_price) price,
-                        SUM(r_t_detail_package_price * r_t_detail_qty) kemasan,
+                        r_t_detail_reguler_price as price,
+                        r_t_detail_package_price as kemasan,
                         SUM(r_t_detail_nominal_pajak) pajak
                     ')
             ->join('rekap_transaksi', 'r_t_detail_r_t_id', 'r_t_id')
@@ -657,7 +657,7 @@ class RekapNonMenuController extends Controller
                 $rekap->where('r_t_m_w_id', $request->waroeng);
             }
         }
-        $rekap = $rekap->groupBy('rekap_modal_id', 'r_t_detail_m_produk_id', 'r_t_m_w_id', 'm_t_t_id')
+        $rekap = $rekap->groupBy('rekap_modal_id', 'r_t_detail_m_produk_id', 'r_t_m_w_id', 'm_t_t_id', 'price', 'kemasan')
             ->orderBy('sesi', 'asc')
             ->orderBy('tanggal', 'asc')
             ->orderBy('m_w_nama', 'asc')
@@ -776,7 +776,7 @@ class RekapNonMenuController extends Controller
                                         }
                                     }
                                 }
-                                $valMenu = ($valRekap->price * $qty) + $valRekap->kemasan;
+                                $valMenu = ($valRekap->price * $qty) + ($valRekap->kemasan * $qty);
                                 ${$valListRekap . '-' . $valTipe . '-menu'} += $valMenu;
                             }
                             if (in_array($valRekap->m_produk_id, $listNonMenu)) {
@@ -795,7 +795,7 @@ class RekapNonMenuController extends Controller
                                         }
                                     }
                                 }
-                                $valNonMenu = ($valRekap->price * $qty) + $valRekap->kemasan;
+                                $valNonMenu = ($valRekap->price * $qty) + ($valRekap->kemasan * $qty);
                                 ${$valListRekap . '-' . $valTipe . '-nonmenu'} += $valNonMenu;
                             }
 
@@ -838,7 +838,7 @@ class RekapNonMenuController extends Controller
                                         }
                                     }
                                 }
-                                $valWbdBB = ($valRekap->price * $qty) + $valRekap->kemasan;
+                                $valWbdBB = ($valRekap->price * $qty) + ($valRekap->kemasan * $qty);
                                 ${$valListRekap . '-' . $valGrab . '-wbdbb'} += $valWbdBB;
                             }
 
@@ -858,7 +858,7 @@ class RekapNonMenuController extends Controller
                                         }
                                     }
                                 }
-                                $valWbdFrozen = ($valRekap->price * $qty) + $valRekap->kemasan;
+                                $valWbdFrozen = ($valRekap->price * $qty) + ($valRekap->kemasan * $qty);
                                 ${$valListRekap . '-' . $valGrab . '-wbdfrozen'} += $valWbdFrozen;
                             }
 
