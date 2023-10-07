@@ -39,11 +39,11 @@ return new class extends Migration
     public function down()
     {
         Schema::table('tmp_transaction', function (Blueprint $table) {
-            $table->dropColumn(['tmp_transaction_qrcode_datetime','tmp_transaction_kitchen_done_datetime']);
+            $table->dropColumn(['tmp_transaction_qrcode_datetime','tmp_transaction_kitchen_done_time']);
         });
 
         Schema::table('rekap_transaksi', function (Blueprint $table) {
-            $table->dropColumn(['r_t_qrcode_datetime','r_t_tmpcr_datetime','r_t_kitchen_done_datetime']);
+            $table->dropColumn(['r_t_qrcode_datetime','r_t_tmpcr_datetime','r_t_kitchen_done_time']);
         });
 
         Schema::table('m_w', function (Blueprint $table) {
