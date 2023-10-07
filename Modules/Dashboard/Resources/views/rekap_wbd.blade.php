@@ -134,7 +134,7 @@
                                         <th class="text-center">Area</th>
                                         <th class="text-center">Waroeng</th>
                                         <th class="text-center">Tanggal</th>
-                                        <th class="text-center">Omset WBD Total</th>
+                                        {{-- <th class="text-center">Omset WBD Total</th> --}}
                                         <th class="text-center">Omset WBD Karyawan</th>
                                         <th class="text-center">Action</th>
                                     </tr>
@@ -203,7 +203,7 @@
         </div>
     </div>
 
-    <div class="modal" id="detail_wbd_waroeng_total" tabindex="-1" role="dialog" aria-labelledby="tampil_modal"
+    {{-- <div class="modal" id="detail_wbd_waroeng_total" tabindex="-1" role="dialog" aria-labelledby="tampil_modal"
         aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
@@ -251,7 +251,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
     <!-- END Select2 in a modal -->
 
     <div class="modal" id="detail_wbd_waroeng_member" tabindex="-1" role="dialog" aria-labelledby="tampil_modal"
@@ -534,54 +534,54 @@
                 $("#detail_wbd").modal('show');
             })
 
-            $("#tampil_waroeng").on('click', '#button_detail_waroeng', function() {
-                var tanggal = $(this).data('tanggal');
-                var waroeng = $(this).data('waroeng');
-                // console.log(waroeng);
-                // console.log(tanggal);
-                $.ajax({
-                    buttons: [{
-                        extend: 'excelHtml5',
-                        text: 'Export Excel',
-                        title: 'Rekap WBD - ' + tanggal,
-                        pageSize: 'A4',
-                        pageOrientation: 'potrait',
-                    }],
-                    url: "/dashboard/rekap_wbd/detail_waroeng/" + tanggal + "/" + waroeng,
-                    type: "GET",
-                    dataType: 'json',
-                    success: function(data) {
-                        console.log(data.tanggal.tanggal);
-                        var date = new Date(data.tanggal.tanggal);
-                        var options = {
-                            year: 'numeric',
-                            month: 'long',
-                            day: '2-digit'
-                        };
-                        var formattedDate = date.toLocaleDateString('id-ID', options);
-                        $('#tanggal_pop_waroeng').html(formattedDate);
-                        $('#waroeng_pop_waroeng').html(data.waroeng.waroeng);
-                        $('#detailTableWaroeng').DataTable({
-                            buttons: [{
-                                extend: 'excelHtml5',
-                                text: 'Export Excel',
-                                title: 'Rekap WBD- ' + tanggal,
-                                pageSize: 'A4',
-                                pageOrientation: 'potrait',
-                            }],
-                            destroy: true,
-                            autoWidth: false,
-                            paging: false,
-                            ajax: {
-                                url: "/dashboard/rekap_wbd/detail_waroeng/" +
-                                    tanggal + "/" + waroeng,
-                                type: "GET",
-                            },
-                        });
-                    }
-                })
-                $("#detail_wbd_waroeng_total").modal('show');
-            })
+            // $("#tampil_waroeng").on('click', '#button_detail_waroeng', function() {
+            //     var tanggal = $(this).data('tanggal');
+            //     var waroeng = $(this).data('waroeng');
+            //     // console.log(waroeng);
+            //     // console.log(tanggal);
+            //     $.ajax({
+            //         buttons: [{
+            //             extend: 'excelHtml5',
+            //             text: 'Export Excel',
+            //             title: 'Rekap WBD - ' + tanggal,
+            //             pageSize: 'A4',
+            //             pageOrientation: 'potrait',
+            //         }],
+            //         url: "/dashboard/rekap_wbd/detail_waroeng/" + tanggal + "/" + waroeng,
+            //         type: "GET",
+            //         dataType: 'json',
+            //         success: function(data) {
+            //             console.log(data.tanggal.tanggal);
+            //             var date = new Date(data.tanggal.tanggal);
+            //             var options = {
+            //                 year: 'numeric',
+            //                 month: 'long',
+            //                 day: '2-digit'
+            //             };
+            //             var formattedDate = date.toLocaleDateString('id-ID', options);
+            //             $('#tanggal_pop_waroeng').html(formattedDate);
+            //             $('#waroeng_pop_waroeng').html(data.waroeng.waroeng);
+            //             $('#detailTableWaroeng').DataTable({
+            //                 buttons: [{
+            //                     extend: 'excelHtml5',
+            //                     text: 'Export Excel',
+            //                     title: 'Rekap WBD- ' + tanggal,
+            //                     pageSize: 'A4',
+            //                     pageOrientation: 'potrait',
+            //                 }],
+            //                 destroy: true,
+            //                 autoWidth: false,
+            //                 paging: false,
+            //                 ajax: {
+            //                     url: "/dashboard/rekap_wbd/detail_waroeng/" +
+            //                         tanggal + "/" + waroeng,
+            //                     type: "GET",
+            //                 },
+            //             });
+            //         }
+            //     })
+            //     $("#detail_wbd_waroeng_total").modal('show');
+            // })
 
             $("#tampil_waroeng").on('click', '#button_detail_member', function() {
                 var tanggal = $(this).data('tanggal');

@@ -119,133 +119,100 @@ class RekapWbdController extends Controller
 
     public function show_waroeng(Request $request)
     {
-        // $wbdWaroeng = DB::table('rekap_transaksi_detail')
-        //     ->join('rekap_transaksi', 'r_t_id', 'r_t_detail_r_t_id')
-        //     ->join('m_produk', 'r_t_detail_m_produk_id', 'm_produk_id');
-        // if ($request->area != 'all') {
-        //     $wbdWaroeng->where('r_t_m_area_id', $request->area);
-        //     if ($request->waroeng != 'all') {
-        //         $wbdWaroeng->where('r_t_m_w_id', $request->waroeng);
-        //     }
-        // }
-        // if (strpos($request->tanggal, 'to') !== false) {
-        //     [$start, $end] = explode('to', $request->tanggal);
-        //     $wbdWaroeng->whereBetween('r_t_tanggal', [$start, $end]);
-        // } else {
-        //     $wbdWaroeng->where('r_t_tanggal', $request->tanggal);
-        // }
-        // $wbdWaroengA = $wbdWaroeng->selectRaw('r_t_tanggal as tanggal,
-        //             r_t_m_area_nama as area,
-        //             r_t_m_w_nama as waroeng,
-        //             r_t_m_w_id as waroeng_id,
-        //             sum(r_t_detail_nominal) as nominal_total
-        //         ')
-        //     ->groupBy('tanggal', 'area', 'waroeng', 'waroeng_id')
-        //     ->where('m_produk_m_jenis_produk_id', '11')
-        //     ->orderby('tanggal', 'ASC')
-        //     ->get();
-        // $wbdWaroengB = $wbdWaroeng->selectRaw('r_t_tanggal as tanggal,
-        //             r_t_m_area_nama as area,
-        //             r_t_m_w_nama as waroeng,
-        //             r_t_m_w_id as waroeng_id,
-        //             sum(r_t_detail_reguler_price * r_t_detail_qty) as nominal_member
-        //         ')
-        //     ->join('users', function ($join) {
-        //         $join->on('users_id', '=', DB::raw('CAST(r_t_member_id AS bigint)'))
-        //             ->whereRaw('LENGTH(r_t_member_id) = 5');
-        //     })
-        //     ->groupBy('tanggal', 'area', 'waroeng', 'waroeng_id')
-        //     ->where('m_produk_m_jenis_produk_id', '11')
-        //     ->orderby('tanggal', 'ASC')
-        //     ->get();
-
-        $wbdWaroengA = DB::table('rekap_transaksi_detail')
-            ->join('rekap_transaksi', 'r_t_id', 'r_t_detail_r_t_id')
-            ->join('m_produk', 'r_t_detail_m_produk_id', 'm_produk_id')
-            ->where('m_produk_m_jenis_produk_id', '11');
-
+        $refund = DB::table('rekap_refund_detail')
+            ->join('rekap_refund', 'r_r_id', 'r_r_detail_r_r_id')
+            ->join('rekap_transaksi', 'r_t_id', 'r_r_r_t_id')
+            ->join('m_produk', 'r_r_detail_m_produk_id', 'm_produk_id')
+            ->selectRaw('sum(r_r_detail_nominal) as nominal_refund,
+            max(r_r_tanggal) as tanggal,
+            max(r_t_m_t_t_id) as type_trans,
+            max(r_r_m_w_nama) as waroeng
+            ');
         if ($request->area != 'all') {
-            $wbdWaroengA->where('r_t_m_area_id', $request->area);
+            $refund->where('r_r_m_area_id', $request->area);
             if ($request->waroeng != 'all') {
-                $wbdWaroengA->where('r_t_m_w_id', $request->waroeng);
+                $refund->where('r_r_m_w_id', $request->waroeng);
             }
         }
-
         if (strpos($request->tanggal, 'to') !== false) {
             [$start, $end] = explode('to', $request->tanggal);
-            $wbdWaroengA->whereBetween('r_t_tanggal', [$start, $end]);
+            $refund->whereBetween('r_r_tanggal', [$start, $end]);
         } else {
-            $wbdWaroengA->where('r_t_tanggal', $request->tanggal);
+            $refund->where('r_r_tanggal', $request->tanggal);
         }
+        $refund = $refund->where('m_produk_m_jenis_produk_id', '11')
+            ->get();
 
-        $wbdWaroengA->selectRaw('r_t_tanggal as tanggal,
-        r_t_m_area_nama as area,
-        r_t_m_w_nama as waroeng,
-        r_t_m_w_id as waroeng_id,
-        sum(r_t_detail_nominal) as nominal_total
-    ')
-            ->groupBy('tanggal', 'area', 'waroeng', 'waroeng_id')
-            ->orderBy('tanggal', 'ASC');
-
-        $wbdWaroengB = DB::table('rekap_transaksi_detail')
+        $wbdWaroeng = DB::table('rekap_transaksi_detail')
             ->join('rekap_transaksi', 'r_t_id', 'r_t_detail_r_t_id')
             ->join('m_produk', 'r_t_detail_m_produk_id', 'm_produk_id')
             ->join('users', function ($join) {
                 $join->on('users_id', '=', DB::raw('CAST(r_t_member_id AS bigint)'))
                     ->whereRaw('LENGTH(r_t_member_id) = 5');
-            })
-            ->where('m_produk_m_jenis_produk_id', '11');
-
+            });
         if ($request->area != 'all') {
-            $wbdWaroengB->where('r_t_m_area_id', $request->area);
+            $wbdWaroeng->where('r_t_m_area_id', $request->area);
             if ($request->waroeng != 'all') {
-                $wbdWaroengB->where('r_t_m_w_id', $request->waroeng);
+                $wbdWaroeng->where('r_t_m_w_id', $request->waroeng);
             }
         }
 
         if (strpos($request->tanggal, 'to') !== false) {
             [$start, $end] = explode('to', $request->tanggal);
-            $wbdWaroengB->whereBetween('r_t_tanggal', [$start, $end]);
+            $wbdWaroeng->whereBetween('r_t_tanggal', [$start, $end]);
         } else {
-            $wbdWaroengB->where('r_t_tanggal', $request->tanggal);
+            $wbdWaroeng->where('r_t_tanggal', $request->tanggal);
         }
 
-        $wbdWaroengB->selectRaw('r_t_tanggal as tanggal,
+        $wbdWaroeng = $wbdWaroeng->selectRaw('r_t_tanggal as tanggal,
                 r_t_m_area_nama as area,
                 r_t_m_w_nama as waroeng,
-                r_t_m_w_id as waroeng_id,
-                sum(r_t_detail_reguler_price * r_t_detail_qty) as nominal_member
+                r_t_m_w_id as id_waroeng,
+                sum(r_t_detail_nominal) as nominal_wbd,
+                max(r_t_id) as r_t_id,
+                max(r_t_m_t_t_id) as type_trans
             ')
-            ->groupBy('tanggal', 'area', 'waroeng', 'r_t_m_w_id')
-            ->orderBy('tanggal', 'ASC');
-
-        $wbdWaroengA = $wbdWaroengA->get();
-        $wbdWaroengB = $wbdWaroengB->get();
+            ->where('m_produk_m_jenis_produk_id', '11')
+            ->groupBy('tanggal', 'area', 'waroeng', 'id_waroeng')
+            ->orderBy('tanggal', 'ASC')
+            ->get();
 
         $member = 0;
         $data = array();
-        foreach ($wbdWaroengA as $waroeng) {
+        foreach ($wbdWaroeng as $waroeng) {
+            $nominal_wbd = $waroeng->nominal_wbd;
+            if (!empty($refund)) {
+                foreach ($refund as $wbdRefund) {
+                    if ($waroeng->tanggal == $wbdRefund->tanggal && $waroeng->waroeng == $wbdRefund->waroeng && $waroeng->type_trans == $wbdRefund->type_trans) {
+                        $nominal_wbd = $nominal_wbd - $wbdRefund->nominal_refund;
+                    }
+                }
+            }
+
             $row = array();
             $row[] = $waroeng->area;
             $row[] = $waroeng->waroeng;
             $row[] = $waroeng->tanggal;
-            $row[] = number_format($waroeng->nominal_total);
-            foreach ($wbdWaroengB as $waroengB) {
-                if ($waroeng->waroeng == $waroengB->waroeng && $waroeng->tanggal == $waroengB->tanggal) {
-                    $member = $waroengB->nominal_member;
-                }
-            }
-            $row[] = number_format($member);
-            $row[] = '<a id="button_detail_waroeng" class="btn btn-sm button_detail_waroeng btn-info" data-tanggal="' . $waroeng->tanggal . '" data-waroeng="' . $waroeng->waroeng_id . '" title="Detail WBD Omset"><i class="fas fa-eye"></i></a>
-            <a id="button_detail_member" class="btn btn-sm button_detail_member btn-warning" data-tanggal="' . $waroeng->tanggal . '" data-waroeng="' . $waroeng->waroeng_id . '" title="Detail WBD karyawan"><i class="fas fa-eye"></i></a>';
+            $row[] = number_format($nominal_wbd);
+            $row[] = '<a id="button_detail_member" class="btn btn-sm button_detail_member btn-warning" data-tanggal="' . $waroeng->tanggal . '" data-waroeng="' . $waroeng->id_waroeng . '" title="Detail WBD karyawan"><i class="fas fa-eye"></i></a>';
             $data[] = $row;
         }
+        // '<a id="button_detail_waroeng" class="btn btn-sm button_detail_waroeng btn-info" data-tanggal="' . $waroeng->tanggal . '" data-waroeng="' . $waroeng->waroeng_id . '" title="Detail WBD Omset"><i class="fas fa-eye"></i></a>
         $output = array("data" => $data);
         return response()->json($output);
     }
 
     public function detail_waroeng($tanggal, $waroeng)
     {
+        $refund = DB::table('rekap_refund_detail')
+            ->join('rekap_refund', 'r_r_id', 'r_r_detail_r_r_id')
+            ->join('rekap_transaksi', 'r_t_id', 'r_r_r_t_id')
+            ->join('m_produk', 'r_r_detail_m_produk_id', 'm_produk_id')
+            ->where('r_r_tanggal', $tanggal)
+            ->where('r_r_m_w_id', $waroeng)
+            ->where('m_produk_m_jenis_produk_id', '11')
+            ->get();
+
         $detailWaroeng = DB::table('rekap_transaksi_detail')
             ->join('rekap_transaksi', 'r_t_id', 'r_t_detail_r_t_id')
             ->join('m_produk', 'r_t_detail_m_produk_id', 'm_produk_id')
@@ -253,12 +220,13 @@ class RekapWbdController extends Controller
                     r_t_detail_m_produk_nama as produk,
                     sum(r_t_detail_qty) as qty,
                     r_t_detail_reguler_price as harga,
-                    sum(r_t_detail_reguler_price * r_t_detail_qty) as nominal_wbd
+                    r_t_id,
+                    max(r_t_m_t_t_id) as r_t_m_t_t_id
                 ')
             ->where('r_t_tanggal', $tanggal)
             ->where('r_t_m_w_id', $waroeng)
             ->where('m_produk_m_jenis_produk_id', '11')
-            ->groupBy('nota', 'produk', 'harga')
+            ->groupBy('nota', 'produk', 'harga', 'r_t_id')
             ->orderby('produk', 'ASC')
             ->get();
 
@@ -274,16 +242,35 @@ class RekapWbdController extends Controller
             ->where('r_t_m_w_id', $waroeng)
             ->first();
 
+        $total = 0;
         $data = array();
         foreach ($detailWaroeng as $waroeng) {
+            $qty = $waroeng->qty;
+            if (!empty($refund)) {
+                foreach ($refund as $wbdRefund) {
+                    if ($waroeng->r_t_id == $wbdRefund->r_r_r_t_id && $waroeng->produk == $wbdRefund->r_r_detail_m_produk_nama && $waroeng->r_t_m_t_t_id == $wbdRefund->r_t_m_t_t_id) {
+                        $qty = $qty - $wbdRefund->r_r_detail_qty;
+                    }
+                }
+            }
+            $nominal_wbd = $waroeng->harga * $qty;
+
             $row = array();
             $row[] = '<div class="text-center">' . $waroeng->nota . '</div>';
             $row[] = $waroeng->produk;
-            $row[] = '<div class="text-center">' . $waroeng->qty . '</div>';
+            $row[] = '<div class="text-center">' . $qty . '</div>';
             $row[] = '<div class="text-center">' . number_format($waroeng->harga) . '</div>';
-            $row[] = '<div class="text-center">' . number_format($waroeng->nominal_wbd) . '</div>';
+            $row[] = '<div class="text-center">' . number_format($nominal_wbd) . '</div>';
             $data[] = $row;
+            $total += $nominal_wbd;
         }
+        $totalRow = array();
+        $totalRow[] = '';
+        $totalRow[] = '<div class="text-center"><b> Total </b></div>';
+        $totalRow[] = '';
+        $totalRow[] = '';
+        $totalRow[] = '<div class="text-center"><b>' . number_format($total) . '</b></div>';
+        $data[] = $totalRow;
 
         $output = array(
             "data" => $data,
