@@ -49,18 +49,12 @@ class RekapWbdController extends Controller
     public function show_member(Request $request)
     {
         $wbdMember = DB::table('users')
-            ->join('rekap_transaksi', DB::raw('CAST(r_t_member_id AS bigint)'), 'users_id')
-        // ->join('rekap_transaksi', function ($join) {
-        //     $join->on('users_id', '=', DB::raw('CAST(r_t_member_id AS bigint)'))
-        //         ->whereRaw('LENGTH(r_t_member_id) = 5');
-        // })
+            ->leftjoin('rekap_transaksi', DB::raw('CAST(r_t_member_id AS bigint)'), 'users_id')
             ->join('rekap_transaksi_detail', 'r_t_detail_r_t_id', 'r_t_id')
-            ->join('m_produk', 'm_produk_id', 'r_t_detail_m_produk_id')
+            ->leftjoin('m_produk', 'm_produk_id', 'r_t_detail_m_produk_id')
             ->selectRaw('
                     name as name,
-                    max(email) as email,
                     max(r_t_member_id) as r_t_member_id,
-                    max(r_t_m_w_nama) as m_w_nama,
                     r_t_tanggal,
                     sum(r_t_detail_nominal + r_t_detail_nominal_pajak + r_t_detail_nominal_sc) as nilaibeli
                 ')
@@ -89,13 +83,9 @@ class RekapWbdController extends Controller
     {
         $wbdDetail = DB::table('rekap_transaksi')
             ->selectRaw('name,
-                    email as email,
-                    r_t_member_id as r_t_member_id,
                     r_t_nota_code as r_t_nota_code,
                     r_t_tanggal,
                     m_w_nama,
-                    r_t_jam as r_t_jam,
-                    r_t_m_area_nama as r_t_m_area_nama,
                     r_t_m_w_nama as r_t_m_w_nama,
                     r_t_detail_m_produk_nama as r_t_detail_m_produk_nama,
                     r_t_detail_qty,

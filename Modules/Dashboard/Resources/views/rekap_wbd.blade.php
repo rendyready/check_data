@@ -117,9 +117,7 @@
                                     <tr>
                                         <th class="text-center">Nama Personel</th>
                                         <th class="text-center">ID Personel</th>
-                                        <th class="text-center">Email</th>
                                         <th class="text-center">Tgl Belanja</th>
-                                        <th class="text-center">Penempatan</th>
                                         <th class="text-center">Belanja WBD</th>
                                         <th class="text-center">Action</th>
                                     </tr>
@@ -377,13 +375,7 @@
                                 data: 'r_t_member_id'
                             },
                             {
-                                data: 'email'
-                            },
-                            {
                                 data: 'r_t_tanggal'
-                            },
-                            {
-                                data: 'm_w_nama'
                             },
                             {
                                 data: 'nilaibeli',
