@@ -42,7 +42,7 @@ class UsersController extends Controller
             ->rightJoin('users', 'users.users_id', 'model_id')
             ->leftJoin('roles', 'role_id', 'roles.id')
             ->leftJoin('m_w', 'waroeng_id', 'm_w_id')
-            ->select('users.users_id as users_id', 'users.name as username', 'email', 'm_w_nama', 'roles.name as rolename')
+            ->select('users.users_id as users_id', 'users.users_status', 'users.name as username', 'email', 'm_w_nama', 'roles.name as rolename')
             ->orderBy('waroeng_id', 'asc')
             ->get();
 
@@ -59,6 +59,7 @@ class UsersController extends Controller
                     'email' => $userRole->email,
                     'm_w_nama' => $userRole->m_w_nama,
                     'roles' => [$roleName],
+                    'users_status' => $userRole->users_status,
                 ];
             } else {
                 $userArray[$userId]['roles'][] = $roleName;
@@ -76,6 +77,7 @@ class UsersController extends Controller
             $row[] = $value['email'];
             $row[] = $value['m_w_nama'];
             $row[] = implode(', ', $value['roles']);
+            $row[] = $value['users_status'];
             $row[] = '<a id="buttonEdit" class="btn btn-sm btn-warning buttonEdit"
             value="' . $value['users_id'] . '"><i class="fa fa-pencil"></i></a>';
             $data2[] = $row;
@@ -108,6 +110,7 @@ class UsersController extends Controller
                 'password' => Hash::make($request->password),
                 'waroeng_id' => $request->waroeng_id,
                 'waroeng_akses' => '[' . $waroeng_akses . ']',
+                'users_status' => $request->users_status,
                 'created_by' => Auth::user()->users_id,
                 'created_at' => Carbon::now(),
             );
@@ -123,6 +126,7 @@ class UsersController extends Controller
                     'password' => Hash::make($request->password),
                     'waroeng_id' => $request->waroeng_id,
                     'waroeng_akses' => '[' . $waroeng_akses . ']',
+                    'users_status' => $request->users_status,
                     'updated_by' => Auth::user()->users_id,
                     'updated_at' => Carbon::now(),
                     'users_status_sync' => 'send',
@@ -134,6 +138,7 @@ class UsersController extends Controller
                     'email' => strtolower($request->email),
                     'waroeng_id' => $request->waroeng_id,
                     'waroeng_akses' => '[' . $waroeng_akses . ']',
+                    'users_status' => $request->users_status,
                     'updated_by' => Auth::user()->users_id,
                     'updated_at' => Carbon::now(),
                     'users_status_sync' => 'send',

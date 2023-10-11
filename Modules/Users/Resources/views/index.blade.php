@@ -90,6 +90,19 @@
                                                     </div>
                                                 </div>
                                                 <div class="mb-4">
+                                                    <div class="form-group">
+                                                        <label for="users_status">User Status</label>
+                                                        <div>
+                                                            <select class="js-select2" id="users_status" name="users_status"
+                                                                style="width: 100%;"
+                                                                required>
+                                                               <option value="aktif">Aktif</option>
+                                                               <option value="nonaktif">Non Aktif</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-4">
                                                     <label for="waroeng_akses">Waroeng Akses List :</label>
                                                     <div class="multi-column">
                                                         <ul>
@@ -161,6 +174,7 @@
                                     <th>EMAIL</th>
                                     <th>WAROENG</th>
                                     <th>HAK AKSES</th>
+                                    <th>STATUS</th>
                                     <th>AKSI</th>
                                 </tr>
                             </thead>

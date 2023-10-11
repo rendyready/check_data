@@ -132,7 +132,7 @@
                                         <th class="text-center">Area</th>
                                         <th class="text-center">Waroeng</th>
                                         <th class="text-center">Tanggal</th>
-                                        {{-- <th class="text-center">Omset WBD Total</th> --}}
+                                        <th class="text-center">Omset WBD Total</th>
                                         <th class="text-center">Omset WBD Karyawan</th>
                                         <th class="text-center">Action</th>
                                     </tr>
@@ -284,9 +284,6 @@
                                 <thead>
                                     <th class="text-center">Karyawan</th>
                                     <th class="text-center">Nota</th>
-                                    <th class="text-center">Produk WBD</th>
-                                    <th class="text-center">Qty</th>
-                                    <th class="text-center">Harga</th>
                                     <th class="text-center">Nominal WBD</th>
                                 </thead>
                                 <tbody>
@@ -585,8 +582,7 @@
                     type: "GET",
                     dataType: 'json',
                     success: function(data) {
-                        console.log(data.tanggal.tanggal);
-                        var date = new Date(data.tanggal.tanggal);
+                        var date = new Date(data.tanggal);
                         var options = {
                             year: 'numeric',
                             month: 'long',
@@ -594,7 +590,7 @@
                         };
                         var formattedDate = date.toLocaleDateString('id-ID', options);
                         $('#tanggal_pop_waroeng_member').html(formattedDate);
-                        $('#waroeng_pop_waroeng_member').html(data.waroeng.waroeng);
+                        $('#waroeng_pop_waroeng_member').html(data.waroeng);
                         $('#detailTableWaroengMember').DataTable({
                             buttons: [{
                                 extend: 'excelHtml5',
