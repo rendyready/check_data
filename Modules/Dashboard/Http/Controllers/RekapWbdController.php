@@ -318,6 +318,7 @@ class RekapWbdController extends Controller
                 'r_t_nota_code as nota',
                 'r_t_tanggal as tanggal',
                 'r_t_m_w_nama as r_t_m_w_nama',
+                'm_w_nama as waroeng',
                 DB::raw('SUM(r_t_detail_nominal - COALESCE(r_r_detail_nominal, 0)) AS total_nominal'))
             ->join('users', function ($join) {
                 $join->on('users_id', '=', DB::raw('CAST(r_t_member_id AS bigint)'))
@@ -327,23 +328,26 @@ class RekapWbdController extends Controller
             ->leftJoin('m_produk', 'r_t_detail_m_produk_id', 'm_produk_id')
             ->leftjoin('rekap_refund', 'r_t_id', 'r_r_r_t_id')
             ->leftJoin('rekap_refund_detail', 'r_r_id', 'r_r_detail_r_r_id')
+            ->leftjoin('m_w', 'm_w_id', 'waroeng_id')
             ->where('m_produk_m_jenis_produk_id', '11')
             ->where('r_t_m_w_id', $waroeng)
             ->where('r_t_tanggal', $tanggal)
             ->whereRaw('LENGTH(r_t_member_id) = 5')
-            ->groupBy('name', 'nota', 'tanggal', 'r_t_m_w_nama')
+            ->groupBy('name', 'nota', 'tanggal', 'r_t_m_w_nama', 'waroeng')
             ->get();
         $total = 0;
         $data = array();
         foreach ($detailWaroeng as $waroeng) {
             $row = array();
             $row[] = $waroeng->name;
-            $row[] = $waroeng->nota;
+            $row[] = '<div class="text-center">' . $waroeng->waroeng . '</div>';
+            $row[] = '<div class="text-center">' . $waroeng->nota . '</div>';
             $row[] = '<div class="text-center">' . number_format($waroeng->total_nominal) . '</div>';
             $data[] = $row;
             $total += $waroeng->total_nominal;
         }
         $totalRow = array();
+        $totalRow[] = '';
         $totalRow[] = '';
         $totalRow[] = '<div class="text-center"><b> Total </b></div>';
         $totalRow[] = '<div class="text-center"><b>' . number_format($total) . '</b></div>';

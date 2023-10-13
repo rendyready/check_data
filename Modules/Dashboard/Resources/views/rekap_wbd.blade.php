@@ -284,6 +284,7 @@
                             <table id="detailTableWaroengMember" class="table table-bordered nowrap">
                                 <thead>
                                     <th class="text-center">Karyawan</th>
+                                    <th class="text-center">Penempatan</th>
                                     <th class="text-center">Nota</th>
                                     <th class="text-center">Nominal WBD</th>
                                 </thead>
@@ -394,9 +395,13 @@
                             {
                                 data: null,
                                 render: function(data, type, full, meta) {
-                                    return '<button class="btn btn-sm btn-info detail-button" id="button_detail" data-tanggal="' +
-                                        data.r_t_tanggal + '" data-member="' + data
-                                        .r_t_member_id + '">Detail</button>';
+                                    if (full.no === '<b>Total</b>') {
+                                        return '';
+                                    } else {
+                                        return '<button class="btn btn-sm btn-info detail-button" id="button_detail" data-tanggal="' +
+                                            data.r_t_tanggal + '" data-member="' + data
+                                            .r_t_member_id + '">Detail</button>';
+                                    }
                                 }
                             }
 
