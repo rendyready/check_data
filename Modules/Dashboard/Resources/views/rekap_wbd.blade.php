@@ -97,7 +97,7 @@
                             <div class="row">
                                 <div class="col-md-5">
                                     <button type="button" id="cari_member" class="btn btn-primary btn-sm mb-3 mt-3">Cari By
-                                        Member</button>
+                                        Karyawan</button>
                                     <button type="button" id="cari_waroeng" class="btn btn-warning btn-sm mb-3 mt-3">Cari
                                         By
                                         Waroeng</button>
@@ -117,7 +117,7 @@
                                     <tr>
                                         <th class="text-center">Nama Personel</th>
                                         <th class="text-center">ID Personel</th>
-                                        <th class="text-center">Tgl Belanja</th>
+                                        <th class="text-center">Rangking</th>
                                         <th class="text-center">Belanja WBD</th>
                                         <th class="text-center">Action</th>
                                     </tr>
@@ -161,11 +161,11 @@
                     </div>
                     <div class="block-content">
                         <table style="margin-bottom: 10px;">
-                            <tr>
+                            {{-- <tr>
                                 <td><b>Tanggal </b></td>
                                 <td>&nbsp; : &nbsp;</td>
                                 <td><span id="tanggal_pop"> </span></td>
-                            </tr>
+                            </tr> --}}
                             <tr>
                                 <td><b>Personel </b></td>
                                 <td>&nbsp; : &nbsp;</td>
@@ -183,6 +183,7 @@
                                 <thead>
                                     <th class="text-center">Nota</th>
                                     <th class="text-center">Waroeng</th>
+                                    <th class="text-center">Tgl Belanja</th>
                                     <th class="text-center">Produk WBD</th>
                                     <th class="text-center">Qty</th>
                                     <th class="text-center">Bayar Produk WBD</th>
@@ -372,16 +373,23 @@
                                 data: 'r_t_member_id'
                             },
                             {
-                                data: 'r_t_tanggal'
+                                data: 'no'
                             },
                             {
                                 data: 'nilaibeli',
                                 render: function(data, type, row) {
-                                    return parseFloat(data).toLocaleString(
-                                        'id-ID', {
+                                    if (row.no === '<b>Total</b>') {
+                                        return '<b>' + parseFloat(data).toLocaleString(
+                                            'id-ID', {
+                                                maximumFractionDigits: 0
+                                            }); +
+                                        '</b>';
+                                    } else {
+                                        return parseFloat(data).toLocaleString('id-ID', {
                                             maximumFractionDigits: 0
                                         });
-                                },
+                                    }
+                                }
                             },
                             {
                                 data: null,
@@ -391,6 +399,7 @@
                                         .r_t_member_id + '">Detail</button>';
                                 }
                             }
+
                         ],
                         success: function(data) {
                             console.log(data);
@@ -462,25 +471,20 @@
             $("#tampil_rekap").on('click', '#button_detail', function() {
                 var tanggal = $(this).data('tanggal');
                 var member = $(this).data('member');
+                var tanggal2 = $('.filter_tanggal').val();
 
-                console.log(tanggal);
+                // console.log(tanggal);
                 $.ajax({
                     url: "/dashboard/rekap_wbd/detail_member/" + tanggal + "/" + member,
+                    data: {
+                        tanggal: tanggal2
+                    },
                     type: "GET",
                     dataType: 'json',
                     success: function(data) {
-                        console.log(data.data[0].r_t_tanggal);
-
-                        var date = new Date(data.data[0].r_t_tanggal);
-                        var options = {
-                            year: 'numeric',
-                            month: 'long',
-                            day: '2-digit'
-                        };
-                        var formattedDate = date.toLocaleDateString('id-ID', options);
-                        $('#tanggal_pop').html(formattedDate);
-                        $('#member_pop').html(data.data[0].name);
-                        $('#waroeng_pop').html(data.data[0].m_w_nama);
+                        console.log(data.member);
+                        $('#member_pop').html(data.member);
+                        $('#waroeng_pop').html(data.waroeng);
                         $('#detailTable').DataTable({
                             buttons: [],
                             destroy: true,
@@ -489,34 +493,12 @@
                             ajax: {
                                 url: "/dashboard/rekap_wbd/detail_member/" +
                                     tanggal + "/" + member,
-
                                 type: "GET",
+                                data: {
+                                    tanggal: tanggal2
+                                },
+
                             },
-                            // data: data,
-                            columns: [{
-                                    data: 'r_t_nota_code'
-                                },
-                                {
-                                    data: 'r_t_m_w_nama'
-                                },
-                                {
-                                    data: 'r_t_detail_m_produk_nama'
-                                },
-                                {
-                                    data: 'r_t_detail_qty',
-                                    className: 'text-center'
-                                },
-                                {
-                                    data: 'nilaibeli',
-                                    className: 'text-center',
-                                    render: function(data, type, row) {
-                                        return parseFloat(data).toLocaleString(
-                                            'id-ID', {
-                                                maximumFractionDigits: 0
-                                            });
-                                    },
-                                }
-                            ]
                         });
                     }
                 })
