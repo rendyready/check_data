@@ -30,6 +30,7 @@ Route::group(['prefix' => 'inventori', 'controller' => SupplierController::class
     Route::post('supplier/action', 'action')->name('supplier.action');
     Route::get('supplier/data', 'data')->name('supplier.data');
     Route::get('supplier/edit/{id}', 'edit')->name('supplier.edit');
+    Route::get('supplier/cari_waroeng','supplier_cari_wrg')->name('supplier.filter');
 });
 //Form rusak Route
 Route::group(['prefix' => 'inventori', 'controller' => RusakController::class, 'middleware' => ['auth', 'web']], function () {
