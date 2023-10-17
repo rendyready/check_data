@@ -2,21 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Schema;
 use App\Helpers\JangkrikHelper;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Database\Schema\Blueprint;
-
+use Illuminate\Support\Facades\Schema;
 
 class MyController extends Controller
 {
-    function sendMaster($target){
+    public function sendMaster($target)
+    {
         $table[1] = 'users';
         $table[2] = 'm_area';
         $table[3] = 'm_pajak';
@@ -55,57 +51,58 @@ class MyController extends Controller
         foreach ($table as $key => $valTable) {
 
             if ($target != "all") {
-                $expTarget = explode("-",$target);
+                $expTarget = explode("-", $target);
                 $newTarget = '';
                 foreach ($expTarget as $key => $valTarget) {
-                    $newTarget .= ':'.$valTarget.':';
+                    $newTarget .= ':' . $valTarget . ':';
                 }
-                $finalTarget = DB::raw($valTable."_client_target||'{$newTarget}'");
+                $finalTarget = DB::raw($valTable . "_client_target||'{$newTarget}'");
             } else {
                 $finalTarget = DB::raw('DEFAULT');
             }
 
-            $fieldName = $valTable."_client_target";
+            $fieldName = $valTable . "_client_target";
             DB::table($valTable)
-            ->update([
-                $fieldName => $finalTarget
-            ]);
+                ->update([
+                    $fieldName => $finalTarget,
+                ]);
         }
 
         DB::table('roles')
             ->update([
-                'roles_client_target' => ($target != "all") ? DB::raw("roles_client_target||'{$newTarget}'") : DB::raw('DEFAULT')
+                'roles_client_target' => ($target != "all") ? DB::raw("roles_client_target||'{$newTarget}'") : DB::raw('DEFAULT'),
             ]);
 
         DB::table('permissions')
             ->update([
-                'permissions_client_target' => ($target != "all") ? DB::raw("permissions_client_target||'{$newTarget}'") : DB::raw('DEFAULT')
+                'permissions_client_target' => ($target != "all") ? DB::raw("permissions_client_target||'{$newTarget}'") : DB::raw('DEFAULT'),
             ]);
 
         DB::table('role_has_permissions')
             ->update([
-                'r_h_p_client_target' => ($target != "all") ? DB::raw("r_h_p_client_target||'{$newTarget}'") : DB::raw('DEFAULT')
+                'r_h_p_client_target' => ($target != "all") ? DB::raw("r_h_p_client_target||'{$newTarget}'") : DB::raw('DEFAULT'),
             ]);
 
         DB::table('model_has_permissions')
             ->update([
-                'm_h_p_client_target' => ($target != "all") ? DB::raw("m_h_p_client_target||'{$newTarget}'") : DB::raw('DEFAULT')
+                'm_h_p_client_target' => ($target != "all") ? DB::raw("m_h_p_client_target||'{$newTarget}'") : DB::raw('DEFAULT'),
             ]);
 
         DB::table('model_has_roles')
             ->update([
-                'm_h_r_client_target' => ($target != "all") ? DB::raw("m_h_r_client_target||'{$newTarget}'") : DB::raw('DEFAULT')
+                'm_h_r_client_target' => ($target != "all") ? DB::raw("m_h_r_client_target||'{$newTarget}'") : DB::raw('DEFAULT'),
             ]);
 
         DB::table('m_transaksi_tipe')
             ->update([
-                'm_t_t_client_target' => ($target != "all") ? DB::raw("m_t_t_client_target||'{$newTarget}'") : DB::raw('DEFAULT')
+                'm_t_t_client_target' => ($target != "all") ? DB::raw("m_t_t_client_target||'{$newTarget}'") : DB::raw('DEFAULT'),
             ]);
 
         return "DONE";
     }
 
-    function uploadImage(){
+    public function uploadImage()
+    {
         #Send Image to public server
         $img = url("/struct/lele.jpeg");
         $folder = 'produk';
@@ -113,30 +110,31 @@ class MyController extends Controller
         $image = fopen($img, 'r');
         $upload = Http::withHeaders([
             'accept' => 'application/json',
-            'X-Authorization' => 'aD1UnchysFUfRHMqi61TWiZT7gjAFNAmnDrjkUFvVgrXIJplWasWvylDuZismZnO'
+            'X-Authorization' => 'aD1UnchysFUfRHMqi61TWiZT7gjAFNAmnDrjkUFvVgrXIJplWasWvylDuZismZnO',
         ])
-        ->attach('image',$image)
-        ->post('https://struk.pedasabis.com/api/upload-image',[
-            "folder" => $folder
-        ]);
-        return response($upload,200);
+            ->attach('image', $image)
+            ->post('https://struk.pedasabis.com/api/upload-image', [
+                "folder" => $folder,
+            ]);
+        return response($upload, 200);
     }
 
-    function deleteImage(){
+    public function deleteImage()
+    {
         $urlImage = "https://struk.pedasabis.com/storage/produk/tes.jpg";
         #delete image from cloud storage
         $delete = Http::withHeaders([
             'accept' => 'application/json',
-            'X-Authorization' => 'aD1UnchysFUfRHMqi61TWiZT7gjAFNAmnDrjkUFvVgrXIJplWasWvylDuZismZnO'
+            'X-Authorization' => 'aD1UnchysFUfRHMqi61TWiZT7gjAFNAmnDrjkUFvVgrXIJplWasWvylDuZismZnO',
         ])
-        ->post('https://struk.pedasabis.com/api/delete-image',[
-            "url" => $urlImage
-        ]);
-        return response($delete,200);
-   }
+            ->post('https://struk.pedasabis.com/api/delete-image', [
+                "url" => $urlImage,
+            ]);
+        return response($delete, 200);
+    }
 
-
-    function upgradeDb($target){
+    public function upgradeDb($target)
+    {
         #Create Connection To Cronjob DB
         Config::set("database.connections.cronjob", [
             'driver' => 'pgsql',
@@ -160,34 +158,34 @@ class MyController extends Controller
 
         #Get List Server
         $server = $DbCron->table('db_con')
-        ->where('db_con_sync_status','on')
-        ->whereNotIn('db_con_id',['1'])
-        ->orderBy('db_con_id','asc');
+            ->where('db_con_sync_status', 'on')
+            ->whereNotIn('db_con_id', ['1'])
+            ->orderBy('db_con_id', 'asc');
         if ($target != "all") {
-            $server->where('db_con_m_w_id',$target);
+            $server->where('db_con_m_w_id', $target);
         }
 
         $sipedasPusat = $DbCron->table('db_con')
-        ->where('db_con_id','1')->first();
+            ->where('db_con_id', '1')->first();
         Config::set("database.connections.pusat", [
             // App::make('config')->set('database.connections.client', [
-                'driver' => $sipedasPusat->db_con_driver,
-                'host' => '10.20.30.21',
-                'port' => '5884',
-                'database' => $sipedasPusat->db_con_dbname,
-                'username' => $sipedasPusat->db_con_username,
-                'password' => JangkrikHelper::customDecrypt($sipedasPusat->db_con_password),
-                'charset' => 'utf8',
-                'prefix' => '',
-                'prefix_indexes' => true,
-                'search_path' => 'public',
-                'sslmode' => 'prefer',
-            ]);
+            'driver' => $sipedasPusat->db_con_driver,
+            'host' => '10.20.30.21',
+            'port' => '5884',
+            'database' => $sipedasPusat->db_con_dbname,
+            'username' => $sipedasPusat->db_con_username,
+            'password' => JangkrikHelper::customDecrypt($sipedasPusat->db_con_password),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'search_path' => 'public',
+            'sslmode' => 'prefer',
+        ]);
 
         foreach ($server->get() as $keyServer => $valServer) {
             #create Connection to client
             Config::set("database.connections.client", [
-            // App::make('config')->set('database.connections.client', [
+                // App::make('config')->set('database.connections.client', [
                 'driver' => $valServer->db_con_driver,
                 'host' => $valServer->db_con_host,
                 'port' => $valServer->db_con_port,
@@ -209,87 +207,87 @@ class MyController extends Controller
             try {
                 //code...
 
-                    DB::connection('client')->table('rekap_buka_laci')
-            ->whereBetween('r_b_l_tanggal', ['2023-08-27','2023-09-02'])
-            // ->whereNull('r_b_l_client_target')
-            ->update(['r_b_l_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
+                DB::connection('client')->table('rekap_buka_laci')
+                    ->whereBetween('r_b_l_tanggal', ['2023-08-27', '2023-09-02'])
+                // ->whereNull('r_b_l_client_target')
+                    ->update(['r_b_l_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
 
-        DB::connection('client')->table('rekap_garansi')
-            ->join('rekap_transaksi', 'r_t_id', 'rekap_garansi_r_t_id')
-            ->whereBetween('r_t_tanggal', ['2023-08-27','2023-09-02'])
-            // ->whereNull('rekap_garansi_client_target')
-            ->update(['rekap_garansi_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
+                DB::connection('client')->table('rekap_garansi')
+                    ->join('rekap_transaksi', 'r_t_id', 'rekap_garansi_r_t_id')
+                    ->whereBetween('r_t_tanggal', ['2023-08-27', '2023-09-02'])
+                // ->whereNull('rekap_garansi_client_target')
+                    ->update(['rekap_garansi_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
 
-        DB::connection('client')->table('rekap_hapus_menu')
-            ->whereBetween('r_h_m_tanggal', ['2023-08-27','2023-09-02'])
-            // ->whereNull('r_h_m_client_target')
-            ->update(['r_h_m_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
+                DB::connection('client')->table('rekap_hapus_menu')
+                    ->whereBetween('r_h_m_tanggal', ['2023-08-27', '2023-09-02'])
+                // ->whereNull('r_h_m_client_target')
+                    ->update(['r_h_m_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
 
-        DB::connection('client')->table('rekap_hapus_transaksi')
-            ->whereBetween('r_h_t_tanggal', ['2023-08-27','2023-09-02'])
-            // ->whereNull('r_h_t_client_target')
-            ->update(['r_h_t_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
+                DB::connection('client')->table('rekap_hapus_transaksi')
+                    ->whereBetween('r_h_t_tanggal', ['2023-08-27', '2023-09-02'])
+                // ->whereNull('r_h_t_client_target')
+                    ->update(['r_h_t_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
 
-        DB::connection('client')->table('rekap_hapus_transaksi_detail')
-            ->join('rekap_hapus_transaksi', 'r_h_t_id', 'r_h_t_detail_r_h_t_id')
-            ->whereBetween('r_h_t_tanggal', ['2023-08-27','2023-09-02'])
-            // ->whereNull('r_h_t_detail_client_target')
-            ->update(['r_h_t_detail_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
+                DB::connection('client')->table('rekap_hapus_transaksi_detail')
+                    ->join('rekap_hapus_transaksi', 'r_h_t_id', 'r_h_t_detail_r_h_t_id')
+                    ->whereBetween('r_h_t_tanggal', ['2023-08-27', '2023-09-02'])
+                // ->whereNull('r_h_t_detail_client_target')
+                    ->update(['r_h_t_detail_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
 
-        DB::connection('client')->table('rekap_lost_bill')
-            ->whereBetween('r_l_b_tanggal', ['2023-08-27','2023-09-02'])
-            // ->whereNull('r_l_b_client_target')
-            ->update(['r_l_b_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
+                DB::connection('client')->table('rekap_lost_bill')
+                    ->whereBetween('r_l_b_tanggal', ['2023-08-27', '2023-09-02'])
+                // ->whereNull('r_l_b_client_target')
+                    ->update(['r_l_b_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
 
-        DB::connection('client')->table('rekap_lost_bill_detail')
-            ->join('rekap_lost_bill', 'r_l_b_id', 'r_l_b_detail_r_l_b_id')
-            ->whereBetween('r_l_b_tanggal', ['2023-08-27','2023-09-02'])
-            // ->where('r_l_b_detail_client_target')
-            ->update(['r_l_b_detail_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
+                DB::connection('client')->table('rekap_lost_bill_detail')
+                    ->join('rekap_lost_bill', 'r_l_b_id', 'r_l_b_detail_r_l_b_id')
+                    ->whereBetween('r_l_b_tanggal', ['2023-08-27', '2023-09-02'])
+                // ->where('r_l_b_detail_client_target')
+                    ->update(['r_l_b_detail_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
 
-        DB::connection('client')->table('rekap_modal')
-            ->whereBetween(DB::raw('DATE(rekap_modal_tanggal)'), ['2023-08-27','2023-09-02'])
-            // ->whereNull('rekap_modal_client_target')
-            ->update(['rekap_modal_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
+                DB::connection('client')->table('rekap_modal')
+                    ->whereBetween(DB::raw('DATE(rekap_modal_tanggal)'), ['2023-08-27', '2023-09-02'])
+                // ->whereNull('rekap_modal_client_target')
+                    ->update(['rekap_modal_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
 
-            DB::connection('client')->table('rekap_modal_detail')
-            ->join('rekap_modal', 'rekap_modal_id', 'rekap_modal_detail_rekap_modal_id')
-            ->whereBetween(DB::raw('DATE(rekap_modal_tanggal)'), ['2023-08-27','2023-09-02'])
-            // ->where('rekap_modal_detail_client_target')
-            ->update(['rekap_modal_detail_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
+                DB::connection('client')->table('rekap_modal_detail')
+                    ->join('rekap_modal', 'rekap_modal_id', 'rekap_modal_detail_rekap_modal_id')
+                    ->whereBetween(DB::raw('DATE(rekap_modal_tanggal)'), ['2023-08-27', '2023-09-02'])
+                // ->where('rekap_modal_detail_client_target')
+                    ->update(['rekap_modal_detail_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
 
-        DB::connection('client')->table('rekap_mutasi_modal')
-            ->whereBetween('r_m_m_tanggal', ['2023-08-27','2023-09-02'])
-            // ->whereNull('r_m_m_client_target')
-            ->update(['r_m_m_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
+                DB::connection('client')->table('rekap_mutasi_modal')
+                    ->whereBetween('r_m_m_tanggal', ['2023-08-27', '2023-09-02'])
+                // ->whereNull('r_m_m_client_target')
+                    ->update(['r_m_m_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
 
-        DB::connection('client')->table('rekap_payment_transaksi')
-            ->join('rekap_transaksi', 'r_t_id', 'r_p_t_r_t_id')
-            ->whereBetween('r_t_tanggal', ['2023-08-27','2023-09-02'])
-            // ->whereNull('r_p_t_client_target')
-            ->update(['r_p_t_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
+                DB::connection('client')->table('rekap_payment_transaksi')
+                    ->join('rekap_transaksi', 'r_t_id', 'r_p_t_r_t_id')
+                    ->whereBetween('r_t_tanggal', ['2023-08-27', '2023-09-02'])
+                // ->whereNull('r_p_t_client_target')
+                    ->update(['r_p_t_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
 
-        DB::connection('client')->table('rekap_refund')
-            ->whereBetween('r_r_tanggal', ['2023-08-27','2023-09-02'])
-            // ->whereNull('r_r_client_target')
-            ->update(['r_r_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
+                DB::connection('client')->table('rekap_refund')
+                    ->whereBetween('r_r_tanggal', ['2023-08-27', '2023-09-02'])
+                // ->whereNull('r_r_client_target')
+                    ->update(['r_r_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
 
-        DB::connection('client')->table('rekap_refund_detail')
-            ->join('rekap_refund', 'r_r_id', 'r_r_detail_r_r_id')
-            ->whereBetween('r_r_tanggal', ['2023-08-27','2023-09-02'])
-            // ->whereNull('r_r_detail_client_target')
-            ->update(['r_r_detail_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
+                DB::connection('client')->table('rekap_refund_detail')
+                    ->join('rekap_refund', 'r_r_id', 'r_r_detail_r_r_id')
+                    ->whereBetween('r_r_tanggal', ['2023-08-27', '2023-09-02'])
+                // ->whereNull('r_r_detail_client_target')
+                    ->update(['r_r_detail_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
 
-        DB::connection('client')->table('rekap_transaksi')
-            ->whereBetween('r_t_tanggal', ['2023-08-27','2023-09-02'])
-            // ->whereNull('r_t_client_target')
-            ->update(['r_t_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
+                DB::connection('client')->table('rekap_transaksi')
+                    ->whereBetween('r_t_tanggal', ['2023-08-27', '2023-09-02'])
+                // ->whereNull('r_t_client_target')
+                    ->update(['r_t_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
 
-        DB::connection('client')->table('rekap_transaksi_detail')
-            ->join('rekap_transaksi', 'r_t_id', 'r_t_detail_r_t_id')
-            ->whereBetween('r_t_tanggal', ['2023-08-27','2023-09-02'])
-            // ->whereNull('r_t_detail_client_target')
-            ->update(['r_t_detail_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
+                DB::connection('client')->table('rekap_transaksi_detail')
+                    ->join('rekap_transaksi', 'r_t_id', 'r_t_detail_r_t_id')
+                    ->whereBetween('r_t_tanggal', ['2023-08-27', '2023-09-02'])
+                // ->whereNull('r_t_detail_client_target')
+                    ->update(['r_t_detail_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
                 echo nl2br("{$valServer->db_con_location_name}: add users token Success!");
             } catch (\Throwable $th) {
                 return $th;

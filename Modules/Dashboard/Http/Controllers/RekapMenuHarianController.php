@@ -255,7 +255,8 @@ class RekapMenuHarianController extends Controller
             $row[] = $nominal;
             $row[] = $val_menu->m_jenis_produk_nama;
             $row[] = $val_menu->m_t_t_name;
-            $row[] = number_format($nominal_trans + ($val_menu->kemasan * $qty));
+            $nom_trans = $nominal_trans + ($val_menu->kemasan * $qty);
+            $row[] = number_format($nom_trans);
             $selisihTrans = $nominal - $nominal_trans;
             if ($val_menu->m_t_t_name != 'dine in' && $val_menu->m_t_t_name != 'take away') {
                 if ($nominal != $nominal_trans) {
@@ -298,7 +299,7 @@ class RekapMenuHarianController extends Controller
                 $data[] = $row;
             }
             $totalNominal += $nominal;
-            $totalNominal_trans += $nominal_trans;
+            $totalNominal_trans += $nom_trans;
             if (is_numeric($selisihTrans)) {
                 $totalSelisihTrans += floatval($selisihTrans);
             }

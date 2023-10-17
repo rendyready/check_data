@@ -19,7 +19,7 @@ class LinkAkuntansiController extends Controller
             ->select('m_link_akuntansi_nama', 'm_rekening_nama', 'm_link_akuntansi_id', 'm_rekening_no_akun')
             ->leftjoin('m_rekening', 'm_rekening_no_akun', 'm_link_akuntansi_m_rekening_no_akun')
             ->whereNull('m_link_akuntansi_deleted_at')
-            ->orderBy('m_link_akuntansi_id', 'asc')
+            ->orderBy('m_link_akuntansi_nama', 'asc')
             ->distinct()
             ->get();
 
@@ -27,7 +27,8 @@ class LinkAkuntansiController extends Controller
         return view('akuntansi::link', compact('list'));
     }
 
-    function list() {
+    public function list()
+    {
         $list2 = DB::table('m_rekening')
             ->select('m_rekening_no_akun', 'm_rekening_id', 'm_rekening_nama')
             ->orderBy('m_rekening_no_akun', 'asc')
