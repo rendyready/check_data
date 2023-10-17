@@ -16,6 +16,13 @@ use Illuminate\Database\Schema\Blueprint;
 
 class MyController extends Controller
 {
+    function Nyoba(){
+        $get = DB::table('m_area')->orderBy('m_area_id','asc')->limit(100)->get();
+        foreach ($get as $key => $val) {
+            $prefix = 'm_area';
+            return $val->{$prefix.'_nama'};
+        }
+    }
     function sendMaster($target){
         $table[1] = 'users';
         $table[2] = 'm_area';
