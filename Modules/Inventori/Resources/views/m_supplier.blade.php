@@ -196,7 +196,7 @@
                                             </div>
                                         </div>
                                         <form id="formAction2" name="form_action2" method="post">
-                                          <input name="action" type="hidden" id="action2">
+                                            <input name="action" type="hidden" id="action2">
                                             <div class="row">
                                                 <div class="col-md-3">
                                                     <div class="list-group push">
@@ -368,8 +368,9 @@
                 $("#form-supplier-wrg").modal('show');
             });
 
-            $('.cari-waroeng').on('click', function() {
+            function loadWaroengData() {
                 var wr_id = $('#m_w_id').val();
+
                 $.get("/inventori/supplier/cari_waroeng", {
                     w_id: wr_id
                 }, function(data) {
@@ -387,8 +388,13 @@
                         listItem.append(icon);
                         $('.master').append(listItem);
                     });
+
+                    // Destroy the existing DataTable and reinitialize it with new data
+                    if ($.fn.DataTable.isDataTable('#tb_waroeng')) {
+                        $('#tb_waroeng').DataTable().destroy();
+                    }
+
                     $('#tb_waroeng').DataTable({
-                        "destroy": true,
                         "orderCellsTop": true,
                         "processing": true,
                         "autoWidth": true,
@@ -402,13 +408,12 @@
                                 data: function(row, type, val, meta) {
                                     if (type === 'display') {
                                         return meta.row +
-                                            1; // Calculate the sequence number
+                                        1; // Calculate the sequence number
                                     }
                                     return meta
-                                        .row; // Use the row index for sorting, filtering, etc.
+                                    .row; // Use the row index for sorting, filtering, etc.
                                 },
-
-                            }, // Adjust the property names
+                            },
                             {
                                 data: 'm_supplier_nama'
                             },
@@ -417,30 +422,37 @@
                             },
                         ]
                     });
-
                 });
+            }
+
+
+
+            $('.cari-waroeng').on('click', function() {
+                loadWaroengData();
             });
             $(document).on('click', '.list-group-item-action', function() {
                 var nama = $(this).text();
                 var supplier_id = $(this).data('id');
-                var saldo = 
-                "<input type='hidden' name='m_supplier_id[]' value=" + supplier_id + ">"+
-                "<input class='form-control number' type='text' name='m_supplier_saldo_awal[]'>";
+                var saldo =
+                    "<input type='hidden' name='m_supplier_id[]' value=" + supplier_id + ">" +
+                    "<input class='form-control number' type='text' name='m_supplier_saldo_awal[]'>";
                 var newRowData = {
                     'm_supplier_nama': nama,
                     'm_supplier_saldo_awal': saldo
                 };
 
-               $('#tb_waroeng').DataTable().row.add(newRowData).draw();
+                $('#tb_waroeng').DataTable().row.add(newRowData).draw();
             });
             $('#formAction2').submit(function(e) {
                 if (!e.isDefaultPrevented()) {
+                    var m_w_id = $('#m_w_id').val();
+                    $('#form-supplier-wrg form').append('<input type="hidden" name="m_w_id" value="' +
+                        m_w_id + '">');
                     $.ajax({
                         url: "{{ route('supplier.action') }}",
                         type: "POST",
                         data: $('#form-supplier-wrg form').serialize(),
                         success: function(data) {
-                            $('#form-supplier-wrg').modal('hide');
                             Codebase.helpers('jq-notify', {
                                 align: 'right', // 'right', 'left', 'center'
                                 from: 'top', // 'top', 'bottom'
@@ -449,8 +461,7 @@
                                 icon: 'fa fa-info me-5', // Icon class
                                 message: data.messages
                             });
-                            console.log(data);
-                            // table.ajax.reload();
+                            loadWaroengData();
                         },
                         error: function() {
                             alert("Tidak dapat menyimpan data!");

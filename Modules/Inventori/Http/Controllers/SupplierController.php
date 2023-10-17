@@ -123,6 +123,51 @@ class SupplierController extends Controller
                     return response(['messages' => 'Nama Supplier Sudah Ada!', 'type' => 'danger']);
                 }
             } elseif ($request->action == 'copy') {
+                foreach ($request->m_supplier_id as $key => $value) {
+                    $code = DB::table('m_supplier')->orderBy('m_supplier_code', 'desc')->first();
+                    $nocode = $code->m_supplier_code + 1;
+                    $mWId = $request->m_w_id;
+                    $supplier_id = $request->m_supplier_id[$key];
+                    $validate = DB::table('m_supplier')
+                        ->where('m_supplier_parent_id', $supplier_id)
+                        ->where('m_supplier_m_w_id', $mWId)
+                        ->first();
+                    $newSaldoAwal = convertfloat($request->m_supplier_saldo_awal[$key]);
+                    if ($validate) {
+                        DB::table('m_supplier')
+                            ->where('m_supplier_parent_id', $supplier_id)
+                            ->where('m_supplier_m_w_id', $mWId)
+                            ->update(['m_supplier_saldo_awal' => $newSaldoAwal,
+                                'm_supplier_updated_by' => Auth::user()->users_id,
+                                'm_supplier_updated_at' => Carbon::now(),
+                            ]);
+                    } else {
+                        $get_master_supplier = DB::table('m_supplier')
+                            ->select('m_supplier_id', 'm_supplier_nama', 'm_supplier_jth_tempo',
+                                'm_supplier_alamat', 'm_supplier_kota', 'm_supplier_telp', 'm_supplier_ket',
+                                'm_supplier_rek', 'm_supplier_rek_nama', 'm_supplier_bank_nama')
+                            ->where('m_supplier_id', $supplier_id)->first();
+                        $supplierData = [
+                            'm_supplier_code' => $nocode,
+                            'm_supplier_nama' => $get_master_supplier->m_supplier_nama,
+                            'm_supplier_jth_tempo' => $get_master_supplier->m_supplier_jth_tempo,
+                            'm_supplier_alamat' => $get_master_supplier->m_supplier_alamat,
+                            'm_supplier_kota' => $get_master_supplier->m_supplier_kota,
+                            'm_supplier_telp' => $get_master_supplier->m_supplier_telp,
+                            'm_supplier_ket' => $get_master_supplier->m_supplier_ket,
+                            'm_supplier_rek' => $get_master_supplier->m_supplier_rek,
+                            'm_supplier_rek_nama' => $get_master_supplier->m_supplier_rek_nama,
+                            'm_supplier_bank_nama' => $get_master_supplier->m_supplier_bank_nama,
+                            'm_supplier_saldo_awal' => $newSaldoAwal,
+                            'm_supplier_parent_id' => $supplier_id,
+                            'm_supplier_m_w_id' => $mWId,
+                            'm_supplier_created_by' => Auth::user()->users_id,
+                            'm_supplier_created_at' => Carbon::now(),
+                        ];
+                        DB::table('m_supplier')->insert($supplierData);
+                        return response(['messages' => 'Berhasil Update Supplier !', 'type' => 'success']);
+                    }
+                }
 
             }
         }
@@ -152,7 +197,7 @@ class SupplierController extends Controller
             })
             ->get();
         $list = DB::table('m_supplier')
-            ->select('m_supplier_id', 'm_supplier_nama', 'm_supplier_saldo_awal')
+            ->select('m_supplier_parent_id', 'm_supplier_nama', 'm_supplier_saldo_awal')
             ->whereIn('m_supplier_m_w_id', [$request->w_id])
             ->get();
 
@@ -161,7 +206,7 @@ class SupplierController extends Controller
         foreach ($list as $key) {
             $listHtml[] = [
                 'm_supplier_nama' => $key->m_supplier_nama,
-                'm_supplier_saldo_awal' => "<input type='hidden' name='m_supplier_id[]' value='" . $key->m_supplier_id . "'>" .
+                'm_supplier_saldo_awal' => "<input type='hidden' name='m_supplier_id[]' value='" . $key->m_supplier_parent_id . "'>" .
                 "<input class='form-control number' type='text' name='m_supplier_saldo_awal[]' value='" . num_format($key->m_supplier_saldo_awal) . "'>",
             ];
         }
@@ -170,8 +215,6 @@ class SupplierController extends Controller
             'master' => $master,
             'list' => $listHtml,
         ];
-
-        return response()->json($data);
 
         return response()->json($data);
     }
