@@ -706,6 +706,14 @@
                                                         </a>
                                                     </li>
                                                 @endcan
+                                                @can('customer.view')
+                                                <li class="nav-main-item">
+                                                    <a class="nav-main-link{{ request()->is('inventori/customer') ? ' active' : '' }}"
+                                                        href="{{ route('customer.index') }}">
+                                                        <span class="nav-main-link-name">Customer</span>
+                                                    </a>
+                                                </li>
+                                            @endcan
                                             </ul>
                                         </li>
                                     @endcan

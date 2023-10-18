@@ -115,6 +115,7 @@ class SupplierController extends Controller
                         'm_supplier_status_sync' => 'send',
                         'm_supplier_updated_by' => Auth::user()->users_id,
                         'm_supplier_updated_at' => Carbon::now(),
+                        'm_supplier_client_target' => DB::raw('DEFAULT')
                     );
                     DB::table('m_supplier')->where('m_supplier_code', $request->m_supplier_code)
                         ->update($data);
@@ -140,6 +141,7 @@ class SupplierController extends Controller
                             ->update(['m_supplier_saldo_awal' => $newSaldoAwal,
                                 'm_supplier_updated_by' => Auth::user()->users_id,
                                 'm_supplier_updated_at' => Carbon::now(),
+                                'm_supplier_client_target' => DB::raw('DEFAULT')
                             ]);
                     } else {
                         $get_master_supplier = DB::table('m_supplier')
