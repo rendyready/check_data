@@ -28,6 +28,11 @@ return new class extends Migration
         //     // $table->time('tmp_transaction_kitchen_order_datetime')->nullable();
         //     $table->time('tmp_transaction_kitchen_done_time')->nullable();
         // });
+        if (!Schema::hasColumn('rekap_transaksi', 'r_t_tmp_transaction_id')) {
+            Schema::table('rekap_transaksi', function (Blueprint $table) {
+                $table->uuid('r_t_tmp_transaction_id')->nullable();
+            });
+        }
         if (!Schema::hasColumn('rekap_transaksi', 'r_t_qrcode_datetime')) {
             Schema::table('rekap_transaksi', function (Blueprint $table) {
                 $table->dateTime('r_t_qrcode_datetime')->nullable();
