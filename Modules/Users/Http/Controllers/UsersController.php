@@ -38,11 +38,14 @@ class UsersController extends Controller
     public function list_users()
     {
         $data = new \stdClass();
+        $users_id = Auth::user()->users_id;
+        $waroeng_akses = DB::table('users')->where('users_id', $users_id)->value('waroeng_akses');
         $userRoles = DB::table('model_has_roles')
             ->rightJoin('users', 'users.users_id', 'model_id')
             ->leftJoin('roles', 'role_id', 'roles.id')
             ->leftJoin('m_w', 'waroeng_id', 'm_w_id')
             ->select('users.users_id as users_id', 'users.users_status', 'users.name as username', 'email', 'm_w_nama', 'roles.name as rolename')
+            ->whereIn('waroeng_id',json_decode($waroeng_akses))
             ->orderBy('waroeng_id', 'asc')
             ->get();
 

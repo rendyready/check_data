@@ -33,8 +33,13 @@
                                                     <div class="form-group">
                                                         <label for="name">Nama User</label>
                                                         <div>
-                                                            <input class="form-control" type="text" name="name"
-                                                                id="name" style="width: 100%;" required>
+                                                            @role(['kacab', 'staf sdm'])
+                                                                <input class="form-control" type="text" name="name"
+                                                                    id="name" style="width: 100%;" disabled>
+                                                            @else
+                                                                <input class="form-control" type="text" name="name"
+                                                                    id="name" style="width: 100%;" required>
+                                                            @endrole
                                                         </div>
                                                     </div>
                                                 </div>
@@ -42,9 +47,15 @@
                                                     <div class="form-group">
                                                         <label for="email">Email User</label>
                                                         <div>
-                                                            <input class="form-control" type="email" name="email"
-                                                                id="email" style="width: 100%;" required
-                                                                placeholder="Masukan Email" autocomplete="off">
+                                                            @role(['kacab', 'staf sdm'])
+                                                                <input class="form-control" type="email" name="email"
+                                                                    id="email" style="width: 100%;" disabled
+                                                                    placeholder="Masukan Email" autocomplete="off">
+                                                            @else
+                                                                <input class="form-control" type="email" name="email"
+                                                                    id="email" style="width: 100%;" required
+                                                                    placeholder="Masukan Email" autocomplete="off">
+                                                            @endrole
                                                         </div>
                                                     </div>
                                                 </div>
@@ -61,15 +72,27 @@
                                                     <div class="form-group">
                                                         <label for="roles">Hak Akses</label>
                                                         <div>
-                                                            <select class="js-select2" id="roles" name="roles[]"
-                                                                style="width: 100%;" data-placeholder="Pilih Hak Akses"
-                                                                multiple="multiple" required>
-                                                                <option></option>
-                                                                @foreach ($data->roles as $item)
-                                                                    <option value="{{ $item->name }}">{{ $item->name }}
-                                                                    </option>
-                                                                @endforeach
-                                                            </select>
+                                                            @role(['kacab', 'staf sdm'])
+                                                                <select class="js-select2" id="roles" name="roles[]"
+                                                                    style="width: 100%;" data-placeholder="Pilih Hak Akses"
+                                                                    multiple="multiple" disabled>
+                                                                    <option></option>
+                                                                    @foreach ($data->roles as $item)
+                                                                        <option value="{{ $item->name }}">{{ $item->name }}
+                                                                        </option>
+                                                                    @endforeach
+                                                                </select>
+                                                            @else
+                                                                <select class="js-select2" id="roles" name="roles[]"
+                                                                    style="width: 100%;" data-placeholder="Pilih Hak Akses"
+                                                                    multiple="multiple" required>
+                                                                    <option></option>
+                                                                    @foreach ($data->roles as $item)
+                                                                        <option value="{{ $item->name }}">{{ $item->name }}
+                                                                        </option>
+                                                                    @endforeach
+                                                                </select>
+                                                            @endrole
                                                         </div>
                                                     </div>
                                                 </div>
@@ -77,15 +100,27 @@
                                                     <div class="form-group">
                                                         <label for="waroeng_id">Wilayah Kerja</label>
                                                         <div>
-                                                            <select class="js-select2" id="waroeng_id" name="waroeng_id"
-                                                                style="width: 100%;" data-placeholder="Choose one.."
-                                                                required>
-                                                                <option></option>
-                                                                @foreach ($data->lokasi as $item)
-                                                                    <option value="{{ $item->m_w_id }}">
-                                                                        {{ $item->m_w_nama }}</option>
-                                                                @endforeach
-                                                            </select>
+                                                            @role(['kacab', 'staf sdm'])
+                                                                <select class="js-select2" id="waroeng_id" name="waroeng_id"
+                                                                    style="width: 100%;" data-placeholder="Choose one.."
+                                                                    disabled>
+                                                                    <option></option>
+                                                                    @foreach ($data->lokasi as $item)
+                                                                        <option value="{{ $item->m_w_id }}">
+                                                                            {{ $item->m_w_nama }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            @else
+                                                                <select class="js-select2" id="waroeng_id" name="waroeng_id"
+                                                                    style="width: 100%;" data-placeholder="Choose one.."
+                                                                    required>
+                                                                    <option></option>
+                                                                    @foreach ($data->lokasi as $item)
+                                                                        <option value="{{ $item->m_w_id }}">
+                                                                            {{ $item->m_w_nama }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            @endrole
                                                         </div>
                                                     </div>
                                                 </div>
@@ -93,11 +128,10 @@
                                                     <div class="form-group">
                                                         <label for="users_status">User Status</label>
                                                         <div>
-                                                            <select class="js-select2" id="users_status" name="users_status"
-                                                                style="width: 100%;"
-                                                                required>
-                                                               <option value="aktif">Aktif</option>
-                                                               <option value="nonaktif">Non Aktif</option>
+                                                            <select class="js-select2" id="users_status"
+                                                                name="users_status" style="width: 100%;" required>
+                                                                <option value="aktif">Aktif</option>
+                                                                <option value="nonaktif">Non Aktif</option>
                                                             </select>
                                                         </div>
                                                     </div>
@@ -122,7 +156,8 @@
                                                                     data-target=".area{{ $val->m_area_id }}">
                                                                     <input type="checkbox"
                                                                         class="css-control-input parentCheckBox pilihSemua"
-                                                                        title="check all" value="area{{ $val->m_area_id }}">
+                                                                        title="check all"
+                                                                        value="area{{ $val->m_area_id }}">
                                                                     <span class="css-control-indicator"></span>
                                                                     <b
                                                                         class="text-danger">{{ ucwords($val->m_area_nama) }}</b>
@@ -132,11 +167,20 @@
                                                                         <li>
                                                                             <label
                                                                                 class="css-control css-control-danger css-checkbox">
-                                                                                <input type="checkbox"
-                                                                                    class="css-control-input childCheckBox area{{ $val->m_area_id }}"
-                                                                                    name="waroeng_akses[{{ $val2->m_w_id }}]"
-                                                                                    value="{{ $val2->m_w_id }}"
-                                                                                    data-parent="area{{ $val->m_area_id }}">
+                                                                                @role(['kacab', 'staf sdm'])
+                                                                                    <input type="checkbox"
+                                                                                        class="css-control-input childCheckBox area{{ $val->m_area_id }}"
+                                                                                        name="waroeng_akses[{{ $val2->m_w_id }}]"
+                                                                                        value="{{ $val2->m_w_id }}"
+                                                                                        data-parent="area{{ $val->m_area_id }}"
+                                                                                        disabled>
+                                                                                @else
+                                                                                    <input type="checkbox"
+                                                                                        class="css-control-input childCheckBox area{{ $val->m_area_id }}"
+                                                                                        name="waroeng_akses[{{ $val2->m_w_id }}]"
+                                                                                        value="{{ $val2->m_w_id }}"
+                                                                                        data-parent="area{{ $val->m_area_id }}">
+                                                                                @endrole
                                                                                 <span class="css-control-indicator"></span>
                                                                                 {{ $val2->m_w_nama }}
                                                                             </label>
@@ -163,8 +207,13 @@
                             </div>
                         </div>
                         <!-- END Pop Out Modal -->
-                        <a class="btn btn-success mr-2 mb-2 buttonInsert" title="Edit" style="color: #fff"><i
-                                class="fa fa-plus mr-5"></i> User</a>
+                        @role(['kacab', 'staf sdm'])
+                        @else
+                            @if (env('DB_DATABASE') == 'admin_sipedas_v4')
+                                <a class="btn btn-success mr-2 mb-2 buttonInsert" title="Edit" style="color: #fff"><i
+                                        class="fa fa-plus mr-5"></i> User</a>
+                            @endif
+                        @endrole
                         @csrf
                         <table id="user" class="table table-bordered table-striped table-vcenter js-dataTable-full">
                             <thead>
@@ -215,7 +264,7 @@
                 ],
                 "pageLength": 10,
                 "ajax": {
-                    "url": "{{route('users.list')}}",
+                    "url": "{{ route('users.list') }}",
                     "type": "GET"
                 }
             });
