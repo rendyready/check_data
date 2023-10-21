@@ -16,27 +16,26 @@ class LinkAkuntansiController extends Controller
     public function index()
     {
         $list = DB::table('m_link_akuntansi')
-            ->select('m_link_akuntansi_nama', 'm_rekening_nama', 'm_link_akuntansi_id', 'm_rekening_no_akun')
-            ->leftjoin('m_rekening', 'm_rekening_no_akun', 'm_link_akuntansi_m_rekening_no_akun')
-            ->whereNull('m_link_akuntansi_deleted_at')
-            ->orderBy('m_link_akuntansi_nama', 'asc')
+            ->select('m_link_akuntansi_nama', 'm_rekening_nama', 'm_rekening_code', 'm_rekening_id', 'm_link_akuntansi_id')
+            ->leftjoin('m_rekening', 'm_rekening_id', 'm_link_akuntansi_m_rekening_id')
+            ->orderBy('m_link_akuntansi_id', 'asc')
             ->distinct()
             ->get();
 
-        // return response()->json($list);
         return view('akuntansi::link', compact('list'));
     }
 
     public function list()
     {
         $list2 = DB::table('m_rekening')
-            ->select('m_rekening_no_akun', 'm_rekening_id', 'm_rekening_nama')
-            ->orderBy('m_rekening_no_akun', 'asc')
-            ->distinct('m_rekening_no_akun')
+            ->select('m_rekening_code', 'm_rekening_id', 'm_rekening_nama')
+            ->orderBy('m_rekening_code', 'asc')
+            ->distinct('m_rekening_code')
             ->get();
         $data = array();
         foreach ($list2 as $val) {
-            $data[$val->m_rekening_no_akun] = [$val->m_rekening_nama];
+            $data[$val->m_rekening_id] = [$val->m_rekening_nama];
+            // $data[$val->m_rekening_code] = [$val->m_rekening_nama];
         }
 
         return response()->json($data);
@@ -45,55 +44,24 @@ class LinkAkuntansiController extends Controller
     public function rekeninglink(Request $request)
     {
         $rekening = DB::table('m_rekening')
-            ->where('m_rekening_no_akun', $request->data)
-            ->select('m_rekening_no_akun')->first();
+            ->where('m_rekening_id', $request->data)
+            ->select('m_rekening_id', 'm_rekening_code')->first();
 
         return response()->json($rekening);
     }
 
     public function update(Request $request)
     {
-        $norek = $request->m_link_akuntansi_m_rekening_id;
+        $rekening_id = $request->no_rekening;
+
         $update = DB::table('m_link_akuntansi')
-            ->where('m_link_akuntansi_id', $request->m_link_akuntansi_id)
-            ->update(['m_link_akuntansi_m_rekening_no_akun' => $norek]);
+            ->where('m_link_akuntansi_id', $request->id)
+            ->update(['m_link_akuntansi_m_rekening_id' => $rekening_id]);
 
-        return response()->json(['messages' => 'Berhasil Update', 'type' => 'success']);
-
-    }
-
-    public function show($id)
-    {
-        return view('akuntansi::show');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     * @param Request $request
-     * @return Renderable
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
-    public function edit($id)
-    {
-        return view('akuntansi::edit');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     * @param int $id
-     * @return Renderable
-     */
-    public function destroy($id)
-    {
-        //
+        if ($update) {
+            return response()->json(['messages' => 'Berhasil Update', 'type' => 'success']);
+        } else {
+            return response()->json(['messages' => 'Gagal Update', 'type' => 'error']);
+        }
     }
 }

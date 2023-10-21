@@ -161,11 +161,6 @@
                     </div>
                     <div class="block-content">
                         <table style="margin-bottom: 10px;">
-                            {{-- <tr>
-                                <td><b>Tanggal </b></td>
-                                <td>&nbsp; : &nbsp;</td>
-                                <td><span id="tanggal_pop"> </span></td>
-                            </tr> --}}
                             <tr>
                                 <td><b>Personel </b></td>
                                 <td>&nbsp; : &nbsp;</td>
@@ -202,57 +197,6 @@
         </div>
     </div>
 
-    {{-- <div class="modal" id="detail_wbd_waroeng_total" tabindex="-1" role="dialog" aria-labelledby="tampil_modal"
-        aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="block block-themed shadow-none mb-0">
-                    <div class="block-header block-header-default bg-pulse">
-                        <h3 class="block-title text-center" id="myModalLabel">Rincian WBD Waroeng</h3>
-                        <div class="block-options">
-                            <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
-                                <i class="fa fa-fw fa-times"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="block-content">
-                        <table style="margin-bottom: 10px;">
-                            <tr>
-                                <td><b>Tanggal </b></td>
-                                <td>&nbsp; : &nbsp;</td>
-                                <td><span id="tanggal_pop_waroeng"> </span></td>
-                            </tr>
-                            <tr>
-                                <td><b>Waroeng </b></td>
-                                <td>&nbsp; : &nbsp;</td>
-                                <td><span id="waroeng_pop_waroeng"> </span></td>
-                            </tr>
-                        </table>
-
-                        <div class="table-responsive">
-                            <table id="detailTableWaroeng" class="table table-bordered nowrap">
-                                <thead>
-                                    <th class="text-center">Nota</th>
-                                    <th class="text-center">Produk WBD</th>
-                                    <th class="text-center">Qty</th>
-                                    <th class="text-center">Harga</th>
-                                    <th class="text-center">Nominal WBD</th>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="mt-3 text-end">
-                            <button type="button" class="btn btn-sm btn-alt-secondary me-1 mb-3"
-                                data-bs-dismiss="modal">Close</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> --}}
-    <!-- END Select2 in a modal -->
-
     <div class="modal" id="detail_wbd_waroeng_member" tabindex="-1" role="dialog" aria-labelledby="tampil_modal"
         aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
@@ -284,6 +228,7 @@
                             <table id="detailTableWaroengMember" class="table table-bordered nowrap">
                                 <thead>
                                     <th class="text-center">Karyawan</th>
+                                    <th class="text-center">ID Karyawan</th>
                                     <th class="text-center">Penempatan</th>
                                     <th class="text-center">Nota</th>
                                     <th class="text-center">Nominal WBD</th>
@@ -491,7 +436,15 @@
                         $('#member_pop').html(data.member);
                         $('#waroeng_pop').html(data.waroeng);
                         $('#detailTable').DataTable({
-                            buttons: [],
+                            buttons: [{
+                                extend: 'excelHtml5',
+                                text: 'Export Excel',
+                                title: 'Belanja WBD - ' + tanggal +
+                                    "\n / " + data.member + " - " + data
+                                    .waroeng,
+                                pageSize: 'A4',
+                                pageOrientation: 'potrait',
+                            }],
                             destroy: true,
                             autoWidth: false,
                             paging: false,

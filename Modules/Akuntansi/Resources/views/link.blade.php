@@ -16,9 +16,9 @@
                                         class="table table-sm table-bordered table-striped table-vcenter"
                                         style="width:100%">
                                         <thead>
-                                            <th>Akuntansi</th>
-                                            <th>Nama Akun</th>
-                                            <th>No Rekening</th>
+                                            <th class="text-center">Akuntansi</th>
+                                            <th class="text-center">Nama Akun</th>
+                                            <th class="text-center">No Akun</th>
                                         </thead>
                                         <tbody>
                                             @php
@@ -32,19 +32,25 @@
                                                     <td>{{ $items->m_link_akuntansi_nama }}</td>
                                                     <td id="{{ $no }}">
                                                         <select class="js-select2 form-select masterRekening text-center"
-                                                            id="m_rekening_no_akun{{ $no }}"
-                                                            name="m_link_akuntansi_m_rekening_no_akun[]"
-                                                            style="width: 100%;">
-                                                            <option value="{{ $items->m_rekening_no_akun }}">
+                                                            id="m_rekening_id{{ $no }}"
+                                                            name="m_link_akuntansi_m_rekening_id[]" style="width: 100%;">
+                                                            <option value="{{ $items->m_rekening_id }}">
                                                                 {{ $items->m_rekening_nama }}</option>
                                                         </select>
                                                     </td>
-                                                    <td><input type="text" id="fieldName{{ $no }}"
-                                                            name="m_rekening_no_akun"
-                                                            value="{{ $items->m_rekening_no_akun }}"
+                                                    <td>
+                                                        <input type="text" id="fieldName{{ $no }}"
+                                                            name="m_rekening_code" value="{{ $items->m_rekening_code }}"
                                                             class="form-control text-center"
                                                             style="color:aliceblue; background-color: rgba(204,0,0, 0.6); "
-                                                            readonly></td>
+                                                            readonly>
+                                                        <input type="text" id="fieldName1{{ $no }}"
+                                                            name="m_rekening_id" value="{{ $items->m_rekening_id }}"
+                                                            class="form-control text-center"
+                                                            style="color:aliceblue; background-color: rgba(204,0,0, 0.6); "
+                                                            hidden>
+                                                    </td>
+
                                                 </tr>
                                             @endforeach
                                         </tbody>
@@ -70,6 +76,7 @@
                 }
             });
 
+            //tampil list akun
             $.ajax({
                 url: '{{ route('link.list') }}',
                 type: 'GET',
@@ -89,16 +96,19 @@
                 }
             })
 
+            //edit akun
             $(document).on("change", ".masterRekening", function() {
                 var id = $(this).closest('tr').index() + 1;
-                var no_rekening = $('#m_rekening_no_akun' + id).val();
+                var no_rekening = $('#m_rekening_id' + id).val();
+                console.log(id);
+                console.log(no_rekening);
                 $.ajax({
                     url: '{{ route('link.update') }}',
                     type: 'POST',
                     dataType: 'Json',
                     data: {
-                        m_link_akuntansi_id: id,
-                        m_link_akuntansi_m_rekening_id: no_rekening,
+                        id: id,
+                        no_rekening: no_rekening,
                     },
                     success: function(data) {
                         Codebase.helpers('jq-notify', {
@@ -108,14 +118,18 @@
                             icon: 'fa fa-info me-5', // Icon class
                             message: data.messages
                         });
+                        $('.code_rek').css('display', 'block');
                     }
                 })
             })
 
+            //auto ganti no akun
             $('#linkAkuntansi').on('change', '.masterRekening', function(s) {
                 s.preventDefault()
-                let getData = $(this).val()
+                let getData = $(this).val();
                 var idNo = $(this).parent().attr('id')
+                // console.log(getData);
+                // console.log(idNo);
                 $.ajax({
                     url: '{{ route('link.rekening') }}',
                     type: 'GET',
@@ -125,7 +139,7 @@
                     },
                     success: function(response) {
                         console.log(response);
-                        $('#fieldName' + idNo).val(response.m_rekening_no_akun)
+                        $('#fieldName' + idNo).val(response.m_rekening_code)
 
                     }
                 });
