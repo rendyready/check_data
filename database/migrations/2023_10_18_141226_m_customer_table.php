@@ -14,26 +14,27 @@ return new class extends Migration
     public function up()
     {
         Schema::create('m_customer', function (Blueprint $table) {
-            $table->string('m_customer_id')->nullable();
+            $table->id('id');
+            $table->bigInteger('m_customer_id')->unsigned()->nullable();
+            $table->unsignedBigInteger('m_customer_parent_id')->nullable();
+            $table->unsignedBigInteger('m_customer_m_w_id')->nullable();
             $table->string('m_customer_code');
             $table->string('m_customer_nama',255);
-            $table->string('m_customer_jth_tempo');
-            $table->string('m_customer_alamat',255);
-            $table->string('m_customer_kota',100);
-            $table->string('m_customer_telp',25);
-            $table->string('m_customer_ket',255);
-            $table->string('m_customer_rek');
+            $table->integer('m_customer_jth_tempo')->default(0)->comment('maks bayar in days');
+            $table->string('m_customer_alamat')->nullable();
+            $table->string('m_customer_kota')->nullable();
+            $table->string('m_customer_telp')->nullable();
+            $table->string('m_customer_ket')->nullable();
+            $table->string('m_customer_rek_number');
             $table->string('m_customer_rek_nama');
             $table->string('m_customer_bank_nama');
-            $table->decimal('m_customer_saldo_awal',8,2);
+            $table->decimal('m_customer_saldo_awal',15,2)->default(0);
             $table->bigInteger('m_customer_created_by');
             $table->bigInteger('m_customer_updated_by')->nullable();
             $table->bigInteger('m_customer_deleted_by')->nullable();
             $table->timestampTz('m_customer_created_at')->useCurrent();
             $table->timestampTz('m_customer_updated_at')->useCurrentOnUpdate()->nullable()->default(NULL);
             $table->timestampTz('m_customer_deleted_at')->nullable()->default(NULL);
-            $table->string('m_customer_parent_id')->nullable();
-            $table->unsignedBigInteger('m_customer_m_w_id')->nullable();
             $table->text('m_customer_client_target')->default(DB::raw('list_waroeng()'))->nullable();
         });
     }

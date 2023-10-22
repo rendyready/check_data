@@ -47,6 +47,7 @@ class TriggerMasterSeeder extends Seeder
         $table[29] = 'm_rekening';
         $table[30] = 'm_link_akuntansi';
         $table[31] = 'm_akun_bank';
+        $table[32] = 'm_customer';
 
         foreach ($table as $key => $valTable) {
 
