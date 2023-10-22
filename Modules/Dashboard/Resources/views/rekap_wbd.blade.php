@@ -97,7 +97,7 @@
                             <div class="row">
                                 <div class="col-md-5">
                                     <button type="button" id="cari_member" class="btn btn-primary btn-sm mb-3 mt-3">Cari By
-                                        Member</button>
+                                        Karyawan</button>
                                     <button type="button" id="cari_waroeng" class="btn btn-warning btn-sm mb-3 mt-3">Cari
                                         By
                                         Waroeng</button>
@@ -117,7 +117,7 @@
                                     <tr>
                                         <th class="text-center">Nama Personel</th>
                                         <th class="text-center">ID Personel</th>
-                                        <th class="text-center">Tgl Belanja</th>
+                                        <th class="text-center">Rangking</th>
                                         <th class="text-center">Belanja WBD</th>
                                         <th class="text-center">Action</th>
                                     </tr>
@@ -162,11 +162,6 @@
                     <div class="block-content">
                         <table style="margin-bottom: 10px;">
                             <tr>
-                                <td><b>Tanggal </b></td>
-                                <td>&nbsp; : &nbsp;</td>
-                                <td><span id="tanggal_pop"> </span></td>
-                            </tr>
-                            <tr>
                                 <td><b>Personel </b></td>
                                 <td>&nbsp; : &nbsp;</td>
                                 <td><span id="member_pop"> </span></td>
@@ -183,6 +178,7 @@
                                 <thead>
                                     <th class="text-center">Nota</th>
                                     <th class="text-center">Waroeng</th>
+                                    <th class="text-center">Tgl Belanja</th>
                                     <th class="text-center">Produk WBD</th>
                                     <th class="text-center">Qty</th>
                                     <th class="text-center">Bayar Produk WBD</th>
@@ -200,57 +196,6 @@
             </div>
         </div>
     </div>
-
-    {{-- <div class="modal" id="detail_wbd_waroeng_total" tabindex="-1" role="dialog" aria-labelledby="tampil_modal"
-        aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="block block-themed shadow-none mb-0">
-                    <div class="block-header block-header-default bg-pulse">
-                        <h3 class="block-title text-center" id="myModalLabel">Rincian WBD Waroeng</h3>
-                        <div class="block-options">
-                            <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
-                                <i class="fa fa-fw fa-times"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="block-content">
-                        <table style="margin-bottom: 10px;">
-                            <tr>
-                                <td><b>Tanggal </b></td>
-                                <td>&nbsp; : &nbsp;</td>
-                                <td><span id="tanggal_pop_waroeng"> </span></td>
-                            </tr>
-                            <tr>
-                                <td><b>Waroeng </b></td>
-                                <td>&nbsp; : &nbsp;</td>
-                                <td><span id="waroeng_pop_waroeng"> </span></td>
-                            </tr>
-                        </table>
-
-                        <div class="table-responsive">
-                            <table id="detailTableWaroeng" class="table table-bordered nowrap">
-                                <thead>
-                                    <th class="text-center">Nota</th>
-                                    <th class="text-center">Produk WBD</th>
-                                    <th class="text-center">Qty</th>
-                                    <th class="text-center">Harga</th>
-                                    <th class="text-center">Nominal WBD</th>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="mt-3 text-end">
-                            <button type="button" class="btn btn-sm btn-alt-secondary me-1 mb-3"
-                                data-bs-dismiss="modal">Close</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> --}}
-    <!-- END Select2 in a modal -->
 
     <div class="modal" id="detail_wbd_waroeng_member" tabindex="-1" role="dialog" aria-labelledby="tampil_modal"
         aria-hidden="true">
@@ -283,6 +228,8 @@
                             <table id="detailTableWaroengMember" class="table table-bordered nowrap">
                                 <thead>
                                     <th class="text-center">Karyawan</th>
+                                    <th class="text-center">ID Karyawan</th>
+                                    <th class="text-center">Penempatan</th>
                                     <th class="text-center">Nota</th>
                                     <th class="text-center">Nominal WBD</th>
                                 </thead>
@@ -372,25 +319,37 @@
                                 data: 'r_t_member_id'
                             },
                             {
-                                data: 'r_t_tanggal'
+                                data: 'no'
                             },
                             {
                                 data: 'nilaibeli',
                                 render: function(data, type, row) {
-                                    return parseFloat(data).toLocaleString(
-                                        'id-ID', {
+                                    if (row.no === '<b>Total</b>') {
+                                        return '<b>' + parseFloat(data).toLocaleString(
+                                            'id-ID', {
+                                                maximumFractionDigits: 0
+                                            }); +
+                                        '</b>';
+                                    } else {
+                                        return parseFloat(data).toLocaleString('id-ID', {
                                             maximumFractionDigits: 0
                                         });
-                                },
+                                    }
+                                }
                             },
                             {
                                 data: null,
                                 render: function(data, type, full, meta) {
-                                    return '<button class="btn btn-sm btn-info detail-button" id="button_detail" data-tanggal="' +
-                                        data.r_t_tanggal + '" data-member="' + data
-                                        .r_t_member_id + '">Detail</button>';
+                                    if (full.no === '<b>Total</b>') {
+                                        return '';
+                                    } else {
+                                        return '<button class="btn btn-sm btn-info detail-button" id="button_detail" data-tanggal="' +
+                                            data.r_t_tanggal + '" data-member="' + data
+                                            .r_t_member_id + '">Detail</button>';
+                                    }
                                 }
                             }
+
                         ],
                         success: function(data) {
                             console.log(data);
@@ -462,61 +421,42 @@
             $("#tampil_rekap").on('click', '#button_detail', function() {
                 var tanggal = $(this).data('tanggal');
                 var member = $(this).data('member');
+                var tanggal2 = $('.filter_tanggal').val();
 
-                console.log(tanggal);
+                // console.log(tanggal);
                 $.ajax({
                     url: "/dashboard/rekap_wbd/detail_member/" + tanggal + "/" + member,
+                    data: {
+                        tanggal: tanggal2
+                    },
                     type: "GET",
                     dataType: 'json',
                     success: function(data) {
-                        console.log(data.data[0].r_t_tanggal);
-
-                        var date = new Date(data.data[0].r_t_tanggal);
-                        var options = {
-                            year: 'numeric',
-                            month: 'long',
-                            day: '2-digit'
-                        };
-                        var formattedDate = date.toLocaleDateString('id-ID', options);
-                        $('#tanggal_pop').html(formattedDate);
-                        $('#member_pop').html(data.data[0].name);
-                        $('#waroeng_pop').html(data.data[0].m_w_nama);
+                        console.log(data.member);
+                        $('#member_pop').html(data.member);
+                        $('#waroeng_pop').html(data.waroeng);
                         $('#detailTable').DataTable({
-                            buttons: [],
+                            buttons: [{
+                                extend: 'excelHtml5',
+                                text: 'Export Excel',
+                                title: 'Belanja WBD - ' + tanggal +
+                                    "\n / " + data.member + " - " + data
+                                    .waroeng,
+                                pageSize: 'A4',
+                                pageOrientation: 'potrait',
+                            }],
                             destroy: true,
                             autoWidth: false,
                             paging: false,
                             ajax: {
                                 url: "/dashboard/rekap_wbd/detail_member/" +
                                     tanggal + "/" + member,
-
                                 type: "GET",
+                                data: {
+                                    tanggal: tanggal2
+                                },
+
                             },
-                            // data: data,
-                            columns: [{
-                                    data: 'r_t_nota_code'
-                                },
-                                {
-                                    data: 'r_t_m_w_nama'
-                                },
-                                {
-                                    data: 'r_t_detail_m_produk_nama'
-                                },
-                                {
-                                    data: 'r_t_detail_qty',
-                                    className: 'text-center'
-                                },
-                                {
-                                    data: 'nilaibeli',
-                                    className: 'text-center',
-                                    render: function(data, type, row) {
-                                        return parseFloat(data).toLocaleString(
-                                            'id-ID', {
-                                                maximumFractionDigits: 0
-                                            });
-                                    },
-                                }
-                            ]
                         });
                     }
                 })

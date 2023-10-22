@@ -281,13 +281,12 @@ class RekapMenuController extends Controller
         }
         $menu = $menu->selectRaw('
             sum(r_t_detail_qty) as qty,
-            r_t_detail_reguler_price as price,
+            max(r_t_detail_reguler_price) as price,
             r_t_detail_m_produk_nama,
             m_jenis_produk_nama
         ')
             ->groupBy(
                 'r_t_detail_m_produk_nama',
-                'r_t_detail_reguler_price',
                 'm_jenis_produk_nama'
             )
             ->orderby('r_t_detail_m_produk_nama', 'ASC')
@@ -317,7 +316,8 @@ class RekapMenuController extends Controller
             ->join('m_produk', 'm_produk_id', 'r_t_detail_m_produk_id')
             ->join('m_jenis_produk', 'm_jenis_produk_id', 'm_produk_m_jenis_produk_id')
             ->join('rekap_modal', 'rekap_modal_id', 'r_t_rekap_modal_id')
-            ->where('rekap_modal_status', 'close');
+            ->where('rekap_modal_status', 'close')
+            ->whereNotIn('r_t_m_w_id', 2);
         if (strpos($request->tanggal, 'to') !== false) {
             [$start, $end] = explode('to', $request->tanggal);
             $menu->whereBetween('r_t_tanggal', [$start, $end]);
@@ -365,7 +365,8 @@ class RekapMenuController extends Controller
                 ->join('m_produk', 'm_produk_id', 'r_t_detail_m_produk_id')
                 ->join('m_jenis_produk', 'm_jenis_produk_id', 'm_produk_m_jenis_produk_id')
                 ->join('rekap_modal', 'rekap_modal_id', 'r_t_rekap_modal_id')
-                ->where('rekap_modal_status', 'close');
+                ->where('rekap_modal_status', 'close')
+                ->whereNotIn('r_t_m_w_id', 2);
             if (strpos($request->tanggal, 'to') !== false) {
                 [$start, $end] = explode('to', $request->tanggal);
                 $menu->whereBetween('r_t_tanggal', [$start, $end]);
@@ -382,12 +383,13 @@ class RekapMenuController extends Controller
                 $menu->where('m_jenis_produk_id', $request->kategori);
             }
             $menu = $menu->selectRaw('
-            r_t_m_area_id,
-            r_t_m_area_nama,
-            sum(r_t_detail_qty) as qty,
-            r_t_detail_reguler_price as price,
-            r_t_detail_m_produk_nama,
-            m_jenis_produk_nama
+                    r_t_m_area_id,
+                    r_t_m_area_nama,
+                    sum(r_t_detail_qty * r_t_detail_package_price) kemasan,
+                    sum(r_t_detail_qty) as qty,
+                    r_t_detail_reguler_price as price,
+                    r_t_detail_m_produk_nama,
+                    m_jenis_produk_nama
             ')
                 ->groupBy(
                     'r_t_m_area_id',
@@ -408,7 +410,7 @@ class RekapMenuController extends Controller
                 $row[] = $valMenu->r_t_detail_m_produk_nama;
                 $row[] = number_format($valMenu->qty);
                 $row[] = number_format($valMenu->price);
-                $row[] = number_format($valMenu->qty * $valMenu->price);
+                $row[] = number_format(($valMenu->qty * $valMenu->price) + $valMenu->kemasan);
                 $data[] = $row;
             }
 
@@ -422,7 +424,8 @@ class RekapMenuController extends Controller
                 ->join('m_produk', 'm_produk_id', 'r_t_detail_m_produk_id')
                 ->join('m_jenis_produk', 'm_jenis_produk_id', 'm_produk_m_jenis_produk_id')
                 ->join('rekap_modal', 'rekap_modal_id', 'r_t_rekap_modal_id')
-                ->where('rekap_modal_status', 'close');
+                ->where('rekap_modal_status', 'close')
+                ->whereNotIn('r_t_m_w_id', 2);
             if (strpos($request->tanggal, 'to') !== false) {
                 [$start, $end] = explode('to', $request->tanggal);
                 $menu->whereBetween('r_t_tanggal', [$start, $end]);
@@ -439,14 +442,15 @@ class RekapMenuController extends Controller
                 $menu->where('m_jenis_produk_id', $request->kategori);
             }
             $menu = $menu->selectRaw('
-            r_t_m_area_id,
-            r_t_m_area_nama,
-            r_t_m_w_id,
-            r_t_m_w_nama,
-            sum(r_t_detail_qty) as qty,
-            r_t_detail_reguler_price as price,
-            r_t_detail_m_produk_nama,
-            m_jenis_produk_nama
+                    r_t_m_area_id,
+                    r_t_m_area_nama,
+                    r_t_m_w_id,
+                    r_t_m_w_nama,
+                    sum(r_t_detail_qty * r_t_detail_package_price) kemasan,
+                    sum(r_t_detail_qty) as qty,
+                    r_t_detail_reguler_price as price,
+                    r_t_detail_m_produk_nama,
+                    m_jenis_produk_nama
             ')
                 ->groupBy(
                     'r_t_m_area_id',
@@ -471,7 +475,7 @@ class RekapMenuController extends Controller
                 $row[] = $valMenu->r_t_detail_m_produk_nama;
                 $row[] = number_format($valMenu->qty);
                 $row[] = number_format($valMenu->price);
-                $row[] = number_format($valMenu->qty * $valMenu->price);
+                $row[] = number_format(($valMenu->qty * $valMenu->price) + $valMenu->kemasan);
                 $data[] = $row;
             }
 
@@ -487,7 +491,8 @@ class RekapMenuController extends Controller
                 ->join('m_produk', 'm_produk_id', 'r_t_detail_m_produk_id')
                 ->join('m_jenis_produk', 'm_jenis_produk_id', 'm_produk_m_jenis_produk_id')
                 ->join('rekap_modal', 'rekap_modal_id', 'r_t_rekap_modal_id')
-                ->where('rekap_modal_status', 'close');
+                ->where('rekap_modal_status', 'close')
+                ->whereNotIn('r_t_m_w_id', 2);
             if (strpos($request->tanggal, 'to') !== false) {
                 [$start, $end] = explode('to', $request->tanggal);
                 $menu->whereBetween('r_t_tanggal', [$start, $end]);
@@ -504,16 +509,17 @@ class RekapMenuController extends Controller
                 $menu->where('m_jenis_produk_id', $request->kategori);
             }
             $menu = $menu->selectRaw('
-            r_t_m_area_id,
-            r_t_m_area_nama,
-            r_t_m_w_id,
-            r_t_m_w_nama,
-            r_t_tanggal,
-            m_t_t_name,
-            sum(r_t_detail_qty) as qty,
-            r_t_detail_reguler_price as price,
-            r_t_detail_m_produk_nama,
-            m_jenis_produk_nama
+                    r_t_m_area_id,
+                    r_t_m_area_nama,
+                    r_t_m_w_id,
+                    r_t_m_w_nama,
+                    r_t_tanggal,
+                    m_t_t_name,
+                    sum(r_t_detail_qty * r_t_detail_package_price) kemasan,
+                    sum(r_t_detail_qty) as qty,
+                    r_t_detail_reguler_price as price,
+                    r_t_detail_m_produk_nama,
+                    m_jenis_produk_nama
             ')
                 ->groupBy(
                     'r_t_m_area_nama',
@@ -544,7 +550,7 @@ class RekapMenuController extends Controller
                 $row[] = $valMenu->r_t_detail_m_produk_nama;
                 $row[] = number_format($valMenu->qty);
                 $row[] = number_format($valMenu->price);
-                $row[] = number_format($valMenu->qty * $valMenu->price);
+                $row[] = number_format(($valMenu->qty * $valMenu->price) + $valMenu->kemasan);
                 $data[] = $row;
             }
 

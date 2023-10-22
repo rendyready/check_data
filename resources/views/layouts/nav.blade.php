@@ -161,7 +161,7 @@
                 <a class="link-fx fw-bold tracking-wide mx-auto" href="/">
                     <span class="smini-hidden">
                         <i class="fa fa-fire text-primary"></i>
-                        <span class="fs-4 text-dual">Sipedas</span><span class="fs-4 text-primary">V4.2.1</span>
+                        <span class="fs-4 text-dual">Sipedas</span><span class="fs-4 text-primary">V4.2.2</span>
                     </span>
                 </a>
             </div>
@@ -507,7 +507,7 @@
                                                         <li class="nav-main-item">
                                                             <a class="nav-main-link{{ request()->is('dashboard/menu_harian') ? ' active' : '' }}"
                                                                 href="{{ route('menu_harian.index') }}">
-                                                                <span class="nav-main-link-name">Rekap Menu Tarikan</span>
+                                                                <span class="nav-main-link-name">Rekap Menu Tarikan*</span>
                                                             </a>
                                                         </li>
                                                         <li class="nav-main-item">
@@ -565,7 +565,7 @@
                                                 <li class="nav-main-item">
                                                     <a class="nav-main-link{{ request()->is('dashboard/kas_kasir') ? ' active' : '' }}"
                                                         href="{{ route('kas_kasir.index') }}">
-                                                        <span class="nav-main-link-name">Laporan Kas Harian Kasir</span>
+                                                        <span class="nav-main-link-name">Laporan Kas Harian Kasir*</span>
                                                     </a>
                                                 </li>
                                             @endcan
@@ -593,7 +593,7 @@
                                                         <li class="nav-main-item">
                                                             <a class="nav-main-link{{ request()->is('dashboard/non_menu') ? ' active' : '' }}"
                                                                 href="{{ route('non_menu.index') }}">
-                                                                <span class="nav-main-link-name">Rekap Penjualan Non Menu</span>
+                                                                <span class="nav-main-link-name">Rekap Penjualan Non Menu*</span>
                                                             </a>
                                                         </li>
                                                     </ul>
