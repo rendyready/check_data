@@ -101,6 +101,28 @@ class MyController extends Controller
         return "DONE";
     }
 
+    public function sendRekap($mw,$start,$end)
+    {
+        #Rekap
+        DB::statement("UPDATE rekap_buka_laci SET WHERE SPLIT_PART() = '{$mw}';");
+        DB::statement("UPDATE rekap_garansi SET WHERE SPLIT_PART() = '{$mw}';");
+        DB::statement("UPDATE rekap_hapus_menu SET WHERE SPLIT_PART() = '{$mw}';");
+        DB::statement("UPDATE rekap_hapus_transaksi SET WHERE SPLIT_PART() = '{$mw}';");
+        DB::statement("UPDATE rekap_hapus_transaksi_detail SET WHERE SPLIT_PART() = '{$mw}';");
+        DB::statement("UPDATE rekap_lost_bill SET WHERE SPLIT_PART() = '{$mw}';");
+        DB::statement("UPDATE rekap_lost_bill_detail SET WHERE SPLIT_PART() = '{$mw}';");
+        DB::statement("UPDATE rekap_member SET WHERE SPLIT_PART() = '{$mw}';");
+        DB::statement("UPDATE rekap_modal SET WHERE SPLIT_PART() = '{$mw}';");
+        DB::statement("UPDATE rekap_modal_detail SET WHERE SPLIT_PART() = '{$mw}';");
+        DB::statement("UPDATE rekap_mutasi_modal SET WHERE SPLIT_PART() = '{$mw}';");
+        DB::statement("UPDATE rekap_uang_tips SET WHERE SPLIT_PART() = '{$mw}';");
+        DB::statement("UPDATE rekap_transaksi SET WHERE SPLIT_PART() = '{$mw}';");
+        DB::statement("UPDATE rekap_transaksi_detail SET WHERE SPLIT_PART() = '{$mw}';");
+        DB::statement("UPDATE rekap_payment_transaksi SET WHERE SPLIT_PART() = '{$mw}';");
+        DB::statement("UPDATE rekap_refund SET WHERE SPLIT_PART() = '{$mw}';");
+        DB::statement("UPDATE rekap_refund_detail SET WHERE SPLIT_PART() = '{$mw}';");
+    }
+
     public function uploadImage()
     {
         #Send Image to public server
