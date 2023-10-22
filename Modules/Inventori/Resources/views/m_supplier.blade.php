@@ -17,28 +17,24 @@
                         <table id="tb_supplier"
                             class="table table-sm table-bordered table-striped table-vcenter js-dataTable-full">
                             <thead>
-                                <th>No</th>
-                                <th>Code</th>
+                                <th>ID</th>
                                 <th>Nama</th>
                                 <th>Alamat</th>
-                                {{-- <th>Kota</th> --}}
                                 <th>Telp</th>
                                 <th>Keterangan</th>
-                                <th>Saldo</th>
+                                {{-- <th>Saldo</th> --}}
                                 <th>Rekening</th>
                                 <th>Aksi</th>
                             </thead>
                             <tbody>
                             </tbody>
                             <tfoot>
-                                <th>No</th>
-                                <th>Code</th>
+                                <th>ID</th>
                                 <th>Nama</th>
                                 <th>Alamat</th>
-                                {{-- <th>Kota</th> --}}
                                 <th>Telp</th>
                                 <th>Keterangan</th>
-                                <th>Saldo</th>
+                                {{-- <th>Saldo</th> --}}
                                 <th>Rekening</th>
                                 <th>Aksi</th>
                             </tfoot>
@@ -64,7 +60,7 @@
                                             <form id="formAction" name="form_action" method="post">
                                                 <div class="mb-4">
                                                     <input name="action" type="hidden" id="action">
-                                                    <input name="m_supplier_code" type="hidden" id="m_supplier_code">
+                                                    <input name="m_supplier_id" type="hidden" id="m_supplier_id">
                                                     <div class="form-group">
                                                         <label for="m_supplier_nama">Nama Supplier</label>
                                                         <div>
@@ -113,10 +109,10 @@
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
-                                                        <label for="m_supplier_rek">No Rekening</label>
+                                                        <label for="m_supplier_rek_number">No Rekening</label>
                                                         <div>
-                                                            <input class="form-control" type="number" name="m_supplier_rek"
-                                                                id="m_supplier_rek" style="width: 100%;">
+                                                            <input class="form-control" type="number" name="m_supplier_rek_number"
+                                                                id="m_supplier_rek_number" style="width: 100%;">
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
@@ -135,14 +131,14 @@
                                                                 style="width: 100%;">
                                                         </div>
                                                     </div>
-                                                    <div class="form-group">
+                                                    {{-- <div class="form-group">
                                                         <label for="m_supplier_saldo_awal">Saldo Awal</label>
                                                         <div>
-                                                            <input class="form-control" type="number"
+                                                            <input class="form-control number" type="text"
                                                                 name="m_supplier_saldo_awal" id="m_supplier_saldo_awal"
                                                                 style="width: 100%;">
                                                         </div>
-                                                    </div>
+                                                    </div> --}}
                                                 </div>
                                         </div>
                                         <div class="block-content block-content-full text-end bg-body">
@@ -292,14 +288,14 @@
                     type: "GET",
                     dataType: 'json',
                     success: function(respond) {
-                        $("#m_supplier_code").val(respond.m_supplier_code).trigger('change');
+                        $("#m_supplier_id").val(respond.m_supplier_id).trigger('change');
                         $("#m_supplier_nama").val(respond.m_supplier_nama).trigger('change');
                         $("#m_supplier_alamat").val(respond.m_supplier_alamat).trigger(
                             'change');
                         $("#m_supplier_kota").val(respond.m_supplier_kota).trigger('change');
                         $("#m_supplier_telp").val(respond.m_supplier_telp).trigger('change');
                         $("#m_supplier_ket").val(respond.m_supplier_ket).trigger('change');
-                        $("#m_supplier_rek").val(respond.m_supplier_rek).trigger('change');
+                        $("#m_supplier_rek_number").val(respond.m_supplier_rek_number).trigger('change');
                         $("#m_supplier_rek_nama").val(respond.m_supplier_rek_nama).trigger(
                             'change');
                         $("#m_supplier_bank_nama").val(respond.m_supplier_bank_nama).trigger(

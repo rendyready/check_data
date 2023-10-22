@@ -15,8 +15,7 @@ return new class extends Migration
     {
         Schema::create('rekap_trans_jualbeli', function (Blueprint $table) {
             $table->id('id');
-            $table->string('r_t_jb_id');
-            $table->string('r_t_jb_code'); //id user+ urutan
+            $table->string('r_t_jb_id')->unique();
             $table->string('r_t_jb_code_nota')->nullable(); //code nota dari supplier jika ada
             $table->date('r_t_jb_tgl');
             $table->date('r_t_jb_jth_tmp')->nullable();
@@ -37,13 +36,13 @@ return new class extends Migration
             $table->string('r_t_jb_m_area_nama_asal');
             $table->string('r_t_jb_m_area_code_tujuan');
             $table->string('r_t_jb_m_area_nama_tujuan');
-            $table->decimal('r_t_jb_disc',15,2)->nullable()->comment('percent');
-            $table->decimal('r_t_jb_nominal_disc',15,2)->nullable();
-            $table->decimal('r_t_jb_ppn',15,2)->nullable()->comment('percent');
-            $table->decimal('r_t_jb_nominal_ppn',15,2)->nullable();
-            $table->decimal('r_t_jb_nominal_ongkir',15,2)->nullable();
+            $table->decimal('r_t_jb_disc',15,2)->default(0)->comment('percent');
+            $table->decimal('r_t_jb_nominal_disc',15,2)->default(0);
+            $table->decimal('r_t_jb_ppn',15,2)->default(0)->comment('percent');
+            $table->decimal('r_t_jb_nominal_ppn',15,2)->default(0);
+            $table->decimal('r_t_jb_nominal_ongkir',15,2)->default(0);
             $table->decimal('r_t_jb_nominal_total_beli',16,2);
-            $table->decimal('r_t_jb_nominal_bayar',16,2);
+            $table->decimal('r_t_jb_nominal_bayar',16,2)->default(0);
             $table->string('r_t_jb_ket')->nullable();
             $table->string('r_t_jb_transaction_code')->nullable();
             $table->unsignedBigInteger('r_t_jb_m_akun_bank_id')->nullable();

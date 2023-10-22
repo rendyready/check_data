@@ -33,17 +33,21 @@ class BeliController extends Controller
      * Show the form for creating a new resource.
      * @return Renderable
      */
-    function list() {
+    public function list()
+    {
         $data = new \stdClass();
+        $user_mwid = Auth::user()->waroeng_id;
         $nama_barang = DB::table('m_produk')
             ->select('m_produk_code', 'm_produk_nama')->whereNotIn('m_produk_m_klasifikasi_produk_id', [4])->get();
-        $supplierku = DB::table('m_supplier')->get();
+        $supplierku = DB::table('m_supplier')
+        ->where('m_supplier_m_w_id',$user_mwid)
+        ->get();
         $satuan = DB::table('m_satuan')->get();
         foreach ($nama_barang as $key => $v) {
             $data->barang[$v->m_produk_code] = $v->m_produk_nama;
         }
         foreach ($supplierku as $key => $v) {
-            $data->supplier[$v->m_supplier_code] = $v->m_supplier_nama;
+            $data->supplier[$v->m_supplier_id] = $v->m_supplier_nama;
         }
         foreach ($satuan as $key => $v) {
             $data->satuan[$v->m_satuan_id] = $v->m_satuan_kode;
@@ -57,7 +61,8 @@ class BeliController extends Controller
      * @return Renderable
      */
     public function simpan(Request $request)
-    {$terbayar = (empty($request->rekap_beli_terbayar)) ? 0 : $request->rekap_beli_terbayar;
+    {
+        $terbayar = (empty($request->rekap_beli_terbayar)) ? 0 : $request->rekap_beli_terbayar;
         $ongkir = (empty($request->rekap_beli_ongkir)) ? 0 : $request->rekap_beli_ongkir;
         $rekap_beli = array(
             'rekap_beli_code' => $request->rekap_beli_code,
@@ -92,7 +97,7 @@ class BeliController extends Controller
                 ->where('m_stok_gudang_code', $request->rekap_beli_gudang_code)
                 ->first();
             $data = array(
-                'rekap_beli_detail_id' => $this->getNextId('rekap_beli_detail',Auth::user()->waroeng_id),
+                'rekap_beli_detail_id' => $this->getNextId('rekap_beli_detail', Auth::user()->waroeng_id),
                 'rekap_beli_detail_rekap_beli_code' => $request->rekap_beli_code,
                 'rekap_beli_detail_m_produk_code' => $request->rekap_beli_detail_m_produk_id[$key],
                 'rekap_beli_detail_m_produk_nama' => $produk->m_stok_produk_nama,
@@ -126,10 +131,10 @@ class BeliController extends Controller
     {
         $tgl_now = Carbon::now();
         $rekap_beli = DB::table('rekap_beli')
-            ->join('users','rekap_beli_created_by','users_id')
+            ->join('users', 'rekap_beli_created_by', 'users_id')
             ->where('rekap_beli_tgl', $tgl_now)
             ->where('rekap_beli_gudang_code', $id)
-            ->orderBy('rekap_beli_created_at','desc')
+            ->orderBy('rekap_beli_created_at', 'desc')
             ->get();
 
         $data = array();
@@ -150,7 +155,7 @@ class BeliController extends Controller
     {
         $rekap_beli_detail = DB::table('rekap_beli_detail')
             ->where('rekap_beli_detail_rekap_beli_code', $id)
-            ->orderBy('rekap_beli_detail_created_at','desc')
+            ->orderBy('rekap_beli_detail_created_at', 'desc')
             ->get();
 
         $data = array();
@@ -172,7 +177,7 @@ class BeliController extends Controller
     }
     public function get_code()
     {
-        $code = $this->getNextId('rekap_beli',Auth::user()->waroeng_id);
+        $code = $this->getNextId('rekap_trans_jualbeli', Auth::user()->waroeng_id);
         return response()->json($code);
     }
 }

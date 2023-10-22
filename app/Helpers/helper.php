@@ -179,3 +179,6 @@ function string_num_tofloat($string) {
 	$number = number_format((float)$string, 2);
 	return $number;
 }
+function format5($nomor) {
+    return sprintf("%05d", $nomor);
+}
