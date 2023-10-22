@@ -1,6 +1,8 @@
 <?php
 
 use illuminate\Support\Facades\Route;
+use Modules\Inventori\Http\Controllers\MCustomerController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -30,6 +32,15 @@ Route::group(['prefix' => 'inventori', 'controller' => SupplierController::class
     Route::post('supplier/action', 'action')->name('supplier.action');
     Route::get('supplier/data', 'data')->name('supplier.data');
     Route::get('supplier/edit/{id}', 'edit')->name('supplier.edit');
+    Route::get('supplier/cari_waroeng','supplier_cari_wrg')->name('supplier.filter');
+});
+//Master Customer
+Route::group(['prefix' => 'inventori', 'controller' => MCustomerController::class, 'middleware' => ['auth', 'web']], function () {
+    Route::get('customer', 'index')->name('customer.index');
+    Route::post('customer/action', 'action')->name('customer.action');
+    Route::get('customer/data', 'data')->name('customer.data');
+    Route::get('customer/edit/{id}', 'edit')->name('customer.edit');
+    Route::get('customer/cari_waroeng','customer_cari_wrg')->name('customer.filter');
 });
 //Form rusak Route
 Route::group(['prefix' => 'inventori', 'controller' => RusakController::class, 'middleware' => ['auth', 'web']], function () {

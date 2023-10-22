@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-
+use Illuminate\Support\Facades\DB;
 return new class extends Migration
 {
     /**
@@ -16,6 +16,8 @@ return new class extends Migration
         Schema::table('m_supplier', function (Blueprint $table) {
             $table->string('m_supplier_parent_id')->nullable();
             $table->unsignedBigInteger('m_supplier_m_w_id')->nullable();
+            $table->string('m_supplier_id')->nullable()->change();
+            $table->text('m_supplier_client_target')->default(DB::raw('list_waroeng()'))->nullable();
         });
     }
 
@@ -29,6 +31,7 @@ return new class extends Migration
         Schema::table('m_supplier', function (Blueprint $table) {
             $table->dropColumn('m_supplier_parent_id');
             $table->dropColumn('m_supplier_m_w_id');
+            $table->dropColumn('m_supplier_client_target');
         });
     }
 };

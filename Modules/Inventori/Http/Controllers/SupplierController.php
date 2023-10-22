@@ -9,6 +9,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+
 class SupplierController extends Controller
 {
     /**
@@ -17,7 +18,8 @@ class SupplierController extends Controller
      */
     public function index()
     {
-        return view('inventori::m_supplier');
+        $waroeng = DB::table('m_w')->get();
+        return view('inventori::m_supplier', compact('waroeng'));
     }
 
     /**
@@ -26,7 +28,9 @@ class SupplierController extends Controller
      */
     public function data()
     {
-        $get = DB::table('m_supplier')->orderBy('m_supplier_id')->get();
+        $get = DB::table('m_supplier')->orderBy('m_supplier_id')
+            ->whereNull('m_supplier_parent_id')
+            ->get();
         $no = 0;
         $data = array();
         foreach ($get as $value) {
@@ -36,7 +40,6 @@ class SupplierController extends Controller
             $row[] = $value->m_supplier_code;
             $row[] = $value->m_supplier_nama;
             $row[] = $value->m_supplier_alamat;
-            $row[] = $value->m_supplier_kota;
             $row[] = $value->m_supplier_telp;
             $row[] = $value->m_supplier_ket;
             $row[] = rupiah($value->m_supplier_saldo_awal);
@@ -94,9 +97,9 @@ class SupplierController extends Controller
             } elseif ($request->action == 'edit') {
                 $name = trim(strtolower(preg_replace('!\s+!', ' ', $request->m_supplier_nama)));
                 $validate = DB::table('m_supplier')
-                ->whereNotIn('m_supplier_code',[$request->m_supplier_code])
-                ->where('m_supplier_nama',$name)
-                ->count();
+                    ->whereNotIn('m_supplier_code', [$request->m_supplier_code])
+                    ->where('m_supplier_nama', $name)
+                    ->count();
                 if ($validate == 0) {
                     $data = array(
                         'm_supplier_nama' => $request->m_supplier_nama,
@@ -112,13 +115,62 @@ class SupplierController extends Controller
                         'm_supplier_status_sync' => 'send',
                         'm_supplier_updated_by' => Auth::user()->users_id,
                         'm_supplier_updated_at' => Carbon::now(),
+                        'm_supplier_client_target' => DB::raw('DEFAULT')
                     );
                     DB::table('m_supplier')->where('m_supplier_code', $request->m_supplier_code)
                         ->update($data);
-                        return response(['messages' => 'Berhasil Update Supplier !', 'type' => 'success']);
+                    return response(['messages' => 'Berhasil Update Supplier !', 'type' => 'success']);
                 } else {
                     return response(['messages' => 'Nama Supplier Sudah Ada!', 'type' => 'danger']);
                 }
+            } elseif ($request->action == 'copy') {
+                foreach ($request->m_supplier_id as $key => $value) {
+                    $code = DB::table('m_supplier')->orderBy('m_supplier_code', 'desc')->first();
+                    $nocode = $code->m_supplier_code + 1;
+                    $mWId = $request->m_w_id;
+                    $supplier_id = $request->m_supplier_id[$key];
+                    $validate = DB::table('m_supplier')
+                        ->where('m_supplier_parent_id', $supplier_id)
+                        ->where('m_supplier_m_w_id', $mWId)
+                        ->first();
+                    $newSaldoAwal = convertfloat($request->m_supplier_saldo_awal[$key]);
+                    if ($validate) {
+                        DB::table('m_supplier')
+                            ->where('m_supplier_parent_id', $supplier_id)
+                            ->where('m_supplier_m_w_id', $mWId)
+                            ->update(['m_supplier_saldo_awal' => $newSaldoAwal,
+                                'm_supplier_updated_by' => Auth::user()->users_id,
+                                'm_supplier_updated_at' => Carbon::now(),
+                                'm_supplier_client_target' => DB::raw('DEFAULT')
+                            ]);
+                    } else {
+                        $get_master_supplier = DB::table('m_supplier')
+                            ->select('m_supplier_id', 'm_supplier_nama', 'm_supplier_jth_tempo',
+                                'm_supplier_alamat', 'm_supplier_kota', 'm_supplier_telp', 'm_supplier_ket',
+                                'm_supplier_rek', 'm_supplier_rek_nama', 'm_supplier_bank_nama')
+                            ->where('m_supplier_id', $supplier_id)->first();
+                        $supplierData = [
+                            'm_supplier_code' => $nocode,
+                            'm_supplier_nama' => $get_master_supplier->m_supplier_nama,
+                            'm_supplier_jth_tempo' => $get_master_supplier->m_supplier_jth_tempo,
+                            'm_supplier_alamat' => $get_master_supplier->m_supplier_alamat,
+                            'm_supplier_kota' => $get_master_supplier->m_supplier_kota,
+                            'm_supplier_telp' => $get_master_supplier->m_supplier_telp,
+                            'm_supplier_ket' => $get_master_supplier->m_supplier_ket,
+                            'm_supplier_rek' => $get_master_supplier->m_supplier_rek,
+                            'm_supplier_rek_nama' => $get_master_supplier->m_supplier_rek_nama,
+                            'm_supplier_bank_nama' => $get_master_supplier->m_supplier_bank_nama,
+                            'm_supplier_saldo_awal' => $newSaldoAwal,
+                            'm_supplier_parent_id' => $supplier_id,
+                            'm_supplier_m_w_id' => $mWId,
+                            'm_supplier_created_by' => Auth::user()->users_id,
+                            'm_supplier_created_at' => Carbon::now(),
+                        ];
+                        DB::table('m_supplier')->insert($supplierData);
+                        return response(['messages' => 'Berhasil Update Supplier !', 'type' => 'success']);
+                    }
+                }
+
             }
         }
 
@@ -132,6 +184,40 @@ class SupplierController extends Controller
     public function edit($id)
     {
         $data = DB::table('m_supplier')->where('m_supplier_code', $id)->first();
+        return response()->json($data);
+    }
+
+    public function supplier_cari_wrg(Request $request)
+    {
+        $master = DB::table('m_supplier')
+            ->select('m_supplier_id as value', 'm_supplier_nama as text')
+            ->whereNull('m_supplier_parent_id')
+            ->whereNotIn('m_supplier_id', function ($query) use ($request) {
+                $query->select('m_supplier_parent_id')
+                    ->from('m_supplier')
+                    ->where('m_supplier_m_w_id', $request->w_id);
+            })
+            ->get();
+        $list = DB::table('m_supplier')
+            ->select('m_supplier_parent_id', 'm_supplier_nama', 'm_supplier_saldo_awal')
+            ->whereIn('m_supplier_m_w_id', [$request->w_id])
+            ->get();
+
+        $listHtml = [];
+
+        foreach ($list as $key) {
+            $listHtml[] = [
+                'm_supplier_nama' => $key->m_supplier_nama,
+                'm_supplier_saldo_awal' => "<input type='hidden' name='m_supplier_id[]' value='" . $key->m_supplier_parent_id . "'>" .
+                "<input class='form-control number' type='text' name='m_supplier_saldo_awal[]' value='" . num_format($key->m_supplier_saldo_awal) . "'>",
+            ];
+        }
+
+        $data = [
+            'master' => $master,
+            'list' => $listHtml,
+        ];
+
         return response()->json($data);
     }
 }
