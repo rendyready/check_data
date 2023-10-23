@@ -17,10 +17,10 @@
                                         <label class="col-sm-4 col-form-label" id="namaWaroeng"
                                             for="example-hf-text">Waroeng</label>
                                         <div class="col-sm-8">
-                                            <select id="filter-waroeng" style="width: 100%;"
+                                            <select id="filter_waroeng" style="width: 100%;"
                                                 class="cari f-wrg js-select2 form-control" name="m_rekening_m_waroeng_id">
                                                 @foreach ($data->waroeng as $wrg)
-                                                    <option value="{{ $wrg->m_w_code }}"> {{ $wrg->m_w_nama }} </option>
+                                                    <option value="{{ $wrg->m_w_id }}"> {{ $wrg->m_w_nama }} </option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -29,7 +29,7 @@
                                         <label class="col-sm-4 col-form-label" id="categoryAccount"
                                             for="example-hf-text">Kategori Akun</label>
                                         <div class="col-md-8">
-                                            <select id="filter-rekening" class="cari js-select2 form-control "
+                                            <select id="filter_rekening" class="cari js-select2 form-control "
                                                 style="width: 100%;" name="m_rekening_kategori">
                                                 <option value="aktiva lancar">Aktiva Lancar</option>
                                                 <option value="aktiva tetap">Aktiva Tetap</option>
@@ -45,14 +45,16 @@
                                             </select>
                                         </div>
                                     </div>
+                                    <br>
                                     <div class="table-responsive">
                                         <table id="form" class="table table-bordered table-striped table-vcenter mb-4">
                                             <thead>
                                                 <tr>
-                                                    <th>No Akun</th>
-                                                    <th>Nama Akun</th>
-                                                    <th>Saldo</th>
-                                                    <th>Action</th>
+                                                    <th class="text-center">No Akun</th>
+                                                    <th class="text-center">Nama Akun</th>
+                                                    <th class="text-center">Saldo</th>
+                                                    <th class="text-center">Item</th>
+                                                    <th class="text-center">Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -75,6 +77,13 @@
                                                             name="m_rekening_saldo[]"
                                                             class="form-control set saldo form-control-sm text-end number"
                                                             required />
+                                                    </td>
+                                                    <td>
+                                                        <a placeholder="Input Nama Item" id="m_rekening_item"
+                                                            name="m_rekening_item[]"
+                                                            class="form-control set form-control-sm m_rekening_item text-center btn btn-primary"
+                                                            title="Tambahkan Item"><i
+                                                                class="fa-solid fa-pen-to-square"></i></a>
                                                     </td>
                                                     <td>
                                                         <button type="button" class="btn tambah btn-primary">+</button>
@@ -115,14 +124,14 @@
                     <div class="block block-rounded">
                         <div class="block-content text-mute">
                             <div class="table-responsive">
-                                <table id="rekening-tampil" class="table table-bordered table-striped table-vcenter mb-4">
+                                <table id="rekening_tampil" class="table table-bordered table-striped table-vcenter mb-4">
                                     <thead>
                                         <tr>
-                                            <th>Kategori</th>
-                                            <th>No Akun</th>
-                                            <th>Nama Akun</th>
-                                            <th>Saldo</th>
-                                            <th>Action</th>
+                                            <th class="text-center">Kategori</th>
+                                            <th class="text-center">No Akun</th>
+                                            <th class="text-center">Nama Akun</th>
+                                            <th class="text-center">Saldo</th>
+                                            <th class="text-center">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody id="show_data">
@@ -257,6 +266,49 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal Item -->
+    <div class="modal" id="rekening_item" tabindex="-1" role="dialog" aria-labelledby="form-rekening"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="block block-themed shadow-none mb-0">
+                    <div class="block-header block-header-default bg-pulse">
+                        <h3 class="block-title" id="item_akun_title"></h3>
+                        <div class="block-options">
+                            <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
+                                <i class="fa fa-fw fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="block-content">
+                        <!-- Select2 is initialized at the bottom of the page -->
+                        <form id="formAction" name="form_action" method="post">
+                            @csrf
+                            <div class="mb-4">
+                                <input name="m_rekening_id" type="hidden" class="m_rekening_no_akun1">
+                                <div class="form-group">
+                                    <label for="m_rekening_no_akun" class="mb-2">Nama Akun : <span id="nama_akun">
+                                        </span></label>
+                                    <div class="mb-2">
+                                        <input class="form-control item_akun" type="text" name="m_rekening_no_akun"
+                                            id="item_akun" style="width: 100%;" required>
+                                    </div>
+                                    <div id="tagList"></div>
+                                </div>
+                            </div>
+                    </div>
+                    <div class="block-content block-content-full text-end bg-body">
+                        <button type="button" class="btn btn-sm btn-alt-secondary me-1"
+                            data-bs-dismiss="modal">Close</button>
+                        {{-- <button type="submit" class="btn btn-success" id="submit">Update</button> --}}
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END Select2 in a modal -->
 @endsection
 @section('js')
     <script type="module">
@@ -275,7 +327,9 @@
                     '" class="btn btn-danger btn_remove"> - </button></td> </tr> ');
             });
 
-
+            function formatNumber(number) {
+                return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            }
 
             $(document).on('focusout', '.no_rekening', function() {
                 var current_value = $(this).val().trim();
@@ -311,13 +365,13 @@
                 console.log(current_value);
             });
 
-            var waroengid = $('#filter-waroeng').val();
-            var rekeningkategori = $('#filter-rekening').val();
+            var waroengid = $('#filter_waroeng').val();
+            var rekeningkategori = $('#filter_rekening').val();
             var table, save_method;
 
             $(function() {
-                table = $('#rekening-tampil').DataTable({
-                    button: [],
+                table = $('#rekening_tampil').DataTable({
+                    buttons: [],
                     destroy: true,
                     orderCellsTop: true,
                     processing: true,
@@ -337,8 +391,34 @@
                 });
             });
 
+            $("#item_akun").on("keypress", function(event) {
+                if (event.which === 13 || event.which === 44) {
+                    event.preventDefault();
+                    var tag = $(this).val().trim();
+                    if (tag !== "") {
+                        $("#tagList").append('<div class="tag">' + tag + '</div>');
+                    }
+                    $(this).val("");
+                }
+            });
+
+            $("#tagList").on("click", ".tag", function() {
+                $(this).remove();
+            });
+
+            $("#m_rekening_item").on('click', function() {
+                var id = $(this).attr('value');
+                var rekening_nama = $("#m_rekening_nama").val();
+                // $('#item_akun_title form')[0].reset();
+                $("#item_akun_title").html('Isi Item Akun');
+                $("#nama_akun").html('<b>' + rekening_nama +
+                    '</b>');
+                $("#rekening_item").modal('show');
+            });
+
+
             //get edit
-            $("#rekening-tampil").on('click', '.buttonEdit', function() {
+            $("#rekening_tampil").on('click', '.buttonEdit', function() {
                 var id = $(this).attr('value');
                 $('#form-rekening form')[0].reset();
                 $("#myModalLabel").html('Ubah Data Rekening');
@@ -348,10 +428,13 @@
                     dataType: 'json',
                     success: function(respond) {
                         // console.log(respond);
-                        $(".m_rekening_no_akun1").val(respond.m_rekening_no_akun).trigger(
+                        $(".m_rekening_no_akun1").val(respond.m_rekening_code).trigger(
                             'change');
                         $("#m_rekening_nama1").val(respond.m_rekening_nama).trigger('change');
-                        $("#m_rekening_saldo1").val(respond.m_rekening_saldo).trigger('change');
+                        $("#m_rekening_saldo1").val(formatNumber(Number(respond
+                                .m_rekening_saldo)))
+                            .trigger(
+                                'change');
                     },
                     error: function() {}
                 });
@@ -383,7 +466,7 @@
             });
 
             //GET HAPUS
-            $('#rekening-tampil').on('click', '.buttonHapus', function() {
+            $('#rekening_tampil').on('click', '.buttonHapus', function() {
                 var id = $(this).attr('value');
                 $("#myModalLabel2").html('Konfirmasi Hapus Rekening');
                 $('#ModalHapus').modal('show');
@@ -433,10 +516,10 @@
                             $('.hapus').remove();
                             $('.set').val('');
 
-                            var waroengid2 = $('#filter-waroeng').val();
-                            var rekeningkategori2 = $('#filter-rekening').val();
+                            var waroengid2 = $('#filter_waroeng').val();
+                            var rekeningkategori2 = $('#filter_rekening').val();
 
-                            $('#rekening-tampil').DataTable({
+                            $('#rekening_tampil').DataTable({
                                 button: [],
                                 destroy: true,
                                 orderCellsTop: true,
@@ -471,9 +554,9 @@
             });
 
             $('.cari').on('change', function() {
-                var waroengid = $('#filter-waroeng').val();
-                var rekeningkategori = $('#filter-rekening').val();
-                $('#rekening-tampil').DataTable({
+                var waroengid = $('#filter_waroeng').val();
+                var rekeningkategori = $('#filter_rekening').val();
+                $('#rekening_tampil').DataTable({
                     button: [],
                     destroy: true,
                     orderCellsTop: true,
@@ -542,8 +625,8 @@
             //validasi nama
             $(document).on("change", ".m_rekening_nama", function() {
                 var nama = $('#m_rekening_nama').val().toLowerCase();
-                var waroengid = $('#filter-waroeng').val();
-                var rekeningkategori = $('#filter-rekening').val();
+                var waroengid = $('#filter_waroeng').val();
+                var rekeningkategori = $('#filter_rekening').val();
                 $.ajax({
                     url: "{{ route('rekening.validasinama') }}",
                     data: {
@@ -569,8 +652,8 @@
             //validasi no akun
             $(document).on("change", ".m_rekening_no_akun", function() {
                 var no = $('#m_rekening_no_akun').val();
-                var waroengid = $('#filter-waroeng').val();
-                var rekeningkategori = $('#filter-rekening').val();
+                var waroengid = $('#filter_waroeng').val();
+                var rekeningkategori = $('#filter_rekening').val();
                 $.ajax({
                     url: "{{ route('rekening.validasino') }}",
                     data: {
@@ -599,8 +682,8 @@
             $(document).on("change", ".m_rekening_namajq", function() {
                 var id = $(this).closest("tr").index();
                 var nama = $('#m_rekening_namajq' + id).val().toLowerCase();
-                var waroengid = $('#filter-waroeng').val();
-                var rekeningkategori = $('#filter-rekening').val();
+                var waroengid = $('#filter_waroeng').val();
+                var rekeningkategori = $('#filter_rekening').val();
                 $.ajax({
                     url: "{{ route('rekening.validasinama') }}",
                     data: {
@@ -627,8 +710,8 @@
             $(document).on("change", ".m_rekening_no_akunjq", function() {
                 var id = $(this).closest("tr").index();
                 var no = $('#m_rekening_no_akunjq' + id).val();
-                var waroengid = $('#filter-waroeng').val();
-                var rekeningkategori = $('#filter-rekening').val();
+                var waroengid = $('#filter_waroeng').val();
+                var rekeningkategori = $('#filter_rekening').val();
                 $.ajax({
                     url: "{{ route('rekening.validasino') }}",
                     data: {
@@ -659,9 +742,9 @@
 
             //copyrecord
             $(document).on('click', '#copyrecord', function() {
-                var waroengasal = $('#filter-waroeng').val();
+                var waroengasal = $('#filter_waroeng').val();
                 var waroengtj = $('#m_rekening_m_waroeng_id2').val();
-                var waroengasal1 = $('#filter-waroeng').val();
+                var waroengasal1 = $('#filter_waroeng').val();
                 var waroengtj1 = $('#m_rekening_m_waroeng_id2').val();
                 var saldo = $('#m_rekening_copy_saldo').val();
                 if (waroengasal1 != waroengtj1) {
