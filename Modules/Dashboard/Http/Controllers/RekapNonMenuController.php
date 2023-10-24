@@ -268,13 +268,13 @@ class RekapNonMenuController extends Controller
                                         }
                                     }
                                 }
-                                if (!empty($garansi_notnull)) {
-                                    foreach ($garansi_nominal as $valGaransi) {
-                                        if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->rekap_modal_id == $valGaransi->rekap_modal_id && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
-                                            $qty = $qty + $valGaransi->qty;
-                                        }
-                                    }
-                                }
+                                // if (!empty($garansi_notnull)) {
+                                //     foreach ($garansi_nominal as $valGaransi) {
+                                //         if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->rekap_modal_id == $valGaransi->rekap_modal_id && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
+                                //             $qty = $qty + $valGaransi->qty;
+                                //         }
+                                //     }
+                                // }
                                 $valMenu = ($valRekap->price * $qty) + ($valRekap->kemasan * $qty);
                                 ${$valListRekap . '-' . $valTipe . '-menu'} += $valMenu;
                             }
@@ -287,13 +287,13 @@ class RekapNonMenuController extends Controller
                                         }
                                     }
                                 }
-                                if (!empty($garansi_notnull)) {
-                                    foreach ($garansi_nominal as $valGaransi) {
-                                        if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->rekap_modal_id == $valGaransi->rekap_modal_id && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
-                                            $qty = $qty + $valGaransi->qty;
-                                        }
-                                    }
-                                }
+                                // if (!empty($garansi_notnull)) {
+                                //     foreach ($garansi_nominal as $valGaransi) {
+                                //         if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->rekap_modal_id == $valGaransi->rekap_modal_id && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
+                                //             $qty = $qty + $valGaransi->qty;
+                                //         }
+                                //     }
+                                // }
                                 $valMenu = ($valRekap->price * $qty) + ($valRekap->kemasan * $qty);
                                 ${$valListRekap . '-' . $valTipe . '-menupajak'} += $valMenu;
                             }
@@ -306,13 +306,13 @@ class RekapNonMenuController extends Controller
                                         }
                                     }
                                 }
-                                if (!empty($garansi_notnull)) {
-                                    foreach ($garansi_nominal as $valGaransi) {
-                                        if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->rekap_modal_id == $valGaransi->rekap_modal_id && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
-                                            $qty = $qty + $valGaransi->qty;
-                                        }
-                                    }
-                                }
+                                // if (!empty($garansi_notnull)) {
+                                //     foreach ($garansi_nominal as $valGaransi) {
+                                //         if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->rekap_modal_id == $valGaransi->rekap_modal_id && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
+                                //             $qty = $qty + $valGaransi->qty;
+                                //         }
+                                //     }
+                                // }
                                 $valMenu = ($valRekap->price * $qty) + ($valRekap->kemasan * $qty);
                                 ${$valListRekap . '-' . $valTipe . '-menunonpajak'} += $valMenu;
                             }
@@ -325,13 +325,13 @@ class RekapNonMenuController extends Controller
                                         }
                                     }
                                 }
-                                if (!empty($garansi_notnull)) {
-                                    foreach ($garansi_nominal as $valGaransi) {
-                                        if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->rekap_modal_id == $valGaransi->rekap_modal_id && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
-                                            $qty = $qty + $valGaransi->qty;
-                                        }
-                                    }
-                                }
+                                // if (!empty($garansi_notnull)) {
+                                //     foreach ($garansi_nominal as $valGaransi) {
+                                //         if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->rekap_modal_id == $valGaransi->rekap_modal_id && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
+                                //             $qty = $qty + $valGaransi->qty;
+                                //         }
+                                //     }
+                                // }
                                 $valNonMenu = ($valRekap->price * $qty) + ($valRekap->kemasan * $qty);
                                 ${$valListRekap . '-' . $valTipe . '-nonmenu'} += $valNonMenu;
                             }
@@ -371,13 +371,13 @@ class RekapNonMenuController extends Controller
                                         }
                                     }
                                 }
-                                if (!empty($garansi_notnull)) {
-                                    foreach ($garansi_nominal as $valGaransi) {
-                                        if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->rekap_modal_id == $valGaransi->rekap_modal_id && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
-                                            $qty = $qty + $valGaransi->qty;
-                                        }
-                                    }
-                                }
+                                // if (!empty($garansi_notnull)) {
+                                //     foreach ($garansi_nominal as $valGaransi) {
+                                //         if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->rekap_modal_id == $valGaransi->rekap_modal_id && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
+                                //             $qty = $qty + $valGaransi->qty;
+                                //         }
+                                //     }
+                                // }
                                 $valWbdBB = ($valRekap->price * $qty) + $valRekap->kemasan;
                                 ${$valListRekap . '-' . $valGrab . '-wbdbb'} += $valWbdBB;
                             }
@@ -391,13 +391,13 @@ class RekapNonMenuController extends Controller
                                         }
                                     }
                                 }
-                                if (!empty($garansi_notnull)) {
-                                    foreach ($garansi_nominal as $valGaransi) {
-                                        if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->rekap_modal_id == $valGaransi->rekap_modal_id && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
-                                            $qty = $qty + $valGaransi->qty;
-                                        }
-                                    }
-                                }
+                                // if (!empty($garansi_notnull)) {
+                                //     foreach ($garansi_nominal as $valGaransi) {
+                                //         if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->rekap_modal_id == $valGaransi->rekap_modal_id && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
+                                //             $qty = $qty + $valGaransi->qty;
+                                //         }
+                                //     }
+                                // }
                                 $valWbdFrozen = ($valRekap->price * $qty) + $valRekap->kemasan;
                                 ${$valListRekap . '-' . $valGrab . '-wbdfrozen'} += $valWbdFrozen;
                             }
@@ -424,13 +424,13 @@ class RekapNonMenuController extends Controller
                                 }
                             }
                         }
-                        if (!empty($garansi_notnull)) {
-                            foreach ($garansi_nominal as $valGaransi) {
-                                if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->rekap_modal_id == $valGaransi->rekap_modal_id && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
-                                    $qty = $qty + $valGaransi->qty;
-                                }
-                            }
-                        }
+                        // if (!empty($garansi_notnull)) {
+                        //     foreach ($garansi_nominal as $valGaransi) {
+                        //         if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->rekap_modal_id == $valGaransi->rekap_modal_id && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
+                        //             $qty = $qty + $valGaransi->qty;
+                        //         }
+                        //     }
+                        // }
                         $valIceCream = ($valRekap->price * $qty) + $valRekap->kemasan;
                         ${$valListRekap . '-icecream'} += $valIceCream;
                     }
@@ -445,13 +445,13 @@ class RekapNonMenuController extends Controller
                                 }
                             }
                         }
-                        if (!empty($garansi_notnull)) {
-                            foreach ($garansi_nominal as $valGaransi) {
-                                if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->rekap_modal_id == $valGaransi->rekap_modal_id && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
-                                    $qty = $qty + $valGaransi->qty;
-                                }
-                            }
-                        }
+                        // if (!empty($garansi_notnull)) {
+                        //     foreach ($garansi_nominal as $valGaransi) {
+                        //         if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->rekap_modal_id == $valGaransi->rekap_modal_id && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
+                        //             $qty = $qty + $valGaransi->qty;
+                        //         }
+                        //     }
+                        // }
                         $valMineral = ($valRekap->price * $qty) + $valRekap->kemasan;
                         ${$valListRekap . '-mineral'} += $valMineral;
                     }
@@ -466,13 +466,13 @@ class RekapNonMenuController extends Controller
                                 }
                             }
                         }
-                        if (!empty($garansi_notnull)) {
-                            foreach ($garansi_nominal as $valGaransi) {
-                                if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->rekap_modal_id == $valGaransi->rekap_modal_id && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
-                                    $qty = $qty + $valGaransi->qty;
-                                }
-                            }
-                        }
+                        // if (!empty($garansi_notnull)) {
+                        //     foreach ($garansi_nominal as $valGaransi) {
+                        //         if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->rekap_modal_id == $valGaransi->rekap_modal_id && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
+                        //             $qty = $qty + $valGaransi->qty;
+                        //         }
+                        //     }
+                        // }
                         $valKerupuk = ($valRekap->price * $qty) + $valRekap->kemasan;
                         ${$valListRekap . '-krupuk'} += $valKerupuk;
                     }
@@ -487,13 +487,13 @@ class RekapNonMenuController extends Controller
                                 }
                             }
                         }
-                        if (!empty($garansi_notnull)) {
-                            foreach ($garansi_nominal as $valGaransi) {
-                                if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->rekap_modal_id == $valGaransi->rekap_modal_id && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
-                                    $qty = $qty + $valGaransi->qty;
-                                }
-                            }
-                        }
+                        // if (!empty($garansi_notnull)) {
+                        //     foreach ($garansi_nominal as $valGaransi) {
+                        //         if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->rekap_modal_id == $valGaransi->rekap_modal_id && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
+                        //             $qty = $qty + $valGaransi->qty;
+                        //         }
+                        //     }
+                        // }
                         $valWbdBB = ($valRekap->price * $qty) + $valRekap->kemasan;
                         ${$valListRekap . '-wbdbb'} += $valWbdBB;
                     }
@@ -508,13 +508,13 @@ class RekapNonMenuController extends Controller
                                 }
                             }
                         }
-                        if (!empty($garansi_notnull)) {
-                            foreach ($garansi_nominal as $valGaransi) {
-                                if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->rekap_modal_id == $valGaransi->rekap_modal_id && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
-                                    $qty = $qty + $valGaransi->qty;
-                                }
-                            }
-                        }
+                        // if (!empty($garansi_notnull)) {
+                        //     foreach ($garansi_nominal as $valGaransi) {
+                        //         if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->rekap_modal_id == $valGaransi->rekap_modal_id && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
+                        //             $qty = $qty + $valGaransi->qty;
+                        //         }
+                        //     }
+                        // }
                         $valWbdFrozen = ($valRekap->price * $qty) + $valRekap->kemasan;
                         ${$valListRekap . '-wbdfrozen'} += $valWbdFrozen;
                     }
@@ -769,13 +769,13 @@ class RekapNonMenuController extends Controller
                                         }
                                     }
                                 }
-                                if (!empty($garansi_notnull)) {
-                                    foreach ($garansi_nominal as $valGaransi) {
-                                        if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->rekap_modal_id == $valGaransi->rekap_modal_id && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
-                                            $qty = $qty + $valGaransi->qty;
-                                        }
-                                    }
-                                }
+                                // if (!empty($garansi_notnull)) {
+                                //     foreach ($garansi_nominal as $valGaransi) {
+                                //         if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->rekap_modal_id == $valGaransi->rekap_modal_id && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
+                                //             $qty = $qty + $valGaransi->qty;
+                                //         }
+                                //     }
+                                // }
                                 $valMenu = ($valRekap->price * $qty) + ($valRekap->kemasan * $qty);
                                 ${$valListRekap . '-' . $valTipe . '-menu'} += $valMenu;
                             }
@@ -788,13 +788,13 @@ class RekapNonMenuController extends Controller
                                         }
                                     }
                                 }
-                                if (!empty($garansi_notnull)) {
-                                    foreach ($garansi_nominal as $valGaransi) {
-                                        if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->rekap_modal_id == $valGaransi->rekap_modal_id && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
-                                            $qty = $qty + $valGaransi->qty;
-                                        }
-                                    }
-                                }
+                                // if (!empty($garansi_notnull)) {
+                                //     foreach ($garansi_nominal as $valGaransi) {
+                                //         if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->rekap_modal_id == $valGaransi->rekap_modal_id && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
+                                //             $qty = $qty + $valGaransi->qty;
+                                //         }
+                                //     }
+                                // }
                                 $valNonMenu = ($valRekap->price * $qty) + ($valRekap->kemasan * $qty);
                                 ${$valListRekap . '-' . $valTipe . '-nonmenu'} += $valNonMenu;
                             }
@@ -831,13 +831,13 @@ class RekapNonMenuController extends Controller
                                         }
                                     }
                                 }
-                                if (!empty($garansi_notnull)) {
-                                    foreach ($garansi_nominal as $valGaransi) {
-                                        if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->rekap_modal_id == $valGaransi->rekap_modal_id && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
-                                            $qty = $qty + $valGaransi->qty;
-                                        }
-                                    }
-                                }
+                                // if (!empty($garansi_notnull)) {
+                                //     foreach ($garansi_nominal as $valGaransi) {
+                                //         if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->rekap_modal_id == $valGaransi->rekap_modal_id && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
+                                //             $qty = $qty + $valGaransi->qty;
+                                //         }
+                                //     }
+                                // }
                                 $valWbdBB = ($valRekap->price * $qty) + ($valRekap->kemasan * $qty);
                                 ${$valListRekap . '-' . $valGrab . '-wbdbb'} += $valWbdBB;
                             }
@@ -851,13 +851,13 @@ class RekapNonMenuController extends Controller
                                         }
                                     }
                                 }
-                                if (!empty($garansi_notnull)) {
-                                    foreach ($garansi_nominal as $valGaransi) {
-                                        if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->rekap_modal_id == $valGaransi->rekap_modal_id && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
-                                            $qty = $qty + $valGaransi->qty;
-                                        }
-                                    }
-                                }
+                                // if (!empty($garansi_notnull)) {
+                                //     foreach ($garansi_nominal as $valGaransi) {
+                                //         if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->rekap_modal_id == $valGaransi->rekap_modal_id && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
+                                //             $qty = $qty + $valGaransi->qty;
+                                //         }
+                                //     }
+                                // }
                                 $valWbdFrozen = ($valRekap->price * $qty) + ($valRekap->kemasan * $qty);
                                 ${$valListRekap . '-' . $valGrab . '-wbdfrozen'} += $valWbdFrozen;
                             }
@@ -884,13 +884,13 @@ class RekapNonMenuController extends Controller
                                 }
                             }
                         }
-                        if (!empty($garansi_notnull)) {
-                            foreach ($garansi_nominal as $valGaransi) {
-                                if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->rekap_modal_id == $valGaransi->rekap_modal_id && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
-                                    $qty = $qty + $valGaransi->qty;
-                                }
-                            }
-                        }
+                        // if (!empty($garansi_notnull)) {
+                        //     foreach ($garansi_nominal as $valGaransi) {
+                        //         if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->rekap_modal_id == $valGaransi->rekap_modal_id && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
+                        //             $qty = $qty + $valGaransi->qty;
+                        //         }
+                        //     }
+                        // }
                         $valIceCream = ($valRekap->price * $qty) + $valRekap->kemasan;
                         ${$valListRekap . '-icecream'} += $valIceCream;
                     }
@@ -905,13 +905,13 @@ class RekapNonMenuController extends Controller
                                 }
                             }
                         }
-                        if (!empty($garansi_notnull)) {
-                            foreach ($garansi_nominal as $valGaransi) {
-                                if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->rekap_modal_id == $valGaransi->rekap_modal_id && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
-                                    $qty = $qty + $valGaransi->qty;
-                                }
-                            }
-                        }
+                        // if (!empty($garansi_notnull)) {
+                        //     foreach ($garansi_nominal as $valGaransi) {
+                        //         if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->rekap_modal_id == $valGaransi->rekap_modal_id && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
+                        //             $qty = $qty + $valGaransi->qty;
+                        //         }
+                        //     }
+                        // }
                         $valMineral = ($valRekap->price * $qty) + $valRekap->kemasan;
                         ${$valListRekap . '-mineral'} += $valMineral;
                     }
@@ -926,13 +926,13 @@ class RekapNonMenuController extends Controller
                                 }
                             }
                         }
-                        if (!empty($garansi_notnull)) {
-                            foreach ($garansi_nominal as $valGaransi) {
-                                if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->rekap_modal_id == $valGaransi->rekap_modal_id && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
-                                    $qty = $qty + $valGaransi->qty;
-                                }
-                            }
-                        }
+                        // if (!empty($garansi_notnull)) {
+                        //     foreach ($garansi_nominal as $valGaransi) {
+                        //         if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->rekap_modal_id == $valGaransi->rekap_modal_id && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
+                        //             $qty = $qty + $valGaransi->qty;
+                        //         }
+                        //     }
+                        // }
                         $valKerupuk = ($valRekap->price * $qty) + $valRekap->kemasan;
                         ${$valListRekap . '-krupuk'} += $valKerupuk;
                     }
@@ -947,13 +947,13 @@ class RekapNonMenuController extends Controller
                                 }
                             }
                         }
-                        if (!empty($garansi_notnull)) {
-                            foreach ($garansi_nominal as $valGaransi) {
-                                if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->rekap_modal_id == $valGaransi->rekap_modal_id && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
-                                    $qty = $qty + $valGaransi->qty;
-                                }
-                            }
-                        }
+                        // if (!empty($garansi_notnull)) {
+                        //     foreach ($garansi_nominal as $valGaransi) {
+                        //         if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->rekap_modal_id == $valGaransi->rekap_modal_id && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
+                        //             $qty = $qty + $valGaransi->qty;
+                        //         }
+                        //     }
+                        // }
                         $valWbdBB = ($valRekap->price * $qty) + $valRekap->kemasan;
                         ${$valListRekap . '-wbdbb'} += $valWbdBB;
                     }
@@ -968,13 +968,13 @@ class RekapNonMenuController extends Controller
                                 }
                             }
                         }
-                        if (!empty($garansi_notnull)) {
-                            foreach ($garansi_nominal as $valGaransi) {
-                                if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->rekap_modal_id == $valGaransi->rekap_modal_id && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
-                                    $qty = $qty + $valGaransi->qty;
-                                }
-                            }
-                        }
+                        // if (!empty($garansi_notnull)) {
+                        //     foreach ($garansi_nominal as $valGaransi) {
+                        //         if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->rekap_modal_id == $valGaransi->rekap_modal_id && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
+                        //             $qty = $qty + $valGaransi->qty;
+                        //         }
+                        //     }
+                        // }
                         $valWbdFrozen = ($valRekap->price * $qty) + $valRekap->kemasan;
                         ${$valListRekap . '-wbdfrozen'} += $valWbdFrozen;
                     }
@@ -1213,13 +1213,13 @@ class RekapNonMenuController extends Controller
                                         }
                                     }
                                 }
-                                if (!empty($garansi_notnull)) {
-                                    foreach ($garansi_nominal as $valGaransi) {
-                                        if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->m_w_nama == $valGaransi->m_w_nama && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
-                                            $qty = $qty + $valGaransi->qty;
-                                        }
-                                    }
-                                }
+                                // if (!empty($garansi_notnull)) {
+                                //     foreach ($garansi_nominal as $valGaransi) {
+                                //         if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->m_w_nama == $valGaransi->m_w_nama && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
+                                //             $qty = $qty + $valGaransi->qty;
+                                //         }
+                                //     }
+                                // }
                                 $valMenu = ($valRekap->price * $qty) + $valRekap->kemasan;
                                 ${$valListRekap . '-' . $valTipe . '-menu'} += $valMenu;
                             }
@@ -1232,13 +1232,13 @@ class RekapNonMenuController extends Controller
                                         }
                                     }
                                 }
-                                if (!empty($garansi_notnull)) {
-                                    foreach ($garansi_nominal as $valGaransi) {
-                                        if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->m_w_nama == $valGaransi->m_w_nama && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
-                                            $qty = $qty + $valGaransi->qty;
-                                        }
-                                    }
-                                }
+                                // if (!empty($garansi_notnull)) {
+                                //     foreach ($garansi_nominal as $valGaransi) {
+                                //         if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->m_w_nama == $valGaransi->m_w_nama && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
+                                //             $qty = $qty + $valGaransi->qty;
+                                //         }
+                                //     }
+                                // }
                                 $valNonMenu = ($valRekap->price * $qty) + $valRekap->kemasan;
                                 ${$valListRekap . '-' . $valTipe . '-nonmenu'} += $valNonMenu;
                             }
@@ -1265,13 +1265,13 @@ class RekapNonMenuController extends Controller
                                 }
                             }
                         }
-                        if (!empty($garansi_notnull)) {
-                            foreach ($garansi_nominal as $valGaransi) {
-                                if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->m_w_nama == $valGaransi->m_w_nama && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
-                                    $qty = $qty + $valGaransi->qty;
-                                }
-                            }
-                        }
+                        // if (!empty($garansi_notnull)) {
+                        //     foreach ($garansi_nominal as $valGaransi) {
+                        //         if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->m_w_nama == $valGaransi->m_w_nama && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
+                        //             $qty = $qty + $valGaransi->qty;
+                        //         }
+                        //     }
+                        // }
                         $valIceCream = ($valRekap->price * $qty) + $valRekap->kemasan;
                         ${$valListRekap . '-icecream'} += $valIceCream;
                     }
@@ -1286,13 +1286,13 @@ class RekapNonMenuController extends Controller
                                 }
                             }
                         }
-                        if (!empty($garansi_notnull)) {
-                            foreach ($garansi_nominal as $valGaransi) {
-                                if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->m_w_nama == $valGaransi->m_w_nama && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
-                                    $qty = $qty + $valGaransi->qty;
-                                }
-                            }
-                        }
+                        // if (!empty($garansi_notnull)) {
+                        //     foreach ($garansi_nominal as $valGaransi) {
+                        //         if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->m_w_nama == $valGaransi->m_w_nama && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
+                        //             $qty = $qty + $valGaransi->qty;
+                        //         }
+                        //     }
+                        // }
                         $valMineral = ($valRekap->price * $qty) + $valRekap->kemasan;
                         ${$valListRekap . '-mineral'} += $valMineral;
                     }
@@ -1307,13 +1307,13 @@ class RekapNonMenuController extends Controller
                                 }
                             }
                         }
-                        if (!empty($garansi_notnull)) {
-                            foreach ($garansi_nominal as $valGaransi) {
-                                if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->m_w_nama == $valGaransi->m_w_nama && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
-                                    $qty = $qty + $valGaransi->qty;
-                                }
-                            }
-                        }
+                        // if (!empty($garansi_notnull)) {
+                        //     foreach ($garansi_nominal as $valGaransi) {
+                        //         if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->m_w_nama == $valGaransi->m_w_nama && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
+                        //             $qty = $qty + $valGaransi->qty;
+                        //         }
+                        //     }
+                        // }
                         $valKerupuk = ($valRekap->price * $qty) + $valRekap->kemasan;
                         ${$valListRekap . '-krupuk'} += $valKerupuk;
                     }
@@ -1328,13 +1328,13 @@ class RekapNonMenuController extends Controller
                                 }
                             }
                         }
-                        if (!empty($garansi_notnull)) {
-                            foreach ($garansi_nominal as $valGaransi) {
-                                if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->m_w_nama == $valGaransi->m_w_nama && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
-                                    $qty = $qty + $valGaransi->qty;
-                                }
-                            }
-                        }
+                        // if (!empty($garansi_notnull)) {
+                        //     foreach ($garansi_nominal as $valGaransi) {
+                        //         if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->m_w_nama == $valGaransi->m_w_nama && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
+                        //             $qty = $qty + $valGaransi->qty;
+                        //         }
+                        //     }
+                        // }
                         $valWbdBB = ($valRekap->price * $qty) + $valRekap->kemasan;
                         ${$valListRekap . '-wbdbb'} += $valWbdBB;
                     }
@@ -1349,13 +1349,13 @@ class RekapNonMenuController extends Controller
                                 }
                             }
                         }
-                        if (!empty($garansi_notnull)) {
-                            foreach ($garansi_nominal as $valGaransi) {
-                                if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->m_w_nama == $valGaransi->m_w_nama && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
-                                    $qty = $qty + $valGaransi->qty;
-                                }
-                            }
-                        }
+                        // if (!empty($garansi_notnull)) {
+                        //     foreach ($garansi_nominal as $valGaransi) {
+                        //         if ($valRekap->m_produk_id == $valGaransi->produk_id && $valRekap->tanggal == $valGaransi->tanggal && $valRekap->m_w_nama == $valGaransi->m_w_nama && $valRekap->type_id == $valGaransi->r_t_m_t_t_id) {
+                        //             $qty = $qty + $valGaransi->qty;
+                        //         }
+                        //     }
+                        // }
                         $valWbdFrozen = ($valRekap->price * $qty) + $valRekap->kemasan;
                         ${$valListRekap . '-wbdfrozen'} += $valWbdFrozen;
                     }
