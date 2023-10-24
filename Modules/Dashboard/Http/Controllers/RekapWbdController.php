@@ -181,6 +181,10 @@ class RekapWbdController extends Controller
 
     public function show_waroeng(Request $request)
     {
+        $user = DB::table('users')
+            ->selectRaw('max(users_id) no_user')
+            ->first();
+
         $refund = DB::table('rekap_refund_detail')
             ->join('rekap_refund', 'r_r_id', 'r_r_detail_r_r_id')
             ->join('m_produk', 'm_produk_id', 'r_r_detail_m_produk_id')
@@ -211,7 +215,7 @@ class RekapWbdController extends Controller
                 'r_t_tanggal as tanggal',
                 'r_t_m_w_id as id_waroeng',
                 DB::raw('SUM(r_t_detail_reguler_price * r_t_detail_qty) AS nominal_wbd'),
-                DB::raw('SUM(CASE WHEN LENGTH(r_t_member_id) = 5 THEN (r_t_detail_reguler_price * r_t_detail_qty) ELSE 0 END) AS total_nominal_pegawai'))
+                DB::raw('SUM(CASE WHEN LENGTH(r_t_member_id) = 5 AND CAST(r_t_member_id AS bigint) < ' . $user->no_user . ' THEN (r_t_detail_reguler_price * r_t_detail_qty) ELSE 0 END) AS total_nominal_pegawai'))
             ->leftjoin('rekap_transaksi_detail', 'r_t_detail_r_t_id', 'r_t_id')
             ->leftJoin('m_produk', 'r_t_detail_m_produk_id', 'm_produk_id')
             ->where('m_produk_m_jenis_produk_id', '11')

@@ -87,30 +87,13 @@
                             <div class="row">
                                 <div class="col-md-5">
                                     <div class="row mb-1">
-                                        <label class="col-sm-3 col-form-label">Pembayaran</label>
-                                        <div class="col-sm-9">
-                                            <select id="filter_payment" style="width: 100%;"
-                                                data-placeholder="Pilih Pembayaran"
-                                                class="cari f-area js-select2 form-control filter_payment" name="waroeng">
-                                                <option></option>
-                                                @foreach ($data->payment as $payment)
-                                                    <option value="{{ $payment->m_payment_method_id }}">
-                                                        {{ $payment->m_payment_method_name }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-5">
-                                    <div class="row mb-1">
                                         <label class="col-sm-3 col-form-label">Akun</label>
                                         <div class="col-sm-9">
                                             <select id="filter_akun" style="width: 100%;" data-placeholder="Pilih Akun"
                                                 class="cari f-area js-select2 form-control filter_akun" name="waroeng">
                                                 <option></option>
                                                 @foreach ($data->rekening as $rekening)
-                                                    <option value="{{ $rekening->m_link_akuntansi_nama }}">
+                                                    <option value="{{ $rekening->m_rekening_code }}">
                                                         {{ $rekening->m_rekening_nama }}
                                                     </option>
                                                 @endforeach
@@ -147,6 +130,16 @@
                                 </thead>
                                 <tbody id="dataReload">
                                 </tbody>
+                                <tfoot>
+                                    <tr style="font-weight: bold; background-color: #fac1c1;">
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th class="text-center">Total</th>
+                                        <th class="text-center" id="debitTotalFooter"></th>
+                                        <th class="text-center" id="kreditTotalFooter"></th>
+                                    </tr>
+                                </tfoot>
                             </table>
                         </div>
                     </div>
@@ -173,7 +166,7 @@
                 var waroeng = $('.filter_waroeng').val();
                 var tanggal = $('.filter_tanggal').val();
                 var akun = $('.filter_akun').val();
-                var payment = $('.filter_payment').val();
+                var status = 'buku besar';
                 $('#jurnal_tampil').DataTable({
                     destroy: true,
                     autoWidth: true,
@@ -189,12 +182,12 @@
                         pageOrientation: 'portrait',
                     }],
                     ajax: {
-                        url: '{{ route('buku_besar.tampil_buku_besar') }}',
+                        url: '{{ route('otomatis.tampil_jurnal') }}',
                         data: {
                             waroeng: waroeng,
                             tanggal: tanggal,
                             akun: akun,
-                            payment: payment,
+                            status: status,
                         },
                         type: "GET",
                     },
@@ -212,17 +205,57 @@
                         },
                         {
                             data: 'particul',
-                            class: 'text-center'
+                            class: 'text-center',
+                            render: function(data) {
+                                return '<div style="white-space: normal;">' +
+                                    data +
+                                    '</div>';
+                            }
                         },
                         {
                             data: 'debit',
-                            class: 'text-center'
+                            class: 'text-center',
+                            render: function(data) {
+                                return '<div style="white-space: normal;">' +
+                                    data +
+                                    '</div>';
+                            }
                         },
                         {
                             data: 'kredit',
                             class: 'text-center'
                         },
                     ],
+                    drawCallback: function(settings) {
+                        var api = this.api();
+                        var data = api.rows({
+                            page: 'current'
+                        }).data();
+
+                        var debitTotal = 0;
+                        var kreditTotal = 0;
+
+                        for (var i = 0; i < data.length; i++) {
+                            if (data[i]['debit']) {
+                                debitTotal += parseFloat(data[i][
+                                    'debit'
+                                ].replace(
+                                    /[^0-9.-]+/g,
+                                    ""));
+                            }
+                            if (data[i]['kredit']) {
+                                kreditTotal += parseFloat(data[i][
+                                    'kredit'
+                                ].replace(
+                                    /[^0-9.-]+/g, ""));
+                            }
+                        }
+                        console.log(kreditTotal);
+                        $(api.column(4).footer()).html(debitTotal
+                            .toLocaleString());
+                        $(api.column(5).footer()).html(kreditTotal
+                            .toLocaleString());
+                    }
                 });
             });
 
@@ -245,7 +278,7 @@
                     if (id_area && tanggal) {
                         $.ajax({
                             type: "GET",
-                            url: '{{ route('buku_besar.select_waroeng') }}',
+                            url: '{{ route('otomatis.select_waroeng') }}',
                             dataType: 'JSON',
                             destroy: true,
                             data: {

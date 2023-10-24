@@ -80,8 +80,7 @@
                                                     </td>
                                                     <td>
                                                         <a placeholder="Input Nama Item" id="m_rekening_item"
-                                                            name="m_rekening_item[]"
-                                                            class="form-control set form-control-sm m_rekening_item text-center btn btn-primary"
+                                                            class="form-control set form-control-sm text-center btn btn-primary"
                                                             title="Tambahkan Item"><i
                                                                 class="fa-solid fa-pen-to-square"></i></a>
                                                     </td>
@@ -268,7 +267,7 @@
     </div>
 
     <!-- Modal Item -->
-    <div class="modal" id="rekening_item" tabindex="-1" role="dialog" aria-labelledby="form-rekening"
+    <div class="modal" id="rekening_modal" tabindex="-1" role="dialog" aria-labelledby="form-rekening"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -283,27 +282,21 @@
                     </div>
                     <div class="block-content">
                         <!-- Select2 is initialized at the bottom of the page -->
-                        <form id="formAction" name="form_action" method="post">
-                            @csrf
-                            <div class="mb-4">
-                                <input name="m_rekening_id" type="hidden" class="m_rekening_no_akun1">
-                                <div class="form-group">
-                                    <label for="m_rekening_no_akun" class="mb-2">Nama Akun : <span id="nama_akun">
-                                        </span></label>
-                                    <div class="mb-2">
-                                        <input class="form-control item_akun" type="text" name="m_rekening_no_akun"
-                                            id="item_akun" style="width: 100%;" required>
-                                    </div>
-                                    <div id="tagList"></div>
-                                </div>
-                            </div>
+                        <table id="table_item" class="display">
+                            <thead>
+                                <tr>
+                                    <th>Nama Item</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- You can populate the table dynamically using JavaScript -->
+                            </tbody>
+                        </table>
                     </div>
                     <div class="block-content block-content-full text-end bg-body">
                         <button type="button" class="btn btn-sm btn-alt-secondary me-1"
                             data-bs-dismiss="modal">Close</button>
-                        {{-- <button type="submit" class="btn btn-success" id="submit">Update</button> --}}
                     </div>
-                    </form>
                 </div>
             </div>
         </div>
@@ -391,30 +384,39 @@
                 });
             });
 
-            $("#item_akun").on("keypress", function(event) {
-                if (event.which === 13 || event.which === 44) {
-                    event.preventDefault();
-                    var tag = $(this).val().trim();
-                    if (tag !== "") {
-                        $("#tagList").append('<div class="tag">' + tag + '</div>');
-                    }
-                    $(this).val("");
-                }
-            });
+            // $("#item_akun").on("keypress", function(event) {
+            //     if (event.which === 13 || event.which === 44) {
+            //         event.preventDefault();
+            //         var tag = $(this).val().trim();
+            //         if (tag !== "") {
+            //             $("#tagList").append('<div class="tag">' + tag + '</div>');
+            //         }
+            //         $(this).val("");
+            //     }
+            // });
 
-            $("#tagList").on("click", ".tag", function() {
-                $(this).remove();
-            });
+            // $("#tagList").on("click", ".tag", function() {
+            //     $(this).remove();
+            // });
+
+            var table;
+            var temporaryData = [];
+
+            table = $('#table_item').DataTable();
 
             $("#m_rekening_item").on('click', function() {
-                var id = $(this).attr('value');
-                var rekening_nama = $("#m_rekening_nama").val();
-                // $('#item_akun_title form')[0].reset();
-                $("#item_akun_title").html('Isi Item Akun');
-                $("#nama_akun").html('<b>' + rekening_nama +
-                    '</b>');
-                $("#rekening_item").modal('show');
+                // You can add data to the temporaryData array here
+                var rekeningItem =
+                    "<input type='text' placeholder='Input Nama Item' name='m_rekening_item[]' class='form-control set form-control-sm m_rekening_item text-center' required />";
+                temporaryData.push([rekeningItem]);
+
+                // Add the data to the DataTable
+                table.rows.add(temporaryData).draw();
+
+                // Show the modal
+                $("#rekening_modal").modal('show');
             });
+
 
 
             //get edit

@@ -84,7 +84,7 @@
                                 </div>
                             </div>
 
-                            <div class="row">
+                            {{-- <div class="row">
                                 <div class="col-md-5">
                                     <div class="row mb-1">
                                         <label class="col-sm-3 col-form-label">Pembayaran</label>
@@ -104,7 +104,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
 
                             <div id="user-info" data-waroeng-id="{{ Auth::user()->waroeng_id }}"
                                 data-has-access="{{ in_array(Auth::user()->waroeng_id, $data->akses_area) ? 'true' : 'false' }}">
@@ -169,9 +169,9 @@
                 var area = $('.filter_area').val();
                 var waroeng = $('.filter_waroeng').val();
                 var tanggal = $('.filter_tanggal').val();
-                var payment = $('.filter_pembayaran').val();
+                var status = 'jurnal';
 
-                if (area === "" || waroeng === "" || tanggal === "" || payment === "") {
+                if (area === "" || waroeng === "" || tanggal === "") {
                     Swal.fire({
                         title: 'Informasi',
                         text: 'Silahkan lengkapi semua kolom',
@@ -190,7 +190,7 @@
                         data: {
                             waroeng: waroeng,
                             tanggal: tanggal,
-                            payment: payment,
+                            status: status,
                         },
                         success: function(res) {
                             if (res.type != 'error') {
@@ -213,7 +213,7 @@
                                         data: {
                                             waroeng: waroeng,
                                             tanggal: tanggal,
-                                            payment: payment,
+                                            status: status,
                                         },
                                         type: "GET",
                                     },

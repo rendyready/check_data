@@ -1005,13 +1005,13 @@
                                         <ul class="nav-main-submenu">
                                             <li class="nav-main-item">
                                                 <a class="nav-main-link{{ request()->is('akuntansi/jurnal') ? ' active' : '' }}"
-                                                    href="{{ route('otomatis.index') }}">
+                                                    href="{{ route('otomatis.jurnal') }}">
                                                     <span class="nav-main-link-name">Jurnal</span>
                                                 </a>
                                             </li>
                                             <li class="nav-main-item">
                                                 <a class="nav-main-link{{ request()->is('akuntansi/buku_besar') ? ' active' : '' }}"
-                                                    href="{{ route('buku_besar.index') }}">
+                                                    href="{{ route('otomatis.buku_besar') }}">
                                                     <span class="nav-main-link-name">Buku Besar</span>
                                                 </a>
                                             </li>

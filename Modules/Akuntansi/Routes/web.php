@@ -56,15 +56,18 @@ Route::prefix('akuntansi')->middleware('auth', 'web')
         });
 
         Route::controller(JurnalOtomatisController::class)->group(function () {
-            Route::get('otomatis', 'index')->name('otomatis.index');
+            Route::get('otomatis/jurnal', 'jurnal_penjualan')->name('otomatis.jurnal');
             Route::get('otomatis/tampil_jurnal', 'tampil_jurnal')->name('otomatis.tampil_jurnal');
             Route::get('otomatis/select_waroeng', 'select_waroeng')->name('otomatis.select_waroeng');
             Route::get('otomatis/export_pdf', 'export_pdf')->name('otomatis.export_pdf');
+            Route::get('otomatis/buku_besar', 'buku_besar')->name('otomatis.buku_besar');
+            // Route::get('otomatis/tampil_jurnal', 'tampil_buku_besar')->name('otomatis.tampil_buku_besar');
+            Route::get('otomatis/select_waroeng', 'select_waroeng')->name('otomatis.select_waroeng');
         });
 
-        Route::controller(BukuBesarController::class)->group(function () {
-            Route::get('buku_besar', 'index')->name('buku_besar.index');
-            Route::get('buku_besar/tampil_buku_besar', 'tampil_buku_besar')->name('buku_besar.tampil_buku_besar');
-            Route::get('buku_besar/select_waroeng', 'select_waroeng')->name('buku_besar.select_waroeng');
-        });
+        // Route::controller(BukuBesarController::class)->group(function () {
+        //     Route::get('buku_besar', 'index')->name('buku_besar.index');
+        //     Route::get('buku_besar/tampil_buku_besar', 'tampil_buku_besar')->name('buku_besar.tampil_buku_besar');
+        //     Route::get('buku_besar/select_waroeng', 'select_waroeng')->name('buku_besar.select_waroeng');
+        // });
     });
