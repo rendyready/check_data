@@ -3,12 +3,11 @@
 namespace Modules\Master\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use illuminate\Support\Str;
-use illuminate\Support\Facades\Validator;
 
 class SCController extends Controller
 {
@@ -21,43 +20,42 @@ class SCController extends Controller
     {
 
         $val = [
-            'm_sc_value' => ['required']
+            'm_sc_value' => ['required'],
         ];
         $value = [
-            'm_sc_value' => Str::lower($request->m_sc_value)
+            'm_sc_value' => Str::lower($request->m_sc_value),
         ];
-        $validate = \Validator::make($request->all(), $val);
-        if ($validate->fails()) {
-            return response(['Message' => 'Data Duplicate !']);
+        $validate = DB::table('m_sc')->where('m_sc_value', $request->m_sc_value)->first();
+        if ($validate) {
+            return response(['action' => 'add','type'=>'danger','message' => 'Data Duplicate !']);
         } else {
-            if ($validate->ajax()) {
-                if ($request->action == 'add') {
-                    $data = array(
-                        // 'm_sc_id' => $this->getMasterId('m_sc'),
-                        'm_sc_id' => '1',
-                        'm_sc_value'    =>    $request->m_sc_value,
-                        'm_sc_created_by' => Auth::user()->users_id,
-                        'm_sc_created_at' => Carbon::now(),
-                    );
-                    DB::table('m_sc')->insert($data);
-                } elseif ($request->action == 'edit') {
-                    $data = array(
-                        'm_sc_value'    =>    $request->m_sc_value,
-                        'm_sc_status_sync' => 'send',
-                        'm_sc_client_target' => DB::raw('DEFAULT'),
-                        'm_sc_updated_by' => Auth::user()->users_id,
-                        'm_sc_updated_at' => Carbon::now(),
-                    );
-                    DB::table('m_sc')->where('id', $request->id)
-                        ->update($data);
-                } else {
-                    $softdelete = array('m_sc_jenis_deleted_at' => Carbon::now());
-                    DB::table('m_sc')
-                        ->where('id', $request->id)
-                        ->update($softdelete);
-                }
-                return response(['Success' => $data]);
+            if ($request->action == 'add') {
+                $data = array(
+                    // 'm_sc_id' => $this->getMasterId('m_sc'),
+                    'm_sc_id' => '1',
+                    'm_sc_value' => $request->m_sc_value,
+                    'm_sc_created_by' => Auth::user()->users_id,
+                    'm_sc_created_at' => Carbon::now(),
+                );
+                DB::table('m_sc')->insert($data);
+            } elseif ($request->action == 'edit') {
+                $data = array(
+                    'm_sc_value' => $request->m_sc_value,
+                    'm_sc_status_sync' => 'send',
+                    'm_sc_client_target' => DB::raw('DEFAULT'),
+                    'm_sc_updated_by' => Auth::user()->users_id,
+                    'm_sc_updated_at' => Carbon::now(),
+                );
+                DB::table('m_sc')->where('id', $request->id)
+                    ->update($data);
+            } else {
+                $softdelete = array('m_sc_jenis_deleted_at' => Carbon::now());
+                DB::table('m_sc')
+                    ->where('id', $request->id)
+                    ->update($softdelete);
             }
+            return response(['Success' => $data]);
+
         }
     }
 }

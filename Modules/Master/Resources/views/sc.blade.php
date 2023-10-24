@@ -58,7 +58,15 @@
     restoreButton:false,
     onSuccess:function(data, textStatus, jqXHR)
     {
+      
       if (data.action == 'add') {
+        Codebase.helpers('jq-notify', {
+          align: 'right', // 'right', 'left', 'center'
+          from: 'top', // 'top', 'bottom'
+          type: data.type, // 'info', 'success', 'warning', 'danger'
+          icon: 'fa fa-info me-5', // Icon class
+          message: data.message
+        });
         window.location.reload();
       }
       if(data.action == 'delete')

@@ -136,6 +136,12 @@
                                         </div>
                                         <div class="mb-4">
                                             <div class="form-group">
+                                                <label for="m_w_telp">No Wa Waroeng</label>
+                                                <input class="form-control" type="number" name="m_w_telp" id="m_w_telp" placeholder="contoh: 628">
+                                            </div>
+                                        </div>
+                                        <div class="mb-4">
+                                            <div class="form-group">
                                                 <label for="m_w_m_kode_nota">Kode Nota</label>
                                                 <select class="js-select2" id="m_w_m_kode_nota" name="m_w_m_kode_nota"
                                                     style="width: 100%;" data-placeholder="Pilih Kode Nota" required>
@@ -312,6 +318,7 @@
                         $("#m_w_m_modal_tipe_id").val(respond.m_w_m_modal_tipe_id).trigger(
                             'change');
                         $("#m_w_m_sc_id").val(respond.m_w_m_sc_id).trigger('change');
+                        $("#m_w_telp").val(respond.m_w_telp).trigger('change');
                         $("#m_w_decimal").val(respond.m_w_decimal).trigger('change');
                         $("#m_w_pembulatan").val(respond.m_w_pembulatan).trigger('change');
                         $("#m_w_currency").val(respond.m_w_currency).trigger('change');
