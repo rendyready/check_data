@@ -36,8 +36,8 @@ class TriggerMasterSeeder extends Seeder
         $table[19] = 'm_meja';
         $table[20] = 'm_modal_tipe';
         $table[21] = 'm_payment_method';
-        // $table[22] = 'app_setting';
-        // $table[23] = 'm_karyawan';
+        $table[22] = 'm_supplier';
+        $table[23] = 'm_satuan';
         // $table[24] = 'm_jabatan';
         // $table[25] = 'history_pendidikan';
         // $table[26] = 'history_jabatan';
@@ -47,6 +47,7 @@ class TriggerMasterSeeder extends Seeder
         $table[29] = 'm_rekening';
         $table[30] = 'm_link_akuntansi';
         $table[31] = 'm_akun_bank';
+        $table[32] = 'm_customer';
 
         foreach ($table as $key => $valTable) {
 
