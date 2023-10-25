@@ -289,7 +289,8 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <!-- You can populate the table dynamically using JavaScript -->
+                                <input type='text' placeholder='Input Nama Item' name='m_rekening_item[]'
+                                    class='form-control set form-control-sm m_rekening_item text-center' required />
                             </tbody>
                         </table>
                     </div>
