@@ -30,11 +30,11 @@
                                         </div>
                                     </div>
                                     <div class="row mb-2">
-                                        <label class="col-sm-3 col-form-label-sm" for="r_t_jb_gudang_code">Masuk
+                                        <label class="col-sm-3 col-form-label-sm" for="r_t_jb_m_gudang_code">Masuk
                                             Gudang</label>
                                         <div class="col-sm-9">
                                             <select class="js-select2 gudang_code form-control-sm" style="width: 100%;"
-                                                name="r_t_jb_gudang_code" id="r_t_jb_gudang_code"
+                                                name="r_t_jb_m_gudang_code" id="r_t_jb_m_gudang_code"
                                                 data-placeholder="Pilih Gudang" required>
                                                 <option></option>
                                                 @foreach ($data->gudang as $item)
@@ -81,11 +81,11 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="row mb-2">
-                                        <label class="col-sm-4 col-form-label-sm" for="r_t_jb_supplier_code">Kode
+                                        <label class="col-sm-4 col-form-label-sm" for="r_t_jb_m_supplier_code">Kode
                                             Supplier</label>
                                         <div class="col-sm-8">
                                             <select class="js-select2 form-control-sm" style="width: 100%;"
-                                                name="r_t_jb_supplier_code" id="r_t_jb_supplier_code"
+                                                name="r_t_jb_m_supplier_code" id="r_t_jb_m_supplier_code"
                                                 data-placeholder="pilih supplier" required>
                                                 <option></option>
                                             </select>
@@ -93,27 +93,27 @@
                                     </div>
                                     <div class="row mb-1">
                                         <label class="col-sm-4 col-form-label-sm"
-                                            for="r_t_jb_supplier_nama">Nama</label>
+                                            for="r_t_jb_m_supplier_nama">Nama</label>
                                         <div class="col-sm-8">
                                             <input type="text" class="form-control supplier form-control-sm"
-                                                id="r_t_jb_supplier_nama" name="r_t_jb_supplier_nama" readonly
+                                                id="r_t_jb_m_supplier_nama" name="r_t_jb_m_supplier_nama" readonly
                                                 required>
                                         </div>
                                     </div>
                                     <div class="row mb-1">
-                                        <label class="col-sm-4 col-form-label-sm" for="r_t_jb_supplier_telp">No
+                                        <label class="col-sm-4 col-form-label-sm" for="r_t_jb_m_supplier_telp">No
                                             Telpn</label>
                                         <div class="col-sm-8">
                                             <input type="text" class="form-control supplier form-control-sm"
-                                                id="r_t_jb_supplier_telp" name="r_t_jb_supplier_telp" readonly
+                                                id="r_t_jb_m_supplier_telp" name="r_t_jb_m_supplier_telp" readonly
                                                 required>
                                         </div>
                                     </div>
                                     <div class="row mb-1">
                                         <label class="col-sm-4 col-form-label-sm"
-                                            for="r_t_jb_supplier_alamat">Alamat</label>
+                                            for="r_t_jb_m_supplier_alamat">Alamat</label>
                                         <div class="col-sm-8">
-                                            <textarea class="supplier" name="r_t_jb_supplier_alamat" id="r_t_jb_supplier_alamat" cols="23"
+                                            <textarea class="supplier" name="r_t_jb_m_supplier_alamat" id="r_t_jb_m_supplier_alamat" cols="23"
                                                 rows="3" readonly required></textarea>
                                         </div>
                                     </div>
@@ -183,11 +183,11 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="row mb-1">
-                                            <label class="col-sm-4 col-form-label" for="r_t_jb_tot_no_ppn">Jumlah
+                                            <label class="col-sm-4 col-form-label" for="r_t_jb_sub_total_beli">Jumlah
                                                 Total</label>
                                             <div class="col-sm-6">
                                                 <input type="text" class="form-control form-control-sm grdtot"
-                                                    id="r_t_jb_tot_no_ppn" name="r_t_jb_tot_no_ppn" readonly>
+                                                    id="r_t_jb_sub_total_beli" name="r_t_jb_sub_total_beli" readonly>
                                             </div>
                                         </div>
                                         <div class="row mb-1">
@@ -210,34 +210,34 @@
                                             </div>
                                             <div class="col-sm-5">
                                                 <input type="text" class="form-control number form-control-sm ppnrp"
-                                                    id="r_t_jb_ppn_rp" name="r_t_jb_ppn_rp" placeholder="Rp"
+                                                    id="r_t_jb_nominal_ppn" name="r_t_jb_nominal_ppn" placeholder="Rp"
                                                     readonly>
                                             </div>
                                         </div>
                                         <div class="row mb-1">
-                                            <label class="col-sm-4 col-form-label" for="r_t_jb_ongkir">Ongkos
+                                            <label class="col-sm-4 col-form-label" for="r_t_jb_nominal_ongkir">Ongkos
                                                 Kirim</label>
                                             <div class="col-sm-6">
                                                 <input type="text"
                                                     class="form-control form-control-sm number reset ongkir"
-                                                    id="r_t_jb_ongkir" name="r_t_jb_ongkir">
+                                                    id="r_t_jb_nominal_ongkir" name="r_t_jb_nominal_ongkir">
                                             </div>
                                         </div>
                                         <div class="row mb-1">
-                                            <label class="col-sm-4 col-form-label" for="r_t_jb_tot_nom">Jumlah
+                                            <label class="col-sm-4 col-form-label" for="r_t_jb_nominal_total_beli">Jumlah
                                                 Akhir</label>
                                             <div class="col-sm-6">
                                                 <input type="text"
-                                                    class="form-control number form-control-sm r_t_jb_tot_nom"
-                                                    id="r_t_jb_tot_nom" name="r_t_jb_tot_nom" readonly>
+                                                    class="form-control number form-control-sm r_t_jb_nominal_total_beli"
+                                                    id="r_t_jb_nominal_total_beli" name="r_t_jb_nominal_total_beli" readonly>
                                             </div>
                                         </div>
                                         <div class="row mb-1">
                                             <label class="col-sm-4 col-form-label"
-                                                for="r_t_jb_terbayar">Dibayar</label>
+                                                for="r_t_jb_nominal_bayar">Dibayar</label>
                                             <div class="col-sm-6">
                                                 <input type="text" class="form-control number form-control-sm bayar"
-                                                    id="r_t_jb_terbayar" name="r_t_jb_terbayar">
+                                                    id="r_t_jb_nominal_bayar" name="r_t_jb_nominal_bayar">
                                             </div>
                                         </div>
                                         <div class="row mb-1">
@@ -386,10 +386,10 @@
             };
 
             $(document).
-            on("select2:open", '#r_t_jb_gudang_code', function() {
+            on("select2:open", '#r_t_jb_m_gudang_code', function() {
                 $(this).data("id", $(this).val());
             }).
-            on('change', '#r_t_jb_gudang_code', function() {
+            on('change', '#r_t_jb_m_gudang_code', function() {
                 asal = $(this).val();
                 var id = $(this).data("id");
                     if ($('.fc').serialize().length > 191) {
@@ -415,7 +415,7 @@
                             } else {
                                 isConfirmationShown =
                                     true; // Set isConfirmationShown kembali ke false agar dialog konfirmasi dapat ditampilkan lagi jika diperlukan
-                                $('#r_t_jb_gudang_code').val(id).trigger('change');
+                                $('#r_t_jb_m_gudang_code').val(id).trigger('change');
                                 isConfirmationShown = false;
                             }
                         });
@@ -463,7 +463,7 @@
             $.get('/inventori/beli/list', function(response) {
                 supplier = response['supplier'];
                 $.each(supplier, function(key, value) {
-                    $('#r_t_jb_supplier_code')
+                    $('#r_t_jb_m_supplier_code')
                         .append($('<option>', {
                                 value: key
                             })
@@ -518,16 +518,16 @@
                     var disctotrp = $("[name='r_t_jb_nominal_disc']").val().replace(/\./g, '').replace(/\,/g,
                         '.');
                     var ppn = $("[name='r_t_jb_ppn']").val();
-                    var bayar = $("[name='r_t_jb_terbayar']").val().replace(/\./g, '').replace(/\,/g,
+                    var bayar = $("[name='r_t_jb_nominal_bayar']").val().replace(/\./g, '').replace(/\,/g,
                         '.') || 0;
-                    var ongkir = $("[name='r_t_jb_ongkir']").val().replace(/\./g, '').replace(/\,/g, '.') ||
+                    var ongkir = $("[name='r_t_jb_nominal_ongkir']").val().replace(/\./g, '').replace(/\,/g, '.') ||
                         0;
                     var grandtotal = grdtot * parseFloat((100 - disc_tot) / 100) - disctotrp;
                     var ppnrp = parseFloat(ppn / 100) * grandtotal;
-                    var r_t_jb_tot_nom = parseFloat(grandtotal) + parseFloat(ppnrp) + parseFloat(ongkir);
+                    var r_t_jb_nominal_total_beli = parseFloat(grandtotal) + parseFloat(ppnrp) + parseFloat(ongkir);
                     $('.ppnrp').val(ppnrp);
-                    $('.r_t_jb_tot_nom').val(r_t_jb_tot_nom.toLocaleString('id'));
-                    if ((bayar - r_t_jb_tot_nom) > 0) {
+                    $('.r_t_jb_nominal_total_beli').val(r_t_jb_nominal_total_beli.toLocaleString('id'));
+                    if ((bayar - r_t_jb_nominal_total_beli) > 0) {
                         Codebase.helpers('jq-notify', {
                             align: 'right', // 'right', 'left', 'center'
                             from: 'top', // 'top', 'bottom'
@@ -538,11 +538,11 @@
                         $('.bayar').val('');
                         $tblrows.find('.persendisc').trigger('input');
                     } else {
-                        $('.sisa').val((r_t_jb_tot_nom - bayar).toLocaleString('id'));
+                        $('.sisa').val((r_t_jb_nominal_total_beli - bayar).toLocaleString('id'));
                     }
-                    $('#total_sum_value').html(': Rp ' + r_t_jb_tot_nom.toLocaleString('id'));
+                    $('#total_sum_value').html(': Rp ' + r_t_jb_nominal_total_beli.toLocaleString('id'));
                 });
-            $('#r_t_jb_supplier_code').on('change', function() {
+            $('#r_t_jb_m_supplier_code').on('change', function() {
                 var id = $(this).val();
                 if (id == '500001') {
                     const date = new Date('{{ $data->tgl_now }}').toISOString().slice(0, 10);
@@ -555,11 +555,11 @@
                         type: "GET",
                         dataType: 'json',
                         success: function(respond) {
-                            $("#r_t_jb_supplier_nama").val(respond.m_supplier_nama).trigger(
+                            $("#r_t_jb_m_supplier_nama").val(respond.m_supplier_nama).trigger(
                                 'change');
-                            $("#r_t_jb_supplier_alamat").val(respond.m_supplier_alamat)
+                            $("#r_t_jb_m_supplier_alamat").val(respond.m_supplier_alamat)
                                 .trigger('change');
-                            $("#r_t_jb_supplier_telp").val(respond.m_supplier_telp).trigger(
+                            $("#r_t_jb_m_supplier_telp").val(respond.m_supplier_telp).trigger(
                                 'change');
                             const date = new Date('{{ $data->tgl_now }}');
                             date.setDate(date.getDate() + parseInt(respond
@@ -582,7 +582,7 @@
             });
             $('#formAction').submit(function(e) {
                 e.preventDefault();
-                var dibayar = $('#r_t_jb_terbayar').val();
+                var dibayar = $('#r_t_jb_nominal_bayar').val();
                 var ajaxData = {
                     url: "{{ route('beli.simpan') }}",
                     type: "POST",

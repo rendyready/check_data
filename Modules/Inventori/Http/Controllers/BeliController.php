@@ -62,57 +62,66 @@ class BeliController extends Controller
      */
     public function simpan(Request $request)
     {
+        $id_waroeng = Auth::user()->waroeng_id;
+        $area = $this->getAreaMw($id_waroeng);
         $terbayar = (empty($request->rekap_beli_terbayar)) ? 0 : $request->rekap_beli_terbayar;
         $ongkir = (empty($request->rekap_beli_ongkir)) ? 0 : $request->rekap_beli_ongkir;
         $rekap_beli = array(
-            'r_t_jb_id' => $request->rekap_beli_code,
-            'r_t_jb_code_nota' => $request->rekap_beli_code_nota,
-            'r_t_jb_tgl' => $request->rekap_beli_tgl,
-            'r_t_jb_jth_tmp' => $request->rekap_beli_jth_tmp,
-            'r_t_jb_supplier_code' => $request->rekap_beli_supplier_code,
-            'r_t_jb_supplier_nama' => $request->rekap_beli_supplier_nama,
-            'r_t_jb_supplier_telp' => $request->rekap_beli_supplier_telp,
-            'r_t_jb_supplier_alamat' => $request->rekap_beli_supplier_alamat,
-            'r_t_jb_m_w_id' => Auth::user()->waroeng_id,
-            'r_t_jb_gudang_code' => $request->rekap_beli_gudang_code,
-            'r_t_jb_waroeng' => $request->rekap_beli_waroeng,
-            'r_t_jb_disc' => $request->rekap_beli_disc,
-            'r_t_jb_disc_rp' => convertfloat($request->rekap_beli_disc_rp),
-            'r_t_jb_ppn' => $request->rekap_beli_ppn,
-            'r_t_jb_ppn_rp' => convertfloat($request->rekap_beli_ppn_rp),
-            'r_t_jb_ongkir' => convertfloat($ongkir),
-            'r_t_jb_terbayar' => convertfloat($terbayar),
-            'r_t_jb_sub_tot' => convertfloat($request->rekap_beli_tot_no_ppn),
-            'rekap_beli_tot_nom' => convertfloat($request->rekap_beli_tot_nom),
-            'rekap_beli_ket' => 'pembelian mandiri',
-            'rekap_beli_created_at' => Carbon::now(),
-            'rekap_beli_created_by' => Auth::user()->users_id,
+            'r_t_jb_id' => $request->r_t_jb_code,
+            'r_t_jb_code_nota' => $request->r_t_jb_code_nota,
+            'r_t_jb_tgl' => $request->r_t_jb_tgl,
+            'r_t_jb_jth_tmp' => $request->r_t_jb_jth_tmp,
+            'r_t_jb_type' => 'pembelian',
+            'r_t_jb_m_gudang_code' => $request->r_t_jb_m_gudang_code,
+            'r_t_jb_m_supplier_code' => $request->r_t_jb_m_supplier_code,
+            'r_t_jb_m_supplier_nama' => $request->r_t_jb_m_supplier_nama,
+            'r_t_jb_m_supplier_telp' => $request->r_t_jb_m_supplier_telp,
+            'r_t_jb_m_supplier_alamat' => $request->r_t_jb_m_supplier_alamat,
+            'r_t_jb_m_w_id_asal' => $id_waroeng,
+            'r_t_jb_m_w_nama_asal' => $request->r_t_jb_waroeng,
+            'r_t_jb_m_w_id_tujuan' => $id_waroeng,
+            'r_t_jb_m_w_nama_tujuan' => $request->r_t_jb_waroeng,
+            'r_t_jb_m_area_code_asal' => $area->m_area_code,
+            'r_t_jb_m_area_nama_asal' => $area->m_area_nama,
+            'r_t_jb_m_area_code_tujuan' => $area->m_area_code,
+            'r_t_jb_m_area_nama_tujuan' => $area->m_area_nama,
+            'r_t_jb_sub_total_beli' => convertfloat($request->r_t_jb_sub_total_beli),
+            'r_t_jb_disc' => $request->r_t_jb_disc,
+            'r_t_jb_nominal_disc' => convertfloat($request->r_t_jb_nominal_disc),
+            'r_t_jb_ppn' => $request->r_t_jb_ppn,
+            'r_t_jb_nominal_ppn' => convertfloat($request->r_t_jb_nominal_ppn),
+            'r_t_jb_nominal_ongkir' => convertfloat($request->r_t_jb_nominal_ongkir),
+            'r_t_jb_nominal_total_beli' => convertfloat($request->r_t_jb_nominal_total_beli),
+            'r_t_jb_nominal_bayar' => 0,
+            'r_t_jb_ket' => 'pembelian mandiri',
+            'r_t_jb_created_at' => Carbon::now(),
+            'r_t_jb_created_by' => Auth::user()->users_id,
         );
 
-        $insert = DB::table('rekap_beli')->insert($rekap_beli);
-        foreach ($request->rekap_beli_detail_qty as $key => $value) {
+        $insert = DB::table('rekap_trans_jualbeli')->insert($rekap_beli);
+        foreach ($request->r_t_jb_detail_qty as $key => $value) {
             $produk = DB::table('m_stok')
-                ->where('m_stok_m_produk_code', $request->rekap_beli_detail_m_produk_id[$key])
+                ->where('m_stok_m_produk_code', $request->r_t_jb_detail_m_produk_id[$key])
                 ->where('m_stok_gudang_code', $request->rekap_beli_gudang_code)
                 ->first();
             $data = array(
-                'rekap_beli_detail_id' => $this->getNextId('rekap_beli_detail', Auth::user()->waroeng_id),
-                'rekap_beli_detail_rekap_beli_code' => $request->rekap_beli_code,
-                'rekap_beli_detail_m_produk_code' => $request->rekap_beli_detail_m_produk_id[$key],
-                'rekap_beli_detail_m_produk_nama' => $produk->m_stok_produk_nama,
-                'rekap_beli_detail_satuan_id' => $produk->m_stok_satuan_id,
-                'rekap_beli_detail_satuan_terima' => $produk->m_stok_satuan,
-                'rekap_beli_detail_catatan' => $request->rekap_beli_detail_catatan[$key],
-                'rekap_beli_detail_qty' => convertfloat($request->rekap_beli_detail_qty[$key]),
-                'rekap_beli_detail_harga' => convertfloat($request->rekap_beli_detail_harga[$key]),
-                'rekap_beli_detail_disc' => $request->rekap_beli_detail_disc[$key],
-                'rekap_beli_detail_discrp' => convertfloat($request->rekap_beli_detail_discrp[$key]),
-                'rekap_beli_detail_subtot' => convertfloat($request->rekap_beli_detail_subtot[$key]),
-                'rekap_beli_detail_m_w_id' => Auth::user()->waroeng_id,
-                'rekap_beli_detail_created_by' => Auth::user()->users_id,
-                'rekap_beli_detail_created_at' => Carbon::now(),
+                'r_t_jb_detail_id' => $this->getNextId('rekap_trans_jualbeli_detail', Auth::user()->waroeng_id),
+                'r_t_jb_detail_r_t_jb_id' => $request->r_t_jb_code_nota,
+                'r_t_jb_detail_m_produk_id' => $request->r_t_jb_detail_m_produk_id[$key],
+                'r_t_jb_detail_m_produk_nama' => $produk->m_stok_produk_nama,
+                'r_t_jb_detail_satuan_id' => $produk->m_stok_satuan_id,
+                'r_t_jb_detail_satuan_terima' => $produk->m_stok_satuan,
+                'r_t_jb_detail_catatan' => $request->r_t_jb_detail_catatan[$key],
+                'r_t_jb_detail_qty' => convertfloat($request->r_t_jb_detail_qty[$key]),
+                'r_t_jb_detail_harga' => convertfloat($request->r_t_jb_detail_harga[$key]),
+                'r_t_jb_detail_disc' => $request->r_t_jb_detail_disc[$key],
+                'r_t_jb_detail_nominal_disc' => convertfloat($request->r_t_jb_detail_nominal_disc[$key]),
+                'r_t_jb_detail_subtot' => convertfloat($request->r_t_jb_detail_subtot[$key]),
+                'r_t_jb_detail_m_w_id' => Auth::user()->waroeng_id,
+                'r_t_jb_detail_created_by' => Auth::user()->users_id,
+                'r_t_jb_detail_created_at' => Carbon::now(),
             );
-            DB::table('rekap_beli_detail')->insert($data);
+            DB::table('rekap_trans_jualbeli_detail')->insert($data);
         }
         return response()->json(['success' => 'Pembelian Berhasil']);
     }
@@ -152,22 +161,22 @@ class BeliController extends Controller
     }
     public function hist_pemb_detail($id)
     {
-        $rekap_beli_detail = DB::table('rekap_beli_detail')
-            ->where('rekap_beli_detail_rekap_beli_code', $id)
-            ->orderBy('rekap_beli_detail_created_at', 'desc')
+        $r_t_jb_detail = DB::table('r_t_jb_detail')
+            ->where('r_t_jb_detail_rekap_beli_code', $id)
+            ->orderBy('r_t_jb_detail_created_at', 'desc')
             ->get();
 
         $data = array();
         $no = 1;
-        foreach ($rekap_beli_detail as $value) {
+        foreach ($r_t_jb_detail as $value) {
             $row = array();
             $row[] = $no;
-            $row[] = $value->rekap_beli_detail_m_produk_nama;
-            $row[] = $value->rekap_beli_detail_qty;
-            $row[] = rupiah($value->rekap_beli_detail_harga);
-            $row[] = rupiah($value->rekap_beli_detail_discrp);
-            $row[] = rupiah($value->rekap_beli_detail_subtot);
-            $row[] = $value->rekap_beli_detail_catatan;
+            $row[] = $value->r_t_jb_detail_m_produk_nama;
+            $row[] = $value->r_t_jb_detail_qty;
+            $row[] = rupiah($value->r_t_jb_detail_harga);
+            $row[] = rupiah($value->r_t_jb_detail_discrp);
+            $row[] = rupiah($value->r_t_jb_detail_subtot);
+            $row[] = $value->r_t_jb_detail_catatan;
             $data[] = $row;
             $no++;
         }
