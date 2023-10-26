@@ -105,6 +105,11 @@ class Controller extends BaseController
     {
         return $waroeng = DB::table('m_w')->where('m_w_id', $id)->first()->m_w_nama;
     }
+    public function getAreaMw($id_waroeng) {
+        $area = DB::table('m_w')->join('m_area','m_area_id','m_w_m_area_id')
+        ->where('m_w_id',$id_waroeng)->first();
+        return $area;
+    }
     public function get_last_stok($g_id, $p_id)
     {
         $stok = DB::table('m_stok')
