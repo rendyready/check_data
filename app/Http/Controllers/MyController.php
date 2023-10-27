@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Artisan;
 
 class MyController extends Controller
 {
@@ -187,26 +188,10 @@ class MyController extends Controller
             $server->where('db_con_m_w_id', $target);
         }
 
-        $sipedasPusat = $DbCron->table('db_con')
-            ->where('db_con_id', '1')->first();
-        Config::set("database.connections.pusat", [
-            // App::make('config')->set('database.connections.client', [
-            'driver' => $sipedasPusat->db_con_driver,
-            'host' => '10.20.30.21',
-            'port' => '5884',
-            'database' => $sipedasPusat->db_con_dbname,
-            'username' => $sipedasPusat->db_con_username,
-            'password' => JangkrikHelper::customDecrypt($sipedasPusat->db_con_password),
-            'charset' => 'utf8',
-            'prefix' => '',
-            'prefix_indexes' => true,
-            'search_path' => 'public',
-            'sslmode' => 'prefer',
-        ]);
-
         foreach ($server->get() as $keyServer => $valServer) {
             #create Connection to client
-            Config::set("database.connections.client", [
+            $clientName = "client{$valServer->db_con_m_w_id}";
+            Config::set("database.connections.{$clientName}", [
                 // App::make('config')->set('database.connections.client', [
                 'driver' => $valServer->db_con_driver,
                 'host' => $valServer->db_con_host,
@@ -220,271 +205,37 @@ class MyController extends Controller
                 'search_path' => 'public',
                 'sslmode' => 'prefer',
             ]);
-            $cekConn = Schema::connection('client')->hasTable('users');
-            #get Schema Table From resource
-            $clientSchema = Schema::connection('client')->getColumnListing('users');
-            $pusatSchema = Schema::connection('pusat')->getColumnListing('users');
-            $countPusat = count($pusatSchema);
-            $countClient = count($clientSchema);
-            try {
-                //code...
-
-                DB::connection('client')->table('rekap_buka_laci')
-                    ->whereBetween('r_b_l_tanggal', ['2023-08-27', '2023-09-02'])
-                // ->whereNull('r_b_l_client_target')
-                    ->update(['r_b_l_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
-
-                DB::connection('client')->table('rekap_garansi')
-                    ->join('rekap_transaksi', 'r_t_id', 'rekap_garansi_r_t_id')
-                    ->whereBetween('r_t_tanggal', ['2023-08-27', '2023-09-02'])
-                // ->whereNull('rekap_garansi_client_target')
-                    ->update(['rekap_garansi_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
-
-                DB::connection('client')->table('rekap_hapus_menu')
-                    ->whereBetween('r_h_m_tanggal', ['2023-08-27', '2023-09-02'])
-                // ->whereNull('r_h_m_client_target')
-                    ->update(['r_h_m_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
-
-                DB::connection('client')->table('rekap_hapus_transaksi')
-                    ->whereBetween('r_h_t_tanggal', ['2023-08-27', '2023-09-02'])
-                // ->whereNull('r_h_t_client_target')
-                    ->update(['r_h_t_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
-
-                DB::connection('client')->table('rekap_hapus_transaksi_detail')
-                    ->join('rekap_hapus_transaksi', 'r_h_t_id', 'r_h_t_detail_r_h_t_id')
-                    ->whereBetween('r_h_t_tanggal', ['2023-08-27', '2023-09-02'])
-                // ->whereNull('r_h_t_detail_client_target')
-                    ->update(['r_h_t_detail_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
-
-                DB::connection('client')->table('rekap_lost_bill')
-                    ->whereBetween('r_l_b_tanggal', ['2023-08-27', '2023-09-02'])
-                // ->whereNull('r_l_b_client_target')
-                    ->update(['r_l_b_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
-
-                DB::connection('client')->table('rekap_lost_bill_detail')
-                    ->join('rekap_lost_bill', 'r_l_b_id', 'r_l_b_detail_r_l_b_id')
-                    ->whereBetween('r_l_b_tanggal', ['2023-08-27', '2023-09-02'])
-                // ->where('r_l_b_detail_client_target')
-                    ->update(['r_l_b_detail_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
-
-                DB::connection('client')->table('rekap_modal')
-                    ->whereBetween(DB::raw('DATE(rekap_modal_tanggal)'), ['2023-08-27', '2023-09-02'])
-                // ->whereNull('rekap_modal_client_target')
-                    ->update(['rekap_modal_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
-
-                DB::connection('client')->table('rekap_modal_detail')
-                    ->join('rekap_modal', 'rekap_modal_id', 'rekap_modal_detail_rekap_modal_id')
-                    ->whereBetween(DB::raw('DATE(rekap_modal_tanggal)'), ['2023-08-27', '2023-09-02'])
-                // ->where('rekap_modal_detail_client_target')
-                    ->update(['rekap_modal_detail_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
-
-                DB::connection('client')->table('rekap_mutasi_modal')
-                    ->whereBetween('r_m_m_tanggal', ['2023-08-27', '2023-09-02'])
-                // ->whereNull('r_m_m_client_target')
-                    ->update(['r_m_m_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
-
-                DB::connection('client')->table('rekap_payment_transaksi')
-                    ->join('rekap_transaksi', 'r_t_id', 'r_p_t_r_t_id')
-                    ->whereBetween('r_t_tanggal', ['2023-08-27', '2023-09-02'])
-                // ->whereNull('r_p_t_client_target')
-                    ->update(['r_p_t_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
-
-                DB::connection('client')->table('rekap_refund')
-                    ->whereBetween('r_r_tanggal', ['2023-08-27', '2023-09-02'])
-                // ->whereNull('r_r_client_target')
-                    ->update(['r_r_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
-
-                DB::connection('client')->table('rekap_refund_detail')
-                    ->join('rekap_refund', 'r_r_id', 'r_r_detail_r_r_id')
-                    ->whereBetween('r_r_tanggal', ['2023-08-27', '2023-09-02'])
-                // ->whereNull('r_r_detail_client_target')
-                    ->update(['r_r_detail_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
-
-                DB::connection('client')->table('rekap_transaksi')
-                    ->whereBetween('r_t_tanggal', ['2023-08-27', '2023-09-02'])
-                // ->whereNull('r_t_client_target')
-                    ->update(['r_t_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
-
-                DB::connection('client')->table('rekap_transaksi_detail')
-                    ->join('rekap_transaksi', 'r_t_id', 'r_t_detail_r_t_id')
-                    ->whereBetween('r_t_tanggal', ['2023-08-27', '2023-09-02'])
-                // ->whereNull('r_t_detail_client_target')
-                    ->update(['r_t_detail_client_target' => ':1::2::3::4::5::6::27::36::52::70::83::101::110::116::119::120:']);
-                echo nl2br("{$valServer->db_con_location_name}: add users token Success!");
-            } catch (\Throwable $th) {
-                return $th;
-            }
-            // if (count($clientSchema) != count($pusatSchema)) {
-
-            //     Schema::connection('client')->table('users', function (Blueprint $table) {
-            //         $table->string('reset_token')->nullable();
-            //     });
-            //     echo nl2br("{$valServer->db_con_location_name}: add users token Success!");
-
-            // }else{
-            //     echo nl2br("{$valServer->db_con_location_name}: {$countPusat}:{$countClient} tabel user sama!");
-            // }
+            $cekConn = Schema::connection($clientName)->hasTable('users');
 
             if ($cekConn) {
-                // $status=0;
+                $status=0;
                 try {
-                    // DB::connection('client')->statement("TRUNCATE TABLE migrations RESTART IDENTITY;");
-                    // DB::connection('client')->statement("
-                    // INSERT INTO migrations (migration, batch) VALUES
-                    // ('2014_10_12_000000_create_users_table', '1'),
-                    // ('2014_10_12_100000_create_password_resets_table', '1'),
-                    // ('2016_06_01_000001_create_oauth_auth_codes_table', '1'),
-                    // ('2016_06_01_000002_create_oauth_access_tokens_table', '1'),
-                    // ('2016_06_01_000003_create_oauth_refresh_tokens_table', '1'),
-                    // ('2016_06_01_000004_create_oauth_clients_table', '1'),
-                    // ('2016_06_01_000005_create_oauth_personal_access_clients_table', '1'),
-                    // ('2019_08_19_000000_create_failed_jobs_table', '1'),
-                    // ('2019_12_14_000001_create_personal_access_tokens_table', '1'),
-                    // ('2022_11_03_091915_create_permission_tables', '1'),
-                    // ('2022_11_04_071534_create_m_area_table', '1'),
-                    // ('2022_11_05_103937_create_m_jenis_produk_table', '1'),
-                    // ('2022_11_05_110856_create_m_plot_produksi_table', '1'),
-                    // ('2022_11_07_133540_create_m_klasifikasi_produk_table', '1'),
-                    // ('2022_11_07_133541_create_m_produk_table', '1'),
-                    // ('2022_11_07_154029_create_m_jenis_nota_table', '1'),
-                    // ('2022_11_07_154438_create_m_menu_harga_table', '1'),
-                    // ('2022_11_07_164334_create_m_sub_jenis_produk_table', '1'),
-                    // ('2022_11_07_164618_create_config_sub_jenis_produk_table', '1'),
-                    // ('2022_11_07_170348_create_m_pajak_table', '1'),
-                    // ('2022_11_07_170645_create_m_sc_table', '1'),
-                    // ('2022_11_08_095139_create_m_w_jenis_table', '1'),
-                    // ('2022_11_08_110025_create_m_modal_tipe_table', '1'),
-                    // ('2022_11_08_110545_create_m_w_table', '1'),
-                    // ('2022_11_09_060960_create_m_meja_jenis_table', '1'),
-                    // ('2022_11_09_060961_create_m_meja_table', '1'),
-                    // ('2022_11_09_060962_create_m_footer_table', '1'),
-                    // ('2022_11_09_060963_create_m_transaksi_tipe_table', '1'),
-                    // ('2022_11_09_060964_create_rekap_modal_table', '1'),
-                    // ('2022_11_09_060965_create_m_payment_method_table', '1'),
-                    // ('2022_11_09_060965_create_rekap_modal_detail_table', '1'),
-                    // ('2022_11_09_060966_create_rekap_transaksi_table', '1'),
-                    // ('2022_11_09_060967_create_rekap_transaksi_detail_table', '1'),
-                    // ('2022_11_09_060968_create_rekap_buka_laci_table', '1'),
-                    // ('2022_11_09_060970_create_rekap_garansi_table', '1'),
-                    // ('2022_11_09_0609710_create_rekap_hapus_transaksi_detail_table', '1'),
-                    // ('2022_11_09_0609711_create_rekap_lost_bill_detail_table', '1'),
-                    // ('2022_11_09_060971_create_rekap_hapus_transaksi_table', '1'),
-                    // ('2022_11_09_060972_create_rekap_lost_bill_table', '1'),
-                    // ('2022_11_09_060974_create_rekap_mutasi_modal_table', '1'),
-                    // ('2022_11_09_060975_create_rekap_payment_transaksi_table', '1'),
-                    // ('2022_11_09_060976_create_rekap_hapus_menu_table', '1'),
-                    // ('2022_11_09_060981_create_rekap_uang_tips_table', '1'),
-                    // ('2022_11_09_060982_create_rekap_refund_table', '1'),
-                    // ('2022_11_11_132150_create_m_karyawan_table', '1'),
-                    // ('2022_11_12_090026_create_m_level_jabatan_table', '1'),
-                    // ('2022_11_12_090333_create_m_jabatan_table', '1'),
-                    // ('2022_11_12_092846_create_history_jabatan_table', '1'),
-                    // ('2022_11_12_093418_create_history_pendidikan_table', '1'),
-                    // ('2022_11_12_093419_create_m_kelompok_table', '1'),
-                    // ('2022_11_12_093420_create_m_faq_kelompok_table', '1'),
-                    // ('2022_11_12_093421_create_m_faq_table', '1'),
-                    // ('2022_11_19_102237_create_m_satuan_table', '1'),
-                    // ('2022_11_19_102850_create_m_resep_table', '1'),
-                    // ('2022_11_23_103709_create_m_resep_detail_table', '1'),
-                    // ('2022_12_03_165157_create_rekap_beli', '1'),
-                    // ('2022_12_04_100520_create_m_rekening_table', '1'),
-                    // ('2022_12_05_134440_create_rekap_beli_detail_table', '1'),
-                    // ('2022_12_08_074850_create_tmp_transaction_table', '1'),
-                    // ('2022_12_08_074851_create_tmp_transaction_detail_table', '1'),
-                    // ('2022_12_09_133221_create_m_supplier_table', '1'),
-                    // ('2022_12_10_082719_create_list_akt_table', '1'),
-                    // ('2022_12_11_100242_create_rekap_rusak_table', '1'),
-                    // ('2022_12_11_100330_create_rekap_rusak_detail_table', '1'),
-                    // ('2022_12_14_090204_create_rekap_po_table', '1'),
-                    // ('2022_12_14_090930_create_rekap_po_detail_table', '1'),
-                    // ('2022_12_14_143140_create_rekap_inv_penjualan_table', '1'),
-                    // ('2022_12_14_143246_create_rekap_inv_penjualan_detail_table', '1'),
-                    // ('2022_12_24_085643_create_printer_setting_table', '1'),
-                    // ('2022_12_26_105055_create_m_stok_table', '1'),
-                    // ('2022_12_26_111630_create_m_stok_detail_table', '1'),
-                    // ('2022_12_28_141015_create_m_gudang_table', '1'),
-                    // ('2023_01_01_095955_create_m_kasir_akses_table', '1'),
-                    // ('2023_01_14_084500_create_rekap_refund_detail_table', '1'),
-                    // ('2023_01_17_135242_create_m_gudang_nama_table', '1'),
-                    // ('2023_01_23_100905_create_m_jurnal_kas_table', '1'),
-                    // ('2023_01_23_101925_create_m_jurnal_bank_table', '1'),
-                    // ('2023_01_23_102356_create_m_jurnal_umum_table', '1'),
-                    // ('2023_01_24_095858_create_rekap_tf_gudang', '1'),
-                    // ('2023_02_17_140734_create_rekap_pcb_table', '1'),
-                    // ('2023_02_20_164822_create_app_id_counter_table', '1'),
-                    // ('2023_03_08_093413_create_m_divisi_table', '1'),
-                    // ('2023_03_08_093414_create_m_group_produk_table', '1'),
-                    // ('2023_03_09_140847_create_app_setting_table', '1'),
-                    // ('2023_03_12_200129_create_rph_table', '1'),
-                    // ('2023_03_12_203201_create_rph_detail_menu_table', '1'),
-                    // ('2023_03_12_203533_create_rph_detail_bb_table', '1'),
-                    // ('2023_03_15_132551_create_rekap_so_table', '1'),
-                    // ('2023_03_15_132639_create_rekap_so_detail_table', '1'),
-                    // ('2023_04_04_145018_create_rekap_member_table', '1'),
-                    // ('2023_04_06_152157_create_log_transaksi_cr_table', '1'),
-                    // ('2023_04_10_202222_add_rph_detail_bb_rph_detail_menu_id_column_to_rph_detail_bb_table', '2'),
-                    // ('2023_04_14_131345_add_verified_to_users_table', '3'),
-                    // ('2023_04_15_103909_alter_rph_change_mw', '4'),
-                    // ('2023_04_15_153503_add_status_sync_master_cr', '4'),
-                    // ('2023_04_17_114716_alter_m_divisi_table', '4'),
-                    // ('2023_04_18_104851_add_std_bb_resep_konversi_table', '4'),
-                    // ('2023_04_18_132858_alter_change_string_to_num_qty', '5'),
-                    // ('2023_04_28_103255_create_log_cronjob_table', '5'),
-                    // ('2023_04_28_142722_drop_and_create_rekap_jurnal_kas_table', '6'),
-                    // ('2023_04_28_143454_drop_and_create_rekap_jurnal_bank_table', '6'),
-                    // ('2023_04_28_143831_drop_and_create_rekap_jurnal_umum_table', '6'),
-                    // ('2023_04_29_091648_drop_and_create_m_rekening__table', '6'),
-                    // ('2023_04_29_104344_drop_and_create_m_link_akuntansi_table', '6'),
-                    // ('2023_05_10_165738_create_cronjob_table', '6'),
-                    // ('2023_05_17_095255_add_permision_status_sync_to_permission_table', '7'),
-                    // ('2023_05_24_090551_alter_add_column_collect_status_mw_table', '8'),
-                    // ('2023_05_26_141939_add_id_and_sync_to_sipedas_table', '8'),
-                    // ('2023_05_29_112949_add_uniqueid_for_role', '9'),
-                    // ('2023_05_30_173030_alter_m_std_bb_table_rev', '10'),
-                    // ('2023_05_31_104013_create_rph_detail_belanja_table', '10'),
-                    // ('2023_06_09_131015_create_ulang_table_sipedas', '11'),
-                    // ('2023_06_11_145208_create_function_list_waroeng', '12'),
-                    // ('2023_06_11_145209_add_field_master_control', '12'),
-                    // ('2023_06_13_152245_drop_so_and_create_so_table', '12'),
-                    // ('2023_06_23_110434_create_m_tipe_nota_table', '12'),
-                    // ('2023_06_28_142239_add_field_selisih_on_transaksi', '12'),
-                    // ('2023_07_06_102058_alter_table_role_has_permission_create_delete', '13'),
-                    // ('2023_07_13_170600_alter_table_m_w_add_column', '14'),
-                    // ('2023_07_15_093110_add_index_master', '15'),
-                    // ('2023_07_20_132922_recreate_tmp_transaction_detail', '16'),
-                    // ('2023_07_30_132602_alter_table_sipedas_add_pack_produk', '17'),
-                    // ('2023_07_31_140419_drop_and_create_m_link_akuntansi_table', '17'),
-                    // ('2023_08_03_170808_add_field_target_on_rekap', '18'),
-                    // ('2023_08_10_133448_create_tmp_online_table', '18'),
-                    // ('2023_08_10_133503_create_tmp_online_detail_table', '18'),
-                    // ('2023_08_10_133504_add_reset_token_to_users', '19');");
-                    // echo nl2br("{$valServer->db_con_location_name}: Replace Success!");
-
-                    // Artisan::call("migrate --database='client'");
-                    // echo nl2br("{$valServer->db_con_location_name}: ".Artisan::output());
+                    // return $clientName;
+                    Artisan::call("migrate --database='{$clientName}'");
+                    echo nl2br("{$valServer->db_con_location_name}: ".Artisan::output());
                     // $DbCron->table('db_con')->where('db_con_id',$valServer->db_con_id)
                     // ->update([
                     //     'db_con_schema_status' => 'latest'
                     // ]);
-                    // $status=1;
+                    $status=1;
                 } catch (\Throwable $th) {
                     printf($th);
-                    // $status=0;
+                    $status=0;
                 }
 
-                // if ($status == 1) {
-                //     echo "{$valServer->db_con_location_name} update Success!\n";
-                //     $DbCron->table('db_con')->where('db_con_id',$valServer->db_con_id)
-                //     ->update([
-                //         'db_con_schema_status' => 'latest'
-                //     ]);
-                // }else{
-                //     echo "{$valServer->db_con_location_name} update FAILED!\n";
-                //     $DbCron->table('db_con')->where('db_con_id',$valServer->db_con_id)
-                //     ->update([
-                //         'db_con_schema_status' => 'expired'
-                //     ]);
-                // }
+                if ($status == 1) {
+                    echo "{$valServer->db_con_location_name} update Success!\n";
+                    $DbCron->table('db_con')->where('db_con_id',$valServer->db_con_id)
+                    ->update([
+                        'db_con_schema_status' => 'latest'
+                    ]);
+                }else{
+                    echo "{$valServer->db_con_location_name} update FAILED!\n";
+                    $DbCron->table('db_con')->where('db_con_id',$valServer->db_con_id)
+                    ->update([
+                        'db_con_schema_status' => 'expired'
+                    ]);
+                }
             }
         }
 
