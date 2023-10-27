@@ -61,7 +61,7 @@
                                                 <tr>
                                                     <td>
                                                         <input type="text" placeholder="Input Nomor Akun"
-                                                            id="m_rekening_no_akun" name="m_rekening_no_akun[]"
+                                                            id="m_rekening_no_akun" name="m_rekening_code[]"
                                                             class="form-control set form-control-sm m_rekening_no_akun text-center no_rekening"
                                                             required />
                                                     </td>
@@ -79,8 +79,8 @@
                                                             required />
                                                     </td>
                                                     <td>
-                                                        <a placeholder="Input Nama Item" id="tombol_item"
-                                                            class="form-control set form-control-sm text-center btn btn-primary"
+                                                        <a id="tombol_item"
+                                                            class="form-control set form-control-sm text-center btn btn-primary tombol_item"
                                                             title="Tambahkan Item"><i
                                                                 class="fa-solid fa-pen-to-square"></i></a>
                                                     </td>
@@ -274,7 +274,8 @@
                     <div class="block-header block-header-default bg-pulse">
                         <h3 class="block-title text-center" id="item_akun_title"></h3>
                         <div class="block-options">
-                            <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
+                            <button type="button" class="btn-block-option item_close" data-bs-dismiss="modal"
+                                aria-label="Close">
                                 <i class="fa fa-fw fa-times"></i>
                             </button>
                         </div>
@@ -286,8 +287,7 @@
                             <table id="table_item" class="table table-bordered table-striped table-vcenter mb-4">
                                 <thead>
                                     <tr>
-                                        <th class="text-center">Nama Item</th>
-                                        {{-- <th></th> --}}
+                                        <th class="text-center">Input Nama Item</th>
                                     </tr>
                                     <tr>
                                         <td></td>
@@ -300,11 +300,6 @@
                                                 name="m_rekening_item[]"
                                                 class="form-control set form-control-sm m_rekening_item1 text-center">
                                         </td>
-                                        {{-- <td>
-                                            <button type="button" class="btn tambah_item btn-primary">+</button>
-                                        </td> --}}
-                                        {{-- <input type="hidden" id="m_rekening_item_val" name="m_rekening_item_val[]"
-                                            class="form-control set form-control-sm m_rekening_item1 text-center"> --}}
                                     </tr>
                                     <tr>
                                         <td>
@@ -320,30 +315,13 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>
-                                            <input type="text" placeholder="Input Nama Item" id="tags"
-                                                name="m_rekening_item[]"
-                                                class="form-control set form-control-sm m_rekening_item1 text-center">
-                                        </td>
-                                        {{-- <td>
-                                            <button type="button" class="btn tambah_item btn-primary">+</button>
-                                        </td> --}}
-                                        {{-- <input type="hidden" id="m_rekening_item_val" name="m_rekening_item_val[]"
-                                            class="form-control set form-control-sm m_rekening_item1 text-center"> --}}
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div id="tagList"></div>
-                                        </td>
-                                    </tr>
                                 </tbody>
                             </table>
                         </form>
                     </div>
                     <div class="d-flex justify-content-between">
                         <div class="block-content block-content-full text-first bg-body">
-                            <button type="button" id="item_close" class="btn btn-sm btn-warning me-1"
+                            <button type="button" id="item_close" class="btn btn-sm btn-warning me-1 item_close"
                                 data-bs-dismiss="modal">Close</button>
                         </div>
                         <div class="block-content block-content-full text-end bg-body">
@@ -371,6 +349,8 @@
                     '<td><input type="text" class="form-control form-control-sm m_rekening_namajq text-center" name="m_rekening_nama[]" id="m_rekening_namajq' +
                     no + '" placeholder="Input Nama Rekening" required></td>' +
                     '<td><input type="text" class="form-control saldo form-control-sm text-end number" name="m_rekening_saldo[]" id="m_rekening_saldo" placeholder="Input Saldo Rekening" required></td>' +
+                    '<td><a id="tombol_itemjq' + no +
+                    '" class="form-control set form-control-sm text-center btn btn-primary tombol_itemjq" title="Tambahkan Item"><i class="fa-solid fa-pen-to-square"></i></a></td>' +
                     '<td><button type="button" id="' + no +
                     '" class="btn btn-danger btn_remove"> - </button></td> </tr> ');
             });
@@ -389,15 +369,23 @@
             //         '" class="btn btn-danger btn_remove_item"> - </button></td> </tr> ');
             // });
 
+            $("#item_modal").modal({
+                backdrop: 'static',
+                keyboard: false,
+            });
+
             function formatNumber(number) {
                 return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
             }
 
-            var tagsArray = [];
+            var dataTags = [];
+            var existingTagsArray = [];
+            var newTagsArray = [];
+            var isInputEnabled = true;
 
             $("#tombol_item").on('click', function() {
-                if ($.fn.DataTable.isDataTable('#table_item')) {
-                    $('#table_item').DataTable().destroy();
+                if ($.fn.DataTable.isDataTable('#tampil_item')) {
+                    $('#tampil_item').DataTable().destroy();
                 }
 
                 var dataTable = $('#tampil_item').DataTable({
@@ -407,115 +395,150 @@
                     autoWidth: false,
                     dom: '<"text-center"f>rt<lp>',
                     destroy: true,
-                    data: tagsArray,
+                    data: existingTagsArray, // Menggunakan existingTagsArray
                     columns: [{
                         data: "tag"
-                    }]
+                    }],
                 });
 
                 $("#tags_item").on("keypress", function(event) {
-                    if (event.which === 13 || event.which === 44 || event
-                        .which === 32) {
+                    if (isInputEnabled && (event.which === 13 || event.which === 44 || event
+                            .which === 32)) {
                         event.preventDefault();
                         var tag = $(this).val().trim();
                         if (tag !== "") {
-                            tagsArray.push({
+                            newTagsArray.push({
                                 tag: tag
-                            });
+                            }); // Menambahkan ke newTagsArray
                             $("#tagList").append('<div class="tag">' + tag + '</div');
-                            dataTable.draw();
                         }
                         $(this).val("");
                     }
                 });
 
                 $("#item_save").on('click', function() {
-                    $("#tagList").remove();
+                    existingTagsArray = existingTagsArray.concat(newTagsArray);
+                    newTagsArray = []; // Reset newTagsArray
+                    $("#tagList").empty();
+                });
+
+                $(".item_close").on('click', function() {
+                    newTagsArray = [];
+                    $("#tagList").empty();
                 });
 
                 $("#item_modal").modal('show');
             });
 
+            $(document).on('click', '.tombol_itemjq', function() {
+                var id = $(this).attr("id");
+                console.log(id);
+                // var id = $(this).closest("tr").index();
+                if ($.fn.DataTable.isDataTable('#tampil_item')) {
+                    $('#tampil_item').DataTable().destroy();
+                }
 
+                var dataTable = $('#tampil_item').DataTable({
+                    buttons: [],
+                    lengthChange: false,
+                    paging: false,
+                    autoWidth: false,
+                    dom: '<"text-center"f>rt<lp>',
+                    destroy: true,
+                    data: existingTagsArray, // Menggunakan existingTagsArray
+                    columns: [{
+                        data: "tag"
+                    }],
+                });
 
-            // Fungsi untuk memperbarui nomor tag setelah tag dihapus
-            // function updateTagNumbers() {
-            //     var tags = $("#tagList .tag");
-            //     tags.each(function(index) {
-            //         $(this).html((index + 1) + ': ' + $(this).html().split(': ')[1]);
-            //     });
-            // }
+                $("#tags_item").on("keypress", function(event) {
+                    if (isInputEnabled && (event.which === 13 || event.which === 44 || event
+                            .which === 32)) {
+                        event.preventDefault();
+                        var tag = $(this).val().trim();
+                        if (tag !== "") {
+                            newTagsArray.push({
+                                tag: tag
+                            }); // Menambahkan ke newTagsArray
+                            $("#tagList").append('<div class="tag">' + tag + '</div');
+                        }
+                        $(this).val("");
+                    }
+                });
 
-            // $("#item_save").on('click', function() {
-            //     // item_data = [];
+                $("#item_save").on('click', function() {
+                    existingTagsArray = existingTagsArray.concat(newTagsArray);
+                    newTagsArray = []; // Reset newTagsArray
+                    $("#tagList").empty();
+                });
 
-            //     for (var i = 1; i <= no_item; i++) {
-            //         var inputValue = $(".m_rekening_item" + i).val();
-            //         item_data.push(inputValue);
-            //     }
+                $(".item_close").on('click', function() {
+                    newTagsArray = [];
+                    $("#tagList").empty();
+                });
 
-            //     var item_data_json = JSON.stringify(item_data);
+                $("#item_modal").modal('show');
+            });
 
-            //     var data = '<input type="hidden" id="m_rekening_item_val"' +
-            //         'name = "m_rekening_item_val[]"' +
-            //         'class = "form-control set form-control-sm m_rekening_item' + no_item +
-            //         ' text-center" ' +
-            //         'value = "' + item_data_json + '" > ';
+            //insert rekening
+            $('#rekening-insert').submit(function(e) {
+                if (!e.isDefaultPrevented()) {
 
-            //     console.log(data);
-            //     $("#m_rekening_item").append(data);
+                    var formattedArray = existingTagsArray.map(function(item) {
+                        return item.tag;
+                    });
+                    console.log(formattedArray);
+                    var formData = $('#rekening-insert').serializeArray();
+                    formData.push({
+                        name: 'existingTags',
+                        value: JSON.stringify(formattedArray)
+                    });
+                    $.ajax({
+                        url: "{{ route('rekening.simpan') }}",
+                        type: "POST",
+                        data: formData,
+                        success: function(data) {
+                            Codebase.helpers('jq-notify', {
+                                align: 'right', // 'right', 'left', 'center'
+                                from: 'top', // 'top', 'bottom'
+                                type: data
+                                    .type, // 'info', 'success', 'warning', 'danger'
+                                icon: 'fa fa-info me-5', // Icon class
+                                message: data.messages
+                            });
+                            $('.hapus').remove();
+                            $('.set').val('');
 
-            //     $("#item_modal").modal('hide');
-            // });
+                            var waroengid2 = $('#filter_waroeng').val();
+                            var rekeningkategori2 = $('#filter_rekening').val();
 
-            // $("#item_modal").modal({
-            //     backdrop: 'static',
-            //     keyboard: false,
-            // });
-
-            // $("#tombol_item").on('click', function() {
-            //     $("#item_akun_title").html('Isi Nama Item');
-
-            //     // $("#table_item").empty();
-
-            //     // for (var i = 1; i <= no_item; i++) {
-            //     //     var inputValue = item_data[i - 1];
-            //     //     $('#table_item').append('<tr class="hapus_item" id="row_item' + i + '">' +
-            //     //         '<td><input type="text" class="form-control form-control-sm m_rekening_item' +
-            //     //         i +
-            //     //         ' text-center" name="m_rekening_item" id="m_rekening_itemjq' + i +
-            //     //         '" placeholder="Input Nama Item" value="' + inputValue + '"></td>' +
-            //     //         '<td><button type="button" id="' + i +
-            //     //         '" class="btn btn-danger btn_remove_item"> - </button></td></tr>');
-            //     // }
-
-            //     var table_item = $('#table_item').DataTable({
-            //         buttons: [],
-            //         lengthChange: false,
-            //         paging: false,
-            //         autoWidth: false,
-            //         dom: '<"text-center"f>rt<lp>',
-            //         destroy: true
-            //     });
-
-            //     // $("#item_modal").on('shown.bs.modal', function() {
-            //     //     for (var i = 1; i <= no_item; i++) {
-            //     //         var inputValue = item_data[i - 1];
-            //     //         $(".m_rekening_item" + i).val(inputValue);
-            //     //     }
-            //     // });
-
-            //     $("#item_modal").on('shown.bs.modal', function() {
-            //         for (var i = 1; i <= no_item; i++) {
-            //             var inputValue = item_data[i - 1];
-            //             $(".m_rekening_item" + i).val(inputValue);
-            //         }
-            //     });
-
-            //     table_item.rows.add([]).draw();
-            //     $("#item_modal").modal('show');
-            // });
-
+                            $('#rekening_tampil').DataTable({
+                                button: [],
+                                destroy: true,
+                                orderCellsTop: true,
+                                processing: true,
+                                autoWidth: true,
+                                lengthMenu: [
+                                    [10, 25, 50, 100, -1],
+                                    [10, 25, 50, 100, "All"]
+                                ],
+                                ajax: {
+                                    url: '{{ route('rekening.tampil') }}',
+                                    data: {
+                                        m_rekening_m_waroeng_id: waroengid,
+                                        m_rekening_kategori: rekeningkategori,
+                                    },
+                                    type: "GET",
+                                },
+                            });
+                        },
+                        error: function() {
+                            alert("Tidak dapat menyimpan data!");
+                        }
+                    });
+                    return false;
+                }
+            });
 
             $(document).on('focusout', '.no_rekening', function() {
                 var current_value = $(this).val().trim();
@@ -656,55 +679,6 @@
                     },
                 });
                 return false;
-            });
-
-            $('#rekening-insert').submit(function(e) {
-                if (!e.isDefaultPrevented()) {
-                    $.ajax({
-                        url: "{{ route('rekening.simpan') }}",
-                        type: "POST",
-                        data: $('#rekening-insert').serialize(),
-                        success: function(data) {
-                            Codebase.helpers('jq-notify', {
-                                align: 'right', // 'right', 'left', 'center'
-                                from: 'top', // 'top', 'bottom'
-                                type: data
-                                    .type, // 'info', 'success', 'warning', 'danger'
-                                icon: 'fa fa-info me-5', // Icon class
-                                message: data.messages
-                            });
-                            $('.hapus').remove();
-                            $('.set').val('');
-
-                            var waroengid2 = $('#filter_waroeng').val();
-                            var rekeningkategori2 = $('#filter_rekening').val();
-
-                            $('#rekening_tampil').DataTable({
-                                button: [],
-                                destroy: true,
-                                orderCellsTop: true,
-                                processing: true,
-                                autoWidth: true,
-                                lengthMenu: [
-                                    [10, 25, 50, 100, -1],
-                                    [10, 25, 50, 100, "All"]
-                                ],
-                                ajax: {
-                                    url: '{{ route('rekening.tampil') }}',
-                                    data: {
-                                        m_rekening_m_waroeng_id: waroengid,
-                                        m_rekening_kategori: rekeningkategori,
-                                    },
-                                    type: "GET",
-                                },
-                            });
-                        },
-                        error: function() {
-                            alert("Tidak dapat menyimpan data!");
-                        }
-                    });
-                    return false;
-                }
             });
 
             $(document).on('click', '.btn_remove', function() {

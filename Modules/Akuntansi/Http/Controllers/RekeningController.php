@@ -74,18 +74,24 @@ class RekeningController extends Controller
             ->where('m_rekening_code', $request->m_rekening_code)
             ->count();
         if ($validasi == 0) {
+            $existingTags = json_decode($request->input('existingTags'));
+            $m_w_code = $request->m_rekening_m_waroeng_id;
+            $m_w_code_val = sprintf("%03d", $m_w_code);
             foreach ($request->m_rekening_code as $key => $value) {
                 $str1 = str_replace('.', '', $request->m_rekening_saldo[$key]);
                 $data = array(
                     'm_rekening_id' => $this->getMasterId('m_rekening'),
                     'm_rekening_m_w_id' => $request->m_rekening_m_waroeng_id,
+                    'm_rekening_m_w_code' => $request->m_rekening_m_waroeng_id,
                     'm_rekening_kategori' => $request->m_rekening_kategori,
-                    'm_rekening_code' => $request->m_rekening_code[$key],
+                    'm_rekening_code' => $m_w_code_val,
                     'm_rekening_nama' => strtolower($request->m_rekening_nama[$key]),
                     'm_rekening_saldo' => str_replace(',', '.', $str1),
+                    'm_rekening_item' => json_encode($existingTags),
                     'm_rekening_created_by' => Auth::user()->users_id,
                     'm_rekening_created_at' => Carbon::now(),
                 );
+                // return $data['existing_tags'] = json_encode($existingTags);
                 DB::table('m_rekening')->insert($data);
             }
             return response()->json(['messages' => 'Berhasil Menambakan', 'type' => 'success']);
