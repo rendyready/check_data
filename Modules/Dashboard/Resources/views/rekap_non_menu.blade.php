@@ -113,10 +113,10 @@
                                                     style="position: absolute; top: 100%; left: 5%; background-color:rgba(235, 25, 25, 0.123);">
                                                     <button class="dropdown-item" style="font-weight:550;"
                                                         id="hari">Export
-                                                        Per Hari</button>
+                                                        Per Sesi</button>
                                                     <button class="dropdown-item" style="font-weight: 550;"
                                                         id="bulan">Export
-                                                        Per Bulan</button>
+                                                        Per Hari</button>
                                                 </div>
                                             </div>
                                         </div>
