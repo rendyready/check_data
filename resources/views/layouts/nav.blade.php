@@ -161,7 +161,7 @@
                 <a class="link-fx fw-bold tracking-wide mx-auto" href="/">
                     <span class="smini-hidden">
                         <i class="fa fa-fire text-primary"></i>
-                        <span class="fs-4 text-dual">Sipedas</span><span class="fs-4 text-primary">V4.2.2</span>
+                        <span class="fs-4 text-dual">Sipedas</span><span class="fs-4 text-primary">V4.2.3</span>
                     </span>
                 </a>
             </div>
@@ -707,13 +707,13 @@
                                                     </li>
                                                 @endcan
                                                 @can('customer.view')
-                                                <li class="nav-main-item">
-                                                    <a class="nav-main-link{{ request()->is('inventori/customer') ? ' active' : '' }}"
-                                                        href="{{ route('customer.index') }}">
-                                                        <span class="nav-main-link-name">Customer</span>
-                                                    </a>
-                                                </li>
-                                            @endcan
+                                                    <li class="nav-main-item">
+                                                        <a class="nav-main-link{{ request()->is('inventori/customer') ? ' active' : '' }}"
+                                                            href="{{ route('customer.index') }}">
+                                                            <span class="nav-main-link-name">Customer</span>
+                                                        </a>
+                                                    </li>
+                                                @endcan
                                             </ul>
                                         </li>
                                     @endcan

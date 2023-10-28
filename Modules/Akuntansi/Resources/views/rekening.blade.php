@@ -294,7 +294,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
+                                    <tr id="row_insert">
                                         <td>
                                             <input type="text" placeholder="Input Nama Item" id="tags_item"
                                                 name="m_rekening_item[]"
@@ -314,9 +314,10 @@
                                         <th class="text-center">Nama Item</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="row_tampil">
                                 </tbody>
                             </table>
+
                         </form>
                     </div>
                     <div class="d-flex justify-content-between">
@@ -355,20 +356,6 @@
                     '" class="btn btn-danger btn_remove"> - </button></td> </tr> ');
             });
 
-            // var no_item = 0;
-            // var item_data = [];
-
-            // $('.tambah_item').on('click', function() {
-            //     no_item++;
-            //     // var inputValue = "";
-            //     $('#table_item').append('<tr class="hapus_item" id="row_item' + no_item + '">' +
-            //         '<td><input type="text" class="form-control form-control-sm m_rekening_item' +
-            //         no_item + ' text-center" name="m_rekening_item" id="m_rekening_itemjq' +
-            //         no_item + '" placeholder="Input Nama Item"></td>' +
-            //         '<td><button type="button" id="' + no_item +
-            //         '" class="btn btn-danger btn_remove_item"> - </button></td> </tr> ');
-            // });
-
             $("#item_modal").modal({
                 backdrop: 'static',
                 keyboard: false,
@@ -395,7 +382,7 @@
                     autoWidth: false,
                     dom: '<"text-center"f>rt<lp>',
                     destroy: true,
-                    data: existingTagsArray, // Menggunakan existingTagsArray
+                    data: existingTagsArray,
                     columns: [{
                         data: "tag"
                     }],
@@ -409,7 +396,7 @@
                         if (tag !== "") {
                             newTagsArray.push({
                                 tag: tag
-                            }); // Menambahkan ke newTagsArray
+                            });
                             $("#tagList").append('<div class="tag">' + tag + '</div');
                         }
                         $(this).val("");
@@ -418,7 +405,7 @@
 
                 $("#item_save").on('click', function() {
                     existingTagsArray = existingTagsArray.concat(newTagsArray);
-                    newTagsArray = []; // Reset newTagsArray
+                    newTagsArray = [];
                     $("#tagList").empty();
                 });
 
@@ -432,7 +419,6 @@
 
             $(document).on('click', '.tombol_itemjq', function() {
                 var id = $(this).attr("id");
-                console.log(id);
                 // var id = $(this).closest("tr").index();
                 if ($.fn.DataTable.isDataTable('#tampil_item')) {
                     $('#tampil_item').DataTable().destroy();
@@ -445,7 +431,7 @@
                     autoWidth: false,
                     dom: '<"text-center"f>rt<lp>',
                     destroy: true,
-                    data: existingTagsArray, // Menggunakan existingTagsArray
+                    data: existingTagsArray,
                     columns: [{
                         data: "tag"
                     }],
@@ -459,7 +445,7 @@
                         if (tag !== "") {
                             newTagsArray.push({
                                 tag: tag
-                            }); // Menambahkan ke newTagsArray
+                            });
                             $("#tagList").append('<div class="tag">' + tag + '</div');
                         }
                         $(this).val("");
@@ -468,7 +454,7 @@
 
                 $("#item_save").on('click', function() {
                     existingTagsArray = existingTagsArray.concat(newTagsArray);
-                    newTagsArray = []; // Reset newTagsArray
+                    newTagsArray = [];
                     $("#tagList").empty();
                 });
 
