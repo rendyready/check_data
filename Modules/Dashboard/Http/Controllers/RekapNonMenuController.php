@@ -651,9 +651,9 @@ class RekapNonMenuController extends Controller
             }
         }
         $rekap = $rekap->groupBy('rekap_modal_id', 'r_t_detail_m_produk_id', 'r_t_m_w_id', 'm_t_t_id', 'price', 'kemasan')
+            ->orderBy('sesi', 'asc')
             ->orderBy('tanggal', 'asc')
             ->orderBy('m_w_nama', 'asc')
-            ->orderBy('sesi', 'asc')
             ->get();
 
         $countNota = DB::table('rekap_transaksi')
@@ -773,10 +773,10 @@ class RekapNonMenuController extends Controller
 
                 foreach ($rekap as $keyRekap => $valRekap) {
                     if ($valRekap->rekap_modal_id == $valListRekap) {
-                        $data[$valListRekap]['operator'] = $valRekap->kasir;
-                        $data[$valListRekap]['waroeng'] = $valRekap->m_w_nama;
+                        $data[$valListRekap]['operator'] = ucwords($valRekap->kasir);
+                        $data[$valListRekap]['waroeng'] = strtoupper(str_replace('wss ', '', $valRekap->m_w_nama));
                         $data[$valListRekap]['tanggal'] = date('j', strtotime($valRekap->tanggal));
-                        $data[$valListRekap]['sesi'] = $valRekap->sesi;
+                        $data[$valListRekap]['sesi'] = 'Shift-' . $valRekap->sesi;
 
                         if ($valRekap->type_name == $valTipe) {
                             if (in_array($valRekap->m_produk_id, $listMenu)) {
@@ -824,10 +824,10 @@ class RekapNonMenuController extends Controller
 
                 foreach ($rekap as $keyRekap => $valRekap) {
                     if ($valRekap->rekap_modal_id == $valListRekap) {
-                        $data[$valListRekap]['operator'] = $valRekap->kasir;
-                        $data[$valListRekap]['waroeng'] = $valRekap->m_w_nama;
+                        $data[$valListRekap]['operator'] = ucwords($valRekap->kasir);
+                        $data[$valListRekap]['waroeng'] = strtoupper(str_replace('wss ', '', $valRekap->m_w_nama));
                         $data[$valListRekap]['tanggal'] = date('j', strtotime($valRekap->tanggal));
-                        $data[$valListRekap]['sesi'] = $valRekap->sesi;
+                        $data[$valListRekap]['sesi'] = 'Shift-' . $valRekap->sesi;
                         if ($valRekap->type_name == $valGrab) {
                             if (in_array($valRekap->m_produk_id, $listKbd) && !in_array($valRekap->m_produk_id, $listWbdFrozen)) {
                                 $qty = $valRekap->qty;
