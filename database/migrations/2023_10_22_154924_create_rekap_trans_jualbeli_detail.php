@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id('id');
             $table->string('r_t_jb_detail_id')->unique();
             $table->string('r_t_jb_detail_r_t_jb_id');
-            $table->unsignedBigInteger('r_t_jb_detail_m_produk_id');
+            $table->string('r_t_jb_detail_m_produk_code');
             $table->string('r_t_jb_detail_m_produk_nama');
             $table->string('r_t_jb_detail_catatan');
             $table->decimal('r_t_jb_detail_qty',5,2);
@@ -31,10 +31,8 @@ return new class extends Migration
             $table->string('r_t_jb_detail_satuan_terima')->nullable();
             $table->bigInteger('r_t_jb_detail_created_by');
             $table->bigInteger('r_t_jb_detail_updated_by')->nullable();
-            $table->bigInteger('r_t_jb_detail_deleted_by')->nullable();
             $table->timestampTz('r_t_jb_detail_created_at')->useCurrent();
             $table->timestampTz('r_t_jb_detail_updated_at')->useCurrentOnUpdate()->nullable()->default(NULL);
-            $table->timestampTz('r_t_jb_detail_deleted_at')->nullable()->default(NULL);
             $table->text('r_t_jb_detail_client_target')->nullable();
         });
     }

@@ -64,14 +64,14 @@ class BeliController extends Controller
     {
         $id_waroeng = Auth::user()->waroeng_id;
         $area = $this->getAreaMw($id_waroeng);
-        $terbayar = (empty($request->rekap_beli_terbayar)) ? 0 : $request->rekap_beli_terbayar;
-        $ongkir = (empty($request->rekap_beli_ongkir)) ? 0 : $request->rekap_beli_ongkir;
-        $rekap_beli = array(
+        $terbayar = (empty($request->r_t_jb_terbayar)) ? 0 : $request->r_t_jb_terbayar;
+        $ongkir = (empty($request->r_t_jb_ongkir)) ? 0 : $request->r_t_jb_ongkir;
+        $r_t_jb = array(
             'r_t_jb_id' => $request->r_t_jb_code,
             'r_t_jb_code_nota' => $request->r_t_jb_code_nota,
             'r_t_jb_tgl' => $request->r_t_jb_tgl,
             'r_t_jb_jth_tmp' => $request->r_t_jb_jth_tmp,
-            'r_t_jb_type' => 'pembelian',
+            'r_t_jb_type' => 'beli',
             'r_t_jb_m_gudang_code' => $request->r_t_jb_m_gudang_code,
             'r_t_jb_m_supplier_code' => $request->r_t_jb_m_supplier_code,
             'r_t_jb_m_supplier_nama' => $request->r_t_jb_m_supplier_nama,
@@ -98,16 +98,34 @@ class BeliController extends Controller
             'r_t_jb_created_by' => Auth::user()->users_id,
         );
 
-        $insert = DB::table('rekap_trans_jualbeli')->insert($rekap_beli);
+        $insert = DB::table('rekap_trans_jualbeli')->insert($r_t_jb);
+        if ($request->r_t_jb_nominal_bayar) {
+            $kas = array(
+                'r_t_jb_id' => $this->get_code(),
+                'r_t_jb_type' => 'bayar-hutang',
+                'r_t_jb_m_supplier_code' => $request->r_t_jb_m_supplier_code,
+                'r_t_jb_m_supplier_nama' => $request->r_t_jb_m_supplier_nama,
+                'r_t_jb_m_supplier_telp' => $request->r_t_jb_m_supplier_telp,
+                'r_t_jb_m_supplier_alamat' => $request->r_t_jb_m_supplier_alamat,
+                'r_t_jb_m_w_id_tujuan' => $id_waroeng,
+                'r_t_jb_m_w_nama_tujuan' => $request->r_t_jb_waroeng,
+                'r_t_jb_nominal_bayar' => convertfloat($request->r_t_jb_nominal_bayar),
+                'r_t_jb_ket' => 'pembayaran hutang-kas',
+                'r_t_jb_created_at' => Carbon::now(),
+                'r_t_jb_created_by' => Auth::user()->users_id,
+            );
+        }
         foreach ($request->r_t_jb_detail_qty as $key => $value) {
             $produk = DB::table('m_stok')
                 ->where('m_stok_m_produk_code', $request->r_t_jb_detail_m_produk_id[$key])
-                ->where('m_stok_gudang_code', $request->rekap_beli_gudang_code)
+                ->where('m_stok_gudang_code', $request->r_t_jb_m_gudang_code)
                 ->first();
+                $nom_disc = ($request->r_t_jb_detail_nominal_disc[$key] ?? null) !== null ? convertfloat($request->r_t_jb_detail_nominal_disc[$key]) : 0;
+
             $data = array(
                 'r_t_jb_detail_id' => $this->getNextId('rekap_trans_jualbeli_detail', Auth::user()->waroeng_id),
-                'r_t_jb_detail_r_t_jb_id' => $request->r_t_jb_code_nota,
-                'r_t_jb_detail_m_produk_id' => $request->r_t_jb_detail_m_produk_id[$key],
+                'r_t_jb_detail_r_t_jb_id' => $request->r_t_jb_code,
+                'r_t_jb_detail_m_produk_code' => $request->r_t_jb_detail_m_produk_id[$key],
                 'r_t_jb_detail_m_produk_nama' => $produk->m_stok_produk_nama,
                 'r_t_jb_detail_satuan_id' => $produk->m_stok_satuan_id,
                 'r_t_jb_detail_satuan_terima' => $produk->m_stok_satuan,
@@ -115,8 +133,8 @@ class BeliController extends Controller
                 'r_t_jb_detail_qty' => convertfloat($request->r_t_jb_detail_qty[$key]),
                 'r_t_jb_detail_harga' => convertfloat($request->r_t_jb_detail_harga[$key]),
                 'r_t_jb_detail_disc' => $request->r_t_jb_detail_disc[$key],
-                'r_t_jb_detail_nominal_disc' => convertfloat($request->r_t_jb_detail_nominal_disc[$key]),
-                'r_t_jb_detail_subtot' => convertfloat($request->r_t_jb_detail_subtot[$key]),
+                'r_t_jb_detail_nominal_disc' => $nom_disc,
+                'r_t_jb_detail_subtot_beli' => convertfloat($request->r_t_jb_detail_subtot[$key]),
                 'r_t_jb_detail_m_w_id' => Auth::user()->waroeng_id,
                 'r_t_jb_detail_created_by' => Auth::user()->users_id,
                 'r_t_jb_detail_created_at' => Carbon::now(),
@@ -138,22 +156,22 @@ class BeliController extends Controller
     public function hist_pemb($id)
     {
         $tgl_now = Carbon::now();
-        $rekap_beli = DB::table('rekap_beli')
-            ->join('users', 'rekap_beli_created_by', 'users_id')
-            ->where('rekap_beli_tgl', $tgl_now)
-            ->where('rekap_beli_gudang_code', $id)
-            ->orderBy('rekap_beli_created_at', 'desc')
+        $r_t_jb = DB::table('rekap_trans_jualbeli')
+            ->join('users', 'r_t_jb_created_by', 'users_id')
+            ->where('r_t_jb_tgl', $tgl_now)
+            ->where('r_t_jb_m_gudang_code', $id)
+            ->orderBy('r_t_jb_created_at', 'desc')
             ->get();
 
         $data = array();
-        foreach ($rekap_beli as $value) {
+        foreach ($r_t_jb as $value) {
             $row = array();
-            $row[] = $value->rekap_beli_code;
-            $row[] = $value->rekap_beli_supplier_nama;
-            $row[] = rupiah($value->rekap_beli_tot_nom);
+            $row[] = $value->r_t_jb_id;
+            $row[] = $value->r_t_jb_m_supplier_nama;
+            $row[] = convertindo($value->r_t_jb_nominal_total_beli);
             $row[] = $value->name;
-            $row[] = tgl_waktuid($value->rekap_beli_created_at);
-            $row[] = '<a id="detail" class="btn btn-sm detail btn-warning" value="' . $value->rekap_beli_code . '" title="Edit"><i class="fa fa-eye"></i></a>';
+            $row[] = tgl_waktuid($value->r_t_jb_created_at);
+            $row[] = '<a id="detail" class="btn btn-sm detail btn-warning" value="' . $value->r_t_jb_id . '" title="Edit"><i class="fa fa-eye"></i></a>';
             $data[] = $row;
         }
         $output = array("data" => $data);
@@ -161,8 +179,8 @@ class BeliController extends Controller
     }
     public function hist_pemb_detail($id)
     {
-        $r_t_jb_detail = DB::table('r_t_jb_detail')
-            ->where('r_t_jb_detail_rekap_beli_code', $id)
+        $r_t_jb_detail = DB::table('rekap_trans_jualbeli_detail')
+            ->where('r_t_jb_detail_r_t_jb_id', $id)
             ->orderBy('r_t_jb_detail_created_at', 'desc')
             ->get();
 
@@ -174,8 +192,8 @@ class BeliController extends Controller
             $row[] = $value->r_t_jb_detail_m_produk_nama;
             $row[] = $value->r_t_jb_detail_qty;
             $row[] = rupiah($value->r_t_jb_detail_harga);
-            $row[] = rupiah($value->r_t_jb_detail_discrp);
-            $row[] = rupiah($value->r_t_jb_detail_subtot);
+            $row[] = rupiah($value->r_t_jb_detail_nominal_disc);
+            $row[] = rupiah($value->r_t_jb_detail_subtot_beli);
             $row[] = $value->r_t_jb_detail_catatan;
             $data[] = $row;
             $no++;
