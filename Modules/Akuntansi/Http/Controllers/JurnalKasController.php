@@ -21,10 +21,6 @@ class JurnalKasController extends Controller
         $data->akses_pusat = $this->get_akses_pusat(); //1,2,3,4,5
         $data->akses_pusar = $this->get_akses_pusar(); //mulai dari 6 - akhir
 
-        $data->waroeng = DB::table('m_w')
-            ->where('m_w_m_area_id', $data->area_nama->m_area_id)
-            ->orderby('m_w_id', 'ASC')
-            ->get();
         $data->area = DB::table('m_area')
             ->orderby('m_area_id', 'ASC')
             ->get();
@@ -47,11 +43,10 @@ class JurnalKasController extends Controller
         $list2 = DB::table('m_rekening')
             ->select('m_rekening_code', 'm_rekening_id', 'm_rekening_nama')
             ->orderBy('m_rekening_code', 'asc')
-            ->distinct('m_rekening_code')
             ->get();
         $data = array();
         foreach ($list2 as $val) {
-            $data[$val->m_rekening_nama] = [$val->m_rekening_nama];
+            $data[$val->m_rekening_id] = [$val->m_rekening_nama];
         }
 
         return response()->json($data);
@@ -61,7 +56,7 @@ class JurnalKasController extends Controller
     {
         $norek = DB::table('m_rekening')
             ->select('m_rekening_code')
-            ->where('m_rekening_nama', $request->m_rekening_nama)
+            ->where('m_rekening_id', $request->m_rekening_nama)
             ->first();
 
         return response()->json($norek);
@@ -70,7 +65,7 @@ class JurnalKasController extends Controller
     public function carijurnalnoakun(Request $request)
     {
         $norek = DB::table('m_rekening')
-            ->select('m_rekening_nama')
+            ->select('m_rekening_nama', 'm_rekening_id')
             ->where('m_rekening_code', $request->m_rekening_code)
             ->first();
 
@@ -125,9 +120,12 @@ class JurnalKasController extends Controller
 
         if ($validator->passes()) {
             foreach ($request->r_j_k_particul as $key => $value) {
+                $rekening = DB::table('m_rekening')
+                    ->select('m_rekening_code')
+                    ->where('m_rekening_id', '=', $request->r_j_k_m_rekening_nama)
+                    ->first();
+                // return $request->r_j_k_m_rekening_item;
                 [$m_w_id, $m_w_nama, $m_area_id, $m_area_nama] = explode(',', $request->input('r_j_k_m_w_id'));
-                [$no_rek, $nama_rek] = explode(',', $request->r_j_k_m_rekening_code[$key]);
-                return $no_rek;
                 $m_w_code = sprintf("%03d", $m_w_id);
                 $saldo_debit = str_replace('.', '', $request->r_j_k_debit[$key]);
                 $saldo_kredit = str_replace('.', '', $request->r_j_k_kredit[$key]);
@@ -142,8 +140,8 @@ class JurnalKasController extends Controller
                     'r_j_k_tanggal' => $request->r_j_k_tanggal,
                     'r_j_k_status' => $request->r_j_k_status,
                     'r_j_k_m_akun_bank_id' => 1,
-                    'r_j_k_m_rekening_id' => 1,
-                    'r_j_k_m_rekening_code' => $request->r_j_k_m_rekening_code[$key],
+                    'r_j_k_m_rekening_id' => intval($request->r_j_k_m_rekening_nama),
+                    'r_j_k_m_rekening_code' => $rekening->m_rekening_code,
                     'r_j_k_m_rekening_nama' => $request->r_j_k_m_rekening_nama[$key],
                     'r_j_k_m_rekening_item' => $request->r_j_k_m_rekening_item[$key],
                     'r_j_k_particul' => $request->r_j_k_particul[$key],
@@ -171,7 +169,7 @@ class JurnalKasController extends Controller
     public function item(Request $request)
     {
         $item = DB::table('m_rekening')
-            ->select('m_rekening_nama', 'm_rekening_code')
+            ->select('m_rekening_nama', 'm_rekening_code', 'm_rekening_id')
             ->where('m_rekening_item', '=', $request->item_produk)
             ->orWhereRaw('m_rekening_item LIKE ?', ['%' . $request->item_produk . '%'])
             ->first();

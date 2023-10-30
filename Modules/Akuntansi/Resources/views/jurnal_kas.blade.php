@@ -77,7 +77,7 @@
                                                 <td>
                                                     <select id="item_produk"
                                                         class="js-select2 set form-control form-control-sm"
-                                                        style="width: 100%;" name="r_j_k_m_rekening_item"
+                                                        style="width: 100%;" name="r_j_k_m_rekening_item[]"
                                                         data-placeholder="Pilih Item">
                                                         <option value=""></option>
                                                         @foreach ($data->rekening as $item)
@@ -229,7 +229,7 @@
                     success: function(data) {
                         console.log(data);
                         $('#r_j_k_m_rekening_code').val(data.m_rekening_code).trigger("change");
-                        $('#m_rekening_nama').val(data.m_rekening_nama).trigger("change");
+                        $('#m_rekening_nama').val(data.m_rekening_id).trigger("change");
                     }
                 });
             });
@@ -507,17 +507,33 @@
             });
 
             //default select nama rekening
+            // $.ajax({
+            //     url: '{{ route('jurnal.rekeninglink') }}',
+            //     type: 'GET',
+            //     dataType: 'json',
+            //     success: function(data) {
+            //         $('#m_rekening_nama').append('<option></option>');
+            //         $.each(data, function(index, item) {
+            //             // var options = key.split(', ');
+            //             // var parts = index.split(',');
+            //             var value = item.m_rekening_code + ',' + item.m_rekening_id + ',' + item
+            //                 .m_rekening_nama;
+            //             console.log(value);
+            //             $('#m_rekening_nama').append('<option value="' + value + '">' + item
+            //                 .m_rekening_nama +
+            //                 '</option>');
+            //         });
+            //     }
+            // });
+
             $.ajax({
                 url: '{{ route('jurnal.rekeninglink') }}',
                 type: 'GET',
                 dataType: 'Json',
                 success: function(data) {
                     $('#m_rekening_nama').append('<option></option>');
-                    // var combinedValue = key + ',' + value;
-                    //     $('#m_rekening_nama').append('<option value="' + combinedValue + '">' +
-                    //         value + '</option>');
                     $.each(data, function(key, value) {
-                        $('#m_rekening_nama').append('<option value="' + key + value '">' +
+                        $('#m_rekening_nama').append('<option value="' + key + '">' +
                             value +
                             '</option>');
                     });
@@ -582,15 +598,16 @@
             //show nama rekening
             $('#r_j_k_m_rekening_code').on('keyup', function() {
                 var filnomor = $('#r_j_k_m_rekening_code').val();
+                // console.log(filnomor);
                 $.ajax({
                     type: "get",
                     url: '{{ route('jurnal.carijurnalnoakun') }}',
                     data: {
-                        m_rekening_no_akun: filnomor,
+                        m_rekening_code: filnomor,
                     },
                     success: function(data) {
                         console.log(data);
-                        $('#m_rekening_nama').val(data.m_rekening_nama).trigger("change");
+                        $('#m_rekening_nama').val(data.m_rekening_id).trigger("change");
                     }
                 });
             });
@@ -616,6 +633,7 @@
             //show no rekening
             $('#m_rekening_nama').on('select2:select', function() {
                 var filnama = $('#m_rekening_nama').val();
+                console.log(filnama);
                 $.ajax({
                     type: "get",
                     url: '{{ route('jurnal.carijurnalnamaakun') }}',
@@ -624,7 +642,7 @@
                     },
                     success: function(data) {
                         console.log(data);
-                        $('#r_j_k_m_rekening_code').val(data.m_rekening_no_akun);
+                        $('#r_j_k_m_rekening_code').val(data.m_rekening_code);
                     }
                 });
             });
