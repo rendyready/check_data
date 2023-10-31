@@ -1004,28 +1004,29 @@
                                         <span class="nav-main-link-name">Jurnal Umum</span>
                                     </a>
                                 </li>
-                                @can('laporan akuntansi.view')
+                                <li class="nav-main-item">
+                                    <a class="nav-main-link{{ request()->is('akuntansi/jurnal') ? ' active' : '' }}"
+                                        href="{{ route('otomatis.jurnal') }}">
+                                        <span class="nav-main-link-name">Jurnal Penjualan</span>
+                                    </a>
+                                </li>
+                                <li class="nav-main-item">
+                                    <a class="nav-main-link{{ request()->is('akuntansi/buku_besar') ? ' active' : '' }}"
+                                        href="{{ route('otomatis.buku_besar') }}">
+                                        <span class="nav-main-link-name">Buku Besar</span>
+                                    </a>
+                                </li>
+                                {{-- @can('laporan akuntansi.view')
                                     <li class="nav-main-item{{ request()->is('akuntansi/laporan') ? ' open' : '' }}">
                                         <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu"
                                             aria-haspopup="true" aria-expanded="true" href="#">
                                             <span class="nav-main-link-name">Laporan</span>
                                         </a>
                                         <ul class="nav-main-submenu">
-                                            <li class="nav-main-item">
-                                                <a class="nav-main-link{{ request()->is('akuntansi/jurnal') ? ' active' : '' }}"
-                                                    href="{{ route('otomatis.jurnal') }}">
-                                                    <span class="nav-main-link-name">Jurnal</span>
-                                                </a>
-                                            </li>
-                                            <li class="nav-main-item">
-                                                <a class="nav-main-link{{ request()->is('akuntansi/buku_besar') ? ' active' : '' }}"
-                                                    href="{{ route('otomatis.buku_besar') }}">
-                                                    <span class="nav-main-link-name">Buku Besar</span>
-                                                </a>
-                                            </li>
+
                                         </ul>
                                     </li>
-                                @endcan
+                                @endcan --}}
                             </ul>
                         </li>
                     @endcan

@@ -12,7 +12,6 @@
                         <form id="jurnal-insert">
                             <div class="col-md-12">
 
-
                                 <div class="row mb-2 col-6">
                                     <label class="col-sm-4 col-form-label" id="namaWaroeng"
                                         for="example-hf-text">Waroeng</label>
@@ -50,24 +49,29 @@
                                     </div>
                                 </div>
                                 <div class="row mb-2 col-6">
-                                    <label class="col-sm-4 col-form-label" id="categoryAccount" for="example-hf-text">No
-                                        Akun Kas</label>
+                                    <label class="col-sm-4 col-form-label" id="categoryAccount"
+                                        for="example-hf-text">Kategori Akun</label>
                                     <div class="col-md-8">
-                                        <input type="text" class="cari form-control " style="width: 100%;" name=""
-                                            disabled>
+                                        <select id="filter_akun" class="cari js-select2 form-control kas-click"
+                                            style="width: 100%;" name="">
+                                            @foreach ($data->kategori_akun as $kategori_akun)
+                                                <option value="{{ $kategori_akun->m_rekening_kategori }}">
+                                                    {{ $kategori_akun->m_rekening_kategori }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="alert alert-danger print-error-msg" style="display:none">
                                     <ul></ul>
                                 </div>
-                                <div class="table-responsive">
+                                <div class="table-responsive mt-4">
                                     <table id="form" class="table table-bordered table-striped table-vcenter mb-4">
                                         <thead>
                                             <tr>
                                                 <th class="text-center">Item Produk</th>
                                                 <th class="text-center">No Akun</th>
                                                 <th class="text-center">Nama Akun</th>
-                                                <th class="text-center">Particul</th>
+                                                <th class="text-center">Keterangan</th>
                                                 <th class="kas text-center">Kredit</th>
                                                 <th class="text-center">Action</th>
                                             </tr>
@@ -142,7 +146,7 @@
                                                 readonly>
                                         </div>
                                     </div>
-                                    <div class="bg-transparent text-center">
+                                    <div class="bg-transparent text-center mb-4">
                                         <button type="submit" class="btn btn-sm btn-success mt-2 simpan">
                                             Simpan</button>
                                     </div>
@@ -172,8 +176,10 @@
                                         <tr>
                                             <th class="text-center">No Akun</th>
                                             <th class="text-center">Nama Akun</th>
-                                            <th class="text-center">Particul</th>
-                                            <th class="kas text-center">Kredit</th>
+                                            <th class="text-center">Item Produk</th>
+                                            <th class="text-center">Keterangan</th>
+                                            <th class="text-center">Debit</th>
+                                            <th class="text-center">Kredit</th>
                                             <th class="text-center">User</th>
                                             <th class="text-center">No Bukti</th>
                                         </tr>
@@ -219,7 +225,6 @@
 
             $('#item_produk').on('change', function() {
                 var item_produk = $(this).val();
-                console.log(item_produk);
                 $.ajax({
                     type: "get",
                     url: '{{ route('jurnal_kas.item') }}',
@@ -245,10 +250,8 @@
                     },
                     success: function(data) {
                         console.log(data);
-                        $('#r_j_k_m_rekening_codejq' + id).val(data
-                            .m_rekening_code);
-                        $('#m_rekening_namajq' + id).val(data
-                            .m_rekening_nama).trigger("change");
+                        $('#r_j_k_m_rekening_codejq' + id).val(data.m_rekening_code);
+                        $('#m_rekening_namajq' + id).val(data.m_rekening_id).trigger("change");
                     }
                 });
             });
@@ -308,18 +311,18 @@
             var filwaroeng = m_w_id.split(',')[0];
             var filkas = $('#filter-kas').val();
             var filtanggal = $('#filter-tanggal').val();
-
+            console.log(filwaroeng);
             //tampil
             $('#jurnal-tampil').DataTable({
                 "columnDefs": [{
                     "render": DataTable.render.number('.', ',', 2, 'Rp. '),
-                    "targets": 3,
+                    "targets": [4, 5],
                 }],
                 buttons: [],
                 destroy: true,
                 lengthMenu: [10, 25, 50, 75, 100],
                 ajax: {
-                    url: '{{ route('jurnal.tampil') }}',
+                    url: '{{ route('jurnal_kas.tampil') }}',
                     data: {
                         r_j_k_m_w_id: filwaroeng,
                         r_j_k_status: filkas,
@@ -334,10 +337,18 @@
                         data: 'r_j_k_m_rekening_nama'
                     },
                     {
+                        data: 'r_j_k_m_rekening_item'
+                    },
+                    {
                         data: 'r_j_k_particul'
                     },
                     {
-                        data: 'r_j_k_debit'
+                        data: 'r_j_k_debit',
+                        visible: (filkas === 'kk')
+                    },
+                    {
+                        data: 'r_j_k_kredit',
+                        visible: (filkas === 'km')
                     },
                     {
                         data: 'r_j_k_users_name'
@@ -370,6 +381,7 @@
                                 $('.set').val('');
                                 $('#m_rekening_nama').val('').trigger("change");
 
+
                                 var m_w_id = $('#filter-waroeng').val();
                                 var filwaroeng2 = m_w_id.split(',')[0];
                                 var filkas2 = $('#filter-kas').val();
@@ -379,13 +391,13 @@
                                     "columnDefs": [{
                                         "render": DataTable.render.number('.',
                                             ',', 2, 'Rp. '),
-                                        "targets": 3,
+                                        "targets": [4, 5],
                                     }],
                                     button: [],
                                     destroy: true,
                                     lengthMenu: [10, 25, 50, 75, 100],
                                     ajax: {
-                                        url: '{{ route('jurnal.tampil') }}',
+                                        url: '{{ route('jurnal_kas.tampil') }}',
                                         data: {
                                             r_j_k_m_w_id: filwaroeng2,
                                             r_j_k_status: filkas2,
@@ -400,10 +412,18 @@
                                             data: 'r_j_k_m_rekening_nama'
                                         },
                                         {
+                                            data: 'r_j_k_m_rekening_item'
+                                        },
+                                        {
                                             data: 'r_j_k_particul'
                                         },
                                         {
-                                            data: 'r_j_k_debit'
+                                            data: 'r_j_k_debit',
+                                            visible: (filkas2 === 'kk')
+                                        },
+                                        {
+                                            data: 'r_j_k_kredit',
+                                            visible: (filkas2 === 'km')
                                         },
                                         {
                                             data: 'r_j_k_users_name'
@@ -422,6 +442,7 @@
                             alert("Tidak dapat menyimpan data!");
                         }
                     });
+                    $('#item_produk').val('').trigger("change");
                     return false;
                 }
             });
@@ -439,19 +460,21 @@
 
             //filter tampil
             $('.cari').on('change', function() {
-                var filwaroeng = $('#filter-waroeng').val();
+                var m_w_id = $('#filter-waroeng').val();
+                var filwaroeng = m_w_id.split(',')[0];
                 var filkas = $('#filter-kas').val();
                 var filtanggal = $('#filter-tanggal').val();
+                console.log(filwaroeng);
                 $('#jurnal-tampil').DataTable({
                     "columnDefs": [{
                         "render": DataTable.render.number('.', ',', 2, 'Rp. '),
-                        "targets": [3],
+                        "targets": [4, 5],
                     }],
                     button: [],
                     destroy: true,
                     lengthMenu: [10, 25, 50, 75, 100],
                     ajax: {
-                        url: '{{ route('jurnal.tampil') }}',
+                        url: '{{ route('jurnal_kas.tampil') }}',
                         data: {
                             r_j_k_m_w_id: filwaroeng,
                             r_j_k_status: filkas,
@@ -466,10 +489,18 @@
                             data: 'r_j_k_m_rekening_nama'
                         },
                         {
+                            data: 'r_j_k_m_rekening_item'
+                        },
+                        {
                             data: 'r_j_k_particul'
                         },
                         {
-                            data: 'r_j_k_debit'
+                            data: 'r_j_k_debit',
+                            visible: (filkas === 'kk')
+                        },
+                        {
+                            data: 'r_j_k_kredit',
+                            visible: (filkas === 'km')
                         },
                         {
                             data: 'r_j_k_users_name'
@@ -505,26 +536,6 @@
                     $('.saldo_debit').hide()
                 }
             });
-
-            //default select nama rekening
-            // $.ajax({
-            //     url: '{{ route('jurnal.rekeninglink') }}',
-            //     type: 'GET',
-            //     dataType: 'json',
-            //     success: function(data) {
-            //         $('#m_rekening_nama').append('<option></option>');
-            //         $.each(data, function(index, item) {
-            //             // var options = key.split(', ');
-            //             // var parts = index.split(',');
-            //             var value = item.m_rekening_code + ',' + item.m_rekening_id + ',' + item
-            //                 .m_rekening_nama;
-            //             console.log(value);
-            //             $('#m_rekening_nama').append('<option value="' + value + '">' + item
-            //                 .m_rekening_nama +
-            //                 '</option>');
-            //         });
-            //     }
-            // });
 
             $.ajax({
                 url: '{{ route('jurnal.rekeninglink') }}',
@@ -565,10 +576,8 @@
                     type: 'GET',
                     dataType: 'Json',
                     success: function(data) {
-
                         if (data) {
                             $('#item_produkjq' + id).append('<option></option>');
-
                             for (var key in data) {
                                 if (data.hasOwnProperty(key)) {
                                     var options = key.split(', ');
@@ -597,6 +606,7 @@
 
             //show nama rekening
             $('#r_j_k_m_rekening_code').on('keyup', function() {
+                // $('#item_produk').val('').trigger("change");
                 var filnomor = $('#r_j_k_m_rekening_code').val();
                 // console.log(filnomor);
                 $.ajax({
@@ -620,12 +630,11 @@
                     type: "get",
                     url: '{{ route('jurnal.carijurnalnoakun') }}',
                     data: {
-                        m_rekening_no_akun: filnomor2,
+                        m_rekening_code: filnomor2,
                     },
                     success: function(data) {
                         // console.log(data);
-                        $('#m_rekening_namajq' + id).val(data.m_rekening_nama).trigger(
-                            "change");
+                        $('#m_rekening_namajq' + id).val(data.m_rekening_id).trigger("change");
                     }
                 });
             });
@@ -643,6 +652,7 @@
                     success: function(data) {
                         console.log(data);
                         $('#r_j_k_m_rekening_code').val(data.m_rekening_code);
+                        // $('#item_produk').val('').trigger("change");
                     }
                 });
             });
@@ -659,8 +669,7 @@
                     },
                     success: function(data) {
                         console.log(data);
-                        $('#r_j_k_m_rekening_codejq' + id).val(data
-                            .m_rekening_no_akun);
+                        $('#r_j_k_m_rekening_codejq' + id).val(data.m_rekening_code);
                     }
                 });
             });

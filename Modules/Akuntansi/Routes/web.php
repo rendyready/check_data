@@ -26,6 +26,9 @@ Route::prefix('akuntansi')->middleware('auth', 'web')
             Route::post('jurnal_bank/insert', 'simpan')->name('jurnal_bank.simpan');
             Route::post('jurnal_bank/validasi', 'validasi')->name('jurnal_bank.validasi');
             Route::get('jurnal_bank/rekeninglink', 'rekeninglink')->name('jurnal_bank.rekeninglink');
+            Route::get('jurnal_bank/item', 'item')->name('jurnal_bank.item');
+            Route::get('jurnal_bank/list_item', 'list_item')->name('jurnal_bank.list_item');
+            Route::get('jurnal_bank/itemjq', 'itemjq')->name('jurnal_bank.itemjq');
         });
 
         Route::controller(JurnalUmumController::class)->group(function () {
@@ -36,11 +39,14 @@ Route::prefix('akuntansi')->middleware('auth', 'web')
             Route::post('jurnal_umum/insert', 'simpan')->name('jurnal_umum.simpan');
             Route::post('jurnal_umum/validasi', 'validasi')->name('jurnal_umum.validasi');
             Route::get('jurnal_umum/rekeninglink', 'rekeninglink')->name('jurnal_umum.rekeninglink');
+            Route::get('jurnal_umum/item', 'item')->name('jurnal_umum.item');
+            Route::get('jurnal_umum/list_item', 'list_item')->name('jurnal_umum.list_item');
+            Route::get('jurnal_umum/itemjq', 'itemjq')->name('jurnal_umum.itemjq');
         });
 
         Route::controller(JurnalKasController::class)->group(function () {
             Route::get('jurnal_kas', 'index')->name('jurnal_kas.index');
-            Route::get('jurnal_kas/tampil', 'tampil')->name('jurnal.tampil');
+            Route::get('jurnal_kas/tampil', 'tampil')->name('jurnal_kas.tampil');
             Route::get('jurnal_kas/carijurnalnoakun', 'carijurnalnoakun')->name('jurnal.carijurnalnoakun');
             Route::get('jurnal_kas/carijurnalnamaakun', 'carijurnalnamaakun')->name('jurnal.carijurnalnamaakun');
             Route::post('jurnal_kas/insert', 'simpan')->name('jurnal.simpan');

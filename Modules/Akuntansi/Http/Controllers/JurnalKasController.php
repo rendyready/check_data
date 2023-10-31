@@ -29,11 +29,14 @@ class JurnalKasController extends Controller
             ->join('m_area', 'm_area_id', 'm_w_m_area_id')
             ->select('m_w_id', 'm_w_nama', 'm_area_id', 'm_area_nama')->get();
         $data->rekening = DB::table('m_rekening')
-            ->select('m_rekening_code', 'm_rekening_item')
+            ->select('m_rekening_kategori', 'm_rekening_code', 'm_rekening_item')
             ->orderBy('m_rekening_code', 'asc')
             ->get();
-
-        // return $data->rekening;
+        $data->kategori_akun = DB::table('m_rekening')
+            ->select('m_rekening_kategori')
+            ->orderBy('m_rekening_kategori', 'asc')
+            ->groupby('m_rekening_kategori')
+            ->get();
 
         return view('akuntansi::jurnal_kas', compact('data'));
     }
@@ -76,9 +79,9 @@ class JurnalKasController extends Controller
     {
         $tanggal = $request->r_j_k_tanggal;
         $data = DB::table('rekap_jurnal_kas')
-            ->select('r_j_k_id', 'r_j_k_m_rekening_code', 'r_j_k_m_rekening_nama', 'r_j_k_particul', 'r_j_k_debit', 'r_j_k_kredit', 'r_j_k_users_name', 'r_j_k_transaction_code')
+            ->select('r_j_k_id', 'r_j_k_m_rekening_code', 'r_j_k_m_rekening_nama', 'r_j_k_particul', 'r_j_k_debit', 'r_j_k_kredit', 'r_j_k_users_name', 'r_j_k_transaction_code', 'r_j_k_m_rekening_item')
             ->where('r_j_k_m_w_id', $request->r_j_k_m_w_id)
-            ->where('r_j_k_status', $request->rekap_jurnal_kas)
+            ->where('r_j_k_status', $request->r_j_k_status)
             ->where('r_j_k_tanggal', $tanggal)
             ->orderBy('r_j_k_id', 'DESC')
             ->get();
@@ -121,10 +124,10 @@ class JurnalKasController extends Controller
         if ($validator->passes()) {
             foreach ($request->r_j_k_particul as $key => $value) {
                 $rekening = DB::table('m_rekening')
-                    ->select('m_rekening_code')
-                    ->where('m_rekening_id', '=', $request->r_j_k_m_rekening_nama)
+                    ->select('m_rekening_code', 'm_rekening_nama', 'm_rekening_id')
+                    ->where('m_rekening_id', '=', $request->r_j_k_m_rekening_nama[$key])
                     ->first();
-                // return $request->r_j_k_m_rekening_item;
+                // return $request->r_j_k_m_rekening_nama;
                 [$m_w_id, $m_w_nama, $m_area_id, $m_area_nama] = explode(',', $request->input('r_j_k_m_w_id'));
                 $m_w_code = sprintf("%03d", $m_w_id);
                 $saldo_debit = str_replace('.', '', $request->r_j_k_debit[$key]);
@@ -140,9 +143,9 @@ class JurnalKasController extends Controller
                     'r_j_k_tanggal' => $request->r_j_k_tanggal,
                     'r_j_k_status' => $request->r_j_k_status,
                     'r_j_k_m_akun_bank_id' => 1,
-                    'r_j_k_m_rekening_id' => intval($request->r_j_k_m_rekening_nama),
-                    'r_j_k_m_rekening_code' => $rekening->m_rekening_code,
-                    'r_j_k_m_rekening_nama' => $request->r_j_k_m_rekening_nama[$key],
+                    'r_j_k_m_rekening_id' => $rekening->m_rekening_id,
+                    'r_j_k_m_rekening_code' => $m_w_code . '.' . $rekening->m_rekening_code,
+                    'r_j_k_m_rekening_nama' => $rekening->m_rekening_nama,
                     'r_j_k_m_rekening_item' => $request->r_j_k_m_rekening_item[$key],
                     'r_j_k_particul' => $request->r_j_k_particul[$key],
                     'r_j_k_status' => $request->r_j_k_status,
@@ -188,18 +191,6 @@ class JurnalKasController extends Controller
             $data[$val->m_rekening_item] = [$val->m_rekening_item];
         }
 
-        return $data;
         return response()->json($data);
     }
-
-    // public function itemjq(Request $request)
-    // {
-    //     $item = DB::table('m_rekening')
-    //         ->select('m_rekening_nama', 'm_rekening_code')
-    //         ->where('m_rekening_item', '=', $request->item_produk)
-    //     // ->orWhereRaw('m_rekening_item LIKE ?', ['%' . $request->item_produk . '%'])
-    //         ->first();
-
-    //     return response()->json($item);
-    // }
 }
