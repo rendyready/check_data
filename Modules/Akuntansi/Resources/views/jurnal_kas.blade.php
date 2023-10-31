@@ -171,7 +171,7 @@
                         <div class="block-content text-mute">
                             <div class="table-responsive">
                                 <table id="jurnal-tampil"
-                                    class="table table-bordered table-striped table-vcenter mb-4 no-wrap">
+                                    class="table table-bordered table-striped table-vcenter mb-4 nowrap">
                                     <thead class="justify-content-center">
                                         <tr>
                                             <th class="text-center">No Akun</th>

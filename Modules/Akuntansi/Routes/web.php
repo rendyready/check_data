@@ -16,6 +16,7 @@ Route::prefix('akuntansi')->middleware('auth', 'web')
             Route::post('rekening/delete/{id}', 'delete')->name('rekening.delete');
             Route::get('rekening/edit/{id}', 'edit')->name('rekening.edit');
             Route::post('rekening/edit/simpan_edit', 'simpan_edit')->name('rekening.simpan_edit');
+            Route::get('rekening/item/{id}', 'item')->name('rekening.item');
         });
 
         Route::controller(JurnalBankController::class)->group(function () {

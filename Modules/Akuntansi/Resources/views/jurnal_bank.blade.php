@@ -12,7 +12,6 @@
                         <form id="jurnal-insert">
                             <div class="col-md-12">
 
-
                                 <div class="row mb-2 col-6">
                                     <label class="col-sm-4 col-form-label" id="namaWaroeng"
                                         for="example-hf-text">Waroeng</label>
@@ -172,7 +171,7 @@
                         <div class="block-content text-mute">
                             <div class="table-responsive">
                                 <table id="jurnal-tampil"
-                                    class="table table-bordered table-striped table-vcenter mb-4 no-wrap">
+                                    class="table table-bordered table-striped table-vcenter mb-4 nowrap">
                                     <thead class="justify-content-center">
                                         <tr>
                                             <th class="text-center">No Akun</th>

@@ -124,7 +124,7 @@
                     <div class="block block-rounded">
                         <div class="block-content text-mute">
                             <div class="table-responsive">
-                                <table id="jurnal-tampil" class="table table-striped no-wrap">
+                                <table id="jurnal-tampil" class="table table-striped nowrap">
                                     <thead class="justify-content-center">
                                         <tr>
                                             <th class="text-center">No Akun</th>
