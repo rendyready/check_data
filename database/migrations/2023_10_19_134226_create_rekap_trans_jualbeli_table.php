@@ -31,7 +31,7 @@ return new class extends Migration
             $table->string('r_t_jb_m_w_nama_asal')->nullable();
             $table->bigInteger('r_t_jb_m_w_id_tujuan')->nullable();
             $table->string('r_t_jb_m_w_nama_tujuan')->nullable();
-            $table->decimal('r_t_jb_sub_total_beli',16,2)->nullable();
+            $table->decimal('r_t_jb_sub_total_beli',16,2)->default(0);
             $table->string('r_t_jb_m_area_code_asal')->nullable();
             $table->string('r_t_jb_m_area_nama_asal')->nullable();
             $table->string('r_t_jb_m_area_code_tujuan')->nullable();

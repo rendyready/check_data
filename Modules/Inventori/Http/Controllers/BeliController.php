@@ -40,8 +40,8 @@ class BeliController extends Controller
         $nama_barang = DB::table('m_produk')
             ->select('m_produk_code', 'm_produk_nama')->whereNotIn('m_produk_m_klasifikasi_produk_id', [4])->get();
         $supplierku = DB::table('m_supplier')
-        ->where('m_supplier_m_w_id',$user_mwid)
-        ->get();
+            ->where('m_supplier_m_w_id', $user_mwid)
+            ->get();
         $satuan = DB::table('m_satuan')->get();
         foreach ($nama_barang as $key => $v) {
             $data->barang[$v->m_produk_code] = $v->m_produk_nama;
@@ -102,11 +102,15 @@ class BeliController extends Controller
         if ($request->r_t_jb_nominal_bayar) {
             $kas = array(
                 'r_t_jb_id' => $this->get_code(),
+                'r_t_jb_tgl' => $request->r_t_jb_tgl,
                 'r_t_jb_type' => 'bayar-hutang',
+                'r_t_jb_m_gudang_code' => $request->r_t_jb_m_gudang_code,
                 'r_t_jb_m_supplier_code' => $request->r_t_jb_m_supplier_code,
                 'r_t_jb_m_supplier_nama' => $request->r_t_jb_m_supplier_nama,
                 'r_t_jb_m_supplier_telp' => $request->r_t_jb_m_supplier_telp,
                 'r_t_jb_m_supplier_alamat' => $request->r_t_jb_m_supplier_alamat,
+                'r_t_jb_m_w_id_asal' => $id_waroeng,
+                'r_t_jb_m_w_nama_asal' => $request->r_t_jb_waroeng,
                 'r_t_jb_m_w_id_tujuan' => $id_waroeng,
                 'r_t_jb_m_w_nama_tujuan' => $request->r_t_jb_waroeng,
                 'r_t_jb_nominal_bayar' => convertfloat($request->r_t_jb_nominal_bayar),
@@ -114,13 +118,14 @@ class BeliController extends Controller
                 'r_t_jb_created_at' => Carbon::now(),
                 'r_t_jb_created_by' => Auth::user()->users_id,
             );
+            DB::table('rekap_trans_jualbeli')->insert($kas);
         }
         foreach ($request->r_t_jb_detail_qty as $key => $value) {
             $produk = DB::table('m_stok')
                 ->where('m_stok_m_produk_code', $request->r_t_jb_detail_m_produk_id[$key])
                 ->where('m_stok_gudang_code', $request->r_t_jb_m_gudang_code)
                 ->first();
-                $nom_disc = ($request->r_t_jb_detail_nominal_disc[$key] ?? null) !== null ? convertfloat($request->r_t_jb_detail_nominal_disc[$key]) : 0;
+            $nom_disc = ($request->r_t_jb_detail_nominal_disc[$key] ?? null) !== null ? convertfloat($request->r_t_jb_detail_nominal_disc[$key]) : 0;
 
             $data = array(
                 'r_t_jb_detail_id' => $this->getNextId('rekap_trans_jualbeli_detail', Auth::user()->waroeng_id),
