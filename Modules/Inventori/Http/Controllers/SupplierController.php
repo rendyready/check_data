@@ -74,7 +74,11 @@ class SupplierController extends Controller
                 if ($validator->fails()) {
                     return response()->json(['messages' => $validator->messages()->all(), 'type' => 'danger']);
                 } else {
+                    $code = DB::table('m_supplier')->orderBy('m_supplier_id', 'desc')
+                    ->whereNull('m_supplier_parent_id')->first();
+                    $nocode = $code->m_supplier_code + 1;
                     $data = array(
+                        'm_supplier_code' => $nocode,
                         'm_supplier_nama' => $name,
                         'm_supplier_jth_tempo' => $request->m_supplier_jth_tempo,
                         'm_supplier_alamat' => $request->m_supplier_alamat,
@@ -109,7 +113,7 @@ class SupplierController extends Controller
                         'm_supplier_bank_nama' => $request->m_supplier_bank_nama,
                         'm_supplier_updated_by' => Auth::user()->users_id,
                         'm_supplier_updated_at' => Carbon::now(),
-                        'm_supplier_client_target' => DB::raw('DEFAULT')
+                        'm_supplier_client_target' => DB::raw('DEFAULT'),
                     );
                     DB::table('m_supplier')->where('m_supplier_id', $request->m_supplier_id)
                         ->update($data);
@@ -133,15 +137,16 @@ class SupplierController extends Controller
                             ->update(['m_supplier_saldo_awal' => $newSaldoAwal,
                                 'm_supplier_updated_by' => Auth::user()->users_id,
                                 'm_supplier_updated_at' => Carbon::now(),
-                                'm_supplier_client_target' => DB::raw('DEFAULT')
+                                'm_supplier_client_target' => DB::raw('DEFAULT'),
                             ]);
                     } else {
                         $get_master_supplier = DB::table('m_supplier')
-                            ->select('m_supplier_id', 'm_supplier_nama', 'm_supplier_jth_tempo',
+                            ->select('m_supplier_code','m_supplier_id', 'm_supplier_nama', 'm_supplier_jth_tempo',
                                 'm_supplier_alamat', 'm_supplier_kota', 'm_supplier_telp', 'm_supplier_ket',
                                 'm_supplier_rek_number', 'm_supplier_rek_nama', 'm_supplier_bank_nama')
                             ->where('m_supplier_id', $supplier_id)->first();
                         $supplierData = [
+                            'm_supplier_code' => $get_master_supplier->m_supplier_code,
                             'm_supplier_nama' => $get_master_supplier->m_supplier_nama,
                             'm_supplier_jth_tempo' => $get_master_supplier->m_supplier_jth_tempo,
                             'm_supplier_alamat' => $get_master_supplier->m_supplier_alamat,
@@ -175,6 +180,13 @@ class SupplierController extends Controller
     public function edit($id)
     {
         $data = DB::table('m_supplier')->where('m_supplier_id', $id)->first();
+        return response()->json($data);
+    }
+    
+    public function supplier_show($code,$mw_id){
+        $data = DB::table('m_supplier')->where('m_supplier_code', $code)
+        ->where('m_supplier_m_w_id',$mw_id)
+        ->first();
         return response()->json($data);
     }
 

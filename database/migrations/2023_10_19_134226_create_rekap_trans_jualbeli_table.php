@@ -20,7 +20,8 @@ return new class extends Migration
             $table->date('r_t_jb_tgl');
             $table->date('r_t_jb_jth_tmp')->nullable();
             $table->string('r_t_jb_type')->nullable();
-            $table->string('r_t_jb_m_gudang_code')->nullable();
+            $table->string('r_t_jb_m_gudang_code_asal')->nullable();
+            $table->string('r_t_jb_m_gudang_code_tujuan')->nullable();
             $table->string('r_t_jb_m_supplier_code')->nullable();
             $table->string('r_t_jb_m_supplier_nama')->nullable();
             $table->string('r_t_jb_m_supplier_telp')->nullable();

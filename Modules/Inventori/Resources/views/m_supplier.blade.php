@@ -431,7 +431,7 @@
                 var supplier_id = $(this).data('id');
                 var saldo =
                     "<input type='hidden' name='m_supplier_id[]' value=" + supplier_id + ">" +
-                    "<input class='form-control number' type='text' name='m_supplier_saldo_awal[]'>";
+                    "<input class='form-control number' type='text' value='0' name='m_supplier_saldo_awal[]'>";
                 var newRowData = {
                     'm_supplier_nama': nama,
                     'm_supplier_saldo_awal': saldo

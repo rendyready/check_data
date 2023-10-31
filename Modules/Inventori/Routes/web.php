@@ -33,6 +33,7 @@ Route::group(['prefix' => 'inventori', 'controller' => SupplierController::class
     Route::get('supplier/data', 'data')->name('supplier.data');
     Route::get('supplier/edit/{id}', 'edit')->name('supplier.edit');
     Route::get('supplier/cari_waroeng','supplier_cari_wrg')->name('supplier.filter');
+    Route::get('supplier/get_detail/{id}/{mw}','supplier_show')->name('supplier.show');
 });
 //Master Customer
 Route::group(['prefix' => 'inventori', 'controller' => MCustomerController::class, 'middleware' => ['auth', 'web']], function () {

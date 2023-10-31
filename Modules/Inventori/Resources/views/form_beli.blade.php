@@ -27,9 +27,10 @@
                                             <input type="text" class="form-control form-control-sm"
                                                 id="r_t_jb_waroeng" name="r_t_jb_waroeng"
                                                 value="{{ $data->waroeng_nama->m_w_nama }}" readonly>
+                                                <input type="hidden" id="m_w_id" name="m_w_id" value="{{$data->m_w_id}}">
                                         </div>
                                     </div>
-                                    <div class="row mb-2">
+                                    <div class="row">
                                         <label class="col-sm-3 col-form-label-sm" for="r_t_jb_m_gudang_code">Masuk
                                             Gudang</label>
                                         <div class="col-sm-9">
@@ -40,6 +41,21 @@
                                                 @foreach ($data->gudang as $item)
                                                     <option value="{{ $item->m_gudang_code }}">
                                                         {{ ucwords($item->m_gudang_nama) }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <label class="col-sm-3 col-form-label-sm" for="m_jenis_belanja">
+                                            Belanja</label>
+                                        <div class="col-sm-9">
+                                            <select class="js-select2 m_jenis_belanja form-control-sm" style="width: 100%;"
+                                                name="m_jenis_belanja" id="m_jenis_belanja"
+                                                data-placeholder="Pilih Jenis Belanja" required>
+                                                <option></option>
+                                                @foreach ($data->m_jenis_belanja as $item)
+                                                    <option value="{{ $item->m_jenis_belanja_nama }}">
+                                                        {{ ucwords($item->m_jenis_belanja_nama) }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -194,7 +210,7 @@
                                             <label class="col-sm-3 col-form-label" for="r_t_jb_disc">Diskon</label>
                                             <div class="col-sm-2">
                                                 <input type="text" class="form-control number form-control-sm disc_tot"
-                                                    id="r_t_jb_disc" name="r_t_jb_disc" placeholder="%">
+                                                    id="r_t_jb_disc" name="r_t_jb_disc" placeholder="%" value="0">
                                             </div>
                                             <div class="col-sm-5">
                                                 <input type="text"
@@ -206,7 +222,7 @@
                                             <label class="col-sm-3 col-form-label" for="r_t_jb_ppn">PPN</label>
                                             <div class="col-sm-2">
                                                 <input type="text" class="form-control number form-control-sm ppn"
-                                                    id="r_t_jb_ppn" name="r_t_jb_ppn" placeholder="%">
+                                                    id="r_t_jb_ppn" name="r_t_jb_ppn" placeholder="%" value="0">
                                             </div>
                                             <div class="col-sm-5">
                                                 <input type="text" class="form-control number form-control-sm ppnrp"
@@ -544,6 +560,7 @@
                 });
             $('#r_t_jb_m_supplier_code').on('change', function() {
                 var id = $(this).val();
+                var mw_id = $('#m_w_id').val();
                 if (id == '500001') {
                     const date = new Date('{{ $data->tgl_now }}').toISOString().slice(0, 10);
                     $('.supplier').attr('readonly', false).trigger('change').val('');
@@ -551,7 +568,7 @@
                 } else {
                     $('.supplier').attr('readonly', true);
                     $.ajax({
-                        url: "/inventori/supplier/edit/" + id,
+                        url: "/inventori/supplier/get_detail/" + id + "/" + mw_id,
                         type: "GET",
                         dataType: 'json',
                         success: function(respond) {

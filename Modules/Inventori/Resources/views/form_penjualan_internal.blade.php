@@ -6,7 +6,7 @@
                 <div class="block block-themed h-100 mb-0">
                     <div class="block-header bg-pulse">
                         <h3 class="block-title">
-                            FORM PENJUALAN GUDANG INTERNAL
+                            FORM TRANSFER GUDANG
                     </div>
                     <div class="block-content text-muted">
                         <form id="formAction">
@@ -14,10 +14,10 @@
                                 <div class="col-md-3">
                                     <div class="row mb-1">
                                         <label class="col-sm-4 col-form-labdistributorel-sm"
-                                            for="rekap_beli_created_by">Operator</label>
+                                            for="r_t_jb_created_by">Operator</label>
                                         <div class="col-sm-8">
                                             <input type="text" class="form-control form-control-sm"
-                                                id="rekap_beli_created_by" name="rekap_beli_created_by"
+                                                id="r_t_jb_created_by" name="r_t_jb_created_by"
                                                 value="{{ Auth::user()->name }}" readonly>
                                         </div>
                                     </div>
@@ -31,26 +31,26 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="row mb-1">
-                                        <label class="col-sm-5 col-form-label-sm" for="rekap_beli_code">No Nota</label>
+                                        <label class="col-sm-5 col-form-label-sm" for="r_t_jb_code">No Nota</label>
                                         <div class="col-sm-7">
-                                            <input type="text" class="form-control form-control-sm" id="rekap_beli_code"
-                                                name="rekap_beli_code" readonly>
+                                            <input type="text" class="form-control form-control-sm" id="r_t_jb_code"
+                                                name="r_t_jb_code" readonly>
                                         </div>
                                     </div>
                                     <div class="row mb-1">
-                                        <label class="col-sm-5 col-form-label-sm" for="rekap_beli_tgl">Tanggal</label>
+                                        <label class="col-sm-5 col-form-label-sm" for="r_t_jb_tgl">Tanggal</label>
                                         <div class="col-sm-7">
                                             <input type="date" class="form-control form-control-sm"
-                                                value="{{ $data->tgl_now }}" readonly id="rekap_beli_tgl"
-                                                name="rekap_beli_tgl" required>
+                                                value="{{ $data->tgl_now }}" readonly id="r_t_jb_tgl"
+                                                name="r_t_jb_tgl" required>
                                         </div>
                                     </div>
                                     <div class="row mb-1">
-                                        <label class="col-sm-5 col-form-label-sm" for="rekap_beli_jth_tmp">Jth Tempo</label>
+                                        <label class="col-sm-5 col-form-label-sm" for="r_t_jb_jth_tmp">Jth Tempo</label>
                                         <div class="col-sm-7">
                                             <input type="date" class="form-control form-control-sm"
-                                                value="{{ $data->tgl_now }}" id="rekap_beli_jth_tmp"
-                                                name="rekap_beli_jth_tmp" readonly required>
+                                                value="{{ $data->tgl_now }}" id="r_t_jb_jth_tmp"
+                                                name="r_t_jb_jth_tmp" readonly required>
                                         </div>
                                     </div>
                                 </div>
@@ -67,18 +67,6 @@
                                                     <option value="{{ $item->m_gudang_code }}">
                                                         {{ ucwords($item->m_gudang_nama) }}</option>
                                                 @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-2">
-                                        <label class="col-sm-4 col-form-label-sm" for="nama_gudang">Jenis Penjualan</label>
-                                        <div class="col-sm-8">
-                                            <select class="js-select2 form-control-sm" style="width: 100%;"
-                                                name="nama_gudang" id="nama_gudang" data-placeholder="Pilih Jenis Penjualan"
-                                                required>
-                                                <option></option>
-                                                <option value="gudang utama waroeng">Waroeng</option>
-                                                <option value="gudang wbd waroeng">WDB</option>
                                             </select>
                                         </div>
                                     </div>
@@ -114,33 +102,33 @@
                                     <tbody>
                                         <tr>
                                             <td><select class="js-select2 fc nama_barang"
-                                                    name="rekap_beli_detail_m_produk_id[]"
-                                                    id="rekap_beli_detail_m_produk_id1" style="width: 100%;"
+                                                    name="r_t_jb_detail_m_produk_id[]"
+                                                    id="r_t_jb_detail_m_produk_id1" style="width: 100%;"
                                                     data-placeholder="Pilih Nama Barang" required>
                                                     <option value="0" selected disabled hidden>Pilih Nama Produk
                                                     </option>
                                                 </select></td>
                                             <td>
-                                                <textarea class="form-control fc reset form-control-sm" name="rekap_beli_detail_catatan[]"
-                                                    id="rekap_beli_detail_catatan" cols="50" required placeholder="catatan bb atau satuan"></textarea>
+                                                <textarea class="form-control fc reset form-control-sm" name="r_t_jb_detail_catatan[]"
+                                                    id="r_t_jb_detail_catatan" cols="50" required placeholder="catatan bb atau satuan"></textarea>
                                             </td>
                                             <td><input type="text"
                                                     class="form-control number fc reset form-control-sm qty"
-                                                    name="rekap_beli_detail_qty[]" id="rekap_beli_detail_qty" required>
+                                                    name="r_t_jb_detail_qty[]" id="r_t_jb_detail_qty" required>
                                                 <span class="stok" id="stok1"></span>
                                             </td>
                                             <td><input type="text"
                                                     class="form-control reset hpp number form-control-sm harga"
-                                                    name="rekap_beli_detail_harga[]" id="rekap_beli_detail_harga1"
+                                                    name="r_t_jb_detail_harga[]" id="r_t_jb_detail_harga1"
                                                     readonly></td>
                                             <td><input type="text"
                                                     class="form-control number form-control-sm persendisc"
-                                                    name="rekap_beli_detail_disc[]" id="rekap_beli_detail_disc"></td>
+                                                    name="r_t_jb_detail_disc[]" id="r_t_jb_detail_disc"></td>
                                             <td><input type="text"
                                                     class="form-control number form-control-sm rupiahdisc"
-                                                    name="rekap_beli_detail_discrp[]" id="rekap_beli_detail_discrp"></td>
+                                                    name="r_t_jb_detail_discrp[]" id="r_t_jb_detail_discrp"></td>
                                             <td><input type="text" class="form-control number form-control-sm subtot"
-                                                    name="rekap_beli_detail_subtot[]" id="rekap_beli_detail_subtot"
+                                                    name="r_t_jb_detail_subtot[]" id="r_t_jb_detail_subtot"
                                                     readonly></td>
                                         </tr>
                                     </tbody>
@@ -162,67 +150,67 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="row mb-1">
-                                            <label class="col-sm-4 col-form-label" for="rekap_beli_tot_no_ppn">Jumlah
+                                            <label class="col-sm-4 col-form-label" for="r_t_jb_tot_no_ppn">Jumlah
                                                 Total</label>
                                             <div class="col-sm-6">
                                                 <input type="text" class="form-control form-control-sm grdtot"
-                                                    id="rekap_beli_tot_no_ppn" name="rekap_beli_tot_no_ppn" readonly>
+                                                    id="r_t_jb_tot_no_ppn" name="r_t_jb_tot_no_ppn" readonly>
                                             </div>
                                         </div>
                                         <div class="row mb-1">
-                                            <label class="col-sm-3 col-form-label" for="rekap_beli_disc">Diskon</label>
+                                            <label class="col-sm-3 col-form-label" for="r_t_jb_disc">Diskon</label>
                                             <div class="col-sm-2">
                                                 <input type="text" class="form-control number form-control-sm disc_tot"
-                                                    id="rekap_beli_disc" name="rekap_beli_disc" placeholder="%">
+                                                    id="r_t_jb_disc" name="r_t_jb_disc" placeholder="%">
                                             </div>
                                             <div class="col-sm-5">
                                                 <input type="text"
                                                     class="form-control number form-control-sm disc_tot_rp"
-                                                    id="rekap_beli_disc_rp" name="rekap_beli_disc_rp" placeholder="Rp">
+                                                    id="r_t_jb_disc_rp" name="r_t_jb_disc_rp" placeholder="Rp">
                                             </div>
                                         </div>
                                         <div class="row mb-1">
-                                            <label class="col-sm-3 col-form-label" for="rekap_beli_ppn">PPN</label>
+                                            <label class="col-sm-3 col-form-label" for="r_t_jb_ppn">PPN</label>
                                             <div class="col-sm-2">
                                                 <input type="text" class="form-control number form-control-sm ppn"
-                                                    id="rekap_beli_ppn" name="rekap_beli_ppn" placeholder="%">
+                                                    id="r_t_jb_ppn" name="r_t_jb_ppn" placeholder="%">
                                             </div>
                                             <div class="col-sm-5">
                                                 <input type="text" class="form-control number form-control-sm ppnrp"
-                                                    id="rekap_beli_ppn_rp" name="rekap_beli_ppn_rp" placeholder="Rp"
+                                                    id="r_t_jb_ppn_rp" name="r_t_jb_ppn_rp" placeholder="Rp"
                                                     readonly>
                                             </div>
                                         </div>
                                         <div class="row mb-1">
-                                            <label class="col-sm-4 col-form-label" for="rekap_beli_ongkir">Ongkos
+                                            <label class="col-sm-4 col-form-label" for="r_t_jb_ongkir">Ongkos
                                                 Kirim</label>
                                             <div class="col-sm-6">
                                                 <input type="text" class="form-control form-control-sm number ongkir"
-                                                    id="rekap_beli_ongkir" name="rekap_beli_ongkir">
+                                                    id="r_t_jb_ongkir" name="r_t_jb_ongkir">
                                             </div>
                                         </div>
                                         <div class="row mb-1">
-                                            <label class="col-sm-4 col-form-label" for="rekap_beli_tot_nom">Jumlah
+                                            <label class="col-sm-4 col-form-label" for="r_t_jb_tot_nom">Jumlah
                                                 Akhir</label>
                                             <div class="col-sm-6">
                                                 <input type="text"
-                                                    class="form-control number form-control-sm rekap_beli_tot_nom"
-                                                    id="rekap_beli_tot_nom" name="rekap_beli_tot_nom" readonly>
+                                                    class="form-control number form-control-sm r_t_jb_tot_nom"
+                                                    id="r_t_jb_tot_nom" name="r_t_jb_tot_nom" readonly>
                                             </div>
                                         </div>
-                                        <div class="row mb-1">
+                                        <div class="row mb-1" hidden>
                                             <label class="col-sm-4 col-form-label"
-                                                for="rekap_beli_terbayar">Dibayar</label>
+                                                for="r_t_jb_terbayar">Dibayar</label>
                                             <div class="col-sm-6">
                                                 <input type="text" class="form-control number form-control-sm bayar"
-                                                    id="rekap_beli_terbayar" name="rekap_beli_terbayar" value="0">
+                                                    id="r_t_jb_terbayar" name="r_t_jb_terbayar" value="0">
                                             </div>
                                         </div>
-                                        <div class="row mb-1">
-                                            <label class="col-sm-4 col-form-label" for="rekap_beli_tersisa">Sisa</label>
+                                        <div class="row mb-1" hidden>
+                                            <label class="col-sm-4 col-form-label" for="r_t_jb_tersisa">Sisa</label>
                                             <div class="col-sm-6">
                                                 <input type="text" class="form-control form-control-sm sisa"
-                                                    id="rekap_beli_tersisa" name="rekap_beli_tersisa" readonly>
+                                                    id="r_t_jb_tersisa" name="r_t_jb_tersisa" readonly>
                                             </div>
                                         </div>
                                     </div>
@@ -268,7 +256,7 @@
     <script>
         function get_code() {
             $.get("/inventori/beli/code/", function(data) {
-                $('#rekap_beli_code').val(data);
+                $('#r_t_jb_code').val(data);
             });
         }
         $(document).ready(function() {
@@ -290,10 +278,10 @@
                         [10, 25, 50, 100, "All"]
                     ],
                     "pageLength": 10,
-                    "ajax": {
-                        "url": "{{ route('hist_penj_g.index') }}",
-                        "type": "GET"
-                    }
+                    // "ajax": {
+                    //     "url": "{{ route('hist_penj_g.index') }}",
+                    //     "type": "GET"
+                    // }
                 });
             });
             Codebase.helpersOnLoad(['jq-select2']);
@@ -316,13 +304,13 @@
                                 'Gudang Telah Berganti.',
                                 'success'
                             )
-                            $('#rekap_beli_detail_m_produk_id1').empty();
-                            $('#rekap_beli_detail_m_produk_id1').append('<option></option>');
+                            $('#r_t_jb_detail_m_produk_id1').empty();
+                            $('#r_t_jb_detail_m_produk_id1').append('<option></option>');
                             var asal = $(this).val()
                             $.get("/inventori/stok/" + asal, function(data) {
                                 datas = data;
                                 $.each(data, function(key, value) {
-                                    $('#rekap_beli_detail_m_produk_id1')
+                                    $('#r_t_jb_detail_m_produk_id1')
                                         .append($('<option>', {
                                                 value: key
                                             })
@@ -335,12 +323,12 @@
                     });
                 } else {
                     var asal = $(this).val()
-                    $('#rekap_beli_detail_m_produk_id1').empty();
-                    $('#rekap_beli_detail_m_produk_id1').append('<option></option>');
+                    $('#r_t_jb_detail_m_produk_id1').empty();
+                    $('#r_t_jb_detail_m_produk_id1').append('<option></option>');
                     $.get("/inventori/stok/" + asal, function(data) {
                         datas = data;
                         $.each(data, function(key, value) {
-                            $('#rekap_beli_detail_m_produk_id1')
+                            $('#r_t_jb_detail_m_produk_id1')
                                 .append($('<option>', {
                                         value: key
                                     })
@@ -353,23 +341,23 @@
             $('.tambah').on('click', function() {
                 no++;
                 $('#form').append('<tr id="row' + no + '" class="remove">' +
-                    '<td><select class="js-select2 nama_barang" name="rekap_beli_detail_m_produk_id[]" id="rekap_beli_detail_m_produk_id' +
+                    '<td><select class="js-select2 nama_barang" name="r_t_jb_detail_m_produk_id[]" id="r_t_jb_detail_m_produk_id' +
                     no +
                     '" style="width: 100%;" data-placeholder="Pilih Nama Barang" required > <option value="0" selected disabled hidden></option></select></td>' +
-                    '<td><textarea class="form-control form-control-sm" name="rekap_beli_detail_catatan[]" id="rekap_beli_detail_catatan" cols="50" required placeholder="catatan bb atau satuan"></textarea></td>' +
-                    '<td><input type="text" class="form-control number form-control-sm qty" name="rekap_beli_detail_qty[]" id="rekap_beli_detail_qty" required><span class="stok" id="stok' +
+                    '<td><textarea class="form-control form-control-sm" name="r_t_jb_detail_catatan[]" id="r_t_jb_detail_catatan" cols="50" required placeholder="catatan bb atau satuan"></textarea></td>' +
+                    '<td><input type="text" class="form-control number form-control-sm qty" name="r_t_jb_detail_qty[]" id="r_t_jb_detail_qty" required><span class="stok" id="stok' +
                     no + '"></span></td>' +
-                    '<td><input type="text" class="form-control number form-control-sm hpp harga" name="rekap_beli_detail_harga[]" id="rekap_beli_detail_harga' +
+                    '<td><input type="text" class="form-control number form-control-sm hpp harga" name="r_t_jb_detail_harga[]" id="r_t_jb_detail_harga' +
                     no + '" required></td>' +
-                    '<td><input type="text" class="form-control number form-control-sm persendisc" name="rekap_beli_detail_disc[]" id="rekap_beli_detail_disc"></td>' +
-                    '<td><input type="text" class="form-control number form-control-sm rupiahdisc" name="rekap_beli_detail_discrp[]" id="rekap_beli_detail_discrp"></td>' +
-                    '<td><input type="text" class="form-control number form-control-sm subtot" name="rekap_beli_detail_subtot[]" id="rekap_beli_detail_subtot" readonly></td>' +
+                    '<td><input type="text" class="form-control number form-control-sm persendisc" name="r_t_jb_detail_disc[]" id="r_t_jb_detail_disc"></td>' +
+                    '<td><input type="text" class="form-control number form-control-sm rupiahdisc" name="r_t_jb_detail_discrp[]" id="r_t_jb_detail_discrp"></td>' +
+                    '<td><input type="text" class="form-control number form-control-sm subtot" name="r_t_jb_detail_subtot[]" id="r_t_jb_detail_subtot" readonly></td>' +
                     '<td><button type="button" id="' + no +
                     '" class="btn btn-danger btn_remove"><i class="fa fa-trash"></i></button></td></tr>'
                     );
                 Codebase.helpersOnLoad(['jq-select2']);
                 $.each(datas, function(key, value) {
-                    $('#rekap_beli_detail_m_produk_id' + no)
+                    $('#r_t_jb_detail_m_produk_id' + no)
                         .append($('<option>', {
                                 value: key
                             })
@@ -391,14 +379,14 @@
                     $tblrows.each(function(index) {
                         var $tblrow = $(this);
                         $tblrow.find(".qty, .harga, .persendisc, .rupiahdisc").on('input', function() {
-                            var qty = $tblrow.find("[name='rekap_beli_detail_qty[]']").val()
+                            var qty = $tblrow.find("[name='r_t_jb_detail_qty[]']").val()
                                 .replace(/\./g, '').replace(/\,/g, '.');
-                            var price = $tblrow.find("[name='rekap_beli_detail_harga[]']").val()
+                            var price = $tblrow.find("[name='r_t_jb_detail_harga[]']").val()
                                 .replace(/\./g, '').replace(/\,/g, '.');
-                            var persendisc = $tblrow.find("[name='rekap_beli_detail_disc[]']")
+                            var persendisc = $tblrow.find("[name='r_t_jb_detail_disc[]']")
                                 .val();
                             var nilaipersendisc = 100 - persendisc;
-                            var rupiahdisc = $tblrow.find("[name='rekap_beli_detail_discrp[]']")
+                            var rupiahdisc = $tblrow.find("[name='r_t_jb_detail_discrp[]']")
                                 .val().replace(/\./g, '').replace(/\,/g, '.');
                             if (rupiahdisc == null) {
                                 rupiahdisc = 0;
@@ -422,22 +410,22 @@
                         var stval = parseFloat($(this).val().replace(/\./g, '').replace(/\,/g, '.'));
                         grdtot += isNaN(stval) ? 0 : stval;
                     });
-                    var disc_tot = $("[name='rekap_beli_disc']").val();
-                    var disctotrp = $("[name='rekap_beli_disc_rp']").val().replace(/\./g, '').replace(/\,/g,
+                    var disc_tot = $("[name='r_t_jb_disc']").val();
+                    var disctotrp = $("[name='r_t_jb_disc_rp']").val().replace(/\./g, '').replace(/\,/g,
                         '.');
-                    var ppn = $("[name='rekap_beli_ppn']").val();
-                    var bayar = $("[name='rekap_beli_terbayar']").val().replace(/\./g, '').replace(/\,/g, '.');
-                    var ongkir = $("[name='rekap_beli_ongkir']").val().replace(/\./g, '').replace(/\,/g, '.');
+                    var ppn = $("[name='r_t_jb_ppn']").val();
+                    var bayar = $("[name='r_t_jb_terbayar']").val().replace(/\./g, '').replace(/\,/g, '.');
+                    var ongkir = $("[name='r_t_jb_ongkir']").val().replace(/\./g, '').replace(/\,/g, '.');
                     if (ongkir === "") {
                         var ongkir = 0;
                     }
                     var grandtotal = grdtot * parseFloat((100 - disc_tot) / 100) - disctotrp;
                     var ppnrp = parseFloat(ppn / 100) * grandtotal;
-                    var rekap_beli_tot_nom = parseFloat(grandtotal) + parseFloat(ppnrp) + parseFloat(ongkir);
+                    var r_t_jb_tot_nom = parseFloat(grandtotal) + parseFloat(ppnrp) + parseFloat(ongkir);
                     $('.ppnrp').val(ppnrp);
-                    $('.rekap_beli_tot_nom').val(rekap_beli_tot_nom.toLocaleString('id'));
-                    $('.sisa').val((rekap_beli_tot_nom - bayar).toLocaleString('id'));
-                    $('#total_sum_value').html(': Rp ' + rekap_beli_tot_nom.toLocaleString('id'));
+                    $('.r_t_jb_tot_nom').val(r_t_jb_tot_nom.toLocaleString('id'));
+                    $('.sisa').val((r_t_jb_tot_nom - bayar).toLocaleString('id'));
+                    $('#total_sum_value').html(': Rp ' + r_t_jb_tot_nom.toLocaleString('id'));
 
                 });
             $('#formAction').submit(function(e) {
@@ -456,7 +444,7 @@
                             });
                             table.ajax.reload();
                             $('.remove').remove();
-                            $('#rekap_beli_detail_m_produk_id1,.reset').trigger('change').val(
+                            $('#r_t_jb_detail_m_produk_id1,.reset').trigger('change').val(
                                 '');
                             $('#formAction').find('.persendisc').trigger('input');
                             get_code();
