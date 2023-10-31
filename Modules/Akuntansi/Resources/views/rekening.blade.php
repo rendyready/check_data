@@ -79,9 +79,8 @@
                                                             required />
                                                     </td>
                                                     <td>
-                                                        <a placeholder="Input Nama Item" id="m_rekening_item"
-                                                            name="m_rekening_item[]"
-                                                            class="form-control set form-control-sm m_rekening_item text-center btn btn-primary"
+                                                        <a placeholder="Input Nama Item" id="tombol_item"
+                                                            class="form-control set form-control-sm text-center btn btn-primary"
                                                             title="Tambahkan Item"><i
                                                                 class="fa-solid fa-pen-to-square"></i></a>
                                                     </td>
@@ -268,13 +267,12 @@
     </div>
 
     <!-- Modal Item -->
-    <div class="modal" id="rekening_item" tabindex="-1" role="dialog" aria-labelledby="form-rekening"
-        aria-hidden="true">
+    <div class="modal" id="item_modal" tabindex="-1" role="dialog" aria-labelledby="item_modal" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="block block-themed shadow-none mb-0">
                     <div class="block-header block-header-default bg-pulse">
-                        <h3 class="block-title" id="item_akun_title"></h3>
+                        <h3 class="block-title text-center" id="item_akun_title"></h3>
                         <div class="block-options">
                             <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
                                 <i class="fa fa-fw fa-times"></i>
@@ -283,27 +281,77 @@
                     </div>
                     <div class="block-content">
                         <!-- Select2 is initialized at the bottom of the page -->
-                        <form id="formAction" name="form_action" method="post">
+                        <form id="form_item">
                             @csrf
-                            <div class="mb-4">
-                                <input name="m_rekening_id" type="hidden" class="m_rekening_no_akun1">
-                                <div class="form-group">
-                                    <label for="m_rekening_no_akun" class="mb-2">Nama Akun : <span id="nama_akun">
-                                        </span></label>
-                                    <div class="mb-2">
-                                        <input class="form-control item_akun" type="text" name="m_rekening_no_akun"
-                                            id="item_akun" style="width: 100%;" required>
-                                    </div>
-                                    <div id="tagList"></div>
-                                </div>
-                            </div>
+                            <table id="table_item" class="table table-bordered table-striped table-vcenter mb-4">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">Nama Item</th>
+                                        {{-- <th></th> --}}
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <input type="text" placeholder="Input Nama Item" id="tags_item"
+                                                name="m_rekening_item[]"
+                                                class="form-control set form-control-sm m_rekening_item1 text-center">
+                                        </td>
+                                        {{-- <td>
+                                            <button type="button" class="btn tambah_item btn-primary">+</button>
+                                        </td> --}}
+                                        {{-- <input type="hidden" id="m_rekening_item_val" name="m_rekening_item_val[]"
+                                            class="form-control set form-control-sm m_rekening_item1 text-center"> --}}
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div id="tagList"></div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table id="tampil_item" class="table table-bordered table-striped table-vcenter mb-4">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">Nama Item</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <input type="text" placeholder="Input Nama Item" id="tags"
+                                                name="m_rekening_item[]"
+                                                class="form-control set form-control-sm m_rekening_item1 text-center">
+                                        </td>
+                                        {{-- <td>
+                                            <button type="button" class="btn tambah_item btn-primary">+</button>
+                                        </td> --}}
+                                        {{-- <input type="hidden" id="m_rekening_item_val" name="m_rekening_item_val[]"
+                                            class="form-control set form-control-sm m_rekening_item1 text-center"> --}}
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div id="tagList"></div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </form>
                     </div>
-                    <div class="block-content block-content-full text-end bg-body">
-                        <button type="button" class="btn btn-sm btn-alt-secondary me-1"
-                            data-bs-dismiss="modal">Close</button>
-                        {{-- <button type="submit" class="btn btn-success" id="submit">Update</button> --}}
+                    <div class="d-flex justify-content-between">
+                        <div class="block-content block-content-full text-first bg-body">
+                            <button type="button" id="item_close" class="btn btn-sm btn-warning me-1"
+                                data-bs-dismiss="modal">Close</button>
+                        </div>
+                        <div class="block-content block-content-full text-end bg-body">
+                            <button type="button" id="item_save" class="btn btn-sm btn-success me-1"
+                                data-bs-dismiss="modal">Simpan</button>
+                        </div>
                     </div>
-                    </form>
+
                 </div>
             </div>
         </div>
@@ -327,9 +375,147 @@
                     '" class="btn btn-danger btn_remove"> - </button></td> </tr> ');
             });
 
+            // var no_item = 0;
+            // var item_data = [];
+
+            // $('.tambah_item').on('click', function() {
+            //     no_item++;
+            //     // var inputValue = "";
+            //     $('#table_item').append('<tr class="hapus_item" id="row_item' + no_item + '">' +
+            //         '<td><input type="text" class="form-control form-control-sm m_rekening_item' +
+            //         no_item + ' text-center" name="m_rekening_item" id="m_rekening_itemjq' +
+            //         no_item + '" placeholder="Input Nama Item"></td>' +
+            //         '<td><button type="button" id="' + no_item +
+            //         '" class="btn btn-danger btn_remove_item"> - </button></td> </tr> ');
+            // });
+
             function formatNumber(number) {
                 return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
             }
+
+            var tagsArray = [];
+
+            $("#tombol_item").on('click', function() {
+                if ($.fn.DataTable.isDataTable('#table_item')) {
+                    $('#table_item').DataTable().destroy();
+                }
+
+                var dataTable = $('#tampil_item').DataTable({
+                    buttons: [],
+                    lengthChange: false,
+                    paging: false,
+                    autoWidth: false,
+                    dom: '<"text-center"f>rt<lp>',
+                    destroy: true,
+                    data: tagsArray,
+                    columns: [{
+                        data: "tag"
+                    }]
+                });
+
+                $("#tags_item").on("keypress", function(event) {
+                    if (event.which === 13 || event.which === 44 || event
+                        .which === 32) {
+                        event.preventDefault();
+                        var tag = $(this).val().trim();
+                        if (tag !== "") {
+                            tagsArray.push({
+                                tag: tag
+                            });
+                            $("#tagList").append('<div class="tag">' + tag + '</div');
+                            dataTable.draw();
+                        }
+                        $(this).val("");
+                    }
+                });
+
+                $("#item_save").on('click', function() {
+                    $("#tagList").remove();
+                });
+
+                $("#item_modal").modal('show');
+            });
+
+
+
+            // Fungsi untuk memperbarui nomor tag setelah tag dihapus
+            // function updateTagNumbers() {
+            //     var tags = $("#tagList .tag");
+            //     tags.each(function(index) {
+            //         $(this).html((index + 1) + ': ' + $(this).html().split(': ')[1]);
+            //     });
+            // }
+
+            // $("#item_save").on('click', function() {
+            //     // item_data = [];
+
+            //     for (var i = 1; i <= no_item; i++) {
+            //         var inputValue = $(".m_rekening_item" + i).val();
+            //         item_data.push(inputValue);
+            //     }
+
+            //     var item_data_json = JSON.stringify(item_data);
+
+            //     var data = '<input type="hidden" id="m_rekening_item_val"' +
+            //         'name = "m_rekening_item_val[]"' +
+            //         'class = "form-control set form-control-sm m_rekening_item' + no_item +
+            //         ' text-center" ' +
+            //         'value = "' + item_data_json + '" > ';
+
+            //     console.log(data);
+            //     $("#m_rekening_item").append(data);
+
+            //     $("#item_modal").modal('hide');
+            // });
+
+            // $("#item_modal").modal({
+            //     backdrop: 'static',
+            //     keyboard: false,
+            // });
+
+            // $("#tombol_item").on('click', function() {
+            //     $("#item_akun_title").html('Isi Nama Item');
+
+            //     // $("#table_item").empty();
+
+            //     // for (var i = 1; i <= no_item; i++) {
+            //     //     var inputValue = item_data[i - 1];
+            //     //     $('#table_item').append('<tr class="hapus_item" id="row_item' + i + '">' +
+            //     //         '<td><input type="text" class="form-control form-control-sm m_rekening_item' +
+            //     //         i +
+            //     //         ' text-center" name="m_rekening_item" id="m_rekening_itemjq' + i +
+            //     //         '" placeholder="Input Nama Item" value="' + inputValue + '"></td>' +
+            //     //         '<td><button type="button" id="' + i +
+            //     //         '" class="btn btn-danger btn_remove_item"> - </button></td></tr>');
+            //     // }
+
+            //     var table_item = $('#table_item').DataTable({
+            //         buttons: [],
+            //         lengthChange: false,
+            //         paging: false,
+            //         autoWidth: false,
+            //         dom: '<"text-center"f>rt<lp>',
+            //         destroy: true
+            //     });
+
+            //     // $("#item_modal").on('shown.bs.modal', function() {
+            //     //     for (var i = 1; i <= no_item; i++) {
+            //     //         var inputValue = item_data[i - 1];
+            //     //         $(".m_rekening_item" + i).val(inputValue);
+            //     //     }
+            //     // });
+
+            //     $("#item_modal").on('shown.bs.modal', function() {
+            //         for (var i = 1; i <= no_item; i++) {
+            //             var inputValue = item_data[i - 1];
+            //             $(".m_rekening_item" + i).val(inputValue);
+            //         }
+            //     });
+
+            //     table_item.rows.add([]).draw();
+            //     $("#item_modal").modal('show');
+            // });
+
 
             $(document).on('focusout', '.no_rekening', function() {
                 var current_value = $(this).val().trim();
@@ -390,32 +576,6 @@
                     },
                 });
             });
-
-            $("#item_akun").on("keypress", function(event) {
-                if (event.which === 13 || event.which === 44) {
-                    event.preventDefault();
-                    var tag = $(this).val().trim();
-                    if (tag !== "") {
-                        $("#tagList").append('<div class="tag">' + tag + '</div>');
-                    }
-                    $(this).val("");
-                }
-            });
-
-            $("#tagList").on("click", ".tag", function() {
-                $(this).remove();
-            });
-
-            $("#m_rekening_item").on('click', function() {
-                var id = $(this).attr('value');
-                var rekening_nama = $("#m_rekening_nama").val();
-                // $('#item_akun_title form')[0].reset();
-                $("#item_akun_title").html('Isi Item Akun');
-                $("#nama_akun").html('<b>' + rekening_nama +
-                    '</b>');
-                $("#rekening_item").modal('show');
-            });
-
 
             //get edit
             $("#rekening_tampil").on('click', '.buttonEdit', function() {
@@ -551,6 +711,11 @@
                 var button_id = $(this).attr("id");
                 $('#row' + button_id + '').remove();
                 $('.saldo').trigger("input");
+            });
+
+            $(document).on('click', '.btn_remove_item', function() {
+                var button_id = $(this).attr("id");
+                $('#row_item' + button_id + '').remove();
             });
 
             $('.cari').on('change', function() {

@@ -32,9 +32,11 @@ return new class extends Migration
             $table->integer('m_users_status_updated_by');
         });
 
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('users_status')->nullable();
-        });
+        if (!Schema::hasColumn('users', 'users_status')) {
+            Schema::table('users', function (Blueprint $table) {
+                $table->string('users_status')->nullable();
+            });
+        }
 
     }
 

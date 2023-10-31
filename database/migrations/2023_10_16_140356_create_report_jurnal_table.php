@@ -33,8 +33,12 @@ return new class extends Migration
             $table->string('r_j_transaction_code');
             $table->string('r_j_type');
             $table->string('r_j_users_name');
-            $table->unsignedBigInteger('r_j_m_supplier_id');
-            $table->unsignedBigInteger('r_j_m_customer_id');
+            $table->unsignedBigInteger('r_j_m_supplier_id')->nullable();
+            $table->string('r_j_m_supplier_code')->nullable();
+            $table->string('r_j_m_supplier_nama')->nullable();
+            $table->unsignedBigInteger('r_j_m_customer_id')->nullable();
+            $table->string('r_j_m_customer_code')->nullable();
+            $table->string('r_j_m_customer_nama')->nullable();
             $table->bigInteger('r_j_created_by');
             $table->bigInteger('r_j_updated_by')->nullable();
             $table->bigInteger('r_j_deleted_by')->nullable();
