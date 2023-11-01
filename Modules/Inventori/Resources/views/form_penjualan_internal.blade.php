@@ -278,10 +278,10 @@
                         [10, 25, 50, 100, "All"]
                     ],
                     "pageLength": 10,
-                    // "ajax": {
-                    //     "url": "{{ route('hist_penj_g.index') }}",
-                    //     "type": "GET"
-                    // }
+                    "ajax": {
+                        "url": "{{ route('hist_penj_g.index') }}",
+                        "type": "GET"
+                    }
                 });
             });
             Codebase.helpersOnLoad(['jq-select2']);
