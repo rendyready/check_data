@@ -53,7 +53,6 @@
                                                     <th class="text-center">No Akun</th>
                                                     <th class="text-center">Nama Akun</th>
                                                     <th class="text-center">Saldo</th>
-                                                    {{-- <th class="text-center">Item</th> --}}
                                                     <th class="text-center">Action</th>
                                                 </tr>
                                             </thead>
@@ -78,12 +77,6 @@
                                                             class="form-control set saldo form-control-sm text-end number"
                                                             required />
                                                     </td>
-                                                    {{-- <td>
-                                                        <a id="tombol_item"
-                                                            class="form-control set form-control-sm text-center btn btn-primary tombol_item"
-                                                            title="Tambahkan Item"><i
-                                                                class="fa-solid fa-pen-to-square"></i></a>
-                                                    </td> --}}
                                                     <td>
                                                         <button type="button" class="btn tambah btn-primary">+</button>
                                                     </td>
@@ -245,7 +238,7 @@
                     </div>
                     <div class="block-content">
                         <!-- Select2 is initialized at the bottom of the page -->
-                        <form id="formAction" name="form_action" method="POST">
+                        <form id="formAction2" name="form_action" method="POST">
                             @csrf
                             <div class="mb-4">
                                 <input name="m_rekening_no_akun" type="hidden" id="m_rekening_no_akun2">
@@ -281,8 +274,9 @@
                     </div>
                     <div class="block-content">
                         <!-- Select2 is initialized at the bottom of the page -->
-                        <form id="form_item">
+                        <form id="form_item" name="form_action" method="post">
                             @csrf
+                            <input id="m_rekening_idx" name="m_rekening_id" type="hidden">
                             <table id="table_item" class="table table-bordered table-striped table-vcenter mb-4">
                                 <thead>
                                     <tr>
@@ -296,8 +290,8 @@
                                     <tr id="row_insert">
                                         <td>
                                             <input type="text" placeholder="Input Nama Item" id="tags_item"
-                                                name="m_rekening_item[]"
                                                 class="form-control set form-control-sm m_rekening_item1 text-center">
+                                            <input id="tag_save" name="m_rekening_item[]" type="hidden">
                                         </td>
                                     </tr>
                                     <tr>
@@ -365,20 +359,29 @@
             var existingTagsArray = [];
             var newTagsArray = [];
             var isInputEnabled = true;
+
             $("#rekening_tampil").on('click', '.buttonItem', function() {
                 var id = $(this).attr('value');
                 $('#form-rekening form')[0].reset();
                 $("#item_head").html('Data Item');
+                // console.log(id);
                 $.ajax({
                     url: "/akuntansi/rekening/item/" + id,
                     type: "GET",
                     dataType: 'json',
                     success: function(respond) {
-                        // console.log(respond);
-                        var dataArray = respond.m_rekening_item.split(',').map(item => item
-                            .trim());
+                        $("#m_rekening_idx").val(respond.m_rekening_code).trigger('change');
 
-                        $('#tampil_item').DataTable({
+                        var dataArray;
+
+                        if (respond.m_rekening_item.includes(',')) {
+                            dataArray = respond.m_rekening_item.split(',').map(item => item
+                                .trim());
+                        } else {
+                            dataArray = [respond.m_rekening_item];
+                        }
+
+                        var table = $('#tampil_item').DataTable({
                             buttons: [],
                             lengthChange: false,
                             paging: false,
@@ -392,6 +395,16 @@
                                 data: 'm_rekening_item'
                             }],
                         });
+
+                        // Hapus data sebelumnya jika ada
+                        table.clear().draw();
+
+                        // Tambahkan data baru
+                        dataArray.forEach(function(item) {
+                            table.row.add({
+                                m_rekening_item: item
+                            }).draw(false);
+                        });
                     },
                 });
 
@@ -402,106 +415,66 @@
                         var tag = $(this).val().trim();
                         if (tag !== "") {
                             newTagsArray.push({
-                                tag: tag
+                                tag: tag,
                             });
                             $("#tagList").append('<div class="tag">' + tag + '</div');
                         }
                         $(this).val("");
                     }
+                    var tagsArray = newTagsArray.map(function(tagObj) {
+                        return tagObj.tag;
+                    });
+                    $("#tag_save").val(tagsArray);
+                });
+
+                $("#tagList").on("click", ".tag", function() {
+                    var tagText = $(this).text().trim();
+                    existingTagsArray = existingTagsArray.filter(tag => tag.tag !== tagText);
+                    $(this).remove();
+                    // var tagsText = existingTagsArray.map(tag => tag.tag).join(', ');
+                    $('#tag_save').empty();
+                    table.clear().rows.add(existingTagsArray).draw();
                 });
 
                 $(".item_close").on('click', function() {
-                    newTagsArray = [];
                     $("#tagList").empty();
                 });
 
-                console.log(newTagsArray);
-                $('#item_save').submit(function() {
+                $("#item_save").on('click', function() {
+                    var id = $('#m_rekening_idx').val();
+                    var item = $('#tag_save').val();
+                    $("#tagList").empty();
+
+                    var data = {
+                        id: id,
+                        item: item,
+                        _token: '{{ csrf_token() }}', // CSRF Token
+                    };
+
                     $.ajax({
-                        url: "{{ route('rekening.simpan') }}",
+                        url: "{{ route('rekening.simpan_item') }}",
                         type: "POST",
-                        data: newTagsArray,
+                        data: data,
                         success: function(data) {
                             Codebase.helpers('jq-notify', {
-                                align: 'right', // 'right', 'left', 'center'
-                                from: 'top', // 'top', 'bottom'
-                                type: data
-                                    .type, // 'info', 'success', 'warning', 'danger'
-                                icon: 'fa fa-info me-5', // Icon class
+                                align: 'right',
+                                from: 'top',
+                                type: data.type,
+                                icon: 'fa fa-info me-5',
                                 message: data.messages
                             });
+                            table.ajax.reload();
                         }
                     });
+                    return false;
                 });
 
                 $("#item_modal").modal('show');
             });
 
-            // var dataTags = [];
-            // var existingTagsArray = [];
-            // var newTagsArray = [];
-            // var isInputEnabled = true;
-
-            // $("#tombol_item").on('click', function() {
-            //     if ($.fn.DataTable.isDataTable('#tampil_item')) {
-            //         $('#tampil_item').DataTable().destroy();
-            //     }
-
-            //     var dataTable = $('#tampil_item').DataTable({
-            //         buttons: [],
-            //         lengthChange: false,
-            //         paging: false,
-            //         autoWidth: false,
-            //         dom: '<"text-center"f>rt<lp>',
-            //         destroy: true,
-            //         data: existingTagsArray,
-            //         columns: [{
-            //             data: "tag"
-            //         }],
-            //     });
-
-            //     $("#tags_item").on("keypress", function(event) {
-            //         if (isInputEnabled && (event.which === 13 || event.which === 44 || event
-            //                 .which === 32)) {
-            //             event.preventDefault();
-            //             var tag = $(this).val().trim();
-            //             if (tag !== "") {
-            //                 newTagsArray.push({
-            //                     tag: tag
-            //                 });
-            //                 $("#tagList").append('<div class="tag">' + tag + '</div');
-            //             }
-            //             $(this).val("");
-            //         }
-            //     });
-
-            //     $("#item_save").on('click', function() {
-            //         existingTagsArray = existingTagsArray.concat(newTagsArray);
-            //         newTagsArray = [];
-            //         $("#tagList").empty();
-            //     });
-
-            //     $(".item_close").on('click', function() {
-            //         newTagsArray = [];
-            //         $("#tagList").empty();
-            //     });
-
-            //     $("#item_modal").modal('show');
-            // });
-
             //insert rekening
             $('#rekening-insert').submit(function(e) {
                 if (!e.isDefaultPrevented()) {
-
-                    // var formattedArray = existingTagsArray.map(function(item) {
-                    //     return item.tag;
-                    // });
-                    // console.log(formattedArray);
-                    // var formData = $('#rekening-insert').serializeArray();
-                    // formData.push({
-                    //     name: 'existingTags',
-                    //     value: JSON.stringify(formattedArray)
-                    // });
                     $.ajax({
                         url: "{{ route('rekening.simpan') }}",
                         type: "POST",
@@ -619,7 +592,7 @@
                     type: "GET",
                     dataType: 'json',
                     success: function(respond) {
-                        // console.log(respond);
+                        console.log(respond);
                         $(".m_rekening_no_akun1").val(respond.m_rekening_code)
                             .trigger(
                                 'change');

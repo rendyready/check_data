@@ -143,12 +143,6 @@ class RekeningController extends Controller
         return response()->json($data);
     }
 
-    public function item($id)
-    {
-        $data = DB::table('m_rekening')->select('m_rekening_item')->where('m_rekening_code', $id)->first();
-        return response()->json($data);
-    }
-
     public function simpan_edit(Request $request)
     {
         $rekening_old = $request->m_rekening_id;
@@ -203,6 +197,49 @@ class RekeningController extends Controller
             'type' => 'danger',
             'messages' => 'No Akun Sudah Dipakai',
         ]);
+    }
+
+    public function item($id)
+    {
+        $data = DB::table('m_rekening')->select('m_rekening_item', 'm_rekening_code')->where('m_rekening_code', $id)->first();
+        return response()->json($data);
+    }
+
+    public function simpan_item(Request $request)
+    {
+        $id_rekening = $request->id;
+        $newItem = $request->item;
+
+        $rekening = DB::table('m_rekening')->where('m_rekening_code', $id_rekening)->first();
+
+        if ($rekening) {
+            $existingItems = $rekening->m_rekening_item;
+
+            if ($newItem !== null && $newItem !== '') {
+                // Menambahkan string baru ke data yang ada
+                if (empty($existingItems)) {
+                    $updatedItems = $newItem;
+                } else {
+                    $updatedItems = $existingItems . ',' . $newItem;
+                }
+            } else {
+                // Jika $newItem kosong atau null, maka tidak ada perubahan
+                $updatedItems = $existingItems;
+            }
+
+            DB::table('m_rekening')->where('m_rekening_code', $id_rekening)
+                ->update(['m_rekening_item' => $updatedItems]);
+
+            return response()->json([
+                'type' => 'success',
+                'messages' => 'Data berhasil diupdate',
+            ]);
+        } else {
+            return response()->json([
+                'type' => 'error',
+                'messages' => 'Data tidak ditemukan',
+            ]);
+        }
     }
 
     public function delete(Request $request, $id)
