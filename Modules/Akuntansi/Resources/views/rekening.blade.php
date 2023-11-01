@@ -250,7 +250,7 @@
                     <div class="block-content block-content-full text-end bg-body">
                         <button type="button" class="btn btn-sm btn-alt-secondary me-1"
                             data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-success btn_hapus" id="btn_hapus">Hapus</button>
+                        {{-- <button type="submit" class="btn btn-success btn_hapus" id="btn_hapus">Hapus</button> --}}
                     </div>
                     </form>
                 </div>
@@ -260,7 +260,7 @@
 
     <!-- Modal Item -->
     <div class="modal" id="item_modal" tabindex="-1" role="dialog" aria-labelledby="item_modal" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="block block-themed shadow-none mb-0">
                     <div class="block-header block-header-default bg-pulse">
@@ -289,14 +289,18 @@
                                 <tbody>
                                     <tr id="row_insert">
                                         <td>
-                                            <input type="text" placeholder="Input Nama Item" id="tags_item"
-                                                class="form-control set form-control-sm m_rekening_item1 text-center">
+                                            <div class="row">
+                                                <div class="col-9">
+                                                    <input type="text" placeholder="Input Nama Item" id="list_item"
+                                                        class="form-control set form-control-sm m_rekening_item1 text-center">
+                                                </div>
+                                                <div class="col-3">
+                                                    <button type="button" id="item_save"
+                                                        class="btn btn-sm btn-success me-1"
+                                                        data-bs-dismiss="null">Tambah</button>
+                                                </div>
+                                            </div>
                                             <input id="tag_save" name="m_rekening_item[]" type="hidden">
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div id="tagList"></div>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -317,12 +321,41 @@
                             <button type="button" id="item_close" class="btn btn-sm btn-warning me-1 item_close"
                                 data-bs-dismiss="modal">Close</button>
                         </div>
-                        <div class="block-content block-content-full text-end bg-body">
-                            <button type="button" id="item_save" class="btn btn-sm btn-success me-1"
-                                data-bs-dismiss="modal">Simpan</button>
-                        </div>
                     </div>
 
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="hapus_item" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="block block-themed shadow-none mb-0">
+                    <div class="block-header block-header-default bg-warning">
+                        <h3 class="block-title" id="judul_hapus_item"></h3>
+                        <div class="block-options">
+                            <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
+                                <i class="fa fa-fw fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="block-content">
+                        <!-- Select2 is initialized at the bottom of the page -->
+                        <form id="item_hapus">
+                            @csrf
+                            <div class="mb-4">
+                                <input name="m_rekening_code" type="hidden" id="xx">
+                                <div class="alert">
+                                    <p>Apakah Anda yakin mau menghapus item ini?</p>
+                                </div>
+                            </div>
+                    </div>
+                    <div class="block-content block-content-full text-end bg-body">
+                        <button type="button" class="btn btn-sm btn-alt-secondary me-1"
+                            data-bs-dismiss="modal">Close</button>
+                    </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -392,8 +425,13 @@
                                 m_rekening_item: item
                             })),
                             columns: [{
-                                data: 'm_rekening_item'
-                            }],
+                                    data: 'm_rekening_item'
+                                },
+                                {
+                                    data: null,
+                                    defaultContent: '<div class="text-center"><button class="btn btn-sm btn-danger delete_item" title="Hapus Item"><i class="fa fa-trash"></i</button></div>',
+                                },
+                            ],
                         });
 
                         // Hapus data sebelumnya jika ada
@@ -408,42 +446,19 @@
                     },
                 });
 
-                $("#tags_item").on("keypress", function(event) {
-                    if (isInputEnabled && (event.which === 13 || event.which === 44 || event
-                            .which === 32)) {
-                        event.preventDefault();
-                        var tag = $(this).val().trim();
-                        if (tag !== "") {
-                            newTagsArray.push({
-                                tag: tag,
-                            });
-                            $("#tagList").append('<div class="tag">' + tag + '</div');
-                        }
-                        $(this).val("");
+                $("#list_item").on('keydown', function(e) {
+                    if (e.keyCode === 13) {
+                        e.preventDefault();
+                        $("#item_save").click();
                     }
-                    var tagsArray = newTagsArray.map(function(tagObj) {
-                        return tagObj.tag;
-                    });
-                    $("#tag_save").val(tagsArray);
                 });
 
-                $("#tagList").on("click", ".tag", function() {
-                    var tagText = $(this).text().trim();
-                    existingTagsArray = existingTagsArray.filter(tag => tag.tag !== tagText);
-                    $(this).remove();
-                    // var tagsText = existingTagsArray.map(tag => tag.tag).join(', ');
-                    $('#tag_save').empty();
-                    table.clear().rows.add(existingTagsArray).draw();
-                });
-
-                $(".item_close").on('click', function() {
-                    $("#tagList").empty();
-                });
-
-                $("#item_save").on('click', function() {
+                // $("#item_save").on('click', function() {
+                $("#item_save").off('click').on('click', function(e) {
+                    e.preventDefault();
                     var id = $('#m_rekening_idx').val();
-                    var item = $('#tag_save').val();
-                    $("#tagList").empty();
+                    var item = $('#list_item').val();
+                    $("#list_item").val('');
 
                     var data = {
                         id: id,
@@ -463,10 +478,74 @@
                                 icon: 'fa fa-info me-5',
                                 message: data.messages
                             });
-                            table.ajax.reload();
+                            $.ajax({
+                                url: "/akuntansi/rekening/item/" + id,
+                                type: "GET",
+                                dataType: 'json',
+                                success: function(respond) {
+                                    $("#m_rekening_idx").val(respond
+                                        .m_rekening_code).trigger(
+                                        'change');
+
+                                    var dataArray;
+
+                                    if (respond.m_rekening_item.includes(
+                                            ',')) {
+                                        dataArray = respond.m_rekening_item
+                                            .split(',').map(item => item
+                                                .trim());
+                                    } else {
+                                        dataArray = [respond
+                                            .m_rekening_item
+                                        ];
+                                    }
+
+                                    var table = $('#tampil_item')
+                                        .DataTable({
+                                            buttons: [],
+                                            lengthChange: false,
+                                            paging: false,
+                                            autoWidth: false,
+                                            dom: '<"text-center"f>rt<lp>',
+                                            destroy: true,
+                                            data: dataArray.map(item =>
+                                                ({
+                                                    m_rekening_item: item
+                                                })),
+                                            columns: [{
+                                                    data: 'm_rekening_item'
+                                                },
+                                                {
+                                                    data: null,
+                                                    defaultContent: '<div class="text-center"><button class="btn btn-sm btn-danger delete_item" title="Hapus Item"><i class="fa fa-trash"></i</button></div>',
+                                                }
+                                            ],
+                                        });
+
+                                    // Hapus data sebelumnya jika ada
+                                    table.clear().draw();
+
+                                    // Tambahkan data baru
+                                    dataArray.forEach(function(item) {
+                                        table.row.add({
+                                            m_rekening_item: item
+                                        }).draw(false);
+                                    });
+                                },
+                            });
                         }
                     });
                     return false;
+                });
+
+                $('#tampil_item').on('click', '.delete_item', function() {
+                    $("#item_modal").modal('hide');
+                    var id = $(this).attr('value');
+                    $("#judul_hapus_item").html('Konfirmasi Hapus Item');
+                    $('#hapus_item').modal('show');
+                    // var id_rek = $('[name="m_rekening_id"]').val(id);
+                    console.log(id);
+
                 });
 
                 $("#item_modal").modal('show');

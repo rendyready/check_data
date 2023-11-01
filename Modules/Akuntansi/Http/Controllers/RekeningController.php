@@ -242,6 +242,21 @@ class RekeningController extends Controller
         }
     }
 
+    // public function hapus_item(Request $request, $id)
+    // {
+    //     return $itemId = $request->id;
+    //     $delete = DB::table('m_rekening')
+    //         ->where('m_rekening_code', $id)
+    //         ->update([
+    //             'm_rekening_item' => DB::raw("CONCAT(REPLACE(m_rekening_item, '$itemId', ''), '')"),
+    //         ]);
+
+    //     return response()->json([
+    //         'type' => 'success',
+    //         'messages' => 'Data berhasil diupdate',
+    //     ]);
+    // }
+
     public function delete(Request $request, $id)
     {
         $validasi1 = DB::table('rekap_jurnal_kas')
