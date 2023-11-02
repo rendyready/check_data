@@ -42,7 +42,11 @@ class RekeningController extends Controller
             $row[] = $value->m_rekening_code;
             $row[] = $value->m_rekening_nama;
             $row[] = rupiah($value->m_rekening_saldo, 0);
-            $row[] = '<a id="buttonEdit" class="btn btn-sm buttonEdit btn-success" value="' . $value->m_rekening_code . '" title="Edit"><i class="fa fa-pencil"></i></a> <a id="buttonHapus" class="btn btn-sm buttonHapus btn-warning" value="' . $value->m_rekening_code . '" title="Hapus"><i class="fa fa-trash"></i></a>';
+            $row[] =
+            '<div class="text-center"><a id="buttonEdit" class="btn btn-sm buttonEdit btn-success" value="' . $value->m_rekening_code . '" title="Edit"><i class="fa fa-pencil"></i></a>
+            <a id="buttonSaldo" class="btn btn-sm buttonSaldo btn-primary" value="' . $value->m_rekening_code . '" title="Edit Saldo"><i class="fa-solid fa-rupiah-sign"></i></a>
+            <a id="buttonHapus" class="btn btn-sm buttonHapus btn-warning" value="' . $value->m_rekening_code . '" title="Hapus"><i class="fa fa-trash"></i></a>
+            <a id="buttonItem" class="btn btn-sm buttonItem btn-info" value="' . $value->m_rekening_code . '" title="Items"><i class="fa-solid fa-folder"></i></a></div>';
             $data[] = $row;
         }
         $output = array("data" => $data);
@@ -74,18 +78,26 @@ class RekeningController extends Controller
             ->where('m_rekening_code', $request->m_rekening_code)
             ->count();
         if ($validasi == 0) {
+            // $existingTags = json_decode($request->input('existingTags'));
+            $m_w_code = $request->m_rekening_m_waroeng_id;
+            $m_w_code_val = sprintf("%03d", $m_w_code);
+            // return $request->m_rekening_saldo;
             foreach ($request->m_rekening_code as $key => $value) {
-                $str1 = str_replace('.', '', $request->m_rekening_saldo[$key]);
+                $saldo = str_replace(".", "", $request->m_rekening_saldo[$key]);
+                // $str1 = str_replace('.', '', $request->m_rekening_saldo[$key]);
                 $data = array(
                     'm_rekening_id' => $this->getMasterId('m_rekening'),
                     'm_rekening_m_w_id' => $request->m_rekening_m_waroeng_id,
+                    'm_rekening_m_w_code' => $m_w_code_val,
                     'm_rekening_kategori' => $request->m_rekening_kategori,
                     'm_rekening_code' => $request->m_rekening_code[$key],
                     'm_rekening_nama' => strtolower($request->m_rekening_nama[$key]),
-                    'm_rekening_saldo' => str_replace(',', '.', $str1),
+                    'm_rekening_saldo' => $saldo,
+                    // 'm_rekening_item' => json_encode($existingTags),
                     'm_rekening_created_by' => Auth::user()->users_id,
                     'm_rekening_created_at' => Carbon::now(),
                 );
+                // return $data['existing_tags'] = json_encode($existingTags);
                 DB::table('m_rekening')->insert($data);
             }
             return response()->json(['messages' => 'Berhasil Menambakan', 'type' => 'success']);
@@ -128,6 +140,12 @@ class RekeningController extends Controller
     public function edit($id)
     {
         $data = DB::table('m_rekening')->where('m_rekening_code', $id)->first();
+        return response()->json($data);
+    }
+
+    public function item($id)
+    {
+        $data = DB::table('m_rekening')->select('m_rekening_item')->where('m_rekening_code', $id)->first();
         return response()->json($data);
     }
 

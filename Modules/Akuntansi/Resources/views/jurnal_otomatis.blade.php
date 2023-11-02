@@ -6,7 +6,7 @@
                 <div class="block block-themed h-100 mb-0">
                     <div class="block-header bg-pulse">
                         <h3 class="block-title">
-                            Laporan Jurnal</h3>
+                            Jurnal Penjualan</h3>
                     </div>
                     <div class="block-content text-muted">
                         <form id="rekap_insert">
