@@ -30,7 +30,7 @@ class ChtController extends Controller
         $waroeng_id = Auth::user()->waroeng_id;
         foreach ($request->r_t_jb_detail_id as $key => $value) {
             if (!empty($request->r_t_jb_detail_terima_qty[$key])) {
-                $get_rtjb = DB::table('rekap_trans_jualbeli')->where('r_t_jb_id',$request->r_t_jb_detail_r_t_jb_id)->first();
+                $get_rtjb = DB::table('rekap_trans_jualbeli')->where('r_t_jb_id', $request->r_t_jb_detail_r_t_jb_id[$key])->first();
                 $cht_qty = convertfloat($request->r_t_jb_detail_terima_qty[$key]);
                 $save_beli = DB::table('rekap_trans_jualbeli_detail')
                     ->where('r_t_jb_detail_id', $request->r_t_jb_detail_id[$key])
@@ -39,16 +39,19 @@ class ChtController extends Controller
                 $saldo_terakhir = $get_stok->m_stok_saldo;
                 $hpp_terakhir = $get_stok->m_stok_hpp;
                 $data_masuk = $cht_qty;
-                if ($get_rtjb->r_t_jb_disc != null || $get_rtjb->r_t_jb_nominal_disc != null) {
-                    if ($get_rtjb->r_t_jb_disc) {
-                        $hpp_now = (($request->r_t_jb_detail_subtot_beli[$key]*$get_rtjb->r_t_jb_disc) + ($saldo_terakhir * $hpp_terakhir)) / ($saldo_terakhir + $data_masuk);
-                    } else {
-                        $disc = ($get_rtjb->r_t_jb_nominal_disc/$get_rtjb->r_t_jb_nominal_total_beli);
-                        $hpp_now = (($request->r_t_jb_detail_subtot_beli[$key]*$disc) + ($saldo_terakhir * $hpp_terakhir)) / ($saldo_terakhir + $data_masuk);
-                    }
+                if ($get_rtjb->r_t_jb_disc != 0 && $get_rtjb->r_t_jb_nominal_disc !=0) {
+                    $discount = $get_rtjb->r_t_jb_disc + (1 - round($get_rtjb->r_t_jb_nominal_disc / $get_rtjb->r_t_jb_sub_total_beli,4));
+                } elseif ($get_rtjb->r_t_jb_disc != 0) {
+                    $discount = $get_rtjb->r_t_jb_disc;
+                } elseif ($get_rtjb->r_t_jb_nominal_disc !=0) {
+                    $discount = 1 - round($get_rtjb->r_t_jb_nominal_disc / $get_rtjb->r_t_jb_sub_total_beli,4);
                 } else {
-                    $hpp_now = ($request->r_t_jb_detail_subtot_beli[$key]+ ($saldo_terakhir * $hpp_terakhir)) / ($saldo_terakhir + $data_masuk);
+                    $discount = 1;
                 }
+            
+                // Calculate hpp_now
+                $subtotal = $request->r_t_jb_detail_subtot_beli[$key];
+                $hpp_now = (($subtotal * $discount) + ($saldo_terakhir * $hpp_terakhir)) / ($saldo_terakhir + $data_masuk);
                 $data = array(
                     'm_stok_detail_id' => $this->getNextId('m_stok_detail', $waroeng_id),
                     'm_stok_detail_m_produk_code' => $request->r_t_jb_detail_m_produk_code[$key],
@@ -106,16 +109,16 @@ class ChtController extends Controller
         foreach ($cht as $item) {
             $row = array();
             $no++;
-            $row[] = $no . '<input type="hidden" class="form-control form-control-sm" name="r_t_jb_detail_id[]" id="r_t_jb_detail_id'.$no.'" value="' . $item->r_t_jb_detail_id . '" > ' .
-            '<input type="hidden"  class="form-control form-control-sm" name="r_t_jb_detail_r_t_jb_id[]" id="r_t_jb_detail_r_t_jb_id'.$no.'" value="' . $item->r_t_jb_detail_r_t_jb_id . '" >' .
-            '<input type="hidden"  class="form-control form-control-sm" name="r_t_jb_detail_m_produk_code[]" id="r_t_jb_detail_m_produk_code'.$no.'" value="' . $item->r_t_jb_detail_m_produk_code . '" >' .
-            '<input type="hidden"  class="form-control form-control-sm" name="r_t_jb_detail_subtot_beli[]" id="r_t_jb_detail_subtot_beli'.$no.'" value="' . $item->r_t_jb_detail_subtot_beli . '" >';
+            $row[] = $no . '<input type="hidden" class="form-control form-control-sm" name="r_t_jb_detail_id[]" id="r_t_jb_detail_id' . $no . '" value="' . $item->r_t_jb_detail_id . '" > ' .
+            '<input type="hidden"  class="form-control form-control-sm" name="r_t_jb_detail_r_t_jb_id[]" id="r_t_jb_detail_r_t_jb_id' . $no . '" value="' . $item->r_t_jb_detail_r_t_jb_id . '" >' .
+            '<input type="hidden"  class="form-control form-control-sm" name="r_t_jb_detail_m_produk_code[]" id="r_t_jb_detail_m_produk_code' . $no . '" value="' . $item->r_t_jb_detail_m_produk_code . '" >' .
+            '<input type="hidden"  class="form-control form-control-sm" name="r_t_jb_detail_subtot_beli[]" id="r_t_jb_detail_subtot_beli' . $no . '" value="' . $item->r_t_jb_detail_subtot_beli . '" >';
             $row[] = tgl_indo($item->r_t_jb_tgl);
             $row[] = $item->nama_supplier;
             $row[] = $item->r_t_jb_detail_m_produk_nama;
             $row[] = $item->r_t_jb_detail_catatan;
             $row[] = convertindo($item->r_t_jb_detail_qty);
-            $row[] = '<input type="text" class="form-control number form-control-sm" name="r_t_jb_detail_terima_qty[]" id="r_t_jb_detail_terima_qty'.$no.'">';
+            $row[] = '<input type="text" class="form-control number form-control-sm" name="r_t_jb_detail_terima_qty[]" id="r_t_jb_detail_terima_qty' . $no . '">';
             $row[] = ucwords($item->r_t_jb_detail_satuan_terima);
             $data[] = $row;
         }
