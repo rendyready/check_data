@@ -176,7 +176,7 @@
                                         <tr>
                                             <th class="text-center">No Akun</th>
                                             <th class="text-center">Nama Akun</th>
-                                            <th class="text-center">Item Produk</th>
+                                            {{-- <th class="text-center">Item Produk</th> --}}
                                             <th class="text-center">Keterangan</th>
                                             <th class="text-center">Debit</th>
                                             <th class="text-center">Kredit</th>
@@ -336,9 +336,9 @@
                     {
                         data: 'r_j_b_m_rekening_nama'
                     },
-                    {
-                        data: 'r_j_b_m_rekening_item'
-                    },
+                    // {
+                    //   data: 'r_j_b_m_rekening_item'
+                    //},
                     {
                         data: 'r_j_b_particul'
                     },
@@ -411,9 +411,9 @@
                                         {
                                             data: 'r_j_b_m_rekening_nama'
                                         },
-                                        {
-                                            data: 'r_j_b_m_rekening_item'
-                                        },
+                                        // {
+                                        //     data: 'r_j_b_m_rekening_item'
+                                        // },
                                         {
                                             data: 'r_j_b_particul'
                                         },
@@ -488,9 +488,9 @@
                         {
                             data: 'r_j_b_m_rekening_nama'
                         },
-                        {
-                            data: 'r_j_b_m_rekening_item'
-                        },
+                        // {
+                        //     data: 'r_j_b_m_rekening_item'
+                        // },
                         {
                             data: 'r_j_b_particul'
                         },
