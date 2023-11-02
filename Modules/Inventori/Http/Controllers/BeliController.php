@@ -68,6 +68,7 @@ class BeliController extends Controller
         $area = $this->getAreaMw($id_waroeng);
         $terbayar = (empty($request->r_t_jb_terbayar)) ? 0 : $request->r_t_jb_terbayar;
         $ongkir = (empty($request->r_t_jb_ongkir)) ? 0 : $request->r_t_jb_ongkir;
+        $disc = round($request->r_t_jb_disc/100,2);
         $r_t_jb = array(
             'r_t_jb_id' => $request->r_t_jb_code,
             'r_t_jb_code_nota' => $request->r_t_jb_code_nota,
@@ -88,7 +89,7 @@ class BeliController extends Controller
             'r_t_jb_m_area_code_tujuan' => $area->m_area_code,
             'r_t_jb_m_area_nama_tujuan' => $area->m_area_nama,
             'r_t_jb_sub_total_beli' => convertfloat($request->r_t_jb_sub_total_beli),
-            'r_t_jb_disc' => $request->r_t_jb_disc,
+            'r_t_jb_disc' => $disc,
             'r_t_jb_nominal_disc' => convertfloat($request->r_t_jb_nominal_disc),
             'r_t_jb_ppn' => $request->r_t_jb_ppn,
             'r_t_jb_nominal_ppn' => convertfloat($request->r_t_jb_nominal_ppn),

@@ -174,7 +174,7 @@
                                                     name="r_t_jb_detail_disc[]" id="r_t_jb_detail_disc"></td>
                                             <td><input type="text"
                                                     class="form-control number fc reset form-control-sm rupiahdisc"
-                                                    name="r_t_jb_detail_discrp[]" id="r_t_jb_detail_discrp"></td>
+                                                    name="r_t_jb_detail_nominal_disc[]" id="r_t_jb_detail_nominal_disc"></td>
                                             <td><input type="text"
                                                     class="form-control number reset form-control-sm subtot"
                                                     name="r_t_jb_detail_subtot[]" id="r_t_jb_detail_subtot"
@@ -459,7 +459,7 @@
                     no + '" required></td>' +
                     '<td><input type="text" class="form-control number form-control-sm persendisc" name="r_t_jb_detail_disc[]" id="r_t_jb_detail_disc' +
                     no + '"></td>' +
-                    '<td><input type="text" class="form-control number form-control-sm rupiahdisc" name="r_t_jb_detail_discrp[]" id="r_t_jb_detail_discrp' +
+                    '<td><input type="text" class="form-control number form-control-sm rupiahdisc" name="r_t_jb_detail_nominal_disc[]" id="r_t_jb_detail_nominal_disc' +
                     no + '"></td>' +
                     '<td><input type="text" class="form-control number form-control-sm subtot" name="r_t_jb_detail_subtot[]" id="r_t_jb_detail_subtot' +
                     no + '" readonly></td>' +
@@ -506,7 +506,7 @@
                             var persendisc = $tblrow.find("[name='r_t_jb_detail_disc[]']")
                                 .val();
                             var nilaipersendisc = 100 - persendisc;
-                            var rupiahdisc = $tblrow.find("[name='r_t_jb_detail_discrp[]']")
+                            var rupiahdisc = $tblrow.find("[name='r_t_jb_detail_nominal_disc[]']")
                                 .val().replace(/\./g, '').replace(/\,/g, '.');
                             if (rupiahdisc == null) {
                                 rupiahdisc = 0;
@@ -614,9 +614,9 @@
                         });
                         table.ajax.reload();
                         $('.remove').remove();
-                        $('#r_t_jb_detail_m_produk_id1,.reset,.supplier').trigger('change').val(
+                        $('#r_t_jb_detail_m_produk_id1,.reset').trigger('change').val(
                             '');
-                        $('.grdtot').val(0);
+                        $('.grdtot,#r_t_jb_disc,.disc_tot_rp').val(0);
                         $('.bayar').val('');
                         $('#form').find('.persendisc').trigger('input');
                         get_code();

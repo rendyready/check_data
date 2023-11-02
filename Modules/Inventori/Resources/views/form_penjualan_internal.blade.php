@@ -150,11 +150,11 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="row mb-1">
-                                            <label class="col-sm-4 col-form-label" for="r_t_jb_tot_no_ppn">Jumlah
+                                            <label class="col-sm-4 col-form-label" for="r_t_jb_sub_total_beli">Jumlah
                                                 Total</label>
                                             <div class="col-sm-6">
                                                 <input type="text" class="form-control form-control-sm grdtot"
-                                                    id="r_t_jb_tot_no_ppn" name="r_t_jb_tot_no_ppn" readonly>
+                                                    id="r_t_jb_sub_total_beli" name="r_t_jb_sub_total_beli" readonly>
                                             </div>
                                         </div>
                                         <div class="row mb-1">
@@ -166,7 +166,7 @@
                                             <div class="col-sm-5">
                                                 <input type="text"
                                                     class="form-control number form-control-sm disc_tot_rp"
-                                                    id="r_t_jb_disc_rp" name="r_t_jb_disc_rp" placeholder="Rp">
+                                                    id="r_t_jb_nominal_disc" name="r_t_jb_nominal_disc" placeholder="Rp">
                                             </div>
                                         </div>
                                         <div class="row mb-1">
@@ -177,7 +177,7 @@
                                             </div>
                                             <div class="col-sm-5">
                                                 <input type="text" class="form-control number form-control-sm ppnrp"
-                                                    id="r_t_jb_ppn_rp" name="r_t_jb_ppn_rp" placeholder="Rp"
+                                                    id="r_t_jb_nominal_ppn" name="r_t_jb_nominal_ppn" placeholder="Rp"
                                                     readonly>
                                             </div>
                                         </div>
@@ -190,12 +190,12 @@
                                             </div>
                                         </div>
                                         <div class="row mb-1">
-                                            <label class="col-sm-4 col-form-label" for="r_t_jb_tot_nom">Jumlah
+                                            <label class="col-sm-4 col-form-label" for="r_t_jb_nominal_total_beli">Jumlah
                                                 Akhir</label>
                                             <div class="col-sm-6">
                                                 <input type="text"
-                                                    class="form-control number form-control-sm r_t_jb_tot_nom"
-                                                    id="r_t_jb_tot_nom" name="r_t_jb_tot_nom" readonly>
+                                                    class="form-control number form-control-sm r_t_jb_nominal_total_beli"
+                                                    id="r_t_jb_nominal_total_beli" name="r_t_jb_nominal_total_beli" readonly>
                                             </div>
                                         </div>
                                         <div class="row mb-1" hidden>
@@ -411,7 +411,7 @@
                         grdtot += isNaN(stval) ? 0 : stval;
                     });
                     var disc_tot = $("[name='r_t_jb_disc']").val();
-                    var disctotrp = $("[name='r_t_jb_disc_rp']").val().replace(/\./g, '').replace(/\,/g,
+                    var disctotrp = $("[name='r_t_jb_nominal_disc']").val().replace(/\./g, '').replace(/\,/g,
                         '.');
                     var ppn = $("[name='r_t_jb_ppn']").val();
                     var bayar = $("[name='r_t_jb_terbayar']").val().replace(/\./g, '').replace(/\,/g, '.');
@@ -421,11 +421,11 @@
                     }
                     var grandtotal = grdtot * parseFloat((100 - disc_tot) / 100) - disctotrp;
                     var ppnrp = parseFloat(ppn / 100) * grandtotal;
-                    var r_t_jb_tot_nom = parseFloat(grandtotal) + parseFloat(ppnrp) + parseFloat(ongkir);
+                    var r_t_jb_nominal_total_beli = parseFloat(grandtotal) + parseFloat(ppnrp) + parseFloat(ongkir);
                     $('.ppnrp').val(ppnrp);
-                    $('.r_t_jb_tot_nom').val(r_t_jb_tot_nom.toLocaleString('id'));
-                    $('.sisa').val((r_t_jb_tot_nom - bayar).toLocaleString('id'));
-                    $('#total_sum_value').html(': Rp ' + r_t_jb_tot_nom.toLocaleString('id'));
+                    $('.r_t_jb_nominal_total_beli').val(r_t_jb_nominal_total_beli.toLocaleString('id'));
+                    $('.sisa').val((r_t_jb_nominal_total_beli - bayar).toLocaleString('id'));
+                    $('#total_sum_value').html(': Rp ' + r_t_jb_nominal_total_beli.toLocaleString('id'));
 
                 });
             $('#formAction').submit(function(e) {
