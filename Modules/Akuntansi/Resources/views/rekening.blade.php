@@ -185,7 +185,7 @@
                         <form id="formAction" name="form_action" method="post">
                             @csrf
                             <div class="mb-4">
-                                <input name="m_rekening_id" type="hidden" class="m_rekening_no_akun1">
+                                <input name="m_rekening_id" type="hidden" id="id_rek_edit" class="m_rekening_no_akun1">
                                 <div class="form-group">
                                     <label for="m_rekening_no_akun">Nomor Akun</label>
                                     <div>
@@ -201,20 +201,20 @@
                                             id="m_rekening_nama1" style="width: 100%;" required>
                                     </div>
                                 </div>
-                                <div class="form-group">
+                                {{-- <div class="form-group">
                                     <label for="m_rekening_saldo">Saldo</label>
                                     <div>
                                         <input class="form-control number" type="text" name="m_rekening_saldo"
                                             id="m_rekening_saldo1" style="width: 100%;" required>
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
                         </form>
                     </div>
                     <div class="block-content block-content-full text-end bg-body">
                         <button type="button" class="btn btn-sm btn-alt-secondary me-1"
                             data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-success" id="submit">Update</button>
+                        <button type="button" class="btn btn-success" id="update_rekening">Update</button>
                     </div>
                 </div>
             </div>
@@ -250,7 +250,7 @@
                     <div class="block-content block-content-full text-end bg-body">
                         <button type="button" class="btn btn-sm btn-alt-secondary me-1"
                             data-bs-dismiss="modal">Close</button>
-                        {{-- <button type="submit" class="btn btn-success btn_hapus" id="btn_hapus">Hapus</button> --}}
+                        <button type="submit" class="btn btn-success btn_hapus" id="btn_hapus">Hapus</button>
                     </div>
                     </form>
                 </div>
@@ -328,11 +328,12 @@
         </div>
     </div>
 
-    <div class="modal fade" id="hapus_item" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal fade" id="hapus_item" tabindex="-1" role="dialog" aria-hidden="true"
+        style="margin: 100px auto 0;">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <div class="block block-themed shadow-none mb-0">
-                    <div class="block-header block-header-default bg-warning">
+                <div class="block block-themed shadow-none mb-0" style="background-color: #f7e7e7;">
+                    <div class="block-header block-header-default bg-primary">
                         <h3 class="block-title" id="judul_hapus_item"></h3>
                         <div class="block-options">
                             <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
@@ -350,12 +351,16 @@
                                     <p>Apakah Anda yakin mau menghapus item ini?</p>
                                 </div>
                             </div>
+                        </form>
                     </div>
-                    <div class="block-content block-content-full text-end bg-body">
+
+                    <div class="block-content block-content-full text-end" style="background-color: #f1b9b9;">
                         <button type="button" class="btn btn-sm btn-alt-secondary me-1"
                             data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-sm btn-danger me-1" id="button_hapus"
+                            data-bs-dismiss="modal">Hapus</button>
                     </div>
-                    </form>
+
                 </div>
             </div>
         </div>
@@ -383,21 +388,22 @@
                 return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
             }
 
-            $("#item_modal").modal({
-                backdrop: 'static',
-                keyboard: false,
-            });
+            // $("#item_modal").modal({
+            //     backdrop: 'static',
+            //     keyboard: false,
+            // });
 
             var dataTags = [];
             var existingTagsArray = [];
             var newTagsArray = [];
             var isInputEnabled = true;
-
+            //tampil modal item
             $("#rekening_tampil").on('click', '.buttonItem', function() {
                 var id = $(this).attr('value');
                 $('#form-rekening form')[0].reset();
                 $("#item_head").html('Data Item');
-                // console.log(id);
+
+                //tampil
                 $.ajax({
                     url: "/akuntansi/rekening/item/" + id,
                     type: "GET",
@@ -428,8 +434,12 @@
                                     data: 'm_rekening_item'
                                 },
                                 {
-                                    data: null,
-                                    defaultContent: '<div class="text-center"><button class="btn btn-sm btn-danger delete_item" title="Hapus Item"><i class="fa fa-trash"></i</button></div>',
+                                    data: 'm_rekening_item',
+                                    render: function(data, type, row) {
+                                        return '<div class="text-center"><button type="button" class="btn btn-sm btn-danger delete_item" title="Hapus Item" data-item="' +
+                                            row.m_rekening_item +
+                                            '"><i class="fa fa-trash"></i></button></div>';
+                                    },
                                 },
                             ],
                         });
@@ -446,6 +456,7 @@
                     },
                 });
 
+                //enter save
                 $("#list_item").on('keydown', function(e) {
                     if (e.keyCode === 13) {
                         e.preventDefault();
@@ -453,7 +464,7 @@
                     }
                 });
 
-                // $("#item_save").on('click', function() {
+                // simpan
                 $("#item_save").off('click').on('click', function(e) {
                     e.preventDefault();
                     var id = $('#m_rekening_idx').val();
@@ -516,9 +527,17 @@
                                                     data: 'm_rekening_item'
                                                 },
                                                 {
-                                                    data: null,
-                                                    defaultContent: '<div class="text-center"><button class="btn btn-sm btn-danger delete_item" title="Hapus Item"><i class="fa fa-trash"></i</button></div>',
-                                                }
+                                                    data: 'm_rekening_item',
+                                                    render: function(
+                                                        data,
+                                                        type,
+                                                        row) {
+                                                        return '<div class="text-center"><button type="button" class="btn btn-sm btn-danger delete_item" title="Hapus Item" data-item="' +
+                                                            row
+                                                            .m_rekening_item +
+                                                            '"><i class="fa fa-trash"></i></button></div>';
+                                                    },
+                                                },
                                             ],
                                         });
 
@@ -538,18 +557,50 @@
                     return false;
                 });
 
+                // Konfirmasi hapus
+                var id_hapus = null;
                 $('#tampil_item').on('click', '.delete_item', function() {
-                    $("#item_modal").modal('hide');
-                    var id = $(this).attr('value');
-                    $("#judul_hapus_item").html('Konfirmasi Hapus Item');
-                    $('#hapus_item').modal('show');
-                    // var id_rek = $('[name="m_rekening_id"]').val(id);
-                    console.log(id);
+                    id_hapus = $(this).data('item');
+                    $("#hapus_item").modal('show');
 
                 });
 
+                // Saat item dihapus
+                $('#button_hapus').on('click', function() {
+                    // var id = $(this).data('item');
+                    console.log(id_hapus);
+
+                    var data = {
+                        _token: '{{ csrf_token() }}', // CSRF Token
+                    };
+
+                    $.ajax({
+                        url: "/akuntansi/rekening/hapus_item/" + id_hapus,
+                        data: data,
+                        type: "POST",
+                        success: function(data) {
+                            Codebase.helpers('jq-notify', {
+                                align: 'right',
+                                from: 'top',
+                                type: data.type,
+                                icon: 'fa fa-info me-5',
+                                message: data.messages
+                            });
+                            // Hapus baris dari tabel dengan ID yang sesuai
+                            var table = $('#tampil_item').DataTable();
+                            table.rows(function(idx, data, node) {
+                                return data.m_rekening_item === id_hapus;
+                            }).remove().draw();
+                        }
+                    });
+                });
+
+
                 $("#item_modal").modal('show');
             });
+
+
+
 
             //insert rekening
             $('#rekening-insert').submit(function(e) {
@@ -671,44 +722,53 @@
                     type: "GET",
                     dataType: 'json',
                     success: function(respond) {
-                        console.log(respond);
+                        // console.log(respond);
                         $(".m_rekening_no_akun1").val(respond.m_rekening_code)
                             .trigger(
                                 'change');
                         $("#m_rekening_nama1").val(respond.m_rekening_nama).trigger(
                             'change');
-                        $("#m_rekening_saldo1").val(formatNumber(Number(respond
-                                .m_rekening_saldo)))
-                            .trigger(
-                                'change');
+                        // $("#m_rekening_saldo1").val(formatNumber(Number(respond
+                        //         .m_rekening_saldo)))
+                        //     .trigger(
+                        //         'change');
                     },
                     error: function() {}
                 });
                 $("#form-rekening").modal('show');
             });
 
-            //edit
-            $('#formAction').submit(function(e) {
-                if (!e.isDefaultPrevented()) {
-                    $.ajax({
-                        url: "{{ route('rekening.simpan_edit') }}",
-                        type: "POST",
-                        data: $('#form-rekening form').serialize(),
-                        success: function(data) {
-                            console.log(data);
-                            $('#form-rekening').modal('hide');
-                            Codebase.helpers('jq-notify', {
-                                align: 'right',
-                                from: 'top',
-                                type: data.type,
-                                icon: 'fa fa-info me-5',
-                                message: data.messages
-                            });
-                            table.ajax.reload();
-                        },
-                    });
-                    return false;
-                }
+            $("#update_rekening").on('click', function(e) {
+                e.preventDefault();
+                var id = $('#id_rek_edit').val();
+                var m_rekening_code = $('#m_rekening_no_akun1').val();
+                var nama_akun = $('#m_rekening_nama1').val();
+
+                var data = {
+                    id: id,
+                    m_rekening_code: m_rekening_code,
+                    m_rekening_nama1: nama_akun,
+                    _token: '{{ csrf_token() }}', // CSRF Token
+                };
+
+                //simpan edit
+                $.ajax({
+                    url: "{{ route('rekening.simpan_edit') }}",
+                    type: "POST",
+                    data: data,
+                    success: function(data) {
+                        console.log(data);
+                        Codebase.helpers('jq-notify', {
+                            align: 'right',
+                            from: 'top',
+                            type: data.type,
+                            icon: 'fa fa-info me-5',
+                            message: data.messages
+                        });
+                        table.ajax.reload();
+                    }
+                });
+                $("#form-rekening").modal('hide');
             });
 
             //GET HAPUS
