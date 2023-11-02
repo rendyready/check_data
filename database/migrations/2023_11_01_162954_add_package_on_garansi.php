@@ -23,6 +23,11 @@ return new class extends Migration
                 $table->decimal('r_r_detail_package_price',8,2)->default(0);
             });
         }
+        if (!Schema::hasColumn('m_payment_method', 'm_payment_method_m_rekening_id')) {
+            Schema::table('m_payment_method', function (Blueprint $table) {
+                $table->unsignedBigInteger('m_payment_method_m_rekening_id')->nullable();
+            });
+        }
     }
 
     /**
@@ -40,6 +45,11 @@ return new class extends Migration
         if (Schema::hasColumn('rekap_refund_detail', 'r_r_detail_package_price')) {
             Schema::table('rekap_refund_detail', function (Blueprint $table) {
                 $table->dropColumn('r_r_detail_package_price');
+            });
+        }
+        if (Schema::hasColumn('m_payment_method', 'm_payment_method_m_rekening_id')) {
+            Schema::table('m_payment_method', function (Blueprint $table) {
+                $table->dropColumn('m_payment_method_m_rekening_id');
             });
         }
     }

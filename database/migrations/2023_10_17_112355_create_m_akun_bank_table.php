@@ -17,7 +17,7 @@ return new class extends Migration
         Schema::create('m_akun_bank', function (Blueprint $table) {
             $table->id('id');
             $table->bigInteger('m_akun_bank_id')->unsigned()->nullable();
-            $table->unsignedBigInteger('m_akun_bank_m_w_id');
+            $table->unsignedBigInteger('m_akun_bank_m_w_id')->nullable();
             $table->string('m_akun_bank_type')->comment('cash/bank');
             $table->string('m_akun_bank_code');
             $table->string('m_akun_bank_name');
