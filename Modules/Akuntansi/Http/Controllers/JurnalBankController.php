@@ -33,9 +33,9 @@ class JurnalBankController extends Controller
             ->orderBy('m_rekening_code', 'asc')
             ->get();
         $data->kategori_akun = DB::table('m_rekening')
-            ->select('m_rekening_kategori')
-            ->orderBy('m_rekening_kategori', 'asc')
-            ->groupby('m_rekening_kategori')
+            ->select('m_rekening_nama')
+            ->orderBy('m_rekening_nama', 'asc')
+            ->groupby('m_rekening_nama')
             ->get();
 
         // return $data->rekening;
@@ -148,7 +148,7 @@ class JurnalBankController extends Controller
                     'r_j_b_m_rekening_id' => $rekening->m_rekening_id,
                     'r_j_b_m_rekening_code' => $m_w_code . '.' . $rekening->m_rekening_code,
                     'r_j_b_m_rekening_nama' => $rekening->m_rekening_nama,
-                    'r_j_b_particul' =>  $request->r_j_b_m_rekening_item[$key].' | '.$request->r_j_b_particul[$key],
+                    'r_j_b_particul' => $request->r_j_b_m_rekening_item[$key] . ' | ' . $request->r_j_b_particul[$key],
                     'r_j_b_status' => $request->r_j_b_status,
                     'r_j_b_users_name' => Auth::user()->name,
                     'r_j_b_cron_jurnal_status' => 'send',
