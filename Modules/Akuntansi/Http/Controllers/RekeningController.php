@@ -44,11 +44,11 @@ class RekeningController extends Controller
             $row[] = rupiah($value->m_rekening_saldo, 0);
             $row[] =
             '<div class="text-center"><a id="buttonEdit" class="btn btn-sm buttonEdit btn-success" value="' . $value->m_rekening_code . '" title="Edit"><i class="fa fa-pencil"></i></a>
-            <a id="buttonSaldo" class="btn btn-sm buttonSaldo btn-primary" value="' . $value->m_rekening_code . '" title="Edit Saldo"><i class="fa-solid fa-rupiah-sign"></i></a>
             <a id="buttonHapus" class="btn btn-sm buttonHapus btn-warning" value="' . $value->m_rekening_code . '" title="Hapus"><i class="fa fa-trash"></i></a>
             <a id="buttonItem" class="btn btn-sm buttonItem btn-info" value="' . $value->m_rekening_code . '" title="Items"><i class="fa-solid fa-folder"></i></a></div>';
             $data[] = $row;
         }
+        // <a id="buttonSaldo" class="btn btn-sm buttonSaldo btn-primary" value="' . $value->m_rekening_code . '" title="Edit Saldo"><i class="fa-solid fa-rupiah-sign"></i></a>
         $output = array("data" => $data);
         return response()->json($output);
     }
@@ -139,32 +139,26 @@ class RekeningController extends Controller
 
     public function edit($id)
     {
-        $data = DB::table('m_rekening')->where('m_rekening_code', $id)->first();
-        return response()->json($data);
-    }
-
-    public function item($id)
-    {
-        $data = DB::table('m_rekening')->select('m_rekening_item')->where('m_rekening_code', $id)->first();
+        $data = DB::table('m_rekening')->select('m_rekening_code', 'm_rekening_nama')->where('m_rekening_code', $id)->first();
         return response()->json($data);
     }
 
     public function simpan_edit(Request $request)
     {
-        $rekening_old = $request->m_rekening_id;
+        $rekening_old = $request->id;
         $validasi1 = DB::table('rekap_jurnal_kas')
-            ->select('rekap_jurnal_kas_m_rekening_code')
-            ->where('rekap_jurnal_kas_m_rekening_code', $request->m_rekening_code)
+            ->select('r_j_k_m_rekening_code')
+            ->where('r_j_k_m_rekening_code', $request->m_rekening_code)
             ->count();
 
         $validasi2 = DB::table('rekap_jurnal_bank')
-            ->select('rekap_jurnal_bank_m_rekening_code')
-            ->where('rekap_jurnal_bank_m_rekening_code', $request->m_rekening_code)
+            ->select('r_j_b_m_rekening_code')
+            ->where('r_j_b_m_rekening_code', $request->m_rekening_code)
             ->count();
 
         $validasi3 = DB::table('rekap_jurnal_umum')
-            ->select('rekap_jurnal_umum_m_rekening_code')
-            ->where('rekap_jurnal_umum_m_rekening_code', $request->m_rekening_code)
+            ->select('r_j_u_m_rekening_code')
+            ->where('r_j_u_m_rekening_code', $request->m_rekening_code)
             ->count();
 
         $validasi4 = DB::table('m_rekening')
@@ -183,11 +177,11 @@ class RekeningController extends Controller
 
         $validasi = $validasi1 + $validasi2 + $validasi3 + $validasi4 + $validasi5;
         if ($validasi == 0) {
-            $str1 = str_replace('.', '', $request->m_rekening_saldo);
+            // $str1 = str_replace('.', '', $request->m_rekening_saldo);
             $data = array(
                 'm_rekening_code' => $request->m_rekening_code,
-                'm_rekening_nama' => $request->m_rekening_nama,
-                'm_rekening_saldo' => str_replace(',', '.', $str1),
+                'm_rekening_nama' => $request->m_rekening_nama1,
+                // 'm_rekening_saldo' => str_replace(',', '.', $str1),
                 'm_rekening_updated_by' => Auth::user()->users_id,
                 'm_rekening_updated_at' => Carbon::now(),
             );
@@ -205,26 +199,104 @@ class RekeningController extends Controller
         ]);
     }
 
+    public function item($id)
+    {
+        $data = DB::table('m_rekening')->select('m_rekening_item', 'm_rekening_code')->where('m_rekening_code', $id)->first();
+        return response()->json($data);
+    }
+
+    public function simpan_item(Request $request)
+    {
+        $id_rekening = $request->id;
+        $newItem = $request->item;
+
+        $rekening = DB::table('m_rekening')->where('m_rekening_code', $id_rekening)->first();
+
+        if ($rekening) {
+            $existingItems = $rekening->m_rekening_item;
+
+            if ($newItem !== null && $newItem !== '') {
+                // Menambahkan string baru ke data yang ada
+                if (empty($existingItems)) {
+                    $updatedItems = $newItem;
+                } else {
+                    $updatedItems = $existingItems . ',' . $newItem;
+                }
+            } else {
+                // Jika $newItem kosong atau null, maka tidak ada perubahan
+                $updatedItems = $existingItems;
+            }
+
+            DB::table('m_rekening')->where('m_rekening_code', $id_rekening)
+                ->update(['m_rekening_item' => $updatedItems]);
+
+            return response()->json([
+                'type' => 'success',
+                'messages' => 'Data berhasil diupdate',
+            ]);
+        } else {
+            return response()->json([
+                'type' => 'error',
+                'messages' => 'Data tidak ditemukan',
+            ]);
+        }
+    }
+
+    public function hapus_item(Request $request, $id)
+    {
+        // Ambil data dari database
+        $data = DB::table('m_rekening')->select('m_rekening_item')->where('m_rekening_item', 'LIKE', "%$id%")->first();
+
+        if ($data) {
+            // Pisahkan data menjadi array
+            $dataArray = explode(',', $data->m_rekening_item);
+
+            // Hapus item yang hanya mengandung "a"
+            $dataArray = array_filter($dataArray, function ($item) use ($id) {
+                return $item != $id;
+            });
+
+            // Gabungkan kembali array menjadi string dengan koma sebagai delimiter
+            $newData = implode(',', $dataArray);
+
+            // Perbarui data dalam database
+            DB::table('m_rekening')->where('m_rekening_item', 'LIKE', "%$id%")->update([
+                'm_rekening_item' => $newData,
+            ]);
+
+            return response()->json([
+                'type' => 'success',
+                'messages' => 'Data berhasil dihapus',
+            ]);
+        } else {
+            return response()->json([
+                'type' => 'error',
+                'messages' => 'Data tidak ditemukan',
+            ]);
+        }
+    }
+
     public function delete(Request $request, $id)
     {
         $validasi1 = DB::table('rekap_jurnal_kas')
-            ->select('rekap_jurnal_kas_m_rekening_code')
-            ->where('rekap_jurnal_kas_m_rekening_code', $request->m_rekening_code)
+            ->select('r_j_k_m_rekening_code')
+            ->where('r_j_k_m_rekening_code', $request->m_rekening_code)
             ->count();
 
         $validasi2 = DB::table('rekap_jurnal_bank')
-            ->select('rekap_jurnal_bank_m_rekening_code')
-            ->where('rekap_jurnal_bank_m_rekening_code', $request->m_rekening_code)
+            ->select('r_j_b_m_rekening_code')
+            ->where('r_j_b_m_rekening_code', $request->m_rekening_code)
             ->count();
 
         $validasi3 = DB::table('rekap_jurnal_umum')
-            ->select('rekap_jurnal_umum_m_rekening_code')
-            ->where('rekap_jurnal_umum_m_rekening_code', $request->m_rekening_code)
+            ->select('r_j_u_m_rekening_code')
+            ->where('r_j_u_m_rekening_code', $request->m_rekening_code)
             ->count();
 
         $validasi4 = DB::table('m_link_akuntansi')
-            ->select('m_link_akuntansi_m_rekening_code')
-            ->where('m_link_akuntansi_m_rekening_code', $request->m_rekening_code)
+            ->join('m_rekening', 'm_rekening_id', 'm_link_akuntansi_m_rekening_id')
+            ->select('m_rekening_code')
+            ->where('m_rekening_code', $request->m_rekening_code)
             ->count();
         $validasi = $validasi1 + $validasi2 + $validasi3 + $validasi4;
         if ($validasi === 0) {

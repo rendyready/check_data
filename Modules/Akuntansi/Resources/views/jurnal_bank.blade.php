@@ -55,8 +55,8 @@
                                         <select id="filter_akun" class="cari js-select2 form-control kas-click"
                                             style="width: 100%;" name="m_rekening_kategori">
                                             @foreach ($data->kategori_akun as $kategori_akun)
-                                                <option value="{{ $kategori_akun->m_rekening_kategori }}">
-                                                    {{ $kategori_akun->m_rekening_kategori }}</option>
+                                                <option value="{{ $kategori_akun->m_rekening_nama }}">
+                                                    {{ $kategori_akun->m_rekening_nama }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -88,7 +88,7 @@
                                                             @if ($item->m_rekening_item != null)
                                                                 @php
                                                                     $rekeningItemString = $item->m_rekening_item;
-                                                                    $rekeningItemArray = explode(', ', $rekeningItemString);
+                                                                    $rekeningItemArray = explode(',', $rekeningItemString);
                                                                 @endphp
 
                                                                 @if (is_array($rekeningItemArray))
@@ -176,7 +176,7 @@
                                         <tr>
                                             <th class="text-center">No Akun</th>
                                             <th class="text-center">Nama Akun</th>
-                                            <th class="text-center">Item Produk</th>
+                                            {{-- <th class="text-center">Item Produk</th> --}}
                                             <th class="text-center">Keterangan</th>
                                             <th class="text-center">Debit</th>
                                             <th class="text-center">Kredit</th>
@@ -336,9 +336,9 @@
                     {
                         data: 'r_j_b_m_rekening_nama'
                     },
-                    {
-                        data: 'r_j_b_m_rekening_item'
-                    },
+                    // {
+                    //   data: 'r_j_b_m_rekening_item'
+                    //},
                     {
                         data: 'r_j_b_particul'
                     },
@@ -411,9 +411,9 @@
                                         {
                                             data: 'r_j_b_m_rekening_nama'
                                         },
-                                        {
-                                            data: 'r_j_b_m_rekening_item'
-                                        },
+                                        // {
+                                        //     data: 'r_j_b_m_rekening_item'
+                                        // },
                                         {
                                             data: 'r_j_b_particul'
                                         },
@@ -488,9 +488,9 @@
                         {
                             data: 'r_j_b_m_rekening_nama'
                         },
-                        {
-                            data: 'r_j_b_m_rekening_item'
-                        },
+                        // {
+                        //     data: 'r_j_b_m_rekening_item'
+                        // },
                         {
                             data: 'r_j_b_particul'
                         },
@@ -580,7 +580,7 @@
                             $('#item_produkjq' + id).append('<option></option>');
                             for (var key in data) {
                                 if (data.hasOwnProperty(key)) {
-                                    var options = key.split(', ');
+                                    var options = key.split(',');
 
                                     options.forEach(function(option) {
                                         $('#item_produkjq' + id).append(

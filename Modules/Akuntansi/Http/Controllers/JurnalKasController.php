@@ -31,11 +31,12 @@ class JurnalKasController extends Controller
         $data->rekening = DB::table('m_rekening')
             ->select('m_rekening_kategori', 'm_rekening_code', 'm_rekening_item')
             ->orderBy('m_rekening_code', 'asc')
+        // ->groupby('m_rekening_item')
             ->get();
         $data->kategori_akun = DB::table('m_rekening')
-            ->select('m_rekening_kategori')
-            ->orderBy('m_rekening_kategori', 'asc')
-            ->groupby('m_rekening_kategori')
+            ->select('m_rekening_nama')
+            ->orderBy('m_rekening_nama', 'asc')
+            ->groupby('m_rekening_nama')
             ->get();
 
         return view('akuntansi::jurnal_kas', compact('data'));
@@ -79,7 +80,7 @@ class JurnalKasController extends Controller
     {
         $tanggal = $request->r_j_k_tanggal;
         $data = DB::table('rekap_jurnal_kas')
-            ->select('r_j_k_id', 'r_j_k_m_rekening_code', 'r_j_k_m_rekening_nama', 'r_j_k_particul', 'r_j_k_debit', 'r_j_k_kredit', 'r_j_k_users_name', 'r_j_k_transaction_code', 'r_j_k_m_rekening_item')
+            ->select('r_j_k_id', 'r_j_k_m_rekening_code', 'r_j_k_m_rekening_nama', 'r_j_k_particul', 'r_j_k_debit', 'r_j_k_kredit', 'r_j_k_users_name', 'r_j_k_transaction_code')
             ->where('r_j_k_m_w_id', $request->r_j_k_m_w_id)
             ->where('r_j_k_status', $request->r_j_k_status)
             ->where('r_j_k_tanggal', $tanggal)
@@ -146,8 +147,7 @@ class JurnalKasController extends Controller
                     'r_j_k_m_rekening_id' => $rekening->m_rekening_id,
                     'r_j_k_m_rekening_code' => $m_w_code . '.' . $rekening->m_rekening_code,
                     'r_j_k_m_rekening_nama' => $rekening->m_rekening_nama,
-                    'r_j_k_m_rekening_item' => $request->r_j_k_m_rekening_item[$key],
-                    'r_j_k_particul' => $request->r_j_k_particul[$key],
+                    'r_j_k_particul' => $request->r_j_k_m_rekening_item[$key] . ' | ' . $request->r_j_k_particul[$key],
                     'r_j_k_status' => $request->r_j_k_status,
                     'r_j_k_users_name' => Auth::user()->name,
                     'r_j_k_cron_jurnal_status' => 'send',

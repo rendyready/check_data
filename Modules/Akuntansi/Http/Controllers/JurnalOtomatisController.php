@@ -344,7 +344,7 @@ class JurnalOtomatisController extends Controller
                                 rekap_modal_sesi as sesi,
                                 max(r_p_t_m_payment_method_id) pay_method,
                                 r_t_detail_m_produk_id as produk_id,
-                                SUM(r_t_detail_price*r_t_detail_qty) nominal,
+                                SUM(r_t_detail_reguler_price*r_t_detail_qty) nominal,
                                 sum(r_t_detail_nominal_pajak) as pajak,
                                 sum(r_t_detail_nominal_sc) as sc,
                                 max(r_t_m_t_t_id) type_trans,
