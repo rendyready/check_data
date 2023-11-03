@@ -188,15 +188,18 @@ class MStokController extends Controller
             if (!is_null($qty_riil)) {
                 $qty_so  = string_num_tofloat($qty_riil);
                 $produkCodes[] = $detailData['rekap_so_detail_m_produk_code'];
-
+                $get_stok = DB::table('m_stok')->where('m_stok_gudang_code',$request->rekap_so_m_gudang_code)
+                ->where('m_stok_m_produk_code',$detailData['rekap_so_detail_m_produk_code'])
+                ->first();
                 $detail = [
                     'rekap_so_detail_id' => $this->getNextId('rekap_so_detail', $waroeng_id),
                     'rekap_so_detail_rekap_so_id' => $so_code,
                     'rekap_so_detail_m_gudang_code' => $request->rekap_so_m_gudang_code,
                     'rekap_so_detail_m_produk_code' => $detailData['rekap_so_detail_m_produk_code'],
-                    'rekap_so_detail_satuan' => $detailData['rekap_so_detail_satuan'],
+                    'rekap_so_detail_satuan' => $get_stok->m_stok_satuan,
                     'rekap_so_detail_qty' => $detailData['rekap_so_detail_qty'],
                     'rekap_so_detail_qty_riil' => $qty_so,
+                    'rekap_so_detail_hpp' => $get_stok->m_stok_hpp,
                     'rekap_so_detail_created_at' => Carbon::now(),
                     'rekap_so_detail_created_by' => $user_id,
                 ];

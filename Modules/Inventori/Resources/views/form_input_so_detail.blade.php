@@ -129,9 +129,7 @@
                                                         <input type="text" class="form-control number rill"
                                                             name="rekap_so_detail_qty_riil[]">
                                                     </td>
-                                                    <td>{{ ucwords($item->m_stok_satuan) }} <input type="hidden"
-                                                            name="rekap_so_detail_satuan[]"
-                                                            value="{{ $item->m_stok_satuan }}">
+                                                    <td>{{ ucwords($item->m_stok_satuan) }}
                                                     </td>
                                                 </tr>
                                             @endforeach
