@@ -31,11 +31,12 @@ class JurnalKasController extends Controller
         $data->rekening = DB::table('m_rekening')
             ->select('m_rekening_kategori', 'm_rekening_code', 'm_rekening_item')
             ->orderBy('m_rekening_code', 'asc')
+        // ->groupby('m_rekening_item')
             ->get();
         $data->kategori_akun = DB::table('m_rekening')
-            ->select('m_rekening_kategori')
-            ->orderBy('m_rekening_kategori', 'asc')
-            ->groupby('m_rekening_kategori')
+            ->select('m_rekening_nama')
+            ->orderBy('m_rekening_nama', 'asc')
+            ->groupby('m_rekening_nama')
             ->get();
 
         return view('akuntansi::jurnal_kas', compact('data'));
