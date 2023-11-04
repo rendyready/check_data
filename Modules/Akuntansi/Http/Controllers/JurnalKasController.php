@@ -27,16 +27,16 @@ class JurnalKasController extends Controller
 
         $data->waroeng = DB::table('m_w')
             ->join('m_area', 'm_area_id', 'm_w_m_area_id')
-            ->select('m_w_id', 'm_w_nama', 'm_area_id', 'm_area_nama')->get();
-        $data->rekening = DB::table('m_rekening')
-            ->select('m_rekening_kategori', 'm_rekening_code', 'm_rekening_item')
-            ->orderBy('m_rekening_code', 'asc')
-        // ->groupby('m_rekening_item')
+            ->select('m_w_id', 'm_w_nama', 'm_area_id', 'm_area_nama')
+            ->orderby('m_w_id', 'asc')
             ->get();
         $data->kategori_akun = DB::table('m_rekening')
             ->select('m_rekening_nama')
             ->orderBy('m_rekening_nama', 'asc')
             ->groupby('m_rekening_nama')
+            ->get();
+        $data->daftar_bank = DB::table('m_akun_bank')
+            ->where('m_akun_bank_type', 'LIKE', '%cash%')
             ->get();
 
         return view('akuntansi::jurnal_kas', compact('data'));
@@ -46,6 +46,7 @@ class JurnalKasController extends Controller
     {
         $list2 = DB::table('m_rekening')
             ->select('m_rekening_code', 'm_rekening_id', 'm_rekening_nama')
+            ->where('m_rekening_m_w_id', $request->filwaroeng)
             ->orderBy('m_rekening_code', 'asc')
             ->get();
         $data = array();
@@ -123,7 +124,7 @@ class JurnalKasController extends Controller
         ]);
 
         $getBankKas = DB::table('m_akun_bank')
-            ->where('m_akun_bank_type','LIKE','%cash%')
+            ->where('m_akun_bank_type', 'LIKE', '%cash%')
             ->first();
 
         if ($validator->passes()) {
@@ -187,6 +188,7 @@ class JurnalKasController extends Controller
     {
         $list_item = DB::table('m_rekening')
             ->select('m_rekening_code', 'm_rekening_item')
+            ->where('m_rekening_m_w_id', $request->filwaroeng)
             ->orderBy('m_rekening_code', 'asc')
             ->get();
         $data = array();
