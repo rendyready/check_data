@@ -7,7 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Validator;
+use Illuminate\Support\Facades\Validator;
 
 class JurnalKasController extends Controller
 {
@@ -122,6 +122,10 @@ class JurnalKasController extends Controller
             'r_j_k_particul.*' => 'required',
         ]);
 
+        $getBankKas = DB::table('m_akun_bank')
+            ->where('m_akun_bank_type','LIKE','%cash%')
+            ->first();
+
         if ($validator->passes()) {
             foreach ($request->r_j_k_particul as $key => $value) {
                 $rekening = DB::table('m_rekening')
@@ -143,14 +147,13 @@ class JurnalKasController extends Controller
                     'r_j_k_m_area_nama' => $m_area_nama,
                     'r_j_k_tanggal' => $request->r_j_k_tanggal,
                     'r_j_k_status' => $request->r_j_k_status,
-                    'r_j_k_m_akun_bank_id' => 1,
+                    'r_j_k_m_akun_bank_id' => $getBankKas->m_akun_bank_id,
                     'r_j_k_m_rekening_id' => $rekening->m_rekening_id,
                     'r_j_k_m_rekening_code' => $m_w_code . '.' . $rekening->m_rekening_code,
                     'r_j_k_m_rekening_nama' => $rekening->m_rekening_nama,
                     'r_j_k_particul' => $request->r_j_k_m_rekening_item[$key] . ' | ' . $request->r_j_k_particul[$key],
                     'r_j_k_status' => $request->r_j_k_status,
                     'r_j_k_users_name' => Auth::user()->name,
-                    'r_j_k_cron_jurnal_status' => 'send',
                     'r_j_k_transaction_code' => $code,
                     'r_j_k_created_by' => Auth::user()->users_id,
                     'r_j_k_created_at' => Carbon::now(),

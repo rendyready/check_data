@@ -7,7 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Validator;
+use Illuminate\Support\Facades\Validator;
 
 class JurnalBankController extends Controller
 {
@@ -37,6 +37,9 @@ class JurnalBankController extends Controller
             ->orderBy('m_rekening_nama', 'asc')
             ->groupby('m_rekening_nama')
             ->get();
+        $data->daftar_bank = DB::table('m_akun_bank')
+        ->where('m_akun_bank_type','LIKE','%bank%')
+        ->get();
 
         // return $data->rekening;
 
@@ -144,14 +147,13 @@ class JurnalBankController extends Controller
                     'r_j_b_m_area_nama' => $m_area_nama,
                     'r_j_b_tanggal' => $request->r_j_b_tanggal,
                     'r_j_b_status' => $request->r_j_b_status,
-                    'r_j_b_m_akun_bank_id' => 1,
+                    'r_j_b_m_akun_bank_id' => $request->r_j_b_m_akun_bank_id,
                     'r_j_b_m_rekening_id' => $rekening->m_rekening_id,
                     'r_j_b_m_rekening_code' => $m_w_code . '.' . $rekening->m_rekening_code,
                     'r_j_b_m_rekening_nama' => $rekening->m_rekening_nama,
                     'r_j_b_particul' => $request->r_j_b_m_rekening_item[$key] . ' | ' . $request->r_j_b_particul[$key],
                     'r_j_b_status' => $request->r_j_b_status,
                     'r_j_b_users_name' => Auth::user()->name,
-                    'r_j_b_cron_jurnal_status' => 'send',
                     'r_j_b_transaction_code' => $code,
                     'r_j_b_created_by' => Auth::user()->users_id,
                     'r_j_b_created_at' => Carbon::now(),

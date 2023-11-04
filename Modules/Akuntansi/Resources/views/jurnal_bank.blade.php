@@ -50,13 +50,13 @@
                                 </div>
                                 <div class="row mb-2 col-6">
                                     <label class="col-sm-4 col-form-label" id="categoryAccount"
-                                        for="example-hf-text">Kategori Akun</label>
+                                        for="example-hf-text">BANK</label>
                                     <div class="col-md-8">
-                                        <select id="filter_akun" class="cari js-select2 form-control kas-click"
-                                            style="width: 100%;" name="m_rekening_kategori">
-                                            @foreach ($data->kategori_akun as $kategori_akun)
-                                                <option value="{{ $kategori_akun->m_rekening_nama }}">
-                                                    {{ $kategori_akun->m_rekening_nama }}</option>
+                                        <select class="cari js-select2 form-control kas-click"
+                                            style="width: 100%;" name="r_j_b_m_akun_bank_id">
+                                            @foreach ($data->daftar_bank as $daftar_bank)
+                                                <option value="{{ $daftar_bank->m_akun_bank_id }}">
+                                                    {{ $daftar_bank->m_akun_bank_name }}</option>
                                             @endforeach
                                         </select>
                                     </div>

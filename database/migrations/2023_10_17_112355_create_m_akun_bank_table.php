@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('m_akun_bank_type')->comment('cash/bank');
             $table->string('m_akun_bank_code');
             $table->string('m_akun_bank_name');
-            $table->unsignedBigInteger('m_akun_bank_m_rekening_id');
+            $table->unsignedBigInteger('m_akun_bank_m_rekening_id')->nullable();
             $table->bigInteger('m_akun_bank_created_by');
             $table->bigInteger('m_akun_bank_updated_by')->nullable();
             $table->bigInteger('m_akun_bank_deleted_by')->nullable();
