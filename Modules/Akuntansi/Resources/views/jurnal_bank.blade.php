@@ -34,8 +34,8 @@
                                     <div class="col-md-8">
                                         <select id="filter-kas" class="cari js-select2 form-control kas-click"
                                             style="width: 100%;" name="r_j_b_status">
-                                            <option value="km">Bank Masuk</option>
-                                            <option value="kk">Bank Keluar</option>
+                                            <option value="in">Bank Masuk</option>
+                                            <option value="out">Bank Keluar</option>
                                         </select>
                                     </div>
                                 </div>
