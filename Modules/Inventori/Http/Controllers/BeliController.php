@@ -120,7 +120,7 @@ class BeliController extends Controller
                 'r_t_jb_m_w_id_tujuan' => $id_waroeng,
                 'r_t_jb_m_w_nama_tujuan' => $request->r_t_jb_waroeng,
                 'r_t_jb_nominal_bayar' => convertfloat($request->r_t_jb_nominal_bayar),
-                'r_t_jb_m_akun_bank' => $get_akun_bank->m_akun_bank_id,
+                'r_t_jb_m_akun_bank_id' => $get_akun_bank->m_akun_bank_id,
                 'r_t_jb_ket' => 'pembayaran hutang-kas',
                 'r_t_jb_created_at' => Carbon::now(),
                 'r_t_jb_created_by' => Auth::user()->users_id,
