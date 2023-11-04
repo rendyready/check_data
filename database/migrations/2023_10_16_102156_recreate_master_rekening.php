@@ -19,12 +19,13 @@ return new class extends Migration
         Schema::create('m_rekening', function (Blueprint $table) {
             $table->id('id');
             $table->bigInteger('m_rekening_id')->unsigned()->nullable();
-            $table->unsignedBigInteger('m_rekening_m_w_id');
-            $table->string('m_rekening_m_w_code');
+            $table->unsignedBigInteger('m_rekening_parent_id')->nullable();
+            $table->unsignedBigInteger('m_rekening_m_w_id')->nullable();
+            $table->string('m_rekening_m_w_code')->nullable();
             $table->string('m_rekening_kategori');
             $table->string('m_rekening_code');
             $table->string('m_rekening_nama');
-            $table->decimal('m_rekening_saldo', 15, 2);
+            $table->decimal('m_rekening_saldo', 15, 2)->default(0);
             $table->text('m_rekening_item')->nullable();
             $table->bigInteger('m_rekening_created_by');
             $table->bigInteger('m_rekening_updated_by')->nullable();

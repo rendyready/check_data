@@ -34,8 +34,8 @@
                                     <div class="col-md-8">
                                         <select id="filter-kas" class="cari js-select2 form-control kas-click"
                                             style="width: 100%;" name="r_j_b_status">
-                                            <option value="km">Kas Masuk</option>
-                                            <option value="kk">Kas Keluar</option>
+                                            <option value="km">Bank Masuk</option>
+                                            <option value="kk">Bank Keluar</option>
                                         </select>
                                     </div>
                                 </div>
@@ -50,13 +50,13 @@
                                 </div>
                                 <div class="row mb-2 col-6">
                                     <label class="col-sm-4 col-form-label" id="categoryAccount"
-                                        for="example-hf-text">Kategori Akun</label>
+                                        for="example-hf-text">BANK</label>
                                     <div class="col-md-8">
-                                        <select id="filter_akun" class="cari js-select2 form-control kas-click"
-                                            style="width: 100%;" name="m_rekening_kategori">
-                                            @foreach ($data->kategori_akun as $kategori_akun)
-                                                <option value="{{ $kategori_akun->m_rekening_nama }}">
-                                                    {{ $kategori_akun->m_rekening_nama }}</option>
+                                        <select class="cari js-select2 form-control kas-click" style="width: 100%;"
+                                            name="r_j_b_m_akun_bank_id" id="payment_status">
+                                            @foreach ($data->daftar_bank as $daftar_bank)
+                                                <option value="{{ $daftar_bank->m_akun_bank_id }}">
+                                                    {{ $daftar_bank->m_akun_bank_name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -83,23 +83,6 @@
                                                         class="js-select2 set form-control form-control-sm"
                                                         style="width: 100%;" name="r_j_b_m_rekening_item[]"
                                                         data-placeholder="Pilih Item">
-                                                        <option value=""></option>
-                                                        @foreach ($data->rekening as $item)
-                                                            @if ($item->m_rekening_item != null)
-                                                                @php
-                                                                    $rekeningItemString = $item->m_rekening_item;
-                                                                    $rekeningItemArray = explode(',', $rekeningItemString);
-                                                                @endphp
-
-                                                                @if (is_array($rekeningItemArray))
-                                                                    @foreach ($rekeningItemArray as $value)
-                                                                        <option value="{{ $value }}">
-                                                                            {{ $value }}
-                                                                        </option>
-                                                                    @endforeach
-                                                                @endif
-                                                            @endif
-                                                        @endforeach
                                                     </select>
                                                 </td>
                                                 <td>
@@ -176,7 +159,6 @@
                                         <tr>
                                             <th class="text-center">No Akun</th>
                                             <th class="text-center">Nama Akun</th>
-                                            {{-- <th class="text-center">Item Produk</th> --}}
                                             <th class="text-center">Keterangan</th>
                                             <th class="text-center">Debit</th>
                                             <th class="text-center">Kredit</th>
@@ -311,7 +293,7 @@
             var filwaroeng = m_w_id.split(',')[0];
             var filkas = $('#filter-kas').val();
             var filtanggal = $('#filter-tanggal').val();
-            console.log(filwaroeng);
+            // console.log(filwaroeng);
             //tampil
             $('#jurnal-tampil').DataTable({
                 "columnDefs": [{
@@ -464,6 +446,12 @@
                 var filwaroeng = m_w_id.split(',')[0];
                 var filkas = $('#filter-kas').val();
                 var filtanggal = $('#filter-tanggal').val();
+                $('#m_rekening_nama').empty();
+                $('#item_produk').empty();
+                $('.btn_remove').parents('tr').remove();
+                $('.saldo').trigger("input");
+
+                $('.set').val('');
                 console.log(filwaroeng);
                 $('#jurnal-tampil').DataTable({
                     "columnDefs": [{
@@ -510,6 +498,49 @@
                         },
                     ],
                 });
+
+                $.ajax({
+                    url: '{{ route('jurnal_bank.rekeninglink') }}',
+                    type: 'GET',
+                    dataType: 'Json',
+                    data: {
+                        filwaroeng: filwaroeng,
+                    },
+                    success: function(data) {
+                        $('#m_rekening_nama').append('<option></option>');
+                        $.each(data, function(key, value) {
+                            $('#m_rekening_nama').append('<option value="' + key +
+                                '">' +
+                                value +
+                                '</option>');
+                        });
+                    }
+                })
+
+                $.ajax({
+                    url: '{{ route('jurnal_bank.list_item') }}',
+                    type: 'GET',
+                    dataType: 'Json',
+                    data: {
+                        filwaroeng: filwaroeng,
+                    },
+                    success: function(data) {
+                        if (data) {
+                            $('#item_produk').append('<option></option>');
+                            for (var key in data) {
+                                if (data.hasOwnProperty(key)) {
+                                    var options = key.split(',');
+
+                                    options.forEach(function(option) {
+                                        $('#item_produk').append(
+                                            '<option value="' + option + '">' +
+                                            option + '</option>');
+                                    });
+                                }
+                            }
+                        }
+                    },
+                });
             });
 
             var kas = $('.kas-click').val();
@@ -537,10 +568,15 @@
                 }
             });
 
+            // var payment = $('#payment_status').val();
+            // console.log(filwaroeng);
             $.ajax({
                 url: '{{ route('jurnal_bank.rekeninglink') }}',
                 type: 'GET',
                 dataType: 'Json',
+                data: {
+                    filwaroeng: filwaroeng,
+                },
                 success: function(data) {
                     $('#m_rekening_nama').append('<option></option>');
                     $.each(data, function(key, value) {
@@ -551,6 +587,31 @@
                 }
             })
 
+            $.ajax({
+                url: '{{ route('jurnal_bank.list_item') }}',
+                type: 'GET',
+                dataType: 'Json',
+                data: {
+                    filwaroeng: filwaroeng,
+                },
+                success: function(data) {
+                    if (data) {
+                        $('#item_produk').append('<option></option>');
+                        for (var key in data) {
+                            if (data.hasOwnProperty(key)) {
+                                var options = key.split(',');
+
+                                options.forEach(function(option) {
+                                    $('#item_produk').append(
+                                        '<option value="' + option + '">' +
+                                        option + '</option>');
+                                });
+                            }
+                        }
+                    }
+                },
+            });
+
             //default select nama rekening jquery
             $('.tambah').on('click', function() {
                 var id = $(this).closest("tr").index() + no++;
@@ -560,6 +621,9 @@
                     url: '{{ route('jurnal_bank.rekeninglink') }}',
                     type: 'GET',
                     dataType: 'Json',
+                    data: {
+                        filwaroeng: filwaroeng,
+                    },
                     success: function(data) {
                         // console.log(data);
                         $('#m_rekening_namajq' + id).append('<option></option>');
@@ -575,6 +639,9 @@
                     url: '{{ route('jurnal_bank.list_item') }}',
                     type: 'GET',
                     dataType: 'Json',
+                    data: {
+                        filwaroeng: filwaroeng,
+                    },
                     success: function(data) {
                         if (data) {
                             $('#item_produkjq' + id).append('<option></option>');
