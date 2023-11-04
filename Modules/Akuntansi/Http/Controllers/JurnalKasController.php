@@ -81,7 +81,7 @@ class JurnalKasController extends Controller
     {
         $tanggal = $request->r_j_k_tanggal;
         $data = DB::table('rekap_jurnal_kas')
-            ->select('r_j_k_id', 'r_j_k_m_rekening_code', 'r_j_k_m_rekening_nama', 'r_j_k_particul', 'r_j_k_debit', 'r_j_k_kredit', 'r_j_k_users_name', 'r_j_k_transaction_code')
+            ->select('r_j_k_id', 'r_j_k_m_rekening_code', 'r_j_k_m_rekening_nama', 'r_j_k_particul', 'r_j_k_debit', 'r_j_k_kredit', 'r_j_k_users_name', 'r_j_k_transaction_code', 'r_j_k_m_w_code')
             ->where('r_j_k_m_w_id', $request->r_j_k_m_w_id)
             ->where('r_j_k_status', $request->r_j_k_status)
             ->where('r_j_k_tanggal', $tanggal)
@@ -150,7 +150,7 @@ class JurnalKasController extends Controller
                     'r_j_k_status' => $request->r_j_k_status,
                     'r_j_k_m_akun_bank_id' => $getBankKas->m_akun_bank_id,
                     'r_j_k_m_rekening_id' => $rekening->m_rekening_id,
-                    'r_j_k_m_rekening_code' => $m_w_code . '.' . $rekening->m_rekening_code,
+                    'r_j_k_m_rekening_code' => $rekening->m_rekening_code,
                     'r_j_k_m_rekening_nama' => $rekening->m_rekening_nama,
                     'r_j_k_particul' => $request->r_j_k_m_rekening_item[$key] . ' | ' . $request->r_j_k_particul[$key],
                     'r_j_k_status' => $request->r_j_k_status,

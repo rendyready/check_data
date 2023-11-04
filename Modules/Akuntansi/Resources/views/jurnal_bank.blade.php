@@ -313,14 +313,14 @@
                     type: "GET",
                 },
                 columns: [{
-                        data: 'r_j_b_m_rekening_code'
+                        data: null,
+                        render: function(data, type, row) {
+                            return data.r_j_b_m_w_code + '.' + data.r_j_b_m_rekening_code;
+                        }
                     },
                     {
                         data: 'r_j_b_m_rekening_nama'
                     },
-                    // {
-                    //   data: 'r_j_b_m_rekening_item'
-                    //},
                     {
                         data: 'r_j_b_particul'
                     },
@@ -388,14 +388,16 @@
                                         type: "GET",
                                     },
                                     columns: [{
-                                            data: 'r_j_b_m_rekening_code'
+                                            data: null,
+                                            render: function(data, type, row) {
+                                                return data.r_j_b_m_w_code +
+                                                    '.' + data
+                                                    .r_j_b_m_rekening_code;
+                                            }
                                         },
                                         {
                                             data: 'r_j_b_m_rekening_nama'
                                         },
-                                        // {
-                                        //     data: 'r_j_b_m_rekening_item'
-                                        // },
                                         {
                                             data: 'r_j_b_particul'
                                         },
@@ -471,14 +473,15 @@
                         type: "GET",
                     },
                     columns: [{
-                            data: 'r_j_b_m_rekening_code'
+                            data: null,
+                            render: function(data, type, row) {
+                                return data.r_j_b_m_w_code + '.' + data
+                                    .r_j_b_m_rekening_code;
+                            }
                         },
                         {
                             data: 'r_j_b_m_rekening_nama'
                         },
-                        // {
-                        //     data: 'r_j_b_m_rekening_item'
-                        // },
                         {
                             data: 'r_j_b_particul'
                         },
