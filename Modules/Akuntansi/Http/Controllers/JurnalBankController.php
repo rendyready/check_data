@@ -27,10 +27,8 @@ class JurnalBankController extends Controller
 
         $data->waroeng = DB::table('m_w')
             ->join('m_area', 'm_area_id', 'm_w_m_area_id')
-            ->select('m_w_id', 'm_w_nama', 'm_area_id', 'm_area_nama')->get();
-        $data->rekening = DB::table('m_rekening')
-            ->select('m_rekening_kategori', 'm_rekening_code', 'm_rekening_item')
-            ->orderBy('m_rekening_code', 'asc')
+            ->select('m_w_id', 'm_w_nama', 'm_area_id', 'm_area_nama')
+            ->orderby('m_w_id', 'asc')
             ->get();
         $data->kategori_akun = DB::table('m_rekening')
             ->select('m_rekening_nama')
@@ -38,8 +36,8 @@ class JurnalBankController extends Controller
             ->groupby('m_rekening_nama')
             ->get();
         $data->daftar_bank = DB::table('m_akun_bank')
-        ->where('m_akun_bank_type','LIKE','%bank%')
-        ->get();
+            ->where('m_akun_bank_type', 'LIKE', '%bank%')
+            ->get();
 
         // return $data->rekening;
 
@@ -50,6 +48,7 @@ class JurnalBankController extends Controller
     {
         $list2 = DB::table('m_rekening')
             ->select('m_rekening_code', 'm_rekening_id', 'm_rekening_nama')
+            ->where('m_rekening_m_w_id', $request->filwaroeng)
             ->orderBy('m_rekening_code', 'asc')
             ->get();
         $data = array();
@@ -84,7 +83,7 @@ class JurnalBankController extends Controller
     {
         $tanggal = $request->r_j_b_tanggal;
         $data = DB::table('rekap_jurnal_bank')
-            ->select('r_j_b_id', 'r_j_b_m_rekening_code', 'r_j_b_m_rekening_nama', 'r_j_b_particul', 'r_j_b_debit', 'r_j_b_kredit', 'r_j_b_users_name', 'r_j_b_transaction_code')
+            ->select('r_j_b_id', 'r_j_b_m_rekening_code', 'r_j_b_m_rekening_nama', 'r_j_b_particul', 'r_j_b_debit', 'r_j_b_kredit', 'r_j_b_users_name', 'r_j_b_transaction_code', 'r_j_b_m_w_code')
             ->where('r_j_b_m_w_id', $request->r_j_b_m_w_id)
             ->where('r_j_b_status', $request->r_j_b_status)
             ->where('r_j_b_tanggal', $tanggal)
@@ -149,7 +148,7 @@ class JurnalBankController extends Controller
                     'r_j_b_status' => $request->r_j_b_status,
                     'r_j_b_m_akun_bank_id' => $request->r_j_b_m_akun_bank_id,
                     'r_j_b_m_rekening_id' => $rekening->m_rekening_id,
-                    'r_j_b_m_rekening_code' => $m_w_code . '.' . $rekening->m_rekening_code,
+                    'r_j_b_m_rekening_code' => $rekening->m_rekening_code,
                     'r_j_b_m_rekening_nama' => $rekening->m_rekening_nama,
                     'r_j_b_particul' => $request->r_j_b_m_rekening_item[$key] . ' | ' . $request->r_j_b_particul[$key],
                     'r_j_b_status' => $request->r_j_b_status,
@@ -187,6 +186,7 @@ class JurnalBankController extends Controller
     {
         $list_item = DB::table('m_rekening')
             ->select('m_rekening_code', 'm_rekening_item')
+            ->where('m_rekening_m_w_id', $request->filwaroeng)
             ->orderBy('m_rekening_code', 'asc')
             ->get();
         $data = array();
