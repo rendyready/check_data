@@ -27,6 +27,7 @@ return new class extends Migration
             $table->string('m_rekening_nama');
             $table->decimal('m_rekening_saldo', 15, 2)->default(0);
             $table->text('m_rekening_item')->nullable();
+            $table->bigInteger('m_rekening_order')->nullable();
             $table->bigInteger('m_rekening_created_by');
             $table->bigInteger('m_rekening_updated_by')->nullable();
             $table->bigInteger('m_rekening_deleted_by')->nullable();

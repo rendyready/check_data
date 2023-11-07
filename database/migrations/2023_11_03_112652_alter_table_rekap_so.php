@@ -24,13 +24,13 @@ return new class extends Migration
 
         Schema::table('rekap_so', function (Blueprint $table) {
             $table->string('rekap_so_cron_jurnal_status')->default('run');
-            $table->text('rekap_so_client_target')->default(DB::raw('list_waroeng()'))->nullable();
+            $table->text('rekap_so_client_target')->nullable();
         });
 
         Schema::table('rekap_so_detail', function (Blueprint $table) {
             $table->decimal('rekap_so_detail_hpp', 14, 2)->default(0);
             $table->string('rekap_so_detail_cron_jurnal_status')->default('run');
-            $table->text('rekap_so_detail_client_target')->default(DB::raw('list_waroeng()'))->nullable();
+            $table->text('rekap_so_detail_client_target')->nullable();
         });
 
     }
