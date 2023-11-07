@@ -30,7 +30,7 @@ Route::post('/users/pass/update', [App\Http\Controllers\Auth\LoginController::cl
     ->middleware('web')
     ->name('password.changes');
 Route::get('/users/noakses', [App\Http\Controllers\Auth\LoginController::class, 'no_akses'])->name('users.noakses');
-Route::get('/count-data', [App\Http\Controllers\ControlDataController::class, 'CountData']);
+// Route::get('/count-data', [App\Http\Controllers\ControlDataController::class, 'CountData']);
 
 // Dashboard Route
 Route::middleware(['auth', 'web'])->group(function () {
