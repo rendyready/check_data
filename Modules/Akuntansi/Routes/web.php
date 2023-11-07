@@ -77,6 +77,14 @@ Route::prefix('akuntansi')->middleware('auth', 'web')
             Route::get('otomatis/select_waroeng', 'select_waroeng')->name('otomatis.select_waroeng');
         });
 
+        Route::controller(AkunBankController::class)->group(function () {
+            Route::get('akun_bank', 'index')->name('akun_bank.index');
+            Route::post('akun_bank/action', 'action')->name('action.akun_bank');
+            // Route::get('link/rekening', 'rekeninglink')->name('link.rekening');
+            // Route::get('link/list', 'list')->name('link.list');
+            // Route::post('link/update', 'update')->name('link.update');
+        });
+
         // Route::controller(BukuBesarController::class)->group(function () {
         //     Route::get('buku_besar', 'index')->name('buku_besar.index');
         //     Route::get('buku_besar/tampil_buku_besar', 'tampil_buku_besar')->name('buku_besar.tampil_buku_besar');

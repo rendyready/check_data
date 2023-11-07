@@ -260,10 +260,12 @@ class RekapMenuController extends Controller
     {
         $menu = DB::table('rekap_transaksi_detail')
             ->join('rekap_transaksi', 'r_t_id', 'r_t_detail_r_t_id')
+            ->join('m_w', 'm_w_id', 'r_t_m_w_id')
             ->join('m_produk', 'm_produk_id', 'r_t_detail_m_produk_id')
             ->join('m_jenis_produk', 'm_jenis_produk_id', 'm_produk_m_jenis_produk_id')
             ->join('rekap_modal', 'rekap_modal_id', 'r_t_rekap_modal_id')
-            ->where('rekap_modal_status', 'close');
+            ->where('rekap_modal_status', 'close')
+            ->whereIn('m_w_m_w_jenis_id', [1, 2]);
         if (strpos($request->tanggal, 'to') !== false) {
             [$start, $end] = explode('to', $request->tanggal);
             $menu->whereBetween('r_t_tanggal', [$start, $end]);
@@ -314,6 +316,7 @@ class RekapMenuController extends Controller
         // return $request->tanggal;
         $menu = DB::table('rekap_transaksi_detail')
             ->join('rekap_transaksi', 'r_t_id', 'r_t_detail_r_t_id')
+            ->join('m_w', 'm_w_id', 'r_t_m_w_id')
             ->join('m_produk', 'm_produk_id', 'r_t_detail_m_produk_id')
             ->join('m_jenis_produk', 'm_jenis_produk_id', 'm_produk_m_jenis_produk_id')
             ->join('rekap_modal', 'rekap_modal_id', 'r_t_rekap_modal_id')
@@ -363,6 +366,7 @@ class RekapMenuController extends Controller
         if ($request->mark == 'Export By Area') {
             $menu = DB::table('rekap_transaksi_detail')
                 ->join('rekap_transaksi', 'r_t_id', 'r_t_detail_r_t_id')
+                ->join('m_w', 'm_w_id', 'r_t_m_w_id')
                 ->join('m_produk', 'm_produk_id', 'r_t_detail_m_produk_id')
                 ->join('m_jenis_produk', 'm_jenis_produk_id', 'm_produk_m_jenis_produk_id')
                 ->join('rekap_modal', 'rekap_modal_id', 'r_t_rekap_modal_id')
@@ -489,6 +493,7 @@ class RekapMenuController extends Controller
 
             $menu = DB::table('rekap_transaksi_detail')
                 ->join('rekap_transaksi', 'r_t_id', 'r_t_detail_r_t_id')
+                ->join('m_w', 'm_w_id', 'r_t_m_w_id')
                 ->join('m_transaksi_tipe', 'm_t_t_id', 'r_t_m_t_t_id')
                 ->join('m_produk', 'm_produk_id', 'r_t_detail_m_produk_id')
                 ->join('m_jenis_produk', 'm_jenis_produk_id', 'm_produk_m_jenis_produk_id')
