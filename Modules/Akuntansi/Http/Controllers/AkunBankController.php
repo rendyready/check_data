@@ -1,26 +1,18 @@
 <?php
 
-namespace Modules\Master\Http\Controllers;
+namespace Modules\Akuntansi\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Models\MArea;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
-use illuminate\Support\Str;
 
-class MAreaController extends Controller
+class AkunBankController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
-        $data = MArea::select('m_area_id', 'm_area_nama', 'm_area_code')->whereNull('m_area_deleted_at')->orderBy('m_area_id', 'asc')->get();
-        return view('master::area', compact('data'));
+        $data = DB::table('m_akun_bank')->select('m_akun_bank_id', 'm_akun_bank_name', 'm_akun_bank_m_rekening_id')->orderby('m_akun_bank_id', 'asc')->get();
+
+        return view('akuntansi::akun_bank', compact('data'));
     }
 
     public function action(Request $request)
