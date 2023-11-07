@@ -48,7 +48,7 @@
                                             placeholder="Pilih Tanggal.." readonly>
                                     </div>
                                 </div>
-                                <div class="row mb-2 col-6">
+                                <div class="row mb-2 col-6" style="display: none">
                                     <label class="col-sm-4 col-form-label" id="categoryAccount"
                                         for="example-hf-text">CASH</label>
                                     <div class="col-md-8">
@@ -548,7 +548,7 @@
             });
 
             var kas = $('.kas-click').val();
-            if (kas == 'kk') {
+            if (kas == 'out') {
                 $('.kas').html('Debit')
                 $('.saldo_debit').show()
                 $('.saldo_kredit').hide()
@@ -561,7 +561,7 @@
             //auto change debit/kredit
             $('.kas-click').on('change', function() {
                 var kas = $(this).val();
-                if (kas == 'kk') {
+                if (kas == 'out') {
                     $('.kas').html('Debit')
                     $('.saldo_debit').show()
                     $('.saldo_kredit').hide()

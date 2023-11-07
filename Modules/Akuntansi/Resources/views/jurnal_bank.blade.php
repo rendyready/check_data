@@ -547,7 +547,7 @@
             });
 
             var kas = $('.kas-click').val();
-            if (kas == 'kk') {
+            if (kas == 'out') {
                 $('.kas').html('Debit')
                 $('.saldo_debit').show()
                 $('.saldo_kredit').hide()
@@ -560,7 +560,7 @@
             //auto change debit/kredit
             $('.kas-click').on('change', function() {
                 var kas = $(this).val();
-                if (kas == 'kk') {
+                if (kas == 'out') {
                     $('.kas').html('Debit')
                     $('.saldo_debit').show()
                     $('.saldo_kredit').hide()

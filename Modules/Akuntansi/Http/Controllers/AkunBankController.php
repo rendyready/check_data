@@ -2,8 +2,12 @@
 
 namespace Modules\Akuntansi\Http\Controllers;
 
-use Illuminate\Routing\Controller;
+use App\Http\Controllers\Controller;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use illuminate\Support\Str;
 
 class AkunBankController extends Controller
 {
@@ -19,22 +23,27 @@ class AkunBankController extends Controller
     {
         if ($request->ajax()) {
             if ($request->action == 'add') {
-                $aa = Str::lower(preg_replace(array('/\s{2,}/', '/[\t\n]/'), ' ', $request->m_area_nama));
-                // $aa = $request->m_area_nama;
-                $aa = str::lower(trim($aa));
+                $nama_akun = Str::lower(preg_replace(array('/\s{2,}/', '/[\t\n]/'), ' ', $request->m_akun_bank_name));
+                $nama_akun = str::lower(trim($aa));
+                $id_rekening = $request->m_akun_bank_m_rekening_id;
+                $nama_waroeng = $request->m_akun_bank_m_rekening_id;
 
-                $tb = DB::table('m_area')->selectRaw('m_area_nama')->whereRaw('LOWER(m_area_nama) =' . "'$aa'")->first();
+                $tb = DB::table('m_akun_bank')
+                    ->selectRaw('m_akun_bank_name, m_akun_bank_m_rekening_id')
+                    ->whereRaw('LOWER(m_akun_bank_name) =' . "'$nama_akun'")
+                    ->whereRaw('m_akun_bank_m_rekening_id =' . "'$id_rekening'")
+                    ->first();
 
                 // Count
-                $count = '601';
-                $DB = DB::table('m_area')->get()->count('m_area_id');
+                $count = '1';
+                $DB = DB::table('m_akun_bank')->get()->count('m_akun_bank_id');
                 if ($DB == 0) {
                     $DBCount = $count;
                 } else {
-                    $DBCount = '6' . $DB + 1;
+                    $DBCount = $DB + 1;
                 }
 
-                if ($aa == null) {
+                if ($nama_akun == null) {
                     return response(['Messages' => 'Data Tidak Boleh Kosong !', 'type' => 'danger']);
                 } elseif (!empty($tb)) {
                     // return response($this);
@@ -42,8 +51,8 @@ class AkunBankController extends Controller
                 } else {
                     if ($tb == null) {
                         DB::table('m_area')->insert([
-                            // 'm_area_id' => $this->getMasterId('m_area'),
-                            'm_area_id' => '1',
+                            'm_akun_bank_id' => $this->getMasterId('m_akun_bank_id'),
+                            'm_akun_bank_m_w_id' => $request->m_akun_bank_m_w_id,
                             'm_area_nama' => Str::lower(trim($request->m_area_nama)),
                             'm_area_code' => $DBCount,
                             'm_area_created_by' => Auth::user()->users_id,
@@ -55,18 +64,19 @@ class AkunBankController extends Controller
                     }
                 }
             } elseif ($request->action == 'edit') {
-                $ii = Str::lower($request->m_area_nama);
+                $ii = Str::lower($request->m_akun_bank_name);
                 $trim = trim(preg_replace(array('/\s{2,}/', '/[\t\n]/'), ' ', $ii));
-                $validate = DB::table('m_area')->selectRaw('m_area_nama')->whereRaw(' LOWER(m_area_nama) =' . "'$trim'")->get();
+                $ss = $request->m_akun_bank_m_rekening_id;
+                $validate = DB::table('m_akun_bank')->selectRaw('m_akun_bank_name, m_akun_bank_m_rekening_id')->whereRaw(' LOWER(m_akun_bank_name) =' . "'$trim'")->whereRaw('m_akun_bank_m_rekening_id =' . "'$ss'")->get();
                 $data = array(
-                    'm_area_nama' => Str::lower($trim),
-                    'm_area_status_sync' => 'send',
-                    'm_area_client_target' => DB::raw('DEFAULT'),
-                    'm_area_updated_by' => Auth::user()->users_id,
-                    'm_area_updated_at' => Carbon::now(),
+                    'm_akun_bank_name' => Str::lower($trim),
+                    'm_akun_bank_m_rekening_id' => $ss,
+                    'm_akun_bank_client_target' => DB::raw('DEFAULT'),
+                    'm_akun_bank_updated_by' => Auth::user()->users_id,
+                    'm_akun_bank_updated_at' => Carbon::now(),
                 );
                 if (!empty($validate)) {
-                    DB::table('m_area')->where('m_area_id', $request->id)
+                    DB::table('m_akun_bank')->where('m_akun_bank_id', $request->id)
                         ->update($data);
                     return response(['Messages' => 'Data Update !', 'type' => 'success']);
                 } else {

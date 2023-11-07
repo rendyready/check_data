@@ -54,6 +54,7 @@
                 url: '{{ route('action.akun_bank') }}',
                 dataType: "json",
                 deleteButton: false,
+                addButton: false,
                 columns: {
                     identifier: [0, 'id'],
                     editable: [
@@ -70,9 +71,9 @@
                         icon: 'fa fa-info me-5', // Icon class
                         message: data.Messages
                     });
-                    setTimeout(function() {
-                        window.location.reload();
-                    }, 750);
+                    // setTimeout(function() {
+                    //     window.location.reload();
+                    // }, 750);
                 },
             });
 
