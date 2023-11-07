@@ -22,7 +22,8 @@ return new class extends Migration
             $table->unsignedBigInteger('m_rekening_parent_id')->nullable();
             $table->unsignedBigInteger('m_rekening_m_w_id')->nullable();
             $table->string('m_rekening_m_w_code')->nullable();
-            $table->string('m_rekening_kategori');
+            // $table->string('m_rekening_kategori');
+            $table->unsignedBigInteger('m_rekening_m_kategori_rekening_id');
             $table->string('m_rekening_code');
             $table->string('m_rekening_nama');
             $table->decimal('m_rekening_saldo', 15, 2)->default(0);

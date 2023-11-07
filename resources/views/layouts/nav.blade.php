@@ -254,7 +254,7 @@
                                 <span class="nav-main-link-name">CR55</span>
                             </a>
                             <ul class="nav-main-submenu">
-                                @if (env('SERVER_LOCATION') == 'pusat')
+                                @if (env('SERVER_LOCATION','waroeng') == 'pusat')
                                     @can('setting cr.view')
                                         <li class="nav-main-item{{ request()->is('setting_cr/*') ? ' open' : '' }}">
                                             <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu"
@@ -652,7 +652,7 @@
                                 <span class="nav-main-link-name">Inventori</span>
                             </a>
                             <ul class="nav-main-submenu">
-                                @if (env('SERVER_LOCATION') == 'pusat')
+                                @if (env('SERVER_LOCATION','waroeng') == 'pusat')
                                     @can('master inventori.view')
                                         <li class="nav-main-item{{ request()->is('inventori/master') ? ' open' : '' }}">
                                             <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu"
@@ -963,6 +963,7 @@
                             </a>
                             <ul class="nav-main-submenu">
                                 {{-- @if (env('DB_DATABASE') == 'admin_sipedas_v4') --}}
+                                @if (env('SERVER_LOCATION','waroeng') == 'pusat')
                                 @can('master akuntansi.view')
                                     <li class="nav-main-item{{ request()->is('akuntansi/master') ? ' open' : '' }}">
                                         <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu"
@@ -985,7 +986,7 @@
                                         </ul>
                                     </li>
                                 @endcan
-                                {{-- @endif --}}
+                                @endif
                                 <li class="nav-main-item">
                                     <a class="nav-main-link{{ request()->is('akuntansi/jurnal_kas') ? ' active' : '' }}"
                                         href="{{ route('jurnal_kas.index') }}">
@@ -1106,7 +1107,8 @@
                                         </a>
                                     </li>
                                 @endcan
-                                @if (env('DB_DATABASE') == 'admin_sipedas_v4')
+                                {{-- @if (env('DB_DATABASE') == 'admin_sipedas_v4') --}}
+                                @if (env('SERVER_LOCATION','waroeng') == 'pusat')
                                     @can('hak akses.view')
                                         <li class="nav-main-item">
                                             <a class="nav-main-link{{ request()->is('users/akses') ? ' active' : '' }}"

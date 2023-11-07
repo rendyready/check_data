@@ -49,7 +49,7 @@ return new class extends Migration
         }
         Schema::table('rekap_trans_jualbeli_detail', function (Blueprint $table) {
             $table->dropColumn('r_t_jb_detail_cron_jurnal_status');
-            $table->dropColumn('r_t_jb_detail_client_target');
+            // $table->dropColumn('r_t_jb_detail_client_target');
         });
         Schema::table('rekap_so', function (Blueprint $table) {
             $table->dropColumn('rekap_so_cron_jurnal_status');

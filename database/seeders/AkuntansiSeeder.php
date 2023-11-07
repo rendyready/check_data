@@ -16,6 +16,64 @@ class AkuntansiSeeder extends Seeder
      */
     public function run()
     {
+        DB::table('m_kategori_rekening')->truncate();
+        DB::table('m_kategori_rekening')->insert([
+            [
+                'm_kategori_rekening_id' => 1,
+                'm_kategori_rekening_name' => 'aktiva lancar',
+                'm_kategori_rekening_order' => 1,
+                'm_kategori_rekening_created_by' => 1,
+            ],
+            [
+                'm_kategori_rekening_id' => 2,
+                'm_kategori_rekening_name' => 'aktiva tetap',
+                'm_kategori_rekening_order' => 2,
+                'm_kategori_rekening_created_by' => 1,
+            ],
+            [
+                'm_kategori_rekening_id' => 3,
+                'm_kategori_rekening_name' => 'modal',
+                'm_kategori_rekening_order' => 3,
+                'm_kategori_rekening_created_by' => 1,
+            ],
+            [
+                'm_kategori_rekening_id' => 4,
+                'm_kategori_rekening_name' => 'kewajiban jangka pendek',
+                'm_kategori_rekening_order' => 4,
+                'm_kategori_rekening_created_by' => 1,
+            ],
+            [
+                'm_kategori_rekening_id' => 5,
+                'm_kategori_rekening_name' => 'kewajiban jangka panjang',
+                'm_kategori_rekening_order' => 5,
+                'm_kategori_rekening_created_by' => 1,
+            ],
+            [
+                'm_kategori_rekening_id' => 6,
+                'm_kategori_rekening_name' => 'pendapatan operasional',
+                'm_kategori_rekening_order' => 6,
+                'm_kategori_rekening_created_by' => 1,
+            ],
+            [
+                'm_kategori_rekening_id' => 7,
+                'm_kategori_rekening_name' => 'pendapatan non operasional',
+                'm_kategori_rekening_order' => 7,
+                'm_kategori_rekening_created_by' => 1,
+            ],
+            [
+                'm_kategori_rekening_id' => 8,
+                'm_kategori_rekening_name' => 'badan organisasi',
+                'm_kategori_rekening_order' => 8,
+                'm_kategori_rekening_created_by' => 1,
+            ],
+            [
+                'm_kategori_rekening_id' => 9,
+                'm_kategori_rekening_name' => 'badan usaha',
+                'm_kategori_rekening_order' => 9,
+                'm_kategori_rekening_created_by' => 1,
+            ]
+        ]);
+
         DB::table('m_akun_bank')->truncate();
         DB::table('m_akun_bank')->insert([
             [
@@ -24,7 +82,7 @@ class AkuntansiSeeder extends Seeder
                 'm_akun_bank_type' => 'cash',
                 'm_akun_bank_code' => 'CASH',
                 'm_akun_bank_name' => 'CASH',
-                // 'm_akun_bank_m_rekening_id' => 1,
+                'm_akun_bank_m_rekening_id' => 1,
                 'm_akun_bank_created_by' => 1,
                 'm_akun_bank_created_at' => Carbon::now(),
             ],
@@ -34,7 +92,7 @@ class AkuntansiSeeder extends Seeder
                 'm_akun_bank_type' => 'bank',
                 'm_akun_bank_code' => 'MANDIRI',
                 'm_akun_bank_name' => 'MANDIRI',
-                // 'm_akun_bank_m_rekening_id' => 1,
+                'm_akun_bank_m_rekening_id' => 21,
                 'm_akun_bank_created_by' => 1,
                 'm_akun_bank_created_at' => Carbon::now(),
             ],
@@ -44,7 +102,7 @@ class AkuntansiSeeder extends Seeder
                 'm_akun_bank_type' => 'bank',
                 'm_akun_bank_code' => 'BRI',
                 'm_akun_bank_name' => 'BRI',
-                // 'm_akun_bank_m_rekening_id' => 1,
+                'm_akun_bank_m_rekening_id' => NULL,
                 'm_akun_bank_created_by' => 1,
                 'm_akun_bank_created_at' => Carbon::now(),
             ],
@@ -54,7 +112,7 @@ class AkuntansiSeeder extends Seeder
                 'm_akun_bank_type' => 'bank',
                 'm_akun_bank_code' => 'BCA',
                 'm_akun_bank_name' => 'BCA',
-                // 'm_akun_bank_m_rekening_id' => 1,
+                'm_akun_bank_m_rekening_id' => 22,
                 'm_akun_bank_created_by' => 1,
                 'm_akun_bank_created_at' => Carbon::now(),
             ],
@@ -64,7 +122,7 @@ class AkuntansiSeeder extends Seeder
                 'm_akun_bank_type' => 'bank',
                 'm_akun_bank_code' => 'BSI',
                 'm_akun_bank_name' => 'BSI',
-                // 'm_akun_bank_m_rekening_id' => 1,
+                'm_akun_bank_m_rekening_id' => NULL,
                 'm_akun_bank_created_by' => 1,
                 'm_akun_bank_created_at' => Carbon::now(),
             ],
@@ -74,7 +132,7 @@ class AkuntansiSeeder extends Seeder
                 'm_akun_bank_type' => 'bank',
                 'm_akun_bank_code' => 'BNI',
                 'm_akun_bank_name' => 'BNI',
-                // 'm_akun_bank_m_rekening_id' => 1,
+                'm_akun_bank_m_rekening_id' => NULL,
                 'm_akun_bank_created_by' => 1,
                 'm_akun_bank_created_at' => Carbon::now(),
             ],
@@ -84,7 +142,7 @@ class AkuntansiSeeder extends Seeder
                 'm_akun_bank_type' => 'bank',
                 'm_akun_bank_code' => 'MAYBANK',
                 'm_akun_bank_name' => 'MAYBANK',
-                // 'm_akun_bank_m_rekening_id' => 1,
+                'm_akun_bank_m_rekening_id' => NULL,
                 'm_akun_bank_created_by' => 1,
                 'm_akun_bank_created_at' => Carbon::now(),
             ],
@@ -94,7 +152,7 @@ class AkuntansiSeeder extends Seeder
                 'm_akun_bank_type' => 'bank',
                 'm_akun_bank_code' => 'GOPAY',
                 'm_akun_bank_name' => 'GOPAY',
-                // 'm_akun_bank_m_rekening_id' => 1,
+                'm_akun_bank_m_rekening_id' => 25,
                 'm_akun_bank_created_by' => 1,
                 'm_akun_bank_created_at' => Carbon::now(),
             ],
@@ -104,7 +162,7 @@ class AkuntansiSeeder extends Seeder
                 'm_akun_bank_type' => 'bank',
                 'm_akun_bank_code' => 'OVO',
                 'm_akun_bank_name' => 'OVO',
-                // 'm_akun_bank_m_rekening_id' => 1,
+                'm_akun_bank_m_rekening_id' => 23,
                 'm_akun_bank_created_by' => 1,
                 'm_akun_bank_created_at' => Carbon::now(),
             ],
@@ -114,7 +172,7 @@ class AkuntansiSeeder extends Seeder
                 'm_akun_bank_type' => 'bank',
                 'm_akun_bank_code' => 'SHOPEEPAY',
                 'm_akun_bank_name' => 'SHOPEEPAY',
-                // 'm_akun_bank_m_rekening_id' => 1,
+                'm_akun_bank_m_rekening_id' => 24,
                 'm_akun_bank_created_by' => 1,
                 'm_akun_bank_created_at' => Carbon::now(),
             ],
@@ -126,7 +184,8 @@ class AkuntansiSeeder extends Seeder
                     "m_rekening_id" => 1,
                     "m_rekening_m_w_id" => 1,
                     "m_rekening_m_w_code" => "001",
-                    "m_rekening_kategori" => "aktiva lancar",
+                    // "m_rekening_kategori" => "aktiva lancar",
+                    "m_rekening_m_kategori_rekening_id" => 1,
                     "m_rekening_code" => "01.001",
                     "m_rekening_nama" => "kas waroeng",
                     "m_rekening_created_by" => 1
@@ -135,7 +194,8 @@ class AkuntansiSeeder extends Seeder
                     "m_rekening_id" => 2,
                     "m_rekening_m_w_id" => 1,
                     "m_rekening_m_w_code" => "001",
-                    "m_rekening_kategori" => "aktiva lancar",
+                    // "m_rekening_kategori" => "aktiva lancar",
+                    "m_rekening_m_kategori_rekening_id" => 1,
                     "m_rekening_code" => "01.002",
                     "m_rekening_nama" => "bank waroeng",
                     "m_rekening_created_by" => 1
@@ -144,7 +204,8 @@ class AkuntansiSeeder extends Seeder
                     "m_rekening_id" => 3,
                     "m_rekening_m_w_id" => 1,
                     "m_rekening_m_w_code" => "001",
-                    "m_rekening_kategori" => "aktiva lancar",
+                    // "m_rekening_kategori" => "aktiva lancar",
+                    "m_rekening_m_kategori_rekening_id" => 1,
                     "m_rekening_code" => "04.001",
                     "m_rekening_nama" => "pendapatan penjualan - menu",
                     "m_rekening_created_by" => 1
@@ -153,7 +214,8 @@ class AkuntansiSeeder extends Seeder
                     "m_rekening_id" => 4,
                     "m_rekening_m_w_id" => 1,
                     "m_rekening_m_w_code" => "001",
-                    "m_rekening_kategori" => "aktiva lancar",
+                    // "m_rekening_kategori" => "aktiva lancar",
+                    "m_rekening_m_kategori_rekening_id" => 1,
                     "m_rekening_code" => "05.100",
                     "m_rekening_nama" => "biaya persediaan",
                     "m_rekening_created_by" => 1
@@ -162,7 +224,8 @@ class AkuntansiSeeder extends Seeder
                     "m_rekening_id" => 5,
                     "m_rekening_m_w_id" => 1,
                     "m_rekening_m_w_code" => "001",
-                    "m_rekening_kategori" => "aktiva lancar",
+                    // "m_rekening_kategori" => "aktiva lancar",
+                    "m_rekening_m_kategori_rekening_id" => 1,
                     "m_rekening_code" => "01.004",
                     "m_rekening_nama" => "pajak ditahan",
                     "m_rekening_created_by" => 1
@@ -171,7 +234,8 @@ class AkuntansiSeeder extends Seeder
                     "m_rekening_id" => 6,
                     "m_rekening_m_w_id" => 1,
                     "m_rekening_m_w_code" => "001",
-                    "m_rekening_kategori" => "aktiva lancar",
+                    // "m_rekening_kategori" => "aktiva lancar",
+                    "m_rekening_m_kategori_rekening_id" => 1,
                     "m_rekening_code" => "05.005",
                     "m_rekening_nama" => "biaya pembulatan",
                     "m_rekening_created_by" => 1
@@ -180,7 +244,8 @@ class AkuntansiSeeder extends Seeder
                     "m_rekening_id" => 7,
                     "m_rekening_m_w_id" => 1,
                     "m_rekening_m_w_code" => "001",
-                    "m_rekening_kategori" => "aktiva lancar",
+                    // "m_rekening_kategori" => "aktiva lancar",
+                    "m_rekening_m_kategori_rekening_id" => 1,
                     "m_rekening_code" => "01.003",
                     "m_rekening_nama" => "voucer",
                     "m_rekening_created_by" => 1
@@ -189,7 +254,8 @@ class AkuntansiSeeder extends Seeder
                     "m_rekening_id" => 8,
                     "m_rekening_m_w_id" => 1,
                     "m_rekening_m_w_code" => "001",
-                    "m_rekening_kategori" => "aktiva lancar",
+                    // "m_rekening_kategori" => "aktiva lancar",
+                    "m_rekening_m_kategori_rekening_id" => 1,
                     "m_rekening_code" => "05.007",
                     "m_rekening_nama" => "biaya diskon",
                     "m_rekening_created_by" => 1
@@ -198,7 +264,8 @@ class AkuntansiSeeder extends Seeder
                     "m_rekening_id" => 9,
                     "m_rekening_m_w_id" => 1,
                     "m_rekening_m_w_code" => "001",
-                    "m_rekening_kategori" => "aktiva lancar",
+                    // "m_rekening_kategori" => "aktiva lancar",
+                    "m_rekening_m_kategori_rekening_id" => 1,
                     "m_rekening_code" => "05.006",
                     "m_rekening_nama" => "biaya free kembalian",
                     "m_rekening_created_by" => 1
@@ -207,7 +274,8 @@ class AkuntansiSeeder extends Seeder
                     "m_rekening_id" => 10,
                     "m_rekening_m_w_id" => 1,
                     "m_rekening_m_w_code" => "001",
-                    "m_rekening_kategori" => "aktiva lancar",
+                    // "m_rekening_kategori" => "aktiva lancar",
+                    "m_rekening_m_kategori_rekening_id" => 1,
                     "m_rekening_code" => "01.100",
                     "m_rekening_nama" => "persediaan",
                     "m_rekening_created_by" => 1
@@ -216,7 +284,8 @@ class AkuntansiSeeder extends Seeder
                     "m_rekening_id" => 11,
                     "m_rekening_m_w_id" => 1,
                     "m_rekening_m_w_code" => "001",
-                    "m_rekening_kategori" => "aktiva lancar",
+                    // "m_rekening_kategori" => "aktiva lancar",
+                    "m_rekening_m_kategori_rekening_id" => 1,
                     "m_rekening_code" => "05.008",
                     "m_rekening_nama" => "biaya refund",
                     "m_rekening_created_by" => 1
@@ -225,7 +294,8 @@ class AkuntansiSeeder extends Seeder
                     "m_rekening_id" => 12,
                     "m_rekening_m_w_id" => 1,
                     "m_rekening_m_w_code" => "001",
-                    "m_rekening_kategori" => "aktiva lancar",
+                    // "m_rekening_kategori" => "aktiva lancar",
+                    "m_rekening_m_kategori_rekening_id" => 1,
                     "m_rekening_code" => "01.005",
                     "m_rekening_nama" => "tarik tunai",
                     "m_rekening_created_by" => 1
@@ -234,7 +304,8 @@ class AkuntansiSeeder extends Seeder
                     "m_rekening_id" => 13,
                     "m_rekening_m_w_id" => 1,
                     "m_rekening_m_w_code" => "001",
-                    "m_rekening_kategori" => "aktiva lancar",
+                    // "m_rekening_kategori" => "aktiva lancar",
+                    "m_rekening_m_kategori_rekening_id" => 1,
                     "m_rekening_code" => "04.003",
                     "m_rekening_nama" => "pendapatan service charge",
                     "m_rekening_created_by" => 1
@@ -243,7 +314,8 @@ class AkuntansiSeeder extends Seeder
                     "m_rekening_id" => 14,
                     "m_rekening_m_w_id" => 1,
                     "m_rekening_m_w_code" => "001",
-                    "m_rekening_kategori" => "aktiva lancar",
+                    // "m_rekening_kategori" => "aktiva lancar",
+                    "m_rekening_m_kategori_rekening_id" => 1,
                     "m_rekening_code" => "05.009",
                     "m_rekening_nama" => "selisih kasir",
                     "m_rekening_created_by" => 1
@@ -252,7 +324,8 @@ class AkuntansiSeeder extends Seeder
                     "m_rekening_id" => 15,
                     "m_rekening_m_w_id" => 1,
                     "m_rekening_m_w_code" => "001",
-                    "m_rekening_kategori" => "aktiva lancar",
+                    // "m_rekening_kategori" => "aktiva lancar",
+                    "m_rekening_m_kategori_rekening_id" => 1,
                     "m_rekening_code" => "05.010",
                     "m_rekening_nama" => "biaya selisih kasir",
                     "m_rekening_created_by" => 1
@@ -261,7 +334,8 @@ class AkuntansiSeeder extends Seeder
                     "m_rekening_id" => 16,
                     "m_rekening_m_w_id" => 1,
                     "m_rekening_m_w_code" => "001",
-                    "m_rekening_kategori" => "aktiva lancar",
+                    // "m_rekening_kategori" => "aktiva lancar",
+                    "m_rekening_m_kategori_rekening_id" => 1,
                     "m_rekening_code" => "04.002",
                     "m_rekening_nama" => "pendapatan lain-lain",
                     "m_rekening_created_by" => 1
@@ -270,7 +344,8 @@ class AkuntansiSeeder extends Seeder
                     "m_rekening_id" => 17,
                     "m_rekening_m_w_id" => 1,
                     "m_rekening_m_w_code" => "001",
-                    "m_rekening_kategori" => "aktiva lancar",
+                    // "m_rekening_kategori" => "aktiva lancar",
+                    "m_rekening_m_kategori_rekening_id" => 1,
                     "m_rekening_code" => "05.011",
                     "m_rekening_nama" => "biaya lostbill",
                     "m_rekening_created_by" => 1
@@ -279,7 +354,8 @@ class AkuntansiSeeder extends Seeder
                     "m_rekening_id" => 18,
                     "m_rekening_m_w_id" => 1,
                     "m_rekening_m_w_code" => "001",
-                    "m_rekening_kategori" => "aktiva lancar",
+                    // "m_rekening_kategori" => "aktiva lancar",
+                    "m_rekening_m_kategori_rekening_id" => 1,
                     "m_rekening_code" => "04.004",
                     "m_rekening_nama" => "pendapatan penjualan - non menu",
                     "m_rekening_created_by" => 1
@@ -288,7 +364,8 @@ class AkuntansiSeeder extends Seeder
                     "m_rekening_id" => 19,
                     "m_rekening_m_w_id" => 1,
                     "m_rekening_m_w_code" => "001",
-                    "m_rekening_kategori" => "aktiva lancar",
+                    // "m_rekening_kategori" => "aktiva lancar",
+                    "m_rekening_m_kategori_rekening_id" => 1,
                     "m_rekening_code" => "04.005",
                     "m_rekening_nama" => "pendapatan penjualan - wbd",
                     "m_rekening_created_by" => 1
@@ -297,7 +374,8 @@ class AkuntansiSeeder extends Seeder
                     "m_rekening_id" => 20,
                     "m_rekening_m_w_id" => 1,
                     "m_rekening_m_w_code" => "001",
-                    "m_rekening_kategori" => "aktiva lancar",
+                    // "m_rekening_kategori" => "aktiva lancar",
+                    "m_rekening_m_kategori_rekening_id" => 1,
                     "m_rekening_code" => "04.006",
                     "m_rekening_nama" => "pendapatan penjualan - diluar usaha",
                     "m_rekening_created_by" => 1
@@ -306,7 +384,8 @@ class AkuntansiSeeder extends Seeder
                     "m_rekening_id" => 21,
                     "m_rekening_m_w_id" => 1,
                     "m_rekening_m_w_code" => "001",
-                    "m_rekening_kategori" => "aktiva lancar",
+                    // "m_rekening_kategori" => "aktiva lancar",
+                    "m_rekening_m_kategori_rekening_id" => 1,
                     "m_rekening_code" => "01.006",
                     "m_rekening_nama" => "ayat silang mandiri",
                     "m_rekening_created_by" => 1
@@ -315,7 +394,8 @@ class AkuntansiSeeder extends Seeder
                     "m_rekening_id" => 22,
                     "m_rekening_m_w_id" => 1,
                     "m_rekening_m_w_code" => "001",
-                    "m_rekening_kategori" => "aktiva lancar",
+                    // "m_rekening_kategori" => "aktiva lancar",
+                    "m_rekening_m_kategori_rekening_id" => 1,
                     "m_rekening_code" => "01.007",
                     "m_rekening_nama" => "ayat silang bca",
                     "m_rekening_created_by" => 1
@@ -324,7 +404,8 @@ class AkuntansiSeeder extends Seeder
                     "m_rekening_id" => 23,
                     "m_rekening_m_w_id" => 1,
                     "m_rekening_m_w_code" => "001",
-                    "m_rekening_kategori" => "aktiva lancar",
+                    // "m_rekening_kategori" => "aktiva lancar",
+                    "m_rekening_m_kategori_rekening_id" => 1,
                     "m_rekening_code" => "01.008",
                     "m_rekening_nama" => "ayat silang grab",
                     "m_rekening_created_by" => 1
@@ -333,7 +414,8 @@ class AkuntansiSeeder extends Seeder
                     "m_rekening_id" => 24,
                     "m_rekening_m_w_id" => 1,
                     "m_rekening_m_w_code" => "001",
-                    "m_rekening_kategori" => "aktiva lancar",
+                    // "m_rekening_kategori" => "aktiva lancar",
+                    "m_rekening_m_kategori_rekening_id" => 1,
                     "m_rekening_code" => "01.009",
                     "m_rekening_nama" => "ayat silang shopee",
                     "m_rekening_created_by" => 1
@@ -342,7 +424,8 @@ class AkuntansiSeeder extends Seeder
                     "m_rekening_id" => 25,
                     "m_rekening_m_w_id" => 1,
                     "m_rekening_m_w_code" => "001",
-                    "m_rekening_kategori" => "aktiva lancar",
+                    // "m_rekening_kategori" => "aktiva lancar",
+                    "m_rekening_m_kategori_rekening_id" => 1,
                     "m_rekening_code" => "01.010",
                     "m_rekening_nama" => "ayat silang gojek",
                     "m_rekening_created_by" => 1
@@ -351,7 +434,8 @@ class AkuntansiSeeder extends Seeder
                     "m_rekening_id" => 26,
                     "m_rekening_m_w_id" => 1,
                     "m_rekening_m_w_code" => "001",
-                    "m_rekening_kategori" => "aktiva lancar",
+                    // "m_rekening_kategori" => "aktiva lancar",
+                    "m_rekening_m_kategori_rekening_id" => 1,
                     "m_rekening_code" => "01.011",
                     "m_rekening_nama" => "mutasi kas keluar",
                     "m_rekening_created_by" => 1
@@ -360,7 +444,8 @@ class AkuntansiSeeder extends Seeder
                     "m_rekening_id" => 27,
                     "m_rekening_m_w_id" => 1,
                     "m_rekening_m_w_code" => "001",
-                    "m_rekening_kategori" => "aktiva lancar",
+                    // "m_rekening_kategori" => "aktiva lancar",
+                    "m_rekening_m_kategori_rekening_id" => 1,
                     "m_rekening_code" => "01.012",
                     "m_rekening_nama" => "mutasi kas masuk",
                     "m_rekening_created_by" => 1
@@ -369,7 +454,8 @@ class AkuntansiSeeder extends Seeder
                     "m_rekening_id" => 28,
                     "m_rekening_m_w_id" => 1,
                     "m_rekening_m_w_code" => "001",
-                    "m_rekening_kategori" => "aktiva lancar",
+                    // "m_rekening_kategori" => "aktiva lancar",
+                    "m_rekening_m_kategori_rekening_id" => 1,
                     "m_rekening_code" => "05.012",
                     "m_rekening_nama" => "biaya garansi",
                     "m_rekening_created_by" => 1
@@ -378,7 +464,8 @@ class AkuntansiSeeder extends Seeder
                     "m_rekening_id" => 29,
                     "m_rekening_m_w_id" => 1,
                     "m_rekening_m_w_code" => "001",
-                    "m_rekening_kategori" => "aktiva lancar",
+                    // "m_rekening_kategori" => "aktiva lancar",
+                    "m_rekening_m_kategori_rekening_id" => 1,
                     "m_rekening_code" => "05.013",
                     "m_rekening_nama" => "biaya lain - lain",
                     "m_rekening_created_by" => 1
@@ -387,7 +474,8 @@ class AkuntansiSeeder extends Seeder
                     "m_rekening_id" => 30,
                     "m_rekening_m_w_id" => 1,
                     "m_rekening_m_w_code" => "001",
-                    "m_rekening_kategori" => "aktiva lancar",
+                    // "m_rekening_kategori" => "aktiva lancar",
+                    "m_rekening_m_kategori_rekening_id" => 1,
                     "m_rekening_code" => "01.013",
                     "m_rekening_nama" => "sharing profit ditahan",
                     "m_rekening_created_by" => 1
@@ -396,7 +484,8 @@ class AkuntansiSeeder extends Seeder
                     "m_rekening_id" => 31,
                     "m_rekening_m_w_id" => 1,
                     "m_rekening_m_w_code" => "001",
-                    "m_rekening_kategori" => "aktiva lancar",
+                    // "m_rekening_kategori" => "aktiva lancar",
+                    "m_rekening_m_kategori_rekening_id" => 1,
                     "m_rekening_code" => '210200000',
                     "m_rekening_nama" => "hutang deviden",
                     "m_rekening_created_by" => 1
@@ -405,7 +494,8 @@ class AkuntansiSeeder extends Seeder
                     "m_rekening_id" => 32,
                     "m_rekening_m_w_id" => 1,
                     "m_rekening_m_w_code" => "001",
-                    "m_rekening_kategori" => "aktiva lancar",
+                    // "m_rekening_kategori" => "aktiva lancar",
+                    "m_rekening_m_kategori_rekening_id" => 1,
                     "m_rekening_code" => '210700000',
                     "m_rekening_nama" => "hutang bb",
                     "m_rekening_created_by" => 1
@@ -414,7 +504,8 @@ class AkuntansiSeeder extends Seeder
                     "m_rekening_id" => 33,
                     "m_rekening_m_w_id" => 1,
                     "m_rekening_m_w_code" => "001",
-                    "m_rekening_kategori" => "aktiva lancar",
+                    // "m_rekening_kategori" => "aktiva lancar",
+                    "m_rekening_m_kategori_rekening_id" => 1,
                     "m_rekening_code" => '210800000',
                     "m_rekening_nama" => "hutang bb tidak langsung",
                     "m_rekening_created_by" => 1
@@ -423,7 +514,8 @@ class AkuntansiSeeder extends Seeder
                     "m_rekening_id" => 34,
                     "m_rekening_m_w_id" => 1,
                     "m_rekening_m_w_code" => "001",
-                    "m_rekening_kategori" => "aktiva lancar",
+                    // "m_rekening_kategori" => "aktiva lancar",
+                    "m_rekening_m_kategori_rekening_id" => 1,
                     "m_rekening_code" => '210900000',
                     "m_rekening_nama" => "hutang bb operasional",
                     "m_rekening_created_by" => 1
@@ -432,7 +524,8 @@ class AkuntansiSeeder extends Seeder
                     "m_rekening_id" => 35,
                     "m_rekening_m_w_id" => 1,
                     "m_rekening_m_w_code" => "001",
-                    "m_rekening_kategori" => "aktiva lancar",
+                    // "m_rekening_kategori" => "aktiva lancar",
+                    "m_rekening_m_kategori_rekening_id" => 1,
                     "m_rekening_code" => '211000000',
                     "m_rekening_nama" => "hutang lain-lain",
                     "m_rekening_created_by" => 1
@@ -441,7 +534,8 @@ class AkuntansiSeeder extends Seeder
                     "m_rekening_id" => 36,
                     "m_rekening_m_w_id" => 1,
                     "m_rekening_m_w_code" => "001",
-                    "m_rekening_kategori" => "aktiva lancar",
+                    // "m_rekening_kategori" => "aktiva lancar",
+                    "m_rekening_m_kategori_rekening_id" => 1,
                     "m_rekening_code" => '220010000',
                     "m_rekening_nama" => "hutang leasing",
                     "m_rekening_created_by" => 1
@@ -450,7 +544,8 @@ class AkuntansiSeeder extends Seeder
                     "m_rekening_id" => 37,
                     "m_rekening_m_w_id" => 1,
                     "m_rekening_m_w_code" => "001",
-                    "m_rekening_kategori" => "aktiva lancar",
+                    // "m_rekening_kategori" => "aktiva lancar",
+                    "m_rekening_m_kategori_rekening_id" => 1,
                     "m_rekening_code" => '240010000',
                     "m_rekening_nama" => "hutang pajak",
                     "m_rekening_created_by" => 1
@@ -459,7 +554,8 @@ class AkuntansiSeeder extends Seeder
                     "m_rekening_id" => 38,
                     "m_rekening_m_w_id" => 1,
                     "m_rekening_m_w_code" => "001",
-                    "m_rekening_kategori" => "aktiva lancar",
+                    // "m_rekening_kategori" => "aktiva lancar",
+                    "m_rekening_m_kategori_rekening_id" => 1,
                     "m_rekening_code" => '250000000',
                     "m_rekening_nama" => "hutang dana pajak csr",
                     "m_rekening_created_by" => 1
@@ -468,7 +564,8 @@ class AkuntansiSeeder extends Seeder
                     "m_rekening_id" => 39,
                     "m_rekening_m_w_id" => 1,
                     "m_rekening_m_w_code" => "001",
-                    "m_rekening_kategori" => "aktiva lancar",
+                    // "m_rekening_kategori" => "aktiva lancar",
+                    "m_rekening_m_kategori_rekening_id" => 1,
                     "m_rekening_code" => '260000000',
                     "m_rekening_nama" => "hutang dana pajak investasi",
                     "m_rekening_created_by" => 1
@@ -477,7 +574,8 @@ class AkuntansiSeeder extends Seeder
                     "m_rekening_id" => 40,
                     "m_rekening_m_w_id" => 1,
                     "m_rekening_m_w_code" => "001",
-                    "m_rekening_kategori" => "aktiva lancar",
+                    // "m_rekening_kategori" => "aktiva lancar",
+                    "m_rekening_m_kategori_rekening_id" => 1,
                     "m_rekening_code" => '270000000',
                     "m_rekening_nama" => "hutang dana pajak direktur",
                     "m_rekening_created_by" => 1
@@ -486,7 +584,8 @@ class AkuntansiSeeder extends Seeder
                     "m_rekening_id" => 41,
                     "m_rekening_m_w_id" => 1,
                     "m_rekening_m_w_code" => "001",
-                    "m_rekening_kategori" => "aktiva lancar",
+                    // "m_rekening_kategori" => "aktiva lancar",
+                    "m_rekening_m_kategori_rekening_id" => 1,
                     "m_rekening_code" => '281000000',
                     "m_rekening_nama" => "hutang danpen",
                     "m_rekening_created_by" => 1
@@ -495,7 +594,8 @@ class AkuntansiSeeder extends Seeder
                     "m_rekening_id" => 42,
                     "m_rekening_m_w_id" => 1,
                     "m_rekening_m_w_code" => "001",
-                    "m_rekening_kategori" => "aktiva lancar",
+                    // "m_rekening_kategori" => "aktiva lancar",
+                    "m_rekening_m_kategori_rekening_id" => 1,
                     "m_rekening_code" => '282000000',
                     "m_rekening_nama" => "hutang profit sharing",
                     "m_rekening_created_by" => 1
@@ -504,7 +604,8 @@ class AkuntansiSeeder extends Seeder
                     "m_rekening_id" => 43,
                     "m_rekening_m_w_id" => 1,
                     "m_rekening_m_w_code" => "001",
-                    "m_rekening_kategori" => "aktiva lancar",
+                    // "m_rekening_kategori" => "aktiva lancar",
+                    "m_rekening_m_kategori_rekening_id" => 1,
                     "m_rekening_code" => '283000000',
                     "m_rekening_nama" => "hutang gaji",
                     "m_rekening_created_by" => 1
@@ -513,7 +614,8 @@ class AkuntansiSeeder extends Seeder
                     "m_rekening_id" => 44,
                     "m_rekening_m_w_id" => 1,
                     "m_rekening_m_w_code" => "001",
-                    "m_rekening_kategori" => "aktiva lancar",
+                    // "m_rekening_kategori" => "aktiva lancar",
+                    "m_rekening_m_kategori_rekening_id" => 1,
                     "m_rekening_code" => '284000000',
                     "m_rekening_nama" => "hutang dansos",
                     "m_rekening_created_by" => 1
@@ -522,7 +624,8 @@ class AkuntansiSeeder extends Seeder
                     "m_rekening_id" => 45,
                     "m_rekening_m_w_id" => 1,
                     "m_rekening_m_w_code" => "001",
-                    "m_rekening_kategori" => "aktiva lancar",
+                    // "m_rekening_kategori" => "aktiva lancar",
+                    "m_rekening_m_kategori_rekening_id" => 1,
                     "m_rekening_code" => '285000000',
                     "m_rekening_nama" => "hutang koperasi",
                     "m_rekening_created_by" => 1
@@ -531,7 +634,8 @@ class AkuntansiSeeder extends Seeder
                     "m_rekening_id" => 46,
                     "m_rekening_m_w_id" => 1,
                     "m_rekening_m_w_code" => "001",
-                    "m_rekening_kategori" => "aktiva lancar",
+                    // "m_rekening_kategori" => "aktiva lancar",
+                    "m_rekening_m_kategori_rekening_id" => 1,
                     "m_rekening_code" => '286000000',
                     "m_rekening_nama" => "hutang koperasi eskternal",
                     "m_rekening_created_by" => 1
@@ -540,7 +644,8 @@ class AkuntansiSeeder extends Seeder
                     "m_rekening_id" => 47,
                     "m_rekening_m_w_id" => 1,
                     "m_rekening_m_w_code" => "001",
-                    "m_rekening_kategori" => "aktiva lancar",
+                    // "m_rekening_kategori" => "aktiva lancar",
+                    "m_rekening_m_kategori_rekening_id" => 1,
                     "m_rekening_code" => '287000000',
                     "m_rekening_nama" => "hutang dana pajak aparatur",
                     "m_rekening_created_by" => 1
@@ -549,7 +654,8 @@ class AkuntansiSeeder extends Seeder
                     "m_rekening_id" => 48,
                     "m_rekening_m_w_id" => 1,
                     "m_rekening_m_w_code" => "001",
-                    "m_rekening_kategori" => "aktiva lancar",
+                    // "m_rekening_kategori" => "aktiva lancar",
+                    "m_rekening_m_kategori_rekening_id" => 1,
                     "m_rekening_code" => '280000000',
                     "m_rekening_nama" => "hutang usaha",
                     "m_rekening_created_by" => 1
@@ -558,7 +664,8 @@ class AkuntansiSeeder extends Seeder
                     "m_rekening_id" => 49,
                     "m_rekening_m_w_id" => 1,
                     "m_rekening_m_w_code" => "001",
-                    "m_rekening_kategori" => "aktiva lancar",
+                    // "m_rekening_kategori" => "aktiva lancar",
+                    "m_rekening_m_kategori_rekening_id" => 1,
                     "m_rekening_code" => "05.014",
                     "m_rekening_nama" => "piutang dagang",
                     "m_rekening_created_by" => 1
@@ -567,7 +674,8 @@ class AkuntansiSeeder extends Seeder
                     "m_rekening_id" => 50,
                     "m_rekening_m_w_id" => 1,
                     "m_rekening_m_w_code" => "001",
-                    "m_rekening_kategori" => "aktiva lancar",
+                    // "m_rekening_kategori" => "aktiva lancar",
+                    "m_rekening_m_kategori_rekening_id" => 1,
                     "m_rekening_code" => "01.014",
                     "m_rekening_nama" => "hutang dagang",
                     "m_rekening_created_by" => 1
@@ -576,7 +684,8 @@ class AkuntansiSeeder extends Seeder
                     "m_rekening_id" => 51,
                     "m_rekening_m_w_id" => 1,
                     "m_rekening_m_w_code" => "001",
-                    "m_rekening_kategori" => "aktiva lancar",
+                    // "m_rekening_kategori" => "aktiva lancar",
+                    "m_rekening_m_kategori_rekening_id" => 1,
                     "m_rekening_code" => "10.16",
                     "m_rekening_nama" => "biaya stock opname",
                     "m_rekening_created_by" => 1
