@@ -37,7 +37,8 @@
                                             required>
                                             <option value=""></option>
                                             @foreach ($gudang as $item)
-                                                <option value="{{ $item->m_gudang_code }}">{{ ucwords($item->m_gudang_nama) }}
+                                                <option value="{{ $item->m_gudang_code }}">
+                                                    {{ ucwords($item->m_gudang_nama) }}
                                                     - {{ $item->m_w_nama }}</option>
                                             @endforeach
                                         </select>
@@ -61,12 +62,10 @@
                                                     style="width: 100%;"data-placeholder="Pilih Nama Barang" required>
                                                     <option value="0"></option>
                                                 </select></td>
-                                            <td><input type="text"
-                                                    class="form-control form-control-sm number reset" name="m_stok_awal[]"
-                                                    id="m_stok_awal" required></td>
-                                            <td><input type="text"
-                                                    class="form-control number reset form-control-sm"  name="m_stok_hpp[]"
-                                                    id="m_stok_hpp" required></td>
+                                            <td><input type="text" class="form-control form-control-sm number reset"
+                                                    name="m_stok_awal[]" id="m_stok_awal" required></td>
+                                            <td><input type="text" class="form-control number reset form-control-sm"
+                                                    name="m_stok_hpp[]" id="m_stok_hpp" required></td>
                                             <td><input type="text" class="form-control form-control-sm satuan reset"
                                                     id="m_satuan" readonly></td>
                                         </tr>
@@ -107,106 +106,128 @@
 @endsection
 @section('js')
     <script type="module">
- $(document).ready(function(){
-  $.ajaxSetup({
-    headers:{
-      'X-CSRF-Token' : $("input[name=_token]").val()
-        }
-      });
-    Codebase.helpersOnLoad(['jq-notify','jq-select2']);
-    var table;
-    $('#m_stok_gudang_code').on('change',function () {
-            var g_id = $('#m_stok_gudang_code').val();
-            $(function() {
-            table = $('#tb_stok').DataTable({
-              buttons:[],
-              destroy:true,
-              lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
-              pageLength: 10,
-              ajax: {
-              url: "/inventori/stok_awal/list/"+g_id,
-              type: "GET",
+        $(document).ready(function() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-Token': $("input[name=_token]").val()
                 }
             });
-        });
-    });
-    var datas;
-    $('.gudang_code').on('change',function () {
-        var asal = $(this).val()
-        $.get("/inventori/stok/"+asal, function(data){
-            datas = data;
-            $.each(data, function(key, value) {
-              $('#m_stok_m_produk_code1')
-              .append($('<option>', { value : key })
-              .text(value));
+            Codebase.helpersOnLoad(['jq-notify', 'jq-select2']);
+            var table;
+            $('#m_stok_gudang_code').on('change', function() {
+                var g_id = $('#m_stok_gudang_code').val();
+                $(function() {
+                    table = $('#tb_stok').DataTable({
+                        buttons: [],
+                        destroy: true,
+                        lengthMenu: [
+                            [10, 25, 50, 100, -1],
+                            [10, 25, 50, 100, "All"]
+                        ],
+                        pageLength: 10,
+                        ajax: {
+                            url: "/inventori/stok_awal/list/" + g_id,
+                            type: "GET",
+                        }
+                    });
+                });
             });
-        });  
-    });
-    var satuan = new Array();
-    $.get('/inventori/beli/list', function(response){
-      satuan = response['satuan'];
-      var no=1;
-      $('.tambah').on('click',function(){
-        no++;
-      $('#form_input').append('<tr id="row'+no+'" class="remove_all">'+
-                          '<td><select class="js-select2 nama_barang" name="m_stok_m_produk_code[]" id="m_stok_m_produk_code'+no+'" style="width: 100%;"data-placeholder="Pilih Nama Barang" required><option value="0" selected disabled hidden></option></select></td>'+
-                          '<td><input type="text" class="form-control number form-control-sm" name="m_stok_awal[]" id="m_stok_awal" required></td>'+
-                          '<td><input type="text" class="form-control number form-control-sm" name="m_stok_hpp[]" id="m_stok_hpp" required></td>'+
-                          '<td><input type="text" class="form-control form-control-sm satuan" id="m_satuan'+no+'" readonly></td>'+
-                          '<td><button type="button" id="'+no+'" class="btn btn-danger btn_remove"><i class="fa fa-trash"></i></button></td></tr>');
-            Codebase.helpersOnLoad(['jq-select2']);
-            $.each(datas, function(key, value) {
-              $('#m_stok_m_produk_code'+no)
-              .append($('<option>', { value : key })
-              .text(value));
+            var datas;
+            $('.gudang_code').on('change', function() {
+                var asal = $(this).val()
+                $.get("/inventori/stok/" + asal, function(data) {
+                    datas = data;
+                    $('#m_stok_m_produk_code1').empty();
+                    $('#m_stok_m_produk_code1').append('<option> Pilih Nama Barang </option>');
+                    $.each(data, function(key, value) {
+                        $('#m_stok_m_produk_code1')
+                            .append($('<option>', {
+                                    value: key
+                                })
+                                .text(value));
+                    });
+                });
             });
-            
-      });
-      $(document).on('click', '.btn_remove', function(){
-        var button_id = $(this).attr("id"); 
-        $('#row'+button_id+'').remove();
-      });
-    });
-            $('#formAction').submit( function(e){
-                if(!e.isDefaultPrevented()){
-                  var g_id = $('#m_stok_gudang_code').val();
-                  var formData = $('form').serializeArray();
-                  formData.push({name:"m_stok_gudang_code",value:g_id});
+            var satuan = new Array();
+            $.get('/inventori/beli/list', function(response) {
+                satuan = response['satuan'];
+                var no = 1;
+                $('.tambah').on('click', function() {
+                    no++;
+                    $('#form_input').append('<tr id="row' + no + '" class="remove_all">' +
+                        '<td><select class="js-select2 nama_barang" name="m_stok_m_produk_code[]" id="m_stok_m_produk_code' +
+                        no +
+                        '" style="width: 100%;"data-placeholder="Pilih Nama Barang" required><option value="0" selected disabled hidden></option></select></td>' +
+                        '<td><input type="text" class="form-control number form-control-sm" name="m_stok_awal[]" id="m_stok_awal" required></td>' +
+                        '<td><input type="text" class="form-control number form-control-sm" name="m_stok_hpp[]" id="m_stok_hpp" required></td>' +
+                        '<td><input type="text" class="form-control form-control-sm satuan" id="m_satuan' +
+                        no + '" readonly></td>' +
+                        '<td><button type="button" id="' + no +
+                        '" class="btn btn-danger btn_remove"><i class="fa fa-trash"></i></button></td></tr>'
+                    );
+                    Codebase.helpersOnLoad(['jq-select2']);
+                    $.each(datas, function(key, value) {
+                        $('#m_stok_m_produk_code' + no)
+                            .append($('<option>', {
+                                    value: key
+                                })
+                                .text(value));
+                    });
+
+                });
+                $(document).on('click', '.btn_remove', function() {
+                    var button_id = $(this).attr("id");
+                    $('#row' + button_id + '').remove();
+                });
+            });
+            $('#formAction').submit(function(e) {
+                if (!e.isDefaultPrevented()) {
+                    var g_id = $('#m_stok_gudang_code').val();
+                    var formData = $('form').serializeArray();
+                    formData.push({
+                        name: "m_stok_gudang_code",
+                        value: g_id
+                    });
                     $.ajax({
-                        url : "{{ route('stok_awal.simpan') }}",
-                        type : "POST",
-                        data : formData,
-                        success : function(data){
+                        url: "{{ route('stok_awal.simpan') }}",
+                        type: "POST",
+                        data: formData,
+                        success: function(data) {
                             Codebase.helpers('jq-notify', {
-                            align: 'right', // 'right', 'left', 'center'
-                            from: 'top', // 'top', 'bottom'
-                            type: data.type, // 'info', 'success', 'warning', 'danger'
-                            icon: 'fa fa-info me-5', // Icon class
-                            message: data.message
+                                align: 'right', // 'right', 'left', 'center'
+                                from: 'top', // 'top', 'bottom'
+                                type: data
+                                    .type, // 'info', 'success', 'warning', 'danger'
+                                icon: 'fa fa-info me-5', // Icon class
+                                message: data.message
                             });
                             $('.remove_all').remove();
                             $('.reset').val('');
                             var g_id = $('#m_stok_gudang_code').val();
                             $(function() {
-                            $('#tb_stok').DataTable({
-                                buttons:[],
-                                destroy:true,
-                                lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
-                                pageLength: 10,
-                                ajax: {
-                                url: "/inventori/stok_awal/list/"+g_id,
-                                type: "GET",
+                                $('#tb_stok').DataTable({
+                                    buttons: [],
+                                    destroy: true,
+                                    lengthMenu: [
+                                        [10, 25, 50, 100, -1],
+                                        [10, 25, 50, 100, "All"]
+                                    ],
+                                    pageLength: 10,
+                                    ajax: {
+                                        url: "/inventori/stok_awal/list/" +
+                                            g_id,
+                                        type: "GET",
                                     }
                                 });
                             });
                         },
-                        error : function(err){
+                        error: function(err) {
                             alert(err.responseJSON.message);
                         }
                     });
                     return false;
                 }
             });
-});
-</script>
+        });
+    </script>
 @endsection
