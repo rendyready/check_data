@@ -336,6 +336,7 @@ class GudangController extends Controller
                     'rekap_tf_gudang_tgl_terima' => Carbon::now()]);
             $get_stok = $this->get_last_stok($request->rekap_tf_gudang_tujuan_code, $request->rekap_tf_gudang_m_produk_code[$key]);
             if (!empty($request->rekap_tf_gudang_qty_terima[$key])) {
+                $hpp_now = (($data_tf->rekap_tf_gudang_sub_total) + ($get_stok->m_stok_hpp * $get_stok->m_stok_saldo)) / ($request->rekap_tf_gudang_qty_terima[$key] + $get_stok->m_stok_saldo);
                 $stok_detail = array(
                     'm_stok_detail_id' => $this->getNextId('m_stok_detail', $waroeng_id),
                     'm_stok_detail_m_produk_code' => $request->rekap_tf_gudang_m_produk_code[$key],
@@ -345,7 +346,7 @@ class GudangController extends Controller
                     'm_stok_detail_satuan' => $get_stok->m_stok_satuan,
                     'm_stok_detail_masuk' => $request->rekap_tf_gudang_qty_terima[$key],
                     'm_stok_detail_saldo' => $get_stok->m_stok_saldo + $request->rekap_tf_gudang_qty_terima[$key],
-                    'm_stok_detail_hpp' => $data_tf->rekap_tf_gudang_hpp,
+                    'm_stok_detail_hpp' => $hpp_now,
                     'm_stok_detail_catatan' => 'terima tf ' . $data_tf->rekap_tf_gudang_code,
                     'm_stok_detail_gudang_code' => $request->rekap_tf_gudang_tujuan_code,
                     'm_stok_detail_created_by' => Auth::user()->users_id,
@@ -353,7 +354,7 @@ class GudangController extends Controller
                 );
                 DB::table('m_stok_detail')->insert($stok_detail);
 
-                $data2 = array('m_stok_hpp' => $data_tf->rekap_tf_gudang_hpp,
+                $data2 = array('m_stok_hpp' => $hpp_now,
                     'm_stok_masuk' => $get_stok->m_stok_masuk + $request->rekap_tf_gudang_qty_terima[$key],
                     'm_stok_saldo' => $get_stok->m_stok_saldo + $request->rekap_tf_gudang_qty_terima[$key],
                 );

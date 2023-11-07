@@ -100,6 +100,7 @@
                                         <th>Nama Barang</th>
                                         <th>Qty Stok</th>
                                         <th>SO Rill</th>
+                                        <th>HPP</th>
                                         <th>Satuan</th>
                                     </thead>
                                     <tbody>
@@ -113,6 +114,7 @@
                                                     <td>{{ ucwords($item->rekap_so_detail_m_produk_nama) }}</td>
                                                     <td>{{ num_format($item->rekap_so_detail_qty) }} </td>
                                                     <td>{{ num_format($item->rekap_so_detail_qty_riil) }}</td>
+                                                    <td>{{num_format($item->rekap_so_detail_hpp)}}</td>
                                                     <td>{{ ucwords($item->rekap_so_detail_satuan) }}</td>
                                                 </tr>
                                             @endforeach
