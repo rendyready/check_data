@@ -31,17 +31,9 @@
                                         <div class="col-md-8">
                                             <select id="filter_rekening" class="cari js-select2 form-control "
                                                 style="width: 100%;" name="m_rekening_kategori">
-                                                <option value="aktiva lancar">Aktiva Lancar</option>
-                                                <option value="aktiva tetap">Aktiva Tetap</option>
-                                                <option value="modal">Modal</option>
-                                                <option value="kewajiban jangka pendek">Kewajiban Jangka Pendek</option>
-                                                <option value="kewajiban jangka panjang">Kewajiban Jangka Panjang
-                                                </option>
-                                                <option value="pendapatan operasional">Pendapatan Operasional</option>
-                                                <option value="pendapatan non operasional">Pendapatan Non Operasional
-                                                </option>
-                                                <option value="badan organisasi">Badan Organisasi</option>
-                                                <option value="badan usaha">Badan Usaha</option>
+                                                @foreach ($data->kategori_rekening as $kategori)
+                                                    <option value="{{ $kategori->m_kategori_rekening_id }}"> {{ $kategori->m_kategori_rekening_name }} </option>
+                                                @endforeach
                                             </select>
                                         </div>
                                     </div>

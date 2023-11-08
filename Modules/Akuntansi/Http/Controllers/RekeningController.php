@@ -22,23 +22,26 @@ class RekeningController extends Controller
             ->orderby('m_w_id', 'ASC')
             ->get();
         $data->rekening = DB::table('m_rekening')
-            ->select('m_rekening_kategori', 'm_rekening_code', 'm_rekening_nama', 'm_rekening_saldo')
+            ->join('m_kategori_rekening','m_kategori_rekening_id','m_rekening_m_kategori_rekening_id')
+            ->select('m_kategori_rekening_name', 'm_rekening_code', 'm_rekening_nama', 'm_rekening_saldo')
             ->orderBy('m_rekening_id', 'DESC')
             ->get();
+        $data->kategori_rekening = DB::table('m_kategori_rekening')->orderBy('m_kategori_rekening','asc')->get();
         return view('akuntansi::rekening', compact('data'));
     }
 
     public function tampil(Request $request)
     {
         $get = DB::table('m_rekening')
-            ->where('m_rekening_kategori', $request->m_rekening_kategori)
+            ->join('m_kategori_rekening','m_kategori_rekening_id','m_rekening_m_kategori_rekening_id')
+            ->where('m_kategori_rekening_id', $request->m_rekening_kategori)
             ->where('m_rekening_m_w_id', $request->m_rekening_m_waroeng_id)
             ->orderBy('m_rekening_code', 'ASC')
             ->get();
         $data = array();
         foreach ($get as $value) {
             $row = array();
-            $row[] = $value->m_rekening_kategori;
+            $row[] = $value->m_kategori_rekening_name;
             $row[] = $value->m_rekening_code;
             $row[] = $value->m_rekening_nama;
             $row[] = rupiah($value->m_rekening_saldo, 0);
@@ -89,7 +92,7 @@ class RekeningController extends Controller
                     'm_rekening_id' => $this->getMasterId('m_rekening'),
                     'm_rekening_m_w_id' => $request->m_rekening_m_waroeng_id,
                     'm_rekening_m_w_code' => $m_w_code_val,
-                    'm_rekening_kategori' => $request->m_rekening_kategori,
+                    'm_rekening_m_kategori_rekening_id' => $request->m_rekening_kategori,
                     'm_rekening_code' => $request->m_rekening_code[$key],
                     'm_rekening_nama' => strtolower($request->m_rekening_nama[$key]),
                     'm_rekening_saldo' => $saldo,
@@ -115,7 +118,7 @@ class RekeningController extends Controller
         foreach ($get_data as $key) {
             $get_data2 = DB::table('m_rekening')
                 ->where('m_rekening_m_waroeng_id', $request->waroeng_tujuan)
-                ->where('m_rekening_kategori', $key->m_rekening_kategori)
+                ->where('m_rekening_m_kategori_rekening_id', $key->m_rekening_kategori)
                 ->where('m_rekening_code', $key->m_rekening_code)
                 ->where('m_rekening_nama', $key->m_rekening_nama)
                 ->first();
@@ -124,7 +127,7 @@ class RekeningController extends Controller
                 $data = array(
                     'm_rekening_id' => $this->getMasterId('m_rekening'),
                     'm_rekening_m_waroeng_id' => $request->waroeng_tujuan,
-                    'm_rekening_kategori' => $key->m_rekening_kategori,
+                    'm_rekening_m_kategori_rekening_id' => $key->m_rekening_kategori,
                     'm_rekening_code' => $key->m_rekening_code,
                     'm_rekening_nama' => $key->m_rekening_nama,
                     'm_rekening_saldo' => $saldo,
