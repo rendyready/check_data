@@ -319,7 +319,10 @@
                         }
                     },
                     {
-                        data: 'r_j_b_m_rekening_nama'
+                        data: null,
+                        render: function(data, type, row) {
+                            return data.r_j_b_m_rekening_nama + ' ' + data.r_j_b_m_w_nama;
+                        }
                     },
                     {
                         data: 'r_j_b_particul'
@@ -396,7 +399,12 @@
                                             }
                                         },
                                         {
-                                            data: 'r_j_b_m_rekening_nama'
+                                            data: null,
+                                            render: function(data, type, row) {
+                                                return data
+                                                    .r_j_b_m_rekening_nama +
+                                                    ' ' + data.r_j_b_m_w_nama;
+                                            }
                                         },
                                         {
                                             data: 'r_j_b_particul'
@@ -480,7 +488,11 @@
                             }
                         },
                         {
-                            data: 'r_j_b_m_rekening_nama'
+                            data: null,
+                            render: function(data, type, row) {
+                                return data.r_j_b_m_rekening_nama + ' ' + data
+                                    .r_j_b_m_w_nama;
+                            }
                         },
                         {
                             data: 'r_j_b_particul'

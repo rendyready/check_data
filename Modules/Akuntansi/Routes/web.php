@@ -80,9 +80,6 @@ Route::prefix('akuntansi')->middleware('auth', 'web')
         Route::controller(AkunBankController::class)->group(function () {
             Route::get('akun_bank', 'index')->name('akun_bank.index');
             Route::post('akun_bank/action', 'action')->name('action.akun_bank');
-            // Route::get('link/rekening', 'rekeninglink')->name('link.rekening');
-            // Route::get('link/list', 'list')->name('link.list');
-            // Route::post('link/update', 'update')->name('link.update');
         });
 
         // Route::controller(BukuBesarController::class)->group(function () {

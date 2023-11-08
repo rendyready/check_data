@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
-
 class JurnalUmumController extends Controller
 {
     public function index()
@@ -27,7 +26,8 @@ class JurnalUmumController extends Controller
             ->get();
         $data->waroeng = DB::table('m_w')
             ->join('m_area', 'm_area_id', 'm_w_m_area_id')
-            ->select('m_w_id', 'm_w_nama', 'm_area_id', 'm_area_nama')->get();
+            ->select('m_w_id', 'm_w_nama', 'm_area_id', 'm_area_nama')
+            ->orderby('m_w_id', 'asc')->get();
         $data->rekening = DB::table('m_rekening')
             ->select('m_rekening_kategori', 'm_rekening_code', 'm_rekening_item')
             ->orderBy('m_rekening_code', 'asc')
@@ -40,6 +40,7 @@ class JurnalUmumController extends Controller
     {
         $list2 = DB::table('m_rekening')
             ->select('m_rekening_code', 'm_rekening_id', 'm_rekening_nama')
+            ->where('m_rekening_m_w_id', $request->filwaroeng)
             ->orderBy('m_rekening_code', 'asc')
             ->get();
         $data = array();
@@ -74,7 +75,7 @@ class JurnalUmumController extends Controller
     {
         $tanggal = $request->r_j_u_tanggal;
         $data = DB::table('rekap_jurnal_umum')
-            ->select('r_j_u_id', 'r_j_u_m_rekening_code', 'r_j_u_m_rekening_nama', 'r_j_u_particul', 'r_j_u_debit', 'r_j_u_kredit', 'r_j_u_users_name', 'r_j_u_transaction_code')
+            ->select('r_j_u_id', 'r_j_u_m_rekening_code', 'r_j_u_m_rekening_nama', 'r_j_u_particul', 'r_j_u_debit', 'r_j_u_kredit', 'r_j_u_users_name', 'r_j_u_transaction_code', 'r_j_u_m_w_code', 'r_j_u_m_w_nama')
             ->where('r_j_u_m_w_id', $request->r_j_u_m_w_id)
             ->where('r_j_u_tanggal', $tanggal)
             ->orderBy('r_j_u_id', 'DESC')
@@ -103,28 +104,6 @@ class JurnalUmumController extends Controller
         $buildcode = $code2 . '-' . $code3;
         return $buildcode;
     }
-
-    // public function generatecode($prefix1, $prefix2)
-    // {
-    //     $tanggal = date('Y-m-d', strtotime($prefix2));
-    //     $code2 = date('Y/m/d');
-    //     $cek_data = DB::table('rekap_jurnal_umum')
-    //         ->join('m_w', 'm_w_id', 'r_j_u_m_w_id')
-    //         ->select('r_j_u_transaction_code')
-    //         ->where('r_j_u_m_w_id', $prefix2)
-    //         ->whereDate('r_j_u_tanggal', $tanggal)
-    //         ->orderby('r_j_u_id', 'DESC');
-    //     $urut_pertama = '100001';
-    //     if ($cek_data->count() == 0) {
-    //         $code3 = $urut_pertama;
-    //     } else {
-    //         $toconv = $cek_data->first();
-    //         $urut_ada = floatval(substr($toconv->r_j_u_transaction_code, 14)) + 1;
-    //         $code3 = $urut_ada;
-    //     }
-    //     $buildcode = $prefix1 . '-' . $code2 . '-' . $code3;
-    //     return $buildcode;
-    // }
 
     public function simpan(Request $request)
     {
@@ -156,7 +135,7 @@ class JurnalUmumController extends Controller
                     'r_j_u_m_area_nama' => $m_area_nama,
                     'r_j_u_tanggal' => $request->r_j_u_tanggal,
                     'r_j_u_m_rekening_id' => $rekening->m_rekening_id,
-                    'r_j_u_m_rekening_code' => $m_w_code . '.' . $rekening->m_rekening_code,
+                    'r_j_u_m_rekening_code' => $rekening->m_rekening_code,
                     'r_j_u_m_rekening_nama' => $rekening->m_rekening_nama,
                     // 'r_j_u_m_rekening_item' => $request->r_j_u_m_rekening_item[$key],
                     'r_j_u_debit' => str_replace(',', '.', $saldo_debit),

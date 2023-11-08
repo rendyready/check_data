@@ -45,7 +45,7 @@ class RekeningController extends Controller
             $row[] =
             '<div class="text-center"><a id="buttonEdit" class="btn btn-sm buttonEdit btn-success" value="' . $value->m_rekening_code . '" title="Edit"><i class="fa fa-pencil"></i></a>
             <a id="buttonHapus" class="btn btn-sm buttonHapus btn-warning" value="' . $value->m_rekening_code . '" title="Hapus"><i class="fa fa-trash"></i></a>
-            <a id="buttonItem" class="btn btn-sm buttonItem btn-info" value="' . $value->m_rekening_code . '" title="Items"><i class="fa-solid fa-folder"></i></a></div>';
+            <a id="buttonItem" class="btn btn-sm buttonItem btn-info" value="' . $value->m_rekening_id . '" title="Items"><i class="fa-solid fa-folder"></i></a></div>';
             $data[] = $row;
         }
         // <a id="buttonSaldo" class="btn btn-sm buttonSaldo btn-primary" value="' . $value->m_rekening_code . '" title="Edit Saldo"><i class="fa-solid fa-rupiah-sign"></i></a>
@@ -110,24 +110,27 @@ class RekeningController extends Controller
     public function copyrecord(Request $request)
     {
         $get_data = DB::table('m_rekening')
-            ->where('m_rekening_m_waroeng_id', $request->waroeng_asal)
+            ->where('m_rekening_m_w_id', $request->waroeng_asal)
             ->get();
         foreach ($get_data as $key) {
             $get_data2 = DB::table('m_rekening')
-                ->where('m_rekening_m_waroeng_id', $request->waroeng_tujuan)
+                ->where('m_rekening_m_w_id', $request->waroeng_tujuan)
                 ->where('m_rekening_kategori', $key->m_rekening_kategori)
                 ->where('m_rekening_code', $key->m_rekening_code)
                 ->where('m_rekening_nama', $key->m_rekening_nama)
                 ->first();
             if (empty($get_data2)) {
+                $m_w_code_val = sprintf("%03d", $request->waroeng_tujuan);
                 $saldo = ($request->m_rekening_copy_saldo == 'tidak') ? 0 : $key->m_rekening_saldo;
                 $data = array(
                     'm_rekening_id' => $this->getMasterId('m_rekening'),
-                    'm_rekening_m_waroeng_id' => $request->waroeng_tujuan,
+                    'm_rekening_m_w_id' => $request->waroeng_tujuan,
+                    'm_rekening_m_w_code' => $m_w_code_val,
                     'm_rekening_kategori' => $key->m_rekening_kategori,
                     'm_rekening_code' => $key->m_rekening_code,
                     'm_rekening_nama' => $key->m_rekening_nama,
                     'm_rekening_saldo' => $saldo,
+                    'm_rekening_item' => $key->m_rekening_item,
                     'm_rekening_created_by' => Auth::user()->users_id,
                     'm_rekening_created_at' => Carbon::now(),
                 );
@@ -168,7 +171,7 @@ class RekeningController extends Controller
 
         $validasi5 = DB::table('m_rekening')
             ->select('m_rekening_code')
-            ->where('m_rekening_nama', $request->m_rekening_nama1)
+            ->where('m_rekening_nama', $request->nama_akun)
             ->count();
         if (($validasi4 != 0 && $validasi5 == 0) || ($validasi4 == 0 && $validasi5 != 0)) {
             $validasi4 = 0;
@@ -180,10 +183,11 @@ class RekeningController extends Controller
             // $str1 = str_replace('.', '', $request->m_rekening_saldo);
             $data = array(
                 'm_rekening_code' => $request->m_rekening_code,
-                'm_rekening_nama' => $request->m_rekening_nama1,
+                'm_rekening_nama' => $request->nama_akun,
                 // 'm_rekening_saldo' => str_replace(',', '.', $str1),
                 'm_rekening_updated_by' => Auth::user()->users_id,
                 'm_rekening_updated_at' => Carbon::now(),
+                'm_rekening_client_target' => DB::raw('DEFAULT'),
             );
             $update = DB::table('m_rekening')->where('m_rekening_code', $rekening_old)
                 ->update($data);
@@ -201,7 +205,7 @@ class RekeningController extends Controller
 
     public function item($id)
     {
-        $data = DB::table('m_rekening')->select('m_rekening_item', 'm_rekening_code')->where('m_rekening_code', $id)->first();
+        $data = DB::table('m_rekening')->select('m_rekening_item', 'm_rekening_code')->where('m_rekening_id', $id)->first();
         return response()->json($data);
     }
 
@@ -244,22 +248,17 @@ class RekeningController extends Controller
 
     public function hapus_item(Request $request, $id)
     {
-        // Ambil data dari database
         $data = DB::table('m_rekening')->select('m_rekening_item')->where('m_rekening_item', 'LIKE', "%$id%")->first();
 
         if ($data) {
-            // Pisahkan data menjadi array
             $dataArray = explode(',', $data->m_rekening_item);
 
-            // Hapus item yang hanya mengandung "a"
             $dataArray = array_filter($dataArray, function ($item) use ($id) {
                 return $item != $id;
             });
 
-            // Gabungkan kembali array menjadi string dengan koma sebagai delimiter
             $newData = implode(',', $dataArray);
 
-            // Perbarui data dalam database
             DB::table('m_rekening')->where('m_rekening_item', 'LIKE', "%$id%")->update([
                 'm_rekening_item' => $newData,
             ]);

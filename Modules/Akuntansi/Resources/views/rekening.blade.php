@@ -599,9 +599,6 @@
                 $("#item_modal").modal('show');
             });
 
-
-
-
             //insert rekening
             $('#rekening-insert').submit(function(e) {
                 if (!e.isDefaultPrevented()) {
@@ -747,7 +744,7 @@
                 var data = {
                     id: id,
                     m_rekening_code: m_rekening_code,
-                    m_rekening_nama1: nama_akun,
+                    nama_akun: nama_akun,
                     _token: '{{ csrf_token() }}', // CSRF Token
                 };
 
@@ -818,6 +815,9 @@
             $('.cari').on('change', function() {
                 var waroengid = $('#filter_waroeng').val();
                 var rekeningkategori = $('#filter_rekening').val();
+
+                $('#m_rekening_m_waroeng_id2').val('-- Pilih Waroeng --').trigger('change');
+
                 $('#rekening_tampil').DataTable({
                     button: [],
                     destroy: true,
@@ -1007,7 +1007,7 @@
                 var waroengasal = $('#filter_waroeng').val();
                 var waroengtj = $('#m_rekening_m_waroeng_id2').val();
                 var waroengasal1 = $('#filter_waroeng').val();
-                var waroengtj1 = $('#m_rekening_m_waroeng_id2').val();
+                var waroengtj1 = $('#ob').val();
                 var saldo = $('#m_rekening_copy_saldo').val();
                 if (waroengasal1 != waroengtj1) {
                     $.ajax({
@@ -1027,6 +1027,8 @@
                                 icon: 'fa fa-info me-5', // Icon class
                                 message: data.messages
                             });
+                            $('#m_rekening_m_waroeng_id2').val('-- Pilih Waroeng --').trigger(
+                                'change');
                         },
                     });
                 } else {

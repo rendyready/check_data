@@ -83,7 +83,7 @@ class JurnalBankController extends Controller
     {
         $tanggal = $request->r_j_b_tanggal;
         $data = DB::table('rekap_jurnal_bank')
-            ->select('r_j_b_id', 'r_j_b_m_rekening_code', 'r_j_b_m_rekening_nama', 'r_j_b_particul', 'r_j_b_debit', 'r_j_b_kredit', 'r_j_b_users_name', 'r_j_b_transaction_code', 'r_j_b_m_w_code')
+            ->select('r_j_b_id', 'r_j_b_m_rekening_code', 'r_j_b_m_rekening_nama', 'r_j_b_particul', 'r_j_b_debit', 'r_j_b_kredit', 'r_j_b_users_name', 'r_j_b_transaction_code', 'r_j_b_m_w_code', 'r_j_b_m_w_nama')
             ->where('r_j_b_m_w_id', $request->r_j_b_m_w_id)
             ->where('r_j_b_status', $request->r_j_b_status)
             ->where('r_j_b_tanggal', $tanggal)

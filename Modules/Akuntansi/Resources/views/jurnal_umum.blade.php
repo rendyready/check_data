@@ -244,10 +244,18 @@
                     type: "GET",
                 },
                 columns: [{
-                        data: 'r_j_u_m_rekening_code'
+                        data: null,
+                        render: function(data, type, row) {
+                            return data.r_j_u_m_w_code + '.' + data
+                                .r_j_u_m_rekening_code;
+                        }
                     },
                     {
-                        data: 'r_j_u_m_rekening_nama'
+                        data: null,
+                        render: function(data, type, row) {
+                            return data.r_j_u_m_rekening_nama + ' ' + data
+                                .r_j_u_m_w_nama;
+                        }
                     },
                     {
                         data: 'r_j_u_particul'
@@ -318,10 +326,24 @@
                                                 type: "GET",
                                             },
                                             columns: [{
-                                                    data: 'r_j_u_m_rekening_code'
+                                                    data: null,
+                                                    render: function(data,
+                                                        type, row) {
+                                                        return data
+                                                            .r_j_u_m_w_code +
+                                                            '.' + data
+                                                            .r_j_u_m_rekening_code;
+                                                    }
                                                 },
                                                 {
-                                                    data: 'r_j_u_m_rekening_nama'
+                                                    data: null,
+                                                    render: function(data,
+                                                        type, row) {
+                                                        return data
+                                                            .r_j_u_m_rekening_nama +
+                                                            ' ' + data
+                                                            .r_j_u_m_w_nama;
+                                                    }
                                                 },
                                                 {
                                                     data: 'r_j_u_particul'
@@ -379,6 +401,10 @@
                 var m_w_id = $('#filter-waroeng').val();
                 var filwaroeng = m_w_id.split(',')[0];
                 var filtanggal = $('#filter-tanggal').val();
+                $('#m_rekening_nama').empty();
+                $('.set').val('');
+                $('.btn_remove').parents('tr').remove();
+                $('.saldo').trigger("input");
                 $('#jurnal-tampil').DataTable({
                     "columnDefs": [{
                         "render": DataTable.render.number('.', ',', 2, 'Rp. '),
@@ -396,10 +422,18 @@
                         type: "GET",
                     },
                     columns: [{
-                            data: 'r_j_u_m_rekening_code'
+                            data: null,
+                            render: function(data, type, row) {
+                                return data.r_j_u_m_w_code + '.' + data
+                                    .r_j_u_m_rekening_code;
+                            }
                         },
                         {
-                            data: 'r_j_u_m_rekening_nama'
+                            data: null,
+                            render: function(data, type, row) {
+                                return data.r_j_u_m_rekening_nama + ' ' + data
+                                    .r_j_u_m_w_nama;
+                            }
                         },
                         {
                             data: 'r_j_u_particul'
@@ -418,13 +452,33 @@
                         },
                     ],
                 });
+
+                $.ajax({
+                    url: '{{ route('jurnal_umum.rekeninglink') }}',
+                    type: 'GET',
+                    dataType: 'Json',
+                    data: {
+                        filwaroeng: filwaroeng,
+                    },
+                    success: function(data) {
+                        $('#m_rekening_nama').append('<option></option>');
+                        $.each(data, function(key, value) {
+                            $('#m_rekening_nama').append('<option value="' + key +
+                                '">' + value +
+                                '</option>');
+                        });
+                    }
+                })
             });
 
             //default select nama rekening
             $.ajax({
-                url: '{{ route('jurnal_bank.rekeninglink') }}',
+                url: '{{ route('jurnal_umum.rekeninglink') }}',
                 type: 'GET',
                 dataType: 'Json',
+                data: {
+                    filwaroeng: filwaroeng,
+                },
                 success: function(data) {
                     $('#m_rekening_nama').append('<option></option>');
                     $.each(data, function(key, value) {
@@ -443,6 +497,9 @@
                     url: '{{ route('jurnal_umum.rekeninglink') }}',
                     type: 'GET',
                     dataType: 'Json',
+                    data: {
+                        filwaroeng: filwaroeng,
+                    },
                     success: function(data) {
                         // console.log(data);
                         $('#m_rekening_namajq' + id).append('<option></option>');
