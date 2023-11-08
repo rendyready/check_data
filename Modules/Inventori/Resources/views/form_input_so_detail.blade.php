@@ -20,17 +20,18 @@
                                     <div class="row mb-1">
                                         <label class="col-sm-3 col-form-label" for="rekap_beli_created_by">Operator</label>
                                         @if ($data->aksi == 'detail')
-                                        <div class="col-sm-9">
-                                            <input type="text" class="form-control" id="rekap_beli_created_by"
-                                                name="rekap_beli_created_by" value="{{ ucwords($data->operator) }}" readonly>
-                                        </div>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control" id="rekap_beli_created_by"
+                                                    name="rekap_beli_created_by" value="{{ ucwords($data->operator) }}"
+                                                    readonly>
+                                            </div>
                                         @else
-                                        <div class="col-sm-9">
-                                            <input type="text" class="form-control" id="rekap_beli_created_by"
-                                                name="rekap_beli_created_by" value="{{ Auth::user()->name }}" readonly>
-                                        </div>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control" id="rekap_beli_created_by"
+                                                    name="rekap_beli_created_by" value="{{ Auth::user()->name }}" readonly>
+                                            </div>
                                         @endif
-                                        
+
                                     </div>
                                     <div class="row mb-1">
                                         <label class="col-sm-3 col-form-label" for="example-hf-text">Waroeng</label>
@@ -99,6 +100,7 @@
                                         <th>Nama Barang</th>
                                         <th>Qty Stok</th>
                                         <th>SO Rill</th>
+                                        <th>HPP</th>
                                         <th>Satuan</th>
                                     </thead>
                                     <tbody>
@@ -112,6 +114,7 @@
                                                     <td>{{ ucwords($item->rekap_so_detail_m_produk_nama) }}</td>
                                                     <td>{{ num_format($item->rekap_so_detail_qty) }} </td>
                                                     <td>{{ num_format($item->rekap_so_detail_qty_riil) }}</td>
+                                                    <td>{{num_format($item->rekap_so_detail_hpp)}}</td>
                                                     <td>{{ ucwords($item->rekap_so_detail_satuan) }}</td>
                                                 </tr>
                                             @endforeach
@@ -169,18 +172,24 @@
                 };
 
                 $('#tb-so tbody tr').each(function(index, element) {
-                    var row = {
-                        rekap_so_detail_m_produk_code: $(element).find(
-                            'input[name="rekap_so_detail_m_produk_code[]"]').val(),
-                        rekap_so_detail_qty: $(element).find(
-                            'input[name="rekap_so_detail_qty[]"]').val(),
-                        rekap_so_detail_satuan: $(element).find(
-                            'input[name="rekap_so_detail_satuan[]"]').val(),
-                        rekap_so_detail_qty_riil: $(element).find('.rill').val()
-                    };
-
-                    inputData.rekap_so_detail.push(row);
+                    var rekap_so_detail_qty_riil = $(element).find('.rill').val();
+                    if (rekap_so_detail_qty_riil !== null && rekap_so_detail_qty_riil.trim() !==
+                        '') {
+                        var row = {
+                            rekap_so_detail_m_produk_code: $(element).find(
+                                'input[name="rekap_so_detail_m_produk_code[]"]').val(),
+                            rekap_so_detail_qty: $(element).find(
+                                'input[name="rekap_so_detail_qty[]"]').val(),
+                            rekap_so_detail_qty_riil: rekap_so_detail_qty_riil
+                        };
+                        inputData.rekap_so_detail.push(row);
+                    }
                 });
+
+                if (inputData.rekap_so_detail.length === 0) {
+                    alert('At least one qty_riil must be provided.');
+                    return;
+                }
 
                 $.ajax({
                     type: 'POST',

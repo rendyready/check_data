@@ -254,7 +254,7 @@
                                 <span class="nav-main-link-name">CR55</span>
                             </a>
                             <ul class="nav-main-submenu">
-                                @if (env('DB_DATABASE') == 'admin_sipedas_v4')
+                                @if (env('SERVER_LOCATION','waroeng') == 'pusat')
                                     @can('setting cr.view')
                                         <li class="nav-main-item{{ request()->is('setting_cr/*') ? ' open' : '' }}">
                                             <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu"
@@ -645,14 +645,14 @@
                         </li>
                     @endcan
                     @can('module inventori.view')
-                        <li class="nav-main-item{{ request()->is('inventori/master') ? ' open' : '' }}">
+                        <li class="nav-main-item{{ request()->is('inventori/*') ? ' open' : '' }}">
                             <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true"
                                 aria-expanded="true" href="#">
                                 <i class="nav-main-link-icon fa fa-warehouse"></i>
                                 <span class="nav-main-link-name">Inventori</span>
                             </a>
                             <ul class="nav-main-submenu">
-                                @if (env('DB_DATABASE') == 'admin_sipedas_v4')
+                                @if (env('SERVER_LOCATION','waroeng') == 'pusat')
                                     @can('master inventori.view')
                                         <li class="nav-main-item{{ request()->is('inventori/master') ? ' open' : '' }}">
                                             <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu"
@@ -720,7 +720,7 @@
                                 @endif
                                 @can('rph.view')
                                     <li class="nav-main-item">
-                                        <a class="nav-main-link{{ request()->is('invetori/rph') ? ' active' : '' }}"
+                                        <a class="nav-main-link{{ request()->is('inventori/rph') ? ' active' : '' }}"
                                             href="{{ route('rph.index') }}">
                                             <span class="nav-main-link-name">RPH</span>
                                         </a>
@@ -728,7 +728,7 @@
                                 @endcan
                                 @can('kebutuhan belanja.view')
                                     <li class="nav-main-item">
-                                        <a class="nav-main-link{{ request()->is('invetori/rph_belanja') ? ' active' : '' }}"
+                                        <a class="nav-main-link{{ request()->is('inventori/rph_belanja') ? ' active' : '' }}"
                                             href="{{ route('belanja.index') }}">
                                             <span class="nav-main-link-name">Kebutuhan Belanja</span>
                                         </a>
@@ -736,7 +736,7 @@
                                 @endcan
                                 @can('purchase order.view')
                                     <li class="nav-main-item">
-                                        <a class="nav-main-link{{ request()->is('invetori/po') ? ' active' : '' }}"
+                                        <a class="nav-main-link{{ request()->is('inventori/po') ? ' active' : '' }}"
                                             href="{{ route('po.index') }}">
                                             <span class="nav-main-link-name">Purchase Order (PO)</span>
                                         </a>
@@ -744,7 +744,7 @@
                                 @endcan
                                 @can('pembelian.view')
                                     <li class="nav-main-item">
-                                        <a class="nav-main-link{{ request()->is('invetori/beli') ? ' active' : '' }}"
+                                        <a class="nav-main-link{{ request()->is('inventori/beli') ? ' active' : '' }}"
                                             href="{{ route('beli.index') }}">
                                             <span class="nav-main-link-name">Pembelian</span>
                                         </a>
@@ -752,7 +752,7 @@
                                 @endcan
                                 @can('cht pembelian.view')
                                     <li class="nav-main-item">
-                                        <a class="nav-main-link{{ request()->is('invetori/cht') ? ' active' : '' }}"
+                                        <a class="nav-main-link{{ request()->is('inventori/cht') ? ' active' : '' }}"
                                             href="{{ route('cht.index') }}">
                                             <span class="nav-main-link-name">CHT Pembelian</span>
                                         </a>
@@ -760,7 +760,7 @@
                                 @endcan
                                 @can('keluar gudang.view')
                                     <li class="nav-main-item">
-                                        <a class="nav-main-link{{ request()->is('invetori/m_gudang/out') ? ' active' : '' }}"
+                                        <a class="nav-main-link{{ request()->is('inventori/m_gudang/out') ? ' active' : '' }}"
                                             href="{{ route('m_gudang_out.index') }}">
                                             <span class="nav-main-link-name">Keluar Gudang</span>
                                         </a>
@@ -768,7 +768,7 @@
                                 @endcan
                                 @can('terima gudang.view')
                                     <li class="nav-main-item">
-                                        <a class="nav-main-link{{ request()->is('invetori/gudang/terima') ? ' active' : '' }}"
+                                        <a class="nav-main-link{{ request()->is('inventori/gudang/terima') ? ' active' : '' }}"
                                             href="{{ route('m_gudang.terima_tf') }}">
                                             <span class="nav-main-link-name">Terima Gudang</span>
                                         </a>
@@ -776,7 +776,7 @@
                                 @endcan
                                 @can('pecah gabung barang.view')
                                     <li class="nav-main-item">
-                                        <a class="nav-main-link{{ request()->is('invetori/pecah_gabung') ? ' active' : '' }}"
+                                        <a class="nav-main-link{{ request()->is('inventori/pecah_gabung') ? ' active' : '' }}"
                                             href="{{ route('pcb.index') }}">
                                             <span class="nav-main-link-name">Pecah Gabung Barang</span>
                                         </a>
@@ -784,21 +784,21 @@
                                 @endcan
                                 @can('penjualan bb internal.view')
                                     <li class="nav-main-item">
-                                        <a class="nav-main-link{{ request()->is('invetori/penj_gudang') ? ' active' : '' }}"
+                                        <a class="nav-main-link{{ request()->is('inventori/penj_gudang') ? ' active' : '' }}"
                                             href="{{ route('penj_gudang.index') }}">
                                             <span class="nav-main-link-name">Penjualan BB Internal</span>
                                         </a>
                                     </li>
                                 @endcan
                                 {{-- <li class="nav-main-item">
-                                    <a class="nav-main-link{{ request()->is('invetori/penjualan_inv') ? ' active' : '' }}"
+                                    <a class="nav-main-link{{ request()->is('inventori/penjualan_inv') ? ' active' : '' }}"
                                         href="{{ route('penjualan_inv.index') }}">
                                         <span class="nav-main-link-name">Penjualan BB Umum</span>
                                     </a>
                                 </li> --}}
                                 @can('barang rusak.view')
                                     <li class="nav-main-item">
-                                        <a class="nav-main-link{{ request()->is('invetori/rusak') ? ' active' : '' }}"
+                                        <a class="nav-main-link{{ request()->is('inventori/rusak') ? ' active' : '' }}"
                                             href="{{ route('rusak.index') }}">
                                             <span class="nav-main-link-name">Barang Rusak</span>
                                         </a>
@@ -806,7 +806,7 @@
                                 @endcan
                                 @can('stok opname.view')
                                     <li class="nav-main-item">
-                                        <a class="nav-main-link{{ request()->is('invetori/stok_so') ? ' active' : '' }}"
+                                        <a class="nav-main-link{{ request()->is('inventori/stok_so') ? ' active' : '' }}"
                                             href="{{ route('stok_so.index') }}">
                                             <span class="nav-main-link-name">Stok Opname</span>
                                         </a>
@@ -881,7 +881,7 @@
                                             @endcan
                                             @can('laporan cht.view')
                                                 <li class="nav-main-item">
-                                                    <a class="nav-main-link{{ request()->is('invetori/lap_cht') ? ' active' : '' }}"
+                                                    <a class="nav-main-link{{ request()->is('inventori/lap_cht') ? ' active' : '' }}"
                                                         href="{{ route('lap_cht.index') }}">
                                                         <span class="nav-main-link-name">Laporan CHT</span>
                                                     </a>
@@ -963,6 +963,7 @@
                             </a>
                             <ul class="nav-main-submenu">
                                 {{-- @if (env('DB_DATABASE') == 'admin_sipedas_v4') --}}
+                                @if (env('SERVER_LOCATION','waroeng') == 'pusat')
                                 @can('master akuntansi.view')
                                     <li class="nav-main-item{{ request()->is('akuntansi/master') ? ' open' : '' }}">
                                         <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu"
@@ -985,7 +986,7 @@
                                         </ul>
                                     </li>
                                 @endcan
-                                {{-- @endif --}}
+                                @endif
                                 <li class="nav-main-item">
                                     <a class="nav-main-link{{ request()->is('akuntansi/jurnal_kas') ? ' active' : '' }}"
                                         href="{{ route('jurnal_kas.index') }}">
@@ -1106,7 +1107,8 @@
                                         </a>
                                     </li>
                                 @endcan
-                                @if (env('DB_DATABASE') == 'admin_sipedas_v4')
+                                {{-- @if (env('DB_DATABASE') == 'admin_sipedas_v4') --}}
+                                @if (env('SERVER_LOCATION','waroeng') == 'pusat')
                                     @can('hak akses.view')
                                         <li class="nav-main-item">
                                             <a class="nav-main-link{{ request()->is('users/akses') ? ' active' : '' }}"
