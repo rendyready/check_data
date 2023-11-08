@@ -32,7 +32,8 @@
                                             <select id="filter_rekening" class="cari js-select2 form-control "
                                                 style="width: 100%;" name="m_rekening_kategori">
                                                 @foreach ($data->kategori_rekening as $kategori)
-                                                    <option value="{{ $kategori->m_kategori_rekening_id }}"> {{ $kategori->m_kategori_rekening_name }} </option>
+                                                    <option value="{{ $kategori->m_kategori_rekening_id }}">
+                                                        {{ $kategori->m_kategori_rekening_name }} </option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -380,10 +381,10 @@
                 return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
             }
 
-            // $("#item_modal").modal({
-            //     backdrop: 'static',
-            //     keyboard: false,
-            // });
+            $("#item_modal").modal({
+                backdrop: 'static',
+                keyboard: false,
+            });
 
             var dataTags = [];
             var existingTagsArray = [];
@@ -457,14 +458,14 @@
                 });
 
                 // simpan
-                $("#item_save").off('click').on('click', function(e) {
+                $("#item_save").on('click', function(e) {
                     e.preventDefault();
-                    var id = $('#m_rekening_idx').val();
+                    var idx = $('#m_rekening_idx').val();
                     var item = $('#list_item').val();
                     $("#list_item").val('');
 
                     var data = {
-                        id: id,
+                        id: idx,
                         item: item,
                         _token: '{{ csrf_token() }}', // CSRF Token
                     };
@@ -587,6 +588,13 @@
                     });
                 });
 
+                // $('.item_close').on('click', '.delete_item', function() {
+                //     id_item = $(this).data('item');
+                //     var table = $('#tampil_item').DataTable();
+                //     table.rows(function(idx, data, node) {
+                //         return data.m_rekening_item === id_item;
+                //     }).remove().draw();
+                // });
 
                 $("#item_modal").modal('show');
             });
