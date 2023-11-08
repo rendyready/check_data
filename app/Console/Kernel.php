@@ -4,7 +4,6 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
-use Illuminate\Support\Facades\Artisan;
 
 class Kernel extends ConsoleKernel
 {
@@ -16,29 +15,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('getdata:cron')->everyMinute()->withoutOverlapping(10);
-        $schedule->command('duplicatemaster:cron')->everyThirtyMinutes()->withoutOverlapping(10);
-        $schedule->command('duplicaterekap:cron')->everyMinute()->withoutOverlapping(10);
-        // $schedule->command('duplicaterekap:cron')
-        //             ->everyMinute()->withoutOverlapping(10)
-        //             ->after(function (Artisan $artisan) {
-        //                 $artisan->command('senddata:cron');
-        //             });;
-        $schedule->command('senddata:cron')->everyThreeMinutes()->withoutOverlapping(10);
-        $schedule->command('version:cron')->everyFiveMinutes()->withoutOverlapping(10);
-        $schedule->command('mastercontrol:cron')->hourly()->withoutOverlapping(10);
-        $schedule->command('sendcloud:cron')->everyTwoMinutes()->withoutOverlapping(10);
-        $schedule->command('sendserverstatus:cron')->everyMinute()->withoutOverlapping(10);
-        $schedule->command('countdataserver:cron')->dailyAt('10:00')->withoutOverlapping(10);
-        $schedule->command('countdataserver:cron')->dailyAt('14:00')->withoutOverlapping(10);
-        $schedule->command('countdataserver:cron')->dailyAt('20:00')->withoutOverlapping(10);
-        $schedule->command('resetlog:cron')->monthly()->withoutOverlapping(10);
-
-        // $schedule->command('datasync:cron')->everyMinute()->withoutOverlapping(10);
-        // $schedule->command('getdataupdate:cron')->everyMinute()->withoutOverlapping(10);
-        // $schedule->command('autoshutdown:cron')->dailyAt('23:59')->withoutOverlapping(10);
-
-
+        $schedule->command('pengurangan:stok')
+        ->everyMinute();
     }
 
     /**
@@ -48,7 +26,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands()
     {
-        $this->load(__DIR__ . '/Commands');
+        $this->load(__DIR__.'/Commands');
 
         require base_path('routes/console.php');
     }
