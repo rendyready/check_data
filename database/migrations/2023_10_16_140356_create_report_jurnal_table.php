@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('r_j_m_w_nama');
             $table->unsignedBigInteger('r_j_m_area_id');
             $table->string('r_j_m_area_nama');
+            $table->string('r_j_m_rekening_prefix_code')->nullable();
             $table->unsignedBigInteger('r_j_m_rekening_id');
             $table->string('r_j_m_rekening_code');
             $table->string('r_j_m_rekening_nama');
