@@ -1,9 +1,7 @@
 <?php
 
-use App\Http\Controllers\CountDataController;
-use App\Http\Controllers\CronjobController;
-use App\Http\Controllers\ServerStatusController;
-use App\Http\Controllers\VersionController;use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,20 +14,31 @@ use App\Http\Controllers\VersionController;use Illuminate\Support\Facades\Route;
 |
  */
 
-Route::get('/', function () {
-    return view('index');
+// Auth::routes();
+
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/coba/{table}', [App\Http\Controllers\Controller::class, 'getMasterId']);
+Route::get('/sendmaster/{target}', [App\Http\Controllers\MyController::class, 'sendMaster']);
+Route::get('/nyoba', [App\Http\Controllers\MyController::class, 'Nyoba']);
+Route::get('/upgradedbclient/{target}', [App\Http\Controllers\MyController::class, 'upgradeDb']);
+Route::get('/updateclient', [App\Http\Controllers\Controller::class, 'coba']);
+Route::get('/nonmenu', [App\Http\Controllers\Controller::class, 'non_menu']);
+Route::get('/update/pass', [App\Http\Controllers\Auth\LoginController::class, 'change_pass'])
+    ->middleware('web')
+    ->name('update.pass');
+Route::post('/users/pass/update', [App\Http\Controllers\Auth\LoginController::class, 'update_pass_save'])
+    ->middleware('web')
+    ->name('password.changes');
+Route::get('/users/noakses', [App\Http\Controllers\Auth\LoginController::class, 'no_akses'])->name('users.noakses');
+Route::get('/count-data', [App\Http\Controllers\ControlDataController::class, 'CountData']);
+
+// // Dashboard Route
+// Route::middleware(['auth', 'web'])->group(function () {
+//     Route::get('/', [App\Http\Controllers\HomeController::class, 'index']);
+// });
+
+// Route::get('/', [HomeController::class, 'index']);
+
+Route::controller(HomeController::class)->group(function () {
+    Route::get('/', 'index')->name('home');
 });
-
-Route::get('/cron', [CronjobController::class, 'index']);
-Route::get('/migrate', [CronjobController::class, 'migrate']);
-Route::get('/encrypt/{pass}', [CronjobController::class, 'encrypt']);
-Route::get('/getdata', [CronjobController::class, 'getdata']);
-Route::get('/getdataupdate', [CronjobController::class, 'getdataupdate']);
-Route::get('/sendcloud', [CronjobController::class, 'sendcloud']);
-
-Route::get('/upgrade', [VersionController::class, 'upgrade']);
-Route::get('/test', [VersionController::class, 'test']);
-Route::get('/server', [ServerStatusController::class, 'server']);
-
-// Route::get('/count_data', [CountDataServer::class, 'count_data']);
-Route::get('/count_data', [CountDataController::class, 'countData']);

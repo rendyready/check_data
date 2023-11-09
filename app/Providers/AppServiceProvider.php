@@ -3,9 +3,9 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\View;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -25,23 +25,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //Config DB Client Connection By jangkrik404
-        // $clientConnection = DB::table('db_connection')->get(); //get data client
-
-        // foreach ($clientConnection as $key => $value) {
-        //     Config::set("database.connections.{$value->db_connection_client_code}", [
-        //         'driver' => 'pgsql',
-        //         'host' => $value->db_connection_host,
-        //         'port' => $value->db_connection_port,
-        //         'database' => $value->db_connection_dbname,
-        //         'username' => $value->db_connection_username,
-        //         'password' => Crypt::decryptString($value->db_connection_password),
-        //         'charset' => 'utf8',
-        //         'prefix' => '',
-        //         'prefix_indexes' => true,
-        //         'search_path' => 'public',
-        //         'sslmode' => 'prefer',
-        //      ]);
-        // }
+        // View::composer('layouts.app', function ($view) {
+        //     $view->with('waroeng',$this->get_m_w_nama());
+        // });
+        // View::addNamespace('auth', resource_path('views/auth'));
     }
+    // public function get_m_w_nama()
+    // {
+    //     $waroeng_aktif = Auth::user()->waroeng_id;
+    //     $waroeng_nama = DB::table('m_w')->where('m_w_id',$waroeng_aktif)
+    //     ->first()->m_w_nama;
+    //     return $waroeng_nama;
+    // }
 }

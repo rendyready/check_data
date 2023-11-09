@@ -1,0 +1,9 @@
+{
+    "Master": true,
+    "Dashboard": true,
+    "Users": true,
+    "Learn": true,
+    "Akuntansi": true,
+    "Inventori": true,
+    "Hrd": true
+}

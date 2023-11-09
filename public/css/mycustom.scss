@@ -1,0 +1,333 @@
+.btn-custom {
+    background-color: #cc4242; /* Ganti dengan kode warna sesuai keinginan Anda */
+    color: #fff; /* Warna teks pada tombol */
+    font-weight: bold;
+    border-radius: 15px; /* Menjadikan tombol berbentuk lingkaran */
+    padding: 5px 15px;
+}
+
+.btn-note {
+    background-color: #ff7c02; /* Ganti dengan kode warna sesuai keinginan Anda */
+    color: #fff; /* Warna teks pada tombol */
+    font-weight: bold;
+    border-radius: 5px; /* Menjadikan tombol berbentuk lingkaran */
+    padding: 1px 5px;
+}
+
+body {
+    margin-bottom: 70px; /* Sesuaikan dengan tinggi navigasi Anda */
+}
+/* end btn style */
+/* Style for the menu items */
+.menu-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Add space between note/qty and other details */
+    padding: 8px;
+    border-bottom: 1px solid #ccc;
+}
+
+.menu-item img {
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+    margin-right: 10px;
+}
+
+/* Style for out-of-stock menu items */
+.menu-wrap.out-of-stock {
+    opacity: 0.5; /* Reduce opacity for a faded look */
+    pointer-events: none; /* Disable pointer events to prevent clicking */
+}
+
+
+.item-details {
+    flex: 1;
+}
+
+.item-details .item-name {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.item-details .item-price {
+    font-size: 16px;
+    color: #c41717;
+    font-weight: bold;
+}
+
+.item-note-qty {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Add space between note and qty */
+    margin-left: 10px; /* Add margin to separate from other details */
+}
+.item-note-qty .btn-note {
+    background-color: #ff7c02;
+    color: #fff;
+    font-weight: bold;
+    border-radius: 5px;
+    padding: 1px 5px;
+}
+.item-note-qty .qty {
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    font-size: 18px;
+}
+.item-note-qty .qty-text {
+   margin: 10px;
+    align-items: center;
+}
+.item-note-qty .btn-qty {
+    background-color: #cc4242;
+    color: #fff;
+    font-weight: bold;
+    border-radius: 10px;
+    padding: 3px 10px;
+    margin-left: 5px; /* Add margin between qty and note buttons */
+}
+
+/* Submenu styles */
+/* Style for submenu */
+.submenu {
+    display: flex;
+    justify-content: flex-start;
+    overflow-x: auto;
+    white-space: nowrap;
+    padding-bottom: 10px;
+}
+.submenu .btn {
+    margin: 0 10px;
+}
+
+/* Cart styles */
+
+.cart {
+    background-color: #cc4242;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed; /* Set cart to fixed position */
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.cart-icon {
+    display: flex;
+    align-items: center;
+    font-size: 24px;
+    margin-right: 10px;
+}
+
+.cart-icon i {
+    font-size: 24px;
+}
+
+.cart-icon .cart-item-count {
+    background-color: rgba(252, 120, 33, 0.842);
+    color: #fff;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 50%;
+    padding: 4px;
+    min-width: 20px;
+    text-align: center;
+    margin-left: 5px;
+}
+
+.cart-total,
+.cart-total-nom {
+    font-size: 18px;
+    font-weight: bold;
+}
+/* Style for search input */
+#searchInput {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+#searchInput.fixed {
+    position: fixed;
+    top: 50px;
+    left: 0;
+    right: 0;
+    background-color: #f9f9f9; /* Warna background saat fixed */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 999; /* Pastikan nilai z-index lebih tinggi dari elemen lain di halaman */
+}
+
+#kategori {
+    width: 100%;
+    padding: 8px;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+#kategori.fixed {
+    position: fixed;
+    top:0px;
+    left: 0;
+    right: 0;
+    background-color: #f9f9f9; /* Warna background saat fixed */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 999; /* Pastikan nilai z-index lebih tinggi dari elemen lain di halaman */
+}
+
+.body-order {
+    background-image: url("https://www.waroengss.com/assets/urbanrgill/img/five-back-hp.jpg"); /* Ganti URL gambar sesuai keinginan Anda */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+.body-landing {
+    background-image: url("https://www.waroengss.com/assets/urbanrgill/img/five-back-hp.jpg");
+    background-repeat: repeat;
+}
+
+.card-bg {
+    position: cover;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 15px;
+}
+/* pop up
+/* Popup Container */
+/* Popup Container */
+.popup-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    max-height: 70%; /* Set maximum height to allow scrolling */
+    overflow-y: auto; /* Enable vertical scrolling when content exceeds height */
+}
+
+/* Popup Header */
+.popup-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    padding: 10px;
+}
+
+.popup-header h2 {
+    margin: 0;
+    padding: 10px 0; /* Tambahkan padding atas dan bawah */
+    text-align: center;
+}
+
+.popup-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #333;
+}
+
+/* Popup Footer */
+.popup-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.popup-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 15px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.popup-button:last-child {
+    margin-left: 0;
+}
+
+.popup-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 1200;
+    overflow-y: scroll; /* Enable vertical scrolling for the popup content */
+}
+// /* Styling for Select */
+// #selectTable {
+//     width: 100%;
+//     padding: 8px;
+//     border: 1px solid #ccc;
+//     border-radius: 4px;
+//     font-size: 16px;
+//     margin-top: 5px;
+// }
+/* Table List */
+.popup-content {
+    padding: 20px;
+    max-height: 40vh; /* Set the maximum height for the content area */
+    overflow-y: auto; /* Enable vertical scrolling if content overflows */
+}
+
+.table-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Display tables in 3 columns */
+    gap: 10px; /* Add gap between table elements */
+}
+
+/* Table Element */
+.table-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    cursor: pointer;
+}
+
+/*no scroll ketika load popup*/
+.no-scroll {
+    overflow: hidden;
+}
+/*header checkout*/
+/* styles.css */
+
+.tipe {
+    border: 1px solid #ccc;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.tipe img {
+    margin-right: 10px;
+    max-width: 50px;
+}
+
+.tipe h2 {
+    margin: 0;
+}
+
+.payment-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Add space between note/qty and other details */
+    padding: 8px;
+    border-bottom: 1px solid #ccc;
+}
+
