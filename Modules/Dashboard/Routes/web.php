@@ -10,9 +10,9 @@ Route::prefix('dashboard')->middleware('web')
         // Route::view('/', 'dashboard::dashboard');
 
         // Route::get('/count_data', [CountDataController::class, 'countData']);
-        Route::controller(CountDataController::class)->group(function () {
-            Route::get('count', 'index')->name('count.index');
-            // Route::get('count/count_data', 'count_data')->name('count.count_data');
-        });
+        // Route::controller(CountDataController::class)->group(function () {
+        //     Route::get('count', 'index')->name('count.index');
+        //     // Route::get('count/count_data', 'count_data')->name('count.count_data');
+        // });
 
     });
