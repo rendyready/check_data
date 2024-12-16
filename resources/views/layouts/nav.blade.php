@@ -109,10 +109,24 @@
             <div class="content-side content-side-full">
                 <ul class="nav-main">
                     <li class="nav-main-item">
-                        <a class="nav-main-link{{ request()->is('dashboard') ? ' active' : '' }}"
+                        <a class="nav-main-link{{ request()->is('/') ? ' active' : '' }}"
                             href="{{ route('count.index') }}">
                             <i class="nav-main-link-icon fa fa-house-user"></i>
                             <span class="nav-main-link-name">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-main-item">
+                        <a class="nav-main-link{{ request()->is('/') ? ' active' : '' }}"
+                            href="{{ route('count.show_data') }}">
+                            <i class="nav-main-link-icon fa-solid fa-database"></i>
+                            <span class="nav-main-link-name">Tampilkan Data</span>
+                        </a>
+                    </li>
+                    <li class="nav-main-item">
+                        <a class="nav-main-link{{ request()->is('/') ? ' active' : '' }}"
+                            href="{{ route('count.check_data') }}">
+                            <i class="nav-main-link-icon fa fa-search"></i>
+                            <span class="nav-main-link-name">Check Data</span>
                         </a>
                     </li>
                 </ul>
